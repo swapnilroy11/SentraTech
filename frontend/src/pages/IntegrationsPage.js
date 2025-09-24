@@ -84,58 +84,92 @@ const IntegrationsPage = () => {
 
   return (
     <ComponentErrorBoundary>
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+      <div className="min-h-screen bg-[#0D1117] text-[#FFFFFF]" style={{ backgroundColor: '#0D1117', minHeight: '100vh' }}>
         {/* Debug info */}
         {process.env.NODE_ENV === 'development' && (
           <div className="fixed top-20 right-4 z-50 bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)] rounded p-2 text-xs text-[#00FF41]">
             Integrations Page Loaded: {pageLoaded ? 'Yes' : 'No'}
           </div>
         )}
-      {/* Hero Section */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto mb-20"
-          >
-            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight">
-              Platform <span className="text-[#00FF41]">Integrations</span>
-            </h1>
-            
-            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
-              Connect SentraTech seamlessly with your existing tech stack. 50+ pre-built integrations 
-              with popular CRM, communication, analytics, and support tools.
-            </p>
 
-            {/* Key Features */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
-              {[
-                { value: '50+', label: 'Available Integrations' },
-                { value: '5 min', label: 'Average Setup Time' },
-                { value: '99.9%', label: 'Integration Uptime' },
-                { value: '24/7', label: 'API Monitoring' }
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6"
+        {/* Hero Section */}
+        <section className="py-24 relative overflow-hidden">
+          <div className="container mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center max-w-4xl mx-auto"
+            >
+              <h1 className="text-7xl md:text-8xl font-bold font-rajdhani mb-8 leading-tight uppercase tracking-wider">
+                SEAMLESS PLATFORM <br/>
+                <span className="text-[#00FF41]">INTEGRATIONS</span>
+              </h1>
+              
+              <p className="text-2xl text-[#C9D1D9] mb-12 max-w-3xl mx-auto leading-relaxed">
+                Connect your tech stack in minutes, scale without limits.
+              </p>
+
+              {/* Primary and Secondary CTAs */}
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16">
+                <Button 
+                  onClick={() => document.getElementById('integrations-grid')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="bg-[#00FF41] text-[#0D1117] hover:bg-[#00e83a] font-bold px-10 py-5 text-xl rounded-xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#00FF41] focus:ring-opacity-50"
                 >
-                  <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-[rgb(161,161,170)]">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
+                  EXPLORE INTEGRATIONS
+                  <ArrowRight size={24} className="ml-2" />
+                </Button>
+                
+                <Button 
+                  asChild
+                  variant="outline"
+                  className="border-2 border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-10 py-5 text-xl rounded-xl font-bold transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#00FF41] focus:ring-opacity-50"
+                >
+                  <a href="mailto:info@sentratech.net">
+                    <Mail size={24} className="mr-2" />
+                    CONTACT SALES
+                  </a>
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Performance Stats Strip */}
+        <section className="py-16 bg-[#161B22] border-y border-[rgba(0,255,65,0.2)]">
+          <div className="container mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {performanceStats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="text-center group"
+                  >
+                    <div className="w-20 h-20 bg-[#00FF41] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <Icon size={32} className="text-[#0D1117]" />
+                    </div>
+                    
+                    <h3 className="text-4xl font-bold text-[#FFFFFF] mb-2 font-rajdhani">
+                      {stat.value}
+                    </h3>
+                    
+                    <p className="text-lg font-semibold text-[#00FF41] mb-1">
+                      {stat.label}
+                    </p>
+                    
+                    <p className="text-sm text-[#C9D1D9]">
+                      {stat.description}
+                    </p>
+                  </motion.div>
+                );
+              })}
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
 
       {/* Logo Carousel Section */}
       <section className="py-16 bg-gradient-to-r from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
