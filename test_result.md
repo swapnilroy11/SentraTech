@@ -119,6 +119,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE TESTING COMPLETE - All 3 ROI endpoints working perfectly. Fixed minor issue with /api/roi/save endpoint request format. PASSED: All calculation accuracy tests (45% cost reduction, 70% automation, 35% AHT reduction), edge cases (zero values, large numbers, decimal precision), input validation, database integration (save/retrieve), performance (<50ms response times). Tested with realistic business data. All 19 test cases passed. Database properly stores and retrieves calculations with UUID generation and timestamp handling."
+      - working: true
+        agent: "testing"
+        comment: "✅ REGRESSION TESTING PASSED - All 19 ROI Calculator tests passed after frontend changes. /api/roi/calculate endpoint working perfectly with accurate calculations (45% cost reduction, 70% automation, 35% AHT reduction), /api/roi/save storing data correctly, /api/roi/calculations retrieval working, edge cases handled properly, input validation functional, performance excellent (<50ms response times). No regressions detected from horizontal journey timeline changes."
 
   - task: "Demo Request & CRM Integration"
     implemented: true
