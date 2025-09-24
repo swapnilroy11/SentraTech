@@ -423,22 +423,22 @@ const HorizontalJourney = () => {
                 tabIndex={0}
                 aria-label={`${stage.title} - ${stage.subtitle}`}
               >
-                <CardContent className="p-6 h-full flex flex-col justify-between">
+                <CardContent className="p-8 h-full flex flex-col justify-between">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-3">
+                      <div className="flex items-center space-x-4 mb-4">
                         <div 
-                          className="w-12 h-12 rounded-xl flex items-center justify-center"
+                          className="w-16 h-16 rounded-xl flex items-center justify-center"
                           style={{ 
                             backgroundColor: `${stage.color}20`,
-                            border: `1px solid ${stage.color}50`
+                            border: `2px solid ${stage.color}50`
                           }}
                         >
-                          <stage.icon size={24} style={{ color: stage.color }} />
+                          <stage.icon size={32} style={{ color: stage.color }} />
                         </div>
                         <div>
                           <Badge 
-                            className="text-xs"
+                            className="text-sm px-3 py-1"
                             style={{ 
                               backgroundColor: `${stage.color}20`,
                               color: stage.color,
@@ -450,22 +450,22 @@ const HorizontalJourney = () => {
                         </div>
                       </div>
                       
-                      <h3 className="text-xl font-bold text-white mb-2">
+                      <h3 className="text-2xl font-bold text-white mb-3">
                         {stage.title}
                       </h3>
-                      <p className="text-[rgb(161,161,170)] text-sm leading-relaxed">
+                      <p className="text-[rgb(161,161,170)] text-base leading-relaxed">
                         {stage.subtitle}
                       </p>
                     </div>
                     
                     <div className="text-right">
                       <div 
-                        className="text-3xl font-bold font-rajdhani"
+                        className="text-4xl font-bold font-rajdhani"
                         style={{ color: stage.color }}
                       >
                         {stage.metric}
                       </div>
-                      <div className="text-[rgb(161,161,170)] text-xs mt-1">
+                      <div className="text-[rgb(161,161,170)] text-sm mt-2">
                         {stage.metricLabel}
                       </div>
                     </div>
