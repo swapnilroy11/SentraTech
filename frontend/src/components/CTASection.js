@@ -190,11 +190,11 @@ const CTASection = () => {
           </div>
 
           {/* Right Side - Contact Form */}
-          <Card className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(38,40,42)] border-2 border-[#DAFF01] rounded-3xl p-8">
+          <Card className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(38,40,42)] border-2 border-[#00FF41] rounded-3xl p-8">
             <CardHeader className="p-0 mb-8">
               <div className="text-center">
-                <div className="w-16 h-16 bg-[#DAFF01]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#DAFF01]/50">
-                  <Rocket size={32} className="text-[#DAFF01]" />
+                <div className="w-16 h-16 bg-[#00FF41]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00FF41]/50">
+                  <Rocket size={32} className="text-[#00FF41]" />
                 </div>
                 <CardTitle className="text-2xl text-white mb-2">
                   Request Your Demo
