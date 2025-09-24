@@ -14,6 +14,9 @@ import SpaceBackground from "./components/SpaceBackground";
 function App() {
   return (
     <div className="App">
+      {/* Space-themed WebGL Background for entire website */}
+      <SpaceBackground intensity={0.8} particles={300} />
+      
       <BrowserRouter>
         <Routes>
           <Route path="/" element={
