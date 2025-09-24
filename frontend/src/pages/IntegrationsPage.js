@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { motion } from 'framer-motion';
 import { ArrowRight, Code, ExternalLink, Play } from 'lucide-react';
 import IntegrationsShowcase from '../components/IntegrationsShowcase';
+import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const IntegrationsPage = () => {
   const [showCodeExample, setShowCodeExample] = useState(false);
