@@ -148,6 +148,7 @@ const CaseStudiesPage = () => {
         </div>
       </section>
     </div>
+    </ComponentErrorBoundary>
   );
 };
 
