@@ -321,7 +321,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Demo Request & CRM Integration"
     - "Demo Request Form Integration"
   stuck_tasks: []
   test_all: false
@@ -330,3 +329,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Implemented Demo Request & CRM integration (Phase 1b). Created backend API with mock HubSpot service, email notifications, and database storage. Updated frontend form to integrate with real API. Added proper validation, error handling, and success feedback. Ready for comprehensive testing of the demo request workflow."
+  - agent: "testing"
+    message: "✅ BACKEND TESTING COMPLETE - Demo Request & CRM Integration fully tested and working. All 15 demo request tests passed after fixing 2 minor validation issues. Mock HubSpot service working correctly with contact creation and duplicate handling. Mock email service sending both user confirmations and internal notifications. Database integration working properly. All validation (required fields, email format, phone format) working correctly. Debug endpoints functional. Ready for frontend integration testing if needed."
