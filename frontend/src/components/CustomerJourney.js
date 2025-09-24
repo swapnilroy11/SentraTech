@@ -80,15 +80,6 @@ const CustomerJourney = () => {
           </div>
         </div>
 
-        {/* 3D Interactive Timeline */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Interactive 3D Journey Map</h3>
-            <p className="text-[rgb(161,161,170)]">Click on any stage to explore in detail • Hover for quick info</p>
-          </div>
-          <CustomerJourney3D />
-        </div>
-
         {/* Traditional Timeline View */}
         <div className="relative max-w-6xl mx-auto">
           {/* Timeline Container */}
