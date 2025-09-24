@@ -1004,12 +1004,9 @@ class LiveChatTester:
         # Test Case 1: Send message via REST API
         try:
             test_message = "Hello, I need help with SentraTech's AI platform features."
-            test_data = {
-                "session_id": session_id,
-                "message": test_message
-            }
             
-            response = requests.post(f"{BACKEND_URL}/chat/message", json=test_data, timeout=30)
+            # Use query parameters as expected by the endpoint
+            response = requests.post(f"{BACKEND_URL}/chat/message?session_id={session_id}&message={test_message}", timeout=30)
             
             if response.status_code == 200:
                 result = response.json()
