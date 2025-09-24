@@ -43,64 +43,156 @@ const SentraTechLanding = () => {
   // Load mock data on component mount
   useEffect(() => {
     mockApi.getStats().then(setStats);
-    mockApi.getChatMessages().then(setChatMessages);
+    // Remove mock chat messages loading
   }, []);
 
-  // Custom cursor effect
-  useEffect(() => {
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-
-    const particles = [];
-    
-    const moveCursor = (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+  // Live Chat Integration Functions
+  const createChatSession = async () => {
+    try {
+      setIsConnecting(true);
+      setConnectionError(null);
       
-      // Create particle trail
-      if (Math.random() > 0.7) {
-        const particle = document.createElement('div');
-        particle.className = 'cursor-particle';
-        particle.style.left = e.clientX + 'px';
-        particle.style.top = e.clientY + 'px';
-        particle.style.background = '#00FF41';
-        document.body.appendChild(particle);
+      const response = await axios.post(`${BACKEND_URL}/api/chat/session`);
+      
+      if (response.data.success) {
+        const sessionId = response.data.session_id;
+        setChatSessionId(sessionId);
         
-        particles.push(particle);
+        // Try WebSocket connection first
+        await connectWebSocket(sessionId);
         
-        setTimeout(() => {
-          particle.remove();
-          particles.splice(particles.indexOf(particle), 1);
-        }, 500);
+        return sessionId;
+      } else {
+        throw new Error('Failed to create chat session');
       }
-    };
+    } catch (error) {
+      console.error('Error creating chat session:', error);
+      setConnectionError('Failed to connect to chat service');
+      return null;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
 
-    document.addEventListener('mousemove', moveCursor);
+  const connectWebSocket = async (sessionId) => {
+    try {
+      const wsUrl = `wss://${window.location.host}/ws/chat/${sessionId}`;
+      const ws = new WebSocket(wsUrl);
+      
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+        setWebsocket(ws);
+        setConnectionError(null);
+      };
+      
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'system') {
+          // Handle welcome message
+          const systemMessage = {
+            id: Date.now(),
+            content: data.content,
+            sender: 'assistant',
+            timestamp: new Date(data.timestamp)
+          };
+          setChatMessages(prev => [...prev, systemMessage]);
+        } else if (data.type === 'ai_response') {
+          // Handle AI response
+          const aiMessage = {
+            id: data.id,
+            content: data.content,
+            sender: 'assistant',
+            timestamp: new Date(data.timestamp)
+          };
+          setChatMessages(prev => [...prev, aiMessage]);
+          setIsTyping(false);
+        } else if (data.type === 'typing') {
+          setIsTyping(data.is_typing);
+        }
+      };
+      
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        setConnectionError('Connection lost. Using fallback mode.');
+        setWebsocket(null);
+      };
+      
+      ws.onclose = () => {
+        console.log('WebSocket disconnected');
+        setWebsocket(null);
+      };
+      
+    } catch (error) {
+      console.error('WebSocket connection failed:', error);
+      setConnectionError('WebSocket unavailable. Using REST API.');
+    }
+  };
+
+  const sendMessageWebSocket = (message) => {
+    if (websocket && websocket.readyState === WebSocket.OPEN) {
+      const messageData = {
+        type: 'user_message',
+        content: message
+      };
+      websocket.send(JSON.stringify(messageData));
+      return true;
+    }
+    return false;
+  };
+
+  const sendMessageREST = async (sessionId, message) => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/api/chat/message?session_id=${sessionId}&message=${encodeURIComponent(message)}`
+      );
+      
+      if (response.data.success) {
+        const aiMessage = {
+          id: response.data.ai_response.id,
+          content: response.data.ai_response.content,
+          sender: 'assistant',
+          timestamp: new Date(response.data.ai_response.timestamp)
+        };
+        setChatMessages(prev => [...prev, aiMessage]);
+        setIsTyping(false);
+      }
+    } catch (error) {
+      console.error('REST API message error:', error);
+      setConnectionError('Failed to send message');
+      setIsTyping(false);
+    }
+  };
+
+  const handleChatOpen = async () => {
+    setChatOpen(true);
     
-    return () => {
-      document.removeEventListener('mousemove', moveCursor);
-      cursor.remove();
-      particles.forEach(p => p.remove());
-    };
-  }, []);
+    if (!chatSessionId) {
+      await createChatSession();
+    }
+  };
 
   const handleChatSend = async () => {
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || !chatSessionId) return;
     
     const userMessage = {
       id: Date.now(),
-      text: chatInput,
+      content: chatInput,
       sender: 'user',
       timestamp: new Date()
     };
     
     setChatMessages(prev => [...prev, userMessage]);
     setChatInput('');
+    setIsTyping(true);
     
-    // Get bot response
-    const botResponse = await mockApi.sendChatMessage(chatInput);
-    setChatMessages(prev => [...prev, botResponse]);
+    // Try WebSocket first, fallback to REST API
+    const sentViaWebSocket = sendMessageWebSocket(chatInput);
+    
+    if (!sentViaWebSocket) {
+      // Fallback to REST API
+      await sendMessageREST(chatSessionId, chatInput);
+    }
   };
 
   const translations = {
