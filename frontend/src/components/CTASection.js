@@ -62,36 +62,46 @@ const CTASection = () => {
   };
 
   const validateField = (field, value) => {
+    // Handle undefined or null values
+    const fieldValue = value || '';
+    console.log(`validateField called for ${field} with value: "${fieldValue}" (type: ${typeof fieldValue})`); // Debug log
+    
     switch (field) {
       case 'name':
-        if (!value.trim()) {
+        if (!fieldValue.trim()) {
+          console.log(`Name validation failed: empty value`); // Debug log
           return 'Full name is required';
         }
-        if (value.trim().length < 2) {
+        if (fieldValue.trim().length < 2) {
+          console.log(`Name validation failed: too short`); // Debug log
           return 'Name must be at least 2 characters';
         }
         return '';
       
       case 'email':
-        if (!value.trim()) {
+        if (!fieldValue.trim()) {
+          console.log(`Email validation failed: empty value`); // Debug log
           return 'Email is required';
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) {
+        if (!emailRegex.test(fieldValue)) {
+          console.log(`Email validation failed: invalid format`); // Debug log
           return 'Please enter a valid email address';
         }
         return '';
       
       case 'company':
-        if (!value.trim()) {
+        if (!fieldValue.trim()) {
+          console.log(`Company validation failed: empty value`); // Debug log
           return 'Company name is required';
         }
         return '';
       
       case 'phone':
-        if (value && value.trim()) {
+        if (fieldValue && fieldValue.trim()) {
           const phoneRegex = /^[\+]?[\d\s\-\(\)]{7,20}$/;
-          if (!phoneRegex.test(value.trim())) {
+          if (!phoneRegex.test(fieldValue.trim())) {
+            console.log(`Phone validation failed: invalid format`); // Debug log
             return 'Please enter a valid phone number';
           }
         }
