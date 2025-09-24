@@ -982,18 +982,18 @@ async def create_demo_request(
     demo_request: DemoRequest,
     background_tasks: BackgroundTasks
 ):
-    """Create a demo request and add to CRM"""
+    """Create a demo request and save to Google Sheets"""
     try:
-        # Create contact in HubSpot (mock)
-        hubspot_result = await hubspot_service.create_contact(demo_request)
+        # Submit to Google Sheets
+        sheets_result = await sheets_service.submit_demo_request(demo_request)
         
-        if hubspot_result["success"]:
-            contact_id = hubspot_result["contact_id"]
+        if sheets_result["success"]:
+            # Generate a reference ID for tracking
+            reference_id = str(uuid.uuid4())
             
-            # Save to database
+            # Save to database as backup
             demo_record = {
-                "id": str(uuid.uuid4()),
-                "contact_id": contact_id,
+                "id": reference_id,
                 "email": demo_request.email,
                 "name": demo_request.name,
                 "company": demo_request.company,
@@ -1001,7 +1001,8 @@ async def create_demo_request(
                 "call_volume": demo_request.call_volume,
                 "message": demo_request.message,
                 "timestamp": datetime.now(timezone.utc).isoformat(),
-                "source": "website_form"
+                "source": "website_form",
+                "sheets_timestamp": sheets_result.get("timestamp")
             }
             
             await db.demo_requests.insert_one(demo_record)
@@ -1009,27 +1010,24 @@ async def create_demo_request(
             # Schedule email notifications as background tasks
             background_tasks.add_task(
                 email_service.send_demo_confirmation,
-                demo_request.email,
-                demo_request.name,
-                contact_id
+                demo_request
             )
             
             background_tasks.add_task(
                 email_service.send_internal_notification,
-                demo_request,
-                contact_id
+                demo_request
             )
             
-            logger.info(f"Demo request created successfully: {contact_id}")
+            logger.info(f"Demo request created successfully: {reference_id}")
             
             return DemoRequestResponse(
                 success=True,
-                contact_id=contact_id,
-                message="Demo request submitted successfully! We'll contact you within 1-2 business days.",
-                reference_id=demo_record["id"]
+                contact_id=reference_id,
+                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
+                reference_id=reference_id
             )
         else:
-            raise HTTPException(status_code=400, detail=hubspot_result["message"])
+            raise HTTPException(status_code=400, detail=sheets_result["message"])
             
     except Exception as e:
         logger.error(f"Demo request creation failed: {str(e)}")
