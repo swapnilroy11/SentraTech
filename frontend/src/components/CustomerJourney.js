@@ -8,6 +8,7 @@ import {
   ArrowRight, Play, Pause, RotateCcw
 } from 'lucide-react';
 import { mockData } from '../data/mock';
+import HorizontalJourney from './HorizontalJourney';
 
 const CustomerJourney = () => {
   const [activeStep, setActiveStep] = useState(0);
