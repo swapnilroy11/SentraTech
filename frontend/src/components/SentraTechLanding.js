@@ -263,17 +263,23 @@ const SentraTechLanding = () => {
               />
             </div>
             
-            {/* Desktop Navigation */}
+            {/* Company Slogan Display */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
-                {t.nav.features}
-              </a>
-              <a href="#pricing" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
-                {t.nav.pricing}
-              </a>
-              <a href="#about" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
-                {t.nav.about}
-              </a>
+              {/* Slogan Display */}
+              <div className="flex items-center space-x-6 text-lg font-rajdhani font-medium">
+                <span className="text-[#00FF41] tracking-wider">
+                  {t.nav.features}
+                </span>
+                <span className="text-[#e2e8f0]">•</span>
+                <span className="text-[#00FF41] tracking-wider">
+                  {t.nav.pricing}
+                </span>
+                <span className="text-[#e2e8f0]">•</span>
+                <span className="text-[#00FF41] tracking-wider">
+                  {t.nav.about}
+                </span>
+              </div>
+              
               <Button 
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
               >
