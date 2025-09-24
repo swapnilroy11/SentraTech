@@ -269,18 +269,26 @@ const ROICalculator = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                   <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
                     <div className="text-2xl lg:text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
-                      {formatCurrency(results.monthlySavings || 0)}
+                      {isLoading ? (
+                        <Loader2 className="animate-spin mx-auto" size={32} />
+                      ) : (
+                        formatCurrency(results.monthly_savings || 0)
+                      )}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Monthly Savings</div>
                     <div className="flex items-center justify-center mt-2 text-[#00FF41]">
                       <ArrowDown size={14} className="mr-1" />
-                      <span className="text-sm">{results.costReductionPercent?.toFixed(0)}%</span>
+                      <span className="text-sm">{results.cost_reduction_percent?.toFixed(0)}%</span>
                     </div>
                   </div>
 
                   <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
                     <div className="text-2xl lg:text-3xl font-bold text-[#00DDFF] mb-2">
-                      {formatCurrency(results.annualSavings || 0)}
+                      {isLoading ? (
+                        <Loader2 className="animate-spin mx-auto" size={32} />
+                      ) : (
+                        formatCurrency(results.annual_savings || 0)
+                      )}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Annual Savings</div>
                     <div className="flex items-center justify-center mt-2 text-[#00DDFF]">
@@ -289,6 +297,18 @@ const ROICalculator = () => {
                     </div>
                   </div>
                 </div>
+
+                {error && (
+                  <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
+                    {error}
+                  </div>
+                )}
+
+                {savedSuccessfully && (
+                  <div className="mt-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
+                    ✅ ROI calculation saved successfully!
+                  </div>
+                )}
               </CardContent>
             </Card>
 
