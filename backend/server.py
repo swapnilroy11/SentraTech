@@ -849,8 +849,8 @@ class EmailService:
             return {"success": False, "message": f"Internal notification error: {str(e)}"}
 
 # Initialize services
-hubspot_service = MockHubSpotService()
-email_service = MockEmailService()
+sheets_service = GoogleSheetsService()
+email_service = EmailService()
 connection_manager = ConnectionManager()
 chat_service = LiveChatService()
 
