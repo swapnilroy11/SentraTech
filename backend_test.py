@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Comprehensive Backend Testing for SentraTech Demo Request System
-Tests Google Sheets integration, email notifications, rate limiting, and security
+Tests Airtable integration, Google Sheets fallback, enhanced logging, and source tracking
 """
 
 import requests
