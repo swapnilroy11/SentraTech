@@ -83,7 +83,7 @@ const FeatureShowcase = () => {
 
                 <CardContent className="p-0">
                   <CardDescription className="text-[rgb(218,218,218)] text-base leading-relaxed">
-                    {feature.description}
+                    {t[feature.descriptionKey] || feature.description}
                   </CardDescription>
                 </CardContent>
 
