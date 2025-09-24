@@ -102,7 +102,20 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Conduct comprehensive frontend testing for the SentraTech AI-powered landing page. Test all components including navigation, hero section, features, customer journey, ROI calculator, testimonials, pricing, CTA section, footer, interactive elements, responsive design, and performance."
+user_problem_statement: "Build backend functionality for SentraTech ROI Calculator. Implement calculation engine that records user inputs in database and returns savings immediately. This is Phase 1a of the backend development plan."
+
+backend:
+  - task: "ROI Calculator API"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented ROI Calculator backend with 3 API endpoints: POST /api/roi/calculate (calculate without saving), POST /api/roi/save (calculate and save to DB), GET /api/roi/calculations (retrieve saved calculations). Added ROI calculation engine with business logic for cost savings (45% reduction), automation rates (70%), and AHT reduction (35%). Added proper Pydantic models for input/output validation and MongoDB integration."
 
 frontend:
   - task: "Navigation & Header"
