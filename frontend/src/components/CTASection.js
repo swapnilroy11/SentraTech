@@ -106,14 +106,24 @@ const CTASection = () => {
     const newErrors = {};
     let hasErrors = false;
     
+    console.log('validateAllFields called with formData:', formData); // Debug log
+    
     // Validate all required fields
     ['name', 'email', 'company', 'phone'].forEach(field => {
-      const errorMessage = validateField(field, formData[field]);
+      const fieldValue = formData[field];
+      console.log(`Validating field ${field} with value: "${fieldValue}"`); // Debug log
+      
+      const errorMessage = validateField(field, fieldValue);
+      console.log(`Validation result for ${field}: "${errorMessage}"`); // Debug log
+      
       if (errorMessage) {
         newErrors[field] = errorMessage;
         hasErrors = true;
+        console.log(`Error found for ${field}: ${errorMessage}`); // Debug log
       }
     });
+    
+    console.log('Final validation - hasErrors:', hasErrors, 'newErrors:', newErrors); // Debug log
     
     // Use flushSync to force immediate state updates and re-render
     if (hasErrors) {
@@ -124,6 +134,7 @@ const CTASection = () => {
         }));
         setError('Please fix the highlighted fields below');
       });
+      console.log('Validation failed, returning false'); // Debug log
       return false;
     } else {
       flushSync(() => {
@@ -131,6 +142,7 @@ const CTASection = () => {
         setError(null);
         setFieldErrors({});
       });
+      console.log('Validation passed, returning true'); // Debug log
       return true;
     }
   };
