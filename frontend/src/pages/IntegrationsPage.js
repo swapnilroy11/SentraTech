@@ -278,7 +278,18 @@ createContact({
       </section>
 
       {/* Integrations Showcase Component */}
-      <IntegrationsShowcase />
+      <ComponentErrorBoundary>
+        <React.Suspense fallback={
+          <div className="py-20 bg-[#0A0A0A] flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-[rgba(0,255,65,0.3)] rounded-full animate-spin border-t-[#00FF41] mx-auto mb-4"></div>
+              <p className="text-[#00FF41]">Loading Integrations...</p>
+            </div>
+          </div>
+        }>
+          <IntegrationsShowcase />
+        </React.Suspense>
+      </ComponentErrorBoundary>
 
       {/* CTA Section */}
       <section className="py-20 bg-[#0A0A0A]">
