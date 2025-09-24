@@ -26,115 +26,79 @@ const HorizontalJourney = () => {
   
   const { t } = useLanguage();
 
-  // Journey stages data
+  // Journey stages data - now using translations
   const journeyStages = [
     {
-      id: 'inbound',
-      title: 'Inbound Contact',
-      subtitle: 'Multi-channel customer entry point',
+      id: 'contact',
+      title: t.journey.stages.contact.title,
+      subtitle: t.journey.stages.contact.subtitle,
       metric: '<5s',
       metricLabel: 'Response Time',
-      description: 'Customers reach out via their preferred channel - phone, email, chat, social media, or SMS. Our unified intake system captures every interaction with full context preservation.',
-      icon: Phone,
+      description: t.journey.stages.contact.description,
+      icon: MessageSquare,
       color: '#00FF41',
       automationRate: 85,
-      channels: ['Phone', 'Email', 'Live Chat', 'Social Media', 'SMS'],
-      keyFeatures: [
-        'Unified multi-channel intake',
-        'Context preservation across channels', 
-        'Real-time availability detection',
-        'Intelligent overflow routing'
-      ]
+      keyFeatures: t.journey.stages.contact.features
     },
     {
       id: 'triage',
-      title: 'AI Triage',
-      subtitle: 'Intelligent intent classification',
+      title: t.journey.stages.triage.title,
+      subtitle: t.journey.stages.triage.subtitle,
       metric: '<50ms',
       metricLabel: 'Analysis Time',
-      description: 'Advanced NLP and machine learning instantly analyze customer intent, sentiment, urgency level, and historical context to determine the optimal response strategy.',
+      description: t.journey.stages.triage.description,
       icon: Brain,
       color: '#00DDFF',
       automationRate: 94,
-      channels: ['NLP Engine', 'Sentiment Analysis', 'Intent Classification', 'Priority Scoring'],
-      keyFeatures: [
-        'Sub-50ms intent recognition',
-        'Real-time sentiment analysis',
-        'Historical context integration',
-        'Urgency level assessment'
-      ]
+      keyFeatures: t.journey.stages.triage.features
     },
     {
       id: 'engagement',
-      title: 'Smart Engagement',
-      subtitle: 'Optimal resource allocation',
+      title: t.journey.stages.engagement.title,
+      subtitle: t.journey.stages.engagement.subtitle,
       metric: '70%',
       metricLabel: 'Automation Rate',
-      description: 'Intelligent routing engine matches customers to the best-suited agent or automated solution based on expertise, availability, complexity, and customer profile.',
+      description: t.journey.stages.engagement.description,
       icon: Zap,
       color: '#FFD700',
       automationRate: 70,
-      channels: ['Expert Matching', 'Load Balancing', 'Skill Routing', 'Escalation Paths'],
-      keyFeatures: [
-        'Expertise-based routing',
-        'Real-time capacity management',
-        'Automated resolution paths',
-        'Seamless human handoff'
-      ]
+      keyFeatures: t.journey.stages.engagement.features
     },
     {
       id: 'augmentation',
-      title: 'AI Augmentation',
-      subtitle: 'Agent empowerment & efficiency',
+      title: t.journey.stages.augmentation.title,
+      subtitle: t.journey.stages.augmentation.subtitle,
       metric: '60%',
       metricLabel: 'Productivity Gain',
-      description: 'Agents receive real-time AI assistance with suggested responses, knowledge base integration, and predictive insights to resolve issues faster and more effectively.',
+      description: t.journey.stages.augmentation.description,
       icon: Users,
       color: '#FF6B6B',
       automationRate: 60,
-      channels: ['Response Suggestions', 'Knowledge Base', 'Predictive Insights', 'Real-time Coaching'],
-      keyFeatures: [
-        'AI-powered response suggestions',
-        'Integrated knowledge base',
-        'Real-time performance coaching',
-        'Predictive issue resolution'
-      ]
+      keyFeatures: t.journey.stages.augmentation.features
     },
     {
       id: 'analytics',
-      title: 'Real-time Analytics',
-      subtitle: 'Continuous intelligence gathering',
+      title: t.journey.stages.analytics.title,
+      subtitle: t.journey.stages.analytics.subtitle,
       metric: '99.9%',
       metricLabel: 'Data Accuracy',
-      description: 'Comprehensive analytics engine tracks performance metrics, identifies trends, measures satisfaction, and provides actionable insights for continuous improvement.',
+      description: t.journey.stages.analytics.description,
       icon: BarChart3,
       color: '#9D4EDD',
       automationRate: 100,
-      channels: ['Performance Metrics', 'Trend Analysis', 'CSAT Tracking', 'Predictive Analytics'],
-      keyFeatures: [
-        'Real-time performance dashboards',
-        'Predictive trend analysis',
-        'Customer satisfaction tracking',
-        'Automated reporting'
-      ]
+      keyFeatures: t.journey.stages.analytics.features
     },
     {
       id: 'outcome',
-      title: 'Optimized Outcome',
-      subtitle: 'Measured success & improvement',
+      title: t.journey.stages.outcome.title,
+      subtitle: t.journey.stages.outcome.subtitle,
       metric: '96%',
       metricLabel: 'Customer Satisfaction',
-      description: 'Continuous learning and optimization ensure improved resolution rates, higher satisfaction scores, and reduced operational costs through data-driven insights.',
-      icon: Target,
+      description: t.journey.stages.outcome.description,
+      icon: CheckCircle,
       color: '#00FF41',
       automationRate: 88,
-      channels: ['Resolution Tracking', 'Satisfaction Surveys', 'Cost Analytics', 'Improvement Loops'],
-      keyFeatures: [
-        'Automated follow-up sequences',
-        'Satisfaction measurement',
-        'Cost optimization insights',
-        'Continuous improvement loops'
-      ]
+      keyFeatures: t.journey.stages.outcome.features
     }
   ];
 
