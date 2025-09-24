@@ -2325,26 +2325,532 @@ class AnalyticsTester:
         # Return overall success
         return len(self.failed_tests) == 0
 
+class UserManagementTester:
+    """Test User Management System API endpoints"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        self.test_users = []  # Store created users for cleanup
+        self.admin_token = None
+        self.user_token = None
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_user_registration(self):
+        """Test POST /api/auth/register endpoint"""
+        print("\n=== Testing User Registration ===")
+        
+        # Test Case 1: Valid registration with all requirements
+        valid_user = {
+            "email": "john.doe@testcompany.com",
+            "password": "SecurePass123",
+            "full_name": "John Doe",
+            "company": "Test Company Inc"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/register", json=valid_user, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check response structure
+                required_fields = ["id", "email", "full_name", "company", "role", "is_active", "created_at"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    if result["email"] == valid_user["email"] and result["full_name"] == valid_user["full_name"]:
+                        self.log_test("User Registration - Valid Data", True, 
+                                    f"User created with ID: {result['id']}")
+                        self.test_users.append(result["id"])
+                    else:
+                        self.log_test("User Registration - Valid Data", False, 
+                                    f"User data mismatch: {result}")
+                else:
+                    self.log_test("User Registration - Valid Data", False, 
+                                f"Missing response fields: {missing_fields}")
+            else:
+                self.log_test("User Registration - Valid Data", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("User Registration - Valid Data", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Password validation - missing uppercase
+        weak_password_user = {
+            "email": "weak.password@test.com",
+            "password": "weakpass123",  # No uppercase
+            "full_name": "Weak Password User",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/register", json=weak_password_user, timeout=10)
+            if response.status_code == 422:
+                self.log_test("User Registration - Password Validation (Uppercase)", True, 
+                            "Password validation working - uppercase required")
+            else:
+                self.log_test("User Registration - Password Validation (Uppercase)", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Registration - Password Validation (Uppercase)", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Password validation - missing digit
+        no_digit_user = {
+            "email": "nodigit@test.com",
+            "password": "NoDigitPass",  # No digit
+            "full_name": "No Digit User",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/register", json=no_digit_user, timeout=10)
+            if response.status_code == 422:
+                self.log_test("User Registration - Password Validation (Digit)", True, 
+                            "Password validation working - digit required")
+            else:
+                self.log_test("User Registration - Password Validation (Digit)", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Registration - Password Validation (Digit)", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Password validation - too short
+        short_password_user = {
+            "email": "short@test.com",
+            "password": "Short1",  # Less than 8 characters
+            "full_name": "Short Password User",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/register", json=short_password_user, timeout=10)
+            if response.status_code == 422:
+                self.log_test("User Registration - Password Validation (Length)", True, 
+                            "Password validation working - minimum 8 characters")
+            else:
+                self.log_test("User Registration - Password Validation (Length)", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Registration - Password Validation (Length)", False, f"Exception: {str(e)}")
+        
+        # Test Case 5: Duplicate email registration
+        duplicate_user = {
+            "email": "john.doe@testcompany.com",  # Same as first test
+            "password": "AnotherPass123",
+            "full_name": "John Duplicate",
+            "company": "Another Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/register", json=duplicate_user, timeout=10)
+            if response.status_code == 400:
+                self.log_test("User Registration - Duplicate Email", True, 
+                            "Duplicate email properly rejected")
+            else:
+                self.log_test("User Registration - Duplicate Email", False, 
+                            f"Expected 400, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Registration - Duplicate Email", False, f"Exception: {str(e)}")
+    
+    def test_user_authentication(self):
+        """Test POST /api/auth/login endpoint"""
+        print("\n=== Testing User Authentication ===")
+        
+        # First create a test user for login
+        test_user = {
+            "email": "login.test@company.com",
+            "password": "LoginTest123",
+            "full_name": "Login Test User",
+            "company": "Login Test Company"
+        }
+        
+        # Register the user first
+        register_response = requests.post(f"{BACKEND_URL}/auth/register", json=test_user, timeout=15)
+        if register_response.status_code != 200:
+            self.log_test("User Authentication - Setup", False, "Failed to create test user for login")
+            return
+        
+        # Test Case 1: Successful login with correct credentials
+        login_data = {
+            "email": test_user["email"],
+            "password": test_user["password"]
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/login", json=login_data, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check JWT token structure
+                required_fields = ["access_token", "token_type", "expires_in", "user"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    if result["token_type"] == "bearer" and len(result["access_token"]) > 0:
+                        self.log_test("User Authentication - Successful Login", True, 
+                                    f"JWT token generated, expires in: {result['expires_in']} minutes")
+                        
+                        # Store token for later tests
+                        self.user_token = result["access_token"]
+                        
+                        # Verify user data in response
+                        user_data = result["user"]
+                        if user_data["email"] == test_user["email"]:
+                            self.log_test("User Authentication - User Data in Token", True, 
+                                        "User data correctly included in login response")
+                        else:
+                            self.log_test("User Authentication - User Data in Token", False, 
+                                        "User data mismatch in login response")
+                    else:
+                        self.log_test("User Authentication - Successful Login", False, 
+                                    f"Invalid token structure: {result}")
+                else:
+                    self.log_test("User Authentication - Successful Login", False, 
+                                f"Missing response fields: {missing_fields}")
+            else:
+                self.log_test("User Authentication - Successful Login", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("User Authentication - Successful Login", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Failed login with incorrect password
+        wrong_password = {
+            "email": test_user["email"],
+            "password": "WrongPassword123"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/login", json=wrong_password, timeout=10)
+            if response.status_code == 401:
+                self.log_test("User Authentication - Wrong Password", True, 
+                            "Wrong password properly rejected")
+            else:
+                self.log_test("User Authentication - Wrong Password", False, 
+                            f"Expected 401, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Authentication - Wrong Password", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Failed login with non-existent email
+        nonexistent_user = {
+            "email": "nonexistent@test.com",
+            "password": "SomePassword123"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/login", json=nonexistent_user, timeout=10)
+            if response.status_code == 401:
+                self.log_test("User Authentication - Non-existent User", True, 
+                            "Non-existent user properly rejected")
+            else:
+                self.log_test("User Authentication - Non-existent User", False, 
+                            f"Expected 401, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Authentication - Non-existent User", False, f"Exception: {str(e)}")
+    
+    def test_user_profile_management(self):
+        """Test GET /api/auth/me and PUT /api/auth/profile endpoints"""
+        print("\n=== Testing User Profile Management ===")
+        
+        if not self.user_token:
+            self.log_test("User Profile - Token Setup", False, "No user token available for testing")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.user_token}"}
+        
+        # Test Case 1: Get current user profile
+        try:
+            response = requests.get(f"{BACKEND_URL}/auth/me", headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check profile structure
+                required_fields = ["id", "email", "full_name", "company", "role", "is_active"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    self.log_test("User Profile - Get Current User", True, 
+                                f"Profile retrieved for user: {result['email']}")
+                    
+                    # Store user ID for later tests
+                    self.test_user_id = result["id"]
+                else:
+                    self.log_test("User Profile - Get Current User", False, 
+                                f"Missing profile fields: {missing_fields}")
+            else:
+                self.log_test("User Profile - Get Current User", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("User Profile - Get Current User", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Update user profile
+        profile_update = {
+            "full_name": "Updated Test User",
+            "company": "Updated Test Company",
+            "profile_data": {"department": "Engineering", "role": "Senior Developer"}
+        }
+        
+        try:
+            response = requests.put(f"{BACKEND_URL}/auth/profile", 
+                                  json=profile_update, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result["full_name"] == profile_update["full_name"]:
+                    self.log_test("User Profile - Update Profile", True, 
+                                f"Profile updated successfully: {result['full_name']}")
+                else:
+                    self.log_test("User Profile - Update Profile", False, 
+                                f"Profile update failed: {result}")
+            else:
+                self.log_test("User Profile - Update Profile", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("User Profile - Update Profile", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Unauthorized access (no token)
+        try:
+            response = requests.get(f"{BACKEND_URL}/auth/me", timeout=10)
+            if response.status_code == 401:
+                self.log_test("User Profile - Unauthorized Access", True, 
+                            "Unauthorized access properly rejected")
+            else:
+                self.log_test("User Profile - Unauthorized Access", False, 
+                            f"Expected 401, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("User Profile - Unauthorized Access", False, f"Exception: {str(e)}")
+    
+    def test_password_management(self):
+        """Test password change and reset endpoints"""
+        print("\n=== Testing Password Management ===")
+        
+        if not self.user_token:
+            self.log_test("Password Management - Token Setup", False, "No user token available for testing")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.user_token}"}
+        
+        # Test Case 1: Change password with correct current password
+        password_change = {
+            "current_password": "LoginTest123",  # From the login test user
+            "new_password": "NewSecurePass123"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/change-password", 
+                                   json=password_change, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Password Management - Change Password", True, 
+                                "Password changed successfully")
+                else:
+                    self.log_test("Password Management - Change Password", False, 
+                                f"Password change failed: {result}")
+            else:
+                self.log_test("Password Management - Change Password", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Password Management - Change Password", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Change password with wrong current password
+        wrong_current_password = {
+            "current_password": "WrongCurrentPass123",
+            "new_password": "AnotherNewPass123"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/change-password", 
+                                   json=wrong_current_password, headers=headers, timeout=10)
+            
+            if response.status_code == 400:
+                self.log_test("Password Management - Wrong Current Password", True, 
+                            "Wrong current password properly rejected")
+            else:
+                self.log_test("Password Management - Wrong Current Password", False, 
+                            f"Expected 400, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Password Management - Wrong Current Password", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Request password reset
+        reset_request = {
+            "email": "login.test@company.com"  # From our test user
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/auth/request-password-reset", 
+                                   json=reset_request, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Password Management - Request Reset", True, 
+                                "Password reset request processed")
+                    
+                    # Store reset token if provided (for testing purposes)
+                    if "reset_token" in result:
+                        self.reset_token = result["reset_token"]
+                else:
+                    self.log_test("Password Management - Request Reset", False, 
+                                f"Reset request failed: {result}")
+            else:
+                self.log_test("Password Management - Request Reset", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Password Management - Request Reset", False, f"Exception: {str(e)}")
+    
+    def test_jwt_token_validation(self):
+        """Test JWT token structure and validation"""
+        print("\n=== Testing JWT Token Validation ===")
+        
+        if not self.user_token:
+            self.log_test("JWT Validation - Token Setup", False, "No user token available for testing")
+            return
+        
+        # Test Case 1: Valid token structure
+        try:
+            import base64
+            import json as json_lib
+            
+            # Decode JWT token (without verification for testing)
+            token_parts = self.user_token.split('.')
+            if len(token_parts) == 3:
+                # Decode header
+                header_data = base64.b64decode(token_parts[0] + '==').decode('utf-8')
+                header = json_lib.loads(header_data)
+                
+                # Decode payload
+                payload_data = base64.b64decode(token_parts[1] + '==').decode('utf-8')
+                payload = json_lib.loads(payload_data)
+                
+                # Check JWT structure
+                if header.get('alg') and payload.get('sub') and payload.get('exp'):
+                    self.log_test("JWT Validation - Token Structure", True, 
+                                f"Valid JWT structure with algorithm: {header.get('alg')}")
+                    
+                    # Check expiration
+                    import time
+                    current_time = time.time()
+                    if payload.get('exp') > current_time:
+                        self.log_test("JWT Validation - Token Expiration", True, 
+                                    "Token not expired")
+                    else:
+                        self.log_test("JWT Validation - Token Expiration", False, 
+                                    "Token is expired")
+                else:
+                    self.log_test("JWT Validation - Token Structure", False, 
+                                f"Invalid JWT structure: header={header}, payload keys={list(payload.keys())}")
+            else:
+                self.log_test("JWT Validation - Token Structure", False, 
+                            f"Invalid JWT format: {len(token_parts)} parts")
+                
+        except Exception as e:
+            self.log_test("JWT Validation - Token Structure", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Invalid token
+        invalid_headers = {"Authorization": "Bearer invalid_token_here"}
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/auth/me", headers=invalid_headers, timeout=10)
+            if response.status_code == 401:
+                self.log_test("JWT Validation - Invalid Token", True, 
+                            "Invalid token properly rejected")
+            else:
+                self.log_test("JWT Validation - Invalid Token", False, 
+                            f"Expected 401, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("JWT Validation - Invalid Token", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Missing Authorization header
+        try:
+            response = requests.get(f"{BACKEND_URL}/auth/me", timeout=10)
+            if response.status_code == 401:
+                self.log_test("JWT Validation - Missing Authorization", True, 
+                            "Missing authorization properly rejected")
+            else:
+                self.log_test("JWT Validation - Missing Authorization", False, 
+                            f"Expected 401, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("JWT Validation - Missing Authorization", False, f"Exception: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all user management test suites"""
+        print("🚀 Starting User Management System API Tests")
+        print("=" * 60)
+        
+        # Run all test suites in order
+        self.test_user_registration()
+        self.test_user_authentication()
+        self.test_user_profile_management()
+        self.test_password_management()
+        self.test_jwt_token_validation()
+        
+        # Print summary
+        print("\n" + "=" * 60)
+        print("📊 USER MANAGEMENT TEST SUMMARY")
+        print("=" * 60)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        # Return overall success
+        return len(self.failed_tests) == 0
+
 if __name__ == "__main__":
-    print("🎯 SentraTech Analytics & Tracking System Testing Suite")
-    print("=" * 70)
+    print("🎯 USER MANAGEMENT SYSTEM API TESTING")
+    print("=" * 80)
     
-    overall_success = True
-    
-    # Test Analytics & Tracking System API (NEW - Focus of this test)
-    print("\n📊 TESTING ANALYTICS & TRACKING SYSTEM API")
-    analytics_tester = AnalyticsTester()
-    analytics_success = analytics_tester.run_all_tests()
-    overall_success = overall_success and analytics_success
+    # Test User Management System API (Focus of this test)
+    print("\n🔐 TESTING USER MANAGEMENT SYSTEM API")
+    user_mgmt_tester = UserManagementTester()
+    user_mgmt_success = user_mgmt_tester.run_all_tests()
     
     # Final Summary
-    print("\n" + "=" * 70)
-    print("🏁 ANALYTICS & TRACKING API TEST SUMMARY")
-    print("=" * 70)
+    print("\n" + "=" * 80)
+    print("🏁 USER MANAGEMENT API TEST SUMMARY")
+    print("=" * 80)
     
-    total_tests = len(analytics_tester.test_results)
-    total_passed = len(analytics_tester.passed_tests)
-    total_failed = len(analytics_tester.failed_tests)
+    total_tests = len(user_mgmt_tester.test_results)
+    total_passed = len(user_mgmt_tester.passed_tests)
+    total_failed = len(user_mgmt_tester.failed_tests)
     
     print(f"📊 Overall Results:")
     print(f"   Total Tests: {total_tests}")
@@ -2352,14 +2858,15 @@ if __name__ == "__main__":
     print(f"   ❌ Failed: {total_failed}")
     print(f"   Success Rate: {(total_passed/total_tests)*100:.1f}%")
     
-    if overall_success:
-        print("\n🎉 ALL ANALYTICS & TRACKING API TESTS PASSED! 🎉")
-        print("✅ Analytics Event Tracking API: Working")
-        print("✅ Conversion Tracking API: Working") 
-        print("✅ Analytics Statistics API: Working")
-        print("✅ Performance Metrics API: Working")
+    if user_mgmt_success:
+        print("\n🎉 ALL USER MANAGEMENT API TESTS PASSED! 🎉")
+        print("✅ User Registration API: Working")
+        print("✅ User Authentication API: Working") 
+        print("✅ User Profile Management API: Working")
+        print("✅ Password Management API: Working")
+        print("✅ JWT Token Validation: Working")
     else:
-        print("\n⚠️  SOME ANALYTICS TESTS FAILED")
-        print(f"❌ Real-time Metrics API: {'✅ Working' if metrics_success else '❌ Issues Found'}")
+        print("\n⚠️  SOME USER MANAGEMENT TESTS FAILED")
+        print("❌ Check failed tests above for details")
         
-    print("\n" + "=" * 70)
+    print("\n" + "=" * 80)
