@@ -237,7 +237,7 @@ const FloatingNavigation = () => {
             {/* Menu Footer */}
             <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.1)]">
               <div className="text-xs text-[rgb(161,161,170)] text-center">
-                SentraTech Navigation
+                {t.floatingNav.footer}
               </div>
             </div>
           </motion.div>
