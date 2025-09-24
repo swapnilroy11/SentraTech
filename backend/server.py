@@ -1112,18 +1112,36 @@ async def create_demo_request(
     demo_request: DemoRequest,
     background_tasks: BackgroundTasks
 ):
-    """Create a demo request and save to Google Sheets"""
+    """Create a demo request with Airtable primary, Google Sheets fallback"""
     try:
-        # Try Airtable submission first
-        airtable_result = await airtable_service.create_demo_request(demo_request)
-        
-        # Also try Google Sheets as backup
-        sheets_result = await sheets_service.submit_demo_request(demo_request)
+        logger.info(f"📝 Demo request received: {demo_request.email} from {demo_request.company}")
         
         # Generate a reference ID for tracking
         reference_id = str(uuid.uuid4())
         
-        # Always save to database (either as backup or primary storage)
+        # Initialize status tracking
+        integration_results = {
+            "airtable": {"success": False, "error": "Not attempted"},
+            "sheets": {"success": False, "error": "Not attempted"},
+            "database": {"success": False, "error": "Not attempted"}
+        }
+        
+        # PRIMARY: Try Airtable submission first
+        logger.info("🔄 Attempting Airtable submission...")
+        airtable_result = await airtable_service.create_demo_request(demo_request)
+        integration_results["airtable"] = airtable_result
+        
+        primary_success = airtable_result.get("success", False)
+        
+        # FALLBACK: If Airtable failed, try Google Sheets
+        if not primary_success:
+            logger.warning(f"⚠️ Airtable failed: {airtable_result.get('error')}, falling back to Google Sheets")
+            sheets_result = await sheets_service.submit_demo_request(demo_request)
+            integration_results["sheets"] = sheets_result
+        else:
+            logger.info(f"✅ Airtable success: Record ID {airtable_result.get('airtable_id')}")
+        
+        # Always save to database as final backup
         demo_record = {
             "id": reference_id,
             "email": demo_request.email,
@@ -1134,13 +1152,14 @@ async def create_demo_request(
             "message": demo_request.message,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "source": "website_form",
-            "airtable_status": airtable_result.get("success", False),
-            "sheets_status": sheets_result["success"],
-            "sheets_timestamp": sheets_result.get("timestamp"),
-            "airtable_id": airtable_result.get("airtable_id") if airtable_result.get("success") else None
+            "integrations": integration_results,
+            "airtable_id": airtable_result.get("airtable_id") if primary_success else None,
+            "sheets_timestamp": integration_results["sheets"].get("timestamp") if not primary_success else None
         }
         
         await db.demo_requests.insert_one(demo_record)
+        integration_results["database"]["success"] = True
+        logger.info(f"💾 Database storage successful: {reference_id}")
         
         # Schedule email notifications as background tasks
         background_tasks.add_task(
@@ -1153,14 +1172,35 @@ async def create_demo_request(
             demo_request
         )
         
-        logger.info(f"Demo request created successfully: {reference_id} (Sheets: {sheets_result['success']})")
-        
-        return DemoRequestResponse(
-            success=True,
-            contact_id=reference_id,
-            message="Demo request submitted successfully! We'll contact you within 2 business hours.",
-            reference_id=reference_id
-        )
+        # Determine success status and response
+        if primary_success:
+            logger.info(f"🎉 Demo request completed successfully via Airtable: {reference_id}")
+            return DemoRequestResponse(
+                success=True,
+                contact_id=reference_id,
+                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
+                reference_id=reference_id,
+                source="airtable"
+            )
+        elif integration_results["sheets"].get("success"):
+            logger.info(f"🎉 Demo request completed successfully via Google Sheets fallback: {reference_id}")
+            return DemoRequestResponse(
+                success=True,
+                contact_id=reference_id,
+                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
+                reference_id=reference_id,
+                source="sheets"
+            )
+        else:
+            # Both external services failed, but database succeeded
+            logger.warning(f"⚠️ External services failed, but database backup successful: {reference_id}")
+            return DemoRequestResponse(
+                success=True,
+                contact_id=reference_id,
+                message="Demo request received! We'll contact you within 4 business hours.",
+                reference_id=reference_id,
+                source="database"
+            )
             
     except Exception as e:
         logger.error(f"Demo request creation failed: {str(e)}")
