@@ -2732,8 +2732,10 @@ class UserManagementTester:
         print("\n=== Testing Admin Functions ===")
         
         # First create an admin user
+        import uuid
+        unique_id = str(uuid.uuid4())[:8]
         admin_user = {
-            "email": "admin@testcompany.com",
+            "email": f"admin.{unique_id}@testcompany.com",
             "password": "AdminPass123",
             "full_name": "Admin User",
             "company": "Test Company",
