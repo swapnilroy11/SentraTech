@@ -456,7 +456,6 @@ const CTASection = () => {
                   By submitting this form, you agree to our privacy policy. 
                   No spam, unsubscribe anytime.
                 </p>
-                </p>
               </form>
             </CardContent>
           </Card>
