@@ -21,49 +21,49 @@ const FloatingNavigation = () => {
   const navigationItems = [
     {
       id: 'home',
-      label: 'Home',
+      label: t.floatingNav.items.home,
       icon: Home,
       href: '#',
       offset: 0
     },
     {
       id: 'features',
-      label: 'Features',
+      label: t.floatingNav.items.features,
       icon: Sparkles,
       href: '#features',
       offset: -100
     },
     {
       id: 'journey',
-      label: 'Customer Journey',
+      label: t.floatingNav.items.journey,
       icon: Route,
       href: '#journey',
       offset: -100
     },
     {
       id: 'roi',
-      label: 'ROI Calculator',
+      label: t.floatingNav.items.roi,
       icon: Calculator,
       href: '#roi-calculator',
       offset: -100
     },
     {
       id: 'testimonials',
-      label: 'Testimonials',
+      label: t.floatingNav.items.testimonials,
       icon: MessageSquare,
       href: '#testimonials',
       offset: -100
     },
     {
       id: 'pricing',
-      label: 'Pricing',
+      label: t.floatingNav.items.pricing,
       icon: DollarSign,
       href: '#pricing',
       offset: -100
     },
     {
       id: 'contact',
-      label: 'Contact',
+      label: t.floatingNav.items.contact,
       icon: Phone,
       href: '#contact',
       offset: -100
