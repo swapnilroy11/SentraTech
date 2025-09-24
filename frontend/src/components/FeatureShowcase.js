@@ -83,7 +83,7 @@ const FeatureShowcase = () => {
 
                 <CardContent className="p-0">
                   <CardDescription className="text-[rgb(218,218,218)] text-base leading-relaxed">
-                    {t[feature.descriptionKey] || feature.description}
+                    {feature.descriptionKey ? t.features.items[feature.descriptionKey.split('.').pop()].description : feature.description}
                   </CardDescription>
                 </CardContent>
 
