@@ -9,12 +9,14 @@ const FloatingNavigation = () => {
   // Navigation items with icons and routes
   const navItems = [
     { id: 'home', path: '/', icon: Home, label: 'Home' },
-    { id: 'features', path: '/features', icon: Zap, label: 'Features' },
-    { id: 'case-studies', path: '/case-studies', icon: Users, label: 'Cases' },
+    { id: 'roi', path: '/features#roi-calculator', icon: Calculator, label: 'ROI Calculator' },
+    { id: 'voice', path: '/features#multi-channel', icon: MessageSquare, label: 'Voice Agents' },
+    { id: 'journey', path: '/features#customer-journey', icon: Route, label: 'Journey' },
+    { id: 'cases', path: '/case-studies', icon: Users, label: 'Case Studies' },
     { id: 'integrations', path: '/integrations', icon: Briefcase, label: 'Integrations' },
     { id: 'security', path: '/security', icon: Shield, label: 'Security' },
     { id: 'pricing', path: '/pricing', icon: DollarSign, label: 'Pricing' },
-    { id: 'demo', path: '/demo-request', icon: MessageSquare, label: 'Demo' }
+    { id: 'demo', path: '/demo-request', icon: FileText, label: 'Demo' }
   ];
 
   const isActivePath = (path) => {
