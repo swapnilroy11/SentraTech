@@ -1,13 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import React from 'react';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { 
-  Phone, Brain, Network, Users, TrendingUp, Award,
-  ArrowRight, Play, Pause, RotateCcw
-} from 'lucide-react';
-import { mockData } from '../data/mock';
+import { Brain } from 'lucide-react';
 import HorizontalJourney from './HorizontalJourney';
 
 const CustomerJourney = () => {
