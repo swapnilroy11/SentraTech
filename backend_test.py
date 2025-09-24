@@ -3869,38 +3869,457 @@ class UserManagementTester:
         # Return overall success
         return len(self.failed_tests) == 0
 
-if __name__ == "__main__":
-    print("🎯 SentraTech Demo Request System Testing Suite")
-    print("=" * 80)
-    print("Testing Google Sheets Integration + Email Notifications + Rate Limiting")
-    print("=" * 80)
+class GoogleSheetsIntegrationTester:
+    """Focused testing for Google Sheets integration and fallback mechanisms"""
     
-    # Run Demo Request System tests
-    demo_system_tester = DemoRequestSystemTester()
-    demo_system_success = demo_system_tester.run_all_tests()
-    
-    # Overall summary
-    print("\n" + "🎯" * 30)
-    print("DEMO REQUEST SYSTEM TESTING SUMMARY")
-    print("🎯" * 30)
-    
-    if demo_system_success:
-        print("\n🎉 ALL DEMO REQUEST SYSTEM TESTS PASSED! 🎉")
-        print("✅ Google Sheets integration working")
-        print("✅ Email notifications properly queued")
-        print("✅ Rate limiting and security functional")
-        print("✅ Form data handling comprehensive")
-        print("✅ Background tasks processing correctly")
-        print("✅ Error handling and fallbacks working")
-        print("\nDemo Request system is ready for production use.")
-    else:
-        failed_count = len(demo_system_tester.failed_tests)
-        total_count = len(demo_system_tester.test_results)
-        print(f"\n⚠️  {failed_count}/{total_count} tests failed.")
-        print("Please review failed tests before deployment.")
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
         
-        print("\n🔍 CRITICAL ISSUES TO ADDRESS:")
-        for failed_test in demo_system_tester.failed_tests:
-            print(f"   ❌ {failed_test}")
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
     
-    print("\n" + "🎯" * 30)
+    def test_google_sheets_configuration(self):
+        """Test Google Sheets service configuration with correct Sheet ID"""
+        print("\n=== Testing Google Sheets Configuration ===")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/debug/sheets/config", timeout=10)
+            
+            if response.status_code == 200:
+                config = response.json()
+                
+                # Check if correct Sheet ID is configured
+                expected_sheet_id = "1-sonq8dr_QbA2gG8YU2iv12mVM4OQqwl9mhNPkKS8ts"
+                if config.get("sheet_id") == expected_sheet_id:
+                    self.log_test("Google Sheets - Correct Sheet ID", True, 
+                                f"Sheet ID: {config['sheet_id']}")
+                else:
+                    self.log_test("Google Sheets - Correct Sheet ID", False, 
+                                f"Expected: {expected_sheet_id}, Got: {config.get('sheet_id')}")
+                
+                # Check service configuration
+                if config.get("service_type") == "Google Sheets":
+                    self.log_test("Google Sheets - Service Type", True, "Service type correctly configured")
+                else:
+                    self.log_test("Google Sheets - Service Type", False, 
+                                f"Expected: Google Sheets, Got: {config.get('service_type')}")
+                
+                # Check sheet name
+                if config.get("sheet_name") == "Demo Requests":
+                    self.log_test("Google Sheets - Sheet Name", True, "Sheet name correctly configured")
+                else:
+                    self.log_test("Google Sheets - Sheet Name", False, 
+                                f"Expected: Demo Requests, Got: {config.get('sheet_name')}")
+                
+                # Check web app URL (should be placeholder)
+                web_app_url = config.get("web_app_url", "")
+                if "PLACEHOLDER" in web_app_url:
+                    self.log_test("Google Sheets - Placeholder URL", True, 
+                                "Placeholder URL configured (will trigger fallback)")
+                else:
+                    self.log_test("Google Sheets - Placeholder URL", False, 
+                                f"URL: {web_app_url} (may not trigger fallback)")
+                    
+            else:
+                self.log_test("Google Sheets - Configuration Access", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Google Sheets - Configuration Access", False, f"Exception: {str(e)}")
+    
+    def test_demo_request_with_sheets_fallback(self):
+        """Test demo request submission with Google Sheets fallback to MongoDB"""
+        print("\n=== Testing Demo Request with Google Sheets Fallback ===")
+        
+        # Test data for Google Sheets integration
+        test_request = {
+            "name": "Google Sheets Test User",
+            "email": "sheets.test@integration.com",
+            "company": "Sheets Integration Test Corp",
+            "phone": "+1-555-SHEETS",
+            "call_volume": "25,000",
+            "message": "Testing Google Sheets integration with fallback to MongoDB storage when Sheets submission fails due to placeholder URL."
+        }
+        
+        try:
+            # Submit demo request
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=test_request, timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check successful response structure
+                if result.get("success") and result.get("reference_id"):
+                    self.log_test("Demo Request - Successful Submission", True, 
+                                f"Reference ID: {result['reference_id']}")
+                    
+                    # Store reference for verification
+                    test_reference_id = result["reference_id"]
+                    
+                    # Wait for background processing
+                    time.sleep(3)
+                    
+                    # Verify data was stored in MongoDB (fallback)
+                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=20", timeout=15)
+                    if get_response.status_code == 200:
+                        requests_data = get_response.json()
+                        
+                        if requests_data.get("success"):
+                            # Look for our test request
+                            found_request = None
+                            for req in requests_data.get("requests", []):
+                                if req.get("email") == test_request["email"]:
+                                    found_request = req
+                                    break
+                            
+                            if found_request:
+                                self.log_test("Google Sheets - MongoDB Fallback Storage", True, 
+                                            "Request properly stored in MongoDB when Sheets fails")
+                                
+                                # Verify data integrity
+                                if (found_request.get("name") == test_request["name"] and
+                                    found_request.get("company") == test_request["company"] and
+                                    found_request.get("phone") == test_request["phone"]):
+                                    self.log_test("Google Sheets - Data Integrity", True, 
+                                                "All form data preserved in fallback storage")
+                                else:
+                                    self.log_test("Google Sheets - Data Integrity", False, 
+                                                "Form data not preserved correctly")
+                                
+                                # Check if sheets_status is recorded
+                                if "sheets_status" in found_request:
+                                    sheets_status = found_request["sheets_status"]
+                                    if sheets_status == False:
+                                        self.log_test("Google Sheets - Fallback Status Tracking", True, 
+                                                    "Sheets failure status properly recorded")
+                                    else:
+                                        self.log_test("Google Sheets - Fallback Status Tracking", False, 
+                                                    f"Unexpected sheets_status: {sheets_status}")
+                                else:
+                                    self.log_test("Google Sheets - Fallback Status Tracking", False, 
+                                                "sheets_status not recorded")
+                                
+                                # Check timestamp
+                                if found_request.get("timestamp"):
+                                    self.log_test("Google Sheets - Timestamp Recording", True, 
+                                                f"Timestamp: {found_request['timestamp']}")
+                                else:
+                                    self.log_test("Google Sheets - Timestamp Recording", False, 
+                                                "Timestamp not recorded")
+                                    
+                            else:
+                                self.log_test("Google Sheets - MongoDB Fallback Storage", False, 
+                                            "Request not found in MongoDB fallback")
+                        else:
+                            self.log_test("Google Sheets - MongoDB Fallback Storage", False, 
+                                        "Failed to query MongoDB")
+                    else:
+                        self.log_test("Google Sheets - MongoDB Fallback Storage", False, 
+                                    f"Database query failed: {get_response.status_code}")
+                        
+                else:
+                    self.log_test("Demo Request - Successful Submission", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Demo Request - Successful Submission", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request - Successful Submission", False, f"Exception: {str(e)}")
+    
+    def test_form_data_processing_methods(self):
+        """Test both JSON and form-encoded data submission methods"""
+        print("\n=== Testing Form Data Processing Methods ===")
+        
+        # Test Case 1: JSON data submission to /api/demo/request
+        json_test_data = {
+            "name": "JSON Method Test",
+            "email": "json.method@test.com",
+            "company": "JSON Test Corp",
+            "phone": "+1-555-JSON1",
+            "message": "Testing JSON data submission method"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   json=json_test_data,
+                                   headers={"Content-Type": "application/json"},
+                                   timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success") and result.get("reference_id"):
+                    self.log_test("Form Processing - JSON Method", True, 
+                                f"JSON submission successful, Ref: {result['reference_id']}")
+                else:
+                    self.log_test("Form Processing - JSON Method", False, 
+                                f"JSON submission failed: {result}")
+            else:
+                self.log_test("Form Processing - JSON Method", False, 
+                            f"JSON submission status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Processing - JSON Method", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Form-encoded data submission to /api/demo-request
+        form_test_data = {
+            "name": "Form Method Test",
+            "email": "form.method@test.com",
+            "company": "Form Test Corp",
+            "phone": "+1-555-FORM1",
+            "message": "Testing form-encoded data submission method"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", 
+                                   data=form_test_data,
+                                   headers={"Content-Type": "application/x-www-form-urlencoded"},
+                                   timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "success" and result.get("requestId"):
+                    self.log_test("Form Processing - Form-Encoded Method", True, 
+                                f"Form submission successful, ID: {result['requestId']}")
+                else:
+                    self.log_test("Form Processing - Form-Encoded Method", False, 
+                                f"Form submission failed: {result}")
+            else:
+                self.log_test("Form Processing - Form-Encoded Method", False, 
+                            f"Form submission status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Processing - Form-Encoded Method", False, f"Exception: {str(e)}")
+    
+    def test_error_handling_and_graceful_fallback(self):
+        """Test error handling when Google Sheets submission fails"""
+        print("\n=== Testing Error Handling and Graceful Fallback ===")
+        
+        # Test data that should trigger Google Sheets failure and fallback
+        fallback_test_data = {
+            "name": "Fallback Test User",
+            "email": "fallback.test@error.com",
+            "company": "Error Handling Test Corp",
+            "phone": "+1-555-ERROR",
+            "message": "Testing graceful fallback when Google Sheets submission fails"
+        }
+        
+        try:
+            # Submit request that should fail at Google Sheets but succeed overall
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   json=fallback_test_data, 
+                                   timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Should still return success despite Sheets failure
+                if result.get("success"):
+                    self.log_test("Error Handling - Graceful Fallback Response", True, 
+                                "User receives successful response despite Sheets failure")
+                    
+                    # Should provide reference ID
+                    if result.get("reference_id"):
+                        self.log_test("Error Handling - Reference ID Generation", True, 
+                                    f"Reference ID provided: {result['reference_id']}")
+                    else:
+                        self.log_test("Error Handling - Reference ID Generation", False, 
+                                    "No reference ID provided")
+                    
+                    # Should provide user-friendly message
+                    if result.get("message"):
+                        self.log_test("Error Handling - User-Friendly Message", True, 
+                                    f"Message: {result['message']}")
+                    else:
+                        self.log_test("Error Handling - User-Friendly Message", False, 
+                                    "No user message provided")
+                        
+                else:
+                    self.log_test("Error Handling - Graceful Fallback Response", False, 
+                                f"Request failed: {result}")
+            else:
+                self.log_test("Error Handling - Graceful Fallback Response", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Error Handling - Graceful Fallback Response", False, f"Exception: {str(e)}")
+    
+    def test_database_storage_structure(self):
+        """Test that demo requests are stored in MongoDB with proper structure"""
+        print("\n=== Testing Database Storage Structure ===")
+        
+        # Submit a test request
+        structure_test_data = {
+            "name": "Database Structure Test",
+            "email": "db.structure@test.com",
+            "company": "DB Structure Test Corp",
+            "phone": "+1-555-DBTEST",
+            "call_volume": "15,000",
+            "message": "Testing database storage structure and field preservation"
+        }
+        
+        try:
+            # Submit request
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   json=structure_test_data, 
+                                   timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success") and result.get("reference_id"):
+                    reference_id = result["reference_id"]
+                    
+                    # Wait for storage
+                    time.sleep(3)
+                    
+                    # Retrieve and verify structure
+                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=10", timeout=15)
+                    
+                    if get_response.status_code == 200:
+                        requests_data = get_response.json()
+                        
+                        if requests_data.get("success"):
+                            # Find our test request
+                            found_request = None
+                            for req in requests_data.get("requests", []):
+                                if req.get("email") == structure_test_data["email"]:
+                                    found_request = req
+                                    break
+                            
+                            if found_request:
+                                # Check required fields
+                                required_fields = ["id", "name", "email", "company", "timestamp", "source"]
+                                missing_fields = [field for field in required_fields if field not in found_request]
+                                
+                                if not missing_fields:
+                                    self.log_test("Database Storage - Required Fields", True, 
+                                                "All required fields present")
+                                else:
+                                    self.log_test("Database Storage - Required Fields", False, 
+                                                f"Missing fields: {missing_fields}")
+                                
+                                # Check optional fields
+                                optional_fields = ["phone", "call_volume", "message", "sheets_status"]
+                                present_optional = [field for field in optional_fields if field in found_request]
+                                
+                                if len(present_optional) > 0:
+                                    self.log_test("Database Storage - Optional Fields", True, 
+                                                f"Optional fields present: {present_optional}")
+                                else:
+                                    self.log_test("Database Storage - Optional Fields", False, 
+                                                "No optional fields stored")
+                                
+                                # Check timestamp format
+                                timestamp = found_request.get("timestamp")
+                                if timestamp:
+                                    try:
+                                        # Try to parse ISO format timestamp
+                                        datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                                        self.log_test("Database Storage - Timestamp Format", True, 
+                                                    f"Valid ISO timestamp: {timestamp}")
+                                    except:
+                                        self.log_test("Database Storage - Timestamp Format", False, 
+                                                    f"Invalid timestamp format: {timestamp}")
+                                else:
+                                    self.log_test("Database Storage - Timestamp Format", False, 
+                                                "No timestamp recorded")
+                                
+                                # Check source field
+                                if found_request.get("source") == "website_form":
+                                    self.log_test("Database Storage - Source Tracking", True, 
+                                                "Source correctly recorded as website_form")
+                                else:
+                                    self.log_test("Database Storage - Source Tracking", False, 
+                                                f"Unexpected source: {found_request.get('source')}")
+                                    
+                            else:
+                                self.log_test("Database Storage - Request Retrieval", False, 
+                                            "Test request not found in database")
+                        else:
+                            self.log_test("Database Storage - Request Retrieval", False, 
+                                        "Database query unsuccessful")
+                    else:
+                        self.log_test("Database Storage - Request Retrieval", False, 
+                                    f"Database query failed: {get_response.status_code}")
+                        
+                else:
+                    self.log_test("Database Storage - Request Submission", False, 
+                                f"Request submission failed: {result}")
+            else:
+                self.log_test("Database Storage - Request Submission", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Database Storage - Request Submission", False, f"Exception: {str(e)}")
+    
+    def run_focused_google_sheets_tests(self):
+        """Run focused Google Sheets integration tests"""
+        print("🎯 Starting Focused Google Sheets Integration Tests")
+        print("=" * 80)
+        
+        # Run focused test suites
+        self.test_google_sheets_configuration()
+        self.test_demo_request_with_sheets_fallback()
+        self.test_form_data_processing_methods()
+        self.test_error_handling_and_graceful_fallback()
+        self.test_database_storage_structure()
+        
+        # Print summary
+        print("\n" + "=" * 80)
+        print("📊 GOOGLE SHEETS INTEGRATION TEST SUMMARY")
+        print("=" * 80)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        success_rate = (len(self.passed_tests) / len(self.test_results)) * 100 if self.test_results else 0
+        print(f"📈 Success Rate: {success_rate:.1f}%")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        return len(self.failed_tests) == 0
+
+if __name__ == "__main__":
+    # Run focused Google Sheets integration tests as requested
+    print("🎯 FOCUSED TESTING: Google Sheets Integration & Demo Request Functionality")
+    print("=" * 80)
+    
+    sheets_tester = GoogleSheetsIntegrationTester()
+    sheets_success = sheets_tester.run_focused_google_sheets_tests()
+    
+    print("\n" + "=" * 80)
+    print("🎯 FOCUSED GOOGLE SHEETS INTEGRATION TESTING COMPLETED")
+    print("=" * 80)
+    
+    if sheets_success:
+        print("✅ All Google Sheets integration tests passed!")
+    else:
+        print("❌ Some Google Sheets integration tests failed. Check details above.")
