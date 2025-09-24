@@ -411,8 +411,8 @@ const SentraTechLanding = () => {
                   <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-xs p-3 rounded-lg text-sm ${
                       message.sender === 'user' 
-                        ? 'bg-[#DAFF01] text-[rgb(17,17,19)]'
-                        : 'bg-[rgb(38,40,42)] text-white'
+                        ? 'bg-[#00FF41] text-[#0A0A0A]'
+                        : 'bg-[#2a2a2a] text-[#F8F9FA]'
                     }`}>
                       {message.text}
                     </div>
