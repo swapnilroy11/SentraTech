@@ -13,43 +13,37 @@ export const mockData = {
   features: [
     {
       id: 1,
-      titleKey: "features.items.omnichannel.title",
-      descriptionKey: "features.items.omnichannel.description",
+      key: "omnichannel",
       icon: "MessageSquare",
       stats: "5+ channels integrated"
     },
     {
       id: 2,
-      titleKey: "features.items.automation.title",
-      descriptionKey: "features.items.automation.description",
+      key: "automation",
       icon: "Zap",
       stats: "<50ms routing time"
     },
     {
       id: 3,
-      titleKey: "features.items.analytics.title",
-      descriptionKey: "features.items.analytics.description",
+      key: "analytics",
       icon: "BarChart3",
       stats: "20+ KPI metrics"
     },
     {
       id: 4,
-      titleKey: "features.items.satisfaction.title",
-      descriptionKey: "features.items.satisfaction.description",
+      key: "satisfaction",
       icon: "Heart",
       stats: "99.5% accuracy"
     },
     {
       id: 5,
-      titleKey: "features.items.global.title",
-      descriptionKey: "features.items.global.description",
+      key: "global",
       icon: "Globe",
       stats: "15+ languages"
     },
     {
       id: 6,
-      titleKey: "features.items.security.title",
-      descriptionKey: "features.items.security.description",
+      key: "security",
       icon: "Shield",
       stats: "100% audit coverage"
     }
