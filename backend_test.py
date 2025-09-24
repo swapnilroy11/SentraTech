@@ -2326,16 +2326,16 @@ class AnalyticsTester:
         return len(self.failed_tests) == 0
 
 if __name__ == "__main__":
-    print("🎯 SentraTech Real-time Metrics API Testing Suite")
+    print("🎯 SentraTech Analytics & Tracking System Testing Suite")
     print("=" * 70)
     
     overall_success = True
     
-    # Test Real-time Metrics API (NEW - Focus of this test)
-    print("\n📊 TESTING REAL-TIME METRICS API")
-    metrics_tester = MetricsTester()
-    metrics_success = metrics_tester.run_all_tests()
-    overall_success = overall_success and metrics_success
+    # Test Analytics & Tracking System API (NEW - Focus of this test)
+    print("\n📊 TESTING ANALYTICS & TRACKING SYSTEM API")
+    analytics_tester = AnalyticsTester()
+    analytics_success = analytics_tester.run_all_tests()
+    overall_success = overall_success and analytics_success
     
     # Final Summary
     print("\n" + "=" * 70)
