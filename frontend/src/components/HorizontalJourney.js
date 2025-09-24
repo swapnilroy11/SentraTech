@@ -21,6 +21,7 @@ const HorizontalJourney = () => {
   const [selectedPanel, setSelectedPanel] = useState(null);
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [hasThreeJSError, setHasThreeJSError] = useState(false);
 
   // Journey stages data
   const journeyStages = [
