@@ -201,7 +201,7 @@ const ROICalculator = () => {
                       {formatCurrency(results.monthlySavings || 0)}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Monthly Savings</div>
-                    <div className="flex items-center justify-center mt-2 text-[#DAFF01]">
+                    <div className="flex items-center justify-center mt-2 text-[#00FF41]">
                       <ArrowDown size={14} className="mr-1" />
                       <span className="text-sm">{results.costReductionPercent?.toFixed(0)}%</span>
                     </div>
