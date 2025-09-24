@@ -12,6 +12,7 @@ import {
   Send, Maximize2, Minimize2
 } from 'lucide-react';
 import { mockData, mockApi } from '../data/mock';
+import SentraTechLogo from './SentraTechLogo';
 
 const SentraTechLanding = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
