@@ -50,19 +50,19 @@ const HomePage = () => {
       title: '70% Automation',
       description: 'Intelligent automation handles routine inquiries while humans focus on complex issues',
       icon: Zap,
-      link: '/features'
+      link: '/features#automation'
     },
     {
       title: 'Real-time Metrics',
       description: 'Comprehensive BI dashboards with 20+ KPI metrics for data-driven decisions',
       icon: BarChart3,
-      link: '/features'
+      link: '/features#metrics'
     },
     {
       title: 'Seamless Integrations',
       description: '50+ pre-built integrations with popular CRM, communication, and analytics tools',
       icon: TrendingUp,
-      link: '/integrations'
+      link: '/integrations#platforms'
     }
   ];
 
