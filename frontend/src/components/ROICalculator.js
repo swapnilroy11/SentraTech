@@ -95,22 +95,22 @@ const ROICalculator = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
           {/* Input Controls */}
-          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
-            <CardHeader className="p-0 mb-8">
-              <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                <div className="p-3 bg-[#DAFF01]/20 rounded-xl border border-[#DAFF01]/50">
-                  <BarChart3 size={24} className="text-[#DAFF01]" />
+          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 lg:p-8">
+            <CardHeader className="p-0 mb-6 lg:mb-8">
+              <CardTitle className="text-xl lg:text-2xl text-white flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                <div className="p-2 lg:p-3 bg-[#DAFF01]/20 rounded-xl border border-[#DAFF01]/50">
+                  <BarChart3 size={20} className="text-[#DAFF01] lg:w-6 lg:h-6" />
                 </div>
-                <span>Your Current Metrics</span>
+                <span className="text-lg lg:text-2xl">Your Current Metrics</span>
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-0 space-y-8">
+            <CardContent className="p-0 space-y-6 lg:space-y-8">
               {/* Monthly Call Volume */}
               <div>
-                <Label className="text-white text-lg mb-4 block">
+                <Label className="text-white text-base lg:text-lg mb-3 lg:mb-4 block">
                   Monthly Call Volume: {callVolume[0].toLocaleString()} calls
                 </Label>
                 <Slider
@@ -129,17 +129,17 @@ const ROICalculator = () => {
 
               {/* Cost Per Call */}
               <div>
-                <Label htmlFor="costPerCall" className="text-white text-lg mb-4 block">
+                <Label htmlFor="costPerCall" className="text-white text-base lg:text-lg mb-3 lg:mb-4 block">
                   Current Cost Per Call
                 </Label>
                 <div className="relative">
-                  <DollarSign size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <DollarSign size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)] lg:w-5 lg:h-5" />
                   <Input
                     id="costPerCall"
                     type="number"
                     value={currentCostPerCall}
                     onChange={(e) => setCurrentCostPerCall(parseFloat(e.target.value) || 0)}
-                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                    className="pl-10 lg:pl-12 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
                     step="0.1"
                     min="0"
                   />
@@ -148,17 +148,17 @@ const ROICalculator = () => {
 
               {/* Average Handle Time */}
               <div>
-                <Label htmlFor="aht" className="text-white text-lg mb-4 block">
+                <Label htmlFor="aht" className="text-white text-base lg:text-lg mb-3 lg:mb-4 block">
                   Average Handle Time: {formatTime(averageHandleTime)}
                 </Label>
                 <div className="relative">
-                  <Clock size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Clock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)] lg:w-5 lg:h-5" />
                   <Input
                     id="aht"
                     type="number"
                     value={averageHandleTime}
                     onChange={(e) => setAverageHandleTime(parseInt(e.target.value) || 0)}
-                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                    className="pl-10 lg:pl-12 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
                     placeholder="Seconds"
                   />
                 </div>
@@ -166,17 +166,17 @@ const ROICalculator = () => {
 
               {/* Agent Count */}
               <div>
-                <Label htmlFor="agents" className="text-white text-lg mb-4 block">
+                <Label htmlFor="agents" className="text-white text-base lg:text-lg mb-3 lg:mb-4 block">
                   Current Agent Count
                 </Label>
                 <div className="relative">
-                  <Users size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Users size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)] lg:w-5 lg:h-5" />
                   <Input
                     id="agents"
                     type="number"
                     value={agentCount}
                     onChange={(e) => setAgentCount(parseInt(e.target.value) || 0)}
-                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                    className="pl-10 lg:pl-12 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
                   />
                 </div>
               </div>
@@ -184,36 +184,36 @@ const ROICalculator = () => {
           </Card>
 
           {/* Results Display */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {/* Cost Savings Card */}
-            <Card className="bg-gradient-to-br from-[#DAFF01]/10 to-[#00DDFF]/10 border-2 border-[#DAFF01] rounded-3xl p-8">
-              <CardHeader className="p-0 mb-6">
-                <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                  <TrendingUp size={24} className="text-[#DAFF01]" />
+            <Card className="bg-gradient-to-br from-[#DAFF01]/10 to-[#00DDFF]/10 border-2 border-[#DAFF01] rounded-3xl p-6 lg:p-8">
+              <CardHeader className="p-0 mb-4 lg:mb-6">
+                <CardTitle className="text-xl lg:text-2xl text-white flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                  <TrendingUp size={20} className="text-[#DAFF01] lg:w-6 lg:h-6" />
                   <span>Projected Savings</span>
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-0">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-3xl font-bold text-[#DAFF01] mb-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                  <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-2xl lg:text-3xl font-bold text-[#DAFF01] mb-2">
                       {formatCurrency(results.monthlySavings || 0)}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Monthly Savings</div>
                     <div className="flex items-center justify-center mt-2 text-[#DAFF01]">
-                      <ArrowDown size={16} className="mr-1" />
+                      <ArrowDown size={14} className="mr-1" />
                       <span className="text-sm">{results.costReductionPercent?.toFixed(0)}%</span>
                     </div>
                   </div>
 
-                  <div className="text-center p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-3xl font-bold text-[#00DDFF] mb-2">
+                  <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-2xl lg:text-3xl font-bold text-[#00DDFF] mb-2">
                       {formatCurrency(results.annualSavings || 0)}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Annual Savings</div>
                     <div className="flex items-center justify-center mt-2 text-[#00DDFF]">
-                      <ArrowUp size={16} className="mr-1" />
+                      <ArrowUp size={14} className="mr-1" />
                       <span className="text-sm">{results.roi?.toFixed(0)}% ROI</span>
                     </div>
                   </div>
@@ -222,47 +222,47 @@ const ROICalculator = () => {
             </Card>
 
             {/* Performance Improvements */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
-              <CardHeader className="p-0 mb-6">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <Zap size={20} className="text-[#00DDFF]" />
+            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 lg:p-8">
+              <CardHeader className="p-0 mb-4 lg:mb-6">
+                <CardTitle className="text-lg lg:text-xl text-white flex items-center space-x-3">
+                  <Zap size={18} className="text-[#00DDFF] lg:w-5 lg:h-5" />
                   <span>Performance Improvements</span>
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="p-0 space-y-4">
-                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
-                  <div>
-                    <div className="text-white font-semibold">Average Handle Time</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">
+              <CardContent className="p-0 space-y-3 lg:space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 lg:p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)] space-y-2 sm:space-y-0">
+                  <div className="flex-1">
+                    <div className="text-white font-semibold text-sm lg:text-base">Average Handle Time</div>
+                    <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
                       {formatTime(averageHandleTime)} → {formatTime(results.newAHT || 0)}
                     </div>
                   </div>
-                  <Badge className="bg-[#DAFF01]/20 text-[#DAFF01] border-[#DAFF01]/30">
+                  <Badge className="bg-[#DAFF01]/20 text-[#DAFF01] border-[#DAFF01]/30 w-fit">
                     -{results.ahtReductionPercent?.toFixed(0)}%
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
-                  <div>
-                    <div className="text-white font-semibold">Automated Interactions</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 lg:p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)] space-y-2 sm:space-y-0">
+                  <div className="flex-1">
+                    <div className="text-white font-semibold text-sm lg:text-base">Automated Interactions</div>
+                    <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
                       {results.automatedCalls?.toLocaleString()} calls/month
                     </div>
                   </div>
-                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30">
+                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30 w-fit">
                     {results.automationRate?.toFixed(0)}%
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
-                  <div>
-                    <div className="text-white font-semibold">Time Saved Monthly</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 lg:p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)] space-y-2 sm:space-y-0">
+                  <div className="flex-1">
+                    <div className="text-white font-semibold text-sm lg:text-base">Time Saved Monthly</div>
+                    <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
                       {results.totalTimeSavedMonthly?.toLocaleString()} agent hours
                     </div>
                   </div>
-                  <Badge className="bg-[rgb(192,192,192)]/20 text-[rgb(192,192,192)] border-[rgb(192,192,192)]/30">
+                  <Badge className="bg-[rgb(192,192,192)]/20 text-[rgb(192,192,192)] border-[rgb(192,192,192)]/30 w-fit">
                     Efficiency
                   </Badge>
                 </div>
@@ -270,14 +270,14 @@ const ROICalculator = () => {
             </Card>
 
             {/* CTA */}
-            <div className="text-center">
+            <div className="text-center pt-4">
               <Button 
                 size="lg"
-                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200"
+                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto"
               >
                 Get Detailed ROI Report
               </Button>
-              <p className="text-[rgb(161,161,170)] text-sm mt-4">
+              <p className="text-[rgb(161,161,170)] text-xs lg:text-sm mt-4">
                 Schedule a personalized demo to see these results in action
               </p>
             </div>
