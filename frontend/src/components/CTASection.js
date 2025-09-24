@@ -6,7 +6,7 @@ import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
 import { 
   Rocket, ArrowRight, CheckCircle, Clock, 
-  Users, Zap, Calendar, Send, Sparkles
+  Users, Zap, Calendar, Send, Sparkles, Loader2
 } from 'lucide-react';
 import axios from 'axios';
 
