@@ -80,7 +80,7 @@ const CTASection = () => {
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+          <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Rocket className="mr-2" size={14} />
             Get Started Today
           </Badge>
