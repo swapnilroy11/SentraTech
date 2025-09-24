@@ -2457,7 +2457,7 @@ class UserManagementTester:
         
         # Test Case 5: Duplicate email registration
         duplicate_user = {
-            "email": "john.doe@testcompany.com",  # Same as first test
+            "email": valid_user["email"],  # Same as first test
             "password": "AnotherPass123",
             "full_name": "John Duplicate",
             "company": "Another Company"
