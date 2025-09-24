@@ -1,10 +1,10 @@
 export const translations = {
   en: {
-    // Navigation
+    // Navigation - Company Slogan
     nav: {
-      features: "Features",
-      pricing: "Pricing", 
-      about: "About",
+      features: "Beyond",
+      pricing: "Better", 
+      about: "Boundless",
       contact: "Contact"
     },
     
