@@ -71,7 +71,7 @@ const CustomerJourney = () => {
             <Button
               onClick={resetJourney}
               variant="outline"
-              className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#DAFF01] hover:text-[#DAFF01] rounded-xl"
+              className="border-[#2a2a2a] text-[#e2e8f0] hover:border-[#00FF41] hover:text-[#00FF41] rounded-xl"
             >
               <RotateCcw size={20} />
               <span className="ml-2">Reset</span>
