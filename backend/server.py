@@ -10,7 +10,6 @@ from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone, timedelta
 import asyncio
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
@@ -18,12 +17,9 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import Depends, status, Form
+from fastapi import Depends, status
 import aiosmtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import aiohttp
-from urllib.parse import urlencode
 
 # Configure logging first
 logging.basicConfig(
@@ -1248,7 +1244,6 @@ class MetricsService:
     
     async def get_current_metrics(self) -> MetricSnapshot:
         """Generate current real-time metrics with realistic variations"""
-        import random
         
         # Simulate realistic variations
         metrics = {
