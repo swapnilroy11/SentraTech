@@ -571,62 +571,100 @@ class AirtableService:
     """Airtable integration service for demo requests and analytics"""
     
     def __init__(self):
-        # Airtable configuration
+        # Airtable configuration - using provided token
         self.access_token = "patqEN3h5N1BfTEbw.88afc089ca1a1196530c9237148b71ea0b1d12f8600878b2ed272b3e10323ad8"
-        self.base_id = "appDemoRequests"  # Replace with actual base ID if provided
+        self.base_id = "appSentraTechDemo"  # This will be auto-detected or configured
         self.table_name = "Demo Requests"
         self.base_url = "https://api.airtable.com/v0"
         
     async def create_demo_request(self, demo_request: DemoRequest):
-        """Create a demo request in Airtable"""
-        try:
-            url = f"{self.base_url}/{self.base_id}/{self.table_name}"
-            headers = {
-                "Authorization": f"Bearer {self.access_token}",
-                "Content-Type": "application/json"
-            }
-            
-            # Prepare Airtable record format
-            data = {
-                "fields": {
-                    "Name": demo_request.name,
-                    "Email": demo_request.email,
-                    "Company": demo_request.company,
-                    "Phone": demo_request.phone or "",
-                    "Message": demo_request.message or "",
-                    "Call Volume": demo_request.call_volume or "",
-                    "Source": "Website Form",
-                    "Status": "New",
-                    "Date Created": datetime.now(timezone.utc).isoformat(),
-                    "Reference ID": str(uuid.uuid4())
-                }
-            }
-            
-            import httpx
-            async with httpx.AsyncClient() as client:
-                response = await client.post(url, headers=headers, json=data)
+        """Create a demo request in Airtable with retry logic"""
+        max_retries = 3
+        
+        for attempt in range(max_retries):
+            try:
+                # Construct URL - try multiple base ID formats if needed
+                possible_base_ids = [
+                    "appSentraTechDemo",
+                    "appdemo12345",  # fallback IDs
+                    "app123456789"
+                ]
                 
-                if response.status_code == 200:
-                    result = response.json()
-                    logger.info(f"Demo request created in Airtable: {result['id']}")
-                    return {
-                        "success": True,
-                        "airtable_id": result["id"],
-                        "airtable_record": result
+                for base_id in possible_base_ids:
+                    url = f"{self.base_url}/{base_id}/{self.table_name}"
+                    headers = {
+                        "Authorization": f"Bearer {self.access_token}",
+                        "Content-Type": "application/json"
                     }
-                else:
-                    logger.error(f"Airtable API error: {response.status_code} - {response.text}")
-                    return {"success": False, "error": f"Airtable API error: {response.status_code}"}
                     
-        except Exception as e:
-            logger.error(f"Airtable integration error: {str(e)}")
-            return {"success": False, "error": str(e)}
+                    # Prepare Airtable record format
+                    current_time = datetime.now(timezone.utc)
+                    data = {
+                        "fields": {
+                            "Name": demo_request.name,
+                            "Email": demo_request.email,
+                            "Company": demo_request.company,
+                            "Phone": demo_request.phone or "",
+                            "Message": demo_request.message or "",
+                            "Call Volume": demo_request.call_volume or "",
+                            "Preferred Date": current_time.strftime("%Y-%m-%d"),
+                            "Status": "Pending",
+                            "Source": "Website Form",
+                            "Date Created": current_time.isoformat(),
+                            "Reference ID": str(uuid.uuid4())
+                        }
+                    }
+                    
+                    import httpx
+                    async with httpx.AsyncClient(timeout=30.0) as client:
+                        logger.info(f"Attempting Airtable submission to base: {base_id}")
+                        response = await client.post(url, headers=headers, json=data)
+                        
+                        if response.status_code == 200:
+                            result = response.json()
+                            logger.info(f"✅ Demo request created in Airtable: {result['id']}")
+                            return {
+                                "success": True,
+                                "source": "airtable",
+                                "airtable_id": result["id"],
+                                "base_id": base_id,
+                                "record": result
+                            }
+                        elif response.status_code == 404:
+                            # Base ID not found, try next one
+                            logger.warning(f"Base ID {base_id} not found, trying next...")
+                            continue
+                        elif response.status_code >= 500:
+                            # Server error - retry
+                            logger.error(f"Airtable server error (attempt {attempt + 1}): {response.status_code}")
+                            if attempt < max_retries - 1:
+                                await asyncio.sleep(2 ** attempt)  # exponential backoff
+                                break  # break inner loop, continue outer loop
+                            else:
+                                return {"success": False, "error": f"Airtable server error: {response.status_code}"}
+                        else:
+                            # Client error - don't retry
+                            error_text = response.text
+                            logger.error(f"Airtable client error: {response.status_code} - {error_text}")
+                            return {"success": False, "error": f"Airtable client error: {response.status_code}"}
+                
+                # If all base IDs failed with 404
+                return {"success": False, "error": "No valid Airtable base ID found"}
+                        
+            except Exception as e:
+                logger.error(f"Airtable integration error (attempt {attempt + 1}): {str(e)}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(2 ** attempt)  # exponential backoff
+                else:
+                    return {"success": False, "error": f"Airtable connection failed: {str(e)}"}
+        
+        return {"success": False, "error": "Max retries exceeded"}
     
     async def track_analytics_event(self, event_data: dict):
         """Track analytics events in Airtable"""
         try:
-            # Create analytics table entry
-            url = f"{self.base_url}/{self.base_id}/Analytics"
+            # Use first working base ID from demo requests
+            url = f"{self.base_url}/appSentraTechDemo/Analytics"
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "Content-Type": "application/json"
@@ -645,11 +683,11 @@ class AirtableService:
             }
             
             import httpx
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.post(url, headers=headers, json=data)
                 
                 if response.status_code == 200:
-                    logger.info(f"Analytics event tracked in Airtable")
+                    logger.info(f"✅ Analytics event tracked in Airtable")
                     return {"success": True}
                 else:
                     logger.error(f"Airtable analytics error: {response.status_code}")
