@@ -23,7 +23,16 @@ const SentraTechLanding = () => {
   const [chatInput, setChatInput] = useState('');
   const [stats, setStats] = useState([]);
   const [currentLang, setCurrentLang] = useState('en');
+  
+  // Live Chat Integration State
+  const [chatSessionId, setChatSessionId] = useState(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [connectionError, setConnectionError] = useState(null);
+  const [websocket, setWebsocket] = useState(null);
+  
   const heroRef = useRef(null);
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   // Icon mapping
   const iconMap = {
