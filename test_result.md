@@ -396,10 +396,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Analytics & Tracking System API"
-  stuck_tasks: []
+    - "Enhanced Navigation & Anchor Scrolling"
+  stuck_tasks:
+    - "Enhanced Navigation & Anchor Scrolling"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "critical_first"
 
   - task: "Space-themed WebGL Background"
     implemented: true
