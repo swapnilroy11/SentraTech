@@ -571,15 +571,15 @@ const CTASection = () => {
               <div className="text-lg font-bold text-[#00FF41] font-rajdhani">24hrs</div>
               <div className="text-[rgb(161,161,170)] text-sm">Response Time</div>
             </div>
-            <div className="text-center">
+            <div className="text-center p-3 bg-[rgb(17,17,19)] rounded-lg border border-[rgb(63,63,63)]">
               <div className="text-2xl font-bold text-[#00DDFF] mb-1">99.9%</div>
               <div className="text-[rgb(161,161,170)] text-sm">Platform Uptime</div>
             </div>
-            <div className="text-center">
+            <div className="text-center p-3 bg-[rgb(17,17,19)] rounded-lg border border-[rgb(63,63,63)]">
               <div className="text-2xl font-bold text-[rgb(192,192,192)] mb-1">SOC2</div>
               <div className="text-[rgb(161,161,170)] text-sm">Compliant</div>
             </div>
-            <div className="text-center">
+            <div className="text-center p-3 bg-[rgb(17,17,19)] rounded-lg border border-[rgb(63,63,63)]">
               <div className="text-2xl font-bold text-[#00FF41] mb-1 font-rajdhani">30-day</div>
               <div className="text-[rgb(161,161,170)] text-sm">Free Trial</div>
             </div>
