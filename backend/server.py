@@ -1681,6 +1681,251 @@ async def get_performance_metrics(timeframe: str = "24h"):
             "performance_score": 85
         }
 
+# User Management API Endpoints
+@api_router.post("/auth/register", response_model=UserResponse)
+async def register_user(user_create: UserCreate):
+    """Register a new user"""
+    try:
+        user_data = await user_service.create_user(user_create)
+        # Convert datetime strings back to datetime objects for response
+        user_data['created_at'] = datetime.fromisoformat(user_data['created_at'].replace('Z', '+00:00'))
+        if user_data.get('updated_at'):
+            user_data['updated_at'] = datetime.fromisoformat(user_data['updated_at'].replace('Z', '+00:00'))
+        return UserResponse(**user_data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating user: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create user")
+
+@api_router.post("/auth/login", response_model=Token)
+async def login_user(user_login: UserLogin):
+    """Authenticate user and return JWT token"""
+    try:
+        user = await user_service.authenticate_user(user_login.email, user_login.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect email or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        access_token_expires = timedelta(minutes=user_service.access_token_expire_minutes)
+        access_token = user_service.create_access_token(
+            data={"sub": user["id"]}, expires_delta=access_token_expires
+        )
+        
+        # Prepare user data for response
+        user_response_data = {k: v for k, v in user.items() if k != 'password_hash'}
+        if isinstance(user_response_data.get('created_at'), str):
+            user_response_data['created_at'] = datetime.fromisoformat(user_response_data['created_at'].replace('Z', '+00:00'))
+        if isinstance(user_response_data.get('last_login'), str):
+            user_response_data['last_login'] = datetime.fromisoformat(user_response_data['last_login'].replace('Z', '+00:00'))
+        
+        return Token(
+            access_token=access_token,
+            expires_in=user_service.access_token_expire_minutes * 60,
+            user=User(**user_response_data)
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error during login: {str(e)}")
+        raise HTTPException(status_code=500, detail="Login failed")
+
+@api_router.get("/auth/me", response_model=UserResponse)
+async def get_current_user_profile(current_user: dict = Depends(get_current_active_user)):
+    """Get current user profile"""
+    try:
+        user_data = {k: v for k, v in current_user.items() if k != 'password_hash'}
+        if isinstance(user_data.get('created_at'), str):
+            user_data['created_at'] = datetime.fromisoformat(user_data['created_at'].replace('Z', '+00:00'))
+        if isinstance(user_data.get('last_login'), str):
+            user_data['last_login'] = datetime.fromisoformat(user_data['last_login'].replace('Z', '+00:00'))
+        return UserResponse(**user_data)
+    except Exception as e:
+        logger.error(f"Error getting user profile: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get user profile")
+
+@api_router.put("/auth/profile", response_model=UserResponse)
+async def update_user_profile(
+    user_update: UserUpdate,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Update current user profile"""
+    try:
+        updated_user = await user_service.update_user(current_user["id"], user_update)
+        if not updated_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user_data = {k: v for k, v in updated_user.items() if k != 'password_hash'}
+        if isinstance(user_data.get('created_at'), str):
+            user_data['created_at'] = datetime.fromisoformat(user_data['created_at'].replace('Z', '+00:00'))
+        if isinstance(user_data.get('updated_at'), str):
+            user_data['updated_at'] = datetime.fromisoformat(user_data['updated_at'].replace('Z', '+00:00'))
+        
+        return UserResponse(**user_data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating user profile: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update profile")
+
+@api_router.post("/auth/change-password")
+async def change_password(
+    password_change: PasswordChange,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Change user password"""
+    try:
+        success = await user_service.change_password(current_user["id"], password_change)
+        if not success:
+            raise HTTPException(status_code=400, detail="Current password is incorrect")
+        
+        return {"message": "Password changed successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error changing password: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to change password")
+
+@api_router.post("/auth/request-password-reset")
+async def request_password_reset(password_reset: PasswordReset):
+    """Request password reset token"""
+    try:
+        user = await user_service.get_user_by_email(password_reset.email)
+        if not user:
+            # Don't reveal if email exists or not for security
+            return {"message": "If the email exists, a reset token has been sent"}
+        
+        reset_token = user_service.create_reset_token(password_reset.email)
+        
+        # In production, send email with reset token
+        # For now, just log it (in production, remove this log)
+        logger.info(f"Password reset token for {password_reset.email}: {reset_token}")
+        
+        return {"message": "If the email exists, a reset token has been sent"}
+    except Exception as e:
+        logger.error(f"Error requesting password reset: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process password reset request")
+
+@api_router.post("/auth/reset-password")
+async def reset_password(password_reset_confirm: PasswordResetConfirm):
+    """Reset password using token"""
+    try:
+        success = await user_service.reset_password(
+            password_reset_confirm.token, 
+            password_reset_confirm.new_password
+        )
+        if not success:
+            raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+        
+        return {"message": "Password reset successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error resetting password: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to reset password")
+
+@api_router.get("/users", response_model=List[UserResponse])
+async def get_all_users(
+    skip: int = 0,
+    limit: int = 100,
+    admin_user: dict = Depends(get_admin_user)
+):
+    """Get all users (admin only)"""
+    try:
+        cursor = db.users.find({}).skip(skip).limit(limit)
+        users = []
+        async for user_doc in cursor:
+            user_data = {k: v for k, v in user_doc.items() if k != 'password_hash'}
+            if isinstance(user_data.get('created_at'), str):
+                user_data['created_at'] = datetime.fromisoformat(user_data['created_at'].replace('Z', '+00:00'))
+            if isinstance(user_data.get('last_login'), str):
+                user_data['last_login'] = datetime.fromisoformat(user_data['last_login'].replace('Z', '+00:00'))
+            users.append(UserResponse(**user_data))
+        
+        return users
+    except Exception as e:
+        logger.error(f"Error getting users: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get users")
+
+@api_router.get("/users/{user_id}", response_model=UserResponse)
+async def get_user_by_id(
+    user_id: str,
+    admin_user: dict = Depends(get_admin_user)
+):
+    """Get user by ID (admin only)"""
+    try:
+        user = await user_service.get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user_data = {k: v for k, v in user.items() if k != 'password_hash'}
+        if isinstance(user_data.get('created_at'), str):
+            user_data['created_at'] = datetime.fromisoformat(user_data['created_at'].replace('Z', '+00:00'))
+        if isinstance(user_data.get('last_login'), str):
+            user_data['last_login'] = datetime.fromisoformat(user_data['last_login'].replace('Z', '+00:00'))
+        
+        return UserResponse(**user_data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting user: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get user")
+
+@api_router.put("/users/{user_id}/role")
+async def update_user_role(
+    user_id: str,
+    role: str,
+    admin_user: dict = Depends(get_admin_user)
+):
+    """Update user role (admin only)"""
+    try:
+        if role not in [UserRole.ADMIN, UserRole.USER, UserRole.VIEWER]:
+            raise HTTPException(status_code=400, detail="Invalid role")
+        
+        user = await user_service.get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"role": role, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        return {"message": f"User role updated to {role}"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating user role: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update user role")
+
+@api_router.put("/users/{user_id}/status")
+async def update_user_status(
+    user_id: str,
+    is_active: bool,
+    admin_user: dict = Depends(get_admin_user)
+):
+    """Update user active status (admin only)"""
+    try:
+        user = await user_service.get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"is_active": is_active, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        status_text = "activated" if is_active else "deactivated"
+        return {"message": f"User {status_text} successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating user status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update user status")
+
 # Include the router in the main app
 app.include_router(api_router)
 
