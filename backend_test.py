@@ -250,11 +250,17 @@ class ROICalculatorTester:
         """Test POST /api/roi/save endpoint"""
         print("\n=== Testing ROI Save Endpoint ===")
         
-        test_data = {
+        test_input_data = {
             "call_volume": 18000,
             "current_cost_per_call": 9.25,
             "average_handle_time": 420,
             "agent_count": 40
+        }
+        
+        # Format request according to the expected structure
+        test_data = {
+            "input_data": test_input_data,
+            "user_info": {"test_user": "backend_tester"}
         }
         
         try:
@@ -271,7 +277,7 @@ class ROICalculatorTester:
                     self.log_test("ROI Save - Response Structure", True, "All required fields present")
                     
                     # Verify input data is preserved
-                    if result["input_data"]["call_volume"] == test_data["call_volume"]:
+                    if result["input_data"]["call_volume"] == test_input_data["call_volume"]:
                         self.log_test("ROI Save - Input Data Preservation", True, "Input data correctly stored")
                     else:
                         self.log_test("ROI Save - Input Data Preservation", False, "Input data not preserved")
@@ -297,11 +303,16 @@ class ROICalculatorTester:
         print("\n=== Testing ROI Get Calculations Endpoint ===")
         
         # First, save a calculation to ensure there's data
-        test_data = {
+        test_input_data = {
             "call_volume": 22000,
             "current_cost_per_call": 7.75,
             "average_handle_time": 390,
             "agent_count": 45
+        }
+        
+        test_data = {
+            "input_data": test_input_data,
+            "user_info": {"test_user": "backend_tester_get"}
         }
         
         try:
@@ -336,7 +347,7 @@ class ROICalculatorTester:
                     self.log_test("ROI Get - Basic Functionality", False, 
                                 f"Status: {get_response.status_code}, Response: {get_response.text}")
             else:
-                self.log_test("ROI Get - Setup (Save First)", False, "Could not save test calculation")
+                self.log_test("ROI Get - Setup (Save First)", False, f"Save failed with status: {save_response.status_code}")
                 
         except Exception as e:
             self.log_test("ROI Get - Basic Functionality", False, f"Exception: {str(e)}")
