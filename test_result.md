@@ -318,13 +318,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "ROI Calculator API"
+    - "Demo Request & CRM Integration"
+    - "Demo Request Form Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
-    message: "Implemented ROI Calculator backend functionality. Created 3 API endpoints with proper business logic, error handling, and database integration. Ready for comprehensive backend testing to verify all endpoints work correctly, handle edge cases, and integrate with MongoDB properly."
-  - agent: "testing"
-    message: "✅ BACKEND TESTING COMPLETE - ROI Calculator API fully functional. All 3 endpoints working: /api/roi/calculate (instant calculations), /api/roi/save (save to database), /api/roi/calculations (retrieve saved data). Fixed minor endpoint format issue during testing. Comprehensive testing completed: calculation accuracy, edge cases, input validation, database operations, performance. All business logic verified (45% cost reduction, 70% automation, 35% AHT reduction). Ready for production use."
+    message: "Implemented Demo Request & CRM integration (Phase 1b). Created backend API with mock HubSpot service, email notifications, and database storage. Updated frontend form to integrate with real API. Added proper validation, error handling, and success feedback. Ready for comprehensive testing of the demo request workflow."
