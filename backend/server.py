@@ -86,6 +86,49 @@ class ROICalculation(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     user_info: Optional[dict] = None
 
+# Demo Request & CRM Models
+class DemoRequest(BaseModel):
+    email: EmailStr
+    name: str
+    company: str = ""
+    phone: str = ""
+    call_volume: str = ""
+    message: str = ""
+    
+    @validator('name')
+    def name_must_not_be_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError('Name cannot be empty')
+        return v.strip()
+    
+    @validator('phone')
+    def validate_phone(cls, v):
+        if v and v.strip():
+            # Basic phone validation
+            import re
+            phone_pattern = r'^[\+]?[\d\s\-\(\)]{7,20}$'
+            if not re.match(phone_pattern, v.strip()):
+                raise ValueError('Invalid phone number format')
+        return v.strip() if v else ""
+
+class DemoRequestResponse(BaseModel):
+    success: bool
+    contact_id: str = None
+    message: str
+    reference_id: str = None
+
+class HubSpotContact(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: str
+    firstname: str
+    lastname: str = ""
+    phone: str = ""
+    company: str = ""
+    call_volume: str = ""
+    message: str = ""
+    created_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    source: str = "website_demo_form"
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
