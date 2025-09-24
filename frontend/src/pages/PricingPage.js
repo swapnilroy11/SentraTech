@@ -71,7 +71,7 @@ const PricingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-16">
               {[
                 { title: '14-Day Free Trial', description: 'No credit card required' },
-                { title: 'Cancel Anytime', description: 'No long-term contracts' },
+                { title: '24 or 36 Months Contract', description: 'Flexible contract terms' },
                 { title: '99.9% Uptime SLA', description: 'Guaranteed reliability' }
               ].map((prop, index) => (
                 <motion.div
