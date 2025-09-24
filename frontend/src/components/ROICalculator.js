@@ -364,9 +364,18 @@ const ROICalculator = () => {
             <div className="text-center pt-4">
               <Button 
                 size="lg"
-                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani"
+                onClick={saveROICalculation}
+                disabled={isLoading}
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani disabled:opacity-50 disabled:transform-none"
               >
-                Get Detailed ROI Report
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin mr-2" size={20} />
+                    Calculating...
+                  </>
+                ) : (
+                  'Get Detailed ROI Report'
+                )}
               </Button>
               <p className="text-[rgb(161,161,170)] text-xs lg:text-sm mt-4">
                 Schedule a personalized demo to see these results in action
