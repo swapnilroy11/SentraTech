@@ -1428,12 +1428,8 @@ class LiveChatTester:
         # Test Case 1: Invalid session ID
         try:
             invalid_session_id = "invalid_session_123"
-            test_data = {
-                "session_id": invalid_session_id,
-                "message": "Test message"
-            }
-            
-            response = requests.post(f"{BACKEND_URL}/chat/message", json=test_data, timeout=10)
+            # Use query parameters as expected by the endpoint
+            response = requests.post(f"{BACKEND_URL}/chat/message?session_id={invalid_session_id}&message=Test message", timeout=10)
             
             # Should handle gracefully (either create session or return error)
             if response.status_code in [200, 400, 404, 500]:
