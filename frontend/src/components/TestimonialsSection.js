@@ -37,7 +37,7 @@ const TestimonialsSection = () => {
   const currentTestimonial = mockData.testimonials[activeTestimonial];
 
   return (
-    <section className="py-20 bg-[rgb(17,17,19)]">
+    <section id="testimonials" className="py-20 bg-[rgb(17,17,19)]">
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
