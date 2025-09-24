@@ -139,21 +139,37 @@ const HorizontalJourney = () => {
     axis: 'x'
   });
 
+  // Scroll to panel function
+  const scrollToPanel = (panelIndex) => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        left: panelIndex * window.innerWidth,
+        behavior: 'smooth'
+      });
+      setCurrentPanel(panelIndex);
+    }
+  };
+
   // Auto-advance functionality
   useEffect(() => {
-    if (!isAutoAdvancing || isHovered) return;
+    if (!isAutoAdvancing || isHovered || isMobile) return;
     
     const timer = setInterval(() => {
       setCurrentPanel(prev => {
         const nextPanel = (prev + 1) % journeyStages.length;
         // Actually scroll to the next panel
-        scrollToPanel(nextPanel);
+        if (containerRef.current) {
+          containerRef.current.scrollTo({
+            left: nextPanel * window.innerWidth,
+            behavior: 'smooth'
+          });
+        }
         return nextPanel;
       });
     }, 8000);
     
     return () => clearInterval(timer);
-  }, [isAutoAdvancing, isHovered, journeyStages.length]);
+  }, [isAutoAdvancing, isHovered, isMobile, journeyStages.length]);
 
   // Mobile detection
   useEffect(() => {
@@ -259,17 +275,6 @@ const HorizontalJourney = () => {
       renderer.dispose();
     };
   }, [isMobile, scrollXProgress]);
-
-  // Scroll to panel
-  const scrollToPanel = (panelIndex) => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        left: panelIndex * window.innerWidth,
-        behavior: 'smooth'
-      });
-      setCurrentPanel(panelIndex);
-    }
-  };
 
   // Keyboard navigation
   useEffect(() => {
