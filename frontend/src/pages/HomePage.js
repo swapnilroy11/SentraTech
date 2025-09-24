@@ -28,11 +28,11 @@ const HomePage = () => {
       color: '#00FF41'
     },
     {
-      title: 'Live Chat AI',
-      description: 'Experience our sub-50ms AI-powered customer support in action',
+      title: 'Multi-Channel Support',
+      description: 'Seamless customer interactions across voice, chat, email, and social media',
       icon: MessageSquare,
-      preview: 'Animated chat bubbles with real-time AI responses',
-      link: '/features',
+      preview: 'Human-like voice agents with real-time conversation flow',
+      link: '/features#multi-channel',
       color: '#00DDFF'
     },
     {
