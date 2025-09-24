@@ -328,7 +328,15 @@ const SentraTechLanding = () => {
                     </span>
                   </div>
                 </div>
-                <Button className="bg-[#00FF41] text-[#0A0A0A] w-full rounded-xl">
+                <Button 
+                  onClick={() => {
+                    const contactSection = document.querySelector('#contact');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="bg-[#00FF41] text-[#0A0A0A] w-full rounded-xl"
+                >
                   {t.hero.cta}
                 </Button>
               </div>
