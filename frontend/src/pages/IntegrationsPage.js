@@ -171,24 +171,149 @@ const IntegrationsPage = () => {
           </div>
         </section>
 
-      {/* Logo Carousel Section */}
-      <section className="py-16 bg-gradient-to-r from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-white mb-4 font-rajdhani">
-              Trusted Integrations
-            </h2>
-            <p className="text-[rgb(161,161,170)]">
-              Connect with the tools your team already uses
-            </p>
-          </motion.div>
+        {/* Integration Logo Grid */}
+        <section id="integrations-grid" className="py-20 bg-[#0D1117]">
+          <div className="container mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl font-bold text-[#00FF41] mb-4 font-rajdhani uppercase tracking-wider">
+                TRUSTED INTEGRATIONS
+              </h2>
+              <p className="text-[#C9D1D9] text-lg">
+                Connect with the platforms your team already uses
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {[
+                { 
+                  name: 'HubSpot', 
+                  logo: 'HS', 
+                  color: '#FF7A59',
+                  setupTime: '10 min',
+                  adoption: '88%',
+                  description: 'Sync contacts in minutes'
+                },
+                { 
+                  name: 'Salesforce', 
+                  logo: 'SF', 
+                  color: '#00A1E0',
+                  setupTime: '15 min',
+                  adoption: '95%',
+                  description: 'CRM integration made easy'
+                },
+                { 
+                  name: 'Zendesk', 
+                  logo: 'ZD', 
+                  color: '#03363D',
+                  setupTime: '45 min',
+                  adoption: '80%',
+                  description: 'Migrate tickets seamlessly'
+                },
+                { 
+                  name: 'Airtable', 
+                  logo: 'AT', 
+                  color: '#18BFFF',
+                  setupTime: '8 min',
+                  adoption: '72%',
+                  description: 'Database sync in real-time'
+                },
+                { 
+                  name: 'Twilio', 
+                  logo: 'TW', 
+                  color: '#F22F46',
+                  setupTime: '12 min',
+                  adoption: '85%',
+                  description: 'SMS & voice integration'
+                },
+                { 
+                  name: 'Tableau', 
+                  logo: 'TB', 
+                  color: '#E97627',
+                  setupTime: '25 min',
+                  adoption: '78%',
+                  description: 'Advanced analytics dashboard'
+                },
+                { 
+                  name: 'Slack', 
+                  logo: 'SL', 
+                  color: '#4A154B',
+                  setupTime: '5 min',
+                  adoption: '92%',
+                  description: 'Team communication hub'
+                },
+                { 
+                  name: 'Microsoft', 
+                  logo: 'MS', 
+                  color: '#00BCF2',
+                  setupTime: '20 min',
+                  adoption: '89%',
+                  description: 'Office 365 integration'
+                }
+              ].map((integration, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group relative"
+                >
+                  <div className="bg-[#161B22] rounded-xl p-8 h-48 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:border-2 hover:border-[#00FF41] hover:shadow-lg hover:shadow-[#00FF41]/20 focus-within:outline-none focus-within:ring-4 focus-within:ring-[#00FF41] focus-within:ring-opacity-50">
+                    {/* Front Side */}
+                    <div className="group-hover:opacity-0 transition-opacity duration-300">
+                      <div 
+                        className="w-20 h-20 rounded-xl flex items-center justify-center font-bold text-white text-2xl mb-4 group-hover:scale-110 transition-transform duration-300"
+                        style={{ backgroundColor: integration.color }}
+                      >
+                        {integration.logo}
+                      </div>
+                      <h3 className="text-[#FFFFFF] font-semibold text-lg text-center">
+                        {integration.name}
+                      </h3>
+                      <p className="text-[#C9D1D9] text-sm text-center mt-2">
+                        {integration.description}
+                      </p>
+                    </div>
+
+                    {/* Back Side - Appears on hover */}
+                    <div className="absolute inset-0 bg-[#00FF41] rounded-xl p-8 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:rotateY-180">
+                      <h3 className="text-[#0D1117] font-bold text-xl mb-4 text-center">
+                        {integration.name}
+                      </h3>
+                      <div className="text-[#0D1117] text-center space-y-2">
+                        <p className="font-semibold">Setup: {integration.setupTime}</p>
+                        <p className="font-semibold">Adoption: {integration.adoption}</p>
+                        <Link 
+                          to={`/integrations/${integration.name.toLowerCase()}`}
+                          className="inline-block mt-4 bg-[#0D1117] text-[#00FF41] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors"
+                        >
+                          Learn More →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Button
+                asChild
+                variant="outline"
+                className="border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-3 rounded-xl font-semibold"
+              >
+                <Link to="/integrations/all">
+                  See All Platforms
+                  <ArrowRight size={16} className="ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
             {[
               { 
                 name: 'HubSpot', 
