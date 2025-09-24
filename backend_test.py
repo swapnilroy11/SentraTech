@@ -1363,12 +1363,8 @@ class LiveChatTester:
         
         for i, message in enumerate(test_messages):
             try:
-                test_data = {
-                    "session_id": session_id,
-                    "message": message
-                }
-                
-                response = requests.post(f"{BACKEND_URL}/chat/message", json=test_data, timeout=30)
+                # Use query parameters as expected by the endpoint
+                response = requests.post(f"{BACKEND_URL}/chat/message?session_id={session_id}&message={message}", timeout=30)
                 
                 if response.status_code == 200:
                     self.log_test(f"Database - Message {i+1} Storage", True, 
