@@ -71,7 +71,14 @@ createContact({
 });`;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
+    <ComponentErrorBoundary>
+      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+        {/* Debug info */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="fixed top-20 right-4 z-50 bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)] rounded p-2 text-xs text-[#00FF41]">
+            Integrations Page Loaded: {pageLoaded ? 'Yes' : 'No'}
+          </div>
+        )}
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="container mx-auto px-6">
