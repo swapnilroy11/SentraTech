@@ -115,8 +115,8 @@ const CustomerJourney = () => {
                           {/* Step Number */}
                           <div className={`absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
                             ${isActive || isCompleted 
-                              ? 'bg-[#DAFF01] text-[rgb(17,17,19)]' 
-                              : 'bg-[rgb(63,63,63)] text-[rgb(161,161,170)]'}`}
+                              ? 'bg-[#00FF41] text-[#0A0A0A]' 
+                              : 'bg-[#2a2a2a] text-[#a1a1aa]'}`}
                           >
                             {index + 1}
                           </div>
