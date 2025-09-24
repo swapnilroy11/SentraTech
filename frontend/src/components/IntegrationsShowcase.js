@@ -17,11 +17,9 @@ import {
   Clock,
   ArrowRight
 } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const IntegrationsShowcase = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const { t } = useLanguage();
 
   const integrationCategories = [
     { id: 'all', name: 'All Integrations', icon: Globe },
