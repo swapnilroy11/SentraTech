@@ -326,11 +326,11 @@ const ROICalculator = () => {
                   <div className="flex-1">
                     <div className="text-white font-semibold text-sm lg:text-base">Average Handle Time</div>
                     <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
-                      {formatTime(averageHandleTime)} → {formatTime(results.newAHT || 0)}
+                      {formatTime(averageHandleTime)} → {formatTime(results.new_aht || 0)}
                     </div>
                   </div>
                   <Badge className="bg-[#DAFF01]/20 text-[#DAFF01] border-[#DAFF01]/30 w-fit">
-                    -{results.ahtReductionPercent?.toFixed(0)}%
+                    -{results.aht_reduction_percent?.toFixed(0)}%
                   </Badge>
                 </div>
 
@@ -338,11 +338,11 @@ const ROICalculator = () => {
                   <div className="flex-1">
                     <div className="text-white font-semibold text-sm lg:text-base">Automated Interactions</div>
                     <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
-                      {results.automatedCalls?.toLocaleString()} calls/month
+                      {results.automated_calls?.toLocaleString()} calls/month
                     </div>
                   </div>
                   <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30 w-fit">
-                    {results.automationRate?.toFixed(0)}%
+                    {results.automation_rate?.toFixed(0)}%
                   </Badge>
                 </div>
 
@@ -350,7 +350,7 @@ const ROICalculator = () => {
                   <div className="flex-1">
                     <div className="text-white font-semibold text-sm lg:text-base">Time Saved Monthly</div>
                     <div className="text-[rgb(161,161,170)] text-xs lg:text-sm">
-                      {results.totalTimeSavedMonthly?.toLocaleString()} agent hours
+                      {results.total_time_saved_monthly?.toLocaleString()} agent hours
                     </div>
                   </div>
                   <Badge className="bg-[rgb(192,192,192)]/20 text-[rgb(192,192,192)] border-[rgb(192,192,192)]/30 w-fit">
