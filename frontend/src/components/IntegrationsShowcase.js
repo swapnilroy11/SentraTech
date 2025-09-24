@@ -214,25 +214,6 @@ const IntegrationsShowcase = () => {
     }
   ];
 
-  // Performance optimization: memoize filtered integrations
-  const filteredIntegrations = useMemo(() => {
-    console.log('IntegrationsShowcase: Filtering integrations', { activeCategory, searchTerm });
-    let filtered = integrations;
-
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(integration => integration.category === activeCategory);
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter(integration => 
-        integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        integration.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    return filtered;
-  }, [activeCategory, searchTerm]);
-
   const IntegrationCard = ({ integration }) => (
     <motion.div
       layout
