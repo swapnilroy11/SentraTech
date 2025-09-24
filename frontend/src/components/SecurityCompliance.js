@@ -19,11 +19,9 @@ import {
   Users,
   ExternalLink
 } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const SecurityCompliance = () => {
   const [activeTab, setActiveTab] = useState('certifications');
-  const { t } = useLanguage();
 
   const certifications = [
     {
