@@ -187,6 +187,270 @@ class ConnectionManager:
             websocket = self.active_connections[session_id]
             await websocket.send_text(json.dumps(typing_message))
 
+# User Management Models
+class UserRole:
+    ADMIN = "admin"
+    USER = "user"
+    VIEWER = "viewer"
+
+class User(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    full_name: str
+    company: str
+    role: str = UserRole.USER
+    is_active: bool = True
+    is_verified: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_login: Optional[datetime] = None
+    profile_data: Optional[Dict[str, Any]] = {}
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=8, description="Password must be at least 8 characters")
+    full_name: str = Field(..., min_length=2, description="Full name is required")
+    company: str = Field(..., min_length=2, description="Company name is required")
+    role: str = UserRole.USER
+
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        if not any(c.isupper() for c in v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not any(c.islower() for c in v):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    company: Optional[str] = None
+    profile_data: Optional[Dict[str, Any]] = None
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str = Field(..., min_length=8)
+    
+    @validator('new_password')
+    def validate_new_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        if not any(c.isupper() for c in v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not any(c.islower() for c in v):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
+
+class PasswordReset(BaseModel):
+    email: EmailStr
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str = Field(..., min_length=8)
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user: User
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    full_name: str
+    company: str
+    role: str
+    is_active: bool
+    is_verified: bool
+    created_at: datetime
+    last_login: Optional[datetime] = None
+    profile_data: Optional[Dict[str, Any]] = {}
+
+# User Management Service
+class UserService:
+    def __init__(self):
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        self.secret_key = os.environ.get("JWT_SECRET_KEY", "sentratech-super-secret-jwt-key-2024")
+        self.algorithm = "HS256"
+        self.access_token_expire_minutes = 30 * 24 * 60  # 30 days
+        
+    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
+        return self.pwd_context.verify(plain_password, hashed_password)
+    
+    def get_password_hash(self, password: str) -> str:
+        return self.pwd_context.hash(password)
+    
+    def create_access_token(self, data: dict, expires_delta: Optional[timedelta] = None):
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(minutes=self.access_token_expire_minutes)
+        to_encode.update({"exp": expire, "type": "access"})
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        return encoded_jwt
+    
+    def create_reset_token(self, email: str) -> str:
+        expire = datetime.now(timezone.utc) + timedelta(hours=1)  # Reset token expires in 1 hour
+        to_encode = {"sub": email, "exp": expire, "type": "reset"}
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        return encoded_jwt
+    
+    def verify_token(self, token: str) -> Optional[dict]:
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            return payload
+        except JWTError:
+            return None
+    
+    async def get_user_by_email(self, email: str) -> Optional[dict]:
+        return await db.users.find_one({"email": email})
+    
+    async def get_user_by_id(self, user_id: str) -> Optional[dict]:
+        return await db.users.find_one({"id": user_id})
+    
+    async def create_user(self, user_create: UserCreate) -> dict:
+        # Check if user already exists
+        existing_user = await self.get_user_by_email(user_create.email)
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Create new user
+        hashed_password = self.get_password_hash(user_create.password)
+        user_dict = user_create.dict()
+        del user_dict['password']  # Remove password from user dict
+        
+        user = User(**user_dict)
+        user_data = user.dict()
+        user_data['password_hash'] = hashed_password
+        user_data['created_at'] = user_data['created_at'].isoformat()
+        user_data['updated_at'] = user_data['updated_at'].isoformat()
+        
+        await db.users.insert_one(user_data)
+        
+        # Return user without password hash
+        del user_data['password_hash']
+        return user_data
+    
+    async def authenticate_user(self, email: str, password: str) -> Optional[dict]:
+        user = await self.get_user_by_email(email)
+        if not user:
+            return None
+        if not self.verify_password(password, user.get('password_hash', '')):
+            return None
+        if not user.get('is_active', True):
+            return None
+        
+        # Update last login
+        await db.users.update_one(
+            {"id": user['id']},
+            {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        return user
+    
+    async def update_user(self, user_id: str, user_update: UserUpdate) -> Optional[dict]:
+        update_data = {}
+        for field, value in user_update.dict(exclude_unset=True).items():
+            if value is not None:
+                update_data[field] = value
+        
+        if update_data:
+            update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+            await db.users.update_one({"id": user_id}, {"$set": update_data})
+        
+        return await self.get_user_by_id(user_id)
+    
+    async def change_password(self, user_id: str, password_change: PasswordChange) -> bool:
+        user = await self.get_user_by_id(user_id)
+        if not user:
+            return False
+        
+        if not self.verify_password(password_change.current_password, user.get('password_hash', '')):
+            return False
+        
+        new_hashed_password = self.get_password_hash(password_change.new_password)
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {
+                "password_hash": new_hashed_password,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        return True
+    
+    async def reset_password(self, token: str, new_password: str) -> bool:
+        payload = self.verify_token(token)
+        if not payload or payload.get('type') != 'reset':
+            return False
+        
+        email = payload.get('sub')
+        if not email:
+            return False
+        
+        user = await self.get_user_by_email(email)
+        if not user:
+            return False
+        
+        new_hashed_password = self.get_password_hash(new_password)
+        await db.users.update_one(
+            {"email": email},
+            {"$set": {
+                "password_hash": new_hashed_password,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        return True
+
+# Authentication Dependencies
+security = HTTPBearer()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    try:
+        payload = jwt.decode(credentials.credentials, user_service.secret_key, algorithms=[user_service.algorithm])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    user = await user_service.get_user_by_id(user_id)
+    if user is None:
+        raise credentials_exception
+    
+    if not user.get('is_active', True):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    
+    return user
+
+async def get_current_active_user(current_user: dict = Depends(get_current_user)) -> dict:
+    if not current_user.get('is_active', True):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+async def get_admin_user(current_user: dict = Depends(get_current_user)) -> dict:
+    if current_user.get('role') != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+    return current_user
+
+# Initialize user service
+user_service = UserService()
+
 # Live Chat Service
 class LiveChatService:
     def __init__(self):
