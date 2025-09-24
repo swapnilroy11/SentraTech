@@ -184,6 +184,21 @@ const HorizontalJourney = () => {
   // Three.js neural network background
   useEffect(() => {
     if (isMobile || !canvasRef.current) return;
+    
+    // Additional mobile/WebGL checks
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        console.log('WebGL not supported, falling back to mobile view');
+        setIsMobile(true);
+        return;
+      }
+    } catch (e) {
+      console.log('WebGL check failed, falling back to mobile view');
+      setIsMobile(true);
+      return;
+    }
 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
