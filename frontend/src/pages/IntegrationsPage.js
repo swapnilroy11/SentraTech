@@ -17,8 +17,8 @@ import IntegrationsShowcase from '../components/IntegrationsShowcase';
 import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const IntegrationsPage = () => {
-  const [showCodeExample, setShowCodeExample] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [openFAQ, setOpenFAQ] = useState(null);
 
   // Track page loading
   useEffect(() => {
@@ -29,13 +29,59 @@ const IntegrationsPage = () => {
     };
   }, []);
 
-  // Cleanup any potential memory leaks
-  useEffect(() => {
-    return () => {
-      // Clear any timeouts, intervals, or event listeners
-      setShowCodeExample(false);
-    };
-  }, []);
+  const toggleFAQ = (index) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const performanceStats = [
+    { 
+      icon: Zap, 
+      value: '50+', 
+      label: 'Integrations',
+      description: 'Pre-built connectors'
+    },
+    { 
+      icon: Clock, 
+      value: '5min', 
+      label: 'Average Setup',
+      description: 'Quick configuration'
+    },
+    { 
+      icon: Shield, 
+      value: '99.9%', 
+      label: 'Uptime',
+      description: 'Reliable connections'
+    },
+    { 
+      icon: Activity, 
+      value: '24/7', 
+      label: 'Monitoring',
+      description: 'Always watching'
+    }
+  ];
+
+  const faqItems = [
+    {
+      question: 'How do I add a new integration?',
+      answer: 'Adding integrations is simple! Navigate to your dashboard, click "Add Integration", select your platform, and follow our step-by-step setup wizard. Most integrations can be configured in under 5 minutes.'
+    },
+    {
+      question: 'Do you support custom API integrations?',
+      answer: 'Yes! Our Enterprise plan includes custom API integration development. Our team will work with you to build tailored connectors for your specific platforms and requirements.'
+    },
+    {
+      question: 'What happens if an integration fails?',
+      answer: 'We provide 24/7 monitoring with automatic failover mechanisms. If an integration experiences issues, you\'ll receive immediate alerts and our system will attempt automatic recovery.'
+    },
+    {
+      question: 'Can I test integrations before going live?',
+      answer: 'Absolutely! All integrations include sandbox testing environments where you can safely test data flows, webhooks, and API calls before deploying to production.'
+    },
+    {
+      question: 'How secure are the integrations?',
+      answer: 'All integrations use enterprise-grade security including OAuth 2.0, API key encryption, and SOC 2 compliant data handling. Your credentials and data are always protected.'
+    }
+  ];
 
   const codeExample = `// Sample API integration - Create contact in Google Sheets backend
 const createContact = async (contactData) => {
