@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://sentrafuture.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-ai-portal.preview.emergentagent.com/api"
 
 class ROICalculatorTester:
     def __init__(self):
