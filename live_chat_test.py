@@ -194,12 +194,8 @@ class LiveChatTester:
         
         # Send a test message to create history
         test_message = "What are the key benefits of SentraTech's platform?"
-        message_data = {
-            "session_id": session_id,
-            "message": test_message
-        }
         
-        message_response = requests.post(f"{BACKEND_URL}/chat/message", json=message_data, timeout=30)
+        message_response = requests.post(f"{BACKEND_URL}/chat/message?session_id={session_id}&message={test_message}", timeout=30)
         if message_response.status_code != 200:
             self.log_test("Chat History - Message Setup", False, "Failed to send test message")
             return
