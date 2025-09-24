@@ -243,16 +243,15 @@ const HomePage = () => {
                     {benefit.description}
                   </p>
                   
-                  <Link to={benefit.link}>
-                    <Button 
-                      variant="outline"
-                      size="sm"
-                      className="border-[rgba(0,255,65,0.3)] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
-                    >
-                      <span>Learn More</span>
-                      <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
+                  <Button 
+                    onClick={() => navigateToSection(benefit.link)}
+                    variant="outline"
+                    size="sm"
+                    className="border-[rgba(0,255,65,0.3)] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
                 </motion.div>
               );
             })}
