@@ -62,7 +62,7 @@ const CustomerJourney = () => {
           <div className="flex items-center justify-center space-x-4 mb-12">
             <Button
               onClick={togglePlayback}
-              className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] rounded-xl px-6"
+              className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-xl px-6"
             >
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}
               <span className="ml-2">{isPlaying ? 'Pause' : 'Play'} Journey</span>
