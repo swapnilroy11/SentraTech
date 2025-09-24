@@ -363,8 +363,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Demo Request Form Integration" 
-    - "Live Chat Integration"
+    - "Real-time Metrics API"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
