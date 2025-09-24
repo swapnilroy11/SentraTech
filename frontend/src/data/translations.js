@@ -259,7 +259,7 @@ export const translations = {
   },
   
   bn: {
-    // Navigation (নেভিগেশন) - Company Slogan
+    // Company Slogan (কোম্পানির স্লোগান)
     nav: {
       features: "অতিক্রম", // Beyond
       pricing: "উৎকৃষ্ট", // Better  
