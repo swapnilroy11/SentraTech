@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend Testing for SentraTech ROI Calculator API
-Tests all 3 ROI endpoints with various scenarios including edge cases
+Comprehensive Backend Testing for SentraTech Demo Request System
+Tests Google Sheets integration, email notifications, rate limiting, and security
 """
 
 import requests
@@ -11,6 +11,7 @@ import asyncio
 import websockets
 from datetime import datetime
 from typing import Dict, Any
+import urllib.parse
 
 # Backend URL from environment
 BACKEND_URL = "https://customer-ai-portal.preview.emergentagent.com/api"
