@@ -433,7 +433,7 @@ const SentraTechLanding = () => {
                   <Button 
                     onClick={handleChatSend}
                     size="sm"
-                    className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] rounded-lg"
+                    className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-lg"
                   >
                     <Send size={16} />
                   </Button>
