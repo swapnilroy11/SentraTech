@@ -89,22 +89,22 @@ const HomePage = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16">
-              <Link to="/features">
-                <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2">
-                  <Calculator size={24} />
-                  <span>Calculate ROI</span>
-                </Button>
-              </Link>
+              <Button 
+                onClick={() => navigateToSection('/features#roi-calculator')}
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2"
+              >
+                <Calculator size={24} />
+                <span>Calculate ROI</span>
+              </Button>
               
-              <Link to="/demo-request">
-                <Button 
-                  variant="outline"
-                  className="border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 text-lg rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <Play size={24} />
-                  <span>Request Your Demo</span>
-                </Button>
-              </Link>
+              <Button 
+                onClick={() => navigateToSection('/demo-request')}
+                variant="outline"
+                className="border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 text-lg rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 flex items-center space-x-2"
+              >
+                <Play size={24} />
+                <span>Request Your Demo</span>
+              </Button>
             </div>
 
             {/* Quick Stats */}
