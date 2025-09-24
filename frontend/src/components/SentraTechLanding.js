@@ -53,6 +53,7 @@ const SentraTechLanding = () => {
         particle.className = 'cursor-particle';
         particle.style.left = e.clientX + 'px';
         particle.style.top = e.clientY + 'px';
+        particle.style.background = '#00FF41';
         document.body.appendChild(particle);
         
         particles.push(particle);
