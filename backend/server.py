@@ -18,7 +18,12 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import Depends, status
+from fastapi import Depends, status, Form
+import aiosmtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import aiohttp
+from urllib.parse import urlencode
 
 # Configure logging first
 logging.basicConfig(
