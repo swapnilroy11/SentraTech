@@ -419,11 +419,521 @@ class ROICalculatorTester:
         # Return overall success
         return len(self.failed_tests) == 0
 
-if __name__ == "__main__":
-    tester = ROICalculatorTester()
-    success = tester.run_all_tests()
+class DemoRequestTester:
+    """Test Demo Request & CRM Integration functionality"""
     
-    if success:
-        print("\n🎉 All tests passed! ROI Calculator API is working correctly.")
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_demo_request_valid_input(self):
+        """Test POST /api/demo/request with valid input"""
+        print("\n=== Testing Demo Request - Valid Input ===")
+        
+        # Test Case 1: Complete valid request
+        valid_request = {
+            "name": "Sarah Johnson",
+            "email": "sarah.johnson@techcorp.com",
+            "company": "TechCorp Solutions",
+            "phone": "+1-555-0123",
+            "call_volume": "25,000",
+            "message": "We're interested in a demo to see how SentraTech can help reduce our customer support costs and improve response times."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=valid_request, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check response structure
+                required_fields = ["success", "contact_id", "message", "reference_id"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    if result["success"] and result["contact_id"] and result["reference_id"]:
+                        self.log_test("Demo Request - Valid Complete Input", True, 
+                                    f"Contact ID: {result['contact_id']}, Reference: {result['reference_id']}")
+                    else:
+                        self.log_test("Demo Request - Valid Complete Input", False, 
+                                    f"Invalid response values: {result}")
+                else:
+                    self.log_test("Demo Request - Valid Complete Input", False, 
+                                f"Missing response fields: {missing_fields}")
+            else:
+                self.log_test("Demo Request - Valid Complete Input", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request - Valid Complete Input", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Minimal valid request (only required fields)
+        minimal_request = {
+            "name": "John Smith",
+            "email": "john.smith@company.com",
+            "company": "Smith & Associates"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=minimal_request, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"] and result["contact_id"]:
+                    self.log_test("Demo Request - Minimal Valid Input", True, 
+                                f"Contact ID: {result['contact_id']}")
+                else:
+                    self.log_test("Demo Request - Minimal Valid Input", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Demo Request - Minimal Valid Input", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request - Minimal Valid Input", False, f"Exception: {str(e)}")
+    
+    def test_demo_request_validation(self):
+        """Test input validation for demo requests"""
+        print("\n=== Testing Demo Request - Input Validation ===")
+        
+        # Test Case 1: Missing required field - name
+        missing_name = {
+            "email": "test@company.com",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=missing_name, timeout=10)
+            if response.status_code == 422:  # Validation error expected
+                self.log_test("Demo Request - Missing Name", True, "Validation error returned correctly")
+            else:
+                self.log_test("Demo Request - Missing Name", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Missing Name", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Missing required field - email
+        missing_email = {
+            "name": "John Doe",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=missing_email, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Demo Request - Missing Email", True, "Validation error returned correctly")
+            else:
+                self.log_test("Demo Request - Missing Email", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Missing Email", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Missing required field - company
+        missing_company = {
+            "name": "John Doe",
+            "email": "john@test.com"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=missing_company, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Demo Request - Missing Company", True, "Validation error returned correctly")
+            else:
+                self.log_test("Demo Request - Missing Company", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Missing Company", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Invalid email format
+        invalid_email = {
+            "name": "John Doe",
+            "email": "invalid-email-format",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=invalid_email, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Demo Request - Invalid Email Format", True, "Email validation working")
+            else:
+                self.log_test("Demo Request - Invalid Email Format", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Invalid Email Format", False, f"Exception: {str(e)}")
+        
+        # Test Case 5: Invalid phone format
+        invalid_phone = {
+            "name": "John Doe",
+            "email": "john@test.com",
+            "company": "Test Company",
+            "phone": "invalid-phone"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=invalid_phone, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Demo Request - Invalid Phone Format", True, "Phone validation working")
+            else:
+                self.log_test("Demo Request - Invalid Phone Format", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Invalid Phone Format", False, f"Exception: {str(e)}")
+        
+        # Test Case 6: Empty name (whitespace only)
+        empty_name = {
+            "name": "   ",
+            "email": "john@test.com",
+            "company": "Test Company"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=empty_name, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Demo Request - Empty Name", True, "Empty name validation working")
+            else:
+                self.log_test("Demo Request - Empty Name", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Demo Request - Empty Name", False, f"Exception: {str(e)}")
+    
+    def test_duplicate_contact_handling(self):
+        """Test duplicate contact handling in mock HubSpot"""
+        print("\n=== Testing Duplicate Contact Handling ===")
+        
+        # First request
+        first_request = {
+            "name": "Michael Chen",
+            "email": "michael.chen@duplicatetest.com",
+            "company": "Duplicate Test Corp",
+            "phone": "+1-555-9999",
+            "call_volume": "15,000",
+            "message": "First demo request"
+        }
+        
+        try:
+            # Submit first request
+            response1 = requests.post(f"{BACKEND_URL}/demo/request", json=first_request, timeout=15)
+            
+            if response1.status_code == 200:
+                result1 = response1.json()
+                first_contact_id = result1.get("contact_id")
+                
+                # Submit duplicate request (same email)
+                duplicate_request = {
+                    "name": "Michael Chen Updated",
+                    "email": "michael.chen@duplicatetest.com",
+                    "company": "Updated Company Name",
+                    "phone": "+1-555-8888",
+                    "call_volume": "20,000",
+                    "message": "Updated demo request"
+                }
+                
+                response2 = requests.post(f"{BACKEND_URL}/demo/request", json=duplicate_request, timeout=15)
+                
+                if response2.status_code == 200:
+                    result2 = response2.json()
+                    second_contact_id = result2.get("contact_id")
+                    
+                    # Check if the same contact ID is returned (indicating duplicate handling)
+                    if first_contact_id == second_contact_id:
+                        self.log_test("Demo Request - Duplicate Contact Handling", True, 
+                                    f"Same contact ID returned: {first_contact_id}")
+                    else:
+                        self.log_test("Demo Request - Duplicate Contact Handling", False, 
+                                    f"Different contact IDs: {first_contact_id} vs {second_contact_id}")
+                else:
+                    self.log_test("Demo Request - Duplicate Contact Handling", False, 
+                                f"Second request failed: {response2.status_code}")
+            else:
+                self.log_test("Demo Request - Duplicate Contact Handling", False, 
+                            f"First request failed: {response1.status_code}")
+                
+        except Exception as e:
+            self.log_test("Demo Request - Duplicate Contact Handling", False, f"Exception: {str(e)}")
+    
+    def test_debug_endpoints(self):
+        """Test debug endpoints for mock services"""
+        print("\n=== Testing Debug Endpoints ===")
+        
+        # Test HubSpot contacts debug endpoint
+        try:
+            response = requests.get(f"{BACKEND_URL}/debug/hubspot/contacts", timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if "contacts" in result and "total_contacts" in result:
+                    self.log_test("Debug - HubSpot Contacts", True, 
+                                f"Total contacts: {result['total_contacts']}")
+                else:
+                    self.log_test("Debug - HubSpot Contacts", False, 
+                                f"Missing expected fields in response: {result}")
+            else:
+                self.log_test("Debug - HubSpot Contacts", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Debug - HubSpot Contacts", False, f"Exception: {str(e)}")
+        
+        # Test emails debug endpoint
+        try:
+            response = requests.get(f"{BACKEND_URL}/debug/emails", timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if "sent_emails" in result and "total_emails" in result:
+                    self.log_test("Debug - Sent Emails", True, 
+                                f"Total emails: {result['total_emails']}")
+                else:
+                    self.log_test("Debug - Sent Emails", False, 
+                                f"Missing expected fields in response: {result}")
+            else:
+                self.log_test("Debug - Sent Emails", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Debug - Sent Emails", False, f"Exception: {str(e)}")
+    
+    def test_database_integration(self):
+        """Test database storage of demo requests"""
+        print("\n=== Testing Database Integration ===")
+        
+        # Submit a demo request
+        test_request = {
+            "name": "Database Test User",
+            "email": "dbtest@example.com",
+            "company": "Database Test Corp",
+            "phone": "+1-555-1111",
+            "call_volume": "30,000",
+            "message": "Testing database integration"
+        }
+        
+        try:
+            # Submit demo request
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=test_request, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Try to retrieve demo requests to verify database storage
+                get_response = requests.get(f"{BACKEND_URL}/demo/requests", timeout=10)
+                
+                if get_response.status_code == 200:
+                    demo_requests = get_response.json()
+                    
+                    if isinstance(demo_requests, list) and len(demo_requests) > 0:
+                        # Look for our test request
+                        found_request = None
+                        for req in demo_requests:
+                            if req.get("email") == test_request["email"]:
+                                found_request = req
+                                break
+                        
+                        if found_request:
+                            self.log_test("Database - Demo Request Storage", True, 
+                                        f"Request found in database with ID: {found_request.get('id')}")
+                        else:
+                            self.log_test("Database - Demo Request Storage", False, 
+                                        "Test request not found in database")
+                    else:
+                        self.log_test("Database - Demo Request Storage", False, 
+                                    "No demo requests returned from database")
+                else:
+                    self.log_test("Database - Demo Request Storage", False, 
+                                f"Failed to retrieve demo requests: {get_response.status_code}")
+            else:
+                self.log_test("Database - Demo Request Storage", False, 
+                            f"Demo request submission failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Database - Demo Request Storage", False, f"Exception: {str(e)}")
+    
+    def test_mock_email_service(self):
+        """Test mock email service functionality"""
+        print("\n=== Testing Mock Email Service ===")
+        
+        # Clear previous emails by checking current count
+        try:
+            initial_response = requests.get(f"{BACKEND_URL}/debug/emails", timeout=10)
+            initial_count = 0
+            if initial_response.status_code == 200:
+                initial_count = initial_response.json().get("total_emails", 0)
+        except:
+            initial_count = 0
+        
+        # Submit a demo request to trigger email sending
+        email_test_request = {
+            "name": "Email Test User",
+            "email": "emailtest@example.com",
+            "company": "Email Test Corp",
+            "phone": "+1-555-2222",
+            "call_volume": "40,000",
+            "message": "Testing email service functionality"
+        }
+        
+        try:
+            # Submit demo request
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=email_test_request, timeout=15)
+            
+            if response.status_code == 200:
+                # Wait a moment for background email tasks to complete
+                time.sleep(2)
+                
+                # Check if emails were sent
+                email_response = requests.get(f"{BACKEND_URL}/debug/emails", timeout=10)
+                
+                if email_response.status_code == 200:
+                    email_result = email_response.json()
+                    final_count = email_result.get("total_emails", 0)
+                    sent_emails = email_result.get("sent_emails", [])
+                    
+                    # Should have at least 2 new emails (user confirmation + internal notification)
+                    if final_count >= initial_count + 2:
+                        # Check for both email types
+                        confirmation_found = False
+                        internal_found = False
+                        
+                        for email in sent_emails:
+                            if email.get("type") == "demo_confirmation" and email.get("to") == email_test_request["email"]:
+                                confirmation_found = True
+                            elif email.get("type") == "internal_notification":
+                                internal_found = True
+                        
+                        if confirmation_found and internal_found:
+                            self.log_test("Mock Email - Both Email Types", True, 
+                                        f"Confirmation and internal emails sent. Total: {final_count}")
+                        else:
+                            self.log_test("Mock Email - Both Email Types", False, 
+                                        f"Missing email types. Confirmation: {confirmation_found}, Internal: {internal_found}")
+                    else:
+                        self.log_test("Mock Email - Email Count", False, 
+                                    f"Expected at least {initial_count + 2} emails, got {final_count}")
+                else:
+                    self.log_test("Mock Email - Service Check", False, 
+                                f"Failed to check emails: {email_response.status_code}")
+            else:
+                self.log_test("Mock Email - Demo Request", False, 
+                            f"Demo request failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Mock Email - Service Check", False, f"Exception: {str(e)}")
+    
+    def test_error_handling(self):
+        """Test various error scenarios"""
+        print("\n=== Testing Error Handling ===")
+        
+        # Test Case 1: Malformed JSON
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   data="invalid json", 
+                                   headers={"Content-Type": "application/json"},
+                                   timeout=10)
+            if response.status_code in [400, 422]:
+                self.log_test("Error Handling - Malformed JSON", True, f"Status: {response.status_code}")
+            else:
+                self.log_test("Error Handling - Malformed JSON", False, 
+                            f"Expected 400/422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Error Handling - Malformed JSON", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Empty request body
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json={}, timeout=10)
+            if response.status_code == 422:
+                self.log_test("Error Handling - Empty Request", True, "Validation error returned")
+            else:
+                self.log_test("Error Handling - Empty Request", False, 
+                            f"Expected 422, got: {response.status_code}")
+        except Exception as e:
+            self.log_test("Error Handling - Empty Request", False, f"Exception: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all demo request test suites"""
+        print("🚀 Starting Demo Request & CRM Integration Tests")
+        print("=" * 60)
+        
+        # Run all test suites
+        self.test_demo_request_valid_input()
+        self.test_demo_request_validation()
+        self.test_duplicate_contact_handling()
+        self.test_debug_endpoints()
+        self.test_database_integration()
+        self.test_mock_email_service()
+        self.test_error_handling()
+        
+        # Print summary
+        print("\n" + "=" * 60)
+        print("📊 DEMO REQUEST TEST SUMMARY")
+        print("=" * 60)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        # Return overall success
+        return len(self.failed_tests) == 0
+
+if __name__ == "__main__":
+    print("🔧 SentraTech Backend API Testing Suite")
+    print("=" * 60)
+    
+    # Test ROI Calculator (existing functionality)
+    print("\n🧮 TESTING ROI CALCULATOR")
+    roi_tester = ROICalculatorTester()
+    roi_success = roi_tester.run_all_tests()
+    
+    # Test Demo Request & CRM Integration (new functionality)
+    print("\n📝 TESTING DEMO REQUEST & CRM INTEGRATION")
+    demo_tester = DemoRequestTester()
+    demo_success = demo_tester.run_all_tests()
+    
+    # Overall summary
+    print("\n" + "=" * 60)
+    print("🎯 OVERALL TEST SUMMARY")
+    print("=" * 60)
+    
+    total_tests = len(roi_tester.test_results) + len(demo_tester.test_results)
+    total_passed = len(roi_tester.passed_tests) + len(demo_tester.passed_tests)
+    total_failed = len(roi_tester.failed_tests) + len(demo_tester.failed_tests)
+    
+    print(f"Total Tests Run: {total_tests}")
+    print(f"✅ Total Passed: {total_passed}")
+    print(f"❌ Total Failed: {total_failed}")
+    
+    if roi_success and demo_success:
+        print("\n🎉 ALL TESTS PASSED! Backend API is working correctly.")
     else:
-        print(f"\n⚠️  {len(tester.failed_tests)} test(s) failed. Please review the issues above.")
+        print(f"\n⚠️  Some tests failed:")
+        if not roi_success:
+            print(f"   - ROI Calculator: {len(roi_tester.failed_tests)} failed")
+        if not demo_success:
+            print(f"   - Demo Request: {len(demo_tester.failed_tests)} failed")
