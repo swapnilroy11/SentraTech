@@ -2706,7 +2706,7 @@ class UserManagementTester:
         
         # Test Case 3: Request password reset
         reset_request = {
-            "email": test_user["email"]  # From our test user
+            "email": self.test_user["email"] if hasattr(self, 'test_user') else "login.test@company.com"
         }
         
         try:
