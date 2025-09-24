@@ -90,7 +90,7 @@ const CustomerJourney = () => {
         </div>
 
         {/* Traditional Timeline View */}
-        <div className="relative max-w-6xl mx-auto")
+        <div className="relative max-w-6xl mx-auto">{
           {/* Timeline Container */}
           <div className="relative bg-[rgb(26,28,30)]/50 rounded-3xl p-8 border border-[rgba(255,255,255,0.1)] backdrop-blur-sm">
             {/* Progress Bar */}
