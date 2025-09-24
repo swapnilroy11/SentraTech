@@ -137,6 +137,161 @@ class HubSpotContact(BaseModel):
     created_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     source: str = "website_demo_form"
 
+# Live Chat Models
+class ChatMessage(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
+    content: str
+    sender: str  # "user" or "assistant"
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+class ChatSession(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: Optional[str] = None
+    started_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_activity: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    messages: List[ChatMessage] = []
+    context: Dict[str, Any] = {}
+
+# WebSocket Connection Manager
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: Dict[str, WebSocket] = {}
+        
+    async def connect(self, websocket: WebSocket, session_id: str):
+        await websocket.accept()
+        self.active_connections[session_id] = websocket
+        logger.info(f"WebSocket connected for session: {session_id}")
+        
+    def disconnect(self, session_id: str):
+        if session_id in self.active_connections:
+            del self.active_connections[session_id]
+            logger.info(f"WebSocket disconnected for session: {session_id}")
+            
+    async def send_personal_message(self, message: str, session_id: str):
+        if session_id in self.active_connections:
+            websocket = self.active_connections[session_id]
+            await websocket.send_text(message)
+            
+    async def send_typing_indicator(self, session_id: str, is_typing: bool):
+        if session_id in self.active_connections:
+            typing_message = {
+                "type": "typing",
+                "is_typing": is_typing,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+            websocket = self.active_connections[session_id]
+            await websocket.send_text(json.dumps(typing_message))
+
+# Live Chat Service
+class LiveChatService:
+    def __init__(self):
+        self.llm_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not self.llm_key:
+            logger.warning("EMERGENT_LLM_KEY not found in environment variables")
+            
+    async def create_chat_session(self, user_id: Optional[str] = None) -> str:
+        """Create a new chat session"""
+        session = ChatSession(user_id=user_id)
+        
+        # Save to database
+        session_dict = session.dict()
+        session_dict['started_at'] = session_dict['started_at'].isoformat()
+        session_dict['last_activity'] = session_dict['last_activity'].isoformat()
+        
+        await db.chat_sessions.insert_one(session_dict)
+        logger.info(f"Created new chat session: {session.id}")
+        
+        return session.id
+    
+    async def get_chat_session(self, session_id: str) -> Optional[ChatSession]:
+        """Get chat session from database"""
+        session_data = await db.chat_sessions.find_one({"id": session_id})
+        if session_data:
+            # Handle datetime parsing
+            if isinstance(session_data.get('started_at'), str):
+                session_data['started_at'] = datetime.fromisoformat(session_data['started_at'])
+            if isinstance(session_data.get('last_activity'), str):
+                session_data['last_activity'] = datetime.fromisoformat(session_data['last_activity'])
+            return ChatSession(**session_data)
+        return None
+    
+    async def save_message(self, session_id: str, content: str, sender: str) -> ChatMessage:
+        """Save a message to the database and return the message object"""
+        message = ChatMessage(
+            session_id=session_id,
+            content=content,
+            sender=sender
+        )
+        
+        # Save message to database
+        message_dict = message.dict()
+        message_dict['timestamp'] = message_dict['timestamp'].isoformat()
+        
+        await db.chat_messages.insert_one(message_dict)
+        
+        # Update session last activity
+        await db.chat_sessions.update_one(
+            {"id": session_id},
+            {"$set": {"last_activity": datetime.now(timezone.utc).isoformat()}}
+        )
+        
+        logger.info(f"Saved message from {sender} in session {session_id}")
+        return message
+    
+    async def get_ai_response(self, session_id: str, user_message: str) -> str:
+        """Get AI response using Emergent LLM integration"""
+        try:
+            if not self.llm_key:
+                return "I'm sorry, but the AI chat service is currently unavailable. Please try again later or contact our support team."
+            
+            # Initialize LLM Chat with SentraTech context
+            system_message = """You are an AI assistant for SentraTech, a company that provides AI-powered customer support solutions. 
+
+Your role is to help visitors understand our platform and answer questions about:
+- AI-powered customer routing (sub-50ms response times)
+- 70% automation capabilities for customer interactions
+- Real-time BI dashboards and analytics
+- Cost savings and ROI benefits (typically 45% cost reduction)
+- Integration with existing systems (CRM, helpdesk, etc.)
+- Platform security and compliance features
+
+Be helpful, professional, and knowledgeable about AI customer support solutions. If asked about specific technical implementation or pricing, suggest they schedule a demo or speak with our sales team.
+
+Keep responses concise and focused on how SentraTech can solve their customer support challenges."""
+            
+            chat = LlmChat(
+                api_key=self.llm_key,
+                session_id=session_id,
+                system_message=system_message
+            ).with_model("openai", "gpt-4o-mini")  # Using default model
+            
+            # Create user message
+            user_msg = UserMessage(text=user_message)
+            
+            # Get AI response
+            response = await chat.send_message(user_msg)
+            
+            return response.strip()
+            
+        except Exception as e:
+            logger.error(f"Error getting AI response: {str(e)}")
+            return "I apologize, but I'm having trouble processing your message right now. Our human support team is available to help you - please feel free to schedule a demo or contact us directly."
+    
+    async def get_chat_history(self, session_id: str, limit: int = 50) -> List[ChatMessage]:
+        """Get chat history for a session"""
+        messages = await db.chat_messages.find(
+            {"session_id": session_id}
+        ).sort("timestamp", 1).limit(limit).to_list(limit)
+        
+        result = []
+        for msg in messages:
+            if isinstance(msg.get('timestamp'), str):
+                msg['timestamp'] = datetime.fromisoformat(msg['timestamp'])
+            result.append(ChatMessage(**msg))
+        
+        return result
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
