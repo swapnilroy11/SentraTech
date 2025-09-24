@@ -104,11 +104,11 @@ const CustomerJourney = () => {
                       <Card
                         className={`cursor-pointer transition-all duration-500 transform hover:scale-105
                           ${isActive 
-                            ? 'bg-gradient-to-br from-[#DAFF01]/20 to-[#00DDFF]/20 border-[#DAFF01] shadow-2xl shadow-[#DAFF01]/20' 
+                            ? 'bg-gradient-to-br from-[#00FF41]/20 to-[#00DDFF]/20 border-[#00FF41] shadow-2xl shadow-[#00FF41]/20' 
                             : isCompleted
-                            ? 'bg-[rgb(38,40,42)] border-[#00DDFF]/50'
-                            : 'bg-[rgb(26,28,30)] border-[rgba(255,255,255,0.1)]'
-                          } rounded-2xl hover:border-[#DAFF01]`}
+                            ? 'bg-[#2a2a2a] border-[#00DDFF]/50'
+                            : 'bg-[#1a1a1a] border-[rgba(248,249,250,0.1)]'
+                          } rounded-2xl hover:border-[#00FF41]`}
                         onClick={() => setSelectedModal(step)}
                       >
                         <CardHeader className="relative p-6">
