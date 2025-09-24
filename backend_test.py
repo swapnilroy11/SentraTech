@@ -911,7 +911,7 @@ class LiveChatTester:
         self.test_results = []
         self.failed_tests = []
         self.passed_tests = []
-        self.websocket_url = "wss://sentrafuture.preview.emergentagent.com/ws/chat"
+        self.websocket_url = "wss://customer-ai-portal.preview.emergentagent.com/ws/chat"
         
     def log_test(self, test_name: str, passed: bool, details: str = ""):
         """Log test results"""
