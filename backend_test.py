@@ -2339,12 +2339,12 @@ if __name__ == "__main__":
     
     # Final Summary
     print("\n" + "=" * 70)
-    print("🏁 METRICS API TEST SUMMARY")
+    print("🏁 ANALYTICS & TRACKING API TEST SUMMARY")
     print("=" * 70)
     
-    total_tests = len(metrics_tester.test_results)
-    total_passed = len(metrics_tester.passed_tests)
-    total_failed = len(metrics_tester.failed_tests)
+    total_tests = len(analytics_tester.test_results)
+    total_passed = len(analytics_tester.passed_tests)
+    total_failed = len(analytics_tester.failed_tests)
     
     print(f"📊 Overall Results:")
     print(f"   Total Tests: {total_tests}")
@@ -2353,14 +2353,13 @@ if __name__ == "__main__":
     print(f"   Success Rate: {(total_passed/total_tests)*100:.1f}%")
     
     if overall_success:
-        print("\n🎉 ALL METRICS API TESTS PASSED! 🎉")
-        print("✅ Live Metrics API: Working")
-        print("✅ Dashboard Metrics API: Working") 
-        print("✅ Metrics History API: Working")
-        print("✅ KPIs API: Working")
-        print("✅ WebSocket Metrics Stream: Working")
+        print("\n🎉 ALL ANALYTICS & TRACKING API TESTS PASSED! 🎉")
+        print("✅ Analytics Event Tracking API: Working")
+        print("✅ Conversion Tracking API: Working") 
+        print("✅ Analytics Statistics API: Working")
+        print("✅ Performance Metrics API: Working")
     else:
-        print("\n⚠️  SOME METRICS TESTS FAILED")
+        print("\n⚠️  SOME ANALYTICS TESTS FAILED")
         print(f"❌ Real-time Metrics API: {'✅ Working' if metrics_success else '❌ Issues Found'}")
         
     print("\n" + "=" * 70)
