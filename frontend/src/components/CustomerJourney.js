@@ -107,8 +107,6 @@ const CustomerJourney = () => {
         </div>
       </div>
     </section>
-      </div>
-    </section>
   );
 };
 
