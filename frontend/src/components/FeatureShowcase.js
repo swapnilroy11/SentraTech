@@ -5,6 +5,7 @@ import {
   MessageSquare, Zap, BarChart3, Heart, Globe, Shield,
   Sparkles
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { mockData } from '../data/mock';
 
 const FeatureShowcase = () => {
