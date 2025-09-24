@@ -151,8 +151,8 @@ const TestimonialsSection = () => {
               key={testimonial.id}
               className={`cursor-pointer transition-all duration-300 transform hover:scale-105
                 ${index === activeTestimonial 
-                  ? 'bg-gradient-to-br from-[#DAFF01]/20 to-[#00DDFF]/20 border-2 border-[#DAFF01]' 
-                  : 'bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[#DAFF01]/50'
+                  ? 'bg-gradient-to-br from-[#00FF41]/20 to-[#00DDFF]/20 border-2 border-[#00FF41]' 
+                  : 'bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50'
                 } rounded-2xl`}
               onClick={() => {
                 setActiveTestimonial(index);
@@ -161,8 +161,8 @@ const TestimonialsSection = () => {
             >
               <CardHeader className="p-6">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 bg-[rgb(38,40,42)] rounded-xl flex items-center justify-center border border-[rgb(63,63,63)]">
-                    <span className="text-sm font-bold text-[#DAFF01]">
+                  <div className="w-10 h-10 bg-[#00FF41]/20 rounded-xl flex items-center justify-center border border-[#00FF41]/50">
+                    <span className="text-sm font-bold text-[#00FF41]">
                       {testimonial.company.charAt(0)}
                     </span>
                   </div>
