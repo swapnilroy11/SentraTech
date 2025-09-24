@@ -689,6 +689,136 @@ async def debug_sent_emails():
         "total_emails": len(email_service.get_sent_emails())
     }
 
+# Live Chat API Routes
+@api_router.post("/chat/session")
+async def create_chat_session(user_id: Optional[str] = None):
+    """Create a new chat session"""
+    try:
+        session_id = await chat_service.create_chat_session(user_id)
+        return {
+            "success": True,
+            "session_id": session_id,
+            "message": "Chat session created successfully"
+        }
+    except Exception as e:
+        logger.error(f"Error creating chat session: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create chat session")
+
+@api_router.get("/chat/session/{session_id}/history")
+async def get_chat_history(session_id: str, limit: int = 50):
+    """Get chat history for a session"""
+    try:
+        messages = await chat_service.get_chat_history(session_id, limit)
+        return {
+            "success": True,
+            "messages": [
+                {
+                    "id": msg.id,
+                    "content": msg.content,
+                    "sender": msg.sender,
+                    "timestamp": msg.timestamp.isoformat()
+                }
+                for msg in messages
+            ]
+        }
+    except Exception as e:
+        logger.error(f"Error fetching chat history: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch chat history")
+
+@api_router.post("/chat/message")
+async def send_chat_message(session_id: str, message: str):
+    """Send a message via REST API (fallback for non-WebSocket clients)"""
+    try:
+        # Save user message
+        user_message = await chat_service.save_message(session_id, message, "user")
+        
+        # Get AI response
+        ai_response_content = await chat_service.get_ai_response(session_id, message)
+        
+        # Save AI response
+        ai_message = await chat_service.save_message(session_id, ai_response_content, "assistant")
+        
+        return {
+            "success": True,
+            "user_message": {
+                "id": user_message.id,
+                "content": user_message.content,
+                "sender": user_message.sender,
+                "timestamp": user_message.timestamp.isoformat()
+            },
+            "ai_response": {
+                "id": ai_message.id,
+                "content": ai_message.content,
+                "sender": ai_message.sender,
+                "timestamp": ai_message.timestamp.isoformat()
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error processing chat message: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process message")
+
+# WebSocket endpoint for real-time chat
+@app.websocket("/ws/chat/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    await connection_manager.connect(websocket, session_id)
+    try:
+        # Send welcome message
+        welcome_message = {
+            "type": "system",
+            "content": "Connected to SentraTech AI Assistant. How can I help you today?",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        await websocket.send_text(json.dumps(welcome_message))
+        
+        while True:
+            # Receive message from client
+            data = await websocket.receive_text()
+            message_data = json.loads(data)
+            
+            if message_data.get("type") == "user_message":
+                user_content = message_data.get("content", "")
+                
+                if user_content.strip():
+                    # Save user message
+                    user_message = await chat_service.save_message(session_id, user_content, "user")
+                    
+                    # Send typing indicator
+                    await connection_manager.send_typing_indicator(session_id, True)
+                    
+                    # Get AI response
+                    ai_response_content = await chat_service.get_ai_response(session_id, user_content)
+                    
+                    # Stop typing indicator
+                    await connection_manager.send_typing_indicator(session_id, False)
+                    
+                    # Save AI response
+                    ai_message = await chat_service.save_message(session_id, ai_response_content, "assistant")
+                    
+                    # Send AI response to client
+                    response_message = {
+                        "type": "ai_response",
+                        "id": ai_message.id,
+                        "content": ai_response_content,
+                        "sender": "assistant",
+                        "timestamp": ai_message.timestamp.isoformat()
+                    }
+                    await websocket.send_text(json.dumps(response_message))
+                    
+            elif message_data.get("type") == "ping":
+                # Respond to ping to keep connection alive
+                pong_message = {
+                    "type": "pong",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+                await websocket.send_text(json.dumps(pong_message))
+                
+    except WebSocketDisconnect:
+        connection_manager.disconnect(session_id)
+        logger.info(f"Client disconnected from session: {session_id}")
+    except Exception as e:
+        logger.error(f"WebSocket error for session {session_id}: {str(e)}")
+        connection_manager.disconnect(session_id)
+
 # Include the router in the main app
 app.include_router(api_router)
 
