@@ -1,7 +1,14 @@
-import { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import SentraTechLanding from "./components/SentraTechLanding";
+import FeatureShowcase from "./components/FeatureShowcase";
+import CustomerJourney from "./components/CustomerJourney";
+import ROICalculator from "./components/ROICalculator";
+import PricingSection from "./components/PricingSection";
+import TestimonialsSection from "./components/TestimonialsSection";
+import CTASection from "./components/CTASection";
+import Footer from "./components/Footer";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
