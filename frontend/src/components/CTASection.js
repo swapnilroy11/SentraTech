@@ -123,12 +123,12 @@ const CTASection = () => {
     if (hasErrors) {
       setError('Please fix the highlighted fields below');
       return false;
+    } else {
+      // Clear any previous errors if validation passes
+      setError(null);
+      setFieldErrors({});
+      return true;
     }
-    
-    // Clear any previous errors if validation passes
-    setError(null);
-    setFieldErrors({});
-    return true;
   };
 
   const handleSubmit = async (e) => {
