@@ -9,47 +9,47 @@ export const mockData = {
     chatGreeting: "Hi, I'm Sentra—how can I help you today?"
   },
 
-  // Features Data
+  // Features Data - using translation keys
   features: [
     {
       id: 1,
-      title: "Omnichannel AI",
-      description: "Unified experience across phone, email, chat, social media, and SMS with intelligent routing",
+      titleKey: "features.items.omnichannel.title",
+      descriptionKey: "features.items.omnichannel.description",
       icon: "MessageSquare",
       stats: "5+ channels integrated"
     },
     {
       id: 2,
-      title: "70% Automation",
-      description: "Real-time triage and routing with sub-50ms decision engine for optimal outcomes",
+      titleKey: "features.items.automation.title",
+      descriptionKey: "features.items.automation.description",
       icon: "Zap",
       stats: "<50ms routing time"
     },
     {
       id: 3,
-      title: "BI Dashboards",
-      description: "Advanced analytics tracking AHT, CSAT, churn predictions, and operational insights",
+      titleKey: "features.items.analytics.title",
+      descriptionKey: "features.items.analytics.description",
       icon: "BarChart3",
       stats: "20+ KPI metrics"
     },
     {
       id: 4,
-      title: "Sentiment Analysis",
-      description: "Proactive escalation using real-time emotion detection and risk assessment",
+      titleKey: "features.items.satisfaction.title",
+      descriptionKey: "features.items.satisfaction.description",
       icon: "Heart",
       stats: "99.5% accuracy"
     },
     {
       id: 5,
-      title: "Global Coverage",
-      description: "Multilingual NLP processing with 24/7 operations across multiple time zones",
+      titleKey: "features.items.global.title",
+      descriptionKey: "features.items.global.description",
       icon: "Globe",
       stats: "15+ languages"
     },
     {
       id: 6,
-      title: "Compliance-Grade",
-      description: "Built-in GDPR, HIPAA, PCI DSS compliance with immutable audit trails",
+      titleKey: "features.items.security.title",
+      descriptionKey: "features.items.security.description",
       icon: "Shield",
       stats: "100% audit coverage"
     }
