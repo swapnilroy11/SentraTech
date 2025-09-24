@@ -2517,6 +2517,7 @@ class UserManagementTester:
                         
                         # Store token for later tests
                         self.user_token = result["access_token"]
+                        self.test_user = test_user  # Store for password reset test
                         
                         # Verify user data in response
                         user_data = result["user"]
