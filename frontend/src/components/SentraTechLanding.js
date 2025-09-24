@@ -23,7 +23,7 @@ const SentraTechLanding = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [stats, setStats] = useState([]);
-  const [currentLang, setCurrentLang] = useState('en');
+  const { currentLang, toggleLanguage, t } = useLanguage();
   
   // Live Chat Integration State
   const [chatSessionId, setChatSessionId] = useState(null);
