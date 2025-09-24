@@ -370,12 +370,12 @@ const HorizontalJourney = () => {
       {/* Three.js Neural Network Background */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
       />
 
       {/* Channel Icons Midground */}
-      <div className="absolute inset-0" style={{ zIndex: 2 }}>
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
         {['phone', 'email', 'chat', 'social', 'sms'].map((type, index) => (
           <ChannelIcon key={`${type}-${index}`} type={type} delay={index * 4} />
         ))}
