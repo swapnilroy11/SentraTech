@@ -378,7 +378,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Real-time Metrics API"
+    - "Analytics & Tracking System API"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
