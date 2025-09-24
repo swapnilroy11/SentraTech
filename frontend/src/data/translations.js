@@ -506,11 +506,11 @@ export const translations = {
       title: "দ্রুত নেভিগেশন",
       items: {
         home: "হোম",
-        features: "বৈশিষ্ট্যসমূহ",
+        features: "অতিক্রম", // Beyond
         journey: "গ্রাহক যাত্রা", 
         roi: "ROI ক্যালকুলেটর",
         testimonials: "প্রশংসাপত্র",
-        pricing: "মূল্য নির্ধারণ",
+        pricing: "উৎকৃষ্ট", // Better
         contact: "যোগাযোগ"
       },
       footer: "SentraTech নেভিগেশন"
