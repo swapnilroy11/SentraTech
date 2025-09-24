@@ -116,16 +116,28 @@ const CTASection = () => {
                 <CheckCircle size={40} className="text-[#00FF41]" />
               </div>
               <h3 className="text-3xl font-bold text-white mb-4">
-                Thank You!
+                Demo Request Confirmed!
               </h3>
-              <p className="text-[rgb(218,218,218)] text-lg leading-relaxed">
-                Your demo request has been received. Our team will contact you within 24 hours 
-                to schedule a personalized demonstration of our AI-powered platform.
+              <p className="text-[rgb(218,218,218)] text-lg leading-relaxed mb-4">
+                Thank you for your interest in SentraTech! We've received your demo request 
+                and our team will contact you within 1-2 business days to schedule your personalized demonstration.
+              </p>
+              {contactId && (
+                <div className="bg-[rgb(38,40,42)] rounded-xl p-4 mb-4">
+                  <p className="text-[rgb(161,161,170)] text-sm mb-1">Your Reference ID:</p>
+                  <p className="text-[#00FF41] font-mono text-lg">{contactId}</p>
+                </div>
+              )}
+              <p className="text-[rgb(161,161,170)] text-sm">
+                Check your email for confirmation details and next steps.
               </p>
             </div>
             
             <Button 
-              onClick={() => setIsSubmitted(false)}
+              onClick={() => {
+                setIsSubmitted(false);
+                setContactId('');
+              }}
               className="bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a] rounded-xl px-6"
             >
               Submit Another Request
