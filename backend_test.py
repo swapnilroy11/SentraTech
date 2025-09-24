@@ -1300,12 +1300,8 @@ class LiveChatTester:
         
         for i, query in enumerate(sentratech_queries):
             try:
-                test_data = {
-                    "session_id": session_id,
-                    "message": query
-                }
-                
-                response = requests.post(f"{BACKEND_URL}/chat/message", json=test_data, timeout=30)
+                # Use query parameters as expected by the endpoint
+                response = requests.post(f"{BACKEND_URL}/chat/message?session_id={session_id}&message={query}", timeout=30)
                 
                 if response.status_code == 200:
                     result = response.json()
