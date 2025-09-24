@@ -120,6 +120,18 @@ backend:
         agent: "testing"
         comment: "✅ COMPREHENSIVE TESTING COMPLETE - All 3 ROI endpoints working perfectly. Fixed minor issue with /api/roi/save endpoint request format. PASSED: All calculation accuracy tests (45% cost reduction, 70% automation, 35% AHT reduction), edge cases (zero values, large numbers, decimal precision), input validation, database integration (save/retrieve), performance (<50ms response times). Tested with realistic business data. All 19 test cases passed. Database properly stores and retrieves calculations with UUID generation and timestamp handling."
 
+  - task: "Demo Request & CRM Integration"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Demo Request & CRM integration with mock HubSpot service. Added POST /api/demo/request endpoint for form submissions, mock HubSpot contact creation, mock email notification service (user confirmations + internal notifications), database storage of demo requests, proper error handling and validation. Uses Pydantic models for data validation. Mock services simulate real API behavior for testing without actual HubSpot credentials. Ready for backend testing."
+
 frontend:
   - task: "Navigation & Header"
     implemented: true
