@@ -1491,6 +1491,427 @@ class LiveChatTester:
         # Return overall success
         return len(self.failed_tests) == 0
 
+class MetricsTester:
+    """Test Real-time Metrics API endpoints"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        self.websocket_url = "wss://customer-ai-portal.preview.emergentagent.com/ws/metrics"
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_live_metrics_endpoint(self):
+        """Test GET /api/metrics/live endpoint"""
+        print("\n=== Testing Live Metrics Endpoint ===")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/metrics/live", timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check required fields
+                required_fields = [
+                    "active_chats", "response_time_ms", "automation_rate", 
+                    "customer_satisfaction", "resolution_rate", "daily_volume", 
+                    "cost_savings", "agent_utilization", "timestamp"
+                ]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    self.log_test("Live Metrics - Response Structure", True, 
+                                f"All required fields present: {len(required_fields)} fields")
+                    
+                    # Validate data types and ranges
+                    validations = []
+                    
+                    # Check active_chats (should be positive integer)
+                    if isinstance(result["active_chats"], int) and result["active_chats"] >= 0:
+                        validations.append("active_chats: valid")
+                    else:
+                        validations.append(f"active_chats: invalid ({result['active_chats']})")
+                    
+                    # Check response_time_ms (should be positive float, realistic range)
+                    if isinstance(result["response_time_ms"], (int, float)) and 10 <= result["response_time_ms"] <= 1000:
+                        validations.append("response_time_ms: valid")
+                    else:
+                        validations.append(f"response_time_ms: invalid ({result['response_time_ms']})")
+                    
+                    # Check automation_rate (should be between 0 and 1)
+                    if isinstance(result["automation_rate"], (int, float)) and 0 <= result["automation_rate"] <= 1:
+                        validations.append("automation_rate: valid")
+                    else:
+                        validations.append(f"automation_rate: invalid ({result['automation_rate']})")
+                    
+                    # Check customer_satisfaction (should be between 0 and 1)
+                    if isinstance(result["customer_satisfaction"], (int, float)) and 0 <= result["customer_satisfaction"] <= 1:
+                        validations.append("customer_satisfaction: valid")
+                    else:
+                        validations.append(f"customer_satisfaction: invalid ({result['customer_satisfaction']})")
+                    
+                    # Check resolution_rate (should be between 0 and 1)
+                    if isinstance(result["resolution_rate"], (int, float)) and 0 <= result["resolution_rate"] <= 1:
+                        validations.append("resolution_rate: valid")
+                    else:
+                        validations.append(f"resolution_rate: invalid ({result['resolution_rate']})")
+                    
+                    # Check daily_volume (should be positive integer)
+                    if isinstance(result["daily_volume"], int) and result["daily_volume"] >= 0:
+                        validations.append("daily_volume: valid")
+                    else:
+                        validations.append(f"daily_volume: invalid ({result['daily_volume']})")
+                    
+                    # Check cost_savings (should be positive number)
+                    if isinstance(result["cost_savings"], (int, float)) and result["cost_savings"] >= 0:
+                        validations.append("cost_savings: valid")
+                    else:
+                        validations.append(f"cost_savings: invalid ({result['cost_savings']})")
+                    
+                    # Check agent_utilization (should be between 0 and 1)
+                    if isinstance(result["agent_utilization"], (int, float)) and 0 <= result["agent_utilization"] <= 1:
+                        validations.append("agent_utilization: valid")
+                    else:
+                        validations.append(f"agent_utilization: invalid ({result['agent_utilization']})")
+                    
+                    # Count valid fields
+                    valid_count = sum(1 for v in validations if "valid" in v and "invalid" not in v)
+                    
+                    if valid_count == len(required_fields) - 1:  # -1 for timestamp
+                        self.log_test("Live Metrics - Data Validation", True, 
+                                    f"All {valid_count} metrics have valid values")
+                    else:
+                        invalid_validations = [v for v in validations if "invalid" in v]
+                        self.log_test("Live Metrics - Data Validation", False, 
+                                    f"Invalid fields: {invalid_validations}")
+                        
+                else:
+                    self.log_test("Live Metrics - Response Structure", False, 
+                                f"Missing required fields: {missing_fields}")
+                    
+            else:
+                self.log_test("Live Metrics - Basic Functionality", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Live Metrics - Basic Functionality", False, f"Exception: {str(e)}")
+    
+    def test_dashboard_metrics_endpoint(self):
+        """Test GET /api/metrics/dashboard endpoint"""
+        print("\n=== Testing Dashboard Metrics Endpoint ===")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/metrics/dashboard", timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check main structure
+                required_sections = ["current_metrics", "trends", "alerts", "uptime"]
+                missing_sections = [section for section in required_sections if section not in result]
+                
+                if not missing_sections:
+                    self.log_test("Dashboard Metrics - Main Structure", True, 
+                                f"All required sections present: {required_sections}")
+                    
+                    # Validate trends section
+                    trends = result["trends"]
+                    expected_trend_metrics = ["response_time_ms", "automation_rate", "customer_satisfaction", "active_chats"]
+                    
+                    if isinstance(trends, dict):
+                        trend_validations = []
+                        for metric in expected_trend_metrics:
+                            if metric in trends:
+                                trend_data = trends[metric]
+                                if isinstance(trend_data, list) and len(trend_data) == 24:  # 24 data points
+                                    trend_validations.append(f"{metric}: valid (24 points)")
+                                else:
+                                    trend_validations.append(f"{metric}: invalid ({len(trend_data) if isinstance(trend_data, list) else 'not list'} points)")
+                            else:
+                                trend_validations.append(f"{metric}: missing")
+                        
+                        valid_trends = sum(1 for v in trend_validations if "valid" in v)
+                        if valid_trends == len(expected_trend_metrics):
+                            self.log_test("Dashboard Metrics - Trends Data", True, 
+                                        f"All {valid_trends} trend metrics have 24 data points")
+                        else:
+                            self.log_test("Dashboard Metrics - Trends Data", False, 
+                                        f"Trend issues: {trend_validations}")
+                    else:
+                        self.log_test("Dashboard Metrics - Trends Structure", False, 
+                                    f"Trends is not a dict: {type(trends)}")
+                        
+                else:
+                    self.log_test("Dashboard Metrics - Main Structure", False, 
+                                f"Missing sections: {missing_sections}")
+                    
+            else:
+                self.log_test("Dashboard Metrics - Basic Functionality", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Dashboard Metrics - Basic Functionality", False, f"Exception: {str(e)}")
+    
+    def test_metrics_history_endpoint(self):
+        """Test GET /api/metrics/history/{metric_name} endpoint"""
+        print("\n=== Testing Metrics History Endpoint ===")
+        
+        # Test different metrics and timeframes
+        test_cases = [
+            ("response_time_ms", "1h"),
+            ("response_time_ms", "24h"),
+            ("automation_rate", "24h"),
+            ("customer_satisfaction", "7d"),
+            ("customer_satisfaction", "30d")
+        ]
+        
+        for metric_name, timeframe in test_cases:
+            try:
+                response = requests.get(f"{BACKEND_URL}/metrics/history/{metric_name}?timeframe={timeframe}", timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    
+                    # Check response structure
+                    required_fields = ["metric_name", "values", "timestamps", "timeframe"]
+                    missing_fields = [field for field in required_fields if field not in result]
+                    
+                    if not missing_fields:
+                        # Validate field values
+                        if result["metric_name"] == metric_name and result["timeframe"] == timeframe:
+                            values = result["values"]
+                            timestamps = result["timestamps"]
+                            
+                            if isinstance(values, list) and isinstance(timestamps, list):
+                                if len(values) == len(timestamps) and len(values) > 0:
+                                    self.log_test(f"History - {metric_name} ({timeframe})", True, 
+                                                f"{len(values)} data points with matching timestamps")
+                                else:
+                                    self.log_test(f"History - {metric_name} ({timeframe})", False, 
+                                                f"Mismatched or empty arrays: values={len(values)}, timestamps={len(timestamps)}")
+                            else:
+                                self.log_test(f"History - {metric_name} ({timeframe})", False, 
+                                            f"Values or timestamps not arrays: {type(values)}, {type(timestamps)}")
+                        else:
+                            self.log_test(f"History - {metric_name} ({timeframe})", False, 
+                                        f"Incorrect metric_name or timeframe in response")
+                    else:
+                        self.log_test(f"History - {metric_name} ({timeframe})", False, 
+                                    f"Missing fields: {missing_fields}")
+                        
+                else:
+                    self.log_test(f"History - {metric_name} ({timeframe})", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"History - {metric_name} ({timeframe})", False, f"Exception: {str(e)}")
+    
+    def test_kpis_endpoint(self):
+        """Test GET /api/metrics/kpis endpoint"""
+        print("\n=== Testing KPIs Endpoint ===")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/metrics/kpis", timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check expected KPI fields
+                expected_kpis = [
+                    "response_time", "automation_rate", "uptime", "satisfaction",
+                    "cost_savings", "daily_volume", "resolution_rate"
+                ]
+                missing_kpis = [kpi for kpi in expected_kpis if kpi not in result]
+                
+                if not missing_kpis:
+                    self.log_test("KPIs - Response Structure", True, 
+                                f"All {len(expected_kpis)} KPIs present")
+                    
+                    # Validate KPI formatting (should be formatted strings)
+                    format_validations = []
+                    
+                    # Check response_time format (should end with 'ms')
+                    if isinstance(result["response_time"], str) and result["response_time"].endswith("ms"):
+                        format_validations.append("response_time: properly formatted")
+                    else:
+                        format_validations.append(f"response_time: invalid format ({result['response_time']})")
+                    
+                    # Check automation_rate format (should end with '%')
+                    if isinstance(result["automation_rate"], str) and result["automation_rate"].endswith("%"):
+                        format_validations.append("automation_rate: properly formatted")
+                    else:
+                        format_validations.append(f"automation_rate: invalid format ({result['automation_rate']})")
+                    
+                    valid_formats = sum(1 for v in format_validations if "properly formatted" in v)
+                    
+                    if valid_formats >= 2:  # At least 2 should be properly formatted
+                        self.log_test("KPIs - Formatting", True, 
+                                    f"{valid_formats} KPIs properly formatted for display")
+                    else:
+                        invalid_formats = [v for v in format_validations if "invalid format" in v]
+                        self.log_test("KPIs - Formatting", False, 
+                                    f"Formatting issues: {invalid_formats}")
+                        
+                else:
+                    self.log_test("KPIs - Response Structure", False, 
+                                f"Missing KPIs: {missing_kpis}")
+                    
+            else:
+                self.log_test("KPIs - Basic Functionality", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("KPIs - Basic Functionality", False, f"Exception: {str(e)}")
+    
+    def test_websocket_metrics_stream(self):
+        """Test WebSocket /ws/metrics endpoint"""
+        print("\n=== Testing WebSocket Metrics Stream ===")
+        
+        async def test_websocket_metrics():
+            try:
+                # Test Case 1: WebSocket connection establishment
+                uri = self.websocket_url
+                
+                async with websockets.connect(uri) as websocket:
+                    self.log_test("WebSocket Metrics - Connection", True, 
+                                f"Connected to {uri}")
+                    
+                    # Test Case 2: Receive metrics updates
+                    updates_received = 0
+                    valid_updates = 0
+                    
+                    try:
+                        # Wait for up to 12 seconds to receive at least 2 updates (5s intervals)
+                        for _ in range(2):  # Try to get 2 updates
+                            update = await asyncio.wait_for(websocket.recv(), timeout=7)
+                            update_data = json.loads(update)
+                            updates_received += 1
+                            
+                            # Validate update structure
+                            if update_data.get("type") == "metrics_update" and "data" in update_data:
+                                data = update_data["data"]
+                                
+                                # Check if it has the expected metrics fields
+                                expected_fields = ["active_chats", "response_time_ms", "automation_rate", "timestamp"]
+                                if all(field in data for field in expected_fields):
+                                    valid_updates += 1
+                                    
+                                    if updates_received == 1:  # Log details for first update
+                                        self.log_test("WebSocket Metrics - Update Structure", True, 
+                                                    f"Valid metrics update received with all fields")
+                            else:
+                                self.log_test("WebSocket Metrics - Update Format", False, 
+                                            f"Invalid update format: {update_data}")
+                    
+                    except asyncio.TimeoutError:
+                        pass  # Expected if no more updates within timeout
+                    
+                    # Evaluate results
+                    if updates_received >= 1:
+                        self.log_test("WebSocket Metrics - Update Reception", True, 
+                                    f"Received {updates_received} updates")
+                    else:
+                        self.log_test("WebSocket Metrics - Update Reception", False, 
+                                    f"No updates received in 12 seconds")
+                    
+                    if valid_updates == updates_received and updates_received > 0:
+                        self.log_test("WebSocket Metrics - Data Quality", True, 
+                                    f"All {valid_updates} updates had valid structure")
+                    elif updates_received > 0:
+                        self.log_test("WebSocket Metrics - Data Quality", False, 
+                                    f"Only {valid_updates}/{updates_received} updates were valid")
+                        
+            except Exception as e:
+                self.log_test("WebSocket Metrics - Connection", False, f"Connection failed: {str(e)}")
+        
+        # Run the async WebSocket test
+        try:
+            asyncio.run(test_websocket_metrics())
+        except Exception as e:
+            self.log_test("WebSocket Metrics - Test Execution", False, f"Async test failed: {str(e)}")
+    
+    def test_performance_metrics(self):
+        """Test performance of metrics endpoints"""
+        print("\n=== Testing Metrics API Performance ===")
+        
+        endpoints = [
+            ("/metrics/live", "Live Metrics"),
+            ("/metrics/dashboard", "Dashboard Metrics"),
+            ("/metrics/kpis", "KPIs"),
+            ("/metrics/history/response_time_ms", "History")
+        ]
+        
+        for endpoint, name in endpoints:
+            try:
+                start_time = time.time()
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                end_time = time.time()
+                
+                response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+                
+                if response.status_code == 200 and response_time < 100:  # Less than 100ms
+                    self.log_test(f"Performance - {name}", True, 
+                                f"Response time: {response_time:.2f}ms")
+                else:
+                    self.log_test(f"Performance - {name}", False, 
+                                f"Response time: {response_time:.2f}ms, Status: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Performance - {name}", False, f"Exception: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all metrics test suites"""
+        print("🚀 Starting Real-time Metrics API Tests")
+        print("=" * 60)
+        
+        # Run all test suites
+        self.test_live_metrics_endpoint()
+        self.test_dashboard_metrics_endpoint()
+        self.test_metrics_history_endpoint()
+        self.test_kpis_endpoint()
+        self.test_websocket_metrics_stream()
+        self.test_performance_metrics()
+        
+        # Print summary
+        print("\n" + "=" * 60)
+        print("📊 METRICS API TEST SUMMARY")
+        print("=" * 60)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        # Return overall success
+        return len(self.failed_tests) == 0
+
 if __name__ == "__main__":
     print("🔧 SentraTech Backend API Testing Suite")
     print("=" * 60)
