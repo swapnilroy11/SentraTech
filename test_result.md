@@ -137,6 +137,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE TESTING COMPLETE - All 15 demo request tests passed. Fixed 2 minor issues during testing: (1) Added company field validation as required field, (2) Fixed MongoDB ObjectId serialization in GET /api/demo/requests endpoint. PASSED: Valid input handling (complete & minimal requests), input validation (required fields: name, email, company), email format validation, phone number validation, duplicate contact handling in mock HubSpot, mock email service (both user confirmation & internal notifications), database integration (demo requests properly stored/retrieved), debug endpoints working, error handling for malformed requests. Mock services working perfectly - HubSpot contact creation with duplicate detection, email notifications sent correctly. All 34 backend tests passed (19 ROI + 15 Demo Request)."
+      - working: true
+        agent: "testing"
+        comment: "✅ REGRESSION TESTING PASSED - All 15 Demo Request & CRM integration tests passed after frontend changes. /api/demo/request endpoint working with proper validation (required fields: name, email, company), mock HubSpot service creating contacts with duplicate detection, mock email service sending both user confirmations and internal notifications, database integration storing demo requests correctly, debug endpoints functional, error handling for malformed requests working. No regressions detected from horizontal journey timeline changes."
 
 frontend:
   - task: "Navigation & Header"
