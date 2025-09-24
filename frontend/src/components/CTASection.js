@@ -47,12 +47,12 @@ const CTASection = () => {
 
   if (isSubmitted) {
     return (
-      <section className="py-20 bg-gradient-to-br from-[#DAFF01]/5 to-[#00DDFF]/5">
+      <section className="py-20 bg-gradient-to-br from-[#00FF41]/5 to-[#00DDFF]/5">
         <div className="container mx-auto px-6">
-          <Card className="max-w-2xl mx-auto bg-[rgb(26,28,30)] border-2 border-[#DAFF01] rounded-3xl p-12 text-center">
+          <Card className="max-w-2xl mx-auto bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl p-12 text-center">
             <div className="mb-6">
-              <div className="w-20 h-20 bg-[#DAFF01]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#DAFF01]/50">
-                <CheckCircle size={40} className="text-[#DAFF01]" />
+              <div className="w-20 h-20 bg-[#00FF41]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00FF41]/50">
+                <CheckCircle size={40} className="text-[#00FF41]" />
               </div>
               <h3 className="text-3xl font-bold text-white mb-4">
                 Thank You!
@@ -65,7 +65,7 @@ const CTASection = () => {
             
             <Button 
               onClick={() => setIsSubmitted(false)}
-              className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] rounded-xl px-6"
+              className="bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a] rounded-xl px-6"
             >
               Submit Another Request
             </Button>
