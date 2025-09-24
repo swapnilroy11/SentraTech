@@ -55,30 +55,30 @@ const FeatureShowcase = () => {
               >
                 <CardHeader className="p-0 mb-6">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-4 rounded-2xl bg-[rgb(38,40,42)] 
-                      ${hoveredCard === feature.id ? 'bg-[#DAFF01]/10 border border-[#DAFF01]/30' : ''}
+                    <div className={`p-4 rounded-2xl bg-[#1a1a1a] 
+                      ${hoveredCard === feature.id ? 'bg-[#00FF41]/10 border border-[#00FF41]/30' : ''}
                       transition-all duration-300`}
                     >
                       <Icon 
                         size={32} 
-                        className={`${hoveredCard === feature.id ? 'text-[#DAFF01]' : 'text-[rgb(218,218,218)]'} 
+                        className={`${hoveredCard === feature.id ? 'text-[#00FF41]' : 'text-[#e2e8f0]'} 
                           transition-colors duration-300`} 
                       />
                     </div>
                     <ArrowUpRight 
                       size={20} 
-                      className={`text-[rgb(161,161,170)] transition-all duration-300 
-                        ${hoveredCard === feature.id ? 'text-[#DAFF01] transform rotate-45' : ''}`} 
+                      className={`text-[#a1a1aa] transition-all duration-300 
+                        ${hoveredCard === feature.id ? 'text-[#00FF41] transform rotate-45' : ''}`} 
                     />
                   </div>
                   
-                  <CardTitle className="text-2xl text-white mb-3">
+                  <CardTitle className="text-2xl text-[#F8F9FA] mb-3 font-rajdhani">
                     {feature.title}
                   </CardTitle>
                   
                   <Badge 
                     variant="outline" 
-                    className="text-[#DAFF01] border-[#DAFF01]/30 bg-[#DAFF01]/5 w-fit"
+                    className="text-[#00FF41] border-[#00FF41]/30 bg-[#00FF41]/5 w-fit font-rajdhani"
                   >
                     {feature.stats}
                   </Badge>
