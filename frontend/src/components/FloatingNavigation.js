@@ -6,6 +6,7 @@ import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigateToSection = useNavigateWithScroll();
 
   // Navigation items with icons and routes
   const navItems = [
