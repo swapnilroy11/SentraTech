@@ -9,6 +9,24 @@ import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const IntegrationsPage = () => {
   const [showCodeExample, setShowCodeExample] = useState(false);
+  const [pageLoaded, setPageLoaded] = useState(false);
+
+  // Track page loading
+  useEffect(() => {
+    console.log('IntegrationsPage: Component mounting');
+    setPageLoaded(true);
+    return () => {
+      console.log('IntegrationsPage: Component unmounting');
+    };
+  }, []);
+
+  // Cleanup any potential memory leaks
+  useEffect(() => {
+    return () => {
+      // Clear any timeouts, intervals, or event listeners
+      setShowCodeExample(false);
+    };
+  }, []);
 
   const codeExample = `// Sample API integration - Create contact in Google Sheets backend
 const createContact = async (contactData) => {
