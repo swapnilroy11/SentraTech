@@ -1,19 +1,26 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SentraTechLanding from "./components/SentraTechLanding";
-import FeatureShowcase from "./components/FeatureShowcase";
-import CustomerJourney from "./components/CustomerJourney";
-import ROICalculator from "./components/ROICalculator";
-import CaseStudies from "./components/CaseStudies";
-import IntegrationsShowcase from "./components/IntegrationsShowcase";
-import TestimonialsSection from "./components/TestimonialsSection";
-import PricingSection from "./components/PricingSection";
-import SecurityCompliance from "./components/SecurityCompliance";
-import CTASection from "./components/CTASection";
+
+// Components
+import Navigation from "./components/Navigation";
+import Breadcrumbs from "./components/Breadcrumbs";
+import PageTransition from "./components/PageTransition";
 import Footer from "./components/Footer";
 import SpaceBackground from "./components/SpaceBackground";
 import FloatingNavigation from "./components/FloatingNavigation";
+import ChatWidget from "./components/ChatWidget";
+
+// Pages
+import HomePage from "./pages/HomePage";
+import FeaturesPage from "./pages/FeaturesPage";
+import CaseStudiesPage from "./pages/CaseStudiesPage";
+import IntegrationsPage from "./pages/IntegrationsPage";
+import SecurityPage from "./pages/SecurityPage";
+import PricingPage from "./pages/PricingPage";
+import DemoRequestPage from "./pages/DemoRequestPage";
+
+// Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
 
 function App() {
@@ -26,24 +33,31 @@ function App() {
         {/* Floating Left Navigation */}
         <FloatingNavigation />
         
+        {/* Global Chat Widget */}
+        <ChatWidget />
+        
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={
-              <>
-                <SentraTechLanding />
-                <FeatureShowcase />
-                <CustomerJourney />
-                <ROICalculator />
-                <CaseStudies />
-                <IntegrationsShowcase />
-                <TestimonialsSection />
-                <PricingSection />
-                <SecurityCompliance />
-                <CTASection />
-                <Footer />
-              </>
-            } />
-          </Routes>
+          {/* Global Navigation */}
+          <Navigation />
+          
+          {/* Breadcrumbs */}
+          <Breadcrumbs />
+          
+          {/* Main Content with Page Transitions */}
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/features" element={<FeaturesPage />} />
+              <Route path="/case-studies" element={<CaseStudiesPage />} />
+              <Route path="/integrations" element={<IntegrationsPage />} />
+              <Route path="/security" element={<SecurityPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/demo-request" element={<DemoRequestPage />} />
+            </Routes>
+          </PageTransition>
+          
+          {/* Global Footer */}
+          <Footer />
         </BrowserRouter>
       </div>
     </LanguageProvider>
