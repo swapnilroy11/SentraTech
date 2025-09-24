@@ -451,13 +451,11 @@ const CTASection = () => {
                     </div>
                   )}
                 </Button>
-                    </div>
-                  )}
-                </Button>
 
                 <p className="text-[rgb(161,161,170)] text-xs text-center">
                   By submitting this form, you agree to our privacy policy. 
                   No spam, unsubscribe anytime.
+                </p>
                 </p>
               </form>
             </CardContent>
