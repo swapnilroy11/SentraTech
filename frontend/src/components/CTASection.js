@@ -279,7 +279,7 @@ const CTASection = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(38,40,42)]">
+    <section id="contact" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(38,40,42)]">
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
