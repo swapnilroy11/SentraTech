@@ -940,6 +940,7 @@ class EmailService:
 
 # Initialize services
 sheets_service = GoogleSheetsService()
+airtable_service = AirtableService()
 email_service = EmailService()
 connection_manager = ConnectionManager()
 chat_service = LiveChatService()
