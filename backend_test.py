@@ -14,7 +14,7 @@ from typing import Dict, Any
 import urllib.parse
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-ai-portal.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentratech-preview.preview.emergentagent.com/api"
 
 class DemoRequestSystemTester:
     """Test the completely updated Demo Request system with Google Sheets integration and email notifications"""
