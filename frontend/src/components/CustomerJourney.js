@@ -5,7 +5,7 @@ import HorizontalJourney from './HorizontalJourney';
 
 const CustomerJourney = () => {
   return (
-    <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative overflow-hidden">
+    <section id="journey" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative overflow-hidden">
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
