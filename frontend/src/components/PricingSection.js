@@ -14,14 +14,14 @@ const PricingSection = () => {
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+          <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Star className="mr-2" size={14} />
             Transparent Pricing
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">Choose Your</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="text-[#F8F9FA]">Choose Your</span>
             <br />
-            <span className="text-[#DAFF01]">Growth Plan</span>
+            <span className="text-[#00FF41]">Growth Plan</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed mb-8">
             Scale your customer support operations with our flexible pricing tiers. 
