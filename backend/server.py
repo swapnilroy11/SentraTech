@@ -30,10 +30,50 @@ api_router = APIRouter(prefix="/api")
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+# ROI Calculator Models
+class ROIInput(BaseModel):
+    call_volume: int = Field(..., description="Monthly call volume")
+    current_cost_per_call: float = Field(..., description="Current cost per call in USD")
+    average_handle_time: int = Field(..., description="Average handle time in seconds")
+    agent_count: int = Field(..., description="Current agent count")
+    
+class ROIResults(BaseModel):
+    # Current metrics
+    current_monthly_cost: float
+    current_annual_cost: float
+    
+    # Projected metrics with SentraTech
+    new_monthly_cost: float
+    new_annual_cost: float
+    monthly_savings: float
+    annual_savings: float
+    cost_reduction_percent: float
+    
+    # Performance improvements
+    new_aht: float
+    time_saved_per_call: float
+    total_time_saved_monthly: float
+    aht_reduction_percent: float
+    
+    # Automation metrics
+    automated_calls: float
+    human_assisted_calls: float
+    automation_rate: float
+    
+    # ROI
+    roi: float
+
+class ROICalculation(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    input_data: ROIInput
+    results: ROIResults
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    user_info: Optional[dict] = None
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
