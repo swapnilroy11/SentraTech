@@ -1173,7 +1173,7 @@ class LiveChatTester:
                 # Test Case 1: WebSocket connection establishment
                 uri = f"{self.websocket_url}/{session_id}"
                 
-                async with websockets.connect(uri, timeout=10) as websocket:
+                async with websockets.connect(uri) as websocket:
                     self.log_test("WebSocket - Connection Establishment", True, 
                                 f"Connected to {uri}")
                     
