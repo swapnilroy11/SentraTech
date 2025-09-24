@@ -109,7 +109,7 @@ const FeatureShowcase = () => {
               </h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-2 h-2 bg-[#DAFF01] rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-[#00FF41] rounded-full mt-2 flex-shrink-0"></div>
                   <div>
                     <h4 className="text-lg font-semibold text-white mb-2">Sub-50ms Decision Engine</h4>
                     <p className="text-[rgb(218,218,218)]">
