@@ -54,8 +54,8 @@ const FeatureShowcase = () => {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 <CardHeader className="p-0 mb-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`p-4 rounded-2xl bg-[#1a1a1a] 
+                  <div className="mb-4">
+                    <div className={`p-4 rounded-2xl bg-[#1a1a1a] w-fit
                       ${hoveredCard === feature.id ? 'bg-[#00FF41]/10 border border-[#00FF41]/30' : ''}
                       transition-all duration-300`}
                     >
@@ -65,11 +65,6 @@ const FeatureShowcase = () => {
                           transition-colors duration-300`} 
                       />
                     </div>
-                    <ArrowUpRight 
-                      size={20} 
-                      className={`text-[#a1a1aa] transition-all duration-300 
-                        ${hoveredCard === feature.id ? 'text-[#00FF41] transform rotate-45' : ''}`} 
-                    />
                   </div>
                   
                   <CardTitle className="text-2xl text-[#F8F9FA] mb-3 font-rajdhani">
