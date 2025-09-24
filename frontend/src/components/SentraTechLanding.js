@@ -521,45 +521,79 @@ const SentraTechLanding = () => {
                   <div className="w-8 h-8 bg-[#00FF41] rounded-full flex items-center justify-center">
                     <MessageSquare size={16} className="text-[#0A0A0A]" />
                   </div>
-                  <span className="font-semibold text-sm font-rajdhani">Sentra AI</span>
+                  <div>
+                    <div className="text-white text-sm font-semibold">SentraTech AI</div>
+                    <div className="text-[#00FF41] text-xs">
+                      {isConnecting ? 'Connecting...' : 
+                       connectionError ? 'Offline' : 
+                       isTyping ? 'Typing...' : 'Online'}
+                    </div>
+                  </div>
                 </div>
-                <button 
+                <Button
+                  size="sm"
+                  variant="ghost"
                   onClick={() => setChatOpen(false)}
                   className="text-[rgb(161,161,170)] hover:text-white"
                 >
                   <Minimize2 size={16} />
-                </button>
+                </Button>
               </div>
-              
+
               {/* Chat Messages */}
-              <div className="flex-1 p-4 space-y-3 overflow-y-auto">
+              <div className="flex-1 p-4 overflow-y-auto space-y-3">
+                {connectionError && (
+                  <div className="text-center p-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-yellow-400 text-xs">
+                    {connectionError}
+                  </div>
+                )}
+                
                 {chatMessages.map(message => (
                   <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-xs p-3 rounded-lg text-sm ${
-                      message.sender === 'user' 
+                    <div className={`max-w-xs p-3 rounded-xl text-sm ${
+                      message.sender === 'user'
                         ? 'bg-[#00FF41] text-[#0A0A0A]'
-                        : 'bg-[#2a2a2a] text-[#F8F9FA]'
+                        : 'bg-[rgb(38,40,42)] text-white border border-[rgb(63,63,63)]'
                     }`}>
-                      {message.text}
+                      <div>{message.content || message.text}</div>
+                      <div className={`text-xs mt-1 opacity-70 ${
+                        message.sender === 'user' ? 'text-[#0A0A0A]' : 'text-[rgb(161,161,170)]'
+                      }`}>
+                        {message.timestamp ? new Date(message.timestamp).toLocaleTimeString() : ''}
+                      </div>
                     </div>
                   </div>
                 ))}
+                
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-[rgb(38,40,42)] text-white border border-[rgb(63,63,63)] p-3 rounded-xl text-sm">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-[#00FF41] rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-[#00FF41] rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-[#00FF41] rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              
+
               {/* Chat Input */}
-              <div className="p-4 border-t border-[rgb(63,63,63)]">
+              <div className="p-4 border-t border-[#2a2a2a]">
                 <div className="flex space-x-2">
-                  <Input 
+                  <Input
+                    placeholder="Type your message..."
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleChatSend()}
-                    placeholder="Type your message..."
-                    className="flex-1 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-lg"
+                    disabled={isConnecting}
+                    className="flex-1 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] text-sm rounded-xl"
                   />
-                  <Button 
-                    onClick={handleChatSend}
+                  <Button
                     size="sm"
-                    className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-lg"
+                    onClick={handleChatSend}
+                    disabled={!chatInput.trim() || isConnecting}
+                    className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-xl px-3"
                   >
                     <Send size={16} />
                   </Button>
@@ -567,12 +601,12 @@ const SentraTechLanding = () => {
               </div>
             </div>
           ) : (
-            <button 
-              onClick={() => setChatOpen(true)}
-              className="w-full h-full flex items-center justify-center bg-[#00FF41] text-[#0A0A0A] rounded-2xl hover:bg-[#00e83a] transition-all duration-200"
+            <Button
+              onClick={handleChatOpen}
+              className="w-full h-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-2xl flex items-center justify-center"
             >
               <MessageSquare size={24} />
-            </button>
+            </Button>
           )}
         </div>
       </div>
