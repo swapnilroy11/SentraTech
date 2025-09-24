@@ -503,6 +503,12 @@ async def get_demo_requests(limit: int = 50):
     """Get recent demo requests (for admin/debugging)"""
     try:
         requests = await db.demo_requests.find().sort("timestamp", -1).limit(limit).to_list(limit)
+        
+        # Convert ObjectId to string for JSON serialization
+        for request in requests:
+            if '_id' in request:
+                request['_id'] = str(request['_id'])
+        
         return requests
     except Exception as e:
         logger.error(f"Error fetching demo requests: {str(e)}")
