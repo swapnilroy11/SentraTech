@@ -129,6 +129,7 @@ class DemoRequestResponse(BaseModel):
     contact_id: str = None
     message: str
     reference_id: str = None
+    source: str = None
 
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
