@@ -869,6 +869,38 @@ class DemoRequestTester:
         except Exception as e:
             self.log_test("Error Handling - Empty Request", False, f"Exception: {str(e)}")
     
+    def run_all_tests(self):
+        """Run all demo request test suites"""
+        print("🚀 Starting Demo Request & CRM Integration Tests")
+        print("=" * 60)
+        
+        # Run all test suites
+        self.test_demo_request_valid_input()
+        self.test_demo_request_validation()
+        self.test_duplicate_contact_handling()
+        self.test_debug_endpoints()
+        self.test_database_integration()
+        self.test_mock_email_service()
+        self.test_error_handling()
+        
+        # Print summary
+        print("\n" + "=" * 60)
+        print("📊 DEMO REQUEST TEST SUMMARY")
+        print("=" * 60)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
         # Return overall success
         return len(self.failed_tests) == 0
 
