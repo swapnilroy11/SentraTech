@@ -3955,7 +3955,7 @@ class GoogleSheetsIntegrationTester:
             "name": "Google Sheets Test User",
             "email": "sheets.test@integration.com",
             "company": "Sheets Integration Test Corp",
-            "phone": "+1-555-SHEETS",
+            "phone": "+1-555-123-4567",
             "call_volume": "25,000",
             "message": "Testing Google Sheets integration with fallback to MongoDB storage when Sheets submission fails due to placeholder URL."
         }
