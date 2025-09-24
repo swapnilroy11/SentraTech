@@ -173,15 +173,15 @@ const PricingSection = () => {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[rgb(218,218,218)]">
               <div className="flex items-center justify-center space-x-2">
-                <CheckCircle size={20} className="text-[#DAFF01]" />
+                <CheckCircle size={20} className="text-[#00FF41]" />
                 <span>99.9% Uptime SLA</span>
               </div>
               <div className="flex items-center justify-center space-x-2">
-                <CheckCircle size={20} className="text-[#DAFF01]" />
+                <CheckCircle size={20} className="text-[#00FF41]" />
                 <span>24/7 Technical Support</span>
               </div>
               <div className="flex items-center justify-center space-x-2">
-                <CheckCircle size={20} className="text-[#DAFF01]" />
+                <CheckCircle size={20} className="text-[#00FF41]" />
                 <span>Full API Access</span>
               </div>
             </div>
