@@ -177,8 +177,8 @@ const FeatureShowcase = () => {
                 
                 {/* Central Hub */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-[#DAFF01] rounded-full flex items-center justify-center animate-spin-slow">
-                    <Zap size={24} className="text-[rgb(17,17,19)]" />
+                  <div className="w-16 h-16 bg-[#00FF41] rounded-full flex items-center justify-center animate-spin-slow">
+                    <Zap size={24} className="text-[#0A0A0A]" />
                   </div>
                 </div>
               </div>
