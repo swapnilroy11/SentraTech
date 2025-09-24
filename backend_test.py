@@ -4085,7 +4085,7 @@ class GoogleSheetsIntegrationTester:
             "name": "Form Method Test",
             "email": "form.method@test.com",
             "company": "Form Test Corp",
-            "phone": "+1-555-FORM1",
+            "phone": "+1-555-123-0002",
             "message": "Testing form-encoded data submission method"
         }
         
