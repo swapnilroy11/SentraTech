@@ -118,10 +118,10 @@ const CTASection = () => {
     
     console.log('validateAllFields called with formData:', formData); // Debug log
     
-    // Validate all required fields
-    ['name', 'email', 'company', 'phone'].forEach(field => {
+    // Validate ONLY required fields (phone is optional)
+    ['name', 'email', 'company'].forEach(field => {
       const fieldValue = formData[field];
-      console.log(`Validating field ${field} with value: "${fieldValue}"`); // Debug log
+      console.log(`Validating required field ${field} with value: "${fieldValue}"`); // Debug log
       
       const errorMessage = validateField(field, fieldValue);
       console.log(`Validation result for ${field}: "${errorMessage}"`); // Debug log
@@ -129,9 +129,19 @@ const CTASection = () => {
       if (errorMessage) {
         newErrors[field] = errorMessage;
         hasErrors = true;
-        console.log(`Error found for ${field}: ${errorMessage}`); // Debug log
+        console.log(`Error found for required field ${field}: ${errorMessage}`); // Debug log
       }
     });
+    
+    // Validate optional phone field separately (only if it has a value)
+    if (formData.phone && formData.phone.trim()) {
+      const phoneError = validateField('phone', formData.phone);
+      if (phoneError) {
+        newErrors.phone = phoneError;
+        hasErrors = true;
+        console.log(`Error found for optional phone field: ${phoneError}`); // Debug log
+      }
+    }
     
     console.log('Final validation - hasErrors:', hasErrors, 'newErrors:', newErrors); // Debug log
     
