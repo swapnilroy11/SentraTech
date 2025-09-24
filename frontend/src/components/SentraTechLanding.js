@@ -285,7 +285,7 @@ const SentraTechLanding = () => {
               
               {/* Language Toggle */}
               <button 
-                onClick={() => setCurrentLang(currentLang === 'en' ? 'bn' : 'en')}
+                onClick={toggleLanguage}
                 className="px-3 py-1 bg-[#1a1a1a] rounded-lg text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a]"
               >
                 {currentLang === 'en' ? 'বাং' : 'ENG'}
