@@ -131,22 +131,38 @@ const SentraTechLanding = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              {/* Logo */}
+              {/* SentraTech Logo */}
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-1">
-                    {/* Recreating the logo pattern with proper geometry */}
-                    <div className="w-full h-full relative">
-                      <div className="absolute inset-0 bg-[rgb(17,17,19)]"></div>
-                      <div className="absolute top-0 left-0 w-3 h-3 bg-white"></div>
-                      <div className="absolute top-0 right-0 w-3 h-3 bg-white"></div>
-                      <div className="absolute bottom-0 left-0 w-3 h-3 bg-white"></div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-white"></div>
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
-                    </div>
-                  </div>
+                <div className="w-12 h-12 md:w-12 md:h-12 relative">
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-full h-full"
+                  >
+                    {/* SentraTech Logo - Geometric Pattern */}
+                    <rect width="48" height="48" rx="8" fill="#F8F9FA" />
+                    <g transform="translate(6, 6)">
+                      {/* Main geometric pattern - star/compass shape */}
+                      <path
+                        d="M18 0L24 12L36 6L24 18L36 30L24 24L18 36L12 24L0 30L12 18L0 6L12 12L18 0Z"
+                        fill="#0A0A0A"
+                      />
+                      {/* Center accent */}
+                      <circle cx="18" cy="18" r="3" fill="#00FF41" />
+                    </g>
+                  </svg>
                 </div>
-                <span className="text-[#DAFF01] text-2xl font-bold">SENTRA TECH</span>
+                <div className="flex flex-col">
+                  <span className="text-[#00FF41] text-xl md:text-2xl font-bold font-rajdhani tracking-wide">
+                    SENTRA
+                  </span>
+                  <span className="text-[#F8F9FA] text-sm md:text-lg font-semibold font-rajdhani -mt-1">
+                    TECH
+                  </span>
+                </div>
               </div>
             </div>
             
