@@ -115,19 +115,22 @@ const CTASection = () => {
       }
     });
     
-    // Use functional update to avoid stale state
-    setFieldErrors(prevErrors => ({
-      ...prevErrors,
-      ...newErrors
-    }));
-    
+    // Use flushSync to force immediate state updates and re-render
     if (hasErrors) {
-      setError('Please fix the highlighted fields below');
+      flushSync(() => {
+        setFieldErrors(prevErrors => ({
+          ...prevErrors,
+          ...newErrors
+        }));
+        setError('Please fix the highlighted fields below');
+      });
       return false;
     } else {
-      // Clear any previous errors if validation passes
-      setError(null);
-      setFieldErrors({});
+      flushSync(() => {
+        // Clear any previous errors if validation passes
+        setError(null);
+        setFieldErrors({});
+      });
       return true;
     }
   };
