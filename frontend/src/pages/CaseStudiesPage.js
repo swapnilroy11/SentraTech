@@ -8,7 +8,8 @@ import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const CaseStudiesPage = () => {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
+    <ComponentErrorBoundary>
+      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="container mx-auto px-6">
