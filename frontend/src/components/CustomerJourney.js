@@ -49,9 +49,9 @@ const CustomerJourney = () => {
           <Badge className="mb-4 bg-[rgba(0,221,255,0.1)] text-[#00DDFF] border-[#00DDFF]/30">
             Customer Journey
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">From Contact to </span>
-            <span className="text-[#DAFF01]">Resolution</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="text-[#F8F9FA]">From Contact to </span>
+            <span className="text-[#00FF41]">Resolution</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed mb-8">
             Experience the seamless flow of our AI-powered customer support platform. 
