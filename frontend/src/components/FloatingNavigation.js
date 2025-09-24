@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Briefcase } from 'lucide-react';
+import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Briefcase, Route } from 'lucide-react';
 
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
