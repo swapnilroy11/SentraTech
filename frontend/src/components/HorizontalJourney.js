@@ -346,7 +346,7 @@ const HorizontalJourney = () => {
     );
   };
 
-  if (isMobile) {
+  if (isMobile || hasThreeJSError) {
     // Static mobile fallback
     return (
       <section className="py-20 bg-[#0A0A0A] relative overflow-hidden">
