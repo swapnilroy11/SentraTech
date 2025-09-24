@@ -3870,38 +3870,37 @@ class UserManagementTester:
         return len(self.failed_tests) == 0
 
 if __name__ == "__main__":
-    print("🎯 USER MANAGEMENT SYSTEM API TESTING")
+    print("🎯 SentraTech Demo Request System Testing Suite")
+    print("=" * 80)
+    print("Testing Google Sheets Integration + Email Notifications + Rate Limiting")
     print("=" * 80)
     
-    # Test User Management System API (Focus of this test)
-    print("\n🔐 TESTING USER MANAGEMENT SYSTEM API")
-    user_mgmt_tester = UserManagementTester()
-    user_mgmt_success = user_mgmt_tester.run_all_tests()
+    # Run Demo Request System tests
+    demo_system_tester = DemoRequestSystemTester()
+    demo_system_success = demo_system_tester.run_all_tests()
     
-    # Final Summary
-    print("\n" + "=" * 80)
-    print("🏁 USER MANAGEMENT API TEST SUMMARY")
-    print("=" * 80)
+    # Overall summary
+    print("\n" + "🎯" * 30)
+    print("DEMO REQUEST SYSTEM TESTING SUMMARY")
+    print("🎯" * 30)
     
-    total_tests = len(user_mgmt_tester.test_results)
-    total_passed = len(user_mgmt_tester.passed_tests)
-    total_failed = len(user_mgmt_tester.failed_tests)
-    
-    print(f"📊 Overall Results:")
-    print(f"   Total Tests: {total_tests}")
-    print(f"   ✅ Passed: {total_passed}")
-    print(f"   ❌ Failed: {total_failed}")
-    print(f"   Success Rate: {(total_passed/total_tests)*100:.1f}%")
-    
-    if user_mgmt_success:
-        print("\n🎉 ALL USER MANAGEMENT API TESTS PASSED! 🎉")
-        print("✅ User Registration API: Working")
-        print("✅ User Authentication API: Working") 
-        print("✅ User Profile Management API: Working")
-        print("✅ Password Management API: Working")
-        print("✅ JWT Token Validation: Working")
+    if demo_system_success:
+        print("\n🎉 ALL DEMO REQUEST SYSTEM TESTS PASSED! 🎉")
+        print("✅ Google Sheets integration working")
+        print("✅ Email notifications properly queued")
+        print("✅ Rate limiting and security functional")
+        print("✅ Form data handling comprehensive")
+        print("✅ Background tasks processing correctly")
+        print("✅ Error handling and fallbacks working")
+        print("\nDemo Request system is ready for production use.")
     else:
-        print("\n⚠️  SOME USER MANAGEMENT TESTS FAILED")
-        print("❌ Check failed tests above for details")
+        failed_count = len(demo_system_tester.failed_tests)
+        total_count = len(demo_system_tester.test_results)
+        print(f"\n⚠️  {failed_count}/{total_count} tests failed.")
+        print("Please review failed tests before deployment.")
         
-    print("\n" + "=" * 80)
+        print("\n🔍 CRITICAL ISSUES TO ADDRESS:")
+        for failed_test in demo_system_tester.failed_tests:
+            print(f"   ❌ {failed_test}")
+    
+    print("\n" + "🎯" * 30)
