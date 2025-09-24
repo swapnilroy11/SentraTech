@@ -20,7 +20,7 @@ const HorizontalJourney = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedPanel, setSelectedPanel] = useState(null);
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
   const [hasThreeJSError, setHasThreeJSError] = useState(false);
 
   // Journey stages data
