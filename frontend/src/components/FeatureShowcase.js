@@ -10,6 +10,7 @@ import { mockData } from '../data/mock';
 
 const FeatureShowcase = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const { t } = useLanguage();
   
   const iconMap = {
     MessageSquare, Zap, BarChart3, Heart, Globe, Shield
