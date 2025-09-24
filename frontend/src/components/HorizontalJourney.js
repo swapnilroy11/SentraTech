@@ -174,6 +174,13 @@ const HorizontalJourney = () => {
 
   // Mobile detection
   useEffect(() => {
+    const detectMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial detection after component mounts
+    detectMobile();
+    
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
