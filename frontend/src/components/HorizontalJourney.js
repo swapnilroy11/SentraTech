@@ -300,8 +300,7 @@ const HorizontalJourney = () => {
       };
     } catch (error) {
       console.error('Three.js initialization failed:', error);
-      setHasThreeJSError(true);
-      setIsMobile(true); // Fall back to mobile view
+      setHasThreeJSError(true); // Only set Three.js error, don't force mobile
     }
   }, [isMobile, scrollXProgress]);
 
