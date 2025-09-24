@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { mockData, mockApi } from '../data/mock';
 import SentraTechLogo from './SentraTechLogo';
+import axios from 'axios';
 
 const SentraTechLanding = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
