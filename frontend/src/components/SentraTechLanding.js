@@ -497,7 +497,7 @@ const SentraTechLanding = () => {
           position: fixed;
           width: 16px;
           height: 16px;
-          border: 2px solid #DAFF01;
+          border: 2px solid #00FF41;
           border-radius: 50%;
           pointer-events: none;
           z-index: 9999;
@@ -508,7 +508,7 @@ const SentraTechLanding = () => {
           position: fixed;
           width: 4px;
           height: 4px;
-          background: #00DDFF;
+          background: #00FF41;
           border-radius: 50%;
           pointer-events: none;
           z-index: 9998;
