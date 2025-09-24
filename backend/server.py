@@ -1049,20 +1049,26 @@ async def get_demo_requests(limit: int = 50):
         logger.error(f"Error fetching demo requests: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error fetching demo requests: {str(e)}")
 
-@api_router.get("/debug/hubspot/contacts")
-async def debug_hubspot_contacts():
-    """Debug endpoint to see mock HubSpot contacts"""
+@api_router.get("/debug/sheets/config")
+async def debug_sheets_config():
+    """Debug endpoint to see Google Sheets configuration"""
     return {
-        "contacts": hubspot_service.get_all_contacts(),
-        "total_contacts": len(hubspot_service.get_all_contacts())
+        "sheet_id": sheets_service.sheet_id,
+        "sheet_name": sheets_service.sheet_name,
+        "web_app_url": sheets_service.web_app_url,
+        "service_type": "Google Sheets"
     }
 
-@api_router.get("/debug/emails")
-async def debug_sent_emails():
-    """Debug endpoint to see sent emails"""
+@api_router.get("/debug/email/config")
+async def debug_email_config():
+    """Debug endpoint to see email configuration"""
     return {
-        "sent_emails": email_service.get_sent_emails(),
-        "total_emails": len(email_service.get_sent_emails())
+        "smtp_host": email_service.smtp_host,
+        "smtp_port": email_service.smtp_port,
+        "from_email": email_service.from_email,
+        "sales_email": email_service.sales_email,
+        "smtp_configured": bool(email_service.smtp_user and email_service.smtp_pass),
+        "service_type": "Spacemail SMTP"
     }
 
 # Live Chat API Routes
