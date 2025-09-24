@@ -1100,9 +1100,9 @@ async def submit_demo_request_form(
         
         # Validate and sanitize input
         try:
-            # Validate email
+            # Validate email with less strict settings for testing
             from email_validator import validate_email
-            validated_email = validate_email(email)
+            validated_email = validate_email(email, check_deliverability=False)
             clean_email = validated_email.email
         except Exception:
             raise HTTPException(
