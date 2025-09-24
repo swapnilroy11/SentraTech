@@ -305,7 +305,7 @@ frontend:
     implemented: true
     working: false
     file: "/app/frontend/src/components/CTASection.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
@@ -315,6 +315,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETED - Found 3 critical issues: (1) Form validation not working - HTML5 validation is present but custom validation errors not displayed to users, form submits with invalid data relying only on browser validation, (2) 'Submit Another Request' functionality broken - button exists but doesn't return to form properly, stays on success page, (3) Loading state not displayed during form submission. PASSED: Backend API integration working perfectly (200 responses, proper reference ID generation), success confirmation displays correctly with reference ID, form fills and submits valid data successfully, mobile/tablet responsiveness working, form fields have proper HTML5 validation attributes. Backend logs show successful demo request processing with mock HubSpot and email services working correctly."
+      - working: false
+        agent: "testing"
+        comment: "RE-TESTING AFTER FIXES - CRITICAL VALIDATION ISSUES PERSIST: (1) Form validation completely broken - empty form submission shows NO validation errors, NO red borders on fields, NO error messages displayed. Custom validation logic exists in code but not functioning. (2) Form submits successfully even with empty/invalid data, bypassing all validation. (3) Loading state and Submit Another Request functionality could not be fully tested due to form submission timeouts. ANALYSIS: The validateForm() function exists but validation state updates (fieldErrors, error messages) are not reflecting in the UI. The conditional CSS classes for red borders (border-red-500) are not being applied. Form validation is completely non-functional despite having the validation logic in the component code."
 
 metadata:
   created_by: "main_agent"
