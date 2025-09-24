@@ -16,7 +16,6 @@ import IntegrationsShowcase from '../components/IntegrationsShowcase';
 import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const IntegrationsPage = () => {
-  const [showCodeExample, setShowCodeExample] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
 
