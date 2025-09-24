@@ -243,36 +243,8 @@ const SentraTechLanding = () => {
     }
   };
 
-  const translations = {
-    en: {
-      hero: {
-        title: "Customer Support as a Growth Engine, Powered by AI + BI",
-        subtitle: "Transform your customer service into a competitive advantage with our sub-50ms AI routing platform. Reduce costs by 40-60% while improving satisfaction.",
-        cta: "Request a Demo",
-        secondaryCta: "Explore Docs"
-      },
-      nav: {
-        features: "Features",
-        pricing: "Pricing", 
-        about: "About",
-        contact: "Contact"
-      }
-    },
-    bn: {
-      hero: {
-        title: "AI + BI দ্বারা চালিত গ্রাহক সহায়তা একটি বৃদ্ধির ইঞ্জিন হিসেবে",
-        subtitle: "আমাদের সাব-৫০এমএস AI রাউটিং প্ল্যাটফর্মের সাথে আপনার গ্রাহক সেবাকে প্রতিযোগিতামূলক সুবিধায় রূপান্তরিত করুন।",
-        cta: "ডেমো অনুরোধ করুন",
-        secondaryCta: "ডকুমেন্টেশন দেখুন"
-      },
-      nav: {
-        features: "বৈশিষ্ট্য",
-        pricing: "মূল্য",
-        about: "সম্পর্কে", 
-        contact: "যোগাযোগ"
-      }
-    }
-  };
+  // Import comprehensive translations
+  const { translations } = require('../data/translations');
 
   const t = translations[currentLang];
 
