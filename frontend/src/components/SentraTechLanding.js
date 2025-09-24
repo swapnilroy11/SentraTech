@@ -125,9 +125,9 @@ const SentraTechLanding = () => {
   const t = translations[currentLang];
 
   return (
-    <div className="min-h-screen bg-[rgb(17,17,19)] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] overflow-x-hidden font-rajdhani">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[rgb(17,17,19)]/95 backdrop-blur-md border-b border-[rgb(63,63,63)]">
+      <nav className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
