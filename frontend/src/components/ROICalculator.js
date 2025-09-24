@@ -273,7 +273,7 @@ const ROICalculator = () => {
             <div className="text-center pt-4">
               <Button 
                 size="lg"
-                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani"
               >
                 Get Detailed ROI Report
               </Button>
