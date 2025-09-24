@@ -194,7 +194,7 @@ const PricingSection = () => {
           
           <Button 
             variant="outline"
-            className="mt-6 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#DAFF01] hover:text-[#DAFF01] rounded-xl px-8"
+            className="mt-6 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-xl px-8"
           >
             Contact Enterprise Sales
           </Button>
