@@ -7,8 +7,9 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, DollarSign, Clock, 
-  Users, BarChart3, ArrowUp, ArrowDown, Zap
+  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2
 } from 'lucide-react';
+import axios from 'axios';
 
 const ROICalculator = () => {
   const [callVolume, setCallVolume] = useState([25000]);
@@ -16,9 +17,39 @@ const ROICalculator = () => {
   const [averageHandleTime, setAverageHandleTime] = useState(480); // seconds
   const [agentCount, setAgentCount] = useState(50);
   const [results, setResults] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [savedSuccessfully, setSavedSuccessfully] = useState(false);
 
-  // Calculate ROI based on inputs
-  useEffect(() => {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+  // Calculate ROI using backend API
+  const calculateROI = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const inputData = {
+        call_volume: callVolume[0],
+        current_cost_per_call: currentCostPerCall,
+        average_handle_time: averageHandleTime,
+        agent_count: agentCount
+      };
+
+      const response = await axios.post(`${BACKEND_URL}/api/roi/calculate`, inputData);
+      setResults(response.data);
+    } catch (err) {
+      console.error('Error calculating ROI:', err);
+      setError('Failed to calculate ROI. Please try again.');
+      // Fallback to client-side calculation
+      calculateROIClientSide();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fallback client-side calculation (same as original)
+  const calculateROIClientSide = () => {
     const monthlyVolume = callVolume[0];
     const currentMonthlyCost = monthlyVolume * currentCostPerCall;
     const currentAnnualCost = currentMonthlyCost * 12;
@@ -43,22 +74,62 @@ const ROICalculator = () => {
     const humanAssistedCalls = monthlyVolume * (1 - automationRate);
     
     setResults({
-      currentMonthlyCost,
-      currentAnnualCost,
-      newMonthlyCost,
-      newAnnualCost,
-      monthlySavings,
-      annualSavings,
-      costReductionPercent: costReduction * 100,
-      newAHT,
-      timeSavedPerCall,
-      totalTimeSavedMonthly,
-      ahtReductionPercent: ahtReduction * 100,
-      automatedCalls,
-      humanAssistedCalls,
-      automationRate: automationRate * 100,
+      current_monthly_cost: currentMonthlyCost,
+      current_annual_cost: currentAnnualCost,
+      new_monthly_cost: newMonthlyCost,
+      new_annual_cost: newAnnualCost,
+      monthly_savings: monthlySavings,
+      annual_savings: annualSavings,
+      cost_reduction_percent: costReduction * 100,
+      new_aht: newAHT,
+      time_saved_per_call: timeSavedPerCall,
+      total_time_saved_monthly: totalTimeSavedMonthly,
+      aht_reduction_percent: ahtReduction * 100,
+      automated_calls: automatedCalls,
+      human_assisted_calls: humanAssistedCalls,
+      automation_rate: automationRate * 100,
       roi: (annualSavings / newAnnualCost) * 100
     });
+  };
+
+  // Save ROI calculation to database
+  const saveROICalculation = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      setSavedSuccessfully(false);
+
+      const requestData = {
+        input_data: {
+          call_volume: callVolume[0],
+          current_cost_per_call: currentCostPerCall,
+          average_handle_time: averageHandleTime,
+          agent_count: agentCount
+        },
+        user_info: {
+          timestamp: new Date().toISOString(),
+          source: 'website_calculator'
+        }
+      };
+
+      await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
+      setSavedSuccessfully(true);
+      setTimeout(() => setSavedSuccessfully(false), 3000);
+    } catch (err) {
+      console.error('Error saving ROI calculation:', err);
+      setError('Failed to save calculation. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Trigger calculation when inputs change
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      calculateROI();
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(debounceTimer);
   }, [callVolume, currentCostPerCall, averageHandleTime, agentCount]);
 
   const formatCurrency = (amount) => {
