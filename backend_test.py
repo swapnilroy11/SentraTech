@@ -2807,6 +2807,7 @@ class UserManagementTester:
         self.test_user_authentication()
         self.test_user_profile_management()
         self.test_password_management()
+        self.test_admin_functions()
         self.test_jwt_token_validation()
         
         # Print summary
