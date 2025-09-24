@@ -4172,7 +4172,7 @@ class GoogleSheetsIntegrationTester:
             "name": "Database Structure Test",
             "email": "db.structure@test.com",
             "company": "DB Structure Test Corp",
-            "phone": "+1-555-DBTEST",
+            "phone": "+1-555-123-0004",
             "call_volume": "15,000",
             "message": "Testing database storage structure and field preservation"
         }
