@@ -380,6 +380,13 @@ const CTASection = () => {
                       placeholder="Full Name *"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
+                      onBlur={(e) => {
+                        // Validate on blur for immediate feedback
+                        const errorMessage = validateField('name', e.target.value);
+                        if (errorMessage) {
+                          setFieldErrors(prev => ({ ...prev, name: errorMessage }));
+                        }
+                      }}
                       required
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.name 
@@ -397,6 +404,13 @@ const CTASection = () => {
                       placeholder="Work Email *"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
+                      onBlur={(e) => {
+                        // Validate on blur for immediate feedback
+                        const errorMessage = validateField('email', e.target.value);
+                        if (errorMessage) {
+                          setFieldErrors(prev => ({ ...prev, email: errorMessage }));
+                        }
+                      }}
                       required
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.email 
