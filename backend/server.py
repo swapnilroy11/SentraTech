@@ -162,17 +162,21 @@ async def calculate_roi(input_data: ROIInput):
         logger.error(f"Error calculating ROI: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error calculating ROI: {str(e)}")
 
+class ROISaveRequest(BaseModel):
+    input_data: ROIInput
+    user_info: Optional[dict] = None
+
 @api_router.post("/roi/save", response_model=ROICalculation)
-async def save_roi_calculation(input_data: ROIInput, user_info: Optional[dict] = None):
+async def save_roi_calculation(request: ROISaveRequest):
     """Calculate and save ROI calculation to database"""
     try:
-        results = calculate_roi_metrics(input_data)
+        results = calculate_roi_metrics(request.input_data)
         
         # Create ROI calculation record
         calculation = ROICalculation(
-            input_data=input_data,
+            input_data=request.input_data,
             results=results,
-            user_info=user_info
+            user_info=request.user_info
         )
         
         # Convert to dict for MongoDB storage
