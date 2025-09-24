@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Badge } from './ui/badge';
 import { 
   MessageSquare, Zap, BarChart3, Heart, Globe, Shield,
-  ArrowUpRight, Sparkles
+  Sparkles
 } from 'lucide-react';
 import { mockData } from '../data/mock';
 
