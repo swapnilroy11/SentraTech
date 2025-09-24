@@ -570,178 +570,283 @@ Keep responses concise and focused on how SentraTech can solve their customer su
 async def root():
     return {"message": "Hello World"}
 
-# Mock HubSpot Service
-class MockHubSpotService:
-    """Mock HubSpot service that simulates API responses"""
+# Google Sheets Service
+class GoogleSheetsService:
+    """Google Sheets service for storing demo requests"""
     
     def __init__(self):
-        self.contacts_db = {}  # In-memory storage for demo
-    
-    async def create_contact(self, demo_request: DemoRequest) -> Dict[str, Any]:
-        """Simulate HubSpot contact creation"""
+        self.sheet_id = "1-sonq8dr_QbA2gG8YU2iv12mVM4OQqwl9mhNPkKS8ts"
+        self.sheet_name = "Demo Requests"
+        # This should be deployed as a Google Apps Script Web App
+        self.web_app_url = "https://script.google.com/macros/s/AKfycbx_demo_requests_webapp_url/exec"
+        
+    async def submit_demo_request(self, demo_request: DemoRequest) -> Dict[str, Any]:
+        """Submit demo request to Google Sheets"""
         try:
-            # Parse name into first/last name
-            name_parts = demo_request.name.strip().split(' ', 1)
-            firstname = name_parts[0]
-            lastname = name_parts[1] if len(name_parts) > 1 else ""
+            data = {
+                'name': demo_request.name,
+                'email': demo_request.email,
+                'company': demo_request.company,
+                'phone': demo_request.phone or '',
+                'message': demo_request.message or ''
+            }
             
-            # Check if contact already exists (by email)
-            existing_contact = None
-            for contact_id, contact in self.contacts_db.items():
-                if contact['email'].lower() == demo_request.email.lower():
-                    existing_contact = contact_id
-                    break
-            
-            if existing_contact:
-                logger.info(f"Mock HubSpot: Contact already exists for {demo_request.email}")
+            # Submit to Google Sheets via Apps Script
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    self.web_app_url,
+                    data=data,
+                    headers={'Content-Type': 'application/x-www-form-urlencoded'}
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        logger.info(f"Google Sheets: Submitted demo request for {demo_request.email}")
+                        return {
+                            "success": True,
+                            "message": "Demo request saved to Google Sheets",
+                            "timestamp": result.get('timestamp')
+                        }
+                    else:
+                        logger.error(f"Google Sheets error: HTTP {response.status}")
+                        return {
+                            "success": False,
+                            "message": f"Failed to save to Google Sheets: HTTP {response.status}"
+                        }
+                        
+        except Exception as e:
+            logger.error(f"Google Sheets service error: {str(e)}")
+            # Fallback to database storage
+            try:
+                request_data = demo_request.dict()
+                request_data['timestamp'] = datetime.now(timezone.utc).isoformat()
+                request_data['id'] = str(uuid.uuid4())
+                await db.demo_requests.insert_one(request_data)
+                logger.info(f"Fallback: Saved demo request to MongoDB for {demo_request.email}")
                 return {
                     "success": True,
-                    "contact_id": existing_contact,
-                    "message": "Contact already exists - updated with new information",
-                    "is_new": False
+                    "message": "Demo request saved (fallback storage)",
+                    "request_id": request_data['id']
                 }
-            
-            # Create new contact
-            contact_id = f"mock_contact_{str(uuid.uuid4())[:8]}"
-            
-            contact_data = {
-                "id": contact_id,
-                "email": demo_request.email,
-                "firstname": firstname,
-                "lastname": lastname,
-                "phone": demo_request.phone,
-                "company": demo_request.company,
-                "call_volume": demo_request.call_volume,
-                "message": demo_request.message,
-                "created_date": datetime.now(timezone.utc).isoformat(),
-                "source": "website_demo_form"
-            }
-            
-            # Store in mock database
-            self.contacts_db[contact_id] = contact_data
-            
-            logger.info(f"Mock HubSpot: Created contact {contact_id} for {demo_request.email}")
-            
-            # Simulate API delay
-            await asyncio.sleep(0.5)
-            
-            return {
-                "success": True,
-                "contact_id": contact_id,
-                "message": "Contact created successfully in HubSpot",
-                "is_new": True
-            }
-            
-        except Exception as e:
-            logger.error(f"Mock HubSpot service error: {str(e)}")
-            return {
-                "success": False,
-                "message": f"Error creating contact: {str(e)}"
-            }
-    
-    async def get_contact(self, contact_id: str) -> Optional[Dict[str, Any]]:
-        """Get contact by ID"""
-        return self.contacts_db.get(contact_id)
-    
-    def get_all_contacts(self) -> Dict[str, Any]:
-        """Get all contacts for debugging"""
-        return self.contacts_db
+            except Exception as fallback_error:
+                logger.error(f"Fallback storage error: {str(fallback_error)}")
+                return {
+                    "success": False,
+                    "message": f"Storage error: {str(e)}"
+                }
 
-# Mock Email Service
-class MockEmailService:
-    """Mock email service for sending notifications"""
+# Email Service with Spacemail SMTP
+class EmailService:
+    """Email service using Spacemail SMTP for sending notifications"""
     
     def __init__(self):
-        self.sent_emails = []  # Store sent emails for testing
+        # Spacemail SMTP configuration
+        self.smtp_host = os.environ.get('SMTP_HOST', 'smtp.spacemail.com')
+        self.smtp_port = int(os.environ.get('SMTP_PORT', '587'))
+        self.smtp_user = os.environ.get('SMTP_USER', '')
+        self.smtp_pass = os.environ.get('SMTP_PASS', '')
+        self.from_email = os.environ.get('FROM_EMAIL', 'noreply@sentratech.com')
+        self.sales_email = os.environ.get('SALES_EMAIL', 'sales@sentratech.com')
+        
+        if not all([self.smtp_user, self.smtp_pass]):
+            logger.warning("SMTP credentials not configured. Email functionality will be limited.")
     
-    async def send_demo_confirmation(self, email: str, name: str, contact_id: str) -> bool:
-        """Send demo request confirmation to user"""
+    async def send_email(self, to_email: str, subject: str, html_content: str, text_content: str = None):
+        """Send email using Spacemail SMTP"""
         try:
-            email_content = {
-                "to": email,
-                "subject": "Demo Request Confirmed - SentraTech AI Platform",
-                "body": f"""
-Dear {name},
-
-Thank you for your interest in SentraTech's AI-powered customer support platform!
-
-We've received your demo request and our team will contact you within 1-2 business days to schedule a personalized demonstration.
-
-Your reference ID: {contact_id}
-
-During the demo, you'll see:
-• Sub-50ms AI routing in action
-• 70% automation capabilities 
-• Real-time BI dashboards
-• Custom ROI analysis for your business
-
-If you have any immediate questions, please don't hesitate to reach out.
-
-Best regards,
-The SentraTech Team
-
----
-This is a mock email service. In production, this would be sent via SMTP.
-                """,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "type": "demo_confirmation"
-            }
+            if not all([self.smtp_user, self.smtp_pass]):
+                logger.warning("SMTP not configured, skipping email send")
+                return {"success": False, "message": "SMTP not configured"}
             
-            self.sent_emails.append(email_content)
-            logger.info(f"Mock Email: Sent demo confirmation to {email}")
+            message = MIMEMultipart('alternative')
+            message['Subject'] = subject
+            message['From'] = self.from_email
+            message['To'] = to_email
             
-            # Simulate email sending delay
-            await asyncio.sleep(0.3)
+            # Add text and HTML parts
+            if text_content:
+                text_part = MIMEText(text_content, 'plain')
+                message.attach(text_part)
             
-            return True
+            html_part = MIMEText(html_content, 'html')
+            message.attach(html_part)
+            
+            # Send email
+            await aiosmtplib.send(
+                message,
+                hostname=self.smtp_host,
+                port=self.smtp_port,
+                start_tls=True,
+                username=self.smtp_user,
+                password=self.smtp_pass
+            )
+            
+            logger.info(f"Email sent successfully to {to_email}")
+            return {"success": True, "message": "Email sent successfully"}
             
         except Exception as e:
-            logger.error(f"Mock email service error: {str(e)}")
-            return False
+            logger.error(f"Email service error: {str(e)}")
+            return {"success": False, "message": f"Email error: {str(e)}"}
     
-    async def send_internal_notification(self, demo_request: DemoRequest, contact_id: str) -> bool:
-        """Send internal notification about new demo request"""
+    async def send_demo_confirmation(self, demo_request: DemoRequest) -> Dict[str, Any]:
+        """Send demo confirmation email to user"""
         try:
-            internal_recipients = ["sales@sentratech.com", "demo-requests@sentratech.com"]  # Mock recipients
+            subject = "Demo Request Confirmation - SentraTech"
             
-            email_content = {
-                "to": internal_recipients,
-                "subject": f"New Demo Request: {demo_request.name} - {demo_request.company}",
-                "body": f"""
-New Demo Request Received:
-
-Name: {demo_request.name}
-Email: {demo_request.email}
-Company: {demo_request.company}
-Phone: {demo_request.phone}
-Monthly Call Volume: {demo_request.call_volume}
-
-Message:
-{demo_request.message}
-
-HubSpot Contact ID: {contact_id}
-
-Please follow up within 24 hours.
-
----
-This is a mock email service. In production, this would be sent via SMTP.
-                """,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "type": "internal_notification"
-            }
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: Arial, sans-serif; color: #333; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                    .header {{ background-color: #0A0A0A; color: white; padding: 20px; text-align: center; }}
+                    .content {{ background-color: #f9f9f9; padding: 30px; }}
+                    .footer {{ background-color: #1a1a1a; color: #ccc; padding: 20px; text-align: center; font-size: 12px; }}
+                    .highlight {{ color: #00FF41; font-weight: bold; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>SentraTech</h1>
+                        <p>AI-Powered Customer Support Excellence</p>
+                    </div>
+                    <div class="content">
+                        <h2>Thank you for your demo request!</h2>
+                        <p>Hi {demo_request.name},</p>
+                        <p>We've received your demo request for <span class="highlight">SentraTech's AI-powered customer support platform</span>.</p>
+                        
+                        <h3>What happens next?</h3>
+                        <ul>
+                            <li>Our team will review your request within <strong>2 business hours</strong></li>
+                            <li>We'll schedule a personalized demo tailored to {demo_request.company}'s needs</li>
+                            <li>You'll see how we can reduce your support costs by 40-60%</li>
+                        </ul>
+                        
+                        <h3>Your Request Details:</h3>
+                        <p><strong>Company:</strong> {demo_request.company}<br>
+                        <strong>Email:</strong> {demo_request.email}<br>
+                        <strong>Phone:</strong> {demo_request.phone or 'Not provided'}</p>
+                        
+                        <p>Questions? Reply to this email or call us directly.</p>
+                        <p>Best regards,<br><strong>The SentraTech Team</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>SentraTech | AI-Powered Customer Support | Beyond • Better • Boundless</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
             
-            self.sent_emails.append(email_content)
-            logger.info(f"Mock Email: Sent internal notification for {demo_request.email}")
+            text_content = f"""
+            Hi {demo_request.name},
             
-            return True
+            Thank you for requesting a demo of SentraTech's AI-powered customer support platform!
+            
+            What happens next:
+            - Our team will review your request within 2 business hours
+            - We'll schedule a personalized demo tailored to {demo_request.company}'s needs  
+            - You'll see how we can reduce your support costs by 40-60%
+            
+            Your Request Details:
+            Company: {demo_request.company}
+            Email: {demo_request.email}
+            Phone: {demo_request.phone or 'Not provided'}
+            
+            Questions? Reply to this email or call us directly.
+            
+            Best regards,
+            The SentraTech Team
+            
+            SentraTech | AI-Powered Customer Support | Beyond • Better • Boundless
+            """
+            
+            return await self.send_email(demo_request.email, subject, html_content, text_content)
             
         except Exception as e:
-            logger.error(f"Mock internal email error: {str(e)}")
-            return False
+            logger.error(f"Error sending confirmation email: {str(e)}")
+            return {"success": False, "message": f"Confirmation email error: {str(e)}"}
     
-    def get_sent_emails(self) -> List[Dict[str, Any]]:
-        """Get all sent emails for debugging"""
-        return self.sent_emails
+    async def send_internal_notification(self, demo_request: DemoRequest) -> Dict[str, Any]:
+        """Send internal notification to sales team"""
+        try:
+            subject = f"🚨 New Demo Request from {demo_request.company}"
+            
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: Arial, sans-serif; color: #333; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                    .header {{ background-color: #00FF41; color: black; padding: 20px; text-align: center; }}
+                    .content {{ background-color: white; padding: 30px; border: 1px solid #ddd; }}
+                    .details {{ background-color: #f9f9f9; padding: 15px; margin: 20px 0; }}
+                    .urgent {{ color: #FF6B6B; font-weight: bold; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🚨 NEW DEMO REQUEST</h1>
+                        <p class="urgent">Action Required within 2 hours</p>
+                    </div>
+                    <div class="content">
+                        <h2>Demo Request from {demo_request.company}</h2>
+                        
+                        <div class="details">
+                            <h3>Contact Information:</h3>
+                            <p><strong>Name:</strong> {demo_request.name}<br>
+                            <strong>Email:</strong> {demo_request.email}<br>
+                            <strong>Company:</strong> {demo_request.company}<br>
+                            <strong>Phone:</strong> {demo_request.phone or 'Not provided'}</p>
+                            
+                            <h3>Message:</h3>
+                            <p>{demo_request.message or 'No additional message provided'}</p>
+                            
+                            <h3>Submitted:</h3>
+                            <p>{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
+                        </div>
+                        
+                        <h3>Next Steps:</h3>
+                        <ul>
+                            <li>Review company profile and prepare personalized demo</li>
+                            <li>Contact within 2 business hours</li>
+                            <li>Schedule demo meeting</li>
+                        </ul>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            text_content = f"""
+            🚨 NEW DEMO REQUEST - Action Required within 2 hours
+            
+            Demo Request from {demo_request.company}
+            
+            Contact Information:
+            Name: {demo_request.name}
+            Email: {demo_request.email}
+            Company: {demo_request.company}
+            Phone: {demo_request.phone or 'Not provided'}
+            
+            Message: {demo_request.message or 'No additional message provided'}
+            
+            Submitted: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}
+            
+            Next Steps:
+            - Review company profile and prepare personalized demo
+            - Contact within 2 business hours  
+            - Schedule demo meeting
+            """
+            
+            return await self.send_email(self.sales_email, subject, html_content, text_content)
+            
+        except Exception as e:
+            logger.error(f"Error sending internal notification: {str(e)}")
+            return {"success": False, "message": f"Internal notification error: {str(e)}"}
 
 # Initialize services
 hubspot_service = MockHubSpotService()
