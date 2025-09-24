@@ -443,7 +443,7 @@ const SentraTechLanding = () => {
           ) : (
             <button 
               onClick={() => setChatOpen(true)}
-              className="w-full h-full flex items-center justify-center bg-[#DAFF01] text-[rgb(17,17,19)] rounded-2xl hover:bg-[rgb(166,190,21)] transition-all duration-200"
+              className="w-full h-full flex items-center justify-center bg-[#00FF41] text-[#0A0A0A] rounded-2xl hover:bg-[#00e83a] transition-all duration-200"
             >
               <MessageSquare size={24} />
             </button>
