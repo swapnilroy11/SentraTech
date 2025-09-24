@@ -15,30 +15,32 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 
 function App() {
   return (
-    <div className="App">
-      {/* Space-themed WebGL Background for entire website */}
-      <SpaceBackground intensity={0.8} particles={300} />
-      
-      {/* Floating Left Navigation */}
-      <FloatingNavigation />
-      
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <>
-              <SentraTechLanding />
-              <FeatureShowcase />
-              <CustomerJourney />
-              <ROICalculator />
-              <TestimonialsSection />
-              <PricingSection />
-              <CTASection />
-              <Footer />
-            </>
-          } />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <LanguageProvider>
+      <div className="App">
+        {/* Space-themed WebGL Background for entire website */}
+        <SpaceBackground intensity={0.8} particles={300} />
+        
+        {/* Floating Left Navigation */}
+        <FloatingNavigation />
+        
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <SentraTechLanding />
+                <FeatureShowcase />
+                <CustomerJourney />
+                <ROICalculator />
+                <TestimonialsSection />
+                <PricingSection />
+                <CTASection />
+                <Footer />
+              </>
+            } />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </LanguageProvider>
   );
 }
 
