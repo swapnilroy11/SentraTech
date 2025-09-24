@@ -1912,6 +1912,419 @@ class MetricsTester:
         # Return overall success
         return len(self.failed_tests) == 0
 
+class AnalyticsTester:
+    """Test Analytics & Tracking System functionality"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_analytics_track_endpoint(self):
+        """Test POST /api/analytics/track endpoint"""
+        print("\n=== Testing Analytics Event Tracking ===")
+        
+        # Test Case 1: Page view tracking
+        page_view_data = {
+            "session_id": "test_session_analytics_001",
+            "user_id": "test_user_001",
+            "event_type": "page_view",
+            "page_path": "/",
+            "page_title": "SentraTech - AI Customer Support Platform",
+            "referrer": "https://google.com",
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "additional_data": {
+                "viewport_width": 1920,
+                "viewport_height": 1080
+            }
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/track", json=page_view_data, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success") and result.get("page_view_id"):
+                    self.log_test("Analytics Track - Page View", True, 
+                                f"Page view tracked successfully: {result['page_view_id']}")
+                else:
+                    self.log_test("Analytics Track - Page View", False, 
+                                f"Invalid response structure: {result}")
+            else:
+                self.log_test("Analytics Track - Page View", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Analytics Track - Page View", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Click event tracking
+        click_data = {
+            "session_id": "test_session_analytics_002",
+            "event_type": "click",
+            "page_path": "/roi-calculator",
+            "additional_data": {
+                "element_id": "calculate-roi-btn",
+                "element_class": "btn-primary",
+                "element_text": "Calculate ROI"
+            }
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/track", json=click_data, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success") and result.get("interaction_id"):
+                    self.log_test("Analytics Track - Click Event", True, 
+                                f"Click event tracked: {result['interaction_id']}")
+                else:
+                    self.log_test("Analytics Track - Click Event", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Analytics Track - Click Event", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Analytics Track - Click Event", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Form submit tracking
+        form_submit_data = {
+            "session_id": "test_session_analytics_003",
+            "event_type": "form_submit",
+            "page_path": "/demo-request",
+            "additional_data": {
+                "form_id": "demo-request-form",
+                "form_fields": ["name", "email", "company", "phone"]
+            }
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/track", json=form_submit_data, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success"):
+                    self.log_test("Analytics Track - Form Submit", True, 
+                                "Form submit event tracked successfully")
+                else:
+                    self.log_test("Analytics Track - Form Submit", False, 
+                                f"Tracking failed: {result}")
+            else:
+                self.log_test("Analytics Track - Form Submit", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Analytics Track - Form Submit", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Scroll event tracking
+        scroll_data = {
+            "session_id": "test_session_analytics_004",
+            "event_type": "scroll",
+            "page_path": "/features",
+            "additional_data": {
+                "scroll_depth": 75,
+                "max_scroll": 100
+            }
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/track", json=scroll_data, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success"):
+                    self.log_test("Analytics Track - Scroll Event", True, 
+                                "Scroll event tracked successfully")
+                else:
+                    self.log_test("Analytics Track - Scroll Event", False, 
+                                f"Tracking failed: {result}")
+            else:
+                self.log_test("Analytics Track - Scroll Event", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Analytics Track - Scroll Event", False, f"Exception: {str(e)}")
+    
+    def test_conversion_tracking(self):
+        """Test POST /api/analytics/conversion endpoint"""
+        print("\n=== Testing Conversion Tracking ===")
+        
+        # Test Case 1: Demo request conversion
+        demo_conversion_params = {
+            "session_id": "test_session_conversion_001",
+            "event_name": "demo_request",
+            "page_path": "/demo-request",
+            "funnel_step": "form_submission",
+            "conversion_value": 500.0,
+            "user_id": "test_user_conversion_001"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/conversion", params=demo_conversion_params, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success") and result.get("conversion_id"):
+                    self.log_test("Conversion Track - Demo Request", True, 
+                                f"Demo conversion tracked: {result['conversion_id']}")
+                else:
+                    self.log_test("Conversion Track - Demo Request", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Conversion Track - Demo Request", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Conversion Track - Demo Request", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: ROI calculation conversion
+        roi_conversion_params = {
+            "session_id": "test_session_conversion_002",
+            "event_name": "roi_calculation",
+            "page_path": "/roi-calculator",
+            "funnel_step": "calculation_completed",
+            "conversion_value": 1000.0
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/conversion", params=roi_conversion_params, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success") and result.get("conversion_id"):
+                    self.log_test("Conversion Track - ROI Calculation", True, 
+                                f"ROI conversion tracked: {result['conversion_id']}")
+                else:
+                    self.log_test("Conversion Track - ROI Calculation", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Conversion Track - ROI Calculation", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Conversion Track - ROI Calculation", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Chat started conversion
+        chat_conversion_params = {
+            "session_id": "test_session_conversion_003",
+            "event_name": "chat_started",
+            "page_path": "/",
+            "funnel_step": "engagement",
+            "conversion_value": 250.0
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/analytics/conversion", params=chat_conversion_params, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success"):
+                    self.log_test("Conversion Track - Chat Started", True, 
+                                "Chat conversion tracked successfully")
+                else:
+                    self.log_test("Conversion Track - Chat Started", False, 
+                                f"Tracking failed: {result}")
+            else:
+                self.log_test("Conversion Track - Chat Started", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Conversion Track - Chat Started", False, f"Exception: {str(e)}")
+    
+    def test_analytics_stats(self):
+        """Test GET /api/analytics/stats endpoint"""
+        print("\n=== Testing Analytics Statistics ===")
+        
+        # Test different timeframes
+        timeframes = ["1h", "24h", "7d", "30d"]
+        
+        for timeframe in timeframes:
+            try:
+                response = requests.get(f"{BACKEND_URL}/analytics/stats?timeframe={timeframe}", timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    
+                    # Check required fields
+                    required_fields = [
+                        "total_page_views", "unique_visitors", "avg_session_duration",
+                        "bounce_rate", "top_pages", "conversion_rate", 
+                        "device_breakdown", "traffic_sources"
+                    ]
+                    
+                    missing_fields = [field for field in required_fields if field not in result]
+                    
+                    if not missing_fields:
+                        # Validate data types
+                        valid_types = True
+                        type_errors = []
+                        
+                        if not isinstance(result["total_page_views"], int):
+                            valid_types = False
+                            type_errors.append("total_page_views should be int")
+                        
+                        if not isinstance(result["unique_visitors"], int):
+                            valid_types = False
+                            type_errors.append("unique_visitors should be int")
+                        
+                        if not isinstance(result["avg_session_duration"], (int, float)):
+                            valid_types = False
+                            type_errors.append("avg_session_duration should be numeric")
+                        
+                        if not isinstance(result["bounce_rate"], (int, float)):
+                            valid_types = False
+                            type_errors.append("bounce_rate should be numeric")
+                        
+                        if not isinstance(result["top_pages"], list):
+                            valid_types = False
+                            type_errors.append("top_pages should be list")
+                        
+                        if not isinstance(result["conversion_rate"], (int, float)):
+                            valid_types = False
+                            type_errors.append("conversion_rate should be numeric")
+                        
+                        if not isinstance(result["device_breakdown"], dict):
+                            valid_types = False
+                            type_errors.append("device_breakdown should be dict")
+                        
+                        if not isinstance(result["traffic_sources"], dict):
+                            valid_types = False
+                            type_errors.append("traffic_sources should be dict")
+                        
+                        if valid_types:
+                            self.log_test(f"Analytics Stats - {timeframe.upper()} Timeframe", True, 
+                                        f"All fields present with correct types. Pages: {result['total_page_views']}, Visitors: {result['unique_visitors']}")
+                        else:
+                            self.log_test(f"Analytics Stats - {timeframe.upper()} Timeframe", False, 
+                                        f"Type validation errors: {', '.join(type_errors)}")
+                    else:
+                        self.log_test(f"Analytics Stats - {timeframe.upper()} Timeframe", False, 
+                                    f"Missing fields: {missing_fields}")
+                else:
+                    self.log_test(f"Analytics Stats - {timeframe.upper()} Timeframe", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"Analytics Stats - {timeframe.upper()} Timeframe", False, f"Exception: {str(e)}")
+    
+    def test_performance_metrics(self):
+        """Test GET /api/analytics/performance endpoint"""
+        print("\n=== Testing Performance Metrics ===")
+        
+        # Test different timeframes
+        timeframes = ["1h", "24h", "7d", "30d"]
+        
+        for timeframe in timeframes:
+            try:
+                response = requests.get(f"{BACKEND_URL}/analytics/performance?timeframe={timeframe}", timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    
+                    # Check required fields
+                    required_fields = [
+                        "avg_page_load_time", "avg_api_response_time", 
+                        "total_requests", "performance_score"
+                    ]
+                    
+                    missing_fields = [field for field in required_fields if field not in result]
+                    
+                    if not missing_fields:
+                        # Validate data types and ranges
+                        valid_data = True
+                        validation_errors = []
+                        
+                        if not isinstance(result["avg_page_load_time"], (int, float)) or result["avg_page_load_time"] < 0:
+                            valid_data = False
+                            validation_errors.append("avg_page_load_time should be positive number")
+                        
+                        if not isinstance(result["avg_api_response_time"], (int, float)) or result["avg_api_response_time"] < 0:
+                            valid_data = False
+                            validation_errors.append("avg_api_response_time should be positive number")
+                        
+                        if not isinstance(result["total_requests"], int) or result["total_requests"] < 0:
+                            valid_data = False
+                            validation_errors.append("total_requests should be non-negative integer")
+                        
+                        if not isinstance(result["performance_score"], (int, float)) or not (0 <= result["performance_score"] <= 100):
+                            valid_data = False
+                            validation_errors.append("performance_score should be between 0-100")
+                        
+                        if valid_data:
+                            self.log_test(f"Performance Metrics - {timeframe.upper()} Timeframe", True, 
+                                        f"Page Load: {result['avg_page_load_time']}s, API: {result['avg_api_response_time']}ms, Score: {result['performance_score']}")
+                        else:
+                            self.log_test(f"Performance Metrics - {timeframe.upper()} Timeframe", False, 
+                                        f"Validation errors: {', '.join(validation_errors)}")
+                    else:
+                        self.log_test(f"Performance Metrics - {timeframe.upper()} Timeframe", False, 
+                                    f"Missing fields: {missing_fields}")
+                else:
+                    self.log_test(f"Performance Metrics - {timeframe.upper()} Timeframe", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"Performance Metrics - {timeframe.upper()} Timeframe", False, f"Exception: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all analytics test suites"""
+        print("🚀 Starting Analytics & Tracking System Tests")
+        print("=" * 60)
+        
+        # Run all test suites
+        self.test_analytics_track_endpoint()
+        self.test_conversion_tracking()
+        self.test_analytics_stats()
+        self.test_performance_metrics()
+        
+        # Print summary
+        print("\n" + "=" * 60)
+        print("📊 ANALYTICS & TRACKING TEST SUMMARY")
+        print("=" * 60)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        # Return overall success
+        return len(self.failed_tests) == 0
+
 if __name__ == "__main__":
     print("🎯 SentraTech Real-time Metrics API Testing Suite")
     print("=" * 70)
