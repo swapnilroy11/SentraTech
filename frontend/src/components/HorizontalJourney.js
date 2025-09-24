@@ -471,16 +471,16 @@ const HorizontalJourney = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="text-xs text-[rgb(161,161,170)]">
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="text-sm text-[rgb(161,161,170)]">
                       Click for details
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <div 
-                        className="w-2 h-2 rounded-full"
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: stage.color }}
                       />
-                      <span className="text-xs" style={{ color: stage.color }}>
+                      <span className="text-sm font-medium" style={{ color: stage.color }}>
                         {stage.automationRate}% Automated
                       </span>
                     </div>
