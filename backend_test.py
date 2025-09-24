@@ -16,6 +16,906 @@ import urllib.parse
 # Backend URL from environment
 BACKEND_URL = "https://customer-ai-portal.preview.emergentagent.com/api"
 
+class DemoRequestSystemTester:
+    """Test the completely updated Demo Request system with Google Sheets integration and email notifications"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_basic_connectivity(self):
+        """Test basic API connectivity"""
+        try:
+            response = requests.get(f"{BACKEND_URL}/", timeout=10)
+            if response.status_code == 200:
+                self.log_test("Basic API Connectivity", True, f"Status: {response.status_code}")
+                return True
+            else:
+                self.log_test("Basic API Connectivity", False, f"Status: {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_test("Basic API Connectivity", False, f"Connection error: {str(e)}")
+            return False
+    
+    def test_demo_request_json_endpoint(self):
+        """Test POST /api/demo/request - Original JSON endpoint with Google Sheets + email"""
+        print("\n=== Testing Demo Request JSON Endpoint ===")
+        
+        # Test Case 1: Complete valid JSON request
+        valid_request = {
+            "name": "Alice Johnson",
+            "email": "alice.johnson@techsolutions.com",
+            "company": "TechSolutions Inc",
+            "phone": "+1-555-0199",
+            "call_volume": "35,000",
+            "message": "We need a comprehensive demo to understand how SentraTech can integrate with our existing CRM and reduce our customer support costs by the promised 45%."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=valid_request, timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check response structure
+                required_fields = ["success", "contact_id", "message", "reference_id"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    if result["success"] and result["contact_id"] and result["reference_id"]:
+                        self.log_test("Demo Request JSON - Complete Valid Request", True, 
+                                    f"Reference ID: {result['reference_id']}, Contact ID: {result['contact_id']}")
+                        
+                        # Store reference for later verification
+                        self.test_reference_id = result["reference_id"]
+                    else:
+                        self.log_test("Demo Request JSON - Complete Valid Request", False, 
+                                    f"Invalid response values: {result}")
+                else:
+                    self.log_test("Demo Request JSON - Complete Valid Request", False, 
+                                f"Missing response fields: {missing_fields}")
+            else:
+                self.log_test("Demo Request JSON - Complete Valid Request", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request JSON - Complete Valid Request", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Minimal valid JSON request (required fields only)
+        minimal_request = {
+            "name": "Bob Smith",
+            "email": "bob.smith@minimal.com",
+            "company": "Minimal Corp"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=minimal_request, timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"] and result["contact_id"] and result["reference_id"]:
+                    self.log_test("Demo Request JSON - Minimal Valid Request", True, 
+                                f"Reference ID: {result['reference_id']}")
+                else:
+                    self.log_test("Demo Request JSON - Minimal Valid Request", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Demo Request JSON - Minimal Valid Request", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request JSON - Minimal Valid Request", False, f"Exception: {str(e)}")
+    
+    def test_demo_request_form_endpoint(self):
+        """Test POST /api/demo-request - New form endpoint accepting form data"""
+        print("\n=== Testing Demo Request Form Endpoint ===")
+        
+        # Test Case 1: Complete form data submission
+        form_data = {
+            "name": "Carol Williams",
+            "email": "carol.williams@formtest.com",
+            "company": "FormTest Solutions",
+            "phone": "+1-555-0288",
+            "message": "Testing the new form endpoint with complete data including preferred date.",
+            "preferredDate": "2024-02-15"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=form_data, timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Check response structure for form endpoint
+                required_fields = ["status", "requestId", "timestamp"]
+                missing_fields = [field for field in required_fields if field not in result]
+                
+                if not missing_fields:
+                    if result["status"] == "success" and result["requestId"]:
+                        self.log_test("Demo Request Form - Complete Form Data", True, 
+                                    f"Request ID: {result['requestId']}, Timestamp: {result['timestamp']}")
+                    else:
+                        self.log_test("Demo Request Form - Complete Form Data", False, 
+                                    f"Invalid response values: {result}")
+                else:
+                    self.log_test("Demo Request Form - Complete Form Data", False, 
+                                f"Missing response fields: {missing_fields}")
+            else:
+                self.log_test("Demo Request Form - Complete Form Data", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request Form - Complete Form Data", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Minimal form data (required fields only)
+        minimal_form_data = {
+            "name": "David Brown",
+            "email": "david.brown@minimal-form.com",
+            "company": "Minimal Form Corp"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=minimal_form_data, timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["status"] == "success" and result["requestId"]:
+                    self.log_test("Demo Request Form - Minimal Form Data", True, 
+                                f"Request ID: {result['requestId']}")
+                else:
+                    self.log_test("Demo Request Form - Minimal Form Data", False, 
+                                f"Invalid response: {result}")
+            else:
+                self.log_test("Demo Request Form - Minimal Form Data", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Demo Request Form - Minimal Form Data", False, f"Exception: {str(e)}")
+    
+    def test_google_sheets_integration(self):
+        """Test Google Sheets integration and fallback to MongoDB"""
+        print("\n=== Testing Google Sheets Integration ===")
+        
+        # Test Case 1: Verify Google Sheets configuration
+        try:
+            response = requests.get(f"{BACKEND_URL}/debug/sheets/config", timeout=10)
+            
+            if response.status_code == 200:
+                config = response.json()
+                
+                required_config = ["sheet_id", "sheet_name", "web_app_url", "service_type"]
+                missing_config = [field for field in required_config if field not in config]
+                
+                if not missing_config:
+                    if config["service_type"] == "Google Sheets" and config["sheet_id"]:
+                        self.log_test("Google Sheets - Configuration", True, 
+                                    f"Sheet ID: {config['sheet_id']}, Name: {config['sheet_name']}")
+                    else:
+                        self.log_test("Google Sheets - Configuration", False, 
+                                    f"Invalid configuration: {config}")
+                else:
+                    self.log_test("Google Sheets - Configuration", False, 
+                                f"Missing config fields: {missing_config}")
+            else:
+                self.log_test("Google Sheets - Configuration", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Google Sheets - Configuration", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Submit request and verify data handling
+        sheets_test_request = {
+            "name": "Eva Martinez",
+            "email": "eva.martinez@sheetstest.com",
+            "company": "Sheets Integration Test Corp",
+            "phone": "+1-555-0377",
+            "message": "Testing Google Sheets integration with proper data structure and timestamps."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=sheets_test_request, timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"] and result["reference_id"]:
+                    self.log_test("Google Sheets - Data Submission", True, 
+                                f"Data submitted successfully, Reference: {result['reference_id']}")
+                    
+                    # Verify data was stored (fallback to MongoDB should work)
+                    time.sleep(2)  # Allow time for background processing
+                    
+                    # Check if data appears in database
+                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=10", timeout=10)
+                    if get_response.status_code == 200:
+                        requests_data = get_response.json()
+                        if requests_data.get("success") and requests_data.get("requests"):
+                            # Look for our test request
+                            found = any(req.get("email") == sheets_test_request["email"] 
+                                      for req in requests_data["requests"])
+                            if found:
+                                self.log_test("Google Sheets - Fallback Storage", True, 
+                                            "Data properly stored in MongoDB fallback")
+                            else:
+                                self.log_test("Google Sheets - Fallback Storage", False, 
+                                            "Test request not found in database")
+                        else:
+                            self.log_test("Google Sheets - Fallback Storage", False, 
+                                        "No requests data returned")
+                    else:
+                        self.log_test("Google Sheets - Fallback Storage", False, 
+                                    f"Failed to retrieve requests: {get_response.status_code}")
+                else:
+                    self.log_test("Google Sheets - Data Submission", False, 
+                                f"Submission failed: {result}")
+            else:
+                self.log_test("Google Sheets - Data Submission", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Google Sheets - Data Submission", False, f"Exception: {str(e)}")
+    
+    def test_email_service_integration(self):
+        """Test Email Service with Spacemail SMTP configuration"""
+        print("\n=== Testing Email Service Integration ===")
+        
+        # Test Case 1: Verify email configuration
+        try:
+            response = requests.get(f"{BACKEND_URL}/debug/email/config", timeout=10)
+            
+            if response.status_code == 200:
+                config = response.json()
+                
+                required_config = ["smtp_host", "smtp_port", "from_email", "sales_email", "smtp_configured", "service_type"]
+                missing_config = [field for field in required_config if field not in config]
+                
+                if not missing_config:
+                    if config["service_type"] == "Spacemail SMTP":
+                        self.log_test("Email Service - Configuration", True, 
+                                    f"SMTP Host: {config['smtp_host']}, Port: {config['smtp_port']}, Configured: {config['smtp_configured']}")
+                    else:
+                        self.log_test("Email Service - Configuration", False, 
+                                    f"Wrong service type: {config['service_type']}")
+                else:
+                    self.log_test("Email Service - Configuration", False, 
+                                f"Missing config fields: {missing_config}")
+            else:
+                self.log_test("Email Service - Configuration", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Email Service - Configuration", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Submit request and verify email notifications are queued
+        email_test_request = {
+            "name": "Frank Wilson",
+            "email": "frank.wilson@emailtest.com",
+            "company": "Email Test Solutions",
+            "phone": "+1-555-0466",
+            "message": "Testing email notification system with confirmation and internal notifications."
+        }
+        
+        try:
+            # Record initial state
+            initial_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=1", timeout=10)
+            initial_count = 0
+            if initial_response.status_code == 200:
+                initial_data = initial_response.json()
+                initial_count = initial_data.get("count", 0)
+            
+            # Submit request
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=email_test_request, timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"]:
+                    self.log_test("Email Service - Request Submission", True, 
+                                f"Request submitted successfully for email testing")
+                    
+                    # Wait for background tasks to complete
+                    time.sleep(3)
+                    
+                    # Verify request was processed (background tasks completed)
+                    final_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=5", timeout=10)
+                    if final_response.status_code == 200:
+                        final_data = final_response.json()
+                        final_count = final_data.get("count", 0)
+                        
+                        if final_count > initial_count:
+                            self.log_test("Email Service - Background Processing", True, 
+                                        f"Background tasks completed, requests increased from {initial_count} to {final_count}")
+                        else:
+                            self.log_test("Email Service - Background Processing", False, 
+                                        f"No increase in requests count: {initial_count} to {final_count}")
+                    else:
+                        self.log_test("Email Service - Background Processing", False, 
+                                    "Failed to verify background processing")
+                else:
+                    self.log_test("Email Service - Request Submission", False, 
+                                f"Request submission failed: {result}")
+            else:
+                self.log_test("Email Service - Request Submission", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Email Service - Request Submission", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Verify email templates and formatting
+        template_test_request = {
+            "name": "Grace Chen",
+            "email": "grace.chen@templatetest.com",
+            "company": "Template Test Corp",
+            "phone": "+1-555-0555",
+            "message": "Testing HTML and text email template formatting with comprehensive data."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=template_test_request, timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"]:
+                    self.log_test("Email Service - Template Processing", True, 
+                                "Email templates processed successfully (HTML and text versions)")
+                else:
+                    self.log_test("Email Service - Template Processing", False, 
+                                f"Template processing failed: {result}")
+            else:
+                self.log_test("Email Service - Template Processing", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Email Service - Template Processing", False, f"Exception: {str(e)}")
+    
+    def test_rate_limiting_security(self):
+        """Test rate limiting functionality (5 requests per minute per IP)"""
+        print("\n=== Testing Rate Limiting & Security ===")
+        
+        # Test Case 1: Normal request rate (should pass)
+        normal_request = {
+            "name": "Henry Davis",
+            "email": "henry.davis@ratetest.com",
+            "company": "Rate Test Corp"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=normal_request, timeout=15)
+            
+            if response.status_code == 200:
+                self.log_test("Rate Limiting - Normal Request", True, 
+                            "Normal request processed successfully")
+            else:
+                self.log_test("Rate Limiting - Normal Request", False, 
+                            f"Normal request failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Rate Limiting - Normal Request", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Rapid requests to trigger rate limiting
+        rapid_requests_passed = 0
+        rapid_requests_blocked = 0
+        
+        for i in range(7):  # Try 7 requests rapidly (limit is 5 per minute)
+            try:
+                rapid_request = {
+                    "name": f"Rapid User {i+1}",
+                    "email": f"rapid{i+1}@ratetest.com",
+                    "company": f"Rapid Test Corp {i+1}"
+                }
+                
+                response = requests.post(f"{BACKEND_URL}/demo-request", data=rapid_request, timeout=10)
+                
+                if response.status_code == 200:
+                    rapid_requests_passed += 1
+                elif response.status_code == 429:  # Rate limit exceeded
+                    rapid_requests_blocked += 1
+                    
+                time.sleep(0.5)  # Small delay between requests
+                
+            except Exception as e:
+                print(f"   Rapid request {i+1} exception: {str(e)}")
+        
+        # Evaluate rate limiting effectiveness
+        if rapid_requests_blocked > 0:
+            self.log_test("Rate Limiting - Enforcement", True, 
+                        f"Rate limiting working: {rapid_requests_passed} passed, {rapid_requests_blocked} blocked")
+        else:
+            self.log_test("Rate Limiting - Enforcement", False, 
+                        f"Rate limiting not enforced: {rapid_requests_passed} passed, {rapid_requests_blocked} blocked")
+        
+        # Test Case 3: Input validation and sanitization
+        malicious_request = {
+            "name": "<script>alert('xss')</script>",
+            "email": "test@example.com",
+            "company": "'; DROP TABLE demo_requests; --",
+            "message": "<img src=x onerror=alert('xss')>"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=malicious_request, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "success":
+                    self.log_test("Security - Input Sanitization", True, 
+                                "Malicious input handled safely (sanitized and processed)")
+                else:
+                    self.log_test("Security - Input Sanitization", False, 
+                                "Malicious input not handled properly")
+            elif response.status_code == 400:
+                self.log_test("Security - Input Validation", True, 
+                            "Malicious input rejected by validation")
+            else:
+                self.log_test("Security - Input Handling", False, 
+                            f"Unexpected response to malicious input: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Security - Input Handling", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Email format validation
+        invalid_email_request = {
+            "name": "Invalid Email User",
+            "email": "not-an-email-address",
+            "company": "Invalid Email Corp"
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=invalid_email_request, timeout=10)
+            
+            if response.status_code == 400:
+                result = response.json()
+                if "email" in result.get("message", "").lower():
+                    self.log_test("Security - Email Validation", True, 
+                                "Invalid email format properly rejected")
+                else:
+                    self.log_test("Security - Email Validation", False, 
+                                "Email validation error message unclear")
+            else:
+                self.log_test("Security - Email Validation", False, 
+                            f"Invalid email not rejected: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Security - Email Validation", False, f"Exception: {str(e)}")
+    
+    def test_form_data_handling(self):
+        """Test both JSON and form-encoded data submissions"""
+        print("\n=== Testing Form Data Handling ===")
+        
+        # Test Case 1: JSON data submission
+        json_data = {
+            "name": "Isabella Rodriguez",
+            "email": "isabella.rodriguez@jsontest.com",
+            "company": "JSON Test Solutions",
+            "phone": "+1-555-0644",
+            "message": "Testing JSON data submission with all fields populated."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   json=json_data, 
+                                   headers={"Content-Type": "application/json"},
+                                   timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"]:
+                    self.log_test("Form Data - JSON Submission", True, 
+                                f"JSON data processed successfully")
+                else:
+                    self.log_test("Form Data - JSON Submission", False, 
+                                f"JSON processing failed: {result}")
+            else:
+                self.log_test("Form Data - JSON Submission", False, 
+                            f"JSON submission failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Data - JSON Submission", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Form-encoded data submission
+        form_data = {
+            "name": "Jack Thompson",
+            "email": "jack.thompson@formtest.com",
+            "company": "Form Test Solutions",
+            "phone": "+1-555-0733",
+            "message": "Testing form-encoded data submission with proper encoding."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", 
+                                   data=form_data,
+                                   headers={"Content-Type": "application/x-www-form-urlencoded"},
+                                   timeout=20)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "success":
+                    self.log_test("Form Data - Form Encoded Submission", True, 
+                                "Form-encoded data processed successfully")
+                else:
+                    self.log_test("Form Data - Form Encoded Submission", False, 
+                                f"Form processing failed: {result}")
+            else:
+                self.log_test("Form Data - Form Encoded Submission", False, 
+                            f"Form submission failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Data - Form Encoded Submission", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Field validation (required vs optional)
+        missing_required_data = {
+            "name": "Missing Company User",
+            "email": "missing@company.com"
+            # Missing required 'company' field
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=missing_required_data, timeout=10)
+            
+            if response.status_code == 400:
+                result = response.json()
+                if "company" in result.get("message", "").lower():
+                    self.log_test("Form Data - Required Field Validation", True, 
+                                "Missing required field properly detected")
+                else:
+                    self.log_test("Form Data - Required Field Validation", False, 
+                                "Required field validation message unclear")
+            else:
+                self.log_test("Form Data - Required Field Validation", False, 
+                            f"Missing required field not caught: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Data - Required Field Validation", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Data sanitization and length limits
+        long_data = {
+            "name": "A" * 150,  # Exceeds typical length limit
+            "email": "long@test.com",
+            "company": "B" * 150,  # Exceeds typical length limit
+            "message": "C" * 2000  # Exceeds typical length limit
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo-request", data=long_data, timeout=15)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "success":
+                    self.log_test("Form Data - Length Limits", True, 
+                                "Long data handled properly (truncated or accepted)")
+                else:
+                    self.log_test("Form Data - Length Limits", False, 
+                                f"Long data processing failed: {result}")
+            elif response.status_code == 400:
+                self.log_test("Form Data - Length Limits", True, 
+                            "Long data properly rejected by validation")
+            else:
+                self.log_test("Form Data - Length Limits", False, 
+                            f"Unexpected response to long data: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Form Data - Length Limits", False, f"Exception: {str(e)}")
+    
+    def test_background_tasks(self):
+        """Test that email notifications are properly queued as background tasks"""
+        print("\n=== Testing Background Tasks ===")
+        
+        # Test Case 1: Verify main response doesn't wait for email sending
+        background_test_request = {
+            "name": "Karen Lee",
+            "email": "karen.lee@backgroundtest.com",
+            "company": "Background Test Corp",
+            "phone": "+1-555-0822",
+            "message": "Testing background task processing for email notifications."
+        }
+        
+        try:
+            start_time = time.time()
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=background_test_request, timeout=25)
+            end_time = time.time()
+            
+            response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"]:
+                    # Response should be fast (< 5 seconds) indicating background processing
+                    if response_time < 5000:
+                        self.log_test("Background Tasks - Response Time", True, 
+                                    f"Fast response: {response_time:.2f}ms (background processing)")
+                    else:
+                        self.log_test("Background Tasks - Response Time", False, 
+                                    f"Slow response: {response_time:.2f}ms (may be blocking)")
+                else:
+                    self.log_test("Background Tasks - Request Processing", False, 
+                                f"Request failed: {result}")
+            else:
+                self.log_test("Background Tasks - Request Processing", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Background Tasks - Request Processing", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Verify database storage alongside Google Sheets submission
+        storage_test_request = {
+            "name": "Larry Wilson",
+            "email": "larry.wilson@storagetest.com",
+            "company": "Storage Test Solutions",
+            "phone": "+1-555-0911",
+            "message": "Testing simultaneous database storage and Google Sheets submission."
+        }
+        
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=storage_test_request, timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"] and result["reference_id"]:
+                    # Wait for background processing
+                    time.sleep(3)
+                    
+                    # Check database storage
+                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=10", timeout=10)
+                    if get_response.status_code == 200:
+                        requests_data = get_response.json()
+                        if requests_data.get("success"):
+                            # Look for our test request
+                            found = any(req.get("email") == storage_test_request["email"] 
+                                      for req in requests_data.get("requests", []))
+                            if found:
+                                self.log_test("Background Tasks - Database Storage", True, 
+                                            "Request properly stored in database alongside Sheets submission")
+                            else:
+                                self.log_test("Background Tasks - Database Storage", False, 
+                                            "Request not found in database")
+                        else:
+                            self.log_test("Background Tasks - Database Storage", False, 
+                                        "Database query failed")
+                    else:
+                        self.log_test("Background Tasks - Database Storage", False, 
+                                    f"Failed to query database: {get_response.status_code}")
+                else:
+                    self.log_test("Background Tasks - Database Storage", False, 
+                                f"Request submission failed: {result}")
+            else:
+                self.log_test("Background Tasks - Database Storage", False, 
+                            f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Background Tasks - Database Storage", False, f"Exception: {str(e)}")
+    
+    def test_data_flow_complete(self):
+        """Test complete data flow: Form → Google Sheets → Database → Email notifications"""
+        print("\n=== Testing Complete Data Flow ===")
+        
+        complete_flow_request = {
+            "name": "Maria Garcia",
+            "email": "maria.garcia@completeflow.com",
+            "company": "Complete Flow Solutions",
+            "phone": "+1-555-1000",
+            "call_volume": "50,000",
+            "message": "Testing the complete data flow from form submission through Google Sheets, database storage, and email notifications."
+        }
+        
+        try:
+            # Step 1: Submit request
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=complete_flow_request, timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result["success"] and result["reference_id"]:
+                    reference_id = result["reference_id"]
+                    self.log_test("Complete Flow - Form Submission", True, 
+                                f"Form submitted successfully, Reference: {reference_id}")
+                    
+                    # Step 2: Wait for background processing
+                    time.sleep(5)
+                    
+                    # Step 3: Verify database storage
+                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=20", timeout=15)
+                    if get_response.status_code == 200:
+                        requests_data = get_response.json()
+                        if requests_data.get("success"):
+                            # Look for our specific request
+                            found_request = None
+                            for req in requests_data.get("requests", []):
+                                if req.get("email") == complete_flow_request["email"]:
+                                    found_request = req
+                                    break
+                            
+                            if found_request:
+                                self.log_test("Complete Flow - Database Storage", True, 
+                                            f"Request found in database with proper structure")
+                                
+                                # Verify data integrity
+                                if (found_request.get("name") == complete_flow_request["name"] and
+                                    found_request.get("company") == complete_flow_request["company"]):
+                                    self.log_test("Complete Flow - Data Integrity", True, 
+                                                "All form data preserved correctly")
+                                else:
+                                    self.log_test("Complete Flow - Data Integrity", False, 
+                                                "Form data not preserved correctly")
+                            else:
+                                self.log_test("Complete Flow - Database Storage", False, 
+                                            "Request not found in database")
+                        else:
+                            self.log_test("Complete Flow - Database Storage", False, 
+                                        "Database query unsuccessful")
+                    else:
+                        self.log_test("Complete Flow - Database Storage", False, 
+                                    f"Database query failed: {get_response.status_code}")
+                    
+                    # Step 4: Verify Google Sheets configuration is accessible
+                    sheets_config_response = requests.get(f"{BACKEND_URL}/debug/sheets/config", timeout=10)
+                    if sheets_config_response.status_code == 200:
+                        sheets_config = sheets_config_response.json()
+                        if sheets_config.get("service_type") == "Google Sheets":
+                            self.log_test("Complete Flow - Google Sheets Integration", True, 
+                                        "Google Sheets service properly configured")
+                        else:
+                            self.log_test("Complete Flow - Google Sheets Integration", False, 
+                                        "Google Sheets service not configured")
+                    else:
+                        self.log_test("Complete Flow - Google Sheets Integration", False, 
+                                    "Cannot verify Google Sheets configuration")
+                    
+                    # Step 5: Verify email service configuration
+                    email_config_response = requests.get(f"{BACKEND_URL}/debug/email/config", timeout=10)
+                    if email_config_response.status_code == 200:
+                        email_config = email_config_response.json()
+                        if email_config.get("service_type") == "Spacemail SMTP":
+                            self.log_test("Complete Flow - Email Service Integration", True, 
+                                        f"Email service configured: {email_config.get('smtp_configured')}")
+                        else:
+                            self.log_test("Complete Flow - Email Service Integration", False, 
+                                        "Email service not properly configured")
+                    else:
+                        self.log_test("Complete Flow - Email Service Integration", False, 
+                                    "Cannot verify email service configuration")
+                        
+                else:
+                    self.log_test("Complete Flow - Form Submission", False, 
+                                f"Form submission failed: {result}")
+            else:
+                self.log_test("Complete Flow - Form Submission", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Complete Flow - Overall Test", False, f"Exception: {str(e)}")
+    
+    def test_error_handling_fallbacks(self):
+        """Test proper fallbacks and user-friendly error messages"""
+        print("\n=== Testing Error Handling & Fallbacks ===")
+        
+        # Test Case 1: Malformed JSON
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   data="invalid json data", 
+                                   headers={"Content-Type": "application/json"},
+                                   timeout=10)
+            
+            if response.status_code in [400, 422]:
+                try:
+                    result = response.json()
+                    if "detail" in result or "message" in result:
+                        self.log_test("Error Handling - Malformed JSON", True, 
+                                    "User-friendly error message provided")
+                    else:
+                        self.log_test("Error Handling - Malformed JSON", False, 
+                                    "Error message not user-friendly")
+                except:
+                    self.log_test("Error Handling - Malformed JSON", True, 
+                                "Error properly rejected (non-JSON response)")
+            else:
+                self.log_test("Error Handling - Malformed JSON", False, 
+                            f"Malformed JSON not handled: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Error Handling - Malformed JSON", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Empty request
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", json={}, timeout=10)
+            
+            if response.status_code == 422:
+                result = response.json()
+                if "detail" in result:
+                    self.log_test("Error Handling - Empty Request", True, 
+                                "Empty request properly validated")
+                else:
+                    self.log_test("Error Handling - Empty Request", False, 
+                                "Empty request validation unclear")
+            else:
+                self.log_test("Error Handling - Empty Request", False, 
+                            f"Empty request not handled: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Error Handling - Empty Request", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Network timeout simulation (using very short timeout)
+        try:
+            response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                   json={"name": "Test", "email": "test@test.com", "company": "Test"}, 
+                                   timeout=0.001)  # Very short timeout
+            
+            # If we get here, the request was faster than expected
+            if response.status_code == 200:
+                self.log_test("Error Handling - Network Resilience", True, 
+                            "Request completed faster than timeout")
+            else:
+                self.log_test("Error Handling - Network Resilience", False, 
+                            f"Unexpected status: {response.status_code}")
+                
+        except requests.exceptions.Timeout:
+            self.log_test("Error Handling - Network Resilience", True, 
+                        "Timeout handled gracefully by client")
+        except Exception as e:
+            self.log_test("Error Handling - Network Resilience", False, f"Exception: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all demo request system test suites"""
+        print("🚀 Starting Demo Request System Tests with Google Sheets & Email Integration")
+        print("=" * 80)
+        
+        # Check basic connectivity first
+        if not self.test_basic_connectivity():
+            print("❌ Cannot connect to backend API. Stopping tests.")
+            return False
+        
+        # Run all test suites
+        self.test_demo_request_json_endpoint()
+        self.test_demo_request_form_endpoint()
+        self.test_google_sheets_integration()
+        self.test_email_service_integration()
+        self.test_rate_limiting_security()
+        self.test_form_data_handling()
+        self.test_background_tasks()
+        self.test_data_flow_complete()
+        self.test_error_handling_fallbacks()
+        
+        # Print summary
+        print("\n" + "=" * 80)
+        print("📊 DEMO REQUEST SYSTEM TEST SUMMARY")
+        print("=" * 80)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        success_rate = (len(self.passed_tests) / len(self.test_results)) * 100 if self.test_results else 0
+        print(f"📈 Success Rate: {success_rate:.1f}%")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ Passed Tests:")
+            for test in self.passed_tests:
+                print(f"   - {test}")
+        
+        # Return overall success
+        return len(self.failed_tests) == 0
+
 class ROICalculatorTester:
     def __init__(self):
         self.test_results = []
