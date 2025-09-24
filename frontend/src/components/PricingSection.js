@@ -103,7 +103,7 @@ const PricingSection = () => {
                     {typeof price === 'number' ? (
                       <>
                         <div className="flex items-baseline justify-center space-x-1">
-                          <span className="text-4xl font-bold text-[#DAFF01]">
+                          <span className="text-4xl font-bold text-[#00FF41] font-rajdhani">
                             ${price.toLocaleString()}
                           </span>
                           <span className="text-[rgb(161,161,170)]">
