@@ -348,14 +348,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Demo Request Form Integration"
+    - "Demo Request Form Integration" 
+    - "Live Chat Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
-    message: "Implemented Demo Request & CRM integration (Phase 1b). Created backend API with mock HubSpot service, email notifications, and database storage. Updated frontend form to integrate with real API. Added proper validation, error handling, and success feedback. Ready for comprehensive testing of the demo request workflow."
+    message: "PHASE 1B COMPLETE: Demo Request & CRM Integration successfully implemented and tested. Form validation critical bug fixed - empty form validation now works perfectly with red borders and error messages. PHASE 1C STARTED: Live Chat Integration backend implemented with WebSocket support, Emergent LLM key integration (gpt-4o-mini), session management, and SentraTech AI context. Ready for backend testing of live chat functionality before proceeding to frontend integration."
   - agent: "testing"
     message: "✅ BACKEND TESTING COMPLETE - Demo Request & CRM Integration fully tested and working. All 15 demo request tests passed after fixing 2 minor validation issues. Mock HubSpot service working correctly with contact creation and duplicate handling. Mock email service sending both user confirmations and internal notifications. Database integration working properly. All validation (required fields, email format, phone format) working correctly. Debug endpoints functional. Ready for frontend integration testing if needed."
   - agent: "testing"
