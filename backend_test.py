@@ -4119,7 +4119,7 @@ class GoogleSheetsIntegrationTester:
             "name": "Fallback Test User",
             "email": "fallback.test@error.com",
             "company": "Error Handling Test Corp",
-            "phone": "+1-555-ERROR",
+            "phone": "+1-555-123-0003",
             "message": "Testing graceful fallback when Google Sheets submission fails"
         }
         
