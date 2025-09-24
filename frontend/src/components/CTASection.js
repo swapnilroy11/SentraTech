@@ -102,15 +102,15 @@ const CTASection = () => {
             <Card className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(38,40,42)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
               <CardHeader className="p-0 mb-6">
                 <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                  <Sparkles size={24} className="text-[#DAFF01]" />
+                  <Sparkles size={24} className="text-[#00FF41]" />
                   <span>What You'll Get</span>
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-0 space-y-4">
                 <div className="flex items-start space-x-4 p-4 bg-[rgb(17,17,19)]/50 rounded-xl border border-[rgb(63,63,63)]">
-                  <div className="p-2 bg-[#DAFF01]/20 rounded-lg border border-[#DAFF01]/50 flex-shrink-0">
-                    <Zap size={20} className="text-[#DAFF01]" />
+                  <div className="p-2 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50 flex-shrink-0">
+                    <Zap size={20} className="text-[#00FF41]" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-2">Sub-50ms AI Routing</h4>
