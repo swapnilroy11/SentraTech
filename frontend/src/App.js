@@ -30,13 +30,13 @@ function App() {
         {/* Space-themed WebGL Background for entire website */}
         <SpaceBackground intensity={0.8} particles={300} />
         
-        {/* Floating Left Navigation */}
-        <FloatingNavigation />
-        
-        {/* Global Chat Widget */}
-        <ChatWidget />
-        
         <BrowserRouter>
+          {/* Floating Left Navigation - moved inside BrowserRouter */}
+          <FloatingNavigation />
+          
+          {/* Global Chat Widget */}
+          <ChatWidget />
+          
           {/* Global Navigation */}
           <Navigation />
           
