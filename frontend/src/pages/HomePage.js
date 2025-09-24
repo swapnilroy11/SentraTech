@@ -24,7 +24,7 @@ const HomePage = () => {
       description: 'Calculate your potential savings with our intelligent cost analysis tool',
       icon: Calculator,
       preview: 'Interactive sliders showing potential 60% cost reduction',
-      link: '/features',
+      link: '/features#roi-calculator',
       color: '#00FF41'
     },
     {
@@ -40,7 +40,7 @@ const HomePage = () => {
       description: 'Visualize the complete customer support workflow with interactive timeline',
       icon: Route,
       preview: 'Horizontal parallax timeline with 6 automated stages',
-      link: '/features',
+      link: '/features#customer-journey',
       color: '#FFD700'
     }
   ];
