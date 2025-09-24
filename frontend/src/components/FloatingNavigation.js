@@ -11,6 +11,7 @@ import {
   Phone,
   X
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
