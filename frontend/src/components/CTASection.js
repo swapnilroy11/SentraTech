@@ -9,6 +9,7 @@ import {
   Users, Zap, Calendar, Send, Sparkles, Loader2
 } from 'lucide-react';
 import axios from 'axios';
+import { flushSync } from 'react-dom';
 
 const CTASection = () => {
   const [formData, setFormData] = useState({
