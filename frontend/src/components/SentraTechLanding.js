@@ -222,149 +222,103 @@ const SentraTechLanding = () => {
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
         {/* Space-themed WebGL Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#1a1a1a] to-[#0A0A0A]">
-          {/* Rotating Galaxy Core */}
+          {/* Data Network Nodes */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 animate-galaxy">
-              <svg className="w-full h-full opacity-20" viewBox="0 0 400 400">
-                {/* Central Galaxy Core */}
-                <circle cx="200" cy="200" r="8" fill="#00FF41" className="animate-pulse">
-                  <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite" />
-                </circle>
+            <svg className="w-full h-full opacity-20" viewBox="0 0 1920 1080">
+              {/* Network Nodes */}
+              {[...Array(40)].map((_, i) => {
+                const x = (i % 8) * 240 + 120 + Math.random() * 100;
+                const y = Math.floor(i / 8) * 180 + 90 + Math.random() * 100;
                 
-                {/* Orbital Rings */}
-                {[60, 100, 140, 180].map((radius, i) => (
-                  <circle 
-                    key={i}
-                    cx="200" 
-                    cy="200" 
-                    r={radius} 
-                    fill="none" 
-                    stroke="#00FF41" 
-                    strokeWidth="1" 
-                    opacity={0.3 - i * 0.05}
-                    strokeDasharray="5 10"
-                  />
-                ))}
-                
-                {/* Data Nodes */}
-                {[...Array(24)].map((_, i) => {
-                  const angle = (i * 15) * (Math.PI / 180);
-                  const radius = 80 + (i % 3) * 40;
-                  const x = 200 + Math.cos(angle) * radius;
-                  const y = 200 + Math.sin(angle) * radius;
-                  
-                  return (
-                    <g key={i}>
-                      <circle 
-                        cx={x} 
-                        cy={y} 
-                        r="3" 
-                        fill="#00FF41"
-                        opacity="0.6"
-                      >
-                        <animate 
-                          attributeName="opacity" 
-                          values="0.3;0.9;0.3" 
-                          dur={`${2 + (i % 3)}s`}
-                          repeatCount="indefinite"
-                          begin={`${i * 0.1}s`}
-                        />
-                      </circle>
-                      
-                      {/* Connection Lines */}
-                      {i < 23 && (
-                        <line
-                          x1={x}
-                          y1={y}
-                          x2={200 + Math.cos(((i + 1) * 15) * (Math.PI / 180)) * (80 + ((i + 1) % 3) * 40)}
-                          y2={200 + Math.sin(((i + 1) * 15) * (Math.PI / 180)) * (80 + ((i + 1) % 3) * 40)}
-                          stroke="#00DDFF"
-                          strokeWidth="1"
-                          opacity="0.2"
-                          className="animate-data-flow"
-                          style={{ animationDelay: `${i * 0.2}s` }}
-                        />
-                      )}
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
+                return (
+                  <g key={i}>
+                    <circle 
+                      cx={x} 
+                      cy={y} 
+                      r="2" 
+                      fill="#00FF41"
+                      opacity="0.6"
+                    >
+                      <animate 
+                        attributeName="opacity" 
+                        values="0.3;0.9;0.3" 
+                        dur={`${2 + (i % 3)}s`}
+                        repeatCount="indefinite"
+                        begin={`${i * 0.1}s`}
+                      />
+                    </circle>
+                    
+                    {/* Connection Lines */}
+                    {i < 39 && (i % 8) < 7 && (
+                      <line
+                        x1={x}
+                        y1={y}
+                        x2={(((i + 1) % 8) * 240) + 120 + Math.random() * 100}
+                        y2={Math.floor((i + 1) / 8) * 180 + 90 + Math.random() * 100}
+                        stroke="#00FF41"
+                        strokeWidth="1"
+                        opacity="0.2"
+                        strokeDasharray="2 4"
+                        className="animate-data-flow"
+                        style={{ animationDelay: `${i * 0.2}s` }}
+                      />
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
           </div>
 
-          {/* Shooting Stars */}
+          {/* Enhanced Shooting Stars - Higher Density */}
           <div className="absolute inset-0">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(25)].map((_, i) => (
               <div
                 key={i}
                 className="absolute animate-shooting-star"
                 style={{
-                  left: `${20 + i * 15}%`,
-                  top: `${10 + i * 12}%`,
-                  animationDelay: `${i * 2}s`,
-                  animationDuration: '4s'
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 8}s`,
+                  animationDuration: `${2 + Math.random() * 3}s`
                 }}
               >
-                <div className="w-1 h-16 bg-gradient-to-b from-transparent via-[#00FF41] to-transparent opacity-60 transform rotate-45"></div>
+                <div 
+                  className="w-1 h-20 opacity-80 transform rotate-45"
+                  style={{
+                    background: `linear-gradient(to bottom, 
+                      transparent, 
+                      ${i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? '#e0f2fe' : '#b3e5fc'}, 
+                      transparent)`
+                  }}
+                />
               </div>
             ))}
           </div>
 
-          {/* Planetary Orbs - Omnichannel Coverage */}
+          {/* Additional Twinkling Stars */}
           <div className="absolute inset-0">
-            {[
-              { icon: Phone, x: '15%', y: '20%', color: '#00FF41', label: 'Voice' },
-              { icon: MessageSquare, x: '85%', y: '25%', color: '#00DDFF', label: 'Chat' },
-              { icon: Globe, x: '20%', y: '80%', color: '#C0C0C0', label: 'Web' },
-              { icon: Users, x: '80%', y: '75%', color: '#00FF41', label: 'Social' }
-            ].map((planet, i) => {
-              const IconComponent = planet.icon;
-              return (
-                <div
-                  key={i}
-                  className="absolute animate-planet-pulse"
-                  style={{
-                    left: planet.x,
-                    top: planet.y,
-                    animationDelay: `${i * 1.5}s`,
-                    animationDuration: '6s'
-                  }}
-                >
-                  <div className="relative">
-                    {/* Planet Glow */}
-                    <div 
-                      className="absolute inset-0 rounded-full blur-md"
-                      style={{
-                        background: `radial-gradient(circle, ${planet.color}40, transparent)`,
-                        width: '60px',
-                        height: '60px',
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                    />
-                    {/* Planet Core */}
-                    <div 
-                      className="w-8 h-8 rounded-full flex items-center justify-center border"
-                      style={{
-                        background: `${planet.color}20`,
-                        borderColor: planet.color
-                      }}
-                    >
-                      <IconComponent size={16} style={{ color: planet.color }} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {[...Array(60)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full opacity-30"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animation: `twinkle ${2 + Math.random() * 4}s ease-in-out infinite`,
+                  animationDelay: `${Math.random() * 3}s`
+                }}
+              />
+            ))}
           </div>
 
           {/* Matrix Digital Rain Effect */}
           <div className="absolute inset-0 opacity-5">
-            {[...Array(15)].map((_, i) => (
+            {[...Array(20)].map((_, i) => (
               <div
                 key={i}
                 className="digital-rain absolute text-xs"
                 style={{
-                  left: `${i * 7}%`,
+                  left: `${i * 5}%`,
                   animationDelay: `${Math.random() * 5}s`,
                   animationDuration: `${5 + Math.random() * 3}s`
                 }}
