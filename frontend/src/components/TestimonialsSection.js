@@ -45,9 +45,9 @@ const TestimonialsSection = () => {
             <Users className="mr-2" size={14} />
             Customer Success Stories
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">Trusted by </span>
-            <span className="text-[#DAFF01]">Industry Leaders</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="text-[#F8F9FA]">Trusted by </span>
+            <span className="text-[#00FF41]">Industry Leaders</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
             See how our AI-powered platform is transforming customer support 
