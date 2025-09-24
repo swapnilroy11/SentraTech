@@ -22,36 +22,86 @@ const CTASection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [contactId, setContactId] = useState('');
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
+    
+    // Clear field error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
+    
+    // Clear general error when user starts typing
     if (error) {
       setError(null);
     }
   };
 
+  const validateField = (field, value) => {
+    switch (field) {
+      case 'name':
+        if (!value.trim()) {
+          return 'Full name is required';
+        }
+        if (value.trim().length < 2) {
+          return 'Name must be at least 2 characters';
+        }
+        return '';
+      
+      case 'email':
+        if (!value.trim()) {
+          return 'Email is required';
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email address';
+        }
+        return '';
+      
+      case 'company':
+        if (!value.trim()) {
+          return 'Company name is required';
+        }
+        return '';
+      
+      case 'phone':
+        if (value && value.trim()) {
+          const phoneRegex = /^[\+]?[\d\s\-\(\)]{7,20}$/;
+          if (!phoneRegex.test(value.trim())) {
+            return 'Please enter a valid phone number';
+          }
+        }
+        return '';
+      
+      default:
+        return '';
+    }
+  };
+
   const validateForm = () => {
-    if (!formData.name.trim()) {
-      setError('Full name is required');
-      return false;
-    }
-    if (!formData.email.trim()) {
-      setError('Email is required');
-      return false;
-    }
-    if (!formData.company.trim()) {
-      setError('Company name is required');
-      return false;
-    }
+    const errors = {};
+    let hasErrors = false;
     
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
+    // Validate all required fields
+    ['name', 'email', 'company', 'phone'].forEach(field => {
+      const error = validateField(field, formData[field]);
+      if (error) {
+        errors[field] = error;
+        hasErrors = true;
+      }
+    });
+    
+    setFieldErrors(errors);
+    
+    if (hasErrors) {
+      setError('Please fix the highlighted fields below');
       return false;
     }
     
@@ -67,6 +117,7 @@ const CTASection = () => {
     
     setIsSubmitting(true);
     setError(null);
+    setFieldErrors({});
     
     try {
       const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
