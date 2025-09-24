@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Brand Kit Title -->
+  <rect width="1200" height="800" fill="#0A0A0A"/>
+  <text x="600" y="50" font-family="Rajdhani, sans-serif" font-size="28" font-weight="700" fill="#00FF41" text-anchor="middle">
+    SentraTech Complete Logo Collection
+  </text>
+  
+  <!-- Primary Logo - Full Version -->
+  <g transform="translate(50, 100)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">Primary Logo - Horizontal</text>
+    <rect x="0" y="0" width="280" height="80" fill="#1a1a1a" stroke="#2a2a2a" rx="8"/>
+    
+    <!-- Logo Icon -->
+    <g transform="translate(20, 16)">
+      <rect width="48" height="48" rx="6" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#FFFFFF" />
+        <polygon points="22,12 34,2 30,12" fill="#FFFFFF" />
+        <polygon points="30,12 34,18 22,22" fill="#FFFFFF" />
+        <polygon points="22,22 34,34 22,30" fill="#FFFFFF" />
+        <polygon points="22,30 14,30 18,34" fill="#FFFFFF" />
+        <polygon points="14,30 2,34 6,22" fill="#FFFFFF" />
+        <polygon points="6,22 2,18 14,12" fill="#FFFFFF" />
+        <polygon points="14,12 2,2 6,12" fill="#FFFFFF" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#FFFFFF" />
+        <polygon points="18,14 20,18 18,22 16,18" fill="#000000" />
+      </g>
+    </g>
+    
+    <!-- Text -->
+    <g transform="translate(80, 32)">
+      <text x="0" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#00FF41">SENTRA</text>
+      <text x="90" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#F8F9FA">TECH</text>
+    </g>
+  </g>
+  
+  <!-- Icon Only Version -->
+  <g transform="translate(380, 100)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">Icon Only</text>
+    <rect x="0" y="0" width="80" height="80" fill="#1a1a1a" stroke="#2a2a2a" rx="8"/>
+    
+    <g transform="translate(16, 16)">
+      <rect width="48" height="48" rx="6" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#FFFFFF" />
+        <polygon points="22,12 34,2 30,12" fill="#FFFFFF" />
+        <polygon points="30,12 34,18 22,22" fill="#FFFFFF" />
+        <polygon points="22,22 34,34 22,30" fill="#FFFFFF" />
+        <polygon points="22,30 14,30 18,34" fill="#FFFFFF" />
+        <polygon points="14,30 2,34 6,22" fill="#FFFFFF" />
+        <polygon points="6,22 2,18 14,12" fill="#FFFFFF" />
+        <polygon points="14,12 2,2 6,12" fill="#FFFFFF" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#FFFFFF" />
+        <polygon points="18,14 20,18 18,22 16,18" fill="#000000" />
+      </g>
+    </g>
+  </g>
+  
+  <!-- Stacked Version -->
+  <g transform="translate(500, 100)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">Stacked Version</text>
+    <rect x="0" y="0" width="120" height="120" fill="#1a1a1a" stroke="#2a2a2a" rx="8"/>
+    
+    <g transform="translate(36, 16)">
+      <rect width="48" height="48" rx="6" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#FFFFFF" />
+        <polygon points="22,12 34,2 30,12" fill="#FFFFFF" />
+        <polygon points="30,12 34,18 22,22" fill="#FFFFFF" />
+        <polygon points="22,22 34,34 22,30" fill="#FFFFFF" />
+        <polygon points="22,30 14,30 18,34" fill="#FFFFFF" />
+        <polygon points="14,30 2,34 6,22" fill="#FFFFFF" />
+        <polygon points="6,22 2,18 14,12" fill="#FFFFFF" />
+        <polygon points="14,12 2,2 6,12" fill="#FFFFFF" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#FFFFFF" />
+        <polygon points="18,14 20,18 18,22 16,18" fill="#000000" />
+      </g>
+    </g>
+    
+    <text x="60" y="85" font-family="Rajdhani, sans-serif" font-size="16" font-weight="700" fill="#00FF41" text-anchor="middle">SENTRA</text>
+    <text x="60" y="105" font-family="Rajdhani, sans-serif" font-size="16" font-weight="700" fill="#F8F9FA" text-anchor="middle">TECH</text>
+  </g>
+  
+  <!-- White Background Version -->
+  <g transform="translate(660, 100)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">White Background</text>
+    <rect x="0" y="0" width="280" height="80" fill="#F8F9FA" stroke="#e2e8f0" rx="8"/>
+    
+    <!-- Logo Icon -->
+    <g transform="translate(20, 16)">
+      <rect width="48" height="48" rx="6" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#FFFFFF" />
+        <polygon points="22,12 34,2 30,12" fill="#FFFFFF" />
+        <polygon points="30,12 34,18 22,22" fill="#FFFFFF" />
+        <polygon points="22,22 34,34 22,30" fill="#FFFFFF" />
+        <polygon points="22,30 14,30 18,34" fill="#FFFFFF" />
+        <polygon points="14,30 2,34 6,22" fill="#FFFFFF" />
+        <polygon points="6,22 2,18 14,12" fill="#FFFFFF" />
+        <polygon points="14,12 2,2 6,12" fill="#FFFFFF" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#FFFFFF" />
+        <polygon points="18,14 20,18 18,22 16,18" fill="#000000" />
+      </g>
+    </g>
+    
+    <!-- Text -->
+    <g transform="translate(80, 32)">
+      <text x="0" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#00FF41">SENTRA</text>
+      <text x="90" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#000000">TECH</text>
+    </g>
+  </g>
+  
+  <!-- Minimal Version - Green Only -->
+  <g transform="translate(50, 220)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">Minimal - Matrix Green</text>
+    <rect x="0" y="0" width="280" height="80" fill="#1a1a1a" stroke="#2a2a2a" rx="8"/>
+    
+    <!-- Logo Icon -->
+    <g transform="translate(20, 16)">
+      <rect width="48" height="48" rx="6" fill="transparent" stroke="#00FF41" stroke-width="1"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#00FF41" />
+        <polygon points="22,12 34,2 30,12" fill="#00FF41" />
+        <polygon points="30,12 34,18 22,22" fill="#00FF41" />
+        <polygon points="22,22 34,34 22,30" fill="#00FF41" />
+        <polygon points="22,30 14,30 18,34" fill="#00FF41" />
+        <polygon points="14,30 2,34 6,22" fill="#00FF41" />
+        <polygon points="6,22 2,18 14,12" fill="#00FF41" />
+        <polygon points="14,12 2,2 6,12" fill="#00FF41" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#00FF41" />
+      </g>
+    </g>
+    
+    <!-- Text -->
+    <g transform="translate(80, 32)">
+      <text x="0" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#00FF41">SENTRA</text>
+      <text x="90" y="20" font-family="Rajdhani, sans-serif" font-size="24" font-weight="700" fill="#00FF41">TECH</text>
+    </g>
+  </g>
+  
+  <!-- Favicon Sizes -->
+  <g transform="translate(50, 340)">
+    <text x="0" y="-15" font-family="Rajdhani, sans-serif" font-size="16" fill="#F8F9FA">Favicon Sizes</text>
+    
+    <!-- 16x16 -->
+    <g transform="translate(0, 10)">
+      <text x="0" y="-5" font-family="Rajdhani, sans-serif" font-size="12" fill="#a1a1aa">16x16</text>
+      <rect width="16" height="16" rx="2" fill="#000000" stroke="#333333" stroke-width="0.3"/>
+      <polygon points="8,1 6,6 10,6" fill="#FFFFFF" />
+      <polygon points="10,6 15,1 13,6" fill="#FFFFFF" />
+      <polygon points="13,6 15,8 10,10" fill="#FFFFFF" />
+      <polygon points="10,10 15,15 10,13" fill="#FFFFFF" />
+      <polygon points="10,13 6,13 8,15" fill="#FFFFFF" />
+      <polygon points="6,13 1,15 3,10" fill="#FFFFFF" />
+      <polygon points="3,10 1,8 6,6" fill="#FFFFFF" />
+      <polygon points="6,6 1,1 3,6" fill="#FFFFFF" />
+      <polygon points="8,6 10,8 8,10 6,8" fill="#FFFFFF" />
+    </g>
+    
+    <!-- 32x32 -->
+    <g transform="translate(30, 10)">
+      <text x="0" y="-5" font-family="Rajdhani, sans-serif" font-size="12" fill="#a1a1aa">32x32</text>
+      <rect width="32" height="32" rx="3" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(4, 4)">
+        <polygon points="12,1 9,8 15,8" fill="#FFFFFF" />
+        <polygon points="15,8 23,1 20,8" fill="#FFFFFF" />
+        <polygon points="20,8 23,12 15,15" fill="#FFFFFF" />
+        <polygon points="15,15 23,23 15,20" fill="#FFFFFF" />
+        <polygon points="15,20 9,20 12,23" fill="#FFFFFF" />
+        <polygon points="9,20 1,23 4,15" fill="#FFFFFF" />
+        <polygon points="4,15 1,12 9,8" fill="#FFFFFF" />
+        <polygon points="9,8 1,1 4,8" fill="#FFFFFF" />
+        <polygon points="12,8 15,12 12,16 9,12" fill="#FFFFFF" />
+      </g>
+    </g>
+    
+    <!-- 64x64 -->
+    <g transform="translate(80, 10)">
+      <text x="0" y="-5" font-family="Rajdhani, sans-serif" font-size="12" fill="#a1a1aa">64x64</text>
+      <rect width="48" height="48" rx="6" fill="#000000" stroke="#333333" stroke-width="0.5"/>
+      <g transform="translate(6, 6)">
+        <polygon points="18,2 14,12 22,12" fill="#FFFFFF" />
+        <polygon points="22,12 34,2 30,12" fill="#FFFFFF" />
+        <polygon points="30,12 34,18 22,22" fill="#FFFFFF" />
+        <polygon points="22,22 34,34 22,30" fill="#FFFFFF" />
+        <polygon points="22,30 14,30 18,34" fill="#FFFFFF" />
+        <polygon points="14,30 2,34 6,22" fill="#FFFFFF" />
+        <polygon points="6,22 2,18 14,12" fill="#FFFFFF" />
+        <polygon points="14,12 2,2 6,12" fill="#FFFFFF" />
+        <polygon points="18,12 22,18 18,24 14,18" fill="#FFFFFF" />
+        <polygon points="18,14 20,18 18,22 16,18" fill="#000000" />
+      </g>
+    </g>
+  </g>
+  
+  <!-- Usage Guidelines -->
+  <g transform="translate(50, 480)">
+    <text x="0" y="0" font-family="Rajdhani, sans-serif" font-size="20" font-weight="600" fill="#F8F9FA">Usage Guidelines</text>
+    
+    <text x="0" y="30" font-family="Rajdhani, sans-serif" font-size="14" font-weight="500" fill="#00FF41">✓ Do's</text>
+    <text x="0" y="50" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Maintain minimum clear space of 1x logo height</text>
+    <text x="0" y="65" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Use on high contrast backgrounds only</text>
+    <text x="0" y="80" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Keep SENTRA green (#00FF41) and TECH white (#F8F9FA)</text>
+    <text x="0" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Scale proportionally - never stretch or distort</text>
+    
+    <text x="400" y="30" font-family="Rajdhani, sans-serif" font-size="14" font-weight="500" fill="#ff4444">✗ Don'ts</text>
+    <text x="400" y="50" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Never change the star pattern or geometry</text>
+    <text x="400" y="65" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Don't place on busy or low-contrast backgrounds</text>
+    <text x="400" y="80" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Never use different colors for SENTRA and TECH</text>
+    <text x="400" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#e2e8f0">• Don't rotate or skew the logo elements</text>
+  </g>
+  
+  <!-- Color Palette Reference -->
+  <g transform="translate(50, 600)">
+    <text x="0" y="0" font-family="Rajdhani, sans-serif" font-size="20" font-weight="600" fill="#F8F9FA">Brand Colors</text>
+    
+    <!-- Matrix Green -->
+    <rect x="0" y="20" width="80" height="60" fill="#00FF41" rx="8"/>
+    <text x="40" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#F8F9FA" text-anchor="middle">Matrix Green</text>
+    <text x="40" y="110" font-family="Rajdhani, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="middle">#00FF41</text>
+    
+    <!-- Deep Black -->
+    <rect x="100" y="20" width="80" height="60" fill="#0A0A0A" stroke="#2a2a2a" rx="8"/>
+    <text x="140" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#F8F9FA" text-anchor="middle">Deep Black</text>
+    <text x="140" y="110" font-family="Rajdhani, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="middle">#0A0A0A</text>
+    
+    <!-- Pure White -->
+    <rect x="200" y="20" width="80" height="60" fill="#F8F9FA" stroke="#2a2a2a" rx="8"/>
+    <text x="240" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#F8F9FA" text-anchor="middle">Pure White</text>
+    <text x="240" y="110" font-family="Rajdhani, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="middle">#F8F9FA</text>
+    
+    <!-- Dark Gray -->
+    <rect x="300" y="20" width="80" height="60" fill="#1a1a1a" stroke="#2a2a2a" rx="8"/>
+    <text x="340" y="95" font-family="Rajdhani, sans-serif" font-size="12" fill="#F8F9FA" text-anchor="middle">Dark Gray</text>
+    <text x="340" y="110" font-family="Rajdhani, sans-serif" font-size="10" fill="#a1a1aa" text-anchor="middle">#1a1a1a</text>
+  </g>
+</svg>
