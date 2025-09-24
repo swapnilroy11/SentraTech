@@ -1,0 +1,291 @@
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Slider } from './ui/slider';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { 
+  Calculator, TrendingUp, DollarSign, Clock, 
+  Users, BarChart3, ArrowUp, ArrowDown, Zap
+} from 'lucide-react';
+
+const ROICalculator = () => {
+  const [callVolume, setCallVolume] = useState([25000]);
+  const [currentCostPerCall, setCurrentCostPerCall] = useState(8.5);
+  const [averageHandleTime, setAverageHandleTime] = useState(480); // seconds
+  const [agentCount, setAgentCount] = useState(50);
+  const [results, setResults] = useState({});
+
+  // Calculate ROI based on inputs
+  useEffect(() => {
+    const monthlyVolume = callVolume[0];
+    const currentMonthlyCost = monthlyVolume * currentCostPerCall;
+    const currentAnnualCost = currentMonthlyCost * 12;
+    
+    // SentraTech improvements
+    const automationRate = 0.7; // 70% automation
+    const ahtReduction = 0.35; // 35% AHT reduction
+    const costReduction = 0.45; // 45% cost reduction
+    
+    const newCostPerCall = currentCostPerCall * (1 - costReduction);
+    const newMonthlyCost = monthlyVolume * newCostPerCall;
+    const newAnnualCost = newMonthlyCost * 12;
+    
+    const monthlySavings = currentMonthlyCost - newMonthlyCost;
+    const annualSavings = currentAnnualCost - newAnnualCost;
+    
+    const newAHT = averageHandleTime * (1 - ahtReduction);
+    const timeSavedPerCall = averageHandleTime - newAHT;
+    const totalTimeSavedMonthly = (timeSavedPerCall * monthlyVolume) / 3600; // hours
+    
+    const automatedCalls = monthlyVolume * automationRate;
+    const humanAssistedCalls = monthlyVolume * (1 - automationRate);
+    
+    setResults({
+      currentMonthlyCost,
+      currentAnnualCost,
+      newMonthlyCost,
+      newAnnualCost,
+      monthlySavings,
+      annualSavings,
+      costReductionPercent: costReduction * 100,
+      newAHT,
+      timeSavedPerCall,
+      totalTimeSavedMonthly,
+      ahtReductionPercent: ahtReduction * 100,
+      automatedCalls,
+      humanAssistedCalls,
+      automationRate: automationRate * 100,
+      roi: (annualSavings / newAnnualCost) * 100
+    });
+  }, [callVolume, currentCostPerCall, averageHandleTime, agentCount]);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}m ${remainingSeconds}s`;
+  };
+
+  return (
+    <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
+      <div className="container mx-auto px-6">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <Badge className="mb-4 bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+            <Calculator className="mr-2" size={14} />
+            ROI Calculator
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="text-white">Calculate Your </span>
+            <span className="text-[#DAFF01]">Savings</span>
+          </h2>
+          <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
+            See the potential cost savings and efficiency gains from implementing 
+            our AI-powered customer support platform.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+          {/* Input Controls */}
+          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
+            <CardHeader className="p-0 mb-8">
+              <CardTitle className="text-2xl text-white flex items-center space-x-3">
+                <div className="p-3 bg-[#DAFF01]/20 rounded-xl border border-[#DAFF01]/50">
+                  <BarChart3 size={24} className="text-[#DAFF01]" />
+                </div>
+                <span>Your Current Metrics</span>
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="p-0 space-y-8">
+              {/* Monthly Call Volume */}
+              <div>
+                <Label className="text-white text-lg mb-4 block">
+                  Monthly Call Volume: {callVolume[0].toLocaleString()} calls
+                </Label>
+                <Slider
+                  value={callVolume}
+                  onValueChange={setCallVolume}
+                  max={500000}
+                  min={1000}
+                  step={1000}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
+                  <span>1,000</span>
+                  <span>500,000+</span>
+                </div>
+              </div>
+
+              {/* Cost Per Call */}
+              <div>
+                <Label htmlFor="costPerCall" className="text-white text-lg mb-4 block">
+                  Current Cost Per Call
+                </Label>
+                <div className="relative">
+                  <DollarSign size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Input
+                    id="costPerCall"
+                    type="number"
+                    value={currentCostPerCall}
+                    onChange={(e) => setCurrentCostPerCall(parseFloat(e.target.value) || 0)}
+                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                    step="0.1"
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              {/* Average Handle Time */}
+              <div>
+                <Label htmlFor="aht" className="text-white text-lg mb-4 block">
+                  Average Handle Time: {formatTime(averageHandleTime)}
+                </Label>
+                <div className="relative">
+                  <Clock size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Input
+                    id="aht"
+                    type="number"
+                    value={averageHandleTime}
+                    onChange={(e) => setAverageHandleTime(parseInt(e.target.value) || 0)}
+                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                    placeholder="Seconds"
+                  />
+                </div>
+              </div>
+
+              {/* Agent Count */}
+              <div>
+                <Label htmlFor="agents" className="text-white text-lg mb-4 block">
+                  Current Agent Count
+                </Label>
+                <div className="relative">
+                  <Users size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Input
+                    id="agents"
+                    type="number"
+                    value={agentCount}
+                    onChange={(e) => setAgentCount(parseInt(e.target.value) || 0)}
+                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Results Display */}
+          <div className="space-y-6">
+            {/* Cost Savings Card */}
+            <Card className="bg-gradient-to-br from-[#DAFF01]/10 to-[#00DDFF]/10 border-2 border-[#DAFF01] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-2xl text-white flex items-center space-x-3">
+                  <TrendingUp size={24} className="text-[#DAFF01]" />
+                  <span>Projected Savings</span>
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="p-0">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-3xl font-bold text-[#DAFF01] mb-2">
+                      {formatCurrency(results.monthlySavings || 0)}
+                    </div>
+                    <div className="text-[rgb(218,218,218)] text-sm">Monthly Savings</div>
+                    <div className="flex items-center justify-center mt-2 text-[#DAFF01]">
+                      <ArrowDown size={16} className="mr-1" />
+                      <span className="text-sm">{results.costReductionPercent?.toFixed(0)}%</span>
+                    </div>
+                  </div>
+
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-3xl font-bold text-[#00DDFF] mb-2">
+                      {formatCurrency(results.annualSavings || 0)}
+                    </div>
+                    <div className="text-[rgb(218,218,218)] text-sm">Annual Savings</div>
+                    <div className="flex items-center justify-center mt-2 text-[#00DDFF]">
+                      <ArrowUp size={16} className="mr-1" />
+                      <span className="text-sm">{results.roi?.toFixed(0)}% ROI</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Performance Improvements */}
+            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-xl text-white flex items-center space-x-3">
+                  <Zap size={20} className="text-[#00DDFF]" />
+                  <span>Performance Improvements</span>
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="p-0 space-y-4">
+                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
+                  <div>
+                    <div className="text-white font-semibold">Average Handle Time</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">
+                      {formatTime(averageHandleTime)} → {formatTime(results.newAHT || 0)}
+                    </div>
+                  </div>
+                  <Badge className="bg-[#DAFF01]/20 text-[#DAFF01] border-[#DAFF01]/30">
+                    -{results.ahtReductionPercent?.toFixed(0)}%
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
+                  <div>
+                    <div className="text-white font-semibold">Automated Interactions</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">
+                      {results.automatedCalls?.toLocaleString()} calls/month
+                    </div>
+                  </div>
+                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30">
+                    {results.automationRate?.toFixed(0)}%
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
+                  <div>
+                    <div className="text-white font-semibold">Time Saved Monthly</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">
+                      {results.totalTimeSavedMonthly?.toLocaleString()} agent hours
+                    </div>
+                  </div>
+                  <Badge className="bg-[rgb(192,192,192)]/20 text-[rgb(192,192,192)] border-[rgb(192,192,192)]/30">
+                    Efficiency
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* CTA */}
+            <div className="text-center">
+              <Button 
+                size="lg"
+                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200"
+              >
+                Get Detailed ROI Report
+              </Button>
+              <p className="text-[rgb(161,161,170)] text-sm mt-4">
+                Schedule a personalized demo to see these results in action
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ROICalculator;
