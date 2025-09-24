@@ -84,10 +84,10 @@ const CTASection = () => {
             <Rocket className="mr-2" size={14} />
             Get Started Today
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">Ready to Transform</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="text-[#F8F9FA]">Ready to Transform</span>
             <br />
-            <span className="text-[#DAFF01]">Your Customer Support?</span>
+            <span className="text-[#00FF41]">Your Customer Support?</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
             Join industry leaders who trust SentraTech to deliver exceptional customer experiences 
