@@ -247,11 +247,11 @@ export const translations = {
       title: "Quick Navigation",
       items: {
         home: "Home",
-        features: "Features",
+        features: "Beyond",
         journey: "Customer Journey", 
         roi: "ROI Calculator",
         testimonials: "Testimonials",
-        pricing: "Pricing",
+        pricing: "Better",
         contact: "Contact"
       },
       footer: "SentraTech Navigation"
