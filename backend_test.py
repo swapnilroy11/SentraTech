@@ -2361,8 +2361,10 @@ class UserManagementTester:
         print("\n=== Testing User Registration ===")
         
         # Test Case 1: Valid registration with all requirements
+        import uuid
+        unique_id = str(uuid.uuid4())[:8]
         valid_user = {
-            "email": "john.doe@testcompany.com",
+            "email": f"john.doe.{unique_id}@testcompany.com",
             "password": "SecurePass123",
             "full_name": "John Doe",
             "company": "Test Company Inc"
