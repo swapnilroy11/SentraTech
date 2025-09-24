@@ -46,6 +46,54 @@ const SentraTechLanding = () => {
     // Remove mock chat messages loading
   }, []);
 
+  // Custom cursor effect
+  useEffect(() => {
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    document.body.appendChild(cursor);
+
+    const particles = [];
+    
+    const moveCursor = (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      
+      // Create particle trail
+      if (Math.random() > 0.7) {
+        const particle = document.createElement('div');
+        particle.className = 'cursor-particle';
+        particle.style.left = e.clientX + 'px';
+        particle.style.top = e.clientY + 'px';
+        particle.style.background = '#00FF41';
+        document.body.appendChild(particle);
+        
+        particles.push(particle);
+        
+        setTimeout(() => {
+          particle.remove();
+          particles.splice(particles.indexOf(particle), 1);
+        }, 500);
+      }
+    };
+
+    document.addEventListener('mousemove', moveCursor);
+    
+    return () => {
+      document.removeEventListener('mousemove', moveCursor);
+      cursor.remove();
+      particles.forEach(p => p.remove());
+    };
+  }, []);
+
+  // Cleanup WebSocket on component unmount
+  useEffect(() => {
+    return () => {
+      if (websocket) {
+        websocket.close();
+      }
+    };
+  }, [websocket]);
+
   // Live Chat Integration Functions
   const createChatSession = async () => {
     try {
