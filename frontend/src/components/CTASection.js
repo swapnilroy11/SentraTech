@@ -272,7 +272,7 @@ const CTASection = () => {
                 <Button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold py-4 rounded-xl transform hover:scale-105 transition-all duration-200"
+                  className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-4 rounded-xl transform hover:scale-105 transition-all duration-200 font-rajdhani"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center justify-center space-x-2">
