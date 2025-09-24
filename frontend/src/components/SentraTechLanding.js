@@ -203,31 +203,130 @@ const SentraTechLanding = () => {
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Animated Background */}
+        {/* AI-Powered Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
-          {/* Particle Animation */}
-          <div className="absolute inset-0 opacity-30">
-            {[...Array(50)].map((_, i) => (
+          {/* Neural Network Animation */}
+          <div className="absolute inset-0 opacity-20">
+            <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+              {/* Neural Network Nodes */}
+              {[...Array(25)].map((_, i) => {
+                const x = (i % 5) * 400 + 200 + Math.random() * 100;
+                const y = Math.floor(i / 5) * 200 + 150 + Math.random() * 100;
+                return (
+                  <g key={i}>
+                    <circle 
+                      cx={x} 
+                      cy={y} 
+                      r="4" 
+                      fill="#DAFF01" 
+                      className="animate-pulse"
+                      style={{
+                        animationDelay: `${i * 0.2}s`,
+                        animationDuration: `${2 + Math.random()}s`
+                      }}
+                    />
+                    {/* Connection Lines */}
+                    {i < 20 && (
+                      <line
+                        x1={x}
+                        y1={y}
+                        x2={(i + 5) % 5 === 0 ? x + 400 : ((i + 5) % 5) * 400 + 200 + Math.random() * 100}
+                        y2={(i + 5) % 5 === 0 ? y : Math.floor((i + 5) / 5) * 200 + 150 + Math.random() * 100}
+                        stroke="#00DDFF"
+                        strokeWidth="1"
+                        opacity="0.3"
+                        className="animate-pulse"
+                        style={{ animationDelay: `${i * 0.1}s` }}
+                      />
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+
+          {/* Data Flow Animation */}
+          <div className="absolute inset-0 opacity-15">
+            {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-[#DAFF01] rounded-full animate-pulse"
+                className="absolute animate-float"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${2 + Math.random() * 3}s`
+                  left: `${10 + i * 12}%`,
+                  top: `${20 + Math.random() * 60}%`,
+                  animationDelay: `${i * 0.5}s`,
+                  animationDuration: `${4 + Math.random() * 2}s`
                 }}
-              />
+              >
+                <div className="flex items-center space-x-2 text-[#DAFF01] text-xs opacity-50">
+                  <MessageSquare size={12} />
+                  <span>AI Route</span>
+                  <ArrowRight size={10} />
+                </div>
+              </div>
             ))}
           </div>
           
-          {/* 3D Polyhedron Effect */}
+          {/* Central AI Brain Visualization */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-96 h-96 opacity-10 animate-spin-slow">
-              <div className="w-full h-full border border-[#DAFF01] transform rotate-45 rounded-3xl"></div>
-              <div className="absolute inset-8 border border-[#00DDFF] transform -rotate-45 rounded-3xl"></div>
-              <div className="absolute inset-16 border border-[rgb(192,192,192)] transform rotate-12 rounded-3xl"></div>
+            <div className="relative w-80 h-80 opacity-10">
+              {/* Rotating AI Brain Core */}
+              <div className="absolute inset-0 animate-spin-slow">
+                <div className="w-full h-full border-2 border-[#DAFF01] rounded-full"></div>
+                <div className="absolute inset-4 border border-[#00DDFF] rounded-full"></div>
+                <div className="absolute inset-8 border border-[rgb(192,192,192)] rounded-full"></div>
+                
+                {/* AI Processing Indicators */}
+                {[...Array(12)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-3 h-3 bg-[#DAFF01] rounded-full animate-pulse"
+                    style={{
+                      left: '50%',
+                      top: '50%',
+                      transform: `rotate(${i * 30}deg) translateY(-140px) translateX(-50%)`,
+                      animationDelay: `${i * 0.1}s`,
+                      animationDuration: '2s'
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Sub-50ms Indicator */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-[#DAFF01] text-sm font-bold opacity-30 animate-pulse">
+                  <Zap size={24} />
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Customer Support Icons Floating */}
+          <div className="absolute inset-0">
+            {[
+              { icon: Phone, x: '15%', y: '25%', delay: '0s' },
+              { icon: MessageSquare, x: '85%', y: '35%', delay: '1s' },
+              { icon: Users, x: '20%', y: '75%', delay: '2s' },
+              { icon: BarChart3, x: '80%', y: '20%', delay: '3s' },
+              { icon: Globe, x: '25%', y: '50%', delay: '4s' },
+              { icon: Shield, x: '75%', y: '65%', delay: '5s' }
+            ].map((item, i) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={i}
+                  className="absolute opacity-10 animate-float"
+                  style={{
+                    left: item.x,
+                    top: item.y,
+                    animationDelay: item.delay,
+                    animationDuration: '6s'
+                  }}
+                >
+                  <IconComponent size={32} className="text-[#DAFF01]" />
+                </div>
+              );
+            })}
           </div>
         </div>
 
