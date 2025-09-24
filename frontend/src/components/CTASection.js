@@ -338,8 +338,15 @@ const CTASection = () => {
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       required
-                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl"
+                      className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
+                        fieldErrors.name 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-[rgb(63,63,63)] focus:border-[#00FF41]'
+                      }`}
                     />
+                    {fieldErrors.name && (
+                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.name}</p>
+                    )}
                   </div>
                   <div>
                     <Input
@@ -348,8 +355,15 @@ const CTASection = () => {
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       required
-                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl"
+                      className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
+                        fieldErrors.email 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-[rgb(63,63,63)] focus:border-[#00FF41]'
+                      }`}
                     />
+                    {fieldErrors.email && (
+                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -360,8 +374,15 @@ const CTASection = () => {
                       value={formData.company}
                       onChange={(e) => handleInputChange('company', e.target.value)}
                       required
-                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl"
+                      className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
+                        fieldErrors.company 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-[rgb(63,63,63)] focus:border-[#00FF41]'
+                      }`}
                     />
+                    {fieldErrors.company && (
+                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.company}</p>
+                    )}
                   </div>
                   <div>
                     <Input
@@ -369,8 +390,15 @@ const CTASection = () => {
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl"
+                      className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
+                        fieldErrors.phone 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-[rgb(63,63,63)] focus:border-[#00FF41]'
+                      }`}
                     />
+                    {fieldErrors.phone && (
+                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.phone}</p>
+                    )}
                   </div>
                 </div>
 
