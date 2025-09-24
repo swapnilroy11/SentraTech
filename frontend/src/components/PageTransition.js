@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import LoadingScreen from './LoadingScreen';
 
 const pageVariants = {
   initial: {
@@ -23,25 +24,40 @@ const pageVariants = {
 const pageTransition = {
   type: 'tween',
   ease: 'anticipate',
-  duration: 0.4
+  duration: 0.3
 };
 
 const PageTransition = ({ children }) => {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Show loading state briefly for smooth transitions
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={location.pathname}
-        initial="initial"
-        animate="in"
-        exit="out"
-        variants={pageVariants}
-        transition={pageTransition}
-        className="w-full"
-      >
-        {children}
-      </motion.div>
+      {isLoading ? (
+        <LoadingScreen key="loading" />
+      ) : (
+        <motion.div
+          key={location.pathname}
+          initial="initial"
+          animate="in"
+          exit="out"
+          variants={pageVariants}
+          transition={pageTransition}
+          className="w-full min-h-screen"
+        >
+          {children}
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };
