@@ -430,6 +430,13 @@ const CTASection = () => {
                       placeholder="Company Name *"
                       value={formData.company}
                       onChange={(e) => handleInputChange('company', e.target.value)}
+                      onBlur={(e) => {
+                        // Validate on blur for immediate feedback
+                        const errorMessage = validateField('company', e.target.value);
+                        if (errorMessage) {
+                          setFieldErrors(prev => ({ ...prev, company: errorMessage }));
+                        }
+                      }}
                       required
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.company 
@@ -447,6 +454,15 @@ const CTASection = () => {
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
+                      onBlur={(e) => {
+                        // Validate on blur for immediate feedback (only if not empty)
+                        if (e.target.value.trim()) {
+                          const errorMessage = validateField('phone', e.target.value);
+                          if (errorMessage) {
+                            setFieldErrors(prev => ({ ...prev, phone: errorMessage }));
+                          }
+                        }
+                      }}
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.phone 
                           ? 'border-red-500 focus:border-red-500' 
