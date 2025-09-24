@@ -6,39 +6,49 @@ import LoadingScreen from './LoadingScreen';
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 20,
-    scale: 0.98
+    y: 20
   },
   in: {
     opacity: 1,
-    y: 0,
-    scale: 1
+    y: 0
   },
   out: {
     opacity: 0,
-    y: -20,
-    scale: 1.02
+    y: -20
   }
 };
 
 const pageTransition = {
   type: 'tween',
-  ease: 'anticipate',
-  duration: 0.3
+  ease: 'easeInOut',
+  duration: 0.2
 };
 
 const PageTransition = ({ children }) => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // Show loading state briefly for smooth transitions
+    console.log('PageTransition: Navigating to', location.pathname);
+    
+    // Show loading state
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
+    setShowContent(false);
+    
+    // Use requestAnimationFrame to ensure smooth transitions
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsLoading(false);
+        setShowContent(true);
+      });
+    });
 
-    return () => clearTimeout(timer);
+    // Cleanup function
+    return () => {
+      setIsLoading(false);
+      setShowContent(false);
+    };
   }, [location.pathname]);
 
   return (
@@ -54,8 +64,17 @@ const PageTransition = ({ children }) => {
           variants={pageVariants}
           transition={pageTransition}
           className="w-full min-h-screen"
+          style={{ 
+            backgroundColor: '#0A0A0A', 
+            minHeight: '100vh',
+            position: 'relative',
+            zIndex: 1
+          }}
+          onAnimationComplete={() => {
+            console.log('PageTransition: Animation complete for', location.pathname);
+          }}
         >
-          {children}
+          {showContent && children}
         </motion.div>
       )}
     </AnimatePresence>
