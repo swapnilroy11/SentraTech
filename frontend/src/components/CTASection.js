@@ -313,7 +313,7 @@ const CTASection = () => {
               <div className="text-[rgb(161,161,170)] text-sm">Compliant</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#DAFF01] mb-1">30-day</div>
+              <div className="text-2xl font-bold text-[#00FF41] mb-1 font-rajdhani">30-day</div>
               <div className="text-[rgb(161,161,170)] text-sm">Free Trial</div>
             </div>
           </div>
