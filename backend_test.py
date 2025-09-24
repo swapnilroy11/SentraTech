@@ -2705,7 +2705,7 @@ class UserManagementTester:
         
         # Test Case 3: Request password reset
         reset_request = {
-            "email": "login.test@company.com"  # From our test user
+            "email": test_user["email"]  # From our test user
         }
         
         try:
