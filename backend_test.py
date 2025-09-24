@@ -1486,25 +1486,30 @@ if __name__ == "__main__":
     roi_tester = ROICalculatorTester()
     roi_success = roi_tester.run_all_tests()
     
-    # Test Demo Request & CRM Integration (new functionality)
+    # Test Demo Request & CRM Integration (existing functionality)
     print("\n📝 TESTING DEMO REQUEST & CRM INTEGRATION")
     demo_tester = DemoRequestTester()
     demo_success = demo_tester.run_all_tests()
+    
+    # Test Live Chat Integration (new functionality)
+    print("\n💬 TESTING LIVE CHAT INTEGRATION")
+    chat_tester = LiveChatTester()
+    chat_success = chat_tester.run_all_tests()
     
     # Overall summary
     print("\n" + "=" * 60)
     print("🎯 OVERALL TEST SUMMARY")
     print("=" * 60)
     
-    total_tests = len(roi_tester.test_results) + len(demo_tester.test_results)
-    total_passed = len(roi_tester.passed_tests) + len(demo_tester.passed_tests)
-    total_failed = len(roi_tester.failed_tests) + len(demo_tester.failed_tests)
+    total_tests = len(roi_tester.test_results) + len(demo_tester.test_results) + len(chat_tester.test_results)
+    total_passed = len(roi_tester.passed_tests) + len(demo_tester.passed_tests) + len(chat_tester.passed_tests)
+    total_failed = len(roi_tester.failed_tests) + len(demo_tester.failed_tests) + len(chat_tester.failed_tests)
     
     print(f"Total Tests Run: {total_tests}")
     print(f"✅ Total Passed: {total_passed}")
     print(f"❌ Total Failed: {total_failed}")
     
-    if roi_success and demo_success:
+    if roi_success and demo_success and chat_success:
         print("\n🎉 ALL TESTS PASSED! Backend API is working correctly.")
     else:
         print(f"\n⚠️  Some tests failed:")
@@ -1512,3 +1517,5 @@ if __name__ == "__main__":
             print(f"   - ROI Calculator: {len(roi_tester.failed_tests)} failed")
         if not demo_success:
             print(f"   - Demo Request: {len(demo_tester.failed_tests)} failed")
+        if not chat_success:
+            print(f"   - Live Chat: {len(chat_tester.failed_tests)} failed")
