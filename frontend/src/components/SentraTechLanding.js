@@ -14,6 +14,7 @@ import {
 import { mockData, mockApi } from '../data/mock';
 import SentraTechLogo from './SentraTechLogo';
 import axios from 'axios';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SentraTechLanding = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
