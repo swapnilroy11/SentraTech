@@ -2667,12 +2667,12 @@ class UserManagementTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get("success"):
+                if result.get("message") == "Password changed successfully":
                     self.log_test("Password Management - Change Password", True, 
                                 "Password changed successfully")
                 else:
                     self.log_test("Password Management - Change Password", False, 
-                                f"Password change failed: {result}")
+                                f"Unexpected response: {result}")
             else:
                 self.log_test("Password Management - Change Password", False, 
                             f"Status: {response.status_code}, Response: {response.text}")
@@ -2710,16 +2710,12 @@ class UserManagementTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get("success"):
+                if result.get("message") == "If the email exists, a reset token has been sent":
                     self.log_test("Password Management - Request Reset", True, 
                                 "Password reset request processed")
-                    
-                    # Store reset token if provided (for testing purposes)
-                    if "reset_token" in result:
-                        self.reset_token = result["reset_token"]
                 else:
                     self.log_test("Password Management - Request Reset", False, 
-                                f"Reset request failed: {result}")
+                                f"Unexpected response: {result}")
             else:
                 self.log_test("Password Management - Request Reset", False, 
                             f"Status: {response.status_code}, Response: {response.text}")
