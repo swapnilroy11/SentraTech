@@ -30,19 +30,19 @@ const PricingSection = () => {
           
           {/* Billing Toggle */}
           <div className="flex items-center justify-center space-x-4 mb-12">
-            <span className={`text-sm ${billingPeriod === 'monthly' ? 'text-[#DAFF01]' : 'text-[rgb(161,161,170)]'}`}>
+            <span className={`text-sm ${billingPeriod === 'monthly' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
               Monthly
             </span>
             <button
               onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly')}
               className="relative w-14 h-7 bg-[rgb(38,40,42)] rounded-full border border-[rgb(63,63,63)] transition-all duration-200"
             >
-              <div className={`absolute w-5 h-5 bg-[#DAFF01] rounded-full top-1 transition-all duration-200 ${
+              <div className={`absolute w-5 h-5 bg-[#00FF41] rounded-full top-1 transition-all duration-200 ${
                 billingPeriod === 'annual' ? 'left-8' : 'left-1'
               }`} />
             </button>
-            <span className={`text-sm ${billingPeriod === 'annual' ? 'text-[#DAFF01]' : 'text-[rgb(161,161,170)]'}`}>
-              Annual <Badge className="ml-1 bg-[#DAFF01] text-[rgb(17,17,19)] text-xs">Save 20%</Badge>
+            <span className={`text-sm ${billingPeriod === 'annual' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
+              Annual <Badge className="ml-1 bg-[#00FF41] text-[rgb(17,17,19)] text-xs">Save 20%</Badge>
             </span>
           </div>
         </div>
