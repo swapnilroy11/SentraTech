@@ -60,8 +60,8 @@ const PricingSection = () => {
                 key={tier.id}
                 className={`relative rounded-3xl transition-all duration-300 transform hover:scale-105
                   ${isPopular 
-                    ? 'bg-gradient-to-br from-[#DAFF01]/10 to-[#00DDFF]/10 border-2 border-[#DAFF01] shadow-2xl shadow-[#DAFF01]/20' 
-                    : 'bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[#DAFF01]/50'
+                    ? 'bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 border-2 border-[#00FF41] shadow-2xl shadow-[#00FF41]/20' 
+                    : 'bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50'
                   }
                 `}
                 onMouseEnter={() => setHoveredCard(tier.id)}
@@ -69,8 +69,8 @@ const PricingSection = () => {
               >
                 {/* Popular Badge */}
                 {isPopular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-[#DAFF01] text-[rgb(17,17,19)] px-4 py-2 text-sm font-semibold">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-4 py-2 text-sm font-semibold">
                       <Crown size={16} className="mr-1" />
                       Most Popular
                     </Badge>
@@ -81,13 +81,13 @@ const PricingSection = () => {
                   {/* Plan Icon */}
                   <div className={`mx-auto mb-4 p-4 w-16 h-16 rounded-2xl flex items-center justify-center
                     ${isPopular 
-                      ? 'bg-[#DAFF01]/20 border border-[#DAFF01]/50' 
+                      ? 'bg-[#00FF41]/20 border border-[#00FF41]/50' 
                       : 'bg-[rgb(38,40,42)] border border-[rgb(63,63,63)]'
                     }`}
                   >
-                    {index === 0 && <Zap size={24} className={isPopular ? 'text-[#DAFF01]' : 'text-[rgb(218,218,218)]'} />}
-                    {index === 1 && <Star size={24} className={isPopular ? 'text-[#DAFF01]' : 'text-[rgb(218,218,218)]'} />}
-                    {index === 2 && <Crown size={24} className={isPopular ? 'text-[#DAFF01]' : 'text-[rgb(218,218,218)]'} />}
+                    {index === 0 && <Zap size={24} className={isPopular ? 'text-[#00FF41]' : 'text-[rgb(218,218,218)]'} />}
+                    {index === 1 && <Star size={24} className={isPopular ? 'text-[#00FF41]' : 'text-[rgb(218,218,218)]'} />}
+                    {index === 2 && <Crown size={24} className={isPopular ? 'text-[#00FF41]' : 'text-[rgb(218,218,218)]'} />}
                   </div>
 
                   <CardTitle className="text-2xl font-bold text-white mb-2">
@@ -117,7 +117,7 @@ const PricingSection = () => {
                         )}
                       </>
                     ) : (
-                      <div className="text-4xl font-bold text-[#DAFF01]">
+                      <div className="text-4xl font-bold text-[#00FF41]">
                         {price}
                       </div>
                     )}
@@ -127,8 +127,8 @@ const PricingSection = () => {
                   <Button 
                     className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105
                       ${isPopular 
-                        ? 'bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)]' 
-                        : 'bg-transparent border-2 border-[rgb(63,63,63)] text-white hover:border-[#DAFF01] hover:text-[#DAFF01] hover:bg-[rgba(218,255,1,0.1)]'
+                        ? 'bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a]' 
+                        : 'bg-transparent border-2 border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)]'
                       }`}
                   >
                     {tier.cta}
@@ -144,7 +144,7 @@ const PricingSection = () => {
                         <CheckCircle 
                           size={20} 
                           className={`mt-0.5 flex-shrink-0 ${
-                            isPopular ? 'text-[#DAFF01]' : 'text-[#00DDFF]'
+                            isPopular ? 'text-[#00FF41]' : 'text-[#00DDFF]'
                           }`} 
                         />
                         <span className="text-[rgb(218,218,218)] text-sm leading-relaxed">
@@ -155,10 +155,10 @@ const PricingSection = () => {
                   </div>
                 </CardContent>
 
-                {/* Hover Effect */}
-                <div className={`absolute inset-0 bg-gradient-to-br from-[#DAFF01]/5 to-transparent 
+                {/* Hover Effect - Fixed to not interfere with Popular badge */}
+                <div className={`absolute inset-0 bg-gradient-to-br from-[#00FF41]/5 to-transparent 
                   opacity-0 transition-opacity duration-300 rounded-3xl pointer-events-none
-                  ${hoveredCard === tier.id ? 'opacity-100' : ''}`}
+                  ${hoveredCard === tier.id && !isPopular ? 'opacity-100' : ''}`}
                 />
               </Card>
             );
