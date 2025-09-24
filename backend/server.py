@@ -1242,7 +1242,10 @@ async def submit_demo_request_form(
             call_volume="1000"  # Default value since not provided in form
         )
         
-        # Submit to Google Sheets
+        # Try Airtable submission first
+        airtable_result = await airtable_service.create_demo_request(demo_request_data)
+        
+        # Also try Google Sheets as backup
         sheets_result = await sheets_service.submit_demo_request(demo_request_data)
         
         # Generate request ID and timestamp
@@ -1262,7 +1265,9 @@ async def submit_demo_request_form(
             "timestamp": timestamp.isoformat(),
             "client_ip": client_ip,
             "source": "demo_request_form",
-            "sheets_status": sheets_result["success"]
+            "airtable_status": airtable_result.get("success", False),
+            "sheets_status": sheets_result["success"],
+            "airtable_id": airtable_result.get("airtable_id") if airtable_result.get("success") else None
         }
         
         await db.demo_requests.insert_one(demo_record)
