@@ -144,7 +144,12 @@ const HorizontalJourney = () => {
     if (!isAutoAdvancing || isHovered) return;
     
     const timer = setInterval(() => {
-      setCurrentPanel(prev => (prev + 1) % journeyStages.length);
+      setCurrentPanel(prev => {
+        const nextPanel = (prev + 1) % journeyStages.length;
+        // Actually scroll to the next panel
+        scrollToPanel(nextPanel);
+        return nextPanel;
+      });
     }, 8000);
     
     return () => clearInterval(timer);
