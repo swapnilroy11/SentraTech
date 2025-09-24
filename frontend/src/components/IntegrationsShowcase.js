@@ -23,6 +23,160 @@ const IntegrationsShowcase = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const integrations = [
+    // CRM & Sales
+    {
+      id: 1,
+      name: 'Salesforce',
+      category: 'crm',
+      description: 'Sync customer data and support interactions with Salesforce CRM for unified customer view.',
+      logo: 'SF',
+      color: '#00A1E0',
+      status: 'available',
+      features: ['Contact sync', 'Case management', 'Activity tracking', 'Custom fields'],
+      setupTime: '15 minutes',
+      popularity: 95
+    },
+    {
+      id: 2,
+      name: 'HubSpot',
+      category: 'crm',
+      description: 'Connect HubSpot CRM for seamless lead management and customer journey tracking.',
+      logo: 'HS',
+      color: '#FF7A59',
+      status: 'available',
+      features: ['Lead scoring', 'Deal pipeline', 'Contact properties', 'Workflow automation'],
+      setupTime: '10 minutes',
+      popularity: 88
+    },
+    {
+      id: 3,
+      name: 'Pipedrive',
+      category: 'crm',
+      description: 'Integrate sales pipeline data with customer support for complete customer context.',
+      logo: 'PD',
+      color: '#1A78C2',
+      status: 'available',
+      features: ['Pipeline sync', 'Deal tracking', 'Activity logs', 'Custom stages'],
+      setupTime: '12 minutes',
+      popularity: 82
+    },
+
+    // Communication
+    {
+      id: 4,
+      name: 'Slack',
+      category: 'communication',
+      description: 'Get real-time alerts and manage support tickets directly from your Slack workspace.',
+      logo: 'SL',
+      color: '#4A154B',
+      status: 'available',
+      features: ['Ticket alerts', 'Channel notifications', 'Slash commands', 'Thread updates'],
+      setupTime: '5 minutes',
+      popularity: 92
+    },
+    {
+      id: 5,
+      name: 'Microsoft Teams',
+      category: 'communication',
+      description: 'Collaborate on support cases and receive notifications in Microsoft Teams.',
+      logo: 'MT',
+      color: '#6264A7',
+      status: 'available',
+      features: ['Team notifications', 'Case collaboration', 'File sharing', 'Meeting integration'],
+      setupTime: '8 minutes',
+      popularity: 85
+    },
+    {
+      id: 6,
+      name: 'WhatsApp Business',
+      category: 'communication',
+      description: 'Provide customer support through WhatsApp with automated responses and routing.',
+      logo: 'WA',
+      color: '#25D366',
+      status: 'available',
+      features: ['Message templates', 'Media support', 'Business verification', 'Analytics'],
+      setupTime: '20 minutes',
+      popularity: 78
+    },
+
+    // Analytics
+    {
+      id: 7,
+      name: 'Google Analytics',
+      category: 'analytics',
+      description: 'Track customer support metrics and user behavior with Google Analytics integration.',
+      logo: 'GA',
+      color: '#E37400',
+      status: 'available',
+      features: ['Event tracking', 'Conversion goals', 'Custom dimensions', 'Audience insights'],
+      setupTime: '10 minutes',
+      popularity: 90
+    },
+    {
+      id: 8,
+      name: 'Mixpanel',
+      category: 'analytics',
+      description: 'Analyze customer support funnel and track user engagement with detailed event analytics.',
+      logo: 'MP',
+      color: '#7856FF',
+      status: 'available',
+      features: ['Event analytics', 'Funnel tracking', 'Cohort analysis', 'A/B testing'],
+      setupTime: '15 minutes',
+      popularity: 75
+    },
+    {
+      id: 9,
+      name: 'Tableau',
+      category: 'analytics',
+      description: 'Create advanced dashboards and visualizations with SentraTech support data.',
+      logo: 'TB',
+      color: '#E97627',
+      status: 'coming-soon',
+      features: ['Custom dashboards', 'Data visualization', 'Real-time updates', 'Advanced analytics'],
+      setupTime: '30 minutes',
+      popularity: 88
+    },
+
+    // Support Tools
+    {
+      id: 10,
+      name: 'Zendesk',
+      category: 'support',
+      description: 'Migrate from Zendesk or integrate existing workflows with SentraTech AI.',
+      logo: 'ZD',
+      color: '#03363D',
+      status: 'available',
+      features: ['Ticket migration', 'Agent transfer', 'Custom fields', 'SLA tracking'],
+      setupTime: '45 minutes',
+      popularity: 80
+    },
+    {
+      id: 11,
+      name: 'Intercom',
+      category: 'support',
+      description: 'Enhance Intercom conversations with AI-powered responses and routing.',
+      logo: 'IC',
+      color: '#338FFF',
+      status: 'available',
+      features: ['Conversation sync', 'Auto-responses', 'User data', 'Help center'],
+      setupTime: '25 minutes',
+      popularity: 77
+    },
+    {
+      id: 12,
+      name: 'Freshdesk',
+      category: 'support',
+      description: 'Integrate Freshdesk tickets with SentraTech AI for enhanced automation.',
+      logo: 'FD',
+      color: '#2E8B57',
+      status: 'coming-soon',
+      features: ['Ticket sync', 'Automation rules', 'Agent assistance', 'Reporting'],
+      setupTime: '35 minutes',
+      popularity: 73
+    }
+  ];
+
   // Performance optimization: memoize filtered integrations
   const filteredIntegrations = useMemo(() => {
     console.log('IntegrationsShowcase: Filtering integrations');
@@ -40,7 +194,7 @@ const IntegrationsShowcase = () => {
     }
 
     return filtered;
-  }, [activeCategory, searchTerm]);
+  }, [activeCategory, searchTerm, integrations]);
 
   // Component lifecycle logging
   useEffect(() => {
