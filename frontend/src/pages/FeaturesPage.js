@@ -160,8 +160,93 @@ const FeaturesPage = () => {
         </div>
       </section>
 
+      {/* Multi-Channel Support Section */}
+      <section id="multi-channel" className="py-20 bg-[#0A0A0A]">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <MessageSquare className="text-[#00DDFF]" size={48} />
+              <h2 className="text-5xl font-bold text-white font-rajdhani">
+                Multi-Channel Support
+              </h2>
+            </div>
+            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto mb-12">
+              Deliver consistent, intelligent customer experiences across all touchpoints. Our platform seamlessly 
+              integrates voice, chat, email, and social media interactions with human-like AI agents.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Voice Agent Demo */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-2xl border border-[rgba(0,221,255,0.2)] p-8"
+            >
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <div className="w-10 h-10 bg-[#00DDFF] rounded-full flex items-center justify-center mr-4">
+                  <MessageSquare size={20} className="text-black" />
+                </div>
+                Human-like Voice Agents
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="bg-[#0A0A0A] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
+                  <p className="text-[#00DDFF] text-sm font-semibold mb-2">🎙️ Natural Speech Processing</p>
+                  <p className="text-white text-sm">Advanced NLP understands customer intent with 95%+ accuracy</p>
+                </div>
+                <div className="bg-[#0A0A0A] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
+                  <p className="text-[#00DDFF] text-sm font-semibold mb-2">🗣️ Conversational Flow</p>
+                  <p className="text-white text-sm">Dynamic conversation management with context retention</p>
+                </div>
+                <div className="bg-[#0A0A0A] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
+                  <p className="text-[#00DDFF] text-sm font-semibold mb-2">🔄 Seamless Handoffs</p>
+                  <p className="text-white text-sm">Intelligent escalation to human agents when needed</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Channel Overview */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-2xl border border-[rgba(0,255,65,0.2)] p-8"
+            >
+              <h3 className="text-2xl font-bold text-white mb-6">
+                Unified Channel Management
+              </h3>
+              
+              <div className="space-y-6">
+                {[
+                  { channel: 'Voice Calls', icon: '📞', feature: 'AI-powered call routing & transcription' },
+                  { channel: 'Live Chat', icon: '💬', feature: 'Real-time messaging with bot handoffs' },
+                  { channel: 'Email Support', icon: '✉️', feature: 'Intelligent categorization & auto-responses' },
+                  { channel: 'Social Media', icon: '📱', feature: 'Multi-platform monitoring & engagement' },
+                  { channel: 'SMS/WhatsApp', icon: '📲', feature: 'Rich messaging with media support' }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center space-x-4">
+                    <div className="text-2xl">{item.icon}</div>
+                    <div>
+                      <h4 className="text-white font-semibold">{item.channel}</h4>
+                      <p className="text-[rgb(161,161,170)] text-sm">{item.feature}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Customer Journey Section */}
-      <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
+      <section id="customer-journey" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
         <CustomerJourney />
       </section>
 
