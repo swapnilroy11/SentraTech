@@ -17,6 +17,7 @@ import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 
 const HomePage = () => {
   const { t } = useLanguage();
+  const navigateToSection = useNavigateWithScroll();
 
   const features = [
     {
