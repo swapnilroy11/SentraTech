@@ -23,6 +23,8 @@ const HorizontalJourney = () => {
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
   const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
   const [hasThreeJSError, setHasThreeJSError] = useState(false);
+  
+  const { t } = useLanguage();
 
   // Journey stages data
   const journeyStages = [
