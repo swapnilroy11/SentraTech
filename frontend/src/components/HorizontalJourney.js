@@ -418,8 +418,6 @@ const HorizontalJourney = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              onHoverStart={() => setIsHovered(true)}
-              onHoverEnd={() => setIsHovered(false)}
             >
               <Card 
                 className="w-[500px] h-80 bg-[#0A0A0A] border-2 border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300"
@@ -428,88 +426,86 @@ const HorizontalJourney = () => {
                 tabIndex={0}
                 aria-label={`${stage.title} - ${stage.subtitle}`}
               >
-                <CardContent className="p-10 h-full flex flex-col justify-between">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 pr-8">
-                      <div className="flex items-center space-x-6 mb-6">
-                        <div 
-                          className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                          style={{ 
-                            backgroundColor: `${stage.color}20`,
-                            border: `2px solid ${stage.color}50`
-                          }}
-                        >
-                          <stage.icon size={40} style={{ color: stage.color }} />
-                        </div>
-                        <div>
-                          <Badge 
-                            className="text-base px-4 py-2 font-medium"
-                            style={{ 
-                              backgroundColor: `${stage.color}20`,
-                              color: stage.color,
-                              border: `1px solid ${stage.color}50`
-                            }}
-                          >
-                            Step {index + 1}
-                          </Badge>
-                        </div>
+                <CardContent className="p-8 h-full flex flex-col">
+                  {/* Header Section */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-4">
+                      <div 
+                        className="w-16 h-16 rounded-xl flex items-center justify-center"
+                        style={{ 
+                          backgroundColor: `${stage.color}20`,
+                          border: `2px solid ${stage.color}50`
+                        }}
+                      >
+                        <stage.icon size={32} style={{ color: stage.color }} />
                       </div>
-                      
-                      <h3 className="text-3xl font-bold text-white mb-4">
-                        {stage.title}
-                      </h3>
-                      <p className="text-[rgb(161,161,170)] text-lg leading-relaxed">
-                        {stage.subtitle}
-                      </p>
-                      
-                      {/* Add brief description for larger cards */}
-                      <p className="text-[rgb(218,218,218)] text-sm leading-relaxed mt-4 opacity-80">
-                        {stage.description.substring(0, 120)}...
-                      </p>
+                      <Badge 
+                        className="text-sm px-3 py-1 font-medium"
+                        style={{ 
+                          backgroundColor: `${stage.color}20`,
+                          color: stage.color,
+                          border: `1px solid ${stage.color}50`
+                        }}
+                      >
+                        Step {index + 1}
+                      </Badge>
                     </div>
                     
                     <div className="text-right">
                       <div 
-                        className="text-5xl font-bold font-rajdhani mb-2"
+                        className="text-4xl font-bold font-rajdhani"
                         style={{ color: stage.color }}
                       >
                         {stage.metric}
                       </div>
-                      <div className="text-[rgb(161,161,170)] text-base">
+                      <div className="text-[rgb(161,161,170)] text-sm">
                         {stage.metricLabel}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-6">
-                    <div className="text-base text-[rgb(161,161,170)]">
-                      Click for full details
+                  {/* Main Content */}
+                  <div className="flex-1 mb-6">
+                    <h3 className="text-2xl font-bold text-white mb-3">
+                      {stage.title}
+                    </h3>
+                    <p className="text-[rgb(161,161,170)] text-base leading-relaxed mb-4">
+                      {stage.subtitle}
+                    </p>
+                    
+                    {/* Key Features Preview */}
+                    <div className="space-y-2">
+                      {stage.keyFeatures.slice(0, 2).map((feature, idx) => (
+                        <div key={idx} className="flex items-center space-x-2">
+                          <div 
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: stage.color }}
+                          />
+                          <span className="text-[rgb(218,218,218)] text-sm">
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-center space-x-4">
+                  </div>
+
+                  {/* Footer Section */}
+                  <div className="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center space-x-2">
                       <div 
-                        className="w-4 h-4 rounded-full"
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: stage.color }}
                       />
-                      <span className="text-base font-medium" style={{ color: stage.color }}>
+                      <span className="text-sm font-medium" style={{ color: stage.color }}>
                         {stage.automationRate}% Automated
                       </span>
+                    </div>
+                    <div className="text-sm text-[#00FF41] font-medium">
+                      Click to explore →
                     </div>
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Hover Tooltip */}
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="absolute top-full mt-4 left-1/2 transform -translate-x-1/2 bg-[rgb(26,28,30)] border border-[#00FF41] rounded-xl p-4 max-w-xs z-10"
-                >
-                  <p className="text-[rgb(218,218,218)] text-sm">
-                    {stage.description.substring(0, 120)}...
-                  </p>
-                </motion.div>
-              )}
             </motion.div>
           </div>
         ))}
