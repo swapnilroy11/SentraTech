@@ -85,41 +85,58 @@ const CTASection = () => {
     }
   };
 
-  const validateForm = () => {
-    const errors = {};
+  const validateAllFields = () => {
+    const newErrors = {};
     let hasErrors = false;
     
     // Validate all required fields
     ['name', 'email', 'company', 'phone'].forEach(field => {
-      const error = validateField(field, formData[field]);
-      if (error) {
-        errors[field] = error;
+      const errorMessage = validateField(field, formData[field]);
+      if (errorMessage) {
+        newErrors[field] = errorMessage;
         hasErrors = true;
       }
     });
     
-    setFieldErrors(errors);
+    // Use functional update to avoid stale state
+    setFieldErrors(prevErrors => ({
+      ...prevErrors,
+      ...newErrors
+    }));
     
     if (hasErrors) {
       setError('Please fix the highlighted fields below');
       return false;
     }
     
+    // Clear any previous errors if validation passes
+    setError(null);
+    setFieldErrors({});
     return true;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Always prevent default submission first
     
-    if (!validateForm()) {
-      return;
+    console.log('Form submission started...'); // Debug log
+    console.log('Current form data:', formData); // Debug log
+    
+    // Perform validation BEFORE attempting submission
+    const isValid = validateAllFields();
+    console.log('Validation result:', isValid); // Debug log
+    console.log('Field errors after validation:', fieldErrors); // Debug log
+    
+    if (!isValid) {
+      console.log('Form validation failed, stopping submission'); // Debug log
+      return; // Stop submission if validation fails
     }
     
     setIsSubmitting(true);
     setError(null);
-    setFieldErrors({});
     
     try {
+      console.log('Sending request to backend...'); // Debug log
+      
       const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
         headers: {
           'Content-Type': 'application/json'
@@ -127,13 +144,17 @@ const CTASection = () => {
         timeout: 10000
       });
       
+      console.log('Backend response:', response.data); // Debug log
+      
       if (response.data.success) {
         setContactId(response.data.contact_id);
         setIsSubmitted(true);
+        // Clear form data after successful submission
         setFormData({
           name: '', email: '', company: '', phone: '', 
           message: '', call_volume: ''
         });
+        setFieldErrors({}); // Clear any field errors
       }
     } catch (error) {
       console.error('Demo request submission error:', error);
