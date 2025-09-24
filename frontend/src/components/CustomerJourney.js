@@ -5,6 +5,8 @@ import HorizontalJourney from './HorizontalJourney';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const CustomerJourney = () => {
+  const { t } = useLanguage();
+  
   return (
     <section id="journey" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative overflow-hidden">
       <div className="container mx-auto px-6">
