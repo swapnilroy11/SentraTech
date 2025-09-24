@@ -18,6 +18,9 @@ function App() {
       {/* Space-themed WebGL Background for entire website */}
       <SpaceBackground intensity={0.8} particles={300} />
       
+      {/* Floating Left Navigation */}
+      <FloatingNavigation />
+      
       <BrowserRouter>
         <Routes>
           <Route path="/" element={
