@@ -219,130 +219,158 @@ const SentraTechLanding = () => {
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* AI-Powered Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
-          {/* Neural Network Animation */}
-          <div className="absolute inset-0 opacity-20">
-            <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-              {/* Neural Network Nodes */}
-              {[...Array(25)].map((_, i) => {
-                const x = (i % 5) * 400 + 200 + Math.random() * 100;
-                const y = Math.floor(i / 5) * 200 + 150 + Math.random() * 100;
-                return (
-                  <g key={i}>
-                    <circle 
-                      cx={x} 
-                      cy={y} 
-                      r="4" 
-                      fill="#DAFF01" 
-                      className="animate-pulse"
-                      style={{
-                        animationDelay: `${i * 0.2}s`,
-                        animationDuration: `${2 + Math.random()}s`
-                      }}
-                    />
-                    {/* Connection Lines */}
-                    {i < 20 && (
-                      <line
-                        x1={x}
-                        y1={y}
-                        x2={(i + 5) % 5 === 0 ? x + 400 : ((i + 5) % 5) * 400 + 200 + Math.random() * 100}
-                        y2={(i + 5) % 5 === 0 ? y : Math.floor((i + 5) / 5) * 200 + 150 + Math.random() * 100}
-                        stroke="#00DDFF"
-                        strokeWidth="1"
-                        opacity="0.3"
-                        className="animate-pulse"
-                        style={{ animationDelay: `${i * 0.1}s` }}
-                      />
-                    )}
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-
-          {/* Data Flow Animation */}
-          <div className="absolute inset-0 opacity-15">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute animate-float"
-                style={{
-                  left: `${10 + i * 12}%`,
-                  top: `${20 + Math.random() * 60}%`,
-                  animationDelay: `${i * 0.5}s`,
-                  animationDuration: `${4 + Math.random() * 2}s`
-                }}
-              >
-                <div className="flex items-center space-x-2 text-[#DAFF01] text-xs opacity-50">
-                  <MessageSquare size={12} />
-                  <span>AI Route</span>
-                  <ArrowRight size={10} />
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Central AI Brain Visualization */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative w-80 h-80 opacity-10">
-              {/* Rotating AI Brain Core */}
-              <div className="absolute inset-0 animate-spin-slow">
-                <div className="w-full h-full border-2 border-[#DAFF01] rounded-full"></div>
-                <div className="absolute inset-4 border border-[#00DDFF] rounded-full"></div>
-                <div className="absolute inset-8 border border-[rgb(192,192,192)] rounded-full"></div>
+        {/* Space-themed WebGL Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#1a1a1a] to-[#0A0A0A]">
+          {/* Rotating Galaxy Core */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 animate-galaxy">
+              <svg className="w-full h-full opacity-20" viewBox="0 0 400 400">
+                {/* Central Galaxy Core */}
+                <circle cx="200" cy="200" r="8" fill="#00FF41" className="animate-pulse">
+                  <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite" />
+                </circle>
                 
-                {/* AI Processing Indicators */}
-                {[...Array(12)].map((_, i) => (
-                  <div
+                {/* Orbital Rings */}
+                {[60, 100, 140, 180].map((radius, i) => (
+                  <circle 
                     key={i}
-                    className="absolute w-3 h-3 bg-[#DAFF01] rounded-full animate-pulse"
-                    style={{
-                      left: '50%',
-                      top: '50%',
-                      transform: `rotate(${i * 30}deg) translateY(-140px) translateX(-50%)`,
-                      animationDelay: `${i * 0.1}s`,
-                      animationDuration: '2s'
-                    }}
+                    cx="200" 
+                    cy="200" 
+                    r={radius} 
+                    fill="none" 
+                    stroke="#00FF41" 
+                    strokeWidth="1" 
+                    opacity={0.3 - i * 0.05}
+                    strokeDasharray="5 10"
                   />
                 ))}
-              </div>
-              
-              {/* Sub-50ms Indicator */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-[#DAFF01] text-sm font-bold opacity-30 animate-pulse">
-                  <Zap size={24} />
-                </div>
-              </div>
+                
+                {/* Data Nodes */}
+                {[...Array(24)].map((_, i) => {
+                  const angle = (i * 15) * (Math.PI / 180);
+                  const radius = 80 + (i % 3) * 40;
+                  const x = 200 + Math.cos(angle) * radius;
+                  const y = 200 + Math.sin(angle) * radius;
+                  
+                  return (
+                    <g key={i}>
+                      <circle 
+                        cx={x} 
+                        cy={y} 
+                        r="3" 
+                        fill="#00FF41"
+                        opacity="0.6"
+                      >
+                        <animate 
+                          attributeName="opacity" 
+                          values="0.3;0.9;0.3" 
+                          dur={`${2 + (i % 3)}s`}
+                          repeatCount="indefinite"
+                          begin={`${i * 0.1}s`}
+                        />
+                      </circle>
+                      
+                      {/* Connection Lines */}
+                      {i < 23 && (
+                        <line
+                          x1={x}
+                          y1={y}
+                          x2={200 + Math.cos(((i + 1) * 15) * (Math.PI / 180)) * (80 + ((i + 1) % 3) * 40)}
+                          y2={200 + Math.sin(((i + 1) * 15) * (Math.PI / 180)) * (80 + ((i + 1) % 3) * 40)}
+                          stroke="#00DDFF"
+                          strokeWidth="1"
+                          opacity="0.2"
+                          className="animate-data-flow"
+                          style={{ animationDelay: `${i * 0.2}s` }}
+                        />
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
           </div>
 
-          {/* Customer Support Icons Floating */}
+          {/* Shooting Stars */}
+          <div className="absolute inset-0">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-shooting-star"
+                style={{
+                  left: `${20 + i * 15}%`,
+                  top: `${10 + i * 12}%`,
+                  animationDelay: `${i * 2}s`,
+                  animationDuration: '4s'
+                }}
+              >
+                <div className="w-1 h-16 bg-gradient-to-b from-transparent via-[#00FF41] to-transparent opacity-60 transform rotate-45"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Planetary Orbs - Omnichannel Coverage */}
           <div className="absolute inset-0">
             {[
-              { icon: Phone, x: '15%', y: '25%', delay: '0s' },
-              { icon: MessageSquare, x: '85%', y: '35%', delay: '1s' },
-              { icon: Users, x: '20%', y: '75%', delay: '2s' },
-              { icon: BarChart3, x: '80%', y: '20%', delay: '3s' },
-              { icon: Globe, x: '25%', y: '50%', delay: '4s' },
-              { icon: Shield, x: '75%', y: '65%', delay: '5s' }
-            ].map((item, i) => {
-              const IconComponent = item.icon;
+              { icon: Phone, x: '15%', y: '20%', color: '#00FF41', label: 'Voice' },
+              { icon: MessageSquare, x: '85%', y: '25%', color: '#00DDFF', label: 'Chat' },
+              { icon: Globe, x: '20%', y: '80%', color: '#C0C0C0', label: 'Web' },
+              { icon: Users, x: '80%', y: '75%', color: '#00FF41', label: 'Social' }
+            ].map((planet, i) => {
+              const IconComponent = planet.icon;
               return (
                 <div
                   key={i}
-                  className="absolute opacity-10 animate-float"
+                  className="absolute animate-planet-pulse"
                   style={{
-                    left: item.x,
-                    top: item.y,
-                    animationDelay: item.delay,
+                    left: planet.x,
+                    top: planet.y,
+                    animationDelay: `${i * 1.5}s`,
                     animationDuration: '6s'
                   }}
                 >
-                  <IconComponent size={32} className="text-[#DAFF01]" />
+                  <div className="relative">
+                    {/* Planet Glow */}
+                    <div 
+                      className="absolute inset-0 rounded-full blur-md"
+                      style={{
+                        background: `radial-gradient(circle, ${planet.color}40, transparent)`,
+                        width: '60px',
+                        height: '60px',
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                    />
+                    {/* Planet Core */}
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center border"
+                      style={{
+                        background: `${planet.color}20`,
+                        borderColor: planet.color
+                      }}
+                    >
+                      <IconComponent size={16} style={{ color: planet.color }} />
+                    </div>
+                  </div>
                 </div>
               );
             })}
+          </div>
+
+          {/* Matrix Digital Rain Effect */}
+          <div className="absolute inset-0 opacity-5">
+            {[...Array(15)].map((_, i) => (
+              <div
+                key={i}
+                className="digital-rain absolute text-xs"
+                style={{
+                  left: `${i * 7}%`,
+                  animationDelay: `${Math.random() * 5}s`,
+                  animationDuration: `${5 + Math.random() * 3}s`
+                }}
+              >
+                {['01', '10', '11', '00'][Math.floor(Math.random() * 4)]}
+              </div>
+            ))}
           </div>
         </div>
 
