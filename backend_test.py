@@ -2479,8 +2479,10 @@ class UserManagementTester:
         print("\n=== Testing User Authentication ===")
         
         # First create a test user for login
+        import uuid
+        unique_id = str(uuid.uuid4())[:8]
         test_user = {
-            "email": "login.test@company.com",
+            "email": f"login.test.{unique_id}@company.com",
             "password": "LoginTest123",
             "full_name": "Login Test User",
             "company": "Login Test Company"
