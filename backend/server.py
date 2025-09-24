@@ -983,47 +983,45 @@ async def create_demo_request(
         # Submit to Google Sheets
         sheets_result = await sheets_service.submit_demo_request(demo_request)
         
-        if sheets_result["success"]:
-            # Generate a reference ID for tracking
-            reference_id = str(uuid.uuid4())
-            
-            # Save to database as backup
-            demo_record = {
-                "id": reference_id,
-                "email": demo_request.email,
-                "name": demo_request.name,
-                "company": demo_request.company,
-                "phone": demo_request.phone,
-                "call_volume": demo_request.call_volume,
-                "message": demo_request.message,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "source": "website_form",
-                "sheets_timestamp": sheets_result.get("timestamp")
-            }
-            
-            await db.demo_requests.insert_one(demo_record)
-            
-            # Schedule email notifications as background tasks
-            background_tasks.add_task(
-                email_service.send_demo_confirmation,
-                demo_request
-            )
-            
-            background_tasks.add_task(
-                email_service.send_internal_notification,
-                demo_request
-            )
-            
-            logger.info(f"Demo request created successfully: {reference_id}")
-            
-            return DemoRequestResponse(
-                success=True,
-                contact_id=reference_id,
-                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
-                reference_id=reference_id
-            )
-        else:
-            raise HTTPException(status_code=400, detail=sheets_result["message"])
+        # Generate a reference ID for tracking
+        reference_id = str(uuid.uuid4())
+        
+        # Always save to database (either as backup or primary storage)
+        demo_record = {
+            "id": reference_id,
+            "email": demo_request.email,
+            "name": demo_request.name,
+            "company": demo_request.company,
+            "phone": demo_request.phone,
+            "call_volume": demo_request.call_volume,
+            "message": demo_request.message,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "source": "website_form",
+            "sheets_status": sheets_result["success"],
+            "sheets_timestamp": sheets_result.get("timestamp")
+        }
+        
+        await db.demo_requests.insert_one(demo_record)
+        
+        # Schedule email notifications as background tasks
+        background_tasks.add_task(
+            email_service.send_demo_confirmation,
+            demo_request
+        )
+        
+        background_tasks.add_task(
+            email_service.send_internal_notification,
+            demo_request
+        )
+        
+        logger.info(f"Demo request created successfully: {reference_id} (Sheets: {sheets_result['success']})")
+        
+        return DemoRequestResponse(
+            success=True,
+            contact_id=reference_id,
+            message="Demo request submitted successfully! We'll contact you within 2 business hours.",
+            reference_id=reference_id
+        )
             
     except Exception as e:
         logger.error(f"Demo request creation failed: {str(e)}")
