@@ -1075,7 +1075,10 @@ async def create_demo_request(
 ):
     """Create a demo request and save to Google Sheets"""
     try:
-        # Submit to Google Sheets
+        # Try Airtable submission first
+        airtable_result = await airtable_service.create_demo_request(demo_request)
+        
+        # Also try Google Sheets as backup
         sheets_result = await sheets_service.submit_demo_request(demo_request)
         
         # Generate a reference ID for tracking
@@ -1092,8 +1095,10 @@ async def create_demo_request(
             "message": demo_request.message,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "source": "website_form",
+            "airtable_status": airtable_result.get("success", False),
             "sheets_status": sheets_result["success"],
-            "sheets_timestamp": sheets_result.get("timestamp")
+            "sheets_timestamp": sheets_result.get("timestamp"),
+            "airtable_id": airtable_result.get("airtable_id") if airtable_result.get("success") else None
         }
         
         await db.demo_requests.insert_one(demo_record)
