@@ -187,19 +187,57 @@ const CTASection = () => {
     setError(null);
     
     try {
-      console.log('Sending request to backend...'); // Debug log
+      console.log('Sending request to Google Sheets...'); // Debug log
       
-      const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 10000
-      });
+      // Primary: Submit directly to Google Sheets
+      let success = false;
+      let contactId = null;
       
-      console.log('Backend response:', response.data); // Debug log
+      try {
+        // Google Sheets Apps Script Web App URL 
+        const sheetsResponse = await fetch('https://script.google.com/macros/s/AKfycbx_demo_requests_webapp_url/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            name: formData.name,
+            email: formData.email,
+            company: formData.company,
+            phone: formData.phone || '',
+            message: formData.message || ''
+          })
+        });
+        
+        if (sheetsResponse.ok) {
+          const sheetsData = await sheetsResponse.json();
+          console.log('Google Sheets response:', sheetsData); // Debug log
+          success = true;
+          contactId = `sheets_${Date.now()}`;
+        } else {
+          throw new Error(`Google Sheets error: ${sheetsResponse.status}`);
+        }
+      } catch (sheetsError) {
+        console.log('Google Sheets submission failed, trying backend...', sheetsError);
+        
+        // Fallback: Use backend endpoint
+        const backendResponse = await axios.post(`${BACKEND_URL}/api/demo-request`, formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          timeout: 10000
+        });
+        
+        console.log('Backend fallback response:', backendResponse.data); // Debug log
+        
+        if (backendResponse.data.status === 'success') {
+          success = true;
+          contactId = backendResponse.data.requestId;
+        }
+      }
       
-      if (response.data.success) {
-        setContactId(response.data.contact_id);
+      if (success) {
+        setContactId(contactId);
         setIsSubmitted(true);
         // Clear form data after successful submission
         setFormData({
