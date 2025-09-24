@@ -283,14 +283,19 @@ const HorizontalJourney = () => {
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+      animate();
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      renderer.dispose();
-    };
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        renderer.dispose();
+      };
+    } catch (error) {
+      console.error('Three.js initialization failed:', error);
+      setHasThreeJSError(true);
+      setIsMobile(true); // Fall back to mobile view
+    }
   }, [isMobile, scrollXProgress]);
 
   // Keyboard navigation
