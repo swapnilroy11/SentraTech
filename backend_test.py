@@ -7,6 +7,8 @@ Tests all 3 ROI endpoints with various scenarios including edge cases
 import requests
 import json
 import time
+import asyncio
+import websockets
 from datetime import datetime
 from typing import Dict, Any
 
