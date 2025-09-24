@@ -308,10 +308,21 @@ const SentraTechLanding = () => {
           {isMenuOpen && (
             <div className="md:hidden mt-4 pb-4 border-t border-[rgb(63,63,63)]">
               <div className="flex flex-col space-y-4 mt-4">
-                <a href="#features" className="text-[rgb(218,218,218)] hover:text-[#DAFF01]">{t.nav.features}</a>
-                <a href="#pricing" className="text-[rgb(218,218,218)] hover:text-[#DAFF01]">{t.nav.pricing}</a>
-                <a href="#about" className="text-[rgb(218,218,218)] hover:text-[#DAFF01]">{t.nav.about}</a>
-                <Button className="bg-[#DAFF01] text-[rgb(17,17,19)] w-full rounded-xl">
+                {/* Mobile Slogan Display */}
+                <div className="text-center py-4">
+                  <div className="flex flex-col space-y-2 text-base font-rajdhani font-medium">
+                    <span className="text-[#00FF41] tracking-wider">
+                      {t.nav.features}
+                    </span>
+                    <span className="text-[#00FF41] tracking-wider">
+                      {t.nav.pricing}
+                    </span>
+                    <span className="text-[#00FF41] tracking-wider">
+                      {t.nav.about}
+                    </span>
+                  </div>
+                </div>
+                <Button className="bg-[#00FF41] text-[#0A0A0A] w-full rounded-xl">
                   {t.hero.cta}
                 </Button>
               </div>
