@@ -241,7 +241,7 @@ const TestimonialsSection = () => {
               <div className="mb-4 p-4 bg-[rgb(17,17,19)] rounded-2xl w-fit mx-auto border border-[rgb(63,63,63)]">
                 <Star size={32} className="text-[#DAFF01]" />
               </div>
-              <div className="text-3xl font-bold text-[#DAFF01] mb-2">98%</div>
+              <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">98%</div>
               <div className="text-[rgb(218,218,218)] text-sm">Platform Uptime</div>
             </div>
           </div>
