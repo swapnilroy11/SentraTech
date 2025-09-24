@@ -61,38 +61,13 @@ const Footer = () => {
             {/* Brand Section */}
             <div className="lg:col-span-4 space-y-6">
               {/* SentraTech Logo */}
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 relative">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-full h-full"
-                  >
-                    {/* SentraTech Logo - Geometric Pattern */}
-                    <rect width="48" height="48" rx="8" fill="#F8F9FA" />
-                    <g transform="translate(6, 6)">
-                      {/* Main geometric pattern - star/compass shape */}
-                      <path
-                        d="M18 0L24 12L36 6L24 18L36 30L24 24L18 36L12 24L0 30L12 18L0 6L12 12L18 0Z"
-                        fill="#0A0A0A"
-                      />
-                      {/* Center accent */}
-                      <circle cx="18" cy="18" r="3" fill="#00FF41" />
-                    </g>
-                  </svg>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[#00FF41] text-xl font-bold font-rajdhani tracking-wide">
-                    SENTRA
-                  </span>
-                  <span className="text-[#F8F9FA] text-sm font-semibold font-rajdhani -mt-1">
-                    TECH
-                  </span>
-                </div>
-              </div>
+              <SentraTechLogo 
+                width={48} 
+                height={48} 
+                showText={true} 
+                textColor="#00FF41"
+                className="mb-6"
+              />
               
               <p className="text-[rgb(218,218,218)] text-lg leading-relaxed max-w-md">
                 Transforming customer support with AI-powered automation and human expertise. 
