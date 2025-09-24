@@ -193,47 +193,21 @@ const CTASection = () => {
       let success = false;
       let contactId = null;
       
-      try {
-        // Google Sheets Apps Script Web App URL 
-        const sheetsResponse = await fetch('https://script.google.com/macros/s/AKfycbx_demo_requests_webapp_url/exec', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-            name: formData.name,
-            email: formData.email,
-            company: formData.company,
-            phone: formData.phone || '',
-            message: formData.message || ''
-          })
-        });
-        
-        if (sheetsResponse.ok) {
-          const sheetsData = await sheetsResponse.json();
-          console.log('Google Sheets response:', sheetsData); // Debug log
-          success = true;
-          contactId = `sheets_${Date.now()}`;
-        } else {
-          throw new Error(`Google Sheets error: ${sheetsResponse.status}`);
-        }
-      } catch (sheetsError) {
-        console.log('Google Sheets submission failed, trying backend...', sheetsError);
-        
-        // Fallback: Use backend endpoint
-        const backendResponse = await axios.post(`${BACKEND_URL}/api/demo-request`, formData, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          timeout: 10000
-        });
-        
-        console.log('Backend fallback response:', backendResponse.data); // Debug log
-        
-        if (backendResponse.data.status === 'success') {
-          success = true;
-          contactId = backendResponse.data.requestId;
-        }
+      // Primary: Use backend endpoint (Google Sheets integration is handled in backend)
+      const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 15000
+      });
+      
+      console.log('Backend response:', response.data); // Debug log
+      
+      if (response.data.success) {
+        success = true;
+        contactId = response.data.reference_id || response.data.contact_id;
+      } else {
+        throw new Error(response.data.message || 'Submission failed');
       }
       
       if (success) {
