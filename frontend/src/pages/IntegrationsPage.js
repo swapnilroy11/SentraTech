@@ -4,7 +4,6 @@ import { Button } from '../components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
-  ExternalLink, 
   ChevronDown, 
   ChevronUp,
   Zap,
