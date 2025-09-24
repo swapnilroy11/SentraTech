@@ -8,7 +8,6 @@ import {
   ArrowRight, Play, Pause, RotateCcw
 } from 'lucide-react';
 import { mockData } from '../data/mock';
-import CustomerJourney3D from './CustomerJourney3D';
 
 const CustomerJourney = () => {
   const [activeStep, setActiveStep] = useState(0);
