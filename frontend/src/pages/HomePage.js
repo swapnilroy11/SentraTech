@@ -186,15 +186,14 @@ const HomePage = () => {
                         </p>
                       </div>
 
-                      <Link to={feature.link}>
-                        <Button 
-                          variant="ghost"
-                          className="w-full justify-between text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
-                        >
-                          <span>Explore Feature</span>
-                          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </Link>
+                      <Button 
+                        onClick={() => navigateToSection(feature.link)}
+                        variant="ghost"
+                        className="w-full justify-between text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
+                      >
+                        <span>Explore Feature</span>
+                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      </Button>
                     </CardContent>
                   </Card>
                 </motion.div>
