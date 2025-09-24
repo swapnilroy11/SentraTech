@@ -148,7 +148,7 @@ const FeatureShowcase = () => {
                   {[...Array(12)].map((_, i) => (
                     <div
                       key={i}
-                      className="absolute w-4 h-4 bg-[#DAFF01] rounded-full animate-pulse"
+                      className="absolute w-4 h-4 bg-[#00FF41] rounded-full animate-pulse"
                       style={{
                         left: `${20 + (i % 3) * 30}%`,
                         top: `${20 + Math.floor(i / 3) * 25}%`,
