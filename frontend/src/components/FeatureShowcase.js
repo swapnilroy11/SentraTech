@@ -70,7 +70,7 @@ const FeatureShowcase = () => {
                   </div>
                   
                   <CardTitle className="text-2xl text-[#F8F9FA] mb-3 font-rajdhani">
-                    {feature.title}
+                    {t[feature.titleKey] || feature.title}
                   </CardTitle>
                   
                   <Badge 
