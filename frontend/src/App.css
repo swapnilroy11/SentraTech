@@ -406,3 +406,55 @@ h1, h2, h3, h4, h5, h6 {
     transition: none !important;
   }
 }
+
+/* Additional safeguards against black screens */
+.page-container {
+  background-color: #0A0A0A !important;
+  min-height: 100vh !important;
+  position: relative;
+}
+
+/* Ensure all main content areas have proper backgrounds */
+main, .main-content, .page-content {
+  background-color: #0A0A0A;
+  min-height: 100vh;
+}
+
+/* Prevent z-index conflicts */
+.page-transition {
+  position: relative;
+  z-index: 1;
+}
+
+.space-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Loading state improvements */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0A0A0A;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Component error boundary styling */
+.error-boundary {
+  min-height: 100vh;
+  background-color: #0A0A0A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
