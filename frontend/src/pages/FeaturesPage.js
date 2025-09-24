@@ -225,9 +225,29 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* Customer Journey Section */}
-      <section id="customer-journey" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
-        <CustomerJourney />
+      {/* ROI Calculator Section */}
+      <section id="roi-calculator" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <Calculator className="text-[#00FF41]" size={48} />
+              <h2 className="text-5xl font-bold text-white font-rajdhani">
+                ROI Calculator
+              </h2>
+            </div>
+            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto">
+              Calculate your potential savings and efficiency gains with our intelligent cost analysis tool. 
+              See exactly how SentraTech can transform your support operations.
+            </p>
+          </motion.div>
+          
+          <ROICalculator />
+        </div>
       </section>
 
       {/* CTA Section */}
