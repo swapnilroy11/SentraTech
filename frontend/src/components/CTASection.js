@@ -157,7 +157,7 @@ const CTASection = () => {
 
               <CardContent className="p-0 space-y-4">
                 <div className="flex items-center space-x-4">
-                  <div className="w-8 h-8 bg-[#DAFF01] text-[rgb(17,17,19)] rounded-full flex items-center justify-center text-sm font-bold">
+                  <div className="w-8 h-8 bg-[#00FF41] text-[rgb(17,17,19)] rounded-full flex items-center justify-center text-sm font-bold">
                     1
                   </div>
                   <div>
