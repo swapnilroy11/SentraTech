@@ -112,7 +112,12 @@ const ROICalculator = () => {
         }
       };
 
-      await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
+      console.log('Saving ROI calculation with data:', requestData); // Debug log
+
+      const response = await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
+      
+      console.log('ROI save response:', response.data); // Debug log
+      
       setSavedSuccessfully(true);
       setTimeout(() => setSavedSuccessfully(false), 3000);
     } catch (err) {
