@@ -377,24 +377,24 @@ const SentraTechLanding = () => {
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-white to-[rgb(218,218,218)] bg-clip-text text-transparent">
+            <h1 className="hero-title text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-[#F8F9FA] to-[#e2e8f0] bg-clip-text text-transparent">
                 {t.hero.title}
               </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-[rgb(218,218,218)] mb-8 leading-relaxed">
+            <p className="body-text text-xl md:text-2xl text-[#e2e8f0] mb-8 leading-relaxed">
               {t.hero.subtitle}
             </p>
 
             {/* KPI Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               {stats.map((stat, index) => (
-                <div key={stat.id} className="text-center p-4 bg-[rgb(26,28,30)]/50 rounded-xl border border-[rgb(63,63,63)]">
-                  <div className="text-2xl md:text-3xl font-bold text-[#DAFF01] mb-1">
+                <div key={stat.id} className="text-center p-4 bg-[#1a1a1a]/50 rounded-xl border border-[#2a2a2a] backdrop-blur-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-[#00FF41] mb-1 font-rajdhani">
                     {stat.value}{stat.suffix}
                   </div>
-                  <div className="text-sm text-[rgb(161,161,170)]">{stat.label}</div>
+                  <div className="text-sm text-[#a1a1aa] font-rajdhani">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -403,7 +403,7 @@ const SentraTechLanding = () => {
             <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
               <Button 
                 size="lg"
-                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200 min-w-48"
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200 min-w-48 font-rajdhani"
               >
                 <Play className="mr-2" size={20} />
                 {t.hero.cta}
@@ -412,7 +412,7 @@ const SentraTechLanding = () => {
               <Button 
                 variant="outline"
                 size="lg"
-                className="border-2 border-[rgb(63,63,63)] text-white hover:border-[#DAFF01] hover:text-[#DAFF01] hover:bg-[rgba(218,255,1,0.1)] px-8 py-4 rounded-xl transition-all duration-200 min-w-48"
+                className="border-2 border-[#2a2a2a] text-[#F8F9FA] hover:border-[#00FF41] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 rounded-xl transition-all duration-200 min-w-48 font-rajdhani"
               >
                 {t.hero.secondaryCta}
                 <ArrowRight className="ml-2" size={20} />
