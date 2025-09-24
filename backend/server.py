@@ -1029,21 +1029,170 @@ async def create_demo_request(
         logger.error(f"Demo request creation failed: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to process demo request. Please try again.")
 
-@api_router.get("/demo/requests", response_model=List[dict])
+@api_router.get("/demo/requests")
 async def get_demo_requests(limit: int = 50):
-    """Get recent demo requests (for admin/debugging)"""
+    """Get recent demo requests for admin/debugging purposes"""
     try:
-        requests = await db.demo_requests.find().sort("timestamp", -1).limit(limit).to_list(limit)
-        
-        # Convert ObjectId to string for JSON serialization
-        for request in requests:
-            if '_id' in request:
-                request['_id'] = str(request['_id'])
-        
-        return requests
+        cursor = db.demo_requests.find({}).sort("timestamp", -1).limit(limit)
+        demo_requests = []
+        async for doc in cursor:
+            demo_requests.append(doc)
+        return {"success": True, "count": len(demo_requests), "requests": demo_requests}
     except Exception as e:
-        logger.error(f"Error fetching demo requests: {str(e)}")
-        raise HTTPException(status_code=400, detail=f"Error fetching demo requests: {str(e)}")
+        logger.error(f"Error retrieving demo requests: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve demo requests")
+
+# Additional demo request models
+class DemoRequestForm(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
+    company: str = Field(..., min_length=2, max_length=100)
+    phone: Optional[str] = Field(None, max_length=20)
+    message: Optional[str] = Field(None, max_length=1000)
+    preferredDate: Optional[str] = None
+
+# Rate limiting storage (in production, use Redis)
+request_counts = {}
+
+def check_rate_limit(client_ip: str) -> bool:
+    """Simple rate limiting - 5 requests per minute per IP"""
+    import time
+    current_time = time.time()
+    minute_ago = current_time - 60
+    
+    # Clean old entries
+    request_counts[client_ip] = [t for t in request_counts.get(client_ip, []) if t > minute_ago]
+    
+    # Check if limit exceeded
+    if len(request_counts.get(client_ip, [])) >= 5:
+        return False
+    
+    # Add current request
+    if client_ip not in request_counts:
+        request_counts[client_ip] = []
+    request_counts[client_ip].append(current_time)
+    
+    return True
+
+@api_router.post("/demo-request")
+async def submit_demo_request_form(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    name: str = Form(...),
+    email: str = Form(...),
+    company: str = Form(...),
+    phone: Optional[str] = Form(None),
+    message: Optional[str] = Form(None),
+    preferredDate: Optional[str] = Form(None)
+):
+    """
+    Submit demo request form (accepts form data or JSON)
+    Endpoint: POST /api/demo-request
+    """
+    try:
+        # Get client IP for rate limiting
+        client_ip = request.client.host if request.client else "unknown"
+        
+        # Rate limiting check
+        if not check_rate_limit(client_ip):
+            raise HTTPException(
+                status_code=429, 
+                detail={"status": "error", "message": "Rate limit exceeded. Please try again later."}
+            )
+        
+        # Validate and sanitize input
+        try:
+            # Validate email
+            from email_validator import validate_email
+            validated_email = validate_email(email)
+            clean_email = validated_email.email
+        except Exception:
+            raise HTTPException(
+                status_code=400,
+                detail={"status": "error", "message": "Invalid email format"}
+            )
+        
+        # Sanitize inputs
+        clean_name = name.strip()[:100] if name else ""
+        clean_company = company.strip()[:100] if company else ""
+        clean_phone = phone.strip()[:20] if phone else ""
+        clean_message = message.strip()[:1000] if message else ""
+        
+        # Validate required fields
+        if not clean_name or len(clean_name) < 2:
+            raise HTTPException(
+                status_code=400,
+                detail={"status": "error", "message": "Name must be at least 2 characters"}
+            )
+        
+        if not clean_company or len(clean_company) < 2:
+            raise HTTPException(
+                status_code=400,
+                detail={"status": "error", "message": "Company name must be at least 2 characters"}
+            )
+        
+        # Create demo request object
+        demo_request_data = DemoRequest(
+            name=clean_name,
+            email=clean_email,
+            company=clean_company,
+            phone=clean_phone,
+            message=clean_message,
+            call_volume=1000  # Default value since not provided in form
+        )
+        
+        # Submit to Google Sheets
+        sheets_result = await sheets_service.submit_demo_request(demo_request_data)
+        
+        # Generate request ID and timestamp
+        request_id = str(uuid.uuid4())
+        timestamp = datetime.now(timezone.utc)
+        
+        # Save to database
+        demo_record = {
+            "requestId": request_id,
+            "id": request_id,
+            "name": clean_name,
+            "email": clean_email,
+            "company": clean_company,
+            "phone": clean_phone,
+            "message": clean_message,
+            "preferredDate": preferredDate,
+            "timestamp": timestamp.isoformat(),
+            "client_ip": client_ip,
+            "source": "demo_request_form",
+            "sheets_status": sheets_result["success"]
+        }
+        
+        await db.demo_requests.insert_one(demo_record)
+        
+        # Schedule email notifications as background tasks
+        background_tasks.add_task(
+            email_service.send_demo_confirmation,
+            demo_request_data
+        )
+        
+        background_tasks.add_task(
+            email_service.send_internal_notification,
+            demo_request_data
+        )
+        
+        logger.info(f"Demo request form submitted: {request_id} from {client_ip}")
+        
+        return {
+            "status": "success",
+            "requestId": request_id,
+            "timestamp": timestamp.isoformat()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Demo request form error: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail={"status": "error", "message": "Failed to process request. Please try again."}
+        )
 
 @api_router.get("/debug/sheets/config")
 async def debug_sheets_config():
