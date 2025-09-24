@@ -11,6 +11,7 @@ import CTASection from "./components/CTASection";
 import Footer from "./components/Footer";
 import SpaceBackground from "./components/SpaceBackground";
 import FloatingNavigation from "./components/FloatingNavigation";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 function App() {
   return (
