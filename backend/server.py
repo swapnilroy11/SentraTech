@@ -567,6 +567,99 @@ async def root():
     return {"message": "Hello World"}
 
 # Google Sheets Service
+class AirtableService:
+    """Airtable integration service for demo requests and analytics"""
+    
+    def __init__(self):
+        # Airtable configuration
+        self.access_token = "patqEN3h5N1BfTEbw.88afc089ca1a1196530c9237148b71ea0b1d12f8600878b2ed272b3e10323ad8"
+        self.base_id = "appDemoRequests"  # Replace with actual base ID if provided
+        self.table_name = "Demo Requests"
+        self.base_url = "https://api.airtable.com/v0"
+        
+    async def create_demo_request(self, demo_request: DemoRequest):
+        """Create a demo request in Airtable"""
+        try:
+            url = f"{self.base_url}/{self.base_id}/{self.table_name}"
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "Content-Type": "application/json"
+            }
+            
+            # Prepare Airtable record format
+            data = {
+                "fields": {
+                    "Name": demo_request.name,
+                    "Email": demo_request.email,
+                    "Company": demo_request.company,
+                    "Phone": demo_request.phone or "",
+                    "Message": demo_request.message or "",
+                    "Call Volume": demo_request.call_volume or "",
+                    "Source": "Website Form",
+                    "Status": "New",
+                    "Date Created": datetime.now(timezone.utc).isoformat(),
+                    "Reference ID": str(uuid.uuid4())
+                }
+            }
+            
+            import httpx
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, headers=headers, json=data)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    logger.info(f"Demo request created in Airtable: {result['id']}")
+                    return {
+                        "success": True,
+                        "airtable_id": result["id"],
+                        "airtable_record": result
+                    }
+                else:
+                    logger.error(f"Airtable API error: {response.status_code} - {response.text}")
+                    return {"success": False, "error": f"Airtable API error: {response.status_code}"}
+                    
+        except Exception as e:
+            logger.error(f"Airtable integration error: {str(e)}")
+            return {"success": False, "error": str(e)}
+    
+    async def track_analytics_event(self, event_data: dict):
+        """Track analytics events in Airtable"""
+        try:
+            # Create analytics table entry
+            url = f"{self.base_url}/{self.base_id}/Analytics"
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "fields": {
+                    "Event Type": event_data.get("event_type", "page_view"),
+                    "Page URL": event_data.get("page_url", ""),
+                    "User IP": event_data.get("user_ip", ""),
+                    "User Agent": event_data.get("user_agent", ""),
+                    "Timestamp": datetime.now(timezone.utc).isoformat(),
+                    "Session ID": event_data.get("session_id", ""),
+                    "Additional Data": str(event_data.get("metadata", {}))
+                }
+            }
+            
+            import httpx
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, headers=headers, json=data)
+                
+                if response.status_code == 200:
+                    logger.info(f"Analytics event tracked in Airtable")
+                    return {"success": True}
+                else:
+                    logger.error(f"Airtable analytics error: {response.status_code}")
+                    return {"success": False}
+                    
+        except Exception as e:
+            logger.error(f"Airtable analytics error: {str(e)}")
+            return {"success": False}
+
+
 class GoogleSheetsService:
     """Google Sheets service for storing demo requests"""
     
