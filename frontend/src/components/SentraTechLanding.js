@@ -133,8 +133,18 @@ const SentraTechLanding = () => {
             <div className="flex items-center space-x-4">
               {/* Logo */}
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                  <div className="w-6 h-6 bg-[rgb(17,17,19)] transform rotate-45"></div>
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-1">
+                    {/* Recreating the logo pattern with proper geometry */}
+                    <div className="w-full h-full relative">
+                      <div className="absolute inset-0 bg-[rgb(17,17,19)]"></div>
+                      <div className="absolute top-0 left-0 w-3 h-3 bg-white"></div>
+                      <div className="absolute top-0 right-0 w-3 h-3 bg-white"></div>
+                      <div className="absolute bottom-0 left-0 w-3 h-3 bg-white"></div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-white"></div>
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
+                    </div>
+                  </div>
                 </div>
                 <span className="text-[#DAFF01] text-2xl font-bold">SENTRA TECH</span>
               </div>
