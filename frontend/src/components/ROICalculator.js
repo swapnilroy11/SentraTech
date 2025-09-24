@@ -81,13 +81,13 @@ const ROICalculator = () => {
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+          <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Calculator className="mr-2" size={14} />
             ROI Calculator
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">Calculate Your </span>
-            <span className="text-[#DAFF01]">Savings</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="text-[#F8F9FA]">Calculate Your </span>
+            <span className="text-[#00FF41]">Savings</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
             See the potential cost savings and efficiency gains from implementing 
