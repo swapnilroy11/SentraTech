@@ -227,7 +227,7 @@ const CustomerJourney = () => {
             
             {/* Current Step Highlight */}
             <div className="mt-8 text-center">
-              <h3 className="text-2xl font-bold text-[#DAFF01] mb-2">
+              <h3 className="text-2xl font-bold text-[#00FF41] mb-2 font-rajdhani">
                 Current: {mockData.journeySteps[activeStep].title}
               </h3>
               <p className="text-[rgb(218,218,218)] max-w-2xl mx-auto">
