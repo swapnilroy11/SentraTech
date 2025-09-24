@@ -5,6 +5,7 @@ import {
   MapPin, ArrowRight, ExternalLink, MessageSquare,
   Zap, Shield, Globe
 } from 'lucide-react';
+import SentraTechLogo from './SentraTechLogo';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
