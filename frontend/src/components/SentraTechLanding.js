@@ -269,43 +269,49 @@ const SentraTechLanding = () => {
             </svg>
           </div>
 
-          {/* Enhanced Shooting Stars - Higher Density */}
+          {/* Realistic Shooting Stars - Reduced Density */}
           <div className="absolute inset-0">
-            {[...Array(25)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <div
                 key={i}
                 className="absolute animate-shooting-star"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 8}s`,
-                  animationDuration: `${2 + Math.random() * 3}s`
+                  animationDelay: `${Math.random() * 15}s`,
+                  animationDuration: `${3 + Math.random() * 4}s`
                 }}
               >
                 <div 
-                  className="w-1 h-20 opacity-80 transform rotate-45"
+                  className="w-0.5 h-16 opacity-70 transform rotate-45"
                   style={{
                     background: `linear-gradient(to bottom, 
                       transparent, 
-                      ${i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? '#e0f2fe' : '#b3e5fc'}, 
-                      transparent)`
+                      ${i % 4 === 0 ? '#ffffff' : i % 4 === 1 ? '#f0f8ff' : i % 4 === 2 ? '#e6f3ff' : '#ddeeff'}, 
+                      transparent)`,
+                    filter: 'blur(0.5px)'
                   }}
                 />
               </div>
             ))}
           </div>
 
-          {/* Additional Twinkling Stars */}
+          {/* Realistic Twinkling Stars */}
           <div className="absolute inset-0">
-            {[...Array(60)].map((_, i) => (
+            {[...Array(35)].map((_, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-white rounded-full opacity-30"
+                className="absolute rounded-full"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  animation: `twinkle ${2 + Math.random() * 4}s ease-in-out infinite`,
-                  animationDelay: `${Math.random() * 3}s`
+                  width: `${1 + Math.random() * 2}px`,
+                  height: `${1 + Math.random() * 2}px`,
+                  background: i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? '#f8fafc' : '#e2e8f0',
+                  opacity: 0.4 + Math.random() * 0.6,
+                  animation: `twinkle ${3 + Math.random() * 6}s ease-in-out infinite`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  filter: `blur(${Math.random() * 0.5}px)`
                 }}
               />
             ))}
