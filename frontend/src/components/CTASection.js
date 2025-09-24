@@ -8,7 +8,7 @@ import {
   Rocket, ArrowRight, CheckCircle, Clock, 
   Users, Zap, Calendar, Send, Sparkles
 } from 'lucide-react';
-import { mockApi } from '../data/mock';
+import axios from 'axios';
 
 const CTASection = () => {
   const [formData, setFormData] = useState({
