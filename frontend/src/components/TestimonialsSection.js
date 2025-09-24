@@ -59,18 +59,13 @@ const TestimonialsSection = () => {
         <div className="max-w-5xl mx-auto mb-16">
           <Card className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(38,40,42)] border border-[rgba(255,255,255,0.1)] rounded-3xl overflow-hidden">
             <div className="relative p-12">
-              {/* Quote Icon */}
-              <div className="absolute top-8 left-8 opacity-20">
-                <Quote size={80} className="text-[#DAFF01]" />
-              </div>
-              
               {/* Testimonial Content */}
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
                   {/* Company Info */}
                   <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-[rgb(38,40,42)] rounded-2xl flex items-center justify-center border border-[rgb(63,63,63)]">
-                      <span className="text-2xl font-bold text-[#DAFF01]">
+                    <div className="w-16 h-16 bg-[#00FF41]/20 rounded-2xl flex items-center justify-center border border-[#00FF41]/50">
+                      <span className="text-2xl font-bold text-[#00FF41]">
                         {currentTestimonial.company.charAt(0)}
                       </span>
                     </div>
@@ -78,7 +73,7 @@ const TestimonialsSection = () => {
                       <h3 className="text-xl font-bold text-white">
                         {currentTestimonial.company}
                       </h3>
-                      <Badge className="bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+                      <Badge className="bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
                         {currentTestimonial.stats}
                       </Badge>
                     </div>
@@ -101,7 +96,7 @@ const TestimonialsSection = () => {
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-12 h-12">
                     <AvatarImage src="/api/placeholder/48/48" />
-                    <AvatarFallback className="bg-[#DAFF01] text-[rgb(17,17,19)] font-semibold">
+                    <AvatarFallback className="bg-[#00FF41] text-[rgb(17,17,19)] font-semibold">
                       {currentTestimonial.author.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
@@ -122,16 +117,16 @@ const TestimonialsSection = () => {
                   onClick={() => setIsAutoPlay(!isAutoPlay)}
                   size="sm"
                   variant="outline"
-                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#DAFF01] hover:text-[#DAFF01] rounded-lg"
+                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-lg"
                 >
-                  <Play size={16} className={isAutoPlay ? 'text-[#DAFF01]' : ''} />
+                  <Play size={16} className={isAutoPlay ? 'text-[#00FF41]' : ''} />
                 </Button>
                 
                 <Button
                   onClick={prevTestimonial}
                   size="sm"
                   variant="outline"
-                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#DAFF01] hover:text-[#DAFF01] rounded-lg"
+                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-lg"
                 >
                   <ChevronLeft size={16} />
                 </Button>
@@ -140,7 +135,7 @@ const TestimonialsSection = () => {
                   onClick={nextTestimonial}
                   size="sm"
                   variant="outline"
-                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#DAFF01] hover:text-[#DAFF01] rounded-lg"
+                  className="border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-lg"
                 >
                   <ChevronRight size={16} />
                 </Button>
