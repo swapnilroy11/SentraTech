@@ -17,29 +17,90 @@ const CTASection = () => {
     company: '',
     phone: '',
     message: '',
-    callVolume: '',
-    useCase: ''
+    call_volume: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+  const [contactId, setContactId] = useState('');
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (error) {
+      setError(null);
+    }
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setError('Full name is required');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      return false;
+    }
+    if (!formData.company.trim()) {
+      setError('Company name is required');
+      return false;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+    
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsSubmitting(true);
+    setError(null);
     
     try {
-      await mockApi.submitContact(formData);
-      setIsSubmitted(true);
-      setFormData({
-        name: '', email: '', company: '', phone: '', 
-        message: '', callVolume: '', useCase: ''
+      const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
       });
+      
+      if (response.data.success) {
+        setContactId(response.data.contact_id);
+        setIsSubmitted(true);
+        setFormData({
+          name: '', email: '', company: '', phone: '', 
+          message: '', call_volume: ''
+        });
+      }
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('Demo request submission error:', error);
+      
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 400) {
+          setError('Please check your information and try again.');
+        } else if (status >= 500) {
+          setError('Our system is temporarily unavailable. Please try again in a few minutes.');
+        } else {
+          setError('An unexpected error occurred. Please try again.');
+        }
+      } else if (error.code === 'ECONNABORTED') {
+        setError('Request timed out. Please check your connection and try again.');
+      } else {
+        setError('Unable to connect. Please check your internet connection.');
+      }
     } finally {
       setIsSubmitting(false);
     }
