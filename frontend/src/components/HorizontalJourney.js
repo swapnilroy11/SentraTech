@@ -9,6 +9,7 @@ import {
   Users, BarChart3, Target, Brain, Zap, Clock, 
   TrendingUp, CheckCircle, X, Play, Pause
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HorizontalJourney = () => {
   const containerRef = useRef(null);
