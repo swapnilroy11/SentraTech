@@ -101,8 +101,8 @@ const Footer = () => {
               {/* Key Features */}
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <div className="p-1.5 bg-[#DAFF01]/20 rounded-lg border border-[#DAFF01]/50">
-                    <Zap size={16} className="text-[#DAFF01]" />
+                  <div className="p-1.5 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50">
+                    <Zap size={16} className="text-[#00FF41]" />
                   </div>
                   <span className="text-[rgb(218,218,218)] text-sm">Sub-50ms AI Routing</span>
                 </div>
