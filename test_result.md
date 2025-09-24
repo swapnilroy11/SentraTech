@@ -303,15 +303,18 @@ frontend:
 
   - task: "Demo Request Form Integration"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/CTASection.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Updated CTA Section demo request form to integrate with new backend API. Replaced mock API calls with real backend integration using axios. Added proper form validation (required fields, email format), error handling for various failure scenarios (network errors, timeouts, server errors), loading states during submission, success confirmation with reference ID display. Form now calls POST /api/demo/request endpoint and displays proper user feedback."
+      - working: false
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING COMPLETED - Found 3 critical issues: (1) Form validation not working - HTML5 validation is present but custom validation errors not displayed to users, form submits with invalid data relying only on browser validation, (2) 'Submit Another Request' functionality broken - button exists but doesn't return to form properly, stays on success page, (3) Loading state not displayed during form submission. PASSED: Backend API integration working perfectly (200 responses, proper reference ID generation), success confirmation displays correctly with reference ID, form fills and submits valid data successfully, mobile/tablet responsiveness working, form fields have proper HTML5 validation attributes. Backend logs show successful demo request processing with mock HubSpot and email services working correctly."
 
 metadata:
   created_by: "main_agent"
