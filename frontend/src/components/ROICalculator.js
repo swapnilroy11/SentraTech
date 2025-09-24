@@ -197,7 +197,7 @@ const ROICalculator = () => {
               <CardContent className="p-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                   <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-2xl lg:text-3xl font-bold text-[#DAFF01] mb-2">
+                    <div className="text-2xl lg:text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
                       {formatCurrency(results.monthlySavings || 0)}
                     </div>
                     <div className="text-[rgb(218,218,218)] text-sm">Monthly Savings</div>
