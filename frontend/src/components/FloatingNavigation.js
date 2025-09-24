@@ -16,6 +16,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const { t } = useLanguage();
 
   const navigationItems = [
     {
