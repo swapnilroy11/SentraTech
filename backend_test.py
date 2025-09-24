@@ -2723,6 +2723,140 @@ class UserManagementTester:
         except Exception as e:
             self.log_test("Password Management - Request Reset", False, f"Exception: {str(e)}")
     
+    def test_admin_functions(self):
+        """Test admin-only endpoints"""
+        print("\n=== Testing Admin Functions ===")
+        
+        # First create an admin user
+        admin_user = {
+            "email": "admin@testcompany.com",
+            "password": "AdminPass123",
+            "full_name": "Admin User",
+            "company": "Test Company",
+            "role": "admin"
+        }
+        
+        # Register admin user
+        register_response = requests.post(f"{BACKEND_URL}/auth/register", json=admin_user, timeout=15)
+        if register_response.status_code != 200:
+            self.log_test("Admin Functions - Admin User Setup", False, "Failed to create admin user")
+            return
+        
+        # Login as admin
+        admin_login = {
+            "email": admin_user["email"],
+            "password": admin_user["password"]
+        }
+        
+        login_response = requests.post(f"{BACKEND_URL}/auth/login", json=admin_login, timeout=15)
+        if login_response.status_code != 200:
+            self.log_test("Admin Functions - Admin Login", False, "Failed to login as admin")
+            return
+        
+        admin_token = login_response.json()["access_token"]
+        admin_headers = {"Authorization": f"Bearer {admin_token}"}
+        
+        # Test Case 1: Get all users (admin only)
+        try:
+            response = requests.get(f"{BACKEND_URL}/users", headers=admin_headers, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if isinstance(result, list):
+                    self.log_test("Admin Functions - Get All Users", True, 
+                                f"Retrieved {len(result)} users")
+                else:
+                    self.log_test("Admin Functions - Get All Users", False, 
+                                f"Invalid response format: {result}")
+            else:
+                self.log_test("Admin Functions - Get All Users", False, 
+                            f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Admin Functions - Get All Users", False, f"Exception: {str(e)}")
+        
+        # Test Case 2: Get user by ID (admin only)
+        if hasattr(self, 'test_user_id'):
+            try:
+                response = requests.get(f"{BACKEND_URL}/users/{self.test_user_id}", 
+                                      headers=admin_headers, timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("id") == self.test_user_id:
+                        self.log_test("Admin Functions - Get User by ID", True, 
+                                    f"Retrieved user: {result['email']}")
+                    else:
+                        self.log_test("Admin Functions - Get User by ID", False, 
+                                    f"User ID mismatch: {result}")
+                else:
+                    self.log_test("Admin Functions - Get User by ID", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test("Admin Functions - Get User by ID", False, f"Exception: {str(e)}")
+        
+        # Test Case 3: Update user role (admin only)
+        if hasattr(self, 'test_user_id'):
+            role_update = {"role": "viewer"}
+            
+            try:
+                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/role", 
+                                      json=role_update, headers=admin_headers, timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("role") == "viewer":
+                        self.log_test("Admin Functions - Update User Role", True, 
+                                    f"Role updated to: {result['role']}")
+                    else:
+                        self.log_test("Admin Functions - Update User Role", False, 
+                                    f"Role update failed: {result}")
+                else:
+                    self.log_test("Admin Functions - Update User Role", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test("Admin Functions - Update User Role", False, f"Exception: {str(e)}")
+        
+        # Test Case 4: Update user status (admin only)
+        if hasattr(self, 'test_user_id'):
+            status_update = {"is_active": False}
+            
+            try:
+                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/status", 
+                                      json=status_update, headers=admin_headers, timeout=10)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("is_active") == False:
+                        self.log_test("Admin Functions - Update User Status", True, 
+                                    f"Status updated to: {result['is_active']}")
+                    else:
+                        self.log_test("Admin Functions - Update User Status", False, 
+                                    f"Status update failed: {result}")
+                else:
+                    self.log_test("Admin Functions - Update User Status", False, 
+                                f"Status: {response.status_code}, Response: {response.text}")
+                    
+            except Exception as e:
+                self.log_test("Admin Functions - Update User Status", False, f"Exception: {str(e)}")
+        
+        # Test Case 5: Non-admin user trying to access admin endpoints
+        if self.user_token:
+            user_headers = {"Authorization": f"Bearer {self.user_token}"}
+            
+            try:
+                response = requests.get(f"{BACKEND_URL}/users", headers=user_headers, timeout=10)
+                if response.status_code == 403:
+                    self.log_test("Admin Functions - Non-admin Access Control", True, 
+                                "Non-admin user properly denied access")
+                else:
+                    self.log_test("Admin Functions - Non-admin Access Control", False, 
+                                f"Expected 403, got: {response.status_code}")
+            except Exception as e:
+                self.log_test("Admin Functions - Non-admin Access Control", False, f"Exception: {str(e)}")
+    
     def test_jwt_token_validation(self):
         """Test JWT token structure and validation"""
         print("\n=== Testing JWT Token Validation ===")
