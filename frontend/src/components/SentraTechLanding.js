@@ -168,17 +168,17 @@ const SentraTechLanding = () => {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors">
+              <a href="#features" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
                 {t.nav.features}
               </a>
-              <a href="#pricing" className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors">
+              <a href="#pricing" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
                 {t.nav.pricing}
               </a>
-              <a href="#about" className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors">
+              <a href="#about" className="text-[#e2e8f0] hover:text-[#00FF41] transition-colors font-medium">
                 {t.nav.about}
               </a>
               <Button 
-                className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
               >
                 {t.hero.cta}
               </Button>
@@ -186,7 +186,7 @@ const SentraTechLanding = () => {
               {/* Language Toggle */}
               <button 
                 onClick={() => setCurrentLang(currentLang === 'en' ? 'bn' : 'en')}
-                className="px-3 py-1 bg-[rgb(26,28,30)] rounded-lg text-sm text-[rgb(218,218,218)] hover:text-[#DAFF01]"
+                className="px-3 py-1 bg-[#1a1a1a] rounded-lg text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a]"
               >
                 {currentLang === 'en' ? 'বাং' : 'ENG'}
               </button>
@@ -195,7 +195,7 @@ const SentraTechLanding = () => {
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-[rgb(218,218,218)] hover:text-[#DAFF01]"
+              className="md:hidden p-2 text-[#e2e8f0] hover:text-[#00FF41]"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
