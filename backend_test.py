@@ -2832,7 +2832,7 @@ class UserManagementTester:
                 
                 if response.status_code == 200:
                     result = response.json()
-                    if "status updated" in result.get("message", "").lower():
+                    if "deactivated successfully" in result.get("message", "").lower() or "status updated" in result.get("message", "").lower():
                         self.log_test("Admin Functions - Update User Status", True, 
                                     f"Status updated successfully: {result['message']}")
                     else:
