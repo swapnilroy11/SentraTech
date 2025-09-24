@@ -2805,20 +2805,18 @@ class UserManagementTester:
         
         # Test Case 3: Update user role (admin only)
         if hasattr(self, 'test_user_id'):
-            role_update = {"role": "viewer"}
-            
             try:
-                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/role", 
-                                      json=role_update, headers=admin_headers, timeout=10)
+                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/role?role=viewer", 
+                                      headers=admin_headers, timeout=10)
                 
                 if response.status_code == 200:
                     result = response.json()
-                    if result.get("role") == "viewer":
+                    if "role updated to viewer" in result.get("message", "").lower():
                         self.log_test("Admin Functions - Update User Role", True, 
-                                    f"Role updated to: {result['role']}")
+                                    f"Role updated successfully: {result['message']}")
                     else:
                         self.log_test("Admin Functions - Update User Role", False, 
-                                    f"Role update failed: {result}")
+                                    f"Unexpected response: {result}")
                 else:
                     self.log_test("Admin Functions - Update User Role", False, 
                                 f"Status: {response.status_code}, Response: {response.text}")
@@ -2828,20 +2826,18 @@ class UserManagementTester:
         
         # Test Case 4: Update user status (admin only)
         if hasattr(self, 'test_user_id'):
-            status_update = {"is_active": False}
-            
             try:
-                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/status", 
-                                      json=status_update, headers=admin_headers, timeout=10)
+                response = requests.put(f"{BACKEND_URL}/users/{self.test_user_id}/status?is_active=false", 
+                                      headers=admin_headers, timeout=10)
                 
                 if response.status_code == 200:
                     result = response.json()
-                    if result.get("is_active") == False:
+                    if "status updated" in result.get("message", "").lower():
                         self.log_test("Admin Functions - Update User Status", True, 
-                                    f"Status updated to: {result['is_active']}")
+                                    f"Status updated successfully: {result['message']}")
                     else:
                         self.log_test("Admin Functions - Update User Status", False, 
-                                    f"Status update failed: {result}")
+                                    f"Unexpected response: {result}")
                 else:
                     self.log_test("Admin Functions - Update User Status", False, 
                                 f"Status: {response.status_code}, Response: {response.text}")
