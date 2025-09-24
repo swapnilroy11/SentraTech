@@ -4055,7 +4055,7 @@ class GoogleSheetsIntegrationTester:
             "name": "JSON Method Test",
             "email": "json.method@test.com",
             "company": "JSON Test Corp",
-            "phone": "+1-555-JSON1",
+            "phone": "+1-555-123-0001",
             "message": "Testing JSON data submission method"
         }
         
