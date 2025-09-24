@@ -201,24 +201,25 @@ const HorizontalJourney = () => {
       return;
     }
 
-    const scene = new THREE.Scene();
-    sceneRef.current = scene;
+    try {
+      const scene = new THREE.Scene();
+      sceneRef.current = scene;
 
-    const camera = new THREE.PerspectiveCamera(
-      75, 
-      window.innerWidth / 400, 
-      0.1, 
-      1000
-    );
-    camera.position.z = 5;
+      const camera = new THREE.PerspectiveCamera(
+        75, 
+        window.innerWidth / 400, 
+        0.1, 
+        1000
+      );
+      camera.position.z = 5;
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      antialias: true,
-      alpha: true
-    });
-    renderer.setSize(window.innerWidth, 400);
-    renderer.setClearColor(0x000000, 0);
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvasRef.current,
+        antialias: true,
+        alpha: true
+      });
+      renderer.setSize(window.innerWidth, 400);
+      renderer.setClearColor(0x000000, 0);
 
     // Create neural node network
     const nodeGeometry = new THREE.SphereGeometry(0.02, 8, 8);
