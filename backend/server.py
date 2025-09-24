@@ -473,6 +473,8 @@ This is a mock email service. In production, this would be sent via SMTP.
 # Initialize services
 hubspot_service = MockHubSpotService()
 email_service = MockEmailService()
+connection_manager = ConnectionManager()
+chat_service = LiveChatService()
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
