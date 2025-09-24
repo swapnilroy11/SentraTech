@@ -305,6 +305,7 @@ createContact({
         </div>
       </section>
     </div>
+    </ComponentErrorBoundary>
   );
 };
 
