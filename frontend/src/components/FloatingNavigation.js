@@ -190,7 +190,7 @@ const FloatingNavigation = () => {
             {/* Menu Header */}
             <div className="mb-4 pb-3 border-b border-[rgba(255,255,255,0.1)]">
               <h3 className="text-white font-semibold text-sm font-rajdhani">
-                Quick Navigation
+                {t.floatingNav.title}
               </h3>
             </div>
 
