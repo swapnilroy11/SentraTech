@@ -28,9 +28,13 @@ const CTASection = () => {
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    // Update form data
+    setFormData(prev => ({ 
+      ...prev, 
+      [field]: value 
+    }));
     
-    // Clear field error when user starts typing
+    // Clear field error when user starts typing (real-time feedback)
     if (fieldErrors[field]) {
       setFieldErrors(prev => ({
         ...prev,
@@ -42,6 +46,18 @@ const CTASection = () => {
     if (error) {
       setError(null);
     }
+    
+    // Optional: Validate field on blur for better UX
+    // You can enable this for immediate feedback
+    /*
+    const errorMessage = validateField(field, value);
+    if (errorMessage) {
+      setFieldErrors(prev => ({
+        ...prev,
+        [field]: errorMessage
+      }));
+    }
+    */
   };
 
   const validateField = (field, value) => {
