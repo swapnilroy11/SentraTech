@@ -275,7 +275,7 @@ const Footer = () => {
         {/* Floating Chat Button */}
         <div className="fixed bottom-6 left-6 z-50">
           <Button
-            className="bg-gradient-to-r from-[#DAFF01] to-[#00DDFF] text-[rgb(17,17,19)] hover:shadow-2xl hover:shadow-[#DAFF01]/30 font-semibold px-4 py-4 rounded-full transform hover:scale-110 transition-all duration-200"
+            className="bg-gradient-to-r from-[#00FF41] to-[#00DDFF] text-[#0A0A0A] hover:shadow-2xl hover:shadow-[#00FF41]/30 font-semibold px-4 py-4 rounded-full transform hover:scale-110 transition-all duration-200 font-rajdhani"
             aria-label="Open live chat"
           >
             <MessageSquare size={24} />
