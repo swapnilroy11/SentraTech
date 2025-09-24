@@ -167,7 +167,7 @@ const FeatureShowcase = () => {
                         y1={`${25 + Math.floor(i / 2) * 25}%`}
                         x2={`${25 + ((i + 1) % 2) * 50}%`}
                         y2={`${25 + Math.floor((i + 1) / 2) * 25}%`}
-                        stroke="#DAFF01"
+                        stroke="#00FF41"
                         strokeWidth="2"
                         className="animate-pulse"
                       />
