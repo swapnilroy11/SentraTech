@@ -234,7 +234,7 @@ const Footer = () => {
                   className="w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#DAFF01] focus:ring-2 focus:ring-[#DAFF01]/20 transition-all"
                 />
               </div>
-              <Button className="bg-[#DAFF01] text-[rgb(17,17,19)] hover:bg-[rgb(166,190,21)] font-semibold px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-200 w-full md:w-auto">
+              <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-200 w-full md:w-auto font-rajdhani">
                 Subscribe
               </Button>
             </div>
