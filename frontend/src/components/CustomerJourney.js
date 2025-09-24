@@ -16,7 +16,7 @@ const CustomerJourney = () => {
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             AI-Powered Customer Experience
           </h2>
-          <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto">
+          <p className="text-2xl text-[#00FF41] max-w-3xl mx-auto font-medium">
             From first contact to resolution - experience our intelligent workflow in action
           </p>
         </div>
