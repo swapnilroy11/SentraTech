@@ -433,6 +433,91 @@ async def get_roi_calculations(limit: int = 100):
         logger.error(f"Error fetching ROI calculations: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error fetching ROI calculations: {str(e)}")
 
+# Demo Request & CRM Routes
+@api_router.post("/demo/request", response_model=DemoRequestResponse)
+async def create_demo_request(
+    demo_request: DemoRequest,
+    background_tasks: BackgroundTasks
+):
+    """Create a demo request and add to CRM"""
+    try:
+        # Create contact in HubSpot (mock)
+        hubspot_result = await hubspot_service.create_contact(demo_request)
+        
+        if hubspot_result["success"]:
+            contact_id = hubspot_result["contact_id"]
+            
+            # Save to database
+            demo_record = {
+                "id": str(uuid.uuid4()),
+                "contact_id": contact_id,
+                "email": demo_request.email,
+                "name": demo_request.name,
+                "company": demo_request.company,
+                "phone": demo_request.phone,
+                "call_volume": demo_request.call_volume,
+                "message": demo_request.message,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "source": "website_form"
+            }
+            
+            await db.demo_requests.insert_one(demo_record)
+            
+            # Schedule email notifications as background tasks
+            background_tasks.add_task(
+                email_service.send_demo_confirmation,
+                demo_request.email,
+                demo_request.name,
+                contact_id
+            )
+            
+            background_tasks.add_task(
+                email_service.send_internal_notification,
+                demo_request,
+                contact_id
+            )
+            
+            logger.info(f"Demo request created successfully: {contact_id}")
+            
+            return DemoRequestResponse(
+                success=True,
+                contact_id=contact_id,
+                message="Demo request submitted successfully! We'll contact you within 1-2 business days.",
+                reference_id=demo_record["id"]
+            )
+        else:
+            raise HTTPException(status_code=400, detail=hubspot_result["message"])
+            
+    except Exception as e:
+        logger.error(f"Demo request creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process demo request. Please try again.")
+
+@api_router.get("/demo/requests", response_model=List[dict])
+async def get_demo_requests(limit: int = 50):
+    """Get recent demo requests (for admin/debugging)"""
+    try:
+        requests = await db.demo_requests.find().sort("timestamp", -1).limit(limit).to_list(limit)
+        return requests
+    except Exception as e:
+        logger.error(f"Error fetching demo requests: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error fetching demo requests: {str(e)}")
+
+@api_router.get("/debug/hubspot/contacts")
+async def debug_hubspot_contacts():
+    """Debug endpoint to see mock HubSpot contacts"""
+    return {
+        "contacts": hubspot_service.get_all_contacts(),
+        "total_contacts": len(hubspot_service.get_all_contacts())
+    }
+
+@api_router.get("/debug/emails")
+async def debug_sent_emails():
+    """Debug endpoint to see sent emails"""
+    return {
+        "sent_emails": email_service.get_sent_emails(),
+        "total_emails": len(email_service.get_sent_emails())
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
