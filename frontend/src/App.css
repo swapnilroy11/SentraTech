@@ -274,11 +274,130 @@
   .btn-primary {
     padding: 12px 24px;
     font-size: 14px;
+    min-width: 100%;
   }
   
   .animate-float,
   .animate-spin-slow {
     animation-play-state: paused;
+  }
+  
+  /* Mobile ROI Calculator Fixes */
+  .roi-mobile-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .roi-mobile-card {
+    padding: 16px !important;
+  }
+  
+  .roi-mobile-text {
+    font-size: 14px !important;
+  }
+  
+  .roi-mobile-savings {
+    font-size: 20px !important;
+  }
+  
+  /* Mobile form improvements */
+  .mobile-form-input {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 12px !important;
+  }
+  
+  .mobile-slider {
+    height: 8px !important;
+  }
+  
+  /* Mobile spacing improvements */
+  .mobile-spacing {
+    padding: 16px !important;
+    margin: 8px 0 !important;
+  }
+  
+  /* Hero section mobile fixes */
+  .hero-mobile-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .hero-mobile-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  
+  .hero-mobile-stat-card {
+    padding: 12px !important;
+  }
+  
+  /* Feature cards mobile */
+  .feature-mobile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  .feature-mobile-card {
+    padding: 20px !important;
+  }
+  
+  /* Pricing mobile */
+  .pricing-mobile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  .pricing-mobile-card {
+    padding: 20px !important;
+  }
+  
+  /* Navigation mobile */
+  .nav-mobile-menu {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(17, 17, 19, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    z-index: 1000 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile devices */
+  .btn-primary {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .hero-mobile-title {
+    font-size: 1.75rem !important;
+  }
+  
+  .roi-mobile-savings {
+    font-size: 18px !important;
+  }
+  
+  /* Tighter spacing for small screens */
+  .mobile-tight-spacing {
+    padding: 12px !important;
+    margin: 4px 0 !important;
+  }
+  
+  /* Chat widget mobile positioning */
+  .chat-mobile-position {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  
+  /* Footer mobile adjustments */
+  .footer-mobile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  
+  .footer-mobile-links {
+    text-align: center !important;
   }
 }
 
