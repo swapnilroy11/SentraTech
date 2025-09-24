@@ -436,11 +436,11 @@ const CTASection = () => {
                 <Button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-4 rounded-xl transform hover:scale-105 transition-all duration-200 font-rajdhani"
+                  className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-4 rounded-xl transform hover:scale-105 transition-all duration-200 font-rajdhani disabled:opacity-70 disabled:transform-none"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center justify-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-[rgb(17,17,19)] border-t-transparent rounded-full animate-spin"></div>
+                      <Loader2 size={20} className="animate-spin" />
                       <span>Scheduling Demo...</span>
                     </div>
                   ) : (
@@ -448,6 +448,9 @@ const CTASection = () => {
                       <Send size={20} />
                       <span>Schedule My Demo</span>
                       <ArrowRight size={20} />
+                    </div>
+                  )}
+                </Button>
                     </div>
                   )}
                 </Button>
