@@ -82,48 +82,6 @@ const IntegrationsPage = () => {
     }
   ];
 
-  const codeExample = `// Sample API integration - Create contact in Google Sheets backend
-const createContact = async (contactData) => {
-  try {
-    const response = await fetch('/api/demo/request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_KEY'
-      },
-      body: JSON.stringify({
-        name: contactData.name,
-        email: contactData.email,
-        company: contactData.company,
-        phone: contactData.phone,
-        message: contactData.message
-      })
-    });
-
-    const result = await response.json();
-    
-    if (response.ok) {
-      console.log('Contact created:', result.reference_id);
-      // Automatically synced to Google Sheets
-      return result;
-    } else {
-      throw new Error(result.message);
-    }
-  } catch (error) {
-    console.error('Integration error:', error);
-    throw error;
-  }
-};
-
-// Usage example
-createContact({
-  name: "John Doe",
-  email: "john.doe@company.com", 
-  company: "Tech Corp",
-  phone: "+1234567890",
-  message: "Interested in SentraTech integration"
-});`;
-
   return (
     <ComponentErrorBoundary>
       <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
