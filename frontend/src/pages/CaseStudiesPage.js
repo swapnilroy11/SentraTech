@@ -4,6 +4,7 @@ import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import CaseStudies from '../components/CaseStudies';
+import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 
 const CaseStudiesPage = () => {
   return (
