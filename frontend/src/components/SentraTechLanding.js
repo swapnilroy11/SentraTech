@@ -390,12 +390,12 @@ const SentraTechLanding = () => {
           {chatOpen ? (
             <div className="flex flex-col h-full">
               {/* Chat Header */}
-              <div className="flex items-center justify-between p-4 border-b border-[rgb(63,63,63)]">
+              <div className="flex items-center justify-between p-4 border-b border-[#2a2a2a]">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-[#DAFF01] rounded-full flex items-center justify-center">
-                    <MessageSquare size={16} className="text-[rgb(17,17,19)]" />
+                  <div className="w-8 h-8 bg-[#00FF41] rounded-full flex items-center justify-center">
+                    <MessageSquare size={16} className="text-[#0A0A0A]" />
                   </div>
-                  <span className="font-semibold text-sm">Sentra AI</span>
+                  <span className="font-semibold text-sm font-rajdhani">Sentra AI</span>
                 </div>
                 <button 
                   onClick={() => setChatOpen(false)}
