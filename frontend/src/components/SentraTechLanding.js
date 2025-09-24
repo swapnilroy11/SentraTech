@@ -244,10 +244,7 @@ const SentraTechLanding = () => {
     }
   };
 
-  // Import comprehensive translations
-  const { translations } = require('../data/translations');
-
-  const t = translations[currentLang];
+  // Using translations from useLanguage hook
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] overflow-x-hidden font-rajdhani">
