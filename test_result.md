@@ -122,15 +122,18 @@ backend:
 
   - task: "Demo Request & CRM Integration"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented Demo Request & CRM integration with mock HubSpot service. Added POST /api/demo/request endpoint for form submissions, mock HubSpot contact creation, mock email notification service (user confirmations + internal notifications), database storage of demo requests, proper error handling and validation. Uses Pydantic models for data validation. Mock services simulate real API behavior for testing without actual HubSpot credentials. Ready for backend testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING COMPLETE - All 15 demo request tests passed. Fixed 2 minor issues during testing: (1) Added company field validation as required field, (2) Fixed MongoDB ObjectId serialization in GET /api/demo/requests endpoint. PASSED: Valid input handling (complete & minimal requests), input validation (required fields: name, email, company), email format validation, phone number validation, duplicate contact handling in mock HubSpot, mock email service (both user confirmation & internal notifications), database integration (demo requests properly stored/retrieved), debug endpoints working, error handling for malformed requests. Mock services working perfectly - HubSpot contact creation with duplicate detection, email notifications sent correctly. All 34 backend tests passed (19 ROI + 15 Demo Request)."
 
 frontend:
   - task: "Navigation & Header"
