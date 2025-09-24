@@ -70,7 +70,7 @@ const FeatureShowcase = () => {
                   </div>
                   
                   <CardTitle className="text-2xl text-[#F8F9FA] mb-3 font-rajdhani">
-                    {t[feature.titleKey] || feature.title}
+                    {feature.titleKey ? t.features.items[feature.titleKey.split('.').pop()].title : feature.title}
                   </CardTitle>
                   
                   <Badge 
