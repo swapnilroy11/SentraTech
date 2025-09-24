@@ -281,6 +281,12 @@ const SentraTechLanding = () => {
               </div>
               
               <Button 
+                onClick={() => {
+                  const contactSection = document.querySelector('#contact');
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
               >
                 {t.hero.cta}
