@@ -25,18 +25,14 @@ const FeatureShowcase = () => {
             <Sparkles className="mr-2" size={14} />
             Core Features
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
-            <span className="bg-gradient-to-r from-[#F8F9FA] to-[#e2e8f0] bg-clip-text text-transparent">
-              Intelligent Automation
-            </span>
-            <br />
-            <span className="text-[#00FF41]">
-              Built for Scale
-            </span>
+          <h2 className="text-5xl font-bold mb-4 font-rajdhani">
+            {t.features.title}
           </h2>
-          <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
-            Our AI-powered platform combines the best of automation and human expertise, 
-            delivering unmatched performance across every customer interaction.
+          <p className="text-2xl text-[#00FF41] mb-8">
+            {t.features.subtitle}
+          </p>
+          <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto text-lg leading-relaxed">
+            {t.features.description}
           </p>
         </div>
 
