@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Briefcase } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { t } = useLanguage();
 
   // Navigation items with icons and routes
   const navItems = [
@@ -20,21 +18,14 @@ const FloatingNavigation = () => {
   ];
 
   const isActivePath = (path) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
-    return false;
-  };
-
-  // Scroll to section for single-page sections
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    try {
+      if (path === '/' && location.pathname === '/') return true;
+      if (path !== '/' && location.pathname.startsWith(path)) return true;
+      return false;
+    } catch (error) {
+      console.error('Error checking active path:', error);
+      return false;
     }
-    setIsOpen(false);
   };
 
   return (
