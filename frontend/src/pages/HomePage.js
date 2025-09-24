@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { motion } from 'framer-motion';
@@ -14,6 +13,7 @@ import {
   Play
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 
 const HomePage = () => {
   const { t } = useLanguage();
