@@ -34,8 +34,11 @@ function App() {
                 <FeatureShowcase />
                 <CustomerJourney />
                 <ROICalculator />
+                <CaseStudies />
+                <IntegrationsShowcase />
                 <TestimonialsSection />
                 <PricingSection />
+                <SecurityCompliance />
                 <CTASection />
                 <Footer />
               </>
