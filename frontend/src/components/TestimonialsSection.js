@@ -191,7 +191,7 @@ const TestimonialsSection = () => {
                   <div className="text-xs text-[rgb(161,161,170)]">
                     {testimonial.author}
                   </div>
-                  <Badge className="text-xs bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+                  <Badge className="text-xs bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
                     {testimonial.stats}
                   </Badge>
                 </div>
