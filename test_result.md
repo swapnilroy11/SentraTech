@@ -337,8 +337,7 @@ metadata:
 test_plan:
   current_focus:
     - "Demo Request Form Integration"
-  stuck_tasks:
-    - "Demo Request Form Integration"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
