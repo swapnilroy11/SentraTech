@@ -90,7 +90,7 @@ class ROICalculation(BaseModel):
 class DemoRequest(BaseModel):
     email: EmailStr
     name: str
-    company: str = ""
+    company: str  # Required field, no default value
     phone: str = ""
     call_volume: str = ""
     message: str = ""
@@ -99,6 +99,12 @@ class DemoRequest(BaseModel):
     def name_must_not_be_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('Name cannot be empty')
+        return v.strip()
+    
+    @validator('company')
+    def company_must_not_be_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError('Company cannot be empty')
         return v.strip()
     
     @validator('phone')
