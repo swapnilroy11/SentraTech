@@ -428,22 +428,22 @@ const HorizontalJourney = () => {
                 tabIndex={0}
                 aria-label={`${stage.title} - ${stage.subtitle}`}
               >
-                <CardContent className="p-8 h-full flex flex-col justify-between">
+                <CardContent className="p-10 h-full flex flex-col justify-between">
                   <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex-1 pr-8">
+                      <div className="flex items-center space-x-6 mb-6">
                         <div 
-                          className="w-16 h-16 rounded-xl flex items-center justify-center"
+                          className="w-20 h-20 rounded-2xl flex items-center justify-center"
                           style={{ 
                             backgroundColor: `${stage.color}20`,
                             border: `2px solid ${stage.color}50`
                           }}
                         >
-                          <stage.icon size={32} style={{ color: stage.color }} />
+                          <stage.icon size={40} style={{ color: stage.color }} />
                         </div>
                         <div>
                           <Badge 
-                            className="text-sm px-3 py-1"
+                            className="text-base px-4 py-2 font-medium"
                             style={{ 
                               backgroundColor: `${stage.color}20`,
                               color: stage.color,
@@ -455,37 +455,42 @@ const HorizontalJourney = () => {
                         </div>
                       </div>
                       
-                      <h3 className="text-2xl font-bold text-white mb-3">
+                      <h3 className="text-3xl font-bold text-white mb-4">
                         {stage.title}
                       </h3>
-                      <p className="text-[rgb(161,161,170)] text-base leading-relaxed">
+                      <p className="text-[rgb(161,161,170)] text-lg leading-relaxed">
                         {stage.subtitle}
+                      </p>
+                      
+                      {/* Add brief description for larger cards */}
+                      <p className="text-[rgb(218,218,218)] text-sm leading-relaxed mt-4 opacity-80">
+                        {stage.description.substring(0, 120)}...
                       </p>
                     </div>
                     
                     <div className="text-right">
                       <div 
-                        className="text-4xl font-bold font-rajdhani"
+                        className="text-5xl font-bold font-rajdhani mb-2"
                         style={{ color: stage.color }}
                       >
                         {stage.metric}
                       </div>
-                      <div className="text-[rgb(161,161,170)] text-sm mt-2">
+                      <div className="text-[rgb(161,161,170)] text-base">
                         {stage.metricLabel}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-4">
-                    <div className="text-sm text-[rgb(161,161,170)]">
-                      Click for details
+                  <div className="flex items-center justify-between mt-6">
+                    <div className="text-base text-[rgb(161,161,170)]">
+                      Click for full details
                     </div>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-4">
                       <div 
-                        className="w-3 h-3 rounded-full"
+                        className="w-4 h-4 rounded-full"
                         style={{ backgroundColor: stage.color }}
                       />
-                      <span className="text-sm font-medium" style={{ color: stage.color }}>
+                      <span className="text-base font-medium" style={{ color: stage.color }}>
                         {stage.automationRate}% Automated
                       </span>
                     </div>
