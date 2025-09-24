@@ -20,6 +20,37 @@ import {
 
 const IntegrationsShowcase = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Performance optimization: memoize filtered integrations
+  const filteredIntegrations = useMemo(() => {
+    console.log('IntegrationsShowcase: Filtering integrations');
+    let filtered = integrations;
+
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter(integration => integration.category === activeCategory);
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(integration => 
+        integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        integration.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return filtered;
+  }, [activeCategory, searchTerm]);
+
+  // Component lifecycle logging
+  useEffect(() => {
+    console.log('IntegrationsShowcase: Component mounting');
+    setIsLoaded(true);
+    
+    return () => {
+      console.log('IntegrationsShowcase: Component unmounting');
+    };
+  }, []);
 
   const integrationCategories = [
     { id: 'all', name: 'All Integrations', icon: Globe },
