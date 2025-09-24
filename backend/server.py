@@ -134,6 +134,183 @@ class HubSpotContact(BaseModel):
 async def root():
     return {"message": "Hello World"}
 
+# Mock HubSpot Service
+class MockHubSpotService:
+    """Mock HubSpot service that simulates API responses"""
+    
+    def __init__(self):
+        self.contacts_db = {}  # In-memory storage for demo
+    
+    async def create_contact(self, demo_request: DemoRequest) -> Dict[str, Any]:
+        """Simulate HubSpot contact creation"""
+        try:
+            # Parse name into first/last name
+            name_parts = demo_request.name.strip().split(' ', 1)
+            firstname = name_parts[0]
+            lastname = name_parts[1] if len(name_parts) > 1 else ""
+            
+            # Check if contact already exists (by email)
+            existing_contact = None
+            for contact_id, contact in self.contacts_db.items():
+                if contact['email'].lower() == demo_request.email.lower():
+                    existing_contact = contact_id
+                    break
+            
+            if existing_contact:
+                logger.info(f"Mock HubSpot: Contact already exists for {demo_request.email}")
+                return {
+                    "success": True,
+                    "contact_id": existing_contact,
+                    "message": "Contact already exists - updated with new information",
+                    "is_new": False
+                }
+            
+            # Create new contact
+            contact_id = f"mock_contact_{str(uuid.uuid4())[:8]}"
+            
+            contact_data = {
+                "id": contact_id,
+                "email": demo_request.email,
+                "firstname": firstname,
+                "lastname": lastname,
+                "phone": demo_request.phone,
+                "company": demo_request.company,
+                "call_volume": demo_request.call_volume,
+                "message": demo_request.message,
+                "created_date": datetime.now(timezone.utc).isoformat(),
+                "source": "website_demo_form"
+            }
+            
+            # Store in mock database
+            self.contacts_db[contact_id] = contact_data
+            
+            logger.info(f"Mock HubSpot: Created contact {contact_id} for {demo_request.email}")
+            
+            # Simulate API delay
+            await asyncio.sleep(0.5)
+            
+            return {
+                "success": True,
+                "contact_id": contact_id,
+                "message": "Contact created successfully in HubSpot",
+                "is_new": True
+            }
+            
+        except Exception as e:
+            logger.error(f"Mock HubSpot service error: {str(e)}")
+            return {
+                "success": False,
+                "message": f"Error creating contact: {str(e)}"
+            }
+    
+    async def get_contact(self, contact_id: str) -> Optional[Dict[str, Any]]:
+        """Get contact by ID"""
+        return self.contacts_db.get(contact_id)
+    
+    def get_all_contacts(self) -> Dict[str, Any]:
+        """Get all contacts for debugging"""
+        return self.contacts_db
+
+# Mock Email Service
+class MockEmailService:
+    """Mock email service for sending notifications"""
+    
+    def __init__(self):
+        self.sent_emails = []  # Store sent emails for testing
+    
+    async def send_demo_confirmation(self, email: str, name: str, contact_id: str) -> bool:
+        """Send demo request confirmation to user"""
+        try:
+            email_content = {
+                "to": email,
+                "subject": "Demo Request Confirmed - SentraTech AI Platform",
+                "body": f"""
+Dear {name},
+
+Thank you for your interest in SentraTech's AI-powered customer support platform!
+
+We've received your demo request and our team will contact you within 1-2 business days to schedule a personalized demonstration.
+
+Your reference ID: {contact_id}
+
+During the demo, you'll see:
+• Sub-50ms AI routing in action
+• 70% automation capabilities 
+• Real-time BI dashboards
+• Custom ROI analysis for your business
+
+If you have any immediate questions, please don't hesitate to reach out.
+
+Best regards,
+The SentraTech Team
+
+---
+This is a mock email service. In production, this would be sent via SMTP.
+                """,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "type": "demo_confirmation"
+            }
+            
+            self.sent_emails.append(email_content)
+            logger.info(f"Mock Email: Sent demo confirmation to {email}")
+            
+            # Simulate email sending delay
+            await asyncio.sleep(0.3)
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Mock email service error: {str(e)}")
+            return False
+    
+    async def send_internal_notification(self, demo_request: DemoRequest, contact_id: str) -> bool:
+        """Send internal notification about new demo request"""
+        try:
+            internal_recipients = ["sales@sentratech.com", "demo-requests@sentratech.com"]  # Mock recipients
+            
+            email_content = {
+                "to": internal_recipients,
+                "subject": f"New Demo Request: {demo_request.name} - {demo_request.company}",
+                "body": f"""
+New Demo Request Received:
+
+Name: {demo_request.name}
+Email: {demo_request.email}
+Company: {demo_request.company}
+Phone: {demo_request.phone}
+Monthly Call Volume: {demo_request.call_volume}
+
+Message:
+{demo_request.message}
+
+HubSpot Contact ID: {contact_id}
+
+Please follow up within 24 hours.
+
+---
+This is a mock email service. In production, this would be sent via SMTP.
+                """,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "type": "internal_notification"
+            }
+            
+            self.sent_emails.append(email_content)
+            logger.info(f"Mock Email: Sent internal notification for {demo_request.email}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Mock internal email error: {str(e)}")
+            return False
+    
+    def get_sent_emails(self) -> List[Dict[str, Any]]:
+        """Get all sent emails for debugging"""
+        return self.sent_emails
+
+# Initialize services
+hubspot_service = MockHubSpotService()
+email_service = MockEmailService()
+
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.dict()
