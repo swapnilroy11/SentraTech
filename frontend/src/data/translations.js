@@ -259,11 +259,11 @@ export const translations = {
   },
   
   bn: {
-    // Navigation (নেভিগেশন)
+    // Navigation (নেভিগেশন) - Company Slogan
     nav: {
-      features: "বৈশিষ্ট্যসমূহ",
-      pricing: "মূল্য নির্ধারণ", 
-      about: "আমাদের সম্পর্কে",
+      features: "অতিক্রম", // Beyond
+      pricing: "উৎকৃষ্ট", // Better  
+      about: "সীমাহীন", // Boundless
       contact: "যোগাযোগ"
     },
     
