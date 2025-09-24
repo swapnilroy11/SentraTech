@@ -1034,6 +1034,9 @@ async def get_demo_requests(limit: int = 50):
         cursor = db.demo_requests.find({}).sort("timestamp", -1).limit(limit)
         demo_requests = []
         async for doc in cursor:
+            # Convert ObjectId to string for JSON serialization
+            if "_id" in doc:
+                doc["_id"] = str(doc["_id"])
             demo_requests.append(doc)
         return {"success": True, "count": len(demo_requests), "requests": demo_requests}
     except Exception as e:
