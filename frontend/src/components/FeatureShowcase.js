@@ -19,16 +19,16 @@ const FeatureShowcase = () => {
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-[rgba(218,255,1,0.1)] text-[#DAFF01] border-[#DAFF01]/30">
+          <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Sparkles className="mr-2" size={14} />
             Core Features
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-[rgb(218,218,218)] bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+            <span className="bg-gradient-to-r from-[#F8F9FA] to-[#e2e8f0] bg-clip-text text-transparent">
               Intelligent Automation
             </span>
             <br />
-            <span className="text-[#DAFF01]">
+            <span className="text-[#00FF41]">
               Built for Scale
             </span>
           </h2>
