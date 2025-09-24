@@ -573,8 +573,9 @@ class GoogleSheetsService:
     def __init__(self):
         self.sheet_id = "1-sonq8dr_QbA2gG8YU2iv12mVM4OQqwl9mhNPkKS8ts"
         self.sheet_name = "Demo Requests"
-        # This should be deployed as a Google Apps Script Web App
-        self.web_app_url = "https://script.google.com/macros/s/AKfycbx_demo_requests_webapp_url/exec"
+        # Google Apps Script Web App URL - Replace with actual deployed URL
+        # For now, using a placeholder that will trigger fallback to database
+        self.web_app_url = "https://script.google.com/macros/s/PLACEHOLDER_REPLACE_WITH_ACTUAL_WEBAPP_URL/exec"
         
     async def submit_demo_request(self, demo_request: DemoRequest) -> Dict[str, Any]:
         """Submit demo request to Google Sheets"""
