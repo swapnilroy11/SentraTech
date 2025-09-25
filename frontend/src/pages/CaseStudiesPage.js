@@ -136,7 +136,7 @@ const CaseStudiesPage = () => {
               Ready to Build Your Success Story?
             </h2>
             <p className="text-xl text-[rgb(161,161,170)] mb-8">
-              See how SentraTech integrates seamlessly with your existing tools and platforms
+              Discover our enterprise-grade security measures and compliance certifications
             </p>
             <Link to="/security">
               <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 mx-auto">
