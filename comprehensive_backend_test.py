@@ -727,13 +727,13 @@ class ComprehensiveBackendTester:
                 response = self.session.get(f"{BACKEND_URL}/chat/session/{self.chat_session_id}/history", timeout=10)
                 
                 if response.status_code == 200:
-                    history = response.json()
-                    if isinstance(history, list):
+                    result = response.json()
+                    if "messages" in result and isinstance(result["messages"], list):
                         self.log_test("Live Chat - Message History", True, 
-                                    f"Chat history retrieved: {len(history)} messages")
+                                    f"Chat history retrieved: {len(result['messages'])} messages")
                     else:
                         self.log_test("Live Chat - Message History", False, 
-                                    f"Invalid history format: {type(history)}")
+                                    f"Invalid history format: {result}")
                 else:
                     self.log_test("Live Chat - Message History", False, 
                                 f"HTTP {response.status_code}: {response.text}")
