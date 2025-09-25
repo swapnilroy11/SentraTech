@@ -27,7 +27,8 @@ class PerformanceMonitor {
     this.thresholds = {
       // Google's Core Web Vitals thresholds
       LCP: { good: 2500, needs_improvement: 4000 }, // Largest Contentful Paint
-      FID: { good: 100, needs_improvement: 300 },    // First Input Delay  
+      FID: { good: 100, needs_improvement: 300 },    // First Input Delay (deprecated)
+      INP: { good: 200, needs_improvement: 500 },    // Interaction to Next Paint (new)
       CLS: { good: 0.1, needs_improvement: 0.25 },   // Cumulative Layout Shift
       FCP: { good: 1800, needs_improvement: 3000 },  // First Contentful Paint
       TTFB: { good: 600, needs_improvement: 1500 }   // Time to First Byte
