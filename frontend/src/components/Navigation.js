@@ -189,19 +189,19 @@ const Navigation = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Items */}
-          <div className="flex flex-col p-4">
-            <div className="space-y-2">
+          {/* Mobile Menu Items - Enhanced visibility */}
+          <div className="flex flex-col p-6">
+            <div className="space-y-3">
               {navigationItems.map((item) => (
                 <HashLink
                   key={item.path}
                   smooth
                   to={item.path}
                   onClick={handleMenuItemClick}
-                  className={`block px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
+                  className={`block px-6 py-4 rounded-xl transition-all duration-200 font-medium border ${
                     isActivePath(item.path)
-                      ? 'text-[#00FF41] bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)]'
-                      : 'text-[#e2e8f0] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.05)]'
+                      ? 'text-[#00FF41] bg-[rgba(0,255,65,0.15)] border-[rgba(0,255,65,0.4)] shadow-lg shadow-[rgba(0,255,65,0.2)]'
+                      : 'text-[#e2e8f0] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.08)] border-[rgba(255,255,255,0.1)] hover:border-[rgba(0,255,65,0.3)]'
                   }`}
                 >
                   {item.label}
@@ -209,11 +209,11 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Actions */}
-            <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
+            {/* Mobile Menu Actions - Enhanced */}
+            <div className="mt-8 pt-6 border-t border-[rgba(0,255,65,0.2)]">
               {/* Demo Request Button */}
               <Link to="/demo-request" onClick={handleMenuItemClick} className="block">
-                <Button className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-3 rounded-xl font-rajdhani">
+                <Button className="w-full bg-gradient-to-r from-[#00FF41] to-[#00e83a] text-[#0A0A0A] hover:from-[#00e83a] hover:to-[#00d235] font-semibold px-6 py-4 rounded-xl font-rajdhani shadow-lg shadow-[rgba(0,255,65,0.3)] transform hover:scale-105 transition-all duration-200">
                   Request Demo
                 </Button>
               </Link>
