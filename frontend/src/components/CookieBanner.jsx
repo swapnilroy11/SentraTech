@@ -28,22 +28,11 @@ const CookieBanner = () => {
 
   // Initialize Google Analytics based on consent
   const initializeAnalyticsBasedOnConsent = (consent) => {
-    if (typeof window.gtag === 'function') {
-      if (consent === 'all' || (typeof consent === 'object' && consent.analytics)) {
-        // Enable GA4 with page view tracking
-        window.gtag('config', 'G-75HTVL1QME', {
-          send_page_view: true,
-          anonymize_ip: true // Ensure IP anonymization for privacy
-        });
-        console.log('Google Analytics enabled based on user consent');
-      } else {
-        // Disable GA4 tracking
-        window.gtag('config', 'G-75HTVL1QME', {
-          send_page_view: false,
-          client_storage: 'none'
-        });
-        console.log('Google Analytics disabled - no consent given');
-      }
+    if (typeof window.updateGoogleAnalyticsConsent === 'function') {
+      const hasAnalyticsConsent = consent === 'all' || (typeof consent === 'object' && consent.analytics);
+      window.updateGoogleAnalyticsConsent(hasAnalyticsConsent);
+    } else {
+      console.warn('Google Analytics consent function not available');
     }
   };
 
