@@ -164,22 +164,28 @@ const Navigation = () => {
           aria-hidden="true"
         />
 
-        {/* Mobile Menu Panel */}
+        {/* Mobile Menu Panel - Enhanced with better background */}
         <div 
           id="mobile-navigation-menu"
-          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] border-l border-[#2a2a2a] transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
+          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-l border-[rgba(0,255,65,0.3)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          {/* Mobile Menu Header */}
-          <div className="flex items-center justify-between p-4 border-b border-[#2a2a2a]">
-            <SentraTechLogo className="h-8" />
+          {/* Mobile Menu Header - Enhanced */}
+          <div className="flex items-center justify-between p-6 border-b border-[rgba(0,255,65,0.2)]">
+            <SentraTechLogo 
+              width={32} 
+              height={32} 
+              showText={true} 
+              textColor="#00FF41"
+              className="" 
+            />
             <button
               onClick={handleMenuClose}
               aria-label="Close navigation menu"
-              className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors"
+              className="w-10 h-10 bg-[rgba(0,255,65,0.1)] backdrop-blur-md border border-[rgba(0,255,65,0.3)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.2)] hover:scale-110"
             >
-              <X size={24} />
+              <X size={20} className="text-[#00FF41]" />
             </button>
           </div>
 
