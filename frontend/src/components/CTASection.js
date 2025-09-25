@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { flushSync } from 'react-dom';
+import { trackDemoBooking, trackFormErrors, trackFormInteraction } from '../utils/analytics';
 
 const CTASection = () => {
   const [formData, setFormData] = useState({
