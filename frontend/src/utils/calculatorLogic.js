@@ -1,16 +1,17 @@
-// Optimized Multi-Country ROI Calculator Logic
-// Simplified approach focusing on Agent Count and AHT only
+// Multi-Country ROI Calculator Logic with Total Calls Support
+// Updated algorithm with 30% profit margin and Total Calls input option
 
 import { BASE_COST, AI_COST } from './costBaselines';
 
 /**
- * Calculate ROI for four-country comparison with optimized inputs
+ * Calculate ROI for four-country comparison with flexible input options
  * @param {string} country - Selected country (Bangladesh, India, Philippines, Vietnam)
  * @param {number} agentCount - Number of agents
  * @param {number} ahtMinutes - Average Handle Time in minutes per call
- * @returns {object} Complete ROI analysis with simplified metrics
+ * @param {number} totalCalls - Optional: direct call volume input (overrides calculation)
+ * @returns {object} Complete ROI analysis with accurate per-call metrics
  */
-export function calculateROI(country, agentCount, ahtMinutes) {
+export function calculateROI(country, agentCount, ahtMinutes, totalCalls = null) {
   // Input validation
   if (!country || !BASE_COST[country]) {
     throw new Error(`Invalid country: ${country}`);
@@ -24,54 +25,50 @@ export function calculateROI(country, agentCount, ahtMinutes) {
       callVolume: 0,
       tradCost: 0,
       aiCost: 0,
+      tradPerCall: 0,
+      aiPerCall: 0,
       monthlySavings: 0,
       annualSavings: 0,
-      roi: 0,
-      reduction: 0
+      roiPercent: 0,
+      costReduction: 0
     };
   }
   
-  // Derive monthly call volume
-  // 8 hours/day × 60 minutes/hour ÷ AHT minutes/call × 22 working days/month
-  const callsPerAgentPerMonth = (8 * 60) / ahtMinutes * 22;
-  const callVolume = Math.round(agentCount * callsPerAgentPerMonth);
-  
-  // Traditional BPO cost (country baseline × agent count)
+  // Determine callVolume
+  const callVolume = totalCalls 
+    ? totalCalls 
+    : Math.floor(agentCount * ((8*60)/ahtMinutes) * 22);
+
+  // Traditional cost
   const tradCost = agentCount * BASE_COST[country];
-  
-  // SentraTech AI cost (fixed cost per agent)
+
+  // AI cost (with 30% profit margin: $154×1.3 ≈ $200/agent·month)
   const aiCost = agentCount * AI_COST;
-  
-  // Calculate savings and ROI
+
+  // Per-call costs
+  const callsPerAgent = callVolume / agentCount;
+  const tradPerCall = callsPerAgent > 0 ? parseFloat((BASE_COST[country] / callsPerAgent).toFixed(2)) : 0;
+  const aiPerCall = callsPerAgent > 0 ? parseFloat((AI_COST / callsPerAgent).toFixed(2)) : 0;
+
+  // Savings & ROI
   const monthlySavings = tradCost - aiCost;
   const annualSavings = monthlySavings * 12;
-  
-  // Calculate percentages
-  const roi = aiCost > 0 ? ((annualSavings / (aiCost * 12)) * 100) : 0;
-  const reduction = tradCost > 0 ? ((monthlySavings / tradCost) * 100) : 0;
-  
-  return {
+  const roiPercent = aiCost > 0 ? parseInt(((annualSavings / (aiCost * 12)) * 100).toFixed(0)) : 0;
+  const costReduction = tradCost > 0 ? parseInt(((monthlySavings / tradCost) * 100).toFixed(0)) : 0;
+
+  return { 
     country,
     agentCount,
     ahtMinutes,
     callVolume,
-    
-    // Cost comparison
-    tradCost,
-    aiCost,
-    
-    // Savings metrics
-    monthlySavings,
-    annualSavings,
-    
-    // Performance metrics
-    roi: Math.max(0, roi),
-    reduction,
-    
-    // Additional metrics for display
-    costPerCall: callVolume > 0 ? (tradCost / callVolume) : 0,
-    aiCostPerCall: callVolume > 0 ? (aiCost / callVolume) : 0,
-    paybackMonths: monthlySavings > 0 ? (aiCost * 12) / monthlySavings : 0
+    tradCost, 
+    aiCost, 
+    tradPerCall, 
+    aiPerCall, 
+    monthlySavings, 
+    annualSavings, 
+    roiPercent, 
+    costReduction 
   };
 }
 
