@@ -71,25 +71,28 @@ const FloatingNavigation = () => {
           )}
         </button>
 
-      {/* Navigation Menu - Viewport-centered positioning */}
-      <div
-        className={`transition-all duration-500 ${
-          isOpen
-            ? 'opacity-100 translate-x-0 pointer-events-auto'
-            : 'opacity-0 -translate-x-8 pointer-events-none'
-        }`}
-        style={{
-          position: 'absolute',
-          left: '80px',
-          top: '0',
-          transform: 'translateY(-50%)',
-          zIndex: 9998
-        }}
-      >
-        <div 
-          className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.3)] rounded-2xl p-6 min-w-[240px] shadow-2xl shadow-[rgba(0,255,65,0.2)] max-h-[80vh] overflow-y-auto"
-          data-floating-nav="true"
+        {/* Navigation Menu Panel */}
+        <div
+          className={`floating-nav-menu transition-all duration-500 ${
+            isOpen
+              ? 'opacity-100 translate-x-0 pointer-events-auto'
+              : 'opacity-0 -translate-x-8 pointer-events-none'
+          }`}
+          style={{
+            position: 'absolute',
+            left: '88px',
+            top: '0',
+            transform: 'translateY(-50%)',
+            zIndex: 99998
+          }}
         >
+          <div 
+            className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.4)] rounded-2xl p-6 min-w-[260px] shadow-2xl shadow-[rgba(0,255,65,0.3)] max-h-[80vh] overflow-y-auto"
+            data-floating-nav="true"
+            style={{
+              boxShadow: '0 25px 50px -12px rgba(0,255,65,0.25), 0 0 0 1px rgba(0,255,65,0.1)'
+            }}
+          >
           {/* Company Slogan */}
           <div className="mb-6 pb-4 border-b border-[rgba(0,255,65,0.2)]">
             <div className="text-center">
