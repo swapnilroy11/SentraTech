@@ -23,7 +23,6 @@ export const insertDemoRequest = async (formData) => {
         company: formData.company,
         phone: formData.phone || null,
         message: formData.message || null,
-        call_volume: formData.call_volume || null,
         created_at: new Date().toISOString()
       }])
       .select(); // Return the inserted record
