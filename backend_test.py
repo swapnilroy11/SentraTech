@@ -14,7 +14,7 @@ from typing import Dict, Any
 import urllib.parse
 
 # Backend URL from environment
-BACKEND_URL = "https://matrix-support.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-dark.preview.emergentagent.com/api"
 
 class AirtableGoogleSheetsIntegrationTester:
     """Test the Demo Request backend integration with Airtable and Google Sheets fallback"""
