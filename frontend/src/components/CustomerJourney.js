@@ -27,28 +27,6 @@ const CustomerJourney = () => {
       
       {/* Horizontal Parallax Journey */}
       <HorizontalJourney />
-      
-      {/* Journey Stats */}
-      <div className="container mx-auto px-6 pt-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">4.2min</div>
-            <div className="text-[rgb(161,161,170)] text-sm">Average Handle Time</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#00DDFF] mb-2">96%</div>
-            <div className="text-[rgb(161,161,170)] text-sm">First Call Resolution</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[rgb(192,192,192)] mb-2">70%</div>
-            <div className="text-[rgb(161,161,170)] text-sm">Automation Rate</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">47ms</div>
-            <div className="text-[rgb(161,161,170)] text-sm">AI Response Time</div>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };
