@@ -1,22 +1,33 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { motion } from 'framer-motion';
-import { 
-  Zap, 
-  Database, 
-  MessageSquare, 
-  BarChart3, 
-  Users, 
-  Shield,
+import {
+  Search,
+  Filter,
   Globe,
-  Smartphone,
-  ExternalLink,
+  Database,
+  MessageCircle,
+  BarChart3,
+  Users,
+  Mail,
+  Phone,
+  Calendar,
+  FileText,
+  Settings,
+  Zap,
   CheckCircle,
-  Clock,
-  ArrowRight
+  ExternalLink,
+  ArrowRight,
+  MessageSquare,
+  Shield,
+  Smartphone,
+  Clock
 } from 'lucide-react';
+
+// Import data from separate file to avoid circular dependencies
+import { integrations as integrationsData, integrationCategories, getIntegrationsByCategory } from '../data/integrationsData';
 
 const IntegrationsShowcase = () => {
   const [activeCategory, setActiveCategory] = useState('all');
