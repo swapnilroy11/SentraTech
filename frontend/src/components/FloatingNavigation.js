@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Briefcase, Route } from 'lucide-react';
+import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Route } from 'lucide-react';
 import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 
 const FloatingNavigation = () => {
