@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
-import { ArrowRight, MessageSquare, Calculator } from 'lucide-react';
+import { ArrowRight, MessageSquare, Calculator, TrendingUp, Users, Clock, Phone, Zap, BarChart3, Activity } from 'lucide-react';
 import ROICalculator from '../components/ROICalculator';
 import CustomerJourney from '../components/CustomerJourney';
 
