@@ -17,7 +17,7 @@ const CustomerJourney = () => {
             Customer Journey
           </Badge>
           <h2 className="text-5xl font-bold text-white mb-6 font-rajdhani">
-            {t.journey.title}
+            Intelligent Customer Experience Flow
           </h2>
           <p className="text-2xl text-[#00FF41] max-w-3xl mx-auto font-medium">
             {t.journey.subtitle}
