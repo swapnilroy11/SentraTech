@@ -221,6 +221,7 @@ class ROICalculatorTester:
                     "agent_count": agent_count,  # Same agent count for fair comparison
                     "average_handle_time": aht_seconds,
                     "monthly_call_volume": expected_call_volume,
+                    "cost_per_agent": 500,  # Default value, backend should use country baseline
                     "country": "Bangladesh"
                 }
                 
