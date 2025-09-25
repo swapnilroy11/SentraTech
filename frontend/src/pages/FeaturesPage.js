@@ -22,7 +22,7 @@ const FeaturesPage = () => {
               Features & <span className="text-[#00FF41]">Customer Journey</span>
             </h1>
             
-            <p className="text-base text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
               Discover how our AI-powered platform transforms customer support through intelligent automation, 
               real-time analytics, and seamless integrations.
             </p>
