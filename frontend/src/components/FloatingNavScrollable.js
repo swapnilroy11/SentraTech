@@ -65,9 +65,9 @@ const FloatingNavScrollable = () => {
         id="quickNav" 
         className={isExpanded ? 'expanded' : ''}
         style={{
-          position: 'fixed',
+          position: 'absolute',
           left: '20px',
-          top: '50vh',
+          top: '50%',
           transform: 'translateY(-50%)',
           width: '60px',
           height: '60px',
