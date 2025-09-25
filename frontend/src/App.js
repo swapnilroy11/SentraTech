@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import SpaceBackground from "./components/SpaceBackground";
 import FloatingNavigation from "./components/FloatingNavigation";
 import ChatWidget from "./components/ChatWidget";
+import Analytics from "./components/Analytics";
 
 // Pages
 import HomePage from "./pages/HomePage";
