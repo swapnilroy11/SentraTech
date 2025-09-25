@@ -174,37 +174,46 @@ const CookieBanner = () => {
 
       {/* Preferences Modal */}
       {showPreferences && (
-        <div
-          className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black bg-opacity-50"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="preferences-title"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleClosePreferences();
-            }
-          }}
-        >
+        <>
+          {/* Modal Backdrop */}
           <div
-            className="bg-[#161B22] border border-[rgb(63,63,63)] rounded-lg p-6 w-full max-w-md shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-60 bg-black bg-opacity-50"
+            aria-hidden="true"
+            onClick={handleClosePreferences}
+          />
+          
+          {/* Modal Container */}
+          <div
+            className="fixed inset-0 z-60 flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="preferences-title"
+            aria-describedby="preferences-description"
           >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 id="preferences-title" className="text-xl font-semibold text-white">
-                Cookie Preferences
-              </h2>
-              <button
-                onClick={handleClosePreferences}
-                className="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
-                         rounded-md p-1 transition-colors duration-200"
-                aria-label="Close preferences modal"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <div
+              className="bg-[#161B22] border border-[rgb(63,63,63)] rounded-lg p-6 w-full max-w-md shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h2 id="preferences-title" className="text-xl font-semibold text-white">
+                  Cookie Preferences
+                </h2>
+                <button
+                  onClick={handleClosePreferences}
+                  className="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
+                           rounded-md p-1 transition-colors duration-200"
+                  aria-label="Close preferences modal"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <p id="preferences-description" className="text-gray-400 text-sm mb-6">
+                Manage your cookie preferences below. Essential cookies are required for the website to function properly.
+              </p>
 
             {/* Preference Options */}
             <div className="space-y-4 mb-6">
