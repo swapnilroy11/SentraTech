@@ -153,19 +153,23 @@ const ROICalculator = () => {
 
   // Real-time calculation when inputs change
   useEffect(() => {
-    if (agentCount && averageHandleTime && agentCount[0] >= 0 && averageHandleTime[0] > 0) {
+    try {
       const metrics = calculateROIMetrics();
       setResults(metrics);
+    } catch (error) {
+      console.error('Error calculating ROI metrics:', error);
     }
   }, [agentCount, averageHandleTime, costPerAgent, monthlyCallVolume]);
 
-  // Trigger recalculation when monthlyCallVolume changes
+  // Initial calculation on component mount
   useEffect(() => {
-    if (agentCount && averageHandleTime && agentCount[0] >= 0 && averageHandleTime[0] > 0) {
+    try {
       const metrics = calculateROIMetrics();
       setResults(metrics);
+    } catch (error) {
+      console.error('Error in initial calculation:', error);
     }
-  }, [monthlyCallVolume]);
+  }, []);
 
   // Apply preset scenarios
   const applyPreset = (preset) => {
