@@ -218,36 +218,40 @@ class StatusCheckCreate(BaseModel):
 
 # ROI Calculator Models
 class ROIInput(BaseModel):
-    call_volume: int = Field(..., description="Monthly call volume")
-    current_cost_per_call: float = Field(..., description="Current cost per call in USD")
-    average_handle_time: int = Field(..., description="Average handle time in seconds")
     agent_count: int = Field(..., description="Current agent count")
+    average_handle_time: int = Field(..., description="Average handle time in seconds") 
+    monthly_call_volume: int = Field(..., description="Monthly call volume")
+    cost_per_agent: float = Field(..., description="Cost per agent per month in USD")
     
 class ROIResults(BaseModel):
-    # Current metrics
-    current_monthly_cost: float
-    current_annual_cost: float
+    # Traditional cost breakdown
+    traditional_labor_cost: float
+    traditional_technology_cost: float 
+    traditional_infrastructure_cost: float
+    traditional_total_cost: float
     
-    # Projected metrics with SentraTech
-    new_monthly_cost: float
-    new_annual_cost: float
+    # AI cost breakdown
+    ai_voice_cost: float
+    ai_processing_cost: float
+    ai_platform_fee: float
+    ai_total_cost: float
+    
+    # Savings and ROI
     monthly_savings: float
     annual_savings: float
-    cost_reduction_percent: float
+    cost_reduction_percentage: float
+    roi_percentage: float
+    payback_period_months: float
     
-    # Performance improvements
-    new_aht: float
-    time_saved_per_call: float
-    total_time_saved_monthly: float
-    aht_reduction_percent: float
+    # Per-call metrics
+    traditional_cost_per_call: float
+    ai_cost_per_call: float
     
-    # Automation metrics
-    automated_calls: float
-    human_assisted_calls: float
+    # Volume metrics
+    call_volume_processed: int
+    automated_calls: int
+    human_assisted_calls: int
     automation_rate: float
-    
-    # ROI
-    roi: float
 
 class ROICalculation(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
