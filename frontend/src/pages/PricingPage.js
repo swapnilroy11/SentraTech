@@ -284,7 +284,8 @@ const PricingPage = () => {
           </motion.div>
         </div>
       </section>
-      </div>
+        </div>
+      </main>
     </>
   );
 };
