@@ -62,9 +62,6 @@ const FeaturesPage = () => {
 
       {/* Multi-Channel Support Section - Better breathing room */}
       <section id="multi-channel" className="py-10 bg-[#0A0A0A] relative">
-        {/* Visual separator */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-[#00DDFF] to-transparent opacity-50"></div>
-        
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
