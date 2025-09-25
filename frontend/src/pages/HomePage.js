@@ -86,8 +86,7 @@ const HomePage = () => {
           >
             <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight">
               <span className="text-[#FFFFFF]">Customer Support as a</span><br/>
-              <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by</span><br/>
-              <span className="text-[#FFFFFF]">AI&nbsp;+&nbsp;BI</span>
+              <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by AI&nbsp;+&nbsp;BI</span>
             </h1>
             
             <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
