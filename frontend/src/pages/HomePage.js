@@ -26,7 +26,7 @@ const HomePage = () => {
       description: 'Calculate your potential savings with our intelligent cost analysis tool',
       icon: Calculator,
       preview: 'Interactive sliders showing potential 60% cost reduction',
-      link: '/features#roi-calculator',
+      link: '/roi-calculator',
       color: '#00FF41'
     },
     {
