@@ -35,7 +35,7 @@ const FloatingNavigation = () => {
 
   return (
     <div 
-      className="fixed left-6 top-1/2 transform -translate-y-1/2 z-[9999] hidden lg:block"
+      className="fixed left-6 top-1/2 transform -translate-y-1/2 z-[9999] hidden md:block"
       style={{
         position: 'fixed',
         left: '24px',
