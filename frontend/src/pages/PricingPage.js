@@ -53,7 +53,8 @@ const PricingPage = () => {
       {/* SEO Management for Pricing Page */}
       <SEOManager />
       
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="pricing">
+      <main role="main" aria-label="SentraTech Pricing Plans - AI Customer Support Costs">
+        <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="pricing">
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="container mx-auto px-6">
