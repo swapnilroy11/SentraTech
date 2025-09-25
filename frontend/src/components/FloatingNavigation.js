@@ -12,6 +12,7 @@ const FloatingNavigation = () => {
   // Navigation items with icons and routes
   const navItems = [
     { id: 'home', path: '/', icon: Home, label: 'Home' },
+    { id: 'metrics', path: '/features#real-time-metrics', icon: Zap, label: 'Real-Time Metrics' },
     { id: 'roi', path: '/features#roi-calculator', icon: Calculator, label: 'ROI Calculator' },
     { id: 'voice', path: '/features#multi-channel', icon: MessageSquare, label: 'Voice Agents' },
     { id: 'journey', path: '/features#customer-journey', icon: Route, label: 'Journey' },
