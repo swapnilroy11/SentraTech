@@ -73,11 +73,11 @@ const ROICalculator = () => {
     setMonthlyCallVolume(Math.round(totalCallsPerMonth));
   }, [agentCount, averageHandleTime]);
 
-  // Market-Research-Backed Cost Calculations
+  // Traditional BPO Monthly Cost Calculation (India Baseline)
   const calculateTraditionalMonthlyCost = (agents, costPerAgent) => {
     const baseLaborCost = agents * costPerAgent;
-    const technologyCost = agents * MARKET_RESEARCH.technologyCost;
-    const infrastructureCost = agents * MARKET_RESEARCH.infrastructureCost;
+    const technologyCost = agents * INDIA_BPO_BASELINE.technologyCost;
+    const infrastructureCost = agents * INDIA_BPO_BASELINE.infrastructureCost;
     
     return {
       laborCost: baseLaborCost,
@@ -88,69 +88,48 @@ const ROICalculator = () => {
   };
 
   const calculateAIMonthlyCost = (callVolume) => {
-    // AI costs based on real industry data: $0.25-$0.50 per interaction
-    const aiInteractionCost = callVolume * MARKET_RESEARCH.interactions.ai_cost;
-    const platformFee = MARKET_RESEARCH.ai.platformBaseFee;
-    
-    let totalCost = aiInteractionCost + platformFee;
-    
-    // Ensure realistic cost reduction (50-90% per industry research)
-    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent);
-    const traditionalInteractionCost = callVolume * MARKET_RESEARCH.interactions.traditional_cost;
-    const effectiveTraditionalCost = Math.max(traditional.totalCost, traditionalInteractionCost);
-    
-    // Clamp AI cost to ensure 50-90% cost reduction
-    const minAiCost = effectiveTraditionalCost * 0.10;  // 90% savings max
-    const maxAiCost = effectiveTraditionalCost * 0.50;  // 50% savings min
-    totalCost = Math.max(minAiCost, Math.min(totalCost, maxAiCost));
+    const avgCallDurationMin = averageHandleTime[0];
+    const twilioVoiceCost = callVolume * avgCallDurationMin * INDIA_BPO_BASELINE.ai.twilioPerMin;
+    const aiProcessingCost = callVolume * avgCallDurationMin * INDIA_BPO_BASELINE.ai.aiProcessPerMin;
+    const platformFee = INDIA_BPO_BASELINE.ai.platformFee;
     
     return {
-      voiceCost: aiInteractionCost * 0.6,  // 60% for voice processing
-      aiProcessingCost: aiInteractionCost * 0.4,  // 40% for AI processing
+      voiceCost: twilioVoiceCost,
+      aiProcessingCost: aiProcessingCost,
       platformFee: platformFee,
-      totalCost: totalCost
+      totalCost: twilioVoiceCost + aiProcessingCost + platformFee
     };
   };
 
   const calculateROIMetrics = () => {
     const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent);
-    const traditionalInteractionCost = monthlyCallVolume * MARKET_RESEARCH.interactions.traditional_cost;
-    
-    // Use the higher cost model (agent-based or interaction-based)
-    const effectiveTraditionalCost = Math.max(traditional.totalCost, traditionalInteractionCost);
     const ai = calculateAIMonthlyCost(monthlyCallVolume);
     
-    const monthlySavings = effectiveTraditionalCost - ai.totalCost;
+    const monthlySavings = traditional.totalCost - ai.totalCost;
     const annualSavings = monthlySavings * 12;
-    let roiPercentage = ((annualSavings / (ai.totalCost * 12)) * 100);
-    let costReductionPercentage = ((monthlySavings / effectiveTraditionalCost) * 100);
-    let paybackPeriodMonths = (ai.totalCost * 12) / monthlySavings;
     
-    // Ensure realistic ranges based on industry research (50-90% cost reduction)
-    costReductionPercentage = Math.min(90, Math.max(50, costReductionPercentage)); // 50-90% range
-    roiPercentage = Math.min(1000, Math.max(100, roiPercentage)); // 100-1000% ROI range
-    paybackPeriodMonths = Math.min(24, Math.max(4, paybackPeriodMonths)); // 4-24 months
+    // Calculate ROI and cost reduction percentages
+    const roiPercentage = ai.totalCost > 0 ? ((annualSavings / (ai.totalCost * 12)) * 100) : 0;
+    const costReductionPercentage = traditional.totalCost > 0 ? ((monthlySavings / traditional.totalCost) * 100) : 0;
+    const paybackPeriodMonths = monthlySavings > 0 ? ((ai.totalCost * 12) / monthlySavings) : 0;
     
     // Calculate per-call costs
-    const traditionalCostPerCall = effectiveTraditionalCost / monthlyCallVolume;
-    const aiCostPerCall = ai.totalCost / monthlyCallVolume;
+    const traditionalCostPerCall = monthlyCallVolume > 0 ? (traditional.totalCost / monthlyCallVolume) : 0;
+    const aiCostPerCall = monthlyCallVolume > 0 ? (ai.totalCost / monthlyCallVolume) : 0;
     
     return {
-      traditional: {
-        ...traditional,
-        totalCost: effectiveTraditionalCost
-      },
+      traditional,
       ai,
       monthlySavings,
       annualSavings,
-      roiPercentage,
+      roiPercentage: Math.max(0, roiPercentage),
       costReductionPercentage,
-      paybackPeriodMonths,
+      paybackPeriodMonths: Math.max(0, paybackPeriodMonths),
       traditionalCostPerCall,
       aiCostPerCall,
       callVolumeProcessed: monthlyCallVolume,
-      automatedCalls: monthlyCallVolume * MARKET_RESEARCH.ai.automationRate,
-      humanAssistedCalls: monthlyCallVolume * (1 - MARKET_RESEARCH.ai.automationRate)
+      automatedCalls: monthlyCallVolume * INDIA_BPO_BASELINE.ai.automationRate,
+      humanAssistedCalls: monthlyCallVolume * (1 - INDIA_BPO_BASELINE.ai.automationRate)
     };
   };
 
