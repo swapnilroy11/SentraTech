@@ -212,6 +212,9 @@ const CTASection = () => {
       }
       
       if (success) {
+        // Track successful demo booking conversion in GA4
+        trackDemoBooking(formData, contactId);
+        
         setContactId(contactId);
         setIsSubmitted(true);
         // Clear form data after successful submission
