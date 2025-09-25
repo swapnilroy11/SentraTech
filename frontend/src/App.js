@@ -22,6 +22,9 @@ import DemoRequestPage from "./pages/DemoRequestPage";
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
 
+// Hooks
+import usePageViews from "./hooks/usePageViews";
+
 function App() {
   return (
     <LanguageProvider>
