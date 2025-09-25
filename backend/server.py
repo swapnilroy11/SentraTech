@@ -1247,7 +1247,12 @@ def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
     AUTOMATION_RATE = 0.70  # 70% automation rate
     
     # Use India baseline for traditional cost calculation
-    BASE_AGENT_COST = BASE_COST['India']
+    if input_data.country and input_data.country in BASE_COST:
+        BASE_AGENT_COST = BASE_COST[input_data.country]
+    else:
+        # Fallback to cost_per_agent or India baseline
+        BASE_AGENT_COST = input_data.cost_per_agent if hasattr(input_data, 'cost_per_agent') else BASE_COST['India']
+    
     TECHNOLOGY_COST_PER_AGENT = 50  # software/tools estimate per agent
     INFRASTRUCTURE_COST_PER_AGENT = 30  # office/infrastructure estimate per agent
     
