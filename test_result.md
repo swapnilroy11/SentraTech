@@ -143,7 +143,7 @@ user_problem_statement: "Build backend functionality for SentraTech ROI Calculat
 backend:
   - task: "ROI Calculator API"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
@@ -158,6 +158,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ REGRESSION TESTING PASSED - All 19 ROI Calculator tests passed after frontend changes. /api/roi/calculate endpoint working perfectly with accurate calculations (45% cost reduction, 70% automation, 35% AHT reduction), /api/roi/save storing data correctly, /api/roi/calculations retrieval working, edge cases handled properly, input validation functional, performance excellent (<50ms response times). No regressions detected from horizontal journey timeline changes."
+      - working: false
+        agent: "testing"
+        comment: "❌ ENHANCED ROI CALCULATOR VALIDATION FAILED - 37/48 tests passed (77.1% success rate). 🎯 CRITICAL ISSUES FOUND: (1) Market Research Algorithm Issues: Cost reduction calculations showing unrealistic 96-97% savings (outside expected 30-70% range), payback periods too short (0.4-0.5 months vs expected 6-24 months), Enterprise ROI showing 2923% (outside expected 200-500% range). Algorithm needs calibration to match real-world BPO cost scenarios. (2) Input Validation Failures: Zero and negative agent counts accepted when should be rejected, missing proper validation for edge cases. (3) API Endpoint Issues: GET /api/roi/calculations failing with HTTP 400 due to old database records not matching new enhanced model structure. (4) Database Migration Needed: Existing ROI calculations in database have old schema causing Pydantic validation errors. ✅ WORKING CORRECTLY: Mathematical calculation accuracy (100% pass rate), performance and caching (average 118ms response time), concurrent request handling (100% success rate), core calculation logic accurate to market research constants. 💡 RECOMMENDATIONS: (1) Recalibrate market research constants to produce realistic 30-70% cost reduction, (2) Add proper input validation for zero/negative values, (3) Migrate or clean old database records, (4) Adjust algorithm to match real-world BPO vs AI cost scenarios."
 
   - task: "Demo Request & CRM Integration"
     implemented: true
