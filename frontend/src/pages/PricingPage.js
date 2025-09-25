@@ -4,6 +4,7 @@ import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import PricingSection from '../components/PricingSection';
+import SEOManager from '../components/SEOManager';
 
 const PricingPage = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
