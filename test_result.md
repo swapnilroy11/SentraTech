@@ -438,7 +438,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Performance Testing & Core Web Vitals"
+    - "API Load Testing & Production Readiness"
   stuck_tasks: []
   test_all: false
   test_priority: "critical_first"
