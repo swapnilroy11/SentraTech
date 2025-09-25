@@ -80,12 +80,11 @@ const FloatingNavigation = () => {
               const isActive = isActivePath(item.path);
 
               return (
-                <button
+                <HashLink
                   key={item.id}
-                  onClick={() => {
-                    navigateToSection(item.path);
-                    setIsOpen(false);
-                  }}
+                  smooth
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
                   className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 text-left ${
                     isActive
                       ? 'bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)] text-[#00FF41]'
@@ -97,7 +96,7 @@ const FloatingNavigation = () => {
                   {isActive && (
                     <div className="ml-auto w-2 h-2 bg-[#00FF41] rounded-full"></div>
                   )}
-                </button>
+                </HashLink>
               );
             })}
           </nav>
