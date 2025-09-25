@@ -484,15 +484,18 @@ test_plan:
 
   - task: "Supabase Demo Request Integration"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/CTASection.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "critical"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented Supabase integration for demo request form. Replaced previous backend API with direct Supabase database integration. Added supabaseClient.js with createClient setup using environment variables (REACT_APP_SUPABASE_URL, REACT_APP_SUPABASE_ANON_KEY). Created insertDemoRequest helper function to submit form data to 'demo_requests' table. Updated CTASection.js to use Supabase instead of backend API. Form now submits directly to Supabase database with proper error handling and success feedback."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL SUPABASE INTEGRATION FAILURE - Database Schema Mismatch Issue. COMPREHENSIVE TESTING RESULTS: (1) Supabase Client Connection: ✅ Successfully established connection to Supabase instance (dwishuwpqyffsmgljrqy.supabase.co), environment variables properly configured, authentication working. (2) Form Validation: ✅ All form validation working perfectly - required fields (name, email, company) validated correctly, optional phone field validation functional, form submission blocked when validation fails. (3) Network Requests: ✅ POST requests successfully sent to Supabase REST API endpoint (/rest/v1/demo_requests), proper headers and authentication included. (4) CRITICAL DATABASE SCHEMA ERROR: ❌ Supabase returns 400 error with message 'Could not find the call_volume column of demo_requests in the schema cache' (PGRST204). The frontend code is trying to insert a 'call_volume' field that doesn't exist in the Supabase 'demo_requests' table schema. (5) Error Handling: ✅ Frontend properly catches and displays error messages to users ('Failed to submit demo request. Please try again.'). ROOT CAUSE: Database table 'demo_requests' in Supabase is missing the 'call_volume' column that the frontend code expects. The insertDemoRequest function in supabaseClient.js includes call_volume in the insert operation, but the database table doesn't have this column. SOLUTION REQUIRED: Either (A) Add 'call_volume' column to Supabase 'demo_requests' table, or (B) Remove call_volume from the frontend insertion code. All other aspects of the Supabase integration are working correctly - connection, authentication, validation, error handling, and network communication are functional."
 
   - task: "Enhanced Navigation & Anchor Scrolling"
     implemented: true
