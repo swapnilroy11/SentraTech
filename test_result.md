@@ -438,7 +438,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Cookie Consent Banner & Privacy Compliance"
+    - "Performance Testing & Core Web Vitals"
   stuck_tasks: []
   test_all: false
   test_priority: "critical_first"
