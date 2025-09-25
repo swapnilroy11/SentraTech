@@ -26,7 +26,7 @@ const CustomerJourney = () => {
       </div>
       
       {/* Horizontal Parallax Journey */}
-      <HorizontalJourney />
+      <CustomerJourneySimple />
     </section>
   );
 };
