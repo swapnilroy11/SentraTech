@@ -1,82 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import LoadingScreen from './LoadingScreen';
 
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 20
+    x: -10  // Reduced movement for smoother performance
   },
   in: {
     opacity: 1,
-    y: 0
+    x: 0
   },
   out: {
     opacity: 0,
-    y: -20
+    x: 10  // Reduced movement for smoother performance
   }
 };
 
 const pageTransition = {
   type: 'tween',
-  ease: 'easeInOut',
-  duration: 0.2
+  ease: 'easeOut',  // Simpler easing
+  duration: 0.15    // Reduced duration for snappier feel
 };
 
 const PageTransition = ({ children }) => {
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(true);
 
   useEffect(() => {
-    console.log('PageTransition: Navigating to', location.pathname);
-    
-    // Show loading state
-    setIsLoading(true);
+    // Simplified transition logic - remove loading state for better performance
     setShowContent(false);
     
-    // Use requestAnimationFrame to ensure smooth transitions
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setIsLoading(false);
-        setShowContent(true);
-      });
-    });
+    // Use single requestAnimationFrame instead of double
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 50); // Minimal delay for smooth transition
 
-    // Cleanup function
     return () => {
-      setIsLoading(false);
-      setShowContent(false);
+      clearTimeout(timer);
     };
   }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {isLoading ? (
-        <LoadingScreen key="loading" />
-      ) : (
-        <motion.div
-          key={location.pathname}
-          initial="initial"
-          animate="in"
-          exit="out"
-          variants={pageVariants}
-          transition={pageTransition}
-          className="w-full min-h-screen"
-          style={{ 
-            backgroundColor: '#0A0A0A', 
-            minHeight: '100vh',
-            position: 'relative',
-            zIndex: 1
-          }}
-          onAnimationComplete={() => {
-            console.log('PageTransition: Animation complete for', location.pathname);
-          }}
-        >
-          {showContent && children}
-        </motion.div>
-      )}
+      <motion.div
+        key={location.pathname}
+        initial="initial"
+        animate="in"
+        exit="out"
+        variants={pageVariants}
+        transition={pageTransition}
+        className="w-full min-h-screen"
+        style={{ 
+          backgroundColor: '#0A0A0A', 
+          minHeight: '100vh',
+          position: 'relative',
+          zIndex: 1,
+          // Performance optimizations
+          willChange: 'transform, opacity',
+          backfaceVisibility: 'hidden',
+          perspective: 1000
+        }}
+      >
+        {showContent && children}
+      </motion.div>
     </AnimatePresence>
   );
 };
