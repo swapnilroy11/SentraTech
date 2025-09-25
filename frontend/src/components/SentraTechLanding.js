@@ -47,34 +47,49 @@ const SentraTechLanding = () => {
     // Remove mock chat messages loading
   }, []);
 
-  // Custom cursor effect
+  // Enhanced custom cursor effect with synchronized particle trail
   useEffect(() => {
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
     document.body.appendChild(cursor);
 
     const particles = [];
+    let lastParticleTime = 0;
+    const particleInterval = 50; // Create particle every 50ms for smoother trail
     
     const moveCursor = (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      const now = Date.now();
+      cursor.style.left = (e.clientX - 8) + 'px'; // Center cursor
+      cursor.style.top = (e.clientY - 8) + 'px';
       
-      // Create particle trail
-      if (Math.random() > 0.7) {
+      // Create synchronized particle trail at regular intervals
+      if (now - lastParticleTime >= particleInterval) {
         const particle = document.createElement('div');
         particle.className = 'cursor-particle';
-        particle.style.left = e.clientX + 'px';
-        particle.style.top = e.clientY + 'px';
-        particle.style.background = '#00FF41';
+        particle.style.left = (e.clientX - 2) + 'px'; // Center particle
+        particle.style.top = (e.clientY - 2) + 'px';
+        
+        // Add slight random offset for natural feel
+        const offsetX = (Math.random() - 0.5) * 6;
+        const offsetY = (Math.random() - 0.5) * 6;
+        particle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        
         document.body.appendChild(particle);
+        particles.push({
+          element: particle,
+          birth: now
+        });
         
-        particles.push(particle);
-        
-        setTimeout(() => {
-          particle.remove();
-          particles.splice(particles.indexOf(particle), 1);
-        }, 500);
+        lastParticleTime = now;
       }
+      
+      // Clean up old particles
+      particles.forEach((p, index) => {
+        if (now - p.birth > 800) { // Particle lifetime: 800ms
+          p.element.remove();
+          particles.splice(index, 1);
+        }
+      });
     };
 
     document.addEventListener('mousemove', moveCursor);
@@ -82,7 +97,7 @@ const SentraTechLanding = () => {
     return () => {
       document.removeEventListener('mousemove', moveCursor);
       cursor.remove();
-      particles.forEach(p => p.remove());
+      particles.forEach(p => p.element.remove());
     };
   }, []);
 
