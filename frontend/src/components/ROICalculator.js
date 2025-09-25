@@ -478,6 +478,113 @@ const ROICalculator = () => {
             </div>
           </div>
         </div>
+
+        {/* Email Modal for ROI Report */}
+        {showEmailModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+            <div className="bg-[rgb(26,28,30)] rounded-2xl p-8 max-w-md w-full mx-4 border border-[#00FF41]/30 shadow-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-[#00FF41]/20 rounded-xl">
+                    <Mail size={20} className="text-[#00FF41]" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Get Your ROI Report</h3>
+                </div>
+                <button
+                  onClick={closeEmailModal}
+                  className="text-[rgb(161,161,170)] hover:text-white transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <form onSubmit={submitROIReport}>
+                <div className="mb-6">
+                  <Label htmlFor="email" className="text-white text-lg font-semibold mb-3 block">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00FF41]" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="your.email@company.com"
+                      className="pl-12 bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white rounded-xl text-lg py-4 w-full"
+                      required
+                      autoFocus
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-[rgb(38,40,42)] rounded-xl p-4 mb-6 border border-[rgb(63,63,63)]">
+                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Your ROI Report Summary:</div>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <div className="text-white font-semibold">Country:</div>
+                      <div className="text-[#00FF41]">{selectedCountry}</div>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold">Agents:</div>
+                      <div className="text-[#00DDFF]">{agentCount}</div>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold">Monthly Savings:</div>
+                      <div className="text-[#00FF41] font-bold">{formatCurrency(results.monthlySavings)}</div>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold">ROI:</div>
+                      <div className="text-[#00DDFF] font-bold">{results.roi?.toFixed(0)}%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                    {error}
+                  </div>
+                )}
+
+                <div className="flex space-x-3">
+                  <Button
+                    type="button"
+                    onClick={closeEmailModal}
+                    variant="outline"
+                    className="flex-1 border-[rgb(63,63,63)] text-white hover:bg-[rgb(38,40,42)]"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSubmittingReport}
+                    className="flex-1 bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold"
+                  >
+                    {isSubmittingReport ? (
+                      <>
+                        <Loader2 className="animate-spin mr-2" size={16} />
+                        Submitting...
+                      </>
+                    ) : (
+                      'Send ROI Report'
+                    )}
+                  </Button>
+                </div>
+              </form>
+
+              <p className="text-[rgb(161,161,170)] text-xs mt-4 text-center">
+                You'll receive a detailed ROI analysis within 24 hours
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Success Message Overlay */}
+        {savedSuccessfully && (
+          <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-lg">
+            ✅ ROI report request submitted successfully!
+          </div>
+        )}
       </div>
     </section>
   );
