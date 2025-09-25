@@ -7,11 +7,12 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, DollarSign, Clock, 
-  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2, Target
+  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2, Target, Mail, X
 } from 'lucide-react';
 import axios from 'axios';
 import { calculateROI } from '../utils/calculatorLogic';
 import { COUNTRIES } from '../utils/costBaselines';
+import { insertROIReport } from '../lib/supabaseClient';
 
 const ROICalculator = () => {
   // Simplified State Management - Only Agent Count and AHT
