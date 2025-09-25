@@ -18,11 +18,11 @@ const FeaturesPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl md:text-6xl font-bold font-rajdhani mb-4 leading-tight">
+            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-6 leading-tight">
               Features & <span className="text-[#00FF41]">Customer Journey</span>
             </h1>
             
-            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-[rgb(161,161,170)] mb-16 max-w-4xl mx-auto leading-relaxed">
               Discover how our AI-powered platform transforms customer support through intelligent automation, 
               real-time analytics, and seamless integrations.
             </p>
