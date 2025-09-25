@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://custai-metrics.preview.emergentagent.com/api"
+BACKEND_URL = "https://calcperf-ui.preview.emergentagent.com/api"
 
 class SupabaseROIIntegrationTester:
     """Test the Supabase ROI Report integration functionality"""
