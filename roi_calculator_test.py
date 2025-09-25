@@ -444,6 +444,7 @@ class ROICalculatorTester:
         test_data_1 = {
             "agent_count": 50,
             "average_handle_time": 420,  # Exactly 7 minutes
+            "cost_per_agent": 500,  # Default value, backend should use country baseline
             "country": "Bangladesh"
         }
         
