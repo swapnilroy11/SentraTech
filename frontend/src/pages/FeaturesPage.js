@@ -53,14 +53,14 @@ const FeaturesPage = () => {
       </section>
 
       {/* Customer Journey Section - Better positioning */}
-      <section id="customer-journey" className="py-16 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
+      <section id="customer-journey" className="py-12 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
         {/* Subtle top border for visual separation */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent opacity-30"></div>
         <CustomerJourney />
       </section>
 
       {/* Multi-Channel Support Section - Reduced spacing */}
-      <section id="multi-channel" className="py-16 bg-[#0A0A0A] relative">
+      <section id="multi-channel" className="py-12 bg-[#0A0A0A] relative">
         {/* Visual separator */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-[#00DDFF] to-transparent opacity-50"></div>
         
