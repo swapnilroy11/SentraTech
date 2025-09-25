@@ -336,7 +336,7 @@ const ROICalculator = () => {
                   <Label htmlFor="costPerAgent" className="text-white text-base lg:text-lg">
                     Cost Per Agent (Monthly)
                   </Label>
-                  <Tooltip content="Traditional BPO agent costs: $2,600-$3,400/month (US), $1,000-$2,000/month (offshore) plus technology ($200/month) and infrastructure ($150/month)">
+                  <Tooltip content="India BPO baseline costs: $500 base + $50 technology + $30 infrastructure per agent monthly">
                     <Info size={16} className="ml-2 text-[rgb(161,161,170)] cursor-help" />
                   </Tooltip>
                 </div>
