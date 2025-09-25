@@ -505,7 +505,7 @@ class PerformanceMonitor {
    * Get performance summary
    */
   getPerformanceSummary() {
-    const coreVitals = ['LCP', 'FID', 'CLS'];
+    const coreVitals = ['LCP', 'FID', 'INP', 'CLS']; // Include both FID and INP
     const summary = {
       coreVitalsScore: 0,
       goodMetrics: 0,
@@ -513,8 +513,10 @@ class PerformanceMonitor {
       poorMetrics: 0
     };
 
+    let validMetrics = 0;
     coreVitals.forEach(metric => {
       if (this.metrics[metric]) {
+        validMetrics++;
         const rating = this.metrics[metric].rating;
         if (rating === 'good') {
           summary.goodMetrics++;
@@ -528,7 +530,9 @@ class PerformanceMonitor {
       }
     });
 
-    summary.coreVitalsScore = Math.round(summary.coreVitalsScore / coreVitals.length);
+    if (validMetrics > 0) {
+      summary.coreVitalsScore = Math.round(summary.coreVitalsScore / validMetrics);
+    }
     
     return summary;
   }
