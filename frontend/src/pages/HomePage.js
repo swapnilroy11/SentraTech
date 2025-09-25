@@ -60,10 +60,10 @@ const HomePage = () => {
       link: '/features#metrics'
     },
     {
-      title: 'Seamless Integrations',
-      description: '50+ pre-built integrations with popular CRM, communication, and analytics tools',
+      title: 'Enterprise Security',
+      description: 'SOC 2 compliant platform with end-to-end encryption and comprehensive auditing',
       icon: TrendingUp,
-      link: '/integrations#platforms'
+      link: '/security'
     }
   ];
 
