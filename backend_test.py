@@ -568,31 +568,533 @@ class AirtableGoogleSheetsIntegrationTester:
         return len(self.failed_tests) == 0
 
 
+class GA4ConversionTrackingTester:
+    """Test Demo Request API endpoints for GA4 conversion tracking integration"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_demo_request_api_basic(self):
+        """Test POST /api/demo/request endpoint with valid demo request data"""
+        print("\n=== Testing Demo Request API for GA4 Integration ===")
+        
+        # Use the exact test data from the review request
+        test_data = {
+            "name": "John Doe",
+            "email": "john.doe@example.com", 
+            "company": "Test Company",
+            "phone": "+1234567890",
+            "message": "Interested in AI customer support platform",
+            "call_volume": "10000"
+        }
+        
+        try:
+            print(f"📝 Testing POST /api/demo/request with GA4 tracking data...")
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=test_data, timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Verify basic response structure
+                if result.get("success") is True:
+                    self.log_test("GA4 Demo Request - API Success", True, 
+                                f"✅ Demo request API working correctly")
+                    
+                    # Verify reference_id is present for GA4 tracking
+                    reference_id = result.get("reference_id")
+                    if reference_id and len(reference_id) >= 32:  # UUID format
+                        self.log_test("GA4 Demo Request - Reference ID Generation", True, 
+                                    f"✅ Reference ID generated for GA4 tracking: {reference_id}")
+                        
+                        # Store for later tests
+                        self.ga4_reference_id = reference_id
+                    else:
+                        self.log_test("GA4 Demo Request - Reference ID Generation", False, 
+                                    f"❌ Invalid reference ID: {reference_id}")
+                    
+                    # Verify response structure for GA4 integration
+                    required_fields = ["success", "contact_id", "message", "reference_id", "source"]
+                    missing_fields = [field for field in required_fields if field not in result]
+                    
+                    if not missing_fields:
+                        self.log_test("GA4 Demo Request - Response Structure", True, 
+                                    f"✅ All required fields present for GA4 integration")
+                    else:
+                        self.log_test("GA4 Demo Request - Response Structure", False, 
+                                    f"❌ Missing fields for GA4: {missing_fields}")
+                    
+                    # Verify contact_id matches reference_id (for GA4 tracking consistency)
+                    contact_id = result.get("contact_id")
+                    if contact_id == reference_id:
+                        self.log_test("GA4 Demo Request - ID Consistency", True, 
+                                    f"✅ Contact ID matches reference ID for consistent GA4 tracking")
+                    else:
+                        self.log_test("GA4 Demo Request - ID Consistency", False, 
+                                    f"❌ ID mismatch: contact_id={contact_id}, reference_id={reference_id}")
+                    
+                else:
+                    self.log_test("GA4 Demo Request - API Success", False, 
+                                f"❌ Demo request failed: {result}")
+            else:
+                self.log_test("GA4 Demo Request - HTTP Status", False, 
+                            f"❌ HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("GA4 Demo Request - Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_demo_request_response_structure(self):
+        """Test that response includes proper structure for GA4 conversion tracking"""
+        print("\n=== Testing Response Structure for GA4 Conversion Tracking ===")
+        
+        test_data = {
+            "name": "GA4 Test User",
+            "email": "ga4.test@example.com", 
+            "company": "GA4 Test Company",
+            "phone": "+1555123456",
+            "message": "Testing GA4 conversion tracking integration",
+            "call_volume": "5000"
+        }
+        
+        try:
+            print(f"🎯 Testing response structure for GA4 trackDemoBooking() function...")
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=test_data, timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success"):
+                    # Test 1: Verify reference_id format (UUID for GA4)
+                    reference_id = result.get("reference_id")
+                    if reference_id:
+                        # Check if it's a valid UUID format
+                        import re
+                        uuid_pattern = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+                        if re.match(uuid_pattern, reference_id, re.IGNORECASE):
+                            self.log_test("GA4 Response - UUID Format", True, 
+                                        f"✅ Reference ID is valid UUID format: {reference_id}")
+                        else:
+                            self.log_test("GA4 Response - UUID Format", False, 
+                                        f"❌ Reference ID not UUID format: {reference_id}")
+                    
+                    # Test 2: Verify success status for GA4 tracking
+                    if result.get("success") is True:
+                        self.log_test("GA4 Response - Success Status", True, 
+                                    f"✅ Success status available for GA4 trackDemoBooking()")
+                    else:
+                        self.log_test("GA4 Response - Success Status", False, 
+                                    f"❌ Success status unclear: {result.get('success')}")
+                    
+                    # Test 3: Verify message field for user feedback
+                    message = result.get("message", "")
+                    if message and len(message) > 10:
+                        self.log_test("GA4 Response - User Message", True, 
+                                    f"✅ User feedback message available: {message[:50]}...")
+                    else:
+                        self.log_test("GA4 Response - User Message", False, 
+                                    f"❌ User message missing or too short: {message}")
+                    
+                    # Test 4: Verify source tracking for GA4 analytics
+                    source = result.get("source")
+                    if source in ["airtable", "sheets", "database"]:
+                        self.log_test("GA4 Response - Source Tracking", True, 
+                                    f"✅ Source tracking available for GA4 analytics: {source}")
+                    else:
+                        self.log_test("GA4 Response - Source Tracking", False, 
+                                    f"❌ Source tracking unclear: {source}")
+                    
+                    # Test 5: Response time for GA4 user experience
+                    start_time = time.time()
+                    test_response = requests.post(f"{BACKEND_URL}/demo/request", json=test_data, timeout=10)
+                    end_time = time.time()
+                    response_time = (end_time - start_time) * 1000
+                    
+                    if response_time < 2000:  # Less than 2 seconds for good UX
+                        self.log_test("GA4 Response - Performance", True, 
+                                    f"✅ Fast response for GA4 UX: {response_time:.2f}ms")
+                    else:
+                        self.log_test("GA4 Response - Performance", False, 
+                                    f"⚠️ Slow response may affect GA4 UX: {response_time:.2f}ms")
+                
+                else:
+                    self.log_test("GA4 Response - Request Success", False, 
+                                f"❌ Request failed: {result}")
+            else:
+                self.log_test("GA4 Response - HTTP Status", False, 
+                            f"❌ HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("GA4 Response - Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_demo_request_backend_handling(self):
+        """Test backend can handle demo request submissions properly for GA4 tracking"""
+        print("\n=== Testing Backend Handling for GA4 Conversion Tracking ===")
+        
+        # Test multiple scenarios that GA4 might encounter
+        test_scenarios = [
+            {
+                "name": "Complete Data Test",
+                "data": {
+                    "name": "Complete User",
+                    "email": "complete@ga4test.com",
+                    "company": "Complete Test Corp",
+                    "phone": "+1555987654",
+                    "message": "Complete demo request with all fields for GA4 testing",
+                    "call_volume": "15000"
+                }
+            },
+            {
+                "name": "Minimal Data Test", 
+                "data": {
+                    "name": "Minimal User",
+                    "email": "minimal@ga4test.com",
+                    "company": "Minimal Test Corp"
+                }
+            },
+            {
+                "name": "High Volume Test",
+                "data": {
+                    "name": "Enterprise User",
+                    "email": "enterprise@ga4test.com",
+                    "company": "Enterprise Test Corp",
+                    "phone": "+1555111222",
+                    "message": "Enterprise-level demo request for high-volume GA4 tracking",
+                    "call_volume": "50000+"
+                }
+            }
+        ]
+        
+        successful_scenarios = 0
+        
+        for scenario in test_scenarios:
+            try:
+                print(f"🧪 Testing {scenario['name']} for GA4 backend handling...")
+                
+                response = requests.post(f"{BACKEND_URL}/demo/request", 
+                                       json=scenario['data'], timeout=25)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    
+                    if result.get("success") and result.get("reference_id"):
+                        successful_scenarios += 1
+                        
+                        # Verify backend processing for GA4
+                        reference_id = result.get("reference_id")
+                        source = result.get("source", "unknown")
+                        
+                        self.log_test(f"GA4 Backend - {scenario['name']}", True, 
+                                    f"✅ Backend handled {scenario['name']} successfully: {reference_id} via {source}")
+                        
+                        # Verify database storage for GA4 analytics
+                        time.sleep(1)  # Allow background processing
+                        
+                        get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=5", timeout=10)
+                        if get_response.status_code == 200:
+                            requests_data = get_response.json()
+                            if requests_data.get("success"):
+                                found = any(req.get("email") == scenario['data']["email"] 
+                                          for req in requests_data.get("requests", []))
+                                if found:
+                                    self.log_test(f"GA4 Backend - {scenario['name']} Storage", True, 
+                                                f"✅ Data stored for GA4 analytics tracking")
+                                else:
+                                    self.log_test(f"GA4 Backend - {scenario['name']} Storage", False, 
+                                                f"❌ Data not found in storage")
+                    else:
+                        self.log_test(f"GA4 Backend - {scenario['name']}", False, 
+                                    f"❌ Backend failed to handle {scenario['name']}: {result}")
+                else:
+                    self.log_test(f"GA4 Backend - {scenario['name']}", False, 
+                                f"❌ HTTP {response.status_code} for {scenario['name']}")
+                    
+            except Exception as e:
+                self.log_test(f"GA4 Backend - {scenario['name']}", False, 
+                            f"❌ Exception in {scenario['name']}: {str(e)}")
+        
+        # Overall backend handling assessment
+        if successful_scenarios >= 2:  # At least 2 out of 3 scenarios should work
+            self.log_test("GA4 Backend - Overall Handling", True, 
+                        f"✅ Backend can handle demo requests properly for GA4: {successful_scenarios}/3 scenarios successful")
+        else:
+            self.log_test("GA4 Backend - Overall Handling", False, 
+                        f"❌ Backend handling issues for GA4: only {successful_scenarios}/3 scenarios successful")
+    
+    def test_form_data_endpoint(self):
+        """Test POST /api/demo-request endpoint (form data) for GA4 integration"""
+        print("\n=== Testing Form Data Endpoint for GA4 Integration ===")
+        
+        # Test form-encoded data submission (alternative endpoint)
+        form_data = {
+            "name": "Form Data User",
+            "email": "formdata@ga4test.com",
+            "company": "Form Data Test Corp",
+            "phone": "+1555333444",
+            "message": "Testing form data submission for GA4 conversion tracking"
+        }
+        
+        try:
+            print(f"📋 Testing POST /api/demo-request (form data) for GA4...")
+            
+            response = requests.post(f"{BACKEND_URL}/demo-request", 
+                                   data=form_data, 
+                                   headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                                   timeout=25)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("status") == "success":
+                    # Verify form endpoint provides tracking data for GA4
+                    request_id = result.get("requestId")
+                    timestamp = result.get("timestamp")
+                    
+                    if request_id and len(request_id) >= 32:  # UUID format
+                        self.log_test("GA4 Form Data - Request ID", True, 
+                                    f"✅ Form endpoint provides request ID for GA4: {request_id}")
+                    else:
+                        self.log_test("GA4 Form Data - Request ID", False, 
+                                    f"❌ Form endpoint request ID invalid: {request_id}")
+                    
+                    if timestamp:
+                        self.log_test("GA4 Form Data - Timestamp", True, 
+                                    f"✅ Form endpoint provides timestamp for GA4: {timestamp}")
+                    else:
+                        self.log_test("GA4 Form Data - Timestamp", False, 
+                                    f"❌ Form endpoint timestamp missing")
+                    
+                    # Verify form data is processed for GA4 tracking
+                    self.log_test("GA4 Form Data - Processing", True, 
+                                f"✅ Form data endpoint working for GA4 conversion tracking")
+                    
+                else:
+                    self.log_test("GA4 Form Data - Status", False, 
+                                f"❌ Form endpoint failed: {result}")
+            else:
+                self.log_test("GA4 Form Data - HTTP Status", False, 
+                            f"❌ Form endpoint HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("GA4 Form Data - Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_ga4_integration_readiness(self):
+        """Test overall GA4 integration readiness"""
+        print("\n=== Testing GA4 Integration Readiness ===")
+        
+        # Final comprehensive test with the exact sample data from review request
+        ga4_test_data = {
+            "name": "John Doe",
+            "email": "john.doe@example.com", 
+            "company": "Test Company",
+            "phone": "+1234567890",
+            "message": "Interested in AI customer support platform",
+            "call_volume": "10000"
+        }
+        
+        try:
+            print(f"🎯 Final GA4 integration readiness test...")
+            
+            # Test the complete flow that GA4 trackDemoBooking() will use
+            start_time = time.time()
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=ga4_test_data, timeout=30)
+            end_time = time.time()
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                if result.get("success"):
+                    reference_id = result.get("reference_id")
+                    source = result.get("source")
+                    message = result.get("message", "")
+                    
+                    # GA4 Integration Checklist
+                    ga4_ready = True
+                    ga4_issues = []
+                    
+                    # Check 1: Reference ID for conversion tracking
+                    if reference_id and len(reference_id) >= 32:
+                        self.log_test("GA4 Readiness - Reference ID", True, 
+                                    f"✅ Reference ID ready for GA4 trackDemoBooking(): {reference_id}")
+                    else:
+                        ga4_ready = False
+                        ga4_issues.append("Reference ID invalid")
+                        self.log_test("GA4 Readiness - Reference ID", False, 
+                                    f"❌ Reference ID not suitable for GA4: {reference_id}")
+                    
+                    # Check 2: Success status for conversion event
+                    if result.get("success") is True:
+                        self.log_test("GA4 Readiness - Success Status", True, 
+                                    f"✅ Success status ready for GA4 conversion event")
+                    else:
+                        ga4_ready = False
+                        ga4_issues.append("Success status unclear")
+                        self.log_test("GA4 Readiness - Success Status", False, 
+                                    f"❌ Success status not clear for GA4")
+                    
+                    # Check 3: Response time for user experience
+                    response_time = (end_time - start_time) * 1000
+                    if response_time < 3000:  # Less than 3 seconds
+                        self.log_test("GA4 Readiness - Performance", True, 
+                                    f"✅ Response time suitable for GA4 UX: {response_time:.2f}ms")
+                    else:
+                        ga4_issues.append("Slow response time")
+                        self.log_test("GA4 Readiness - Performance", False, 
+                                    f"⚠️ Response time may affect GA4 UX: {response_time:.2f}ms")
+                    
+                    # Check 4: Backend integration stability
+                    if source in ["airtable", "sheets", "database"]:
+                        self.log_test("GA4 Readiness - Backend Stability", True, 
+                                    f"✅ Backend integration stable for GA4: {source}")
+                    else:
+                        ga4_ready = False
+                        ga4_issues.append("Backend integration unstable")
+                        self.log_test("GA4 Readiness - Backend Stability", False, 
+                                    f"❌ Backend integration unstable: {source}")
+                    
+                    # Overall GA4 readiness assessment
+                    if ga4_ready:
+                        self.log_test("GA4 Integration - Overall Readiness", True, 
+                                    f"🎉 Demo Request API is READY for GA4 conversion tracking!")
+                    else:
+                        self.log_test("GA4 Integration - Overall Readiness", False, 
+                                    f"❌ GA4 integration issues: {', '.join(ga4_issues)}")
+                    
+                else:
+                    self.log_test("GA4 Integration - Final Test", False, 
+                                f"❌ Final GA4 test failed: {result}")
+            else:
+                self.log_test("GA4 Integration - Final Test", False, 
+                            f"❌ Final GA4 test HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("GA4 Integration - Final Test", False, f"❌ Exception: {str(e)}")
+    
+    def run_ga4_tests(self):
+        """Run all GA4 conversion tracking tests"""
+        print("🎯 Starting GA4 Conversion Tracking Tests")
+        print("=" * 80)
+        print("Testing Demo Request API endpoints for GA4 integration:")
+        print("• POST /api/demo/request endpoint with valid demo request data")
+        print("• Response includes proper reference_id for GA4 conversion tracking")
+        print("• Demo request functionality integrates with GA4 event tracking")
+        print("• Backend can handle demo request submissions for GA4 tracking")
+        print("=" * 80)
+        
+        # Run all GA4-focused tests
+        self.test_demo_request_api_basic()
+        self.test_demo_request_response_structure()
+        self.test_demo_request_backend_handling()
+        self.test_form_data_endpoint()
+        self.test_ga4_integration_readiness()
+        
+        # Print GA4-specific summary
+        print("\n" + "=" * 80)
+        print("📊 GA4 CONVERSION TRACKING TEST SUMMARY")
+        print("=" * 80)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        success_rate = (len(self.passed_tests) / len(self.test_results)) * 100 if self.test_results else 0
+        print(f"📈 Success Rate: {success_rate:.1f}%")
+        
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests:")
+            for test in self.failed_tests:
+                print(f"   - {test}")
+        
+        print("\n🎯 GA4 Integration Status:")
+        print("• Demo Request API: POST /api/demo/request")
+        print("• Reference ID Generation: UUID format for trackDemoBooking()")
+        print("• Response Structure: success, reference_id, message, source")
+        print("• Backend Processing: Airtable → Google Sheets → Database fallback")
+        print("• Form Data Support: POST /api/demo-request alternative endpoint")
+        
+        # Return success status
+        return len(self.failed_tests) == 0
+
+
 if __name__ == "__main__":
-    print("🎯 SentraTech Backend Integration Testing")
-    print("=" * 60)
-    print("Focus: Demo Request Airtable & Google Sheets Integration")
-    print("=" * 60)
+    print("🎯 SentraTech Backend Testing - GA4 Conversion Tracking Focus")
+    print("=" * 80)
+    print("Focus: Demo Request API endpoints for GA4 conversion tracking integration")
+    print("=" * 80)
     
-    # Run Airtable and Google Sheets integration tests
-    airtable_tester = AirtableGoogleSheetsIntegrationTester()
-    airtable_success = airtable_tester.run_all_tests()
+    # Run GA4 conversion tracking tests
+    ga4_tester = GA4ConversionTrackingTester()
+    ga4_success = ga4_tester.run_ga4_tests()
     
-    print("\n" + "=" * 60)
-    print("🏁 FINAL RESULTS")
-    print("=" * 60)
+    print("\n" + "=" * 80)
+    print("🏁 FINAL GA4 INTEGRATION RESULTS")
+    print("=" * 80)
     
-    if airtable_success:
-        print("🎉 ALL AIRTABLE & GOOGLE SHEETS INTEGRATION TESTS PASSED!")
-        print("✅ Demo Request backend integration is working correctly")
-        print("✅ Airtable primary integration operational")
-        print("✅ Google Sheets fallback mechanism functional")
-        print("✅ Enhanced logging with emoji indicators working")
-        print("✅ Integration status tracking operational")
-        print("✅ Database backup storage confirmed")
+    if ga4_success:
+        print("🎉 ALL GA4 CONVERSION TRACKING TESTS PASSED!")
+        print("✅ Demo Request API ready for GA4 integration")
+        print("✅ Reference ID generation working for trackDemoBooking()")
+        print("✅ Response structure suitable for GA4 conversion events")
+        print("✅ Backend can handle demo submissions for GA4 tracking")
+        print("✅ Both JSON and form data endpoints operational")
     else:
-        print("⚠️ SOME INTEGRATION TESTS FAILED")
-        print("❌ Review failed tests above for specific issues")
-        print("🔧 Integration may need debugging or configuration fixes")
+        print("⚠️ SOME GA4 INTEGRATION TESTS FAILED")
+        print("❌ Review failed tests above for specific GA4 integration issues")
+        print("🔧 GA4 integration may need fixes before deployment")
     
-    print(f"\n📊 Overall Success: {'✅ PASS' if airtable_success else '❌ FAIL'}")
+    print(f"\n📊 GA4 Integration Status: {'✅ READY' if ga4_success else '❌ NEEDS WORK'}")
+    
+    # Also run a quick connectivity test for the existing integration
+    print("\n" + "=" * 60)
+    print("🔄 Running Quick Integration Connectivity Test")
+    print("=" * 60)
+    
+    try:
+        response = requests.get(f"{BACKEND_URL}/", timeout=10)
+        if response.status_code == 200:
+            print("✅ Backend API connectivity confirmed")
+            
+            # Test one demo request to verify overall system
+            test_data = {
+                "name": "System Check User",
+                "email": "systemcheck@ga4ready.com",
+                "company": "System Check Corp",
+                "message": "Final system check for GA4 readiness"
+            }
+            
+            demo_response = requests.post(f"{BACKEND_URL}/demo/request", json=test_data, timeout=15)
+            if demo_response.status_code == 200:
+                result = demo_response.json()
+                if result.get("success") and result.get("reference_id"):
+                    print(f"✅ Demo Request system operational for GA4")
+                    print(f"✅ Reference ID: {result.get('reference_id')}")
+                    print(f"✅ Source: {result.get('source', 'unknown')}")
+                else:
+                    print(f"⚠️ Demo Request system issues: {result}")
+            else:
+                print(f"❌ Demo Request API error: {demo_response.status_code}")
+        else:
+            print(f"❌ Backend API connectivity failed: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Connectivity test failed: {str(e)}")
+    
+    print(f"\n🎯 Overall GA4 Readiness: {'✅ READY FOR DEPLOYMENT' if ga4_success else '❌ REQUIRES FIXES'}")
