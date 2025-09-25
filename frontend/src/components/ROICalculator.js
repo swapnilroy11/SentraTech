@@ -27,53 +27,41 @@ const ROICalculator = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Real-World Market Research Constants - Based on 2024-2025 Industry Data
-  const MARKET_RESEARCH = {
-    traditionalAgentCost: {
-      us_dedicated: { min: 2600, max: 3400, avg: 2800 },
-      offshore: { min: 1000, max: 2000, avg: 1500 }
-    },
-    technologyCost: 200, // per agent per month
-    infrastructureCost: 150, // per agent per month (office, utilities)
-    aht: {
-      industry_min: 6, // minutes
-      industry_max: 12, // minutes
-      industry_avg: 8 // minutes
-    },
-    interactions: {
-      traditional_cost: 4.5, // $3-$6 per interaction (industry average)
-      ai_cost: 0.375, // $0.25-$0.50 per interaction (85-90% cost reduction)
-      cost_reduction_rate: 0.85 // 85% cost reduction (industry standard)
-    },
+  // India Baseline BPO Cost Constants
+  const INDIA_BPO_BASELINE = {
+    baseAgentCost: 500,        // $ per agent per month (India BPO baseline)
+    technologyCost: 50,        // software/tools estimate per agent
+    infrastructureCost: 30,    // office/infrastructure estimate per agent
     ai: {
-      automationRate: 0.80, // 80% automation (industry leading)
-      paybackPeriod: { min: 4, max: 6 }, // 4-6 months per research
-      platformBaseFee: 1500 // Monthly platform fee
+      twilioPerMin: 0.018,     // $0.018 per minute
+      aiProcessPerMin: 0.05,   // $0.05 per minute  
+      platformFee: 297,        // base infrastructure fee
+      automationRate: 0.80     // 80% automation rate
     }
   };
 
-  // Preset Scenarios
+  // Preset Scenarios - Updated for India BPO baseline
   const PRESETS = [
     {
       name: 'Small Team',
       description: '5-15 agents',
       agentCount: 10,
       aht: 8,
-      costPerAgent: 2800
+      costPerAgent: 500  // India BPO baseline
     },
     {
       name: 'Mid-size',
       description: '25-75 agents', 
       agentCount: 50,
       aht: 8,
-      costPerAgent: 2800
+      costPerAgent: 500  // India BPO baseline
     },
     {
       name: 'Enterprise',
       description: '100-500 agents',
       agentCount: 200,
       aht: 9,
-      costPerAgent: 2900
+      costPerAgent: 500  // India BPO baseline
     }
   ];
 
