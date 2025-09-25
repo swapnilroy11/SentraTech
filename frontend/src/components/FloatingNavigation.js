@@ -35,13 +35,14 @@ const FloatingNavigation = () => {
 
   return (
     <div 
-      className="fixed left-6 top-1/2 transform -translate-y-1/2 z-[9999] hidden md:block"
+      className="hidden md:block"
       style={{
         position: 'fixed',
         left: '24px',
-        top: '50%',
+        top: '50vh', // Use viewport height for true centering
         transform: 'translateY(-50%)',
-        zIndex: 9999
+        zIndex: 9999,
+        pointerEvents: 'auto'
       }}
     >
       {/* Toggle Button - Always floating and centered */}
