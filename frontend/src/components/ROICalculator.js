@@ -526,7 +526,7 @@ const ROICalculator = () => {
                 <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
                   <div>
                     <div className="text-white font-semibold">Automated Calls</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">65% automation rate</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">80% automation rate</div>
                   </div>
                   <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
                     {formatNumber(results.automatedCalls || 0)}/month
