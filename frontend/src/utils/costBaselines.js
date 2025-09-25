@@ -1,5 +1,5 @@
 // Cost baselines for top BPO countries
-// Based on real market data with optimized calculations
+// Traditional BPO base costs (unchanged)
 
 export const BASE_COST = {
   Bangladesh: 300,
@@ -8,9 +8,8 @@ export const BASE_COST = {
   Vietnam: 550
 };
 
-// SentraTech AI Infrastructure Cost (with +20% buffer)
-// $128 × 1.2 ≈ $154/agent·month
-export const AI_COST = 154;
+// SentraTech AI infrastructure cost (30% profit margin): $154×1.3 ≈ $200/agent·month
+export const AI_COST = 200;
 
 // Country metadata for UI display
 export const COUNTRIES = [
