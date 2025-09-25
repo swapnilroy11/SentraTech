@@ -200,15 +200,7 @@ const Navigation = () => {
             </div>
 
             {/* Mobile Menu Actions */}
-            <div className="mt-6 pt-6 border-t border-[#2a2a2a] space-y-4">
-              {/* Language Toggle */}
-              <button
-                onClick={toggleLanguage}
-                className="w-full px-4 py-2 bg-[#1a1a1a] rounded-xl text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a] transition-colors"
-              >
-                {currentLang === 'en' ? 'বাং' : 'ENG'}
-              </button>
-
+            <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
               {/* Demo Request Button */}
               <Link to="/demo-request" onClick={handleMenuItemClick} className="block">
                 <Button className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-3 rounded-xl font-rajdhani">
