@@ -9,8 +9,8 @@ import CustomerJourney from '../components/CustomerJourney';
 const FeaturesPage = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
-      {/* Hero Section - Improved spacing */}
-      <section className="pt-16 pb-12 relative overflow-hidden">
+      {/* Hero Section - Compact spacing */}
+      <section className="pt-12 pb-8 relative overflow-hidden">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -18,32 +18,33 @@ const FeaturesPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl md:text-6xl font-bold font-rajdhani mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold font-rajdhani mb-4 leading-tight">
               Features & <span className="text-[#00FF41]">Customer Journey</span>
             </h1>
             
-            <p className="text-lg text-[rgb(161,161,170)] mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-[rgb(161,161,170)] mb-6 max-w-3xl mx-auto leading-relaxed">
               Discover how our AI-powered platform transforms customer support through intelligent automation, 
               real-time analytics, and seamless integrations.
             </p>
 
-            {/* Quick Stats Bar */}
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
+            {/* Compact Stats Bar */}
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
               {[
-                { icon: Zap, value: '50ms', label: 'Response Time' },
+                { icon: Zap, value: '47ms', label: 'AI Response' },
                 { icon: Users, value: '70%', label: 'Automation' },
-                { icon: CheckCircle, value: '99.9%', label: 'Uptime' },
+                { icon: CheckCircle, value: '96%', label: 'First Call Resolution' },
+                { value: '4.2min', label: 'Avg Handle Time' },
               ].map((stat, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                  className="flex items-center space-x-2 bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)] rounded-lg px-4 py-2"
+                  transition={{ duration: 0.6, delay: 0.2 + index * 0.05 }}
+                  className="flex items-center space-x-2 bg-[rgba(0,255,65,0.08)] border border-[rgba(0,255,65,0.25)] rounded-lg px-3 py-1.5 min-w-0"
                 >
-                  <stat.icon size={16} className="text-[#00FF41]" />
-                  <span className="text-[#00FF41] font-bold">{stat.value}</span>
-                  <span className="text-[rgb(161,161,170)] text-sm">{stat.label}</span>
+                  {stat.icon && <stat.icon size={14} className="text-[#00FF41] flex-shrink-0" />}
+                  <span className="text-[#00FF41] font-bold text-sm">{stat.value}</span>
+                  <span className="text-[rgb(161,161,170)] text-xs flex-shrink-0">{stat.label}</span>
                 </motion.div>
               ))}
             </div>
