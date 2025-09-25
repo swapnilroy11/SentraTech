@@ -465,21 +465,12 @@ const ROICalculator = () => {
             <div className="text-center">
               <Button 
                 size="lg"
-                onClick={saveROICalculation}
+                onClick={handleGetROIReport}
                 disabled={isLoading}
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-bold px-12 py-6 rounded-xl transform hover:scale-105 transition-all duration-200 text-xl font-rajdhani disabled:opacity-50 disabled:transform-none shadow-lg shadow-[#00FF41]/30"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="animate-spin mr-3" size={24} />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Target className="mr-3" size={24} />
-                    Get Detailed ROI Report
-                  </>
-                )}
+                <Target className="mr-3" size={24} />
+                Get Detailed ROI Report
               </Button>
               <p className="text-[rgb(161,161,170)] text-sm mt-4">
                 {selectedCountry} BPO vs AI automation comparison • Schedule demo for validation
