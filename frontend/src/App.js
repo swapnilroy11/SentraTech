@@ -43,25 +43,8 @@ function App() {
     console.log('🚀 Initializing SentraTech Enterprise Features...');
     
     try {
-      // Only register service worker in production or if supported
-      if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || window.location.protocol === 'https:')) {
-        serviceWorkerRegistration.register({
-          onUpdate: (registration) => {
-            console.log('🔄 App update available');
-          },
-          onSuccess: (registration) => {
-            console.log('✅ App cached for offline use');
-          }
-        });
-
-        // Request notification permission for updates
-        serviceWorkerRegistration.requestNotificationPermission();
-        
-        // Precache important resources
-        serviceWorkerRegistration.precacheImportantResources();
-      } else {
-        console.log('⚠️ Service Worker not supported or not in production mode');
-      }
+      // Temporarily disable service worker registration in development
+      console.log('⚠️ Service Worker registration disabled in development mode');
       
       // Add breadcrumbs for error tracking
       if (errorTracker) {
