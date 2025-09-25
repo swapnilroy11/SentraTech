@@ -135,9 +135,19 @@ const ROICalculator = () => {
 
   // Real-time calculation when inputs change
   useEffect(() => {
-    const metrics = calculateROIMetrics();
-    setResults(metrics);
+    if (agentCount && averageHandleTime && agentCount[0] >= 0 && averageHandleTime[0] > 0) {
+      const metrics = calculateROIMetrics();
+      setResults(metrics);
+    }
   }, [agentCount, averageHandleTime, costPerAgent, monthlyCallVolume]);
+
+  // Trigger recalculation when monthlyCallVolume changes
+  useEffect(() => {
+    if (agentCount && averageHandleTime && agentCount[0] >= 0 && averageHandleTime[0] > 0) {
+      const metrics = calculateROIMetrics();
+      setResults(metrics);
+    }
+  }, [monthlyCallVolume]);
 
   // Apply preset scenarios
   const applyPreset = (preset) => {
