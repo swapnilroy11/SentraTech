@@ -403,7 +403,8 @@ metadata:
 test_plan:
   current_focus:
     - "Supabase Demo Request Integration"
-  stuck_tasks: []
+  stuck_tasks:
+    - "Supabase Demo Request Integration"
   test_all: false
   test_priority: "critical_first"
 
