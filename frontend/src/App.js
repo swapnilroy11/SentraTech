@@ -64,53 +64,61 @@ function App() {
   };
 
   return (
-    <LanguageProvider>
-      <div className="App">
-        {/* Space-themed WebGL Background for entire website */}
-        <SpaceBackground intensity={0.8} particles={300} />
-        
-        <BrowserRouter>
-          {/* GA4 Analytics Tracking */}
-          <Analytics />
+    <HelmetProvider>
+      <LanguageProvider>
+        <div className="App">
+          {/* Space-themed WebGL Background for entire website */}
+          <SpaceBackground intensity={0.8} particles={300} />
           
-          {/* Scroll to Top on Route Change */}
-          <ScrollToTop />
-          
-          {/* Floating Left Navigation - moved inside BrowserRouter */}
-          <FloatingNavigation />
-          
-          {/* Global Chat Widget */}
-          <ChatWidget />
-          
-          {/* Cookie Consent Banner */}
-          <CookieBanner />
-          
-          {/* Global Navigation */}
-          <Navigation />
-          
-          {/* Breadcrumbs */}
-          <Breadcrumbs />
-          
-          {/* Main Content with Page Transitions */}
-          <PageTransition>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/features" element={<FeaturesPage />} />
-              <Route path="/case-studies" element={<CaseStudiesPage />} />
-              <Route path="/security" element={<SecurityPage />} />
-              <Route path="/roi-calculator" element={<ROICalculatorPage />} />
-              <Route path="/pricing" element={<PricingPage />} />
-              <Route path="/demo-request" element={<DemoRequestPage />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-            </Routes>
-          </PageTransition>
-          
-          {/* Global Footer */}
-          <Footer />
-        </BrowserRouter>
-      </div>
-    </LanguageProvider>
+          <BrowserRouter>
+            {/* Global SEO Management */}
+            <SEOManager />
+            
+            {/* GA4 Analytics Tracking */}
+            <Analytics />
+            
+            {/* Scroll to Top on Route Change */}
+            <ScrollToTop />
+            
+            {/* Floating Left Navigation - moved inside BrowserRouter */}
+            <FloatingNavigation />
+            
+            {/* Global Chat Widget */}
+            <ChatWidget />
+            
+            {/* Cookie Consent Banner */}
+            <CookieBanner />
+            
+            {/* Global Navigation */}
+            <Navigation />
+            
+            {/* Breadcrumbs */}
+            <Breadcrumbs />
+            
+            {/* Main Content with Page Transitions */}
+            <PageTransition>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/features" element={<FeaturesPage />} />
+                <Route path="/case-studies" element={<CaseStudiesPage />} />
+                <Route path="/security" element={<SecurityPage />} />
+                <Route path="/roi-calculator" element={<ROICalculatorPage />} />
+                <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/demo-request" element={<DemoRequestPage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+                
+                {/* Custom 404 Page */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </PageTransition>
+            
+            {/* Global Footer */}
+            <Footer />
+          </BrowserRouter>
+        </div>
+      </LanguageProvider>
+    </HelmetProvider>
   );
 }
 
