@@ -1,8 +1,22 @@
 // SentraTech Real User Monitoring (RUM) & Core Web Vitals
 // Enterprise-grade performance tracking and optimization
 
-// Import web-vitals functions (with fallback for older versions)
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals/attribution';
+// Import web-vitals functions
+let getCLS, getFID, getFCP, getLCP, getTTFB;
+
+// Dynamic import for web-vitals (handles different versions)
+try {
+  const webVitals = require('web-vitals');
+  getCLS = webVitals.getCLS || webVitals.onCLS;
+  getFID = webVitals.getFID || webVitals.onFID;
+  getFCP = webVitals.getFCP || webVitals.onFCP;
+  getLCP = webVitals.getLCP || webVitals.onLCP;
+  getTTFB = webVitals.getTTFB || webVitals.onTTFB;
+} catch (error) {
+  console.warn('Web Vitals library not available:', error);
+  // Fallback functions
+  getCLS = getFID = getFCP = getLCP = getTTFB = () => console.warn('Web Vitals not available');
+}
 
 class PerformanceMonitor {
   constructor() {
