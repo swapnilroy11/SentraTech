@@ -52,13 +52,13 @@ const HomePage = () => {
       title: '70% Automation',
       description: 'Intelligent automation handles routine inquiries while humans focus on complex issues',
       icon: Zap,
-      link: '/features#automation'
+      link: '/features'
     },
     {
       title: 'Real-time Metrics',
       description: 'Comprehensive BI dashboards with 20+ KPI metrics for data-driven decisions',
       icon: BarChart3,
-      link: '/features#metrics'
+      link: '/features#real-time-metrics'
     },
     {
       title: 'Enterprise Security',
