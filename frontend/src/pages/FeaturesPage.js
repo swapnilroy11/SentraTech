@@ -191,8 +191,8 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* Enhanced CTA Section with better visual design */}
-      <section className="py-12 bg-[#0A0A0A] relative">
+      {/* Enhanced CTA Section - More compact */}
+      <section className="py-8 bg-[#0A0A0A] relative">
         {/* Visual separator */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-[rgba(255,255,255,0.3)] to-transparent"></div>
         
