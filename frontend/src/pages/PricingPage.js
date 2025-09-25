@@ -48,7 +48,7 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="pricing">
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="container mx-auto px-6">
