@@ -293,8 +293,9 @@ const CookieBanner = () => {
                 {isLoading ? 'Saving...' : 'Save Preferences'}
               </button>
             </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
