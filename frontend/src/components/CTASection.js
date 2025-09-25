@@ -192,34 +192,18 @@ const CTASection = () => {
     setError(null);
     
     try {
-      console.log('Sending request to Google Sheets...'); // Debug log
+      console.log('Submitting to Supabase...'); // Debug log
       
-      // Primary: Submit directly to Google Sheets
-      let success = false;
-      let contactId = null;
+      // Submit to Supabase
+      const result = await insertDemoRequest(formData);
       
-      // Primary: Use backend endpoint (Google Sheets integration is handled in backend)
-      const response = await axios.post(`${BACKEND_URL}/api/demo/request`, formData, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 15000
-      });
+      console.log('Supabase response:', result); // Debug log
       
-      console.log('Backend response:', response.data); // Debug log
-      
-      if (response.data.success) {
-        success = true;
-        contactId = response.data.reference_id || response.data.contact_id;
-      } else {
-        throw new Error(response.data.message || 'Submission failed');
-      }
-      
-      if (success) {
+      if (result.success) {
         // Track successful demo booking conversion in GA4
-        trackDemoBooking(formData, contactId);
+        trackDemoBooking(formData, result.data.id);
         
-        setContactId(contactId);
+        setContactId(result.data.id);
         setIsSubmitted(true);
         // Clear form data after successful submission
         setFormData({
@@ -227,24 +211,13 @@ const CTASection = () => {
           message: '', call_volume: ''
         });
         setFieldErrors({}); // Clear any field errors
-      }
-    } catch (error) {
-      console.error('Demo request submission error:', error);
-      
-      if (error.response) {
-        const status = error.response.status;
-        if (status === 400) {
-          setError('Please check your information and try again.');
-        } else if (status >= 500) {
-          setError('Our system is temporarily unavailable. Please try again in a few minutes.');
-        } else {
-          setError('An unexpected error occurred. Please try again.');
-        }
-      } else if (error.code === 'ECONNABORTED') {
-        setError('Request timed out. Please check your connection and try again.');
       } else {
-        setError('Unable to connect. Please check your internet connection.');
+        throw new Error(result.message || 'Submission failed');
       }
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError(error.message || 'Failed to submit demo request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
