@@ -2381,7 +2381,7 @@ async def update_user_status(
 
 class DataExportRequest(BaseModel):
     email: EmailStr
-    request_type: str = Field(..., regex="^(export|deletion)$")
+    request_type: str = Field(..., pattern="^(export|deletion)$")
     verification_token: Optional[str] = None
 
 class DataExportResponse(BaseModel):
