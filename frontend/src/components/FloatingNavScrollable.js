@@ -64,6 +64,21 @@ const FloatingNavScrollable = () => {
       <div 
         id="quickNav" 
         className={isExpanded ? 'expanded' : ''}
+        style={{
+          position: 'fixed',
+          left: '20px',
+          top: '50vh',
+          transform: 'translateY(-50%)',
+          width: '60px',
+          height: '60px',
+          background: 'rgba(26, 31, 58, 0.8)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '30px',
+          boxShadow: '0 4px 20px rgba(0, 212, 255, 0.3)',
+          zIndex: 9999,
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }}
       >
         <button 
           onClick={toggleMenu}
