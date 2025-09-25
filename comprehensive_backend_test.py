@@ -684,14 +684,14 @@ class ComprehensiveBackendTester:
         # Test 2: POST /api/chat/message
         try:
             if hasattr(self, 'chat_session_id'):
-                message_data = {
-                    "content": "Hello, I need help with SentraTech platform",
-                    "sender": "user"
+                message_params = {
+                    "session_id": self.chat_session_id,
+                    "message": "Hello, I need help with SentraTech platform"
                 }
                 
                 response = self.session.post(
-                    f"{BACKEND_URL}/chat/message?session_id={self.chat_session_id}", 
-                    json=message_data, 
+                    f"{BACKEND_URL}/chat/message", 
+                    params=message_params, 
                     timeout=30
                 )
                 
