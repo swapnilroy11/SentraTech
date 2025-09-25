@@ -126,8 +126,8 @@ const Navigation = () => {
             </button>
           </ul>
 
-          {/* CTA and Language Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* CTA Section */}
+          <div className="hidden md:flex items-center">
             <Link to="/demo-request">
               <Button 
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
@@ -135,14 +135,6 @@ const Navigation = () => {
                 Request Demo
               </Button>
             </Link>
-            
-            {/* Language Toggle */}
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1 bg-[#1a1a1a] rounded-lg text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a]"
-            >
-              {currentLang === 'en' ? 'বাং' : 'ENG'}
-            </button>
           </div>
 
           {/* Mobile Menu Toggle */}
