@@ -8,9 +8,9 @@ import CustomerJourney from '../components/CustomerJourney';
 
 const FeaturesPage = () => {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="features-page">
       {/* Hero Section - Balanced spacing */}
-      <section className="pt-8 pb-6 relative overflow-hidden">
+      <section className="pt-8 pb-6 relative overflow-hidden" id="features-hero">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
