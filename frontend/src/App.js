@@ -82,7 +82,7 @@ function App() {
             <ScrollToTop />
             
             {/* Floating Left Navigation - moved inside BrowserRouter */}
-            <FloatingNavScrollable />
+            <FloatingNavTest />
             
             {/* Global Chat Widget */}
             <ChatWidget />
