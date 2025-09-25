@@ -1307,11 +1307,14 @@ async def get_roi_calculations(limit: int = 100):
 
 # Demo Request & CRM Routes
 @api_router.post("/demo/request", response_model=DemoRequestResponse)
+@cached(ttl=60, key_prefix="demo_validation")  # Cache validation for 1 minute
 async def create_demo_request(
     demo_request: DemoRequest,
     background_tasks: BackgroundTasks
 ):
-    """Create a demo request with Airtable primary, Google Sheets fallback"""
+    """Create a demo request with Airtable primary, Google Sheets fallback - PERFORMANCE OPTIMIZED"""
+    start_time = time.time()
+    
     try:
         logger.info(f"📝 Demo request received: {demo_request.email} from {demo_request.company}")
         
@@ -1325,40 +1328,34 @@ async def create_demo_request(
             "database": {"success": False, "error": "Not attempted"}
         }
         
-        # PRIMARY: Try Airtable submission first
-        logger.info("🔄 Attempting Airtable submission...")
-        airtable_result = await airtable_service.create_demo_request(demo_request)
-        integration_results["airtable"] = airtable_result
+        # Use asyncio.gather for parallel execution to reduce response time
+        airtable_task = airtable_service.create_demo_request(demo_request)
+        db_task = store_demo_request_optimized(demo_request, reference_id)
         
-        primary_success = airtable_result.get("success", False)
+        # Execute Airtable and database storage in parallel
+        airtable_result, db_result = await asyncio.gather(
+            airtable_task, db_task, return_exceptions=True
+        )
         
-        # FALLBACK: If Airtable failed, try Google Sheets
-        if not primary_success:
-            logger.warning(f"⚠️ Airtable failed: {airtable_result.get('error')}, falling back to Google Sheets")
-            sheets_result = await sheets_service.submit_demo_request(demo_request)
-            integration_results["sheets"] = sheets_result
+        # Handle Airtable result
+        if isinstance(airtable_result, Exception):
+            integration_results["airtable"] = {"success": False, "error": str(airtable_result)}
+            primary_success = False
         else:
-            logger.info(f"✅ Airtable success: Record ID {airtable_result.get('airtable_id')}")
+            integration_results["airtable"] = airtable_result
+            primary_success = airtable_result.get("success", False)
         
-        # Always save to database as final backup
-        demo_record = {
-            "id": reference_id,
-            "email": demo_request.email,
-            "name": demo_request.name,
-            "company": demo_request.company,
-            "phone": demo_request.phone,
-            "call_volume": demo_request.call_volume,
-            "message": demo_request.message,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "source": "website_form",
-            "integrations": integration_results,
-            "airtable_id": airtable_result.get("airtable_id") if primary_success else None,
-            "sheets_timestamp": integration_results["sheets"].get("timestamp") if not primary_success else None
-        }
+        # Handle database result  
+        if isinstance(db_result, Exception):
+            integration_results["database"] = {"success": False, "error": str(db_result)}
+        else:
+            integration_results["database"] = {"success": True, "error": None}
         
-        await db.demo_requests.insert_one(demo_record)
-        integration_results["database"]["success"] = True
-        logger.info(f"💾 Database storage successful: {reference_id}")
+        # FALLBACK: If Airtable failed, try Google Sheets (background task)
+        if not primary_success:
+            logger.warning(f"⚠️ Airtable failed: {integration_results['airtable'].get('error')}, falling back to Google Sheets")
+            # Execute sheets submission as background task to not block response
+            background_tasks.add_task(fallback_to_sheets, demo_request, reference_id)
         
         # Schedule email notifications as background tasks
         background_tasks.add_task(
@@ -1371,35 +1368,15 @@ async def create_demo_request(
             demo_request
         )
         
-        # Determine success status and response
-        if primary_success:
-            logger.info(f"🎉 Demo request completed successfully via Airtable: {reference_id}")
-            return DemoRequestResponse(
-                success=True,
-                contact_id=reference_id,
-                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
-                reference_id=reference_id,
-                source="airtable"
-            )
-        elif integration_results["sheets"].get("success"):
-            logger.info(f"🎉 Demo request completed successfully via Google Sheets fallback: {reference_id}")
-            return DemoRequestResponse(
-                success=True,
-                contact_id=reference_id,
-                message="Demo request submitted successfully! We'll contact you within 2 business hours.",
-                reference_id=reference_id,
-                source="sheets"
-            )
-        else:
-            # Both external services failed, but database succeeded
-            logger.warning(f"⚠️ External services failed, but database backup successful: {reference_id}")
-            return DemoRequestResponse(
-                success=True,
-                contact_id=reference_id,
-                message="Demo request received! We'll contact you within 4 business hours.",
-                reference_id=reference_id,
-                source="database"
-            )
+        response_time = (time.time() - start_time) * 1000
+        logger.info(f"Demo request processed in {response_time:.2f}ms - Reference: {reference_id}")
+        
+        return DemoRequestResponse(
+            message="Demo request submitted successfully! We'll contact you within 24 hours.",
+            reference_id=reference_id,
+            status="submitted",
+            integration_status=integration_results
+        )
             
     except Exception as e:
         logger.error(f"Demo request creation failed: {str(e)}")
