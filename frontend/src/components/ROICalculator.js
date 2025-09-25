@@ -102,7 +102,25 @@ const ROICalculator = () => {
   };
 
   const calculateROIMetrics = () => {
-    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent);
+    // Ensure we have valid inputs before calculating
+    if (!agentCount || !averageHandleTime || agentCount[0] < 0 || averageHandleTime[0] <= 0 || monthlyCallVolume <= 0) {
+      return {
+        traditional: { laborCost: 0, technologyCost: 0, infrastructureCost: 0, totalCost: 0 },
+        ai: { voiceCost: 0, aiProcessingCost: 0, platformFee: 0, totalCost: 0 },
+        monthlySavings: 0,
+        annualSavings: 0,
+        roiPercentage: 0,
+        costReductionPercentage: 0,
+        paybackPeriodMonths: 0,
+        traditionalCostPerCall: 0,
+        aiCostPerCall: 0,
+        callVolumeProcessed: 0,
+        automatedCalls: 0,
+        humanAssistedCalls: 0
+      };
+    }
+
+    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent || 500);
     const ai = calculateAIMonthlyCost(monthlyCallVolume);
     
     const monthlySavings = traditional.totalCost - ai.totalCost;
