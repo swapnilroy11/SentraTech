@@ -26,6 +26,9 @@ from fastapi import Depends, status
 import aiosmtplib
 import aiohttp
 
+# Import performance optimization modules
+from cache_manager import cached, cache_manager, SpecializedCaches, warm_cache, cache_maintenance
+
 # Configure logging first
 logging.basicConfig(
     level=logging.INFO,
