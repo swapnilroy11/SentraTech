@@ -67,6 +67,8 @@ function App() {
               <Route path="/roi-calculator" element={<ROICalculatorPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/demo-request" element={<DemoRequestPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
             </Routes>
           </PageTransition>
           
