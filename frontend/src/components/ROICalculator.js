@@ -13,11 +13,11 @@ import {
 import axios from 'axios';
 
 const ROICalculator = () => {
-  // Market Research Based State
+  // State initialization with India BPO baseline
   const [agentCount, setAgentCount] = useState([50]);
   const [averageHandleTime, setAverageHandleTime] = useState([8]); // minutes
   const [monthlyCallVolume, setMonthlyCallVolume] = useState(0);
-  const [costPerAgent, setCostPerAgent] = useState(2800); // Market research baseline
+  const [costPerAgent, setCostPerAgent] = useState(500); // India BPO baseline
   const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
