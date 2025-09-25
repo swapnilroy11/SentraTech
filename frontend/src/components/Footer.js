@@ -179,6 +179,28 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Contact Information */}
+        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-12">
+            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
+              <Mail size={20} className="text-[#00FF41]" />
+              <a href="mailto:info@sentratech.net" className="hover:text-[#00FF41] transition-colors">
+                info@sentratech.net
+              </a>
+            </div>
+            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
+              <Phone size={20} className="text-[#00FF41]" />
+              <a href="tel:+447424293951" className="hover:text-[#00FF41] transition-colors">
+                +44 7424293951
+              </a>
+            </div>
+            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
+              <MapPin size={20} className="text-[#00FF41]" />
+              <span>London, UK</span>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Footer */}
         <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
