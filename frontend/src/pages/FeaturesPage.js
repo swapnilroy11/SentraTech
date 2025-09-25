@@ -4,10 +4,15 @@ import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 import { ArrowRight, MessageSquare, Calculator, TrendingUp, Users, Clock, Phone, Zap, BarChart3, Activity } from 'lucide-react';
 import CustomerJourney from '../components/CustomerJourney';
+import SEOManager from '../components/SEOManager';
 
 const FeaturesPage = () => {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="features-page">
+    <>
+      {/* SEO Management for Features Page */}
+      <SEOManager />
+      
+      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="features-page">
       {/* Hero Section - Balanced spacing */}
       <section className="pt-8 pb-6 relative overflow-hidden" id="features-hero">
         <div className="container mx-auto px-6">
