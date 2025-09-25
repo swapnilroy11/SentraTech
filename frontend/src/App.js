@@ -11,6 +11,7 @@ import SpaceBackground from "./components/SpaceBackground";
 import FloatingNavigation from "./components/FloatingNavigation";
 import ChatWidget from "./components/ChatWidget";
 import Analytics from "./components/Analytics";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Pages
 import HomePage from "./pages/HomePage";
