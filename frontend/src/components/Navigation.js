@@ -153,7 +153,7 @@ const Navigation = () => {
           className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
             isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none z-40'
           }`}
-          onClick={handleMenuItemClick}
+          onClick={handleOverlayClick}
           aria-hidden="true"
         />
 
