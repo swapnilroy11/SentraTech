@@ -51,7 +51,7 @@ const ROICalculatorPage = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="roi-calculator-page">
       {/* Hero Section */}
-      <section className="pt-16 pb-12 relative overflow-hidden" id="roi-hero">
+      <section className="pt-24 pb-12 relative overflow-hidden" id="roi-hero">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
