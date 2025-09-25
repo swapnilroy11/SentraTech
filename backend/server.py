@@ -43,19 +43,19 @@ load_dotenv(ROOT_DIR / '.env')
 # MongoDB Enterprise Connection with Connection Pooling
 mongo_url = os.environ['MONGO_URL']
 
-# Configure connection with enterprise-grade settings
+# Configure connection with enterprise-grade settings for maximum performance
 client = AsyncIOMotorClient(
     mongo_url,
-    # Connection Pool Settings
-    minPoolSize=10,          # Minimum connections to maintain
-    maxPoolSize=100,         # Maximum connections in pool
-    maxIdleTimeMS=30000,     # Close connections after 30s of inactivity
-    waitQueueTimeoutMS=5000, # Wait max 5s for connection from pool
+    # Aggressive Connection Pool Settings for High Performance
+    minPoolSize=25,          # Minimum connections to maintain (increased)
+    maxPoolSize=200,         # Maximum connections in pool (increased)
+    maxIdleTimeMS=15000,     # Close connections after 15s of inactivity (reduced)
+    waitQueueTimeoutMS=3000, # Wait max 3s for connection from pool (reduced)
     
-    # Performance Settings
-    serverSelectionTimeoutMS=5000,  # 5s timeout for server selection
-    connectTimeoutMS=10000,         # 10s timeout for initial connection
-    socketTimeoutMS=20000,          # 20s timeout for socket operations
+    # Performance Settings - Optimized for Speed
+    serverSelectionTimeoutMS=2000,  # 2s timeout for server selection (reduced)
+    connectTimeoutMS=5000,          # 5s timeout for initial connection (reduced)
+    socketTimeoutMS=10000,          # 10s timeout for socket operations (reduced)
     
     # Reliability Settings
     retryWrites=True,               # Retry failed writes
@@ -66,7 +66,11 @@ client = AsyncIOMotorClient(
     compressors='snappy,zlib,zstd',
     
     # Logging and monitoring
-    appname='sentratech-api',       # Application name for monitoring
+    appname='sentratech-api-optimized', # Application name for monitoring
+    
+    # Additional performance optimizations
+    maxConnecting=10,               # Max simultaneous connections
+    heartbeatFrequencyMS=5000,      # Heartbeat every 5s (reduced)
 )
 
 db = client[os.environ['DB_NAME']]
