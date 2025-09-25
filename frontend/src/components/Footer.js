@@ -164,19 +164,11 @@ const Footer = () => {
               and platform updates delivered to your inbox.
             </p>
             
-            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 max-w-md mx-auto">
-              <div className="relative flex-1 w-full">
-                <Mail size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
-                <input 
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#DAFF01] focus:ring-2 focus:ring-[#DAFF01]/20 transition-all"
-                />
-              </div>
-              <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-200 w-full md:w-auto font-rajdhani">
-                Subscribe
-              </Button>
-            </div>
+            <NewsletterSubscribe />
+            
+            <p className="text-xs text-[rgb(161,161,170)] mt-4">
+              No spam, unsubscribe anytime. We respect your privacy.
+            </p>
           </div>
         </div>
 
