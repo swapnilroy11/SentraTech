@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-ROI Calculator Testing with Fixed 7-Minute AHT
-Tests the updated ROI Calculator with simplified three-card layout and fixed 7-minute AHT
+Comprehensive ROI Calculator API Test Suite
+Tests all calculation accuracy and edge cases as specified in the review request
 """
 
 import requests
 import json
 import time
+import math
 from datetime import datetime
 from typing import Dict, Any, List
 
@@ -14,12 +15,13 @@ from typing import Dict, Any, List
 BACKEND_URL = "https://custai-metrics.preview.emergentagent.com/api"
 
 class ROICalculatorTester:
-    """Test ROI Calculator with fixed 7-minute AHT and real per-call costs"""
+    """Comprehensive ROI Calculator API Testing Framework"""
     
     def __init__(self):
         self.test_results = []
         self.failed_tests = []
         self.passed_tests = []
+        self.calculation_results = {}
         
     def log_test(self, test_name: str, passed: bool, details: str = ""):
         """Log test results"""
@@ -41,544 +43,591 @@ class ROICalculatorTester:
         if details:
             print(f"   Details: {details}")
     
-    def calculate_expected_call_volume(self, agent_count: int, aht_minutes: int = 7, working_hours: int = 8, working_days: int = 22) -> int:
-        """Calculate expected call volume: agents × ((working_hours×60)/aht_minutes) × working_days"""
-        calls_per_agent_per_day = (working_hours * 60) / aht_minutes
-        monthly_call_volume = int(agent_count * calls_per_agent_per_day * working_days)
-        return monthly_call_volume
-    
-    def test_bangladesh_50_agents_scenario(self):
-        """Test Bangladesh - 50 agents scenario with 7-minute AHT"""
-        print("\n=== Testing Bangladesh - 50 Agents Scenario ===")
+    def calculate_expected_values(self, agent_count: int, aht_minutes: int, country: str = "Bangladesh") -> Dict[str, Any]:
+        """Calculate expected values using the same logic as backend"""
         
-        # Expected values from review request
-        agent_count = 50
-        aht_minutes = 7
-        aht_seconds = 420  # 7 minutes = 420 seconds
+        # Country baselines
+        BASE_COST = {
+            'Bangladesh': 300,
+            'India': 500,
+            'Philippines': 600,
+            'Vietnam': 550
+        }
+        
+        # Constants from backend
+        AI_COST_PER_AGENT = 200
+        TECHNOLOGY_COST_PER_AGENT = 50
+        INFRASTRUCTURE_COST_PER_AGENT = 30
+        AUTOMATION_RATE = 0.70
+        
+        # Get base cost for country
+        base_agent_cost = BASE_COST.get(country, BASE_COST['Bangladesh'])
+        
+        # Call volume calculation: workMinutesPerMonth = 8×60×22 = 10,560
+        work_minutes_per_month = 8 * 60 * 22  # 10,560 minutes
+        calls_per_agent = work_minutes_per_month / aht_minutes
+        call_volume = math.floor(agent_count * calls_per_agent)
+        
+        # Traditional BPO costs
+        traditional_labor_cost = agent_count * base_agent_cost
+        traditional_technology_cost = agent_count * TECHNOLOGY_COST_PER_AGENT
+        traditional_infrastructure_cost = agent_count * INFRASTRUCTURE_COST_PER_AGENT
+        traditional_total_cost = traditional_labor_cost + traditional_technology_cost + traditional_infrastructure_cost
+        
+        # AI costs
+        ai_total_cost = agent_count * AI_COST_PER_AGENT
+        ai_platform_fee = ai_total_cost * 0.3
+        ai_processing_cost = ai_total_cost * 0.5
+        ai_voice_cost = ai_total_cost * 0.2
+        
+        # Savings and ROI
+        monthly_savings = traditional_total_cost - ai_total_cost
+        annual_savings = monthly_savings * 12
+        cost_reduction_percentage = (monthly_savings / traditional_total_cost * 100) if traditional_total_cost > 0 else 0
+        roi_percentage = (annual_savings / (ai_total_cost * 12) * 100) if ai_total_cost > 0 else 0
+        payback_period_months = (ai_total_cost * 12) / monthly_savings if monthly_savings > 0 else float('inf')
+        
+        # Per-call metrics
+        traditional_cost_per_call = traditional_total_cost / call_volume if call_volume > 0 else 0
+        ai_cost_per_call = ai_total_cost / call_volume if call_volume > 0 else 0
+        
+        # Volume metrics
+        automated_calls = int(call_volume * AUTOMATION_RATE)
+        human_assisted_calls = call_volume - automated_calls
+        
+        return {
+            "call_volume": call_volume,
+            "traditional_labor_cost": traditional_labor_cost,
+            "traditional_technology_cost": traditional_technology_cost,
+            "traditional_infrastructure_cost": traditional_infrastructure_cost,
+            "traditional_total_cost": traditional_total_cost,
+            "ai_voice_cost": ai_voice_cost,
+            "ai_processing_cost": ai_processing_cost,
+            "ai_platform_fee": ai_platform_fee,
+            "ai_total_cost": ai_total_cost,
+            "monthly_savings": monthly_savings,
+            "annual_savings": annual_savings,
+            "cost_reduction_percentage": cost_reduction_percentage,
+            "roi_percentage": roi_percentage,
+            "payback_period_months": payback_period_months,
+            "traditional_cost_per_call": traditional_cost_per_call,
+            "ai_cost_per_call": ai_cost_per_call,
+            "automated_calls": automated_calls,
+            "human_assisted_calls": human_assisted_calls,
+            "automation_rate": AUTOMATION_RATE * 100
+        }
+    
+    def make_roi_request(self, agent_count: int, aht_minutes: int, country: str = "Bangladesh") -> Dict[str, Any]:
+        """Make ROI calculation request to API"""
+        
+        # Calculate call volume for the request
+        work_minutes_per_month = 8 * 60 * 22  # 10,560 minutes
+        calls_per_agent = work_minutes_per_month / aht_minutes
+        call_volume = math.floor(agent_count * calls_per_agent)
+        
+        # Country baselines for cost_per_agent
+        BASE_COST = {
+            'Bangladesh': 300,
+            'India': 500,
+            'Philippines': 600,
+            'Vietnam': 550
+        }
+        
+        cost_per_agent = BASE_COST.get(country, BASE_COST['Bangladesh'])
+        
+        request_data = {
+            "agent_count": agent_count,
+            "average_handle_time": aht_minutes * 60,  # Convert to seconds
+            "monthly_call_volume": call_volume,
+            "cost_per_agent": cost_per_agent,
+            "country": country
+        }
+        
+        try:
+            start_time = time.time()
+            response = requests.post(f"{BACKEND_URL}/roi/calculate", json=request_data, timeout=30)
+            end_time = time.time()
+            response_time = (end_time - start_time) * 1000
+            
+            if response.status_code == 200:
+                result = response.json()
+                result["_response_time"] = response_time
+                result["_request_data"] = request_data
+                return result
+            else:
+                return {
+                    "error": f"HTTP {response.status_code}",
+                    "response": response.text,
+                    "_response_time": response_time,
+                    "_request_data": request_data
+                }
+        except Exception as e:
+            return {
+                "error": str(e),
+                "_response_time": 30000,  # Timeout
+                "_request_data": request_data
+            }
+    
+    def compare_values(self, expected: float, actual: float, tolerance: float = 0.01) -> bool:
+        """Compare two values with tolerance"""
+        if expected == 0 and actual == 0:
+            return True
+        if expected == 0:
+            return abs(actual) <= tolerance
+        return abs((actual - expected) / expected) <= tolerance
+    
+    def test_input_variation_agent_count(self):
+        """Test Agent Count values: 1, 10 (default), 50, 100, 500 agents"""
+        print("\n=== Testing Input Variation - Agent Count ===")
+        
+        agent_counts = [1, 10, 50, 100, 500]
+        default_aht = 7  # minutes
         country = "Bangladesh"
         
-        # Calculate expected call volume: 50 × ((8×60)/7) × 22 = 50 × 68.57 × 22 ≈ 75,428 calls/month
-        expected_call_volume = self.calculate_expected_call_volume(agent_count, aht_minutes)
+        for agent_count in agent_counts:
+            print(f"\n🧮 Testing Agent Count: {agent_count} agents")
+            
+            # Calculate expected values
+            expected = self.calculate_expected_values(agent_count, default_aht, country)
+            
+            # Make API request
+            actual = self.make_roi_request(agent_count, default_aht, country)
+            
+            if "error" in actual:
+                self.log_test(f"Agent Count {agent_count} - API Call", False, 
+                            f"API error: {actual['error']}")
+                continue
+            
+            # Test call volume calculation
+            expected_call_volume = expected["call_volume"]
+            actual_call_volume = actual.get("call_volume_processed", 0)
+            
+            if self.compare_values(expected_call_volume, actual_call_volume, 0.001):
+                self.log_test(f"Agent Count {agent_count} - Call Volume", True,
+                            f"Expected: {expected_call_volume}, Actual: {actual_call_volume}")
+            else:
+                self.log_test(f"Agent Count {agent_count} - Call Volume", False,
+                            f"Expected: {expected_call_volume}, Actual: {actual_call_volume}")
+            
+            # Test traditional cost scales linearly
+            expected_traditional = expected["traditional_total_cost"]
+            actual_traditional = actual.get("traditional_total_cost", 0)
+            
+            if self.compare_values(expected_traditional, actual_traditional, 0.01):
+                self.log_test(f"Agent Count {agent_count} - Traditional Cost Linear Scaling", True,
+                            f"Expected: ${expected_traditional:,.2f}, Actual: ${actual_traditional:,.2f}")
+            else:
+                self.log_test(f"Agent Count {agent_count} - Traditional Cost Linear Scaling", False,
+                            f"Expected: ${expected_traditional:,.2f}, Actual: ${actual_traditional:,.2f}")
+            
+            # Test AI cost scales linearly
+            expected_ai = expected["ai_total_cost"]
+            actual_ai = actual.get("ai_total_cost", 0)
+            
+            if self.compare_values(expected_ai, actual_ai, 0.01):
+                self.log_test(f"Agent Count {agent_count} - AI Cost Linear Scaling", True,
+                            f"Expected: ${expected_ai:,.2f}, Actual: ${actual_ai:,.2f}")
+            else:
+                self.log_test(f"Agent Count {agent_count} - AI Cost Linear Scaling", False,
+                            f"Expected: ${expected_ai:,.2f}, Actual: ${actual_ai:,.2f}")
+            
+            # Test monthly savings
+            expected_savings = expected["monthly_savings"]
+            actual_savings = actual.get("monthly_savings", 0)
+            
+            if self.compare_values(expected_savings, actual_savings, 0.01):
+                self.log_test(f"Agent Count {agent_count} - Monthly Savings", True,
+                            f"Expected: ${expected_savings:,.2f}, Actual: ${actual_savings:,.2f}")
+            else:
+                self.log_test(f"Agent Count {agent_count} - Monthly Savings", False,
+                            f"Expected: ${expected_savings:,.2f}, Actual: ${actual_savings:,.2f}")
+            
+            # Test cost reduction percentage (should be in 30-70% range for realistic scenarios)
+            actual_cost_reduction = actual.get("cost_reduction_percentage", 0)
+            
+            if 30 <= actual_cost_reduction <= 70:
+                self.log_test(f"Agent Count {agent_count} - Cost Reduction Range", True,
+                            f"Cost reduction: {actual_cost_reduction:.1f}% (within 30-70% range)")
+            else:
+                self.log_test(f"Agent Count {agent_count} - Cost Reduction Range", False,
+                            f"Cost reduction: {actual_cost_reduction:.1f}% (outside 30-70% range)")
+            
+            # Store results for later analysis
+            self.calculation_results[f"agent_{agent_count}"] = {
+                "expected": expected,
+                "actual": actual,
+                "response_time": actual.get("_response_time", 0)
+            }
+    
+    def test_input_variation_aht(self):
+        """Test AHT values: 2, 6, 7 (default), 12, 20 minutes"""
+        print("\n=== Testing Input Variation - Average Handle Time ===")
         
-        # Expected costs from review request
-        expected_traditional_cost = 19000  # $19,000
-        expected_ai_cost = 10000  # $10,000
-        expected_monthly_savings = 9000  # $9,000
-        expected_cost_reduction_approx = 47  # ~47%
+        aht_values = [2, 6, 7, 12, 20]  # minutes
+        default_agent_count = 10
+        country = "Bangladesh"
         
-        # Expected per-call costs
-        expected_traditional_per_call = expected_traditional_cost / expected_call_volume  # Should be $0.25/call
-        expected_ai_per_call = expected_ai_cost / expected_call_volume  # Should be $0.13/call
+        for aht_minutes in aht_values:
+            print(f"\n⏱️ Testing AHT: {aht_minutes} minutes")
+            
+            # Calculate expected values
+            expected = self.calculate_expected_values(default_agent_count, aht_minutes, country)
+            
+            # Make API request
+            actual = self.make_roi_request(default_agent_count, aht_minutes, country)
+            
+            if "error" in actual:
+                self.log_test(f"AHT {aht_minutes}min - API Call", False, 
+                            f"API error: {actual['error']}")
+                continue
+            
+            # Test inverse relationship: higher AHT = lower call volume
+            expected_call_volume = expected["call_volume"]
+            actual_call_volume = actual.get("call_volume_processed", 0)
+            
+            if self.compare_values(expected_call_volume, actual_call_volume, 0.001):
+                self.log_test(f"AHT {aht_minutes}min - Call Volume Inverse Relationship", True,
+                            f"Call volume: {actual_call_volume:,} calls (AHT: {aht_minutes}min)")
+            else:
+                self.log_test(f"AHT {aht_minutes}min - Call Volume Inverse Relationship", False,
+                            f"Expected: {expected_call_volume:,}, Actual: {actual_call_volume:,}")
+            
+            # Test per-call cost calculations
+            expected_trad_per_call = expected["traditional_cost_per_call"]
+            actual_trad_per_call = actual.get("traditional_cost_per_call", 0)
+            
+            if self.compare_values(expected_trad_per_call, actual_trad_per_call, 0.01):
+                self.log_test(f"AHT {aht_minutes}min - Traditional Per-Call Cost", True,
+                            f"Per-call cost: ${actual_trad_per_call:.3f}")
+            else:
+                self.log_test(f"AHT {aht_minutes}min - Traditional Per-Call Cost", False,
+                            f"Expected: ${expected_trad_per_call:.3f}, Actual: ${actual_trad_per_call:.3f}")
+            
+            # Test AI per-call cost
+            expected_ai_per_call = expected["ai_cost_per_call"]
+            actual_ai_per_call = actual.get("ai_cost_per_call", 0)
+            
+            if self.compare_values(expected_ai_per_call, actual_ai_per_call, 0.01):
+                self.log_test(f"AHT {aht_minutes}min - AI Per-Call Cost", True,
+                            f"AI per-call cost: ${actual_ai_per_call:.3f}")
+            else:
+                self.log_test(f"AHT {aht_minutes}min - AI Per-Call Cost", False,
+                            f"Expected: ${expected_ai_per_call:.3f}, Actual: ${actual_ai_per_call:.3f}")
+            
+            # Test cost reduction percentage remains realistic
+            actual_cost_reduction = actual.get("cost_reduction_percentage", 0)
+            
+            if 30 <= actual_cost_reduction <= 70:
+                self.log_test(f"AHT {aht_minutes}min - Cost Reduction Realistic", True,
+                            f"Cost reduction: {actual_cost_reduction:.1f}% (realistic range)")
+            else:
+                self.log_test(f"AHT {aht_minutes}min - Cost Reduction Realistic", False,
+                            f"Cost reduction: {actual_cost_reduction:.1f}% (outside realistic range)")
+            
+            # Store results
+            self.calculation_results[f"aht_{aht_minutes}"] = {
+                "expected": expected,
+                "actual": actual,
+                "response_time": actual.get("_response_time", 0)
+            }
+    
+    def test_multi_country_baselines(self):
+        """Test all countries: Bangladesh ($300), India ($500), Philippines ($600), Vietnam ($550)"""
+        print("\n=== Testing Multi-Country Baseline Tests ===")
         
-        test_data = {
-            "agent_count": agent_count,
-            "average_handle_time": aht_seconds,
-            "monthly_call_volume": expected_call_volume,
-            "cost_per_agent": 500,  # Default value, backend should use country baseline
-            "country": country
+        countries = {
+            "Bangladesh": 300,
+            "India": 500,
+            "Philippines": 600,
+            "Vietnam": 550
         }
         
-        try:
-            print(f"📊 Testing Bangladesh scenario: {agent_count} agents, {aht_minutes} min AHT, {expected_call_volume:,} calls/month")
-            response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=30)
+        default_agent_count = 10
+        default_aht = 7  # minutes
+        
+        for country, expected_baseline in countries.items():
+            print(f"\n🌍 Testing Country: {country} (${expected_baseline}/agent)")
             
-            if response.status_code == 200:
-                result = response.json()
-                
-                # Test 1: Call Volume Calculation
-                actual_call_volume = result.get("call_volume_processed", 0)
-                if abs(actual_call_volume - expected_call_volume) <= 100:  # Allow small variance
-                    self.log_test("Bangladesh 50 Agents - Call Volume Calculation", True,
-                                f"✅ Call volume: {actual_call_volume:,} (expected: ~{expected_call_volume:,})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Call Volume Calculation", False,
-                                f"❌ Call volume: {actual_call_volume:,} (expected: ~{expected_call_volume:,})")
-                
-                # Test 2: Traditional Cost Verification
-                actual_traditional_cost = result.get("traditional_total_cost", 0)
-                if abs(actual_traditional_cost - expected_traditional_cost) <= 1000:  # Allow $1k variance
-                    self.log_test("Bangladesh 50 Agents - Traditional Cost", True,
-                                f"✅ Traditional cost: ${actual_traditional_cost:,.0f} (expected: ~${expected_traditional_cost:,})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Traditional Cost", False,
-                                f"❌ Traditional cost: ${actual_traditional_cost:,.0f} (expected: ~${expected_traditional_cost:,})")
-                
-                # Test 3: AI Cost Verification
-                actual_ai_cost = result.get("ai_total_cost", 0)
-                if abs(actual_ai_cost - expected_ai_cost) <= 500:  # Allow $500 variance
-                    self.log_test("Bangladesh 50 Agents - AI Cost", True,
-                                f"✅ AI cost: ${actual_ai_cost:,.0f} (expected: ~${expected_ai_cost:,})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - AI Cost", False,
-                                f"❌ AI cost: ${actual_ai_cost:,.0f} (expected: ~${expected_ai_cost:,})")
-                
-                # Test 4: Monthly Savings
-                actual_monthly_savings = result.get("monthly_savings", 0)
-                if abs(actual_monthly_savings - expected_monthly_savings) <= 1000:  # Allow $1k variance
-                    self.log_test("Bangladesh 50 Agents - Monthly Savings", True,
-                                f"✅ Monthly savings: ${actual_monthly_savings:,.0f} (expected: ~${expected_monthly_savings:,})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Monthly Savings", False,
-                                f"❌ Monthly savings: ${actual_monthly_savings:,.0f} (expected: ~${expected_monthly_savings:,})")
-                
-                # Test 5: Cost Reduction Percentage
-                actual_cost_reduction = result.get("cost_reduction_percentage", 0)
-                if abs(actual_cost_reduction - expected_cost_reduction_approx) <= 5:  # Allow 5% variance
-                    self.log_test("Bangladesh 50 Agents - Cost Reduction %", True,
-                                f"✅ Cost reduction: {actual_cost_reduction:.1f}% (expected: ~{expected_cost_reduction_approx}%)")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Cost Reduction %", False,
-                                f"❌ Cost reduction: {actual_cost_reduction:.1f}% (expected: ~{expected_cost_reduction_approx}%)")
-                
-                # Test 6: Per-Call Cost Verification
-                actual_traditional_per_call = result.get("traditional_cost_per_call", 0)
-                actual_ai_per_call = result.get("ai_cost_per_call", 0)
-                
-                if abs(actual_traditional_per_call - expected_traditional_per_call) <= 0.05:  # Allow 5 cents variance
-                    self.log_test("Bangladesh 50 Agents - Traditional Per-Call Cost", True,
-                                f"✅ Traditional per-call: ${actual_traditional_per_call:.2f} (expected: ~${expected_traditional_per_call:.2f})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Traditional Per-Call Cost", False,
-                                f"❌ Traditional per-call: ${actual_traditional_per_call:.2f} (expected: ~${expected_traditional_per_call:.2f})")
-                
-                if abs(actual_ai_per_call - expected_ai_per_call) <= 0.05:  # Allow 5 cents variance
-                    self.log_test("Bangladesh 50 Agents - AI Per-Call Cost", True,
-                                f"✅ AI per-call: ${actual_ai_per_call:.2f} (expected: ~${expected_ai_per_call:.2f})")
-                else:
-                    self.log_test("Bangladesh 50 Agents - AI Per-Call Cost", False,
-                                f"❌ AI per-call: ${actual_ai_per_call:.2f} (expected: ~${expected_ai_per_call:.2f})")
-                
-                # Test 7: Realistic Cost Reduction Range (30-70%)
-                if 30 <= actual_cost_reduction <= 70:
-                    self.log_test("Bangladesh 50 Agents - Realistic Cost Reduction Range", True,
-                                f"✅ Cost reduction {actual_cost_reduction:.1f}% is within realistic 30-70% range")
-                else:
-                    self.log_test("Bangladesh 50 Agents - Realistic Cost Reduction Range", False,
-                                f"❌ Cost reduction {actual_cost_reduction:.1f}% is outside realistic 30-70% range")
-                
-                print(f"📊 Bangladesh 50 Agents Results Summary:")
-                print(f"   Call Volume: {actual_call_volume:,} calls/month")
-                print(f"   Traditional Cost: ${actual_traditional_cost:,.0f}")
-                print(f"   AI Cost: ${actual_ai_cost:,.0f}")
-                print(f"   Monthly Savings: ${actual_monthly_savings:,.0f}")
-                print(f"   Cost Reduction: {actual_cost_reduction:.1f}%")
-                print(f"   Traditional Per-Call: ${actual_traditional_per_call:.2f}")
-                print(f"   AI Per-Call: ${actual_ai_per_call:.2f}")
-                
-            else:
-                self.log_test("Bangladesh 50 Agents - API Response", False,
-                            f"HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Bangladesh 50 Agents - Exception", False, f"Exception: {str(e)}")
-    
-    def test_philippines_100_agents_scenario(self):
-        """Test Philippines - 100 agents scenario with 7-minute AHT"""
-        print("\n=== Testing Philippines - 100 Agents Scenario ===")
-        
-        # Expected values from review request
-        agent_count = 100
-        aht_minutes = 7
-        aht_seconds = 420  # 7 minutes = 420 seconds
-        country = "Philippines"
-        
-        # Calculate expected call volume: 100 × ((8×60)/7) × 22 = 100 × 68.57 × 22 ≈ 150,856 calls/month
-        expected_call_volume = self.calculate_expected_call_volume(agent_count, aht_minutes)
-        
-        # Expected costs from review request (Philippines baseline: $600 + $80 overhead = $680/agent = $68,000)
-        expected_traditional_cost_approx = 68000  # $68,000 for 100 agents
-        
-        test_data = {
-            "agent_count": agent_count,
-            "average_handle_time": aht_seconds,
-            "monthly_call_volume": expected_call_volume,
-            "cost_per_agent": 500,  # Default value, backend should use country baseline
-            "country": country
-        }
-        
-        try:
-            print(f"📊 Testing Philippines scenario: {agent_count} agents, {aht_minutes} min AHT, {expected_call_volume:,} calls/month")
-            response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=30)
+            # Calculate expected values
+            expected = self.calculate_expected_values(default_agent_count, default_aht, country)
             
-            if response.status_code == 200:
-                result = response.json()
-                
-                # Test 1: Call Volume Calculation
-                actual_call_volume = result.get("call_volume_processed", 0)
-                if abs(actual_call_volume - expected_call_volume) <= 200:  # Allow small variance
-                    self.log_test("Philippines 100 Agents - Call Volume Calculation", True,
-                                f"✅ Call volume: {actual_call_volume:,} (expected: ~{expected_call_volume:,})")
-                else:
-                    self.log_test("Philippines 100 Agents - Call Volume Calculation", False,
-                                f"❌ Call volume: {actual_call_volume:,} (expected: ~{expected_call_volume:,})")
-                
-                # Test 2: Philippines vs Bangladesh Cost Comparison
-                # Philippines should have higher traditional cost than Bangladesh
-                actual_traditional_cost = result.get("traditional_total_cost", 0)
-                
-                # Get Bangladesh cost for comparison
-                bangladesh_data = {
-                    "agent_count": agent_count,  # Same agent count for fair comparison
-                    "average_handle_time": aht_seconds,
-                    "monthly_call_volume": expected_call_volume,
-                    "cost_per_agent": 500,  # Default value, backend should use country baseline
-                    "country": "Bangladesh"
-                }
-                
-                bangladesh_response = requests.post(f"{BACKEND_URL}/roi/calculate", json=bangladesh_data, timeout=30)
-                if bangladesh_response.status_code == 200:
-                    bangladesh_result = bangladesh_response.json()
-                    bangladesh_traditional_cost = bangladesh_result.get("traditional_total_cost", 0)
-                    
-                    if actual_traditional_cost > bangladesh_traditional_cost:
-                        self.log_test("Philippines 100 Agents - Cost Baseline Comparison", True,
-                                    f"✅ Philippines cost (${actual_traditional_cost:,.0f}) > Bangladesh cost (${bangladesh_traditional_cost:,.0f})")
-                    else:
-                        self.log_test("Philippines 100 Agents - Cost Baseline Comparison", False,
-                                    f"❌ Philippines cost (${actual_traditional_cost:,.0f}) should be > Bangladesh cost (${bangladesh_traditional_cost:,.0f})")
-                
-                # Test 3: Cost Reduction Percentage (should be realistic)
-                actual_cost_reduction = result.get("cost_reduction_percentage", 0)
-                if 30 <= actual_cost_reduction <= 70:
-                    self.log_test("Philippines 100 Agents - Realistic Cost Reduction Range", True,
-                                f"✅ Cost reduction {actual_cost_reduction:.1f}% is within realistic 30-70% range")
-                else:
-                    self.log_test("Philippines 100 Agents - Realistic Cost Reduction Range", False,
-                                f"❌ Cost reduction {actual_cost_reduction:.1f}% is outside realistic 30-70% range")
-                
-                # Test 4: Per-Call Cost Calculation
-                actual_traditional_per_call = result.get("traditional_cost_per_call", 0)
-                actual_ai_per_call = result.get("ai_cost_per_call", 0)
-                
-                if actual_traditional_per_call > 0 and actual_ai_per_call > 0:
-                    self.log_test("Philippines 100 Agents - Per-Call Cost Calculation", True,
-                                f"✅ Per-call costs calculated: Traditional ${actual_traditional_per_call:.2f}, AI ${actual_ai_per_call:.2f}")
-                else:
-                    self.log_test("Philippines 100 Agents - Per-Call Cost Calculation", False,
-                                f"❌ Invalid per-call costs: Traditional ${actual_traditional_per_call:.2f}, AI ${actual_ai_per_call:.2f}")
-                
-                # Test 5: Monthly Savings Calculation
-                actual_monthly_savings = result.get("monthly_savings", 0)
-                actual_ai_cost = result.get("ai_total_cost", 0)
-                
-                expected_monthly_savings = actual_traditional_cost - actual_ai_cost
-                if abs(actual_monthly_savings - expected_monthly_savings) <= 10:  # Allow small rounding variance
-                    self.log_test("Philippines 100 Agents - Monthly Savings Calculation", True,
-                                f"✅ Monthly savings calculation correct: ${actual_monthly_savings:,.0f}")
-                else:
-                    self.log_test("Philippines 100 Agents - Monthly Savings Calculation", False,
-                                f"❌ Monthly savings calculation error: ${actual_monthly_savings:,.0f} (expected: ${expected_monthly_savings:,.0f})")
-                
-                print(f"📊 Philippines 100 Agents Results Summary:")
-                print(f"   Call Volume: {actual_call_volume:,} calls/month")
-                print(f"   Traditional Cost: ${actual_traditional_cost:,.0f}")
-                print(f"   AI Cost: ${actual_ai_cost:,.0f}")
-                print(f"   Monthly Savings: ${actual_monthly_savings:,.0f}")
-                print(f"   Cost Reduction: {actual_cost_reduction:.1f}%")
-                print(f"   Traditional Per-Call: ${actual_traditional_per_call:.2f}")
-                print(f"   AI Per-Call: ${actual_ai_per_call:.2f}")
-                
+            # Make API request
+            actual = self.make_roi_request(default_agent_count, default_aht, country)
+            
+            if "error" in actual:
+                self.log_test(f"{country} - API Call", False, 
+                            f"API error: {actual['error']}")
+                continue
+            
+            # Test traditional costs reflect country baselines correctly
+            expected_traditional = expected["traditional_total_cost"]
+            actual_traditional = actual.get("traditional_total_cost", 0)
+            
+            if self.compare_values(expected_traditional, actual_traditional, 0.01):
+                self.log_test(f"{country} - Country Baseline Cost", True,
+                            f"Traditional cost: ${actual_traditional:,.2f} (baseline: ${expected_baseline}/agent)")
             else:
-                self.log_test("Philippines 100 Agents - API Response", False,
-                            f"HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Philippines 100 Agents - Exception", False, f"Exception: {str(e)}")
+                self.log_test(f"{country} - Country Baseline Cost", False,
+                            f"Expected: ${expected_traditional:,.2f}, Actual: ${actual_traditional:,.2f}")
+            
+            # Test AI costs remain constant at $200/agent across all countries
+            expected_ai = 10 * 200  # 10 agents * $200
+            actual_ai = actual.get("ai_total_cost", 0)
+            
+            if self.compare_values(expected_ai, actual_ai, 0.01):
+                self.log_test(f"{country} - AI Cost Constant", True,
+                            f"AI cost: ${actual_ai:,.2f} (constant $200/agent)")
+            else:
+                self.log_test(f"{country} - AI Cost Constant", False,
+                            f"Expected: ${expected_ai:,.2f}, Actual: ${actual_ai:,.2f}")
+            
+            # Test cost reduction percentages vary appropriately by country
+            actual_cost_reduction = actual.get("cost_reduction_percentage", 0)
+            
+            # Higher baseline countries should have higher cost reduction
+            if country in ["Philippines", "Vietnam", "India"]:
+                if actual_cost_reduction >= 40:
+                    self.log_test(f"{country} - Cost Reduction Variation", True,
+                                f"Cost reduction: {actual_cost_reduction:.1f}% (appropriate for higher baseline)")
+                else:
+                    self.log_test(f"{country} - Cost Reduction Variation", False,
+                                f"Cost reduction: {actual_cost_reduction:.1f}% (too low for higher baseline)")
+            else:  # Bangladesh
+                if 30 <= actual_cost_reduction <= 60:
+                    self.log_test(f"{country} - Cost Reduction Variation", True,
+                                f"Cost reduction: {actual_cost_reduction:.1f}% (appropriate for lower baseline)")
+                else:
+                    self.log_test(f"{country} - Cost Reduction Variation", False,
+                                f"Cost reduction: {actual_cost_reduction:.1f}% (outside expected range)")
+            
+            # Store results
+            self.calculation_results[f"country_{country}"] = {
+                "expected": expected,
+                "actual": actual,
+                "response_time": actual.get("_response_time", 0)
+            }
     
-    def test_fixed_aht_consistency(self):
-        """Test that the backend consistently accepts and uses 7-minute AHT"""
-        print("\n=== Testing Fixed 7-Minute AHT Consistency ===")
+    def test_edge_cases(self):
+        """Test edge cases: Zero agents, maximum values, minimum values"""
+        print("\n=== Testing Edge Case Tests ===")
         
-        # Test multiple scenarios with fixed 7-minute AHT
-        test_scenarios = [
-            {"agent_count": 25, "country": "Bangladesh"},
-            {"agent_count": 75, "country": "India"},
-            {"agent_count": 150, "country": "Philippines"},
-            {"agent_count": 200, "country": "Vietnam"}
+        edge_cases = [
+            {"name": "Zero Agents", "agent_count": 0, "aht_minutes": 7, "should_fail": True},
+            {"name": "Maximum Values", "agent_count": 500, "aht_minutes": 20, "should_fail": False},
+            {"name": "Minimum Values", "agent_count": 1, "aht_minutes": 2, "should_fail": False},
+            {"name": "High Volume Scenario", "agent_count": 100, "aht_minutes": 5, "should_fail": False}
         ]
         
-        aht_seconds = 420  # Fixed 7 minutes
-        
-        for i, scenario in enumerate(test_scenarios):
-            agent_count = scenario["agent_count"]
-            country = scenario["country"]
-            expected_call_volume = self.calculate_expected_call_volume(agent_count, 7)
+        for case in edge_cases:
+            print(f"\n🔍 Testing Edge Case: {case['name']}")
             
-            test_data = {
-                "agent_count": agent_count,
-                "average_handle_time": aht_seconds,
-                "monthly_call_volume": expected_call_volume,
-                "cost_per_agent": 500,  # Default value, backend should use country baseline
-                "country": country
+            # Make API request
+            actual = self.make_roi_request(case["agent_count"], case["aht_minutes"], "Bangladesh")
+            
+            if case["should_fail"]:
+                # Zero agents should be handled gracefully
+                if "error" in actual or actual.get("traditional_total_cost", 0) == 0:
+                    self.log_test(f"Edge Case - {case['name']} Handling", True,
+                                f"Gracefully handled zero agents case")
+                else:
+                    self.log_test(f"Edge Case - {case['name']} Handling", False,
+                                f"Should have failed or returned zero costs for zero agents")
+            else:
+                if "error" not in actual:
+                    # Calculate expected values for comparison
+                    expected = self.calculate_expected_values(case["agent_count"], case["aht_minutes"], "Bangladesh")
+                    
+                    # Test call volume calculation
+                    expected_call_volume = expected["call_volume"]
+                    actual_call_volume = actual.get("call_volume_processed", 0)
+                    
+                    if self.compare_values(expected_call_volume, actual_call_volume, 0.001):
+                        self.log_test(f"Edge Case - {case['name']} Call Volume", True,
+                                    f"Call volume: {actual_call_volume:,} calls")
+                    else:
+                        self.log_test(f"Edge Case - {case['name']} Call Volume", False,
+                                    f"Expected: {expected_call_volume:,}, Actual: {actual_call_volume:,}")
+                    
+                    # Test cost calculations are reasonable
+                    actual_traditional = actual.get("traditional_total_cost", 0)
+                    actual_ai = actual.get("ai_total_cost", 0)
+                    
+                    if actual_traditional > 0 and actual_ai > 0:
+                        self.log_test(f"Edge Case - {case['name']} Cost Calculations", True,
+                                    f"Traditional: ${actual_traditional:,.2f}, AI: ${actual_ai:,.2f}")
+                    else:
+                        self.log_test(f"Edge Case - {case['name']} Cost Calculations", False,
+                                    f"Invalid cost calculations: Traditional: ${actual_traditional:,.2f}, AI: ${actual_ai:,.2f}")
+                    
+                    # Test performance for high volume scenarios
+                    response_time = actual.get("_response_time", 0)
+                    if case["name"] == "High Volume Scenario":
+                        if response_time <= 1000:  # 1 second
+                            self.log_test(f"Edge Case - {case['name']} Performance", True,
+                                        f"Response time: {response_time:.2f}ms (good performance)")
+                        else:
+                            self.log_test(f"Edge Case - {case['name']} Performance", False,
+                                        f"Response time: {response_time:.2f}ms (too slow)")
+                else:
+                    self.log_test(f"Edge Case - {case['name']} API Call", False,
+                                f"API error: {actual['error']}")
+            
+            # Store results
+            self.calculation_results[f"edge_{case['name'].lower().replace(' ', '_')}"] = {
+                "actual": actual,
+                "response_time": actual.get("_response_time", 0)
             }
-            
-            try:
-                print(f"🔍 Testing AHT consistency - Scenario {i+1}: {agent_count} agents, {country}")
-                response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=30)
-                
-                if response.status_code == 200:
-                    result = response.json()
-                    
-                    # Verify call volume calculation is consistent with 7-minute AHT
-                    actual_call_volume = result.get("call_volume_processed", 0)
-                    
-                    if abs(actual_call_volume - expected_call_volume) <= (expected_call_volume * 0.02):  # Allow 2% variance
-                        self.log_test(f"Fixed AHT Consistency - Scenario {i+1} ({country})", True,
-                                    f"✅ Call volume consistent with 7-min AHT: {actual_call_volume:,}")
-                    else:
-                        self.log_test(f"Fixed AHT Consistency - Scenario {i+1} ({country})", False,
-                                    f"❌ Call volume inconsistent: {actual_call_volume:,} (expected: {expected_call_volume:,})")
-                    
-                    # Verify cost reduction is in realistic range
-                    cost_reduction = result.get("cost_reduction_percentage", 0)
-                    if 20 <= cost_reduction <= 80:  # Slightly wider range for different countries
-                        print(f"   ✅ Cost reduction {cost_reduction:.1f}% is realistic")
-                    else:
-                        print(f"   ⚠️ Cost reduction {cost_reduction:.1f}% may be unrealistic")
-                        
-                else:
-                    self.log_test(f"Fixed AHT Consistency - Scenario {i+1} ({country})", False,
-                                f"HTTP {response.status_code}: {response.text}")
-                    
-            except Exception as e:
-                self.log_test(f"Fixed AHT Consistency - Scenario {i+1} ({country})", False,
-                            f"Exception: {str(e)}")
     
-    def test_mathematical_verification(self):
-        """Test mathematical accuracy of ROI calculations"""
-        print("\n=== Testing Mathematical Verification ===")
+    def test_mathematical_accuracy(self):
+        """Test mathematical accuracy verification"""
+        print("\n=== Testing Mathematical Accuracy Verification ===")
         
-        # Test with known values for mathematical verification
-        test_data = {
-            "agent_count": 50,
-            "average_handle_time": 420,  # 7 minutes
-            "monthly_call_volume": 75428,  # Pre-calculated for 50 agents, 7-min AHT
-            "cost_per_agent": 500,  # Default value, backend should use country baseline
-            "country": "Bangladesh"
-        }
+        test_cases = [
+            {"agent_count": 25, "aht_minutes": 8, "country": "India"},
+            {"agent_count": 75, "aht_minutes": 5, "country": "Philippines"},
+            {"agent_count": 15, "aht_minutes": 12, "country": "Vietnam"},
+            {"agent_count": 50, "aht_minutes": 7, "country": "Bangladesh"}
+        ]
         
-        try:
-            print(f"🧮 Testing mathematical accuracy with known values...")
-            response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=30)
+        for i, case in enumerate(test_cases, 1):
+            print(f"\n🧮 Testing Mathematical Accuracy - Case {i}")
             
-            if response.status_code == 200:
-                result = response.json()
-                
-                # Test 1: Call Volume Formula Verification
-                # Formula: agents × ((8×60)/7) × 22
-                expected_calls_per_agent_per_day = (8 * 60) / 7  # 68.57
-                expected_monthly_calls = int(50 * expected_calls_per_agent_per_day * 22)  # 75,428
-                
-                actual_call_volume = result.get("call_volume_processed", 0)
-                if abs(actual_call_volume - expected_monthly_calls) <= 50:
-                    self.log_test("Mathematical Verification - Call Volume Formula", True,
-                                f"✅ Call volume formula correct: {actual_call_volume:,} ≈ {expected_monthly_calls:,}")
-                else:
-                    self.log_test("Mathematical Verification - Call Volume Formula", False,
-                                f"❌ Call volume formula error: {actual_call_volume:,} ≠ {expected_monthly_calls:,}")
-                
-                # Test 2: Per-Call Cost Formula Verification
-                traditional_total = result.get("traditional_total_cost", 0)
-                ai_total = result.get("ai_total_cost", 0)
-                traditional_per_call = result.get("traditional_cost_per_call", 0)
-                ai_per_call = result.get("ai_cost_per_call", 0)
-                
-                expected_traditional_per_call = traditional_total / actual_call_volume if actual_call_volume > 0 else 0
-                expected_ai_per_call = ai_total / actual_call_volume if actual_call_volume > 0 else 0
-                
-                if abs(traditional_per_call - expected_traditional_per_call) <= 0.01:
-                    self.log_test("Mathematical Verification - Traditional Per-Call Formula", True,
-                                f"✅ Traditional per-call formula correct: ${traditional_per_call:.3f}")
-                else:
-                    self.log_test("Mathematical Verification - Traditional Per-Call Formula", False,
-                                f"❌ Traditional per-call formula error: ${traditional_per_call:.3f} ≠ ${expected_traditional_per_call:.3f}")
-                
-                if abs(ai_per_call - expected_ai_per_call) <= 0.01:
-                    self.log_test("Mathematical Verification - AI Per-Call Formula", True,
-                                f"✅ AI per-call formula correct: ${ai_per_call:.3f}")
-                else:
-                    self.log_test("Mathematical Verification - AI Per-Call Formula", False,
-                                f"❌ AI per-call formula error: ${ai_per_call:.3f} ≠ ${expected_ai_per_call:.3f}")
-                
-                # Test 3: Cost Reduction Percentage Formula
-                monthly_savings = result.get("monthly_savings", 0)
-                cost_reduction_percentage = result.get("cost_reduction_percentage", 0)
-                
-                expected_cost_reduction = (monthly_savings / traditional_total * 100) if traditional_total > 0 else 0
-                
-                if abs(cost_reduction_percentage - expected_cost_reduction) <= 0.1:
-                    self.log_test("Mathematical Verification - Cost Reduction Formula", True,
-                                f"✅ Cost reduction formula correct: {cost_reduction_percentage:.1f}%")
-                else:
-                    self.log_test("Mathematical Verification - Cost Reduction Formula", False,
-                                f"❌ Cost reduction formula error: {cost_reduction_percentage:.1f}% ≠ {expected_cost_reduction:.1f}%")
-                
-                # Test 4: Monthly Savings Formula
-                expected_monthly_savings = traditional_total - ai_total
-                
-                if abs(monthly_savings - expected_monthly_savings) <= 1:
-                    self.log_test("Mathematical Verification - Monthly Savings Formula", True,
-                                f"✅ Monthly savings formula correct: ${monthly_savings:,.0f}")
-                else:
-                    self.log_test("Mathematical Verification - Monthly Savings Formula", False,
-                                f"❌ Monthly savings formula error: ${monthly_savings:,.0f} ≠ ${expected_monthly_savings:,.0f}")
-                
-                print(f"📊 Mathematical Verification Results:")
-                print(f"   Call Volume: {actual_call_volume:,} (formula: 50 × 68.57 × 22)")
-                print(f"   Traditional Per-Call: ${traditional_per_call:.3f} (formula: ${traditional_total:,.0f} ÷ {actual_call_volume:,})")
-                print(f"   AI Per-Call: ${ai_per_call:.3f} (formula: ${ai_total:,.0f} ÷ {actual_call_volume:,})")
-                print(f"   Cost Reduction: {cost_reduction_percentage:.1f}% (formula: ${monthly_savings:,.0f} ÷ ${traditional_total:,.0f} × 100)")
-                
+            # Calculate expected values manually
+            expected = self.calculate_expected_values(case["agent_count"], case["aht_minutes"], case["country"])
+            
+            # Make API request
+            actual = self.make_roi_request(case["agent_count"], case["aht_minutes"], case["country"])
+            
+            if "error" in actual:
+                self.log_test(f"Math Accuracy Case {i} - API Call", False, 
+                            f"API error: {actual['error']}")
+                continue
+            
+            # Test monthly savings formula: monthlySavings = traditionalCost - aiCost
+            expected_monthly_savings = expected["monthly_savings"]
+            actual_monthly_savings = actual.get("monthly_savings", 0)
+            
+            if self.compare_values(expected_monthly_savings, actual_monthly_savings, 0.01):
+                self.log_test(f"Math Accuracy Case {i} - Monthly Savings Formula", True,
+                            f"Monthly savings: ${actual_monthly_savings:,.2f}")
             else:
-                self.log_test("Mathematical Verification - API Response", False,
-                            f"HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Mathematical Verification - Exception", False, f"Exception: {str(e)}")
-    
-    def test_api_validation_with_7min_aht(self):
-        """Test API validation specifically with 7-minute AHT parameter"""
-        print("\n=== Testing API Validation with 7-Minute AHT ===")
-        
-        # Test Case 1: Exact 7-minute AHT (420 seconds)
-        test_data_1 = {
-            "agent_count": 50,
-            "average_handle_time": 420,  # Exactly 7 minutes
-            "cost_per_agent": 500,  # Default value, backend should use country baseline
-            "country": "Bangladesh"
-        }
-        
-        # Calculate expected call volume for this scenario
-        expected_call_volume = self.calculate_expected_call_volume(50, 7)
-        test_data_1["monthly_call_volume"] = expected_call_volume
-        
-        try:
-            print(f"🔍 Testing API with exact 7-minute AHT (420 seconds)...")
-            response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data_1, timeout=30)
+                self.log_test(f"Math Accuracy Case {i} - Monthly Savings Formula", False,
+                            f"Expected: ${expected_monthly_savings:,.2f}, Actual: ${actual_monthly_savings:,.2f}")
             
-            if response.status_code == 200:
-                result = response.json()
-                self.log_test("API Validation - 7-Minute AHT Acceptance", True,
-                            f"✅ API accepts 420-second AHT successfully")
-                
-                # Verify the calculation uses the 7-minute AHT
-                call_volume = result.get("call_volume_processed", 0)
-                if abs(call_volume - expected_call_volume) <= 100:
-                    self.log_test("API Validation - 7-Minute AHT Usage", True,
-                                f"✅ API correctly uses 7-minute AHT in calculations")
-                else:
-                    self.log_test("API Validation - 7-Minute AHT Usage", False,
-                                f"❌ API may not be using 7-minute AHT correctly")
-                    
+            # Test annual savings: annualSavings = monthlySavings × 12
+            expected_annual_savings = expected["annual_savings"]
+            actual_annual_savings = actual.get("annual_savings", 0)
+            
+            if self.compare_values(expected_annual_savings, actual_annual_savings, 0.01):
+                self.log_test(f"Math Accuracy Case {i} - Annual Savings Formula", True,
+                            f"Annual savings: ${actual_annual_savings:,.2f}")
             else:
-                self.log_test("API Validation - 7-Minute AHT Acceptance", False,
-                            f"❌ API rejects 420-second AHT: HTTP {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("API Validation - 7-Minute AHT Exception", False, f"Exception: {str(e)}")
-        
-        # Test Case 2: Verify AHT consistency across multiple requests
-        print(f"🔍 Testing AHT consistency across multiple requests...")
-        
-        consistent_results = True
-        baseline_call_volume = None
-        
-        for i in range(3):
-            try:
-                response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data_1, timeout=30)
-                if response.status_code == 200:
-                    result = response.json()
-                    call_volume = result.get("call_volume_processed", 0)
-                    
-                    if baseline_call_volume is None:
-                        baseline_call_volume = call_volume
-                    elif abs(call_volume - baseline_call_volume) > 10:  # Allow minimal variance
-                        consistent_results = False
-                        break
-                else:
-                    consistent_results = False
-                    break
-                    
-            except Exception:
-                consistent_results = False
-                break
-        
-        if consistent_results:
-            self.log_test("API Validation - AHT Consistency", True,
-                        f"✅ 7-minute AHT produces consistent results across multiple requests")
-        else:
-            self.log_test("API Validation - AHT Consistency", False,
-                        f"❌ 7-minute AHT produces inconsistent results")
+                self.log_test(f"Math Accuracy Case {i} - Annual Savings Formula", False,
+                            f"Expected: ${expected_annual_savings:,.2f}, Actual: ${actual_annual_savings:,.2f}")
+            
+            # Test ROI calculation: roiPercent = (annualSavings / (aiCost × 12)) × 100
+            expected_roi = expected["roi_percentage"]
+            actual_roi = actual.get("roi_percentage", 0)
+            
+            if self.compare_values(expected_roi, actual_roi, 0.01):
+                self.log_test(f"Math Accuracy Case {i} - ROI Calculation", True,
+                            f"ROI: {actual_roi:.1f}%")
+            else:
+                self.log_test(f"Math Accuracy Case {i} - ROI Calculation", False,
+                            f"Expected: {expected_roi:.1f}%, Actual: {actual_roi:.1f}%")
+            
+            # Test cost reduction: costReduction = (monthlySavings / traditionalCost) × 100
+            expected_cost_reduction = expected["cost_reduction_percentage"]
+            actual_cost_reduction = actual.get("cost_reduction_percentage", 0)
+            
+            if self.compare_values(expected_cost_reduction, actual_cost_reduction, 0.01):
+                self.log_test(f"Math Accuracy Case {i} - Cost Reduction Formula", True,
+                            f"Cost reduction: {actual_cost_reduction:.1f}%")
+            else:
+                self.log_test(f"Math Accuracy Case {i} - Cost Reduction Formula", False,
+                            f"Expected: {expected_cost_reduction:.1f}%, Actual: {actual_cost_reduction:.1f}%")
     
-    def test_response_time_performance(self):
-        """Test API response time performance"""
-        print("\n=== Testing API Response Time Performance ===")
+    def test_performance_and_validation(self):
+        """Test API response times and validation"""
+        print("\n=== Testing Performance and Validation Tests ===")
         
-        test_data = {
-            "agent_count": 50,
-            "average_handle_time": 420,
-            "monthly_call_volume": 75428,
-            "cost_per_agent": 500,  # Default value, backend should use country baseline
-            "country": "Bangladesh"
-        }
+        # Test 1: Response time under various load scenarios
+        print("\n⚡ Testing API Response Times")
         
         response_times = []
-        successful_requests = 0
-        
-        for i in range(5):
-            try:
-                start_time = time.time()
-                response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=30)
-                end_time = time.time()
-                
-                response_time = (end_time - start_time) * 1000  # Convert to milliseconds
-                response_times.append(response_time)
-                
-                if response.status_code == 200:
-                    successful_requests += 1
-                    
-            except Exception as e:
-                print(f"   Request {i+1} failed: {str(e)}")
+        for i in range(10):
+            actual = self.make_roi_request(10, 7, "Bangladesh")
+            if "_response_time" in actual:
+                response_times.append(actual["_response_time"])
         
         if response_times:
             avg_response_time = sum(response_times) / len(response_times)
             max_response_time = max(response_times)
-            min_response_time = min(response_times)
             
-            # Test response time performance
             if avg_response_time <= 500:  # 500ms target
                 self.log_test("Performance - Average Response Time", True,
-                            f"✅ Average response time: {avg_response_time:.2f}ms (target: <500ms)")
+                            f"Average: {avg_response_time:.2f}ms (target: <500ms)")
             else:
                 self.log_test("Performance - Average Response Time", False,
-                            f"❌ Average response time: {avg_response_time:.2f}ms (target: <500ms)")
+                            f"Average: {avg_response_time:.2f}ms (too slow)")
             
             if max_response_time <= 1000:  # 1 second max
                 self.log_test("Performance - Maximum Response Time", True,
-                            f"✅ Maximum response time: {max_response_time:.2f}ms (target: <1000ms)")
+                            f"Maximum: {max_response_time:.2f}ms (target: <1000ms)")
             else:
                 self.log_test("Performance - Maximum Response Time", False,
-                            f"❌ Maximum response time: {max_response_time:.2f}ms (target: <1000ms)")
+                            f"Maximum: {max_response_time:.2f}ms (too slow)")
+        
+        # Test 2: Input validation
+        print("\n🔍 Testing Input Validation")
+        
+        invalid_inputs = [
+            {"name": "Negative Agent Count", "agent_count": -5, "aht_minutes": 7},
+            {"name": "Zero AHT", "agent_count": 10, "aht_minutes": 0},
+            {"name": "Extremely High Agent Count", "agent_count": 10000, "aht_minutes": 7},
+            {"name": "Extremely High AHT", "agent_count": 10, "aht_minutes": 1000}
+        ]
+        
+        for invalid_case in invalid_inputs:
+            actual = self.make_roi_request(invalid_case["agent_count"], invalid_case["aht_minutes"], "Bangladesh")
             
-            if successful_requests == 5:
-                self.log_test("Performance - Request Success Rate", True,
-                            f"✅ All 5 requests successful")
+            if "error" in actual or actual.get("traditional_total_cost", 0) <= 0:
+                self.log_test(f"Validation - {invalid_case['name']}", True,
+                            f"Properly rejected invalid input")
             else:
-                self.log_test("Performance - Request Success Rate", False,
-                            f"❌ Only {successful_requests}/5 requests successful")
-            
-            print(f"📊 Performance Test Results:")
-            print(f"   Average Response Time: {avg_response_time:.2f}ms")
-            print(f"   Min Response Time: {min_response_time:.2f}ms")
-            print(f"   Max Response Time: {max_response_time:.2f}ms")
-            print(f"   Successful Requests: {successful_requests}/5")
+                self.log_test(f"Validation - {invalid_case['name']}", False,
+                            f"Should have rejected invalid input")
+        
+        # Test 3: Concurrent requests stability
+        print("\n🔄 Testing Concurrent Request Handling")
+        
+        import concurrent.futures
+        import threading
+        
+        def make_concurrent_request(request_id):
+            return self.make_roi_request(10 + request_id, 7, "Bangladesh")
+        
+        concurrent_results = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            futures = [executor.submit(make_concurrent_request, i) for i in range(5)]
+            concurrent_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        
+        successful_concurrent = [r for r in concurrent_results if "error" not in r]
+        
+        if len(successful_concurrent) >= 4:  # At least 4 out of 5 should succeed
+            self.log_test("Performance - Concurrent Request Stability", True,
+                        f"{len(successful_concurrent)}/5 concurrent requests successful")
+        else:
+            self.log_test("Performance - Concurrent Request Stability", False,
+                        f"Only {len(successful_concurrent)}/5 concurrent requests successful")
     
-    def generate_test_summary(self):
-        """Generate comprehensive test summary"""
+    def generate_comprehensive_report(self):
+        """Generate comprehensive test report"""
         print("\n" + "=" * 80)
-        print("📊 ROI CALCULATOR TESTING SUMMARY - 7-MINUTE AHT VALIDATION")
+        print("📊 ROI CALCULATOR API COMPREHENSIVE TEST REPORT")
         print("=" * 80)
         
+        # Overall summary
         total_tests = len(self.test_results)
         passed_tests = len(self.passed_tests)
         failed_tests = len(self.failed_tests)
@@ -590,98 +639,110 @@ class ROICalculatorTester:
         print(f"   ❌ Failed: {failed_tests}")
         print(f"   📊 Success Rate: {success_rate:.1f}%")
         
-        print(f"\n🎯 Key Test Categories:")
+        # Performance summary
+        response_times = [result["response_time"] for result in self.calculation_results.values() 
+                         if "response_time" in result and result["response_time"] > 0]
         
-        # Categorize tests
-        bangladesh_tests = [t for t in self.test_results if "Bangladesh" in t["test"]]
-        philippines_tests = [t for t in self.test_results if "Philippines" in t["test"]]
-        aht_tests = [t for t in self.test_results if "AHT" in t["test"]]
-        math_tests = [t for t in self.test_results if "Mathematical" in t["test"]]
-        performance_tests = [t for t in self.test_results if "Performance" in t["test"]]
+        if response_times:
+            avg_response_time = sum(response_times) / len(response_times)
+            max_response_time = max(response_times)
+            min_response_time = min(response_times)
+            
+            print(f"\n⚡ Performance Metrics:")
+            print(f"   Average Response Time: {avg_response_time:.2f}ms")
+            print(f"   Maximum Response Time: {max_response_time:.2f}ms")
+            print(f"   Minimum Response Time: {min_response_time:.2f}ms")
         
-        def category_summary(tests, category_name):
+        # Test category breakdown
+        print(f"\n📋 Test Category Breakdown:")
+        
+        categories = {
+            "Agent Count": [t for t in self.test_results if "Agent Count" in t["test"]],
+            "AHT": [t for t in self.test_results if "AHT" in t["test"]],
+            "Country": [t for t in self.test_results if any(country in t["test"] for country in ["Bangladesh", "India", "Philippines", "Vietnam"])],
+            "Edge Case": [t for t in self.test_results if "Edge Case" in t["test"]],
+            "Math Accuracy": [t for t in self.test_results if "Math Accuracy" in t["test"]],
+            "Performance": [t for t in self.test_results if "Performance" in t["test"]],
+            "Validation": [t for t in self.test_results if "Validation" in t["test"]]
+        }
+        
+        for category, tests in categories.items():
             if tests:
                 passed = len([t for t in tests if t["passed"]])
                 total = len(tests)
-                rate = (passed / total) * 100
-                print(f"   {category_name}: {passed}/{total} ({rate:.1f}%)")
+                rate = (passed / total) * 100 if total > 0 else 0
+                print(f"   {category}: {passed}/{total} ({rate:.1f}%)")
         
-        category_summary(bangladesh_tests, "Bangladesh 50 Agents Tests")
-        category_summary(philippines_tests, "Philippines 100 Agents Tests")
-        category_summary(aht_tests, "7-Minute AHT Tests")
-        category_summary(math_tests, "Mathematical Verification Tests")
-        category_summary(performance_tests, "Performance Tests")
+        # Failed tests details
+        if self.failed_tests:
+            print(f"\n❌ Failed Tests Details:")
+            for result in self.test_results:
+                if not result["passed"]:
+                    print(f"   • {result['test']}: {result['details']}")
         
-        print(f"\n🔍 Failed Tests Analysis:")
-        if failed_tests > 0:
-            for test in self.test_results:
-                if not test["passed"]:
-                    print(f"   ❌ {test['test']}: {test['details']}")
-        else:
-            print(f"   ✅ No failed tests!")
+        # Recommendations
+        print(f"\n💡 Recommendations:")
         
-        print(f"\n🏆 ROI Calculator Assessment:")
-        if success_rate >= 90:
-            print(f"   🎉 EXCELLENT - ROI Calculator with 7-minute AHT is working perfectly")
-        elif success_rate >= 80:
-            print(f"   ✅ GOOD - ROI Calculator is working well with minor issues")
+        if success_rate >= 95:
+            print(f"   🎉 EXCELLENT - ROI Calculator API is production-ready")
+        elif success_rate >= 85:
+            print(f"   ✅ GOOD - ROI Calculator API is ready with minor improvements needed")
         elif success_rate >= 70:
-            print(f"   ⚠️ FAIR - ROI Calculator needs some improvements")
+            print(f"   ⚠️ FAIR - ROI Calculator API needs improvements before production")
         else:
-            print(f"   ❌ POOR - ROI Calculator has significant issues")
+            print(f"   ❌ POOR - ROI Calculator API has significant issues")
         
-        return success_rate >= 80
+        if failed_tests > 0:
+            print(f"   • Address {failed_tests} failed test cases")
+        
+        if response_times and max(response_times) > 1000:
+            print(f"   • Optimize response times for better performance")
+        
+        print(f"   • Consider implementing caching for frequently requested calculations")
+        print(f"   • Set up monitoring for calculation accuracy and performance")
+        
+        return success_rate >= 85
     
-    def run_comprehensive_roi_tests(self):
-        """Run all ROI Calculator tests with 7-minute AHT focus"""
-        print("🚀 Starting ROI Calculator Testing with Fixed 7-Minute AHT")
+    def run_comprehensive_tests(self):
+        """Run all comprehensive ROI Calculator tests"""
+        print("🚀 Starting Comprehensive ROI Calculator API Testing")
         print("=" * 80)
-        print("Testing Requirements:")
-        print("• Fixed AHT: All calculations should use 7 minutes AHT (420 seconds)")
-        print("• Real Per-Call Costs: Verify accurate per-call cost calculations")
-        print("• Bangladesh - 50 agents: Expected ~75,428 calls/month, $19k traditional, $10k AI")
-        print("• Philippines - 100 agents: Expected ~150,856 calls/month, realistic baselines")
-        print("• API Validation: Confirm backend accepts 7-minute AHT consistently")
-        print("• Mathematical Verification: Confirm formulas and calculations are accurate")
+        print("Testing ROI Calculator API for all calculation accuracy and edge cases:")
+        print("• Input Variation Tests - Agent Count (1, 10, 50, 100, 500 agents)")
+        print("• Input Variation Tests - Average Handle Time (2, 6, 7, 12, 20 minutes)")
+        print("• Multi-Country Baseline Tests (Bangladesh, India, Philippines, Vietnam)")
+        print("• Edge Case Tests (Zero agents, maximum values, minimum values)")
+        print("• Mathematical Accuracy Verification")
+        print("• Performance and Validation Tests")
         print("=" * 80)
         
         try:
-            # Core test scenarios
-            self.test_bangladesh_50_agents_scenario()
-            self.test_philippines_100_agents_scenario()
-            
-            # AHT and API validation
-            self.test_fixed_aht_consistency()
-            self.test_api_validation_with_7min_aht()
-            
-            # Mathematical and performance verification
-            self.test_mathematical_verification()
-            self.test_response_time_performance()
+            # Execute all test suites
+            self.test_input_variation_agent_count()
+            self.test_input_variation_aht()
+            self.test_multi_country_baselines()
+            self.test_edge_cases()
+            self.test_mathematical_accuracy()
+            self.test_performance_and_validation()
             
         except Exception as e:
-            print(f"❌ Critical error during ROI testing: {str(e)}")
-            self.log_test("ROI Testing Framework", False, f"Critical error: {str(e)}")
+            print(f"❌ Critical error during testing: {str(e)}")
+            self.log_test("ROI Calculator Testing Framework", False, f"Critical error: {str(e)}")
         
-        # Generate comprehensive summary
-        success = self.generate_test_summary()
+        # Generate comprehensive report
+        success = self.generate_comprehensive_report()
+        
         return success
 
 
-def main():
-    """Main function to run ROI Calculator tests"""
-    print("🎯 ROI Calculator Testing with Fixed 7-Minute AHT")
-    print("=" * 60)
-    
+if __name__ == "__main__":
+    # Run comprehensive ROI Calculator tests
     tester = ROICalculatorTester()
-    success = tester.run_comprehensive_roi_tests()
+    success = tester.run_comprehensive_tests()
     
     if success:
-        print(f"\n🎉 ROI Calculator testing completed successfully!")
-        return True
+        print(f"\n🎉 ROI Calculator API testing completed successfully!")
+        exit(0)
     else:
-        print(f"\n⚠️ ROI Calculator testing completed with issues.")
-        return False
-
-
-if __name__ == "__main__":
-    main()
+        print(f"\n❌ ROI Calculator API testing found issues that need attention.")
+        exit(1)
