@@ -160,6 +160,244 @@ const FeaturesPage = () => {
         </div>
       </section>
 
+      {/* Real-Time Metrics Section */}
+      <section id="real-time-metrics" className="py-10 bg-[#0A0A0A] relative">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-8"
+          >
+            <div className="flex items-center justify-center space-x-4 mb-3">
+              <div className="w-12 h-12 bg-[#00DDFF]/20 rounded-full flex items-center justify-center border border-[#00DDFF]/50">
+                <BarChart3 className="text-[#00DDFF]" size={24} />
+              </div>
+              <h2 className="text-4xl font-bold text-white font-rajdhani">
+                Real-Time Analytics
+              </h2>
+            </div>
+            <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto mb-2">
+              Monitor your customer support performance with live dashboards and actionable insights.
+            </p>
+          </motion.div>
+
+          {/* Live Metrics Dashboard */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[
+              { 
+                icon: Phone, 
+                title: 'Active Calls', 
+                value: '247', 
+                change: '+12%', 
+                color: 'text-[#00FF41]',
+                bgColor: 'bg-[rgba(0,255,65,0.1)]',
+                borderColor: 'border-[rgba(0,255,65,0.3)]'
+              },
+              { 
+                icon: Clock, 
+                title: 'Avg Wait Time', 
+                value: '1.3min', 
+                change: '-8%', 
+                color: 'text-[#00DDFF]',
+                bgColor: 'bg-[rgba(0,221,255,0.1)]',
+                borderColor: 'border-[rgba(0,221,255,0.3)]'
+              },
+              { 
+                icon: Users, 
+                title: 'Agents Online', 
+                value: '89/92', 
+                change: '97%', 
+                color: 'text-[#FFD700]',
+                bgColor: 'bg-[rgba(255,215,0,0.1)]',
+                borderColor: 'border-[rgba(255,215,0,0.3)]'
+              },
+              { 
+                icon: TrendingUp, 
+                title: 'Resolution Rate', 
+                value: '94.2%', 
+                change: '+3%', 
+                color: 'text-[#00FF41]',
+                bgColor: 'bg-[rgba(0,255,65,0.1)]',
+                borderColor: 'border-[rgba(0,255,65,0.3)]'
+              }
+            ].map((metric, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`${metric.bgColor} ${metric.borderColor} border rounded-xl p-6 relative overflow-hidden`}
+              >
+                {/* Live indicator */}
+                <div className="absolute top-3 right-3 flex items-center space-x-1">
+                  <div className="w-2 h-2 bg-[#00FF41] rounded-full animate-pulse"></div>
+                  <span className="text-xs text-[rgb(161,161,170)]">LIVE</span>
+                </div>
+                
+                <div className="flex items-center space-x-3 mb-3">
+                  <metric.icon size={20} className={metric.color} />
+                  <span className="text-sm text-[rgb(161,161,170)]">{metric.title}</span>
+                </div>
+                
+                <div className="flex items-baseline justify-between">
+                  <span className={`text-2xl font-bold font-rajdhani ${metric.color}`}>
+                    {metric.value}
+                  </span>
+                  <span className={`text-sm font-medium ${
+                    metric.change.startsWith('+') || metric.change.includes('%') && !metric.change.startsWith('-') 
+                      ? 'text-[#00FF41]' 
+                      : 'text-[#00DDFF]'
+                  }`}>
+                    {metric.change}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Analytics Features Grid */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-xl border border-[rgba(0,221,255,0.2)] p-6"
+            >
+              <div className="w-12 h-12 bg-[#00DDFF]/20 rounded-lg flex items-center justify-center mb-4">
+                <Activity size={24} className="text-[#00DDFF]" />
+              </div>
+              
+              <h3 className="text-xl font-bold text-white mb-3">Live Performance</h3>
+              <ul className="space-y-2 text-[rgb(161,161,170)] text-sm">
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00DDFF] rounded-full"></div>
+                  <span>Real-time agent performance tracking</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00DDFF] rounded-full"></div>
+                  <span>Call volume and queue monitoring</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00DDFF] rounded-full"></div>
+                  <span>Customer satisfaction scores</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00DDFF] rounded-full"></div>
+                  <span>Response time analytics</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-xl border border-[rgba(0,255,65,0.2)] p-6"
+            >
+              <div className="w-12 h-12 bg-[#00FF41]/20 rounded-lg flex items-center justify-center mb-4">
+                <BarChart3 size={24} className="text-[#00FF41]" />
+              </div>
+              
+              <h3 className="text-xl font-bold text-white mb-3">Smart Insights</h3>
+              <ul className="space-y-2 text-[rgb(161,161,170)] text-sm">
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00FF41] rounded-full"></div>
+                  <span>Predictive analytics for call volumes</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00FF41] rounded-full"></div>
+                  <span>AI-powered performance recommendations</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00FF41] rounded-full"></div>
+                  <span>Automated alerts and notifications</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#00FF41] rounded-full"></div>
+                  <span>Trend analysis and forecasting</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-xl border border-[rgba(255,215,0,0.2)] p-6"
+            >
+              <div className="w-12 h-12 bg-[#FFD700]/20 rounded-lg flex items-center justify-center mb-4">
+                <Zap size={24} className="text-[#FFD700]" />
+              </div>
+              
+              <h3 className="text-xl font-bold text-white mb-3">Instant Actions</h3>
+              <ul className="space-y-2 text-[rgb(161,161,170)] text-sm">
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#FFD700] rounded-full"></div>
+                  <span>One-click agent reallocation</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#FFD700] rounded-full"></div>
+                  <span>Real-time coaching suggestions</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#FFD700] rounded-full"></div>
+                  <span>Dynamic routing adjustments</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <div className="w-1.5 h-1.5 bg-[#FFD700] rounded-full"></div>
+                  <span>Emergency escalation protocols</span>
+                </li>
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Live Dashboard Preview */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-12 bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)] rounded-2xl border border-[rgba(0,255,65,0.2)] p-8"
+          >
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Live Dashboard Preview</h3>
+              <p className="text-[rgb(161,161,170)]">Real-time metrics updating every 30 seconds</p>
+            </div>
+            
+            {/* Simulated Live Chart Area */}
+            <div className="bg-[#0A0A0A] rounded-xl p-6 border border-[rgba(255,255,255,0.1)]">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-white font-medium">Call Volume Today</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-[#00FF41] rounded-full animate-pulse"></div>
+                  <span className="text-xs text-[#00FF41]">UPDATING</span>
+                </div>
+              </div>
+              
+              {/* Simulated Chart Bars */}
+              <div className="flex items-end space-x-2 h-32">
+                {[40, 65, 45, 80, 60, 90, 75, 85, 70, 95, 88, 92].map((height, index) => (
+                  <div
+                    key={index}
+                    className="flex-1 bg-gradient-to-t from-[#00FF41] to-[#00DDFF] rounded-t opacity-80"
+                    style={{ height: `${height}%` }}
+                  ></div>
+                ))}
+              </div>
+              
+              <div className="flex justify-between mt-2 text-xs text-[rgb(161,161,170)]">
+                <span>9AM</span>
+                <span>11AM</span>
+                <span>1PM</span>
+                <span>3PM</span>
+                <span>5PM</span>
+                <span>Now</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ROI Calculator Section - Better breathing room */}
       <section id="roi-calculator" className="py-10 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
         <div className="container mx-auto px-6">
