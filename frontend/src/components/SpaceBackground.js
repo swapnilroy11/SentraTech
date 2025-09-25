@@ -54,7 +54,7 @@ const SpaceBackground = ({ intensity = 0.3, particles = 150 }) => {
       // Performance optimizations
       renderer.current.shadowMap.enabled = false;
       renderer.current.physicallyCorrectLights = false;
-      renderer.current.outputEncoding = THREE.sRGBEncoding;
+      renderer.current.outputColorSpace = THREE.SRGBColorSpace;
       
       mountRef.current.appendChild(renderer.current.domElement);
 
