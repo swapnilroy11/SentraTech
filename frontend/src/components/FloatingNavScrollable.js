@@ -6,9 +6,6 @@ import './FloatingNavScrollable.css';
 const FloatingNavScrollable = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Debug logging
-  console.log('FloatingNavScrollable component rendering...');
-
   // Navigation items - exactly as specified in user requirements
   const navigationItems = [
     { path: '/', label: 'Home', icon: '🏠' },
