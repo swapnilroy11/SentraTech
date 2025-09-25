@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { Button } from './ui/button';
 import { Menu, X, Search } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
