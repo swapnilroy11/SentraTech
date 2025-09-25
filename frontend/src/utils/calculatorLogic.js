@@ -1,141 +1,88 @@
-// Multi-Country ROI Calculator Logic
-// Based on real BPO market data for Bangladesh, India, Philippines, and Mexico
+// Optimized Multi-Country ROI Calculator Logic
+// Simplified approach focusing on Agent Count and AHT only
 
-const BASE_COST = {
-  Bangladesh: 300,
-  India: 500, 
-  Philippines: 600,
-  Mexico: 700
-};
-
-const TECHNOLOGY_COST = 50;  // per agent per month
-const INFRASTRUCTURE_COST = 30;  // per agent per month
-
-// AI costs constants
-const TWILIO_COST_PER_MIN = 0.018;  // $0.018 per minute
-const AI_PROCESS_COST_PER_MIN = 0.05;  // $0.05 per minute  
-const AI_PLATFORM_FEE = 297;  // base infrastructure fee
+import { BASE_COST, AI_COST } from './costBaselines';
 
 /**
- * Calculate traditional BPO cost for a specific country
- * @param {string} country - Country name (Bangladesh, India, Philippines, Mexico)
+ * Calculate ROI for four-country comparison with optimized inputs
+ * @param {string} country - Selected country (Bangladesh, India, Philippines, Vietnam)
  * @param {number} agentCount - Number of agents
- * @returns {number} Total monthly traditional cost
+ * @param {number} ahtMinutes - Average Handle Time in minutes per call
+ * @returns {object} Complete ROI analysis with simplified metrics
  */
-function traditionalCost(country, agentCount) {
-  const baseCost = BASE_COST[country];
-  if (!baseCost) {
-    throw new Error(`Invalid country: ${country}`);
-  }
-  
-  const laborCost = agentCount * baseCost;
-  const technologyCost = agentCount * TECHNOLOGY_COST;
-  const infrastructureCost = agentCount * INFRASTRUCTURE_COST;
-  
-  return {
-    laborCost,
-    technologyCost,
-    infrastructureCost,
-    totalCost: laborCost + technologyCost + infrastructureCost
-  };
-}
-
-/**
- * Calculate AI-powered monthly cost
- * @param {number} callVolumeMinutes - Total call volume in minutes per month
- * @returns {number} Total monthly AI cost
- */
-function aiCost(callVolumeMinutes) {
-  const twilioVoiceCost = callVolumeMinutes * TWILIO_COST_PER_MIN;
-  const aiProcessingCost = callVolumeMinutes * AI_PROCESS_COST_PER_MIN;
-  const platformFee = AI_PLATFORM_FEE;
-  
-  return {
-    voiceCost: twilioVoiceCost,
-    processingCost: aiProcessingCost,
-    platformFee: platformFee,
-    totalCost: twilioVoiceCost + aiProcessingCost + platformFee
-  };
-}
-
-/**
- * Main ROI calculation function for multi-country comparison
- * @param {string} country - Selected country
- * @param {number} agentCount - Number of agents
- * @param {number} callVolumeMinutes - Monthly call volume in minutes
- * @returns {object} Complete ROI analysis
- */
-export function calculateROI(country, agentCount, callVolumeMinutes) {
+export function calculateROI(country, agentCount, ahtMinutes) {
   // Input validation
   if (!country || !BASE_COST[country]) {
     throw new Error(`Invalid country: ${country}`);
   }
   
-  if (agentCount < 0 || callVolumeMinutes < 0) {
-    throw new Error('Agent count and call volume must be positive numbers');
+  if (agentCount <= 0 || ahtMinutes <= 0) {
+    return {
+      country,
+      agentCount,
+      ahtMinutes,
+      callVolume: 0,
+      tradCost: 0,
+      aiCost: 0,
+      monthlySavings: 0,
+      annualSavings: 0,
+      roi: 0,
+      reduction: 0
+    };
   }
   
-  // Calculate costs
-  const traditional = traditionalCost(country, agentCount);
-  const ai = aiCost(callVolumeMinutes);
+  // Derive monthly call volume
+  // 8 hours/day × 60 minutes/hour ÷ AHT minutes/call × 22 working days/month
+  const callsPerAgentPerMonth = (8 * 60) / ahtMinutes * 22;
+  const callVolume = Math.round(agentCount * callsPerAgentPerMonth);
+  
+  // Traditional BPO cost (country baseline × agent count)
+  const tradCost = agentCount * BASE_COST[country];
+  
+  // SentraTech AI cost (fixed cost per agent)
+  const aiCost = agentCount * AI_COST;
   
   // Calculate savings and ROI
-  const monthlySavings = traditional.totalCost - ai.totalCost;
+  const monthlySavings = tradCost - aiCost;
   const annualSavings = monthlySavings * 12;
   
   // Calculate percentages
-  const roiPercent = ai.totalCost > 0 ? ((annualSavings / (ai.totalCost * 12)) * 100) : 0;
-  const costReduction = traditional.totalCost > 0 ? ((monthlySavings / traditional.totalCost) * 100) : 0;
-  
-  // Calculate per-call metrics
-  const callCount = callVolumeMinutes > 0 ? Math.round(callVolumeMinutes / 8) : 0; // Assume 8 min avg call
-  const traditionalCostPerCall = callCount > 0 ? (traditional.totalCost / callCount) : 0;
-  const aiCostPerCall = callCount > 0 ? (ai.totalCost / callCount) : 0;
-  
-  // Payback period calculation
-  const paybackPeriodMonths = monthlySavings > 0 ? ((ai.totalCost * 12) / monthlySavings) : 0;
+  const roi = aiCost > 0 ? ((annualSavings / (aiCost * 12)) * 100) : 0;
+  const reduction = tradCost > 0 ? ((monthlySavings / tradCost) * 100) : 0;
   
   return {
     country,
     agentCount,
-    callVolumeMinutes,
-    callCount,
+    ahtMinutes,
+    callVolume,
     
-    // Cost breakdown
-    traditional,
-    ai,
+    // Cost comparison
+    tradCost,
+    aiCost,
     
     // Savings metrics
     monthlySavings,
     annualSavings,
     
     // Performance metrics
-    roiPercent: Math.max(0, roiPercent),
-    costReduction,
-    paybackPeriodMonths: Math.max(0, paybackPeriodMonths),
+    roi: Math.max(0, roi),
+    reduction,
     
-    // Per-call metrics
-    traditionalCostPerCall,
-    aiCostPerCall,
-    
-    // Country baseline info
-    countryBaseline: BASE_COST[country],
-    
-    // Automation metrics (assuming 80% automation rate)
-    automatedCalls: Math.round(callCount * 0.8),
-    humanAssistedCalls: Math.round(callCount * 0.2)
+    // Additional metrics for display
+    costPerCall: callVolume > 0 ? (tradCost / callVolume) : 0,
+    aiCostPerCall: callVolume > 0 ? (aiCost / callVolume) : 0,
+    paybackMonths: monthlySavings > 0 ? (aiCost * 12) / monthlySavings : 0
   };
 }
 
 /**
- * Get all available countries and their baseline costs
- * @returns {object} Country information
+ * Get available countries for selection
+ * @returns {array} Array of country objects
  */
 export function getCountries() {
   return Object.keys(BASE_COST).map(country => ({
     name: country,
-    baseCost: BASE_COST[country],
-    totalCostPerAgent: BASE_COST[country] + TECHNOLOGY_COST + INFRASTRUCTURE_COST
+    baseCost: BASE_COST[country]
   }));
 }
 
@@ -148,9 +95,25 @@ export function isValidCountry(country) {
   return country && BASE_COST.hasOwnProperty(country);
 }
 
+/**
+ * Calculate break-even point for AI vs Traditional BPO
+ * @param {string} country - Selected country
+ * @returns {number} Agent count where AI becomes cost-effective
+ */
+export function calculateBreakeven(country) {
+  if (!isValidCountry(country)) return 0;
+  
+  const traditionalCostPerAgent = BASE_COST[country];
+  
+  // AI is cost-effective when AI_COST < traditionalCostPerAgent
+  return traditionalCostPerAgent > AI_COST ? 1 : 0;
+}
+
 export default {
   calculateROI,
   getCountries,
   isValidCountry,
-  BASE_COST
+  calculateBreakeven,
+  BASE_COST,
+  AI_COST
 };
