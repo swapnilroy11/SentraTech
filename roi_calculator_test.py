@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import statistics
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-performance.preview.emergentagent.com/api"
+BACKEND_URL = "https://custai-metrics.preview.emergentagent.com/api"
 
 class ROICalculatorTester:
     """Comprehensive ROI Calculator API Testing Framework"""

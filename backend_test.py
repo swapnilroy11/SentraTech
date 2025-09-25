@@ -19,7 +19,7 @@ import random
 import string
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-performance.preview.emergentagent.com/api"
+BACKEND_URL = "https://custai-metrics.preview.emergentagent.com/api"
 
 class LoadTestingFramework:
     """Comprehensive API Load and Stability Testing Framework"""
