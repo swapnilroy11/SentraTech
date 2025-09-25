@@ -6,6 +6,7 @@ import {
   Zap, Shield, Globe
 } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
+import NewsletterSubscribe from './NewsletterSubscribe';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
