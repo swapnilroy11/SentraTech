@@ -205,7 +205,7 @@ const HomePage = () => {
       </section>
 
       {/* Why SentraTech Strip */}
-      <section className="py-20 bg-[#0A0A0A]">
+      <section className="py-20 bg-[#0A0A0A]" id="why-choose">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
