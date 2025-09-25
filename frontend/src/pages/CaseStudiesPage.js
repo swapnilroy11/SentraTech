@@ -9,9 +9,9 @@ import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
 const CaseStudiesPage = () => {
   return (
     <ComponentErrorBoundary>
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }} id="case-studies">
       {/* Hero Section */}
-      <section className="py-20 relative overflow-hidden">
+      <section className="py-20 relative overflow-hidden" id="case-studies-hero">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
