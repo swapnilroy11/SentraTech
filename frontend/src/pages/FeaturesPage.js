@@ -27,8 +27,8 @@ const FeaturesPage = () => {
               real-time analytics, and seamless integrations.
             </p>
 
-            {/* Very compact Stats Bar */}
-            <div className="flex flex-wrap justify-center gap-2 mt-3">
+            {/* Better sized Stats Bar */}
+            <div className="flex flex-wrap justify-center gap-3 mt-3">
               {[
                 { icon: Zap, value: '47ms', label: 'AI Response' },
                 { icon: Users, value: '70%', label: 'Automation' },
@@ -40,11 +40,11 @@ const FeaturesPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 + index * 0.03 }}
-                  className="flex items-center space-x-1.5 bg-[rgba(0,255,65,0.08)] border border-[rgba(0,255,65,0.25)] rounded-md px-2.5 py-1 min-w-0"
+                  className="flex items-center space-x-2 bg-[rgba(0,255,65,0.08)] border border-[rgba(0,255,65,0.25)] rounded-lg px-4 py-2.5 min-w-0"
                 >
-                  {stat.icon && <stat.icon size={12} className="text-[#00FF41] flex-shrink-0" />}
-                  <span className="text-[#00FF41] font-bold text-xs">{stat.value}</span>
-                  <span className="text-[rgb(161,161,170)] text-xs flex-shrink-0">{stat.label}</span>
+                  {stat.icon && <stat.icon size={16} className="text-[#00FF41] flex-shrink-0" />}
+                  <span className="text-[#00FF41] font-bold text-lg font-rajdhani">{stat.value}</span>
+                  <span className="text-[rgb(161,161,170)] text-sm flex-shrink-0">{stat.label}</span>
                 </motion.div>
               ))}
             </div>
