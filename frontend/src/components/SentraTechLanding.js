@@ -659,9 +659,21 @@ const SentraTechLanding = () => {
           box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
         }
         
-        @keyframes particleFade {
-          0% { opacity: 1; transform: scale(1); }
-          100% { opacity: 0; transform: scale(0); }
+        @keyframes particleTrail {
+          0% { 
+            opacity: 1; 
+            transform: scale(1) translateY(0px); 
+            box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(1.2) translateY(-5px);
+          }
+          100% { 
+            opacity: 0; 
+            transform: scale(0) translateY(-10px);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+          }
         }
         
         @keyframes spin-slow {
