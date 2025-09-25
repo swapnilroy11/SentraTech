@@ -191,17 +191,6 @@ const Navigation = () => {
             </div>
           </div>
         </div>
-                </Link>
-                <button 
-                  onClick={toggleLanguage}
-                  className="px-3 py-1 bg-[#1a1a1a] rounded-lg text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a]"
-                >
-                  {currentLang === 'en' ? 'বাং' : 'ENG'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </nav>
   );
