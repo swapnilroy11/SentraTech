@@ -174,7 +174,7 @@ const FeaturesPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-6"
           >
-            <div className="flex items-center justify-center space-x-4 mb-4">
+            <div className="flex items-center justify-center space-x-4 mb-2">
               <div className="w-12 h-12 bg-[#00FF41]/20 rounded-full flex items-center justify-center border border-[#00FF41]/50">
                 <Calculator className="text-[#00FF41]" size={24} />
               </div>
