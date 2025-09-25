@@ -10,14 +10,14 @@ import {
   Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2, Target
 } from 'lucide-react';
 import axios from 'axios';
-import { calculateROI, getCountries } from '../utils/calculatorLogic';
+import { calculateROI } from '../utils/calculatorLogic';
+import { COUNTRIES } from '../utils/costBaselines';
 
 const ROICalculator = () => {
-  // Multi-Country State Management
+  // Simplified State Management - Only Agent Count and AHT
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [agentCount, setAgentCount] = useState([50]);
-  const [averageHandleTime, setAverageHandleTime] = useState([8]); // minutes
-  const [monthlyCallVolume, setMonthlyCallVolume] = useState(0);
+  const [agentCount, setAgentCount] = useState(50);
+  const [ahtMinutes, setAhtMinutes] = useState(8);
   const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -25,35 +25,19 @@ const ROICalculator = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Country Configuration
-  const COUNTRIES = [
-    { name: 'Bangladesh', baseCost: 300, flag: '🇧🇩' },
-    { name: 'India', baseCost: 500, flag: '🇮🇳' },
-    { name: 'Philippines', baseCost: 600, flag: '🇵🇭' },
-    { name: 'Mexico', baseCost: 700, flag: '🇲🇽' }
-  ];
-
-  // Auto-calculate monthly call volume based on agents and AHT
-  useEffect(() => {
-    const workingHoursPerMonth = 22 * 8; // 22 working days, 8 hours per day
-    const callsPerAgentPerHour = 60 / averageHandleTime[0]; // calls per hour based on AHT
-    const totalCallsPerMonth = agentCount[0] * workingHoursPerMonth * callsPerAgentPerHour;
-    const callVolumeInMinutes = totalCallsPerMonth * averageHandleTime[0]; // Convert to minutes
-    setMonthlyCallVolume(Math.round(callVolumeInMinutes));
-  }, [agentCount, averageHandleTime]);
-
   // Real-time calculation when inputs change
   useEffect(() => {
     try {
-      if (agentCount[0] > 0 && monthlyCallVolume > 0) {
-        const metrics = calculateROI(selectedCountry, agentCount[0], monthlyCallVolume);
+      if (agentCount > 0 && ahtMinutes > 0) {
+        const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
         setResults(metrics);
+        setError(null);
       }
     } catch (error) {
       console.error('Error calculating ROI:', error);
       setError('Calculation error. Please check your inputs.');
     }
-  }, [selectedCountry, agentCount, averageHandleTime, monthlyCallVolume]);
+  }, [selectedCountry, agentCount, ahtMinutes]);
 
   // Handle country selection
   const handleCountryChange = (country) => {
@@ -70,14 +54,14 @@ const ROICalculator = () => {
 
       const requestData = {
         input_data: {
-          agent_count: agentCount[0],
-          average_handle_time: averageHandleTime[0] * 60, // convert to seconds
-          monthly_call_volume: Math.round(monthlyCallVolume / averageHandleTime[0]), // convert back to call count
-          cost_per_agent: results.countryBaseline || 500
+          agent_count: agentCount,
+          average_handle_time: ahtMinutes * 60, // convert to seconds
+          monthly_call_volume: results.callVolume || 0,
+          cost_per_agent: results.tradCost ? results.tradCost / agentCount : 0
         },
         user_info: {
           timestamp: new Date().toISOString(),
-          source: 'multi_country_calculator',
+          source: 'optimized_four_country_calculator',
           country: selectedCountry
         }
       };
@@ -113,14 +97,14 @@ const ROICalculator = () => {
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Calculator className="mr-2" size={14} />
-            Multi-Country ROI Calculator
+            Optimized Four-Country ROI Calculator
           </Badge>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
-            <span className="text-[#F8F9FA]">Calculate Your </span>
-            <span className="text-[#00FF41]">Global Savings</span>
+            <span className="text-[#F8F9FA]">Compare AI vs </span>
+            <span className="text-[#00FF41]">Traditional BPO</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
-            Compare AI automation savings across different countries with real BPO market baselines.
+            Simplified calculator with just Agent Count and AHT - the metrics BPO buyers care about most.
           </p>
         </div>
 
@@ -131,23 +115,23 @@ const ROICalculator = () => {
               key={country.name}
               onClick={() => handleCountryChange(country.name)}
               variant={selectedCountry === country.name ? "default" : "outline"}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+              className={`px-6 py-4 rounded-xl font-semibold transition-all duration-200 ${
                 selectedCountry === country.name 
-                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/30' 
+                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/30 border-2 border-[#00FF41]' 
                   : 'border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:bg-[#00FF41]/10'
               }`}
             >
-              <span className="mr-2 text-lg">{country.flag}</span>
+              <span className="mr-3 text-xl">{country.flag}</span>
               <div className="text-left">
-                <div className="font-bold">{country.name}</div>
-                <div className="text-xs opacity-80">${country.baseCost}/agent/month</div>
+                <div className="font-bold text-lg">{country.name}</div>
+                <div className="text-sm opacity-80">${country.baseCost}/agent • {country.description}</div>
               </div>
             </Button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
-          {/* Input Controls */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 max-w-7xl mx-auto">
+          {/* Simplified Input Controls */}
           <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
             <CardHeader className="p-0 mb-8">
               <CardTitle className="text-2xl text-white flex items-center space-x-3">
@@ -158,109 +142,160 @@ const ROICalculator = () => {
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-0 space-y-8">
-              {/* Selected Country Info */}
-              <div className="bg-gradient-to-r from-[#00FF41]/10 to-[#00DDFF]/10 rounded-2xl p-6 border border-[#00FF41]/30">
+            <CardContent className="p-0 space-y-10">
+              {/* Selected Country Display */}
+              <div className="bg-gradient-to-r from-[#00FF41]/15 to-[#00DDFF]/15 rounded-2xl p-6 border-2 border-[#00FF41]/40">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[#00FF41] font-semibold text-lg">Selected Country</div>
-                    <div className="text-white text-xl font-bold">{selectedCountry}</div>
+                    <div className="text-[#00FF41] font-semibold text-lg mb-1">Selected Market</div>
+                    <div className="text-white text-2xl font-bold mb-2">{selectedCountry}</div>
                     <div className="text-[rgb(161,161,170)] text-sm">
-                      Base cost: {formatCurrency(results.countryBaseline || COUNTRIES.find(c => c.name === selectedCountry)?.baseCost)}/agent/month
+                      Traditional BPO: {formatCurrency(COUNTRIES.find(c => c.name === selectedCountry)?.baseCost)}/agent/month
+                    </div>
+                    <div className="text-[rgb(161,161,170)] text-sm">
+                      AI Cost: $154/agent/month (+20% buffer)
                     </div>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-5xl">
                     {COUNTRIES.find(c => c.name === selectedCountry)?.flag}
                   </div>
                 </div>
               </div>
 
-              {/* Agent Count */}
+              {/* Agent Count Input */}
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <Label className="text-white text-lg font-semibold">
+                <div className="flex items-center justify-between mb-6">
+                  <Label className="text-white text-xl font-semibold">
                     Agent Count
                   </Label>
-                  <div className="text-2xl font-bold text-[#00FF41]">{agentCount[0]}</div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-[#00FF41] mb-1">{agentCount}</div>
+                    <div className="text-sm text-[rgb(161,161,170)]">agents</div>
+                  </div>
                 </div>
-                <Slider
-                  value={agentCount}
-                  onValueChange={setAgentCount}
-                  max={500}
-                  min={1}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
-                  <span>1</span>
-                  <span>500+</span>
+                
+                {/* Slider */}
+                <div className="mb-4">
+                  <Slider
+                    value={[agentCount]}
+                    onValueChange={(value) => setAgentCount(value[0])}
+                    max={500}
+                    min={1}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
+                    <span>1</span>
+                    <span>500</span>
+                  </div>
+                </div>
+                
+                {/* Number Input */}
+                <div className="relative">
+                  <Users size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00FF41]" />
+                  <Input
+                    type="number"
+                    value={agentCount}
+                    onChange={(e) => {
+                      const value = Math.max(1, Math.min(500, parseInt(e.target.value) || 1));
+                      setAgentCount(value);
+                    }}
+                    className="pl-12 bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white rounded-xl text-lg py-4 font-semibold"
+                    min="1"
+                    max="500"
+                  />
                 </div>
               </div>
 
-              {/* Average Handle Time */}
+              {/* Average Handle Time Input */}
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <Label className="text-white text-lg font-semibold">
+                <div className="flex items-center justify-between mb-6">
+                  <Label className="text-white text-xl font-semibold">
                     Average Handle Time
                   </Label>
-                  <div className="text-2xl font-bold text-[#00DDFF]">{averageHandleTime[0]} min</div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-[#00DDFF] mb-1">{ahtMinutes}</div>
+                    <div className="text-sm text-[rgb(161,161,170)]">minutes</div>
+                  </div>
                 </div>
-                <Slider
-                  value={averageHandleTime}
-                  onValueChange={setAverageHandleTime}
-                  max={20}
-                  min={2}
-                  step={0.5}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
-                  <span>2 min</span>
-                  <span>20 min</span>
+                
+                {/* Slider */}
+                <div className="mb-4">
+                  <Slider
+                    value={[ahtMinutes]}
+                    onValueChange={(value) => setAhtMinutes(value[0])}
+                    max={20}
+                    min={2}
+                    step={0.5}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
+                    <span>2 min</span>
+                    <span>20 min</span>
+                  </div>
+                </div>
+                
+                {/* Number Input */}
+                <div className="relative">
+                  <Clock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#00DDFF]" />
+                  <Input
+                    type="number"
+                    value={ahtMinutes}
+                    onChange={(e) => {
+                      const value = Math.max(2, Math.min(20, parseFloat(e.target.value) || 2));
+                      setAhtMinutes(value);
+                    }}
+                    className="pl-12 bg-[rgb(38,40,42)] border-[#00DDFF]/50 text-white rounded-xl text-lg py-4 font-semibold"
+                    min="2"
+                    max="20"
+                    step="0.5"
+                  />
                 </div>
               </div>
 
-              {/* Auto-calculated Call Volume */}
+              {/* Auto-calculated Call Volume Display */}
               <div className="bg-[rgb(38,40,42)] rounded-xl p-6 border border-[rgb(63,63,63)]">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="text-white font-semibold text-lg">Monthly Call Volume</div>
                   <div className="text-2xl font-bold text-[#00FF41]">
-                    {formatNumber(monthlyCallVolume)} min
+                    {formatNumber(results.callVolume || 0)}
                   </div>
                 </div>
                 <div className="text-[rgb(161,161,170)] text-sm">
-                  Auto-calculated: {formatNumber(results.callCount || 0)} calls × {averageHandleTime[0]} min avg
+                  Auto-calculated: {agentCount} agents × {ahtMinutes}min AHT × 8hrs/day × 22 days
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Results Display */}
-          <div className="space-y-6">
-            {/* Cost Comparison */}
-            <Card className="bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 border-2 border-[#00FF41] rounded-3xl p-8">
-              <CardHeader className="p-0 mb-6">
+          <div className="space-y-8">
+            {/* Main Results Card */}
+            <Card className="bg-gradient-to-br from-[#00FF41]/15 to-[#00DDFF]/15 border-2 border-[#00FF41] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-8">
                 <CardTitle className="text-2xl text-white flex items-center space-x-3">
                   <TrendingUp size={24} className="text-[#00FF41]" />
-                  <span>Cost Analysis</span>
+                  <span>ROI Analysis</span>
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-0">
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                  <div className="text-center p-6 bg-[rgb(26,28,30)]/70 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-2">Traditional BPO Cost</div>
+                {/* Cost Comparison Grid */}
+                <div className="grid grid-cols-2 gap-6 mb-8">
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/80 rounded-2xl border border-red-400/30">
+                    <div className="text-sm text-[rgb(161,161,170)] mb-2">Traditional BPO</div>
                     <div className="text-3xl font-bold text-red-400 mb-2 font-rajdhani">
-                      {formatCurrency(results.traditional?.totalCost)}
+                      {formatCurrency(results.tradCost)}
                     </div>
                     <div className="text-xs text-[rgb(161,161,170)]">
-                      {formatCurrency(results.traditionalCostPerCall)}/call
+                      {formatCurrency(results.costPerCall)}/call
                     </div>
                   </div>
 
-                  <div className="text-center p-6 bg-[rgb(26,28,30)]/70 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-2">AI Automation Cost</div>
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/80 rounded-2xl border border-[#00DDFF]/30">
+                    <div className="text-sm text-[rgb(161,161,170)] mb-2">AI Automation</div>
                     <div className="text-3xl font-bold text-[#00DDFF] mb-2 font-rajdhani">
-                      {formatCurrency(results.ai?.totalCost)}
+                      {formatCurrency(results.aiCost)}
                     </div>
                     <div className="text-xs text-[rgb(161,161,170)]">
                       {formatCurrency(results.aiCostPerCall)}/call
@@ -269,122 +304,95 @@ const ROICalculator = () => {
                 </div>
 
                 {/* Savings Display */}
-                <div className="text-center p-8 bg-gradient-to-r from-[#00FF41]/20 to-[#00DDFF]/20 rounded-2xl border border-[#00FF41]/30">
-                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Monthly Savings</div>
-                  <div className="text-5xl font-bold text-[#00FF41] mb-4 font-rajdhani">
+                <div className="text-center p-8 bg-gradient-to-r from-[#00FF41]/25 to-[#00DDFF]/25 rounded-3xl border-2 border-[#00FF41]/50 mb-8">
+                  <div className="text-lg text-[rgb(161,161,170)] mb-3">Monthly Savings</div>
+                  <div className={`text-6xl font-bold mb-4 font-rajdhani ${
+                    (results.monthlySavings || 0) >= 0 ? 'text-[#00FF41]' : 'text-red-400'
+                  }`}>
                     {formatCurrency(results.monthlySavings)}
                   </div>
-                  <div className="flex items-center justify-center space-x-6 text-lg">
-                    <div className="flex items-center text-[#00FF41]">
-                      <ArrowDown size={20} className="mr-2" />
-                      <span>{results.costReduction?.toFixed(0)}% Cost Reduction</span>
+                  <div className="grid grid-cols-2 gap-6 text-lg">
+                    <div className="flex items-center justify-center text-[#00FF41]">
+                      {(results.reduction || 0) >= 0 ? 
+                        <ArrowDown size={20} className="mr-2" /> : 
+                        <ArrowUp size={20} className="mr-2" />
+                      }
+                      <span>{Math.abs(results.reduction || 0).toFixed(0)}% Cost {(results.reduction || 0) >= 0 ? 'Reduction' : 'Increase'}</span>
                     </div>
-                    <div className="flex items-center text-[#00DDFF]">
-                      <ArrowUp size={20} className="mr-2" />
-                      <span>{results.roiPercent?.toFixed(0)}% ROI</span>
+                    <div className="flex items-center justify-center text-[#00DDFF]">
+                      <TrendingUp size={20} className="mr-2" />
+                      <span>{(results.roi || 0).toFixed(0)}% ROI</span>
                     </div>
                   </div>
-                  {results.paybackPeriodMonths && results.paybackPeriodMonths < 24 && (
+                  {results.paybackMonths && results.paybackMonths > 0 && results.paybackMonths < 36 && (
                     <div className="mt-4 text-sm text-[rgb(161,161,170)]">
-                      Payback Period: {results.paybackPeriodMonths?.toFixed(1)} months
+                      Payback Period: {results.paybackMonths.toFixed(1)} months
                     </div>
                   )}
                 </div>
 
+                {/* Annual Savings */}
+                <div className="text-center p-6 bg-[rgb(38,40,42)] rounded-xl border border-[rgb(63,63,63)]">
+                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Annual Savings</div>
+                  <div className={`text-4xl font-bold font-rajdhani ${
+                    (results.annualSavings || 0) >= 0 ? 'text-[#00FF41]' : 'text-red-400'
+                  }`}>
+                    {formatCurrency(results.annualSavings)}
+                  </div>
+                </div>
+
                 {error && (
-                  <div className="mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
+                  <div className="mt-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
                     {error}
                   </div>
                 )}
 
                 {savedSuccessfully && (
-                  <div className="mt-4 p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
+                  <div className="mt-6 p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
                     ✅ ROI calculation saved successfully!
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            {/* Cost Breakdown */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
-              <CardHeader className="p-0 mb-6">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <BarChart3 size={20} className="text-[#00DDFF]" />
-                  <span>Cost Breakdown</span>
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="p-0 space-y-4">
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white font-medium">Labor Cost ({selectedCountry})</span>
-                  <span className="text-[#00FF41] font-bold text-lg">
-                    {formatCurrency(results.traditional?.laborCost)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white font-medium">Technology & Infrastructure</span>
-                  <span className="text-[#00DDFF] font-bold text-lg">
-                    {formatCurrency((results.traditional?.technologyCost || 0) + (results.traditional?.infrastructureCost || 0))}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white font-medium">AI Platform & Processing</span>
-                  <span className="text-[rgb(192,192,192)] font-bold text-lg">
-                    {formatCurrency(results.ai?.totalCost)}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Performance Metrics */}
+            {/* Performance Summary */}
             <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
               <CardHeader className="p-0 mb-6">
                 <CardTitle className="text-xl text-white flex items-center space-x-3">
                   <Zap size={20} className="text-[#00DDFF]" />
-                  <span>Performance Metrics</span>
+                  <span>Performance Summary</span>
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-0 space-y-4">
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <div>
-                    <div className="text-white font-semibold">Automated Calls</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">80% automation rate</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                    <div className="text-white font-semibold mb-1">Market</div>
+                    <div className="text-[#00FF41] font-bold text-lg">{selectedCountry}</div>
                   </div>
-                  <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30 text-lg px-4 py-2">
-                    {formatNumber(results.automatedCalls)}/month
-                  </Badge>
-                </div>
-
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <div>
-                    <div className="text-white font-semibold">Human-Assisted</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">Complex issues only</div>
+                  <div className="text-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                    <div className="text-white font-semibold mb-1">Agents</div>
+                    <div className="text-[#00DDFF] font-bold text-lg">{agentCount}</div>
                   </div>
-                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30 text-lg px-4 py-2">
-                    {formatNumber(results.humanAssistedCalls)}/month
-                  </Badge>
-                </div>
-
-                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
-                  <div>
-                    <div className="text-white font-semibold">Annual Savings</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">Total yearly cost reduction</div>
+                  <div className="text-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                    <div className="text-white font-semibold mb-1">AHT</div>
+                    <div className="text-[#00FF41] font-bold text-lg">{ahtMinutes}min</div>
                   </div>
-                  <div className="text-[#00FF41] font-bold text-xl">
-                    {formatCurrency(results.annualSavings)}
+                  <div className="text-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                    <div className="text-white font-semibold mb-1">Calls/Month</div>
+                    <div className="text-[#00DDFF] font-bold text-lg">{formatNumber(results.callVolume)}</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* CTA */}
-            <div className="text-center pt-6">
+            {/* CTA Button */}
+            <div className="text-center">
               <Button 
                 size="lg"
                 onClick={saveROICalculation}
                 disabled={isLoading}
-                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani disabled:opacity-50 disabled:transform-none text-lg"
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-bold px-12 py-6 rounded-xl transform hover:scale-105 transition-all duration-200 text-xl font-rajdhani disabled:opacity-50 disabled:transform-none shadow-lg shadow-[#00FF41]/30"
               >
                 {isLoading ? (
                   <>
@@ -399,7 +407,7 @@ const ROICalculator = () => {
                 )}
               </Button>
               <p className="text-[rgb(161,161,170)] text-sm mt-4">
-                Compare {selectedCountry} BPO costs vs. AI automation • Schedule demo for validation
+                {selectedCountry} BPO vs AI automation comparison • Schedule demo for validation
               </p>
             </div>
           </div>
