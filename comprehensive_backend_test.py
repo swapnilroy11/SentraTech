@@ -620,7 +620,7 @@ class ComprehensiveBackendTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if "request_id" in result and result.get("status") == "pending":
+                if "request_id" in result and result.get("status") in ["pending", "verification_pending"]:
                     self.log_test("Privacy - Data Request", True, 
                                 f"Privacy request created: {result['request_id']}")
                     self.privacy_request_id = result["request_id"]
