@@ -56,6 +56,7 @@ const FloatingNavScrollable = () => {
   }, [isExpanded]);
 
   return (
+    <>
       {/* Floating Navigation Component */}
       <div 
         id="quickNav" 
