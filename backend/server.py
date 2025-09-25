@@ -2858,6 +2858,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_db_client():
+    """Initialize database connections and indexes on startup"""
+    logger.info("🚀 Starting SentraTech API server...")
+    
+    # Check database health
+    health_status = await check_database_health()
+    if health_status['status'] == 'healthy':
+        logger.info("✅ Database connection established successfully")
+        logger.info(f"📊 MongoDB version: {health_status.get('version')}")
+        logger.info(f"⏱️ Server uptime: {health_status.get('uptime')}s")
+    else:
+        logger.error(f"❌ Database connection failed: {health_status.get('error')}")
+    
+    # Create database indexes for optimal performance
+    await ensure_database_indexes()
+    
+    logger.info("🎯 SentraTech API server started successfully")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
+    """Clean up database connections on shutdown"""
+    logger.info("🔄 Shutting down SentraTech API server...")
     client.close()
+    logger.info("✅ Database connections closed")
