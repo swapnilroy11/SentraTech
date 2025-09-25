@@ -258,16 +258,19 @@ const CookieBanner = () => {
                   <h3 className="text-white font-medium">Marketing Cookies</h3>
                   <p className="text-gray-400 text-sm">Used for personalized advertising and marketing</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="relative inline-flex items-center cursor-pointer z-10">
                   <input
                     type="checkbox"
                     className="sr-only"
                     checked={preferences.marketing}
                     onChange={() => handlePreferenceChange('marketing')}
                   />
-                  <div className={`w-11 h-6 rounded-full transition-colors duration-200 ${
-                    preferences.marketing ? 'bg-[#00FF41]' : 'bg-gray-600'
-                  }`}>
+                  <div 
+                    className={`w-11 h-6 rounded-full transition-colors duration-200 relative z-20 ${
+                      preferences.marketing ? 'bg-[#00FF41]' : 'bg-gray-600'
+                    }`}
+                    onClick={() => handlePreferenceChange('marketing')}
+                  >
                     <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
                       preferences.marketing ? 'translate-x-5' : 'translate-x-0'
                     } mt-0.5 ml-0.5`}></div>
