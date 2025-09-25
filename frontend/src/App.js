@@ -15,7 +15,6 @@ import ChatWidget from "./components/ChatWidget";
 import HomePage from "./pages/HomePage";
 import FeaturesPage from "./pages/FeaturesPage";
 import CaseStudiesPage from "./pages/CaseStudiesPage";
-import IntegrationsPage from "./pages/IntegrationsPage";
 import SecurityPage from "./pages/SecurityPage";
 import PricingPage from "./pages/PricingPage";
 import DemoRequestPage from "./pages/DemoRequestPage";
