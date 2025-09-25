@@ -1,41 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Route } from 'lucide-react';
-import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
+import { Menu, X, Home, Zap, Users, Calculator, Star, DollarSign, Phone } from 'lucide-react';
 
 const FloatingNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-  const navigateToSection = useNavigateWithScroll();
+  const [isVisible, setIsVisible] = useState(true);
 
-  // Navigation items with icons and routes
-  const navItems = [
-    { id: 'home', path: '/', icon: Home, label: 'Home' },
-    { id: 'metrics', path: '/features#real-time-metrics', icon: Zap, label: 'Real-Time Metrics' },
-    { id: 'roi', path: '/roi-calculator', icon: Calculator, label: 'ROI Calculator' },
-    { id: 'voice', path: '/features#multi-channel', icon: MessageSquare, label: 'Voice Agents' },
-    { id: 'journey', path: '/features#customer-journey', icon: Route, label: 'Journey' },
-    { id: 'cases', path: '/case-studies', icon: Users, label: 'Case Studies' },
-    { id: 'security', path: '/security', icon: Shield, label: 'Security' },
-    { id: 'pricing', path: '/pricing', icon: DollarSign, label: 'Pricing' },
-    { id: 'demo', path: '/demo-request', icon: FileText, label: 'Demo' }
+  // Navigation items
+  const navigationItems = [
+    { path: '/#home', label: 'Home', icon: Home },
+    { path: '/#features', label: 'Beyond', icon: Zap },
+    { path: '/#customer-journey', label: 'Customer Journey', icon: Users },
+    { path: '/roi-calculator', label: 'ROI Calculator', icon: Calculator },
+    { path: '/#testimonials', label: 'Testimonials', icon: Star },
+    { path: '/pricing', label: 'Better', icon: DollarSign },
+    { path: '/demo-request', label: 'Contact', icon: Phone }
   ];
 
-  const isActivePath = (path) => {
-    try {
-      if (path === '/' && location.pathname === '/') return true;
-      if (path !== '/' && location.pathname.startsWith(path)) return true;
-      return false;
-    } catch (error) {
-      console.error('Error checking active path:', error);
-      return false;
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && !event.target.closest('[data-floating-nav]')) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  };
+  }, [isOpen]);
+
+  // Hide on mobile screens
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVisible(window.innerWidth >= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <>
-      {/* Floating Navigation Button - Always Visible */}
+      {/* Custom CSS for animations */}
+      <style jsx>{`
+        @keyframes gentle-pulse {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
+          }
+        }
+        
+        .floating-nav-container {
+          position: fixed !important;
+          z-index: 999999 !important;
+        }
+        
+        .floating-nav-btn {
+          position: relative !important;
+          z-index: 1000000 !important;
+        }
+        
+        .floating-nav-menu {
+          position: absolute !important;
+          z-index: 999998 !important;
+        }
+      `}</style>
+
+      {/* Floating Navigation Container */}
       <div 
         className="floating-nav-container"
         style={{
@@ -43,102 +83,139 @@ const FloatingNavigation = () => {
           left: '20px',
           top: '50vh',
           transform: 'translateY(-50%)',
-          zIndex: 99999,
-          pointerEvents: 'auto',
-          display: window.innerWidth >= 768 ? 'block' : 'none'
+          zIndex: 999999,
+          pointerEvents: 'auto'
         }}
+        data-floating-nav="container"
       >
-        {/* Toggle Button - Enhanced for maximum visibility */}
+        {/* Toggle Button - Always Visible and Floating */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          data-floating-nav="true"
-          className={`floating-nav-btn w-18 h-18 bg-[rgba(0,255,65,0.25)] backdrop-blur-2xl border-4 border-[rgba(0,255,65,0.7)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-125 hover:border-[rgba(0,255,65,0.9)] shadow-2xl shadow-[rgba(0,255,65,0.5)] ${
-            isOpen ? 'rotate-180 bg-[rgba(0,255,65,0.35)] scale-125' : ''
+          data-floating-nav="button"
+          className={`floating-nav-btn flex items-center justify-center transition-all duration-300 ${
+            isOpen ? 'rotate-180 scale-125' : ''
           }`}
-          aria-label="Quick Navigation Menu"
+          aria-label="Quick Access Navigation Menu"
           style={{
             position: 'relative',
-            zIndex: 100000,
-            width: '72px',
-            height: '72px',
+            zIndex: 1000000,
+            width: '70px',
+            height: '70px',
+            background: 'rgba(0, 255, 65, 0.25)',
+            backdropFilter: 'blur(20px)',
+            border: '3px solid rgba(0, 255, 65, 0.7)',
+            borderRadius: '50%',
+            boxShadow: '0 8px 32px rgba(0, 255, 65, 0.4), 0 0 0 1px rgba(0, 255, 65, 0.2)',
             animation: 'gentle-pulse 4s ease-in-out infinite'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(0, 255, 65, 0.4)';
+            e.target.style.transform = 'scale(1.15)';
+            e.target.style.borderColor = 'rgba(0, 255, 65, 0.9)';
+          }}
+          onMouseLeave={(e) => {
+            if (!isOpen) {
+              e.target.style.background = 'rgba(0, 255, 65, 0.25)';
+              e.target.style.transform = 'scale(1)';
+              e.target.style.borderColor = 'rgba(0, 255, 65, 0.7)';
+            }
           }}
         >
           {isOpen ? (
-            <X size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+            <X 
+              size={30} 
+              className="text-[#00FF41]" 
+              style={{ 
+                filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))',
+                fontWeight: 'bold'
+              }} 
+            />
           ) : (
-            <Menu size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+            <Menu 
+              size={30} 
+              className="text-[#00FF41]" 
+              style={{ 
+                filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))',
+                fontWeight: 'bold'
+              }} 
+            />
           )}
         </button>
 
         {/* Navigation Menu Panel */}
         <div
-          className={`floating-nav-menu transition-all duration-500 ${
+          className={`floating-nav-menu transition-all duration-500 ease-out ${
             isOpen
-              ? 'opacity-100 translate-x-0 pointer-events-auto'
-              : 'opacity-0 -translate-x-8 pointer-events-none'
+              ? 'opacity-100 translate-x-0 pointer-events-auto scale-100'
+              : 'opacity-0 -translate-x-8 pointer-events-none scale-95'
           }`}
           style={{
             position: 'absolute',
-            left: '88px',
-            top: '0',
+            left: '90px',
+            top: '50%',
             transform: 'translateY(-50%)',
-            zIndex: 99998
+            zIndex: 999998
           }}
+          data-floating-nav="menu"
         >
           <div 
-            className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.4)] rounded-2xl p-6 min-w-[260px] shadow-2xl shadow-[rgba(0,255,65,0.3)] max-h-[80vh] overflow-y-auto"
-            data-floating-nav="true"
+            className="rounded-3xl p-8 min-w-[280px] max-h-[80vh] overflow-y-auto"
             style={{
-              boxShadow: '0 25px 50px -12px rgba(0,255,65,0.25), 0 0 0 1px rgba(0,255,65,0.1)'
+              background: 'rgba(10, 10, 10, 0.95)',
+              backdropFilter: 'blur(20px)',
+              border: '2px solid rgba(0, 255, 65, 0.4)',
+              boxShadow: '0 25px 50px -12px rgba(0, 255, 65, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3)'
             }}
+            data-floating-nav="panel"
           >
-          {/* Company Slogan */}
-          <div className="mb-6 pb-4 border-b border-[rgba(0,255,65,0.2)]">
-            <div className="text-center">
-              <h3 className="text-[#00FF41] font-bold text-lg mb-3 font-rajdhani">
+            {/* Header */}
+            <div className="mb-8 pb-6 border-b border-[rgba(0,255,65,0.2)] text-center">
+              <h3 className="text-[#00FF41] font-bold text-2xl mb-3 font-rajdhani">
                 SentraTech
               </h3>
-              <div className="space-y-1 text-sm text-[rgb(161,161,170)]">
-                <div className="text-[#00FF41] font-medium">Beyond</div>
+              <div className="space-y-1 text-base text-[rgb(161,161,170)]">
+                <div className="text-[#00FF41] font-semibold">Beyond</div>
                 <div className="text-[rgb(161,161,170)]">•</div>
-                <div className="text-[#00FF41] font-medium">Better</div>
+                <div className="text-[#00FF41] font-semibold">Better</div>
                 <div className="text-[rgb(161,161,170)]">•</div>
-                <div className="text-[#00FF41]">Boundless</div>
+                <div className="text-[#00FF41] font-semibold">Boundless</div>
               </div>
             </div>
+
+            {/* Navigation Links */}
+            <nav className="space-y-2">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <HashLink
+                    key={item.path}
+                    smooth
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 text-[rgb(218,218,218)] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] border border-transparent hover:border-[rgba(0,255,65,0.3)] group"
+                    style={{
+                      textDecoration: 'none'
+                    }}
+                  >
+                    <div className="p-2 bg-[rgba(0,255,65,0.1)] rounded-xl border border-[rgba(0,255,65,0.3)] group-hover:bg-[rgba(0,255,65,0.2)] group-hover:border-[rgba(0,255,65,0.5)] transition-all duration-300">
+                      <Icon size={18} className="text-[#00FF41]" />
+                    </div>
+                    <span className="font-medium text-base">{item.label}</span>
+                  </HashLink>
+                );
+              })}
+            </nav>
+
+            {/* Footer */}
+            <div className="mt-8 pt-6 border-t border-[rgba(0,255,65,0.2)] text-center">
+              <p className="text-[rgb(161,161,170)] text-sm">
+                Quick Access Navigation
+              </p>
+            </div>
           </div>
-
-          {/* Navigation Items */}
-          <nav className="space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = isActivePath(item.path);
-
-              return (
-                <HashLink
-                  key={item.id}
-                  smooth
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-300 text-left ${
-                    isActive
-                      ? 'bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)] text-[#00FF41]'
-                      : 'text-[rgb(161,161,170)] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.05)]'
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span className="text-sm font-medium">{item.label}</span>
-                  {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-[#00FF41] rounded-full"></div>
-                  )}
-                </HashLink>
-              );
-            })}
-          </nav>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
