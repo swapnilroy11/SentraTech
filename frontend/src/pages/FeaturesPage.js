@@ -398,32 +398,6 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* ROI Calculator Section - Better breathing room */}
-      <section id="roi-calculator" className="py-10 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-8"
-          >
-            <div className="flex items-center justify-center space-x-4 mb-3">
-              <div className="w-12 h-12 bg-[#00FF41]/20 rounded-full flex items-center justify-center border border-[#00FF41]/50">
-                <Calculator className="text-[#00FF41]" size={24} />
-              </div>
-              <h2 className="text-4xl font-bold text-white font-rajdhani">
-                ROI Calculator
-              </h2>
-            </div>
-            <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto mb-2">
-              Calculate your potential savings and efficiency gains with our intelligent cost analysis tool.
-            </p>
-          </motion.div>
-          
-          <ROICalculator />
-        </div>
-      </section>
-
       {/* Enhanced CTA Section - Better breathing room */}
       <section className="py-10 bg-[#0A0A0A] relative" id="features-cta">
         <div className="container mx-auto px-6 text-center">
