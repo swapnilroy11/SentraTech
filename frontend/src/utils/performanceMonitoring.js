@@ -66,27 +66,33 @@ class PerformanceMonitor {
    */
   collectCoreWebVitals() {
     // Largest Contentful Paint (LCP)
-    getLCP((metric) => {
+    onLCP((metric) => {
       this.recordMetric('LCP', metric);
     });
 
-    // First Input Delay (FID)
-    getFID((metric) => {
-      this.recordMetric('FID', metric);
-    });
+    // First Input Delay (FID) or Interaction to Next Paint (INP)
+    if (onINP) {
+      onINP((metric) => {
+        this.recordMetric('INP', metric);
+      });
+    } else if (onFID) {
+      onFID((metric) => {
+        this.recordMetric('FID', metric);
+      });
+    }
 
     // Cumulative Layout Shift (CLS)
-    getCLS((metric) => {
+    onCLS((metric) => {
       this.recordMetric('CLS', metric);
     });
 
     // First Contentful Paint (FCP)
-    getFCP((metric) => {
+    onFCP((metric) => {
       this.recordMetric('FCP', metric);
     });
 
     // Time to First Byte (TTFB)
-    getTTFB((metric) => {
+    onTTFB((metric) => {
       this.recordMetric('TTFB', metric);
     });
   }
