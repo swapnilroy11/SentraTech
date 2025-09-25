@@ -7,92 +7,159 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, DollarSign, Clock, 
-  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2
+  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2,
+  Info, ToggleLeft, ToggleRight, Building2, Target
 } from 'lucide-react';
 import axios from 'axios';
 
 const ROICalculator = () => {
-  const [callVolume, setCallVolume] = useState([25000]);
-  const [currentCostPerCall, setCurrentCostPerCall] = useState(8.5);
-  const [averageHandleTime, setAverageHandleTime] = useState(480); // seconds
-  const [agentCount, setAgentCount] = useState(50);
+  // Market Research Based State
+  const [agentCount, setAgentCount] = useState([50]);
+  const [averageHandleTime, setAverageHandleTime] = useState([8]); // minutes
+  const [monthlyCallVolume, setMonthlyCallVolume] = useState(0);
+  const [costPerAgent, setCostPerAgent] = useState(2800); // Market research baseline
   const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [savedSuccessfully, setSavedSuccessfully] = useState(false);
+  const [viewMode, setViewMode] = useState('monthly'); // monthly or annual
+  const [selectedPreset, setSelectedPreset] = useState(null);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Calculate ROI using backend API
-  const calculateROI = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const inputData = {
-        call_volume: callVolume[0],
-        current_cost_per_call: currentCostPerCall,
-        average_handle_time: averageHandleTime,
-        agent_count: agentCount
-      };
-
-      const response = await axios.post(`${BACKEND_URL}/api/roi/calculate`, inputData);
-      setResults(response.data);
-    } catch (err) {
-      console.error('Error calculating ROI:', err);
-      setError('Failed to calculate ROI. Please try again.');
-      // Fallback to client-side calculation
-      calculateROIClientSide();
-    } finally {
-      setIsLoading(false);
+  // Market Research Constants
+  const MARKET_RESEARCH = {
+    traditionalAgentCost: {
+      us_dedicated: { min: 2600, max: 3400, avg: 2800 },
+      offshore: { min: 1000, max: 2000, avg: 1500 }
+    },
+    technologyCost: 200, // per agent per month
+    infrastructureCost: 150, // per agent per month (office, utilities)
+    aht: {
+      industry_min: 6, // minutes
+      industry_max: 12, // minutes
+      industry_avg: 8 // minutes
+    },
+    costPerCall: {
+      traditional_min: 3,
+      traditional_max: 15,
+      traditional_avg: 8.5
+    },
+    ai: {
+      twilioVoicePerMin: 0.018, // $0.018 per minute
+      aiProcessingPerCall: 0.05, // AI inference cost per call
+      platformBaseFee: 297, // Monthly Twilio infrastructure
+      automationRate: 0.75, // 75% automation based on research
+      costReductionRate: 0.70 // 70% cost reduction
     }
   };
 
-  // Fallback client-side calculation (same as original)
-  const calculateROIClientSide = () => {
-    const monthlyVolume = callVolume[0];
-    const currentMonthlyCost = monthlyVolume * currentCostPerCall;
-    const currentAnnualCost = currentMonthlyCost * 12;
+  // Preset Scenarios
+  const PRESETS = [
+    {
+      name: 'Small Team',
+      description: '5-15 agents',
+      agentCount: 10,
+      aht: 8,
+      costPerAgent: 2800
+    },
+    {
+      name: 'Mid-size',
+      description: '25-75 agents', 
+      agentCount: 50,
+      aht: 8,
+      costPerAgent: 2800
+    },
+    {
+      name: 'Enterprise',
+      description: '100-500 agents',
+      agentCount: 200,
+      aht: 9,
+      costPerAgent: 2900
+    }
+  ];
+
+  // Auto-calculate monthly call volume based on agents and AHT
+  useEffect(() => {
+    const workingHoursPerMonth = 22 * 8; // 22 working days, 8 hours per day
+    const callsPerAgentPerHour = 60 / averageHandleTime[0]; // calls per hour based on AHT
+    const totalCallsPerMonth = agentCount[0] * workingHoursPerMonth * callsPerAgentPerHour;
+    setMonthlyCallVolume(Math.round(totalCallsPerMonth));
+  }, [agentCount, averageHandleTime]);
+
+  // Market-Research-Backed Cost Calculations
+  const calculateTraditionalMonthlyCost = (agents, costPerAgent) => {
+    const baseLaborCost = agents * costPerAgent;
+    const technologyCost = agents * MARKET_RESEARCH.technologyCost;
+    const infrastructureCost = agents * MARKET_RESEARCH.infrastructureCost;
     
-    // SentraTech improvements
-    const automationRate = 0.7; // 70% automation
-    const ahtReduction = 0.35; // 35% AHT reduction
-    const costReduction = 0.45; // 45% cost reduction
-    
-    const newCostPerCall = currentCostPerCall * (1 - costReduction);
-    const newMonthlyCost = monthlyVolume * newCostPerCall;
-    const newAnnualCost = newMonthlyCost * 12;
-    
-    const monthlySavings = currentMonthlyCost - newMonthlyCost;
-    const annualSavings = currentAnnualCost - newAnnualCost;
-    
-    const newAHT = averageHandleTime * (1 - ahtReduction);
-    const timeSavedPerCall = averageHandleTime - newAHT;
-    const totalTimeSavedMonthly = (timeSavedPerCall * monthlyVolume) / 3600; // hours
-    
-    const automatedCalls = monthlyVolume * automationRate;
-    const humanAssistedCalls = monthlyVolume * (1 - automationRate);
-    
-    setResults({
-      current_monthly_cost: currentMonthlyCost,
-      current_annual_cost: currentAnnualCost,
-      new_monthly_cost: newMonthlyCost,
-      new_annual_cost: newAnnualCost,
-      monthly_savings: monthlySavings,
-      annual_savings: annualSavings,
-      cost_reduction_percent: costReduction * 100,
-      new_aht: newAHT,
-      time_saved_per_call: timeSavedPerCall,
-      total_time_saved_monthly: totalTimeSavedMonthly,
-      aht_reduction_percent: ahtReduction * 100,
-      automated_calls: automatedCalls,
-      human_assisted_calls: humanAssistedCalls,
-      automation_rate: automationRate * 100,
-      roi: (annualSavings / newAnnualCost) * 100
-    });
+    return {
+      laborCost: baseLaborCost,
+      technologyCost: technologyCost,
+      infrastructureCost: infrastructureCost,
+      totalCost: baseLaborCost + technologyCost + infrastructureCost
+    };
   };
 
-  // Save ROI calculation to database
+  const calculateAIMonthlyCost = (callVolume) => {
+    const avgCallDurationMin = averageHandleTime[0];
+    const twilioVoiceCost = callVolume * avgCallDurationMin * MARKET_RESEARCH.ai.twilioVoicePerMin;
+    const aiProcessingCost = callVolume * MARKET_RESEARCH.ai.aiProcessingPerCall;
+    const platformFee = MARKET_RESEARCH.ai.platformBaseFee;
+    
+    return {
+      voiceCost: twilioVoiceCost,
+      aiProcessingCost: aiProcessingCost,
+      platformFee: platformFee,
+      totalCost: twilioVoiceCost + aiProcessingCost + platformFee
+    };
+  };
+
+  const calculateROIMetrics = () => {
+    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent);
+    const ai = calculateAIMonthlyCost(monthlyCallVolume);
+    
+    const monthlySavings = traditional.totalCost - ai.totalCost;
+    const annualSavings = monthlySavings * 12;
+    const roiPercentage = ((annualSavings / (ai.totalCost * 12)) * 100);
+    const costReductionPercentage = ((monthlySavings / traditional.totalCost) * 100);
+    const paybackPeriodMonths = (ai.totalCost * 12) / monthlySavings;
+    
+    // Calculate per-call costs
+    const traditionalCostPerCall = traditional.totalCost / monthlyCallVolume;
+    const aiCostPerCall = ai.totalCost / monthlyCallVolume;
+    
+    return {
+      traditional,
+      ai,
+      monthlySavings,
+      annualSavings,
+      roiPercentage: Math.max(0, roiPercentage),
+      costReductionPercentage: Math.max(0, costReductionPercentage),
+      paybackPeriodMonths: Math.max(0, paybackPeriodMonths),
+      traditionalCostPerCall,
+      aiCostPerCall,
+      callVolumeProcessed: monthlyCallVolume,
+      automatedCalls: monthlyCallVolume * MARKET_RESEARCH.ai.automationRate,
+      humanAssistedCalls: monthlyCallVolume * (1 - MARKET_RESEARCH.ai.automationRate)
+    };
+  };
+
+  // Real-time calculation when inputs change
+  useEffect(() => {
+    const metrics = calculateROIMetrics();
+    setResults(metrics);
+  }, [agentCount, averageHandleTime, costPerAgent, monthlyCallVolume]);
+
+  // Apply preset scenarios
+  const applyPreset = (preset) => {
+    setSelectedPreset(preset.name);
+    setAgentCount([preset.agentCount]);
+    setAverageHandleTime([preset.aht]);
+    setCostPerAgent(preset.costPerAgent);
+  };
+
+  // Save ROI calculation to backend
   const saveROICalculation = async () => {
     try {
       setIsLoading(true);
@@ -101,23 +168,19 @@ const ROICalculator = () => {
 
       const requestData = {
         input_data: {
-          call_volume: callVolume[0],
-          current_cost_per_call: currentCostPerCall,
-          average_handle_time: averageHandleTime,
-          agent_count: agentCount
+          agent_count: agentCount[0],
+          average_handle_time: averageHandleTime[0] * 60, // convert to seconds
+          monthly_call_volume: monthlyCallVolume,
+          cost_per_agent: costPerAgent
         },
         user_info: {
           timestamp: new Date().toISOString(),
-          source: 'website_calculator'
+          source: 'enhanced_website_calculator',
+          preset_used: selectedPreset
         }
       };
 
-      console.log('Saving ROI calculation with data:', requestData); // Debug log
-
       const response = await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
-      
-      console.log('ROI save response:', response.data); // Debug log
-      
       setSavedSuccessfully(true);
       setTimeout(() => setSavedSuccessfully(false), 3000);
     } catch (err) {
@@ -128,15 +191,6 @@ const ROICalculator = () => {
     }
   };
 
-  // Trigger calculation when inputs change
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      calculateROI();
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(debounceTimer);
-  }, [callVolume, currentCostPerCall, averageHandleTime, agentCount]);
-
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -146,8 +200,9 @@ const ROICalculator = () => {
     }).format(amount);
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat('en-US').format(Math.round(number));
+  };
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}m ${remainingSeconds}s`;
   };
