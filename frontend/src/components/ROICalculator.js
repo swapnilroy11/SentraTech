@@ -7,62 +7,30 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, DollarSign, Clock, 
-  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2,
-  Info, ToggleLeft, ToggleRight, Building2, Target
+  Users, BarChart3, ArrowUp, ArrowDown, Zap, Loader2, Target
 } from 'lucide-react';
 import axios from 'axios';
+import { calculateROI, getCountries } from '../utils/calculatorLogic';
 
 const ROICalculator = () => {
-  // State initialization with India BPO baseline
+  // Multi-Country State Management
+  const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
   const [agentCount, setAgentCount] = useState([50]);
   const [averageHandleTime, setAverageHandleTime] = useState([8]); // minutes
   const [monthlyCallVolume, setMonthlyCallVolume] = useState(0);
-  const [costPerAgent, setCostPerAgent] = useState(500); // India BPO baseline - ensure number type
   const [results, setResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [savedSuccessfully, setSavedSuccessfully] = useState(false);
-  const [viewMode, setViewMode] = useState('monthly'); // monthly or annual
-  const [selectedPreset, setSelectedPreset] = useState(null);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // India Baseline BPO Cost Constants
-  const INDIA_BPO_BASELINE = {
-    baseAgentCost: 500,        // $ per agent per month (India BPO baseline)
-    technologyCost: 50,        // software/tools estimate per agent
-    infrastructureCost: 30,    // office/infrastructure estimate per agent
-    ai: {
-      twilioPerMin: 0.018,     // $0.018 per minute
-      aiProcessPerMin: 0.05,   // $0.05 per minute  
-      platformFee: 297,        // base infrastructure fee
-      automationRate: 0.80     // 80% automation rate
-    }
-  };
-
-  // Preset Scenarios - Updated for India BPO baseline
-  const PRESETS = [
-    {
-      name: 'Small Team',
-      description: '5-15 agents',
-      agentCount: 10,
-      aht: 8,
-      costPerAgent: 500  // India BPO baseline
-    },
-    {
-      name: 'Mid-size',
-      description: '25-75 agents', 
-      agentCount: 50,
-      aht: 8,
-      costPerAgent: 500  // India BPO baseline
-    },
-    {
-      name: 'Enterprise',
-      description: '100-500 agents',
-      agentCount: 200,
-      aht: 9,
-      costPerAgent: 500  // India BPO baseline
-    }
+  // Country Configuration
+  const COUNTRIES = [
+    { name: 'Bangladesh', baseCost: 300, flag: '🇧🇩' },
+    { name: 'India', baseCost: 500, flag: '🇮🇳' },
+    { name: 'Philippines', baseCost: 600, flag: '🇵🇭' },
+    { name: 'Mexico', baseCost: 700, flag: '🇲🇽' }
   ];
 
   // Auto-calculate monthly call volume based on agents and AHT
@@ -70,113 +38,27 @@ const ROICalculator = () => {
     const workingHoursPerMonth = 22 * 8; // 22 working days, 8 hours per day
     const callsPerAgentPerHour = 60 / averageHandleTime[0]; // calls per hour based on AHT
     const totalCallsPerMonth = agentCount[0] * workingHoursPerMonth * callsPerAgentPerHour;
-    setMonthlyCallVolume(Math.round(totalCallsPerMonth));
+    const callVolumeInMinutes = totalCallsPerMonth * averageHandleTime[0]; // Convert to minutes
+    setMonthlyCallVolume(Math.round(callVolumeInMinutes));
   }, [agentCount, averageHandleTime]);
-
-  // Traditional BPO Monthly Cost Calculation (India Baseline)
-  const calculateTraditionalMonthlyCost = (agents, costPerAgent) => {
-    const baseLaborCost = agents * costPerAgent;
-    const technologyCost = agents * INDIA_BPO_BASELINE.technologyCost;
-    const infrastructureCost = agents * INDIA_BPO_BASELINE.infrastructureCost;
-    
-    return {
-      laborCost: baseLaborCost,
-      technologyCost: technologyCost,
-      infrastructureCost: infrastructureCost,
-      totalCost: baseLaborCost + technologyCost + infrastructureCost
-    };
-  };
-
-  const calculateAIMonthlyCost = (callVolume) => {
-    const avgCallDurationMin = averageHandleTime[0];
-    const twilioVoiceCost = callVolume * avgCallDurationMin * INDIA_BPO_BASELINE.ai.twilioPerMin;
-    const aiProcessingCost = callVolume * avgCallDurationMin * INDIA_BPO_BASELINE.ai.aiProcessPerMin;
-    const platformFee = INDIA_BPO_BASELINE.ai.platformFee;
-    
-    return {
-      voiceCost: twilioVoiceCost,
-      aiProcessingCost: aiProcessingCost,
-      platformFee: platformFee,
-      totalCost: twilioVoiceCost + aiProcessingCost + platformFee
-    };
-  };
-
-  const calculateROIMetrics = () => {
-    // Ensure we have valid inputs before calculating
-    if (!agentCount || !averageHandleTime || agentCount[0] < 0 || averageHandleTime[0] <= 0 || monthlyCallVolume <= 0) {
-      return {
-        traditional: { laborCost: 0, technologyCost: 0, infrastructureCost: 0, totalCost: 0 },
-        ai: { voiceCost: 0, aiProcessingCost: 0, platformFee: 0, totalCost: 0 },
-        monthlySavings: 0,
-        annualSavings: 0,
-        roiPercentage: 0,
-        costReductionPercentage: 0,
-        paybackPeriodMonths: 0,
-        traditionalCostPerCall: 0,
-        aiCostPerCall: 0,
-        callVolumeProcessed: 0,
-        automatedCalls: 0,
-        humanAssistedCalls: 0
-      };
-    }
-
-    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent || 500);
-    const ai = calculateAIMonthlyCost(monthlyCallVolume);
-    
-    const monthlySavings = traditional.totalCost - ai.totalCost;
-    const annualSavings = monthlySavings * 12;
-    
-    // Calculate ROI and cost reduction percentages
-    const roiPercentage = ai.totalCost > 0 ? ((annualSavings / (ai.totalCost * 12)) * 100) : 0;
-    const costReductionPercentage = traditional.totalCost > 0 ? ((monthlySavings / traditional.totalCost) * 100) : 0;
-    const paybackPeriodMonths = monthlySavings > 0 ? ((ai.totalCost * 12) / monthlySavings) : 0;
-    
-    // Calculate per-call costs
-    const traditionalCostPerCall = monthlyCallVolume > 0 ? (traditional.totalCost / monthlyCallVolume) : 0;
-    const aiCostPerCall = monthlyCallVolume > 0 ? (ai.totalCost / monthlyCallVolume) : 0;
-    
-    return {
-      traditional,
-      ai,
-      monthlySavings,
-      annualSavings,
-      roiPercentage: Math.max(0, roiPercentage),
-      costReductionPercentage,
-      paybackPeriodMonths: Math.max(0, paybackPeriodMonths),
-      traditionalCostPerCall,
-      aiCostPerCall,
-      callVolumeProcessed: monthlyCallVolume,
-      automatedCalls: monthlyCallVolume * INDIA_BPO_BASELINE.ai.automationRate,
-      humanAssistedCalls: monthlyCallVolume * (1 - INDIA_BPO_BASELINE.ai.automationRate)
-    };
-  };
 
   // Real-time calculation when inputs change
   useEffect(() => {
     try {
-      const metrics = calculateROIMetrics();
-      setResults(metrics);
+      if (agentCount[0] > 0 && monthlyCallVolume > 0) {
+        const metrics = calculateROI(selectedCountry, agentCount[0], monthlyCallVolume);
+        setResults(metrics);
+      }
     } catch (error) {
-      console.error('Error calculating ROI metrics:', error);
+      console.error('Error calculating ROI:', error);
+      setError('Calculation error. Please check your inputs.');
     }
-  }, [agentCount, averageHandleTime, costPerAgent, monthlyCallVolume]);
+  }, [selectedCountry, agentCount, averageHandleTime, monthlyCallVolume]);
 
-  // Initial calculation on component mount
-  useEffect(() => {
-    try {
-      const metrics = calculateROIMetrics();
-      setResults(metrics);
-    } catch (error) {
-      console.error('Error in initial calculation:', error);
-    }
-  }, []);
-
-  // Apply preset scenarios
-  const applyPreset = (preset) => {
-    setSelectedPreset(preset.name);
-    setAgentCount([preset.agentCount]);
-    setAverageHandleTime([preset.aht]);
-    setCostPerAgent(preset.costPerAgent);
+  // Handle country selection
+  const handleCountryChange = (country) => {
+    setSelectedCountry(country);
+    setError(null);
   };
 
   // Save ROI calculation to backend
@@ -190,17 +72,17 @@ const ROICalculator = () => {
         input_data: {
           agent_count: agentCount[0],
           average_handle_time: averageHandleTime[0] * 60, // convert to seconds
-          monthly_call_volume: monthlyCallVolume,
-          cost_per_agent: costPerAgent
+          monthly_call_volume: Math.round(monthlyCallVolume / averageHandleTime[0]), // convert back to call count
+          cost_per_agent: results.countryBaseline || 500
         },
         user_info: {
           timestamp: new Date().toISOString(),
-          source: 'enhanced_website_calculator',
-          preset_used: selectedPreset
+          source: 'multi_country_calculator',
+          country: selectedCountry
         }
       };
 
-      const response = await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
+      await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
       setSavedSuccessfully(true);
       setTimeout(() => setSavedSuccessfully(false), 3000);
     } catch (err) {
@@ -217,22 +99,12 @@ const ROICalculator = () => {
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(amount || 0);
   };
 
   const formatNumber = (number) => {
-    return new Intl.NumberFormat('en-US').format(Math.round(number));
+    return new Intl.NumberFormat('en-US').format(Math.round(number || 0));
   };
-
-  const Tooltip = ({ children, content }) => (
-    <div className="group relative inline-block">
-      {children}
-      <div className="invisible group-hover:visible absolute z-50 w-64 px-3 py-2 text-xs text-white bg-gray-900 rounded-lg shadow-lg bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2">
-        {content}
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
-      </div>
-    </div>
-  );
 
   return (
     <section id="roi-calculator" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
@@ -241,88 +113,75 @@ const ROICalculator = () => {
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Calculator className="mr-2" size={14} />
-            Market Research-Backed ROI Calculator
+            Multi-Country ROI Calculator
           </Badge>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
             <span className="text-[#F8F9FA]">Calculate Your </span>
-            <span className="text-[#00FF41]">Real Savings</span>
+            <span className="text-[#00FF41]">Global Savings</span>
           </h2>
           <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
-            Accurate projections based on extensive market research of traditional BPO costs vs. AI automation.
+            Compare AI automation savings across different countries with real BPO market baselines.
           </p>
         </div>
 
-        {/* Preset Scenarios */}
+        {/* Country Selection Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {PRESETS.map((preset) => (
+          {COUNTRIES.map((country) => (
             <Button
-              key={preset.name}
-              onClick={() => applyPreset(preset)}
-              variant={selectedPreset === preset.name ? "default" : "outline"}
-              className={`px-4 py-2 rounded-xl transition-all duration-200 ${
-                selectedPreset === preset.name 
-                  ? 'bg-[#00FF41] text-[#0A0A0A]' 
-                  : 'border-[rgb(63,63,63)] text-white hover:border-[#00FF41]'
+              key={country.name}
+              onClick={() => handleCountryChange(country.name)}
+              variant={selectedCountry === country.name ? "default" : "outline"}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                selectedCountry === country.name 
+                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/30' 
+                  : 'border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:bg-[#00FF41]/10'
               }`}
             >
-              <div className="text-center">
-                <div className="font-semibold">{preset.name}</div>
-                <div className="text-xs opacity-70">{preset.description}</div>
+              <span className="mr-2 text-lg">{country.flag}</span>
+              <div className="text-left">
+                <div className="font-bold">{country.name}</div>
+                <div className="text-xs opacity-80">${country.baseCost}/agent/month</div>
               </div>
             </Button>
           ))}
         </div>
 
-        {/* View Mode Toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-[rgb(26,28,30)] rounded-xl p-1 border border-[rgb(63,63,63)]">
-            <Button
-              onClick={() => setViewMode('monthly')}
-              variant="ghost"
-              className={`px-6 py-2 rounded-lg transition-all duration-200 ${
-                viewMode === 'monthly'
-                  ? 'bg-[#00FF41] text-[#0A0A0A]'
-                  : 'text-white hover:bg-[rgb(38,40,42)]'
-              }`}
-            >
-              Monthly View
-            </Button>
-            <Button
-              onClick={() => setViewMode('annual')}
-              variant="ghost"
-              className={`px-6 py-2 rounded-lg transition-all duration-200 ${
-                viewMode === 'annual'
-                  ? 'bg-[#00FF41] text-[#0A0A0A]'
-                  : 'text-white hover:bg-[rgb(38,40,42)]'
-              }`}
-            >
-              Annual View
-            </Button>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
           {/* Input Controls */}
-          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 lg:p-8">
-            <CardHeader className="p-0 mb-6 lg:mb-8">
-              <CardTitle className="text-xl lg:text-2xl text-white flex items-center space-x-3">
-                <div className="p-2 lg:p-3 bg-[#00FF41]/20 rounded-xl border border-[#00FF41]/50">
-                  <BarChart3 size={20} className="text-[#00FF41] lg:w-6 lg:h-6" />
+          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
+            <CardHeader className="p-0 mb-8">
+              <CardTitle className="text-2xl text-white flex items-center space-x-3">
+                <div className="p-3 bg-[#00FF41]/20 rounded-xl border border-[#00FF41]/50">
+                  <BarChart3 size={24} className="text-[#00FF41]" />
                 </div>
-                <span>Your Current Setup</span>
+                <span>Calculator Inputs</span>
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-0 space-y-6 lg:space-y-8">
+            <CardContent className="p-0 space-y-8">
+              {/* Selected Country Info */}
+              <div className="bg-gradient-to-r from-[#00FF41]/10 to-[#00DDFF]/10 rounded-2xl p-6 border border-[#00FF41]/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-[#00FF41] font-semibold text-lg">Selected Country</div>
+                    <div className="text-white text-xl font-bold">{selectedCountry}</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">
+                      Base cost: {formatCurrency(results.countryBaseline || COUNTRIES.find(c => c.name === selectedCountry)?.baseCost)}/agent/month
+                    </div>
+                  </div>
+                  <div className="text-4xl">
+                    {COUNTRIES.find(c => c.name === selectedCountry)?.flag}
+                  </div>
+                </div>
+              </div>
+
               {/* Agent Count */}
               <div>
-                <div className="flex items-center mb-3">
-                  <Label className="text-white text-base lg:text-lg">
-                    Agent Count: {agentCount[0]} agents
+                <div className="flex items-center justify-between mb-4">
+                  <Label className="text-white text-lg font-semibold">
+                    Agent Count
                   </Label>
-                  <Tooltip content="India BPO baseline: $500/agent/month + $50 technology + $30 infrastructure costs per agent">
-                    <Info size={16} className="ml-2 text-[rgb(161,161,170)] cursor-help" />
-                  </Tooltip>
+                  <div className="text-2xl font-bold text-[#00FF41]">{agentCount[0]}</div>
                 </div>
                 <Slider
                   value={agentCount}
@@ -340,13 +199,11 @@ const ROICalculator = () => {
 
               {/* Average Handle Time */}
               <div>
-                <div className="flex items-center mb-3">
-                  <Label className="text-white text-base lg:text-lg">
-                    Average Handle Time: {averageHandleTime[0]} minutes
+                <div className="flex items-center justify-between mb-4">
+                  <Label className="text-white text-lg font-semibold">
+                    Average Handle Time
                   </Label>
-                  <Tooltip content="AI processing: $0.018/minute (Twilio) + $0.05/minute (AI processing) + $297 platform fee vs India BPO baseline">
-                    <Info size={16} className="ml-2 text-[rgb(161,161,170)] cursor-help" />
-                  </Tooltip>
+                  <div className="text-2xl font-bold text-[#00DDFF]">{averageHandleTime[0]} min</div>
                 </div>
                 <Slider
                   value={averageHandleTime}
@@ -362,137 +219,86 @@ const ROICalculator = () => {
                 </div>
               </div>
 
-              {/* Cost Per Agent */}
-              <div>
-                <div className="flex items-center mb-3">
-                  <Label htmlFor="costPerAgent" className="text-white text-base lg:text-lg">
-                    Cost Per Agent (Monthly)
-                  </Label>
-                  <Tooltip content="India BPO baseline costs: $500 base + $50 technology + $30 infrastructure per agent monthly">
-                    <Info size={16} className="ml-2 text-[rgb(161,161,170)] cursor-help" />
-                  </Tooltip>
-                </div>
-                <div className="relative">
-                  <DollarSign size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
-                  <Input
-                    id="costPerAgent"
-                    type="number"
-                    value={costPerAgent || ''}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === '' || value === '0') {
-                        setCostPerAgent('');
-                      } else {
-                        const numValue = parseFloat(value);
-                        if (!isNaN(numValue) && numValue > 0) {
-                          setCostPerAgent(numValue);
-                        }
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const value = parseFloat(e.target.value);
-                      if (isNaN(value) || value < 300) {
-                        setCostPerAgent(500); // Reset to baseline if invalid
-                      }
-                    }}
-                    className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
-                    step="50"
-                    min="300"
-                    max="1000"
-                    placeholder="500"
-                  />
-                </div>
-              </div>
-
-              {/* Auto-calculated Monthly Call Volume */}
-              <div className="bg-[rgb(38,40,42)] rounded-xl p-4 border border-[rgb(63,63,63)]">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-white font-semibold">Monthly Call Volume</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">Auto-calculated from agents × AHT × working hours</div>
+              {/* Auto-calculated Call Volume */}
+              <div className="bg-[rgb(38,40,42)] rounded-xl p-6 border border-[rgb(63,63,63)]">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-white font-semibold text-lg">Monthly Call Volume</div>
+                  <div className="text-2xl font-bold text-[#00FF41]">
+                    {formatNumber(monthlyCallVolume)} min
                   </div>
-                  <div className="text-[#00FF41] font-bold text-xl">
-                    {formatNumber(monthlyCallVolume)}
-                  </div>
+                </div>
+                <div className="text-[rgb(161,161,170)] text-sm">
+                  Auto-calculated: {formatNumber(results.callCount || 0)} calls × {averageHandleTime[0]} min avg
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Results Display */}
-          <div className="space-y-4 lg:space-y-6">
+          <div className="space-y-6">
             {/* Cost Comparison */}
-            <Card className="bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 border-2 border-[#00FF41] rounded-3xl p-6 lg:p-8">
-              <CardHeader className="p-0 mb-4 lg:mb-6">
-                <CardTitle className="text-xl lg:text-2xl text-white flex items-center space-x-3">
-                  <TrendingUp size={20} className="text-[#00FF41] lg:w-6 lg:h-6" />
-                  <span>{viewMode === 'monthly' ? 'Monthly' : 'Annual'} Savings</span>
+            <Card className="bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 border-2 border-[#00FF41] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-2xl text-white flex items-center space-x-3">
+                  <TrendingUp size={24} className="text-[#00FF41]" />
+                  <span>Cost Analysis</span>
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="p-0">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                  <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-1">Traditional Cost</div>
-                    <div className="text-2xl lg:text-3xl font-bold text-red-400 mb-2 font-rajdhani">
-                      {formatCurrency(viewMode === 'monthly' 
-                        ? (results.traditional?.totalCost || 0)
-                        : (results.traditional?.totalCost || 0) * 12
-                      )}
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/70 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-sm text-[rgb(161,161,170)] mb-2">Traditional BPO Cost</div>
+                    <div className="text-3xl font-bold text-red-400 mb-2 font-rajdhani">
+                      {formatCurrency(results.traditional?.totalCost)}
                     </div>
                     <div className="text-xs text-[rgb(161,161,170)]">
-                      {results.traditionalCostPerCall ? formatCurrency(results.traditionalCostPerCall) : '$0'}/call
+                      {formatCurrency(results.traditionalCostPerCall)}/call
                     </div>
                   </div>
 
-                  <div className="text-center p-4 lg:p-6 bg-[rgb(26,28,30)]/50 rounded-2xl border border-[rgba(255,255,255,0.1)]">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-1">AI Cost</div>
-                    <div className="text-2xl lg:text-3xl font-bold text-[#00DDFF] mb-2 font-rajdhani">
-                      {formatCurrency(viewMode === 'monthly' 
-                        ? (results.ai?.totalCost || 0)
-                        : (results.ai?.totalCost || 0) * 12
-                      )}
+                  <div className="text-center p-6 bg-[rgb(26,28,30)]/70 rounded-2xl border border-[rgba(255,255,255,0.1)]">
+                    <div className="text-sm text-[rgb(161,161,170)] mb-2">AI Automation Cost</div>
+                    <div className="text-3xl font-bold text-[#00DDFF] mb-2 font-rajdhani">
+                      {formatCurrency(results.ai?.totalCost)}
                     </div>
                     <div className="text-xs text-[rgb(161,161,170)]">
-                      {results.aiCostPerCall ? formatCurrency(results.aiCostPerCall) : '$0'}/call
+                      {formatCurrency(results.aiCostPerCall)}/call
                     </div>
                   </div>
                 </div>
 
                 {/* Savings Display */}
-                <div className="mt-6 text-center p-6 bg-gradient-to-r from-[#00FF41]/20 to-[#00DDFF]/20 rounded-2xl border border-[#00FF41]/30">
-                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Your Savings</div>
-                  <div className="text-4xl font-bold text-[#00FF41] mb-2 font-rajdhani">
-                    {formatCurrency(viewMode === 'monthly' 
-                      ? (results.monthlySavings || 0)
-                      : (results.annualSavings || 0)
-                    )}
+                <div className="text-center p-8 bg-gradient-to-r from-[#00FF41]/20 to-[#00DDFF]/20 rounded-2xl border border-[#00FF41]/30">
+                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Monthly Savings</div>
+                  <div className="text-5xl font-bold text-[#00FF41] mb-4 font-rajdhani">
+                    {formatCurrency(results.monthlySavings)}
                   </div>
-                  <div className="flex items-center justify-center space-x-4 text-sm">
+                  <div className="flex items-center justify-center space-x-6 text-lg">
                     <div className="flex items-center text-[#00FF41]">
-                      <ArrowDown size={14} className="mr-1" />
-                      <span>{results.costReductionPercentage?.toFixed(0)}% Cost Reduction</span>
+                      <ArrowDown size={20} className="mr-2" />
+                      <span>{results.costReduction?.toFixed(0)}% Cost Reduction</span>
                     </div>
                     <div className="flex items-center text-[#00DDFF]">
-                      <ArrowUp size={14} className="mr-1" />
-                      <span>{results.roiPercentage?.toFixed(0)}% ROI</span>
+                      <ArrowUp size={20} className="mr-2" />
+                      <span>{results.roiPercent?.toFixed(0)}% ROI</span>
                     </div>
                   </div>
                   {results.paybackPeriodMonths && results.paybackPeriodMonths < 24 && (
-                    <div className="mt-2 text-xs text-[rgb(161,161,170)]">
-                      Payback Period: {results.paybackPeriodMonths.toFixed(1)} months
+                    <div className="mt-4 text-sm text-[rgb(161,161,170)]">
+                      Payback Period: {results.paybackPeriodMonths?.toFixed(1)} months
                     </div>
                   )}
                 </div>
 
                 {error && (
-                  <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
+                  <div className="mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
                     {error}
                   </div>
                 )}
 
                 {savedSuccessfully && (
-                  <div className="mt-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
+                  <div className="mt-4 p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
                     ✅ ROI calculation saved successfully!
                   </div>
                 )}
@@ -500,100 +306,100 @@ const ROICalculator = () => {
             </Card>
 
             {/* Cost Breakdown */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 lg:p-8">
-              <CardHeader className="p-0 mb-4 lg:mb-6">
-                <CardTitle className="text-lg lg:text-xl text-white flex items-center space-x-3">
-                  <BarChart3 size={18} className="text-[#00DDFF] lg:w-5 lg:h-5" />
+            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-xl text-white flex items-center space-x-3">
+                  <BarChart3 size={20} className="text-[#00DDFF]" />
                   <span>Cost Breakdown</span>
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="p-0 space-y-3 lg:space-y-4">
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white">Labor Cost</span>
-                  <span className="text-[#00FF41] font-semibold">
-                    {formatCurrency(results.traditional?.laborCost || 0)}
+              <CardContent className="p-0 space-y-4">
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                  <span className="text-white font-medium">Labor Cost ({selectedCountry})</span>
+                  <span className="text-[#00FF41] font-bold text-lg">
+                    {formatCurrency(results.traditional?.laborCost)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white">Technology Cost</span>
-                  <span className="text-[#00DDFF] font-semibold">
-                    {formatCurrency(results.traditional?.technologyCost || 0)}
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                  <span className="text-white font-medium">Technology & Infrastructure</span>
+                  <span className="text-[#00DDFF] font-bold text-lg">
+                    {formatCurrency((results.traditional?.technologyCost || 0) + (results.traditional?.infrastructureCost || 0))}
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
-                  <span className="text-white">Infrastructure Cost</span>
-                  <span className="text-[rgb(192,192,192)] font-semibold">
-                    {formatCurrency(results.traditional?.infrastructureCost || 0)}
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
+                  <span className="text-white font-medium">AI Platform & Processing</span>
+                  <span className="text-[rgb(192,192,192)] font-bold text-lg">
+                    {formatCurrency(results.ai?.totalCost)}
                   </span>
                 </div>
               </CardContent>
             </Card>
 
             {/* Performance Metrics */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 lg:p-8">
-              <CardHeader className="p-0 mb-4 lg:mb-6">
-                <CardTitle className="text-lg lg:text-xl text-white flex items-center space-x-3">
-                  <Zap size={18} className="text-[#00DDFF] lg:w-5 lg:h-5" />
-                  <span>AI Performance</span>
+            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
+              <CardHeader className="p-0 mb-6">
+                <CardTitle className="text-xl text-white flex items-center space-x-3">
+                  <Zap size={20} className="text-[#00DDFF]" />
+                  <span>Performance Metrics</span>
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="p-0 space-y-3 lg:space-y-4">
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
+              <CardContent className="p-0 space-y-4">
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
                   <div>
                     <div className="text-white font-semibold">Automated Calls</div>
                     <div className="text-[rgb(161,161,170)] text-sm">80% automation rate</div>
                   </div>
-                  <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
-                    {formatNumber(results.automatedCalls || 0)}/month
+                  <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30 text-lg px-4 py-2">
+                    {formatNumber(results.automatedCalls)}/month
                   </Badge>
                 </div>
 
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
                   <div>
                     <div className="text-white font-semibold">Human-Assisted</div>
                     <div className="text-[rgb(161,161,170)] text-sm">Complex issues only</div>
                   </div>
-                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30">
-                    {formatNumber(results.humanAssistedCalls || 0)}/month
+                  <Badge className="bg-[#00DDFF]/20 text-[#00DDFF] border-[#00DDFF]/30 text-lg px-4 py-2">
+                    {formatNumber(results.humanAssistedCalls)}/month
                   </Badge>
                 </div>
 
-                <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
+                <div className="flex justify-between items-center p-4 bg-[rgb(38,40,42)] rounded-xl">
                   <div>
-                    <div className="text-white font-semibold">India BPO Baseline</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">$500/agent competitive comparison</div>
+                    <div className="text-white font-semibold">Annual Savings</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">Total yearly cost reduction</div>
                   </div>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                    ✓ Baseline Cost
-                  </Badge>
+                  <div className="text-[#00FF41] font-bold text-xl">
+                    {formatCurrency(results.annualSavings)}
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* CTA */}
-            <div className="text-center pt-4">
+            <div className="text-center pt-6">
               <Button 
                 size="lg"
                 onClick={saveROICalculation}
                 disabled={isLoading}
-                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani disabled:opacity-50 disabled:transform-none"
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 rounded-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto font-rajdhani disabled:opacity-50 disabled:transform-none text-lg"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="animate-spin mr-2" size={20} />
+                    <Loader2 className="animate-spin mr-3" size={24} />
                     Saving...
                   </>
                 ) : (
                   <>
-                    <Target className="mr-2" size={20} />
+                    <Target className="mr-3" size={24} />
                     Get Detailed ROI Report
                   </>
                 )}
               </Button>
               <p className="text-[rgb(161,161,170)] text-sm mt-4">
-                Based on extensive market research • Schedule demo to validate your results
+                Compare {selectedCountry} BPO costs vs. AI automation • Schedule demo for validation
               </p>
             </div>
           </div>
