@@ -518,6 +518,7 @@ class ROICalculatorTester:
             "agent_count": 50,
             "average_handle_time": 420,
             "monthly_call_volume": 75428,
+            "cost_per_agent": 500,  # Default value, backend should use country baseline
             "country": "Bangladesh"
         }
         
