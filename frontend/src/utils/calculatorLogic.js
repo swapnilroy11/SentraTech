@@ -4,14 +4,13 @@
 import { BASE_COST, AI_COST } from './costBaselines';
 
 /**
- * Calculate ROI for four-country comparison with flexible input options
+ * Calculate ROI for four-country comparison with Agent Count and AHT inputs
  * @param {string} country - Selected country (Bangladesh, India, Philippines, Vietnam)
  * @param {number} agentCount - Number of agents
  * @param {number} ahtMinutes - Average Handle Time in minutes per call
- * @param {number} totalCalls - Optional: direct call volume input (overrides calculation)
  * @returns {object} Complete ROI analysis with accurate per-call metrics
  */
-export function calculateROI(country, agentCount, ahtMinutes, totalCalls = null) {
+export function calculateROI(country, agentCount, ahtMinutes) {
   // Input validation
   if (!country || !BASE_COST[country]) {
     throw new Error(`Invalid country: ${country}`);
@@ -46,9 +45,8 @@ export function calculateROI(country, agentCount, ahtMinutes, totalCalls = null)
   const aiCost = agentCount * AI_COST;
 
   // Per-call costs
-  const callsPerAgent = callVolume / agentCount;
-  const tradPerCall = callsPerAgent > 0 ? parseFloat((BASE_COST[country] / callsPerAgent).toFixed(2)) : 0;
-  const aiPerCall = callsPerAgent > 0 ? parseFloat((AI_COST / callsPerAgent).toFixed(2)) : 0;
+  const tradPerCall = callVolume > 0 ? parseFloat((tradCost / callVolume).toFixed(2)) : 0;
+  const aiPerCall = callVolume > 0 ? parseFloat((aiCost / callVolume).toFixed(2)) : 0;
 
   // Savings & ROI
   const monthlySavings = tradCost - aiCost;
