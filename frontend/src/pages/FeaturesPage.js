@@ -71,7 +71,7 @@ const FeaturesPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-6"
           >
-            <div className="flex items-center justify-center space-x-4 mb-4">
+            <div className="flex items-center justify-center space-x-4 mb-2">
               <div className="w-12 h-12 bg-[#00DDFF]/20 rounded-full flex items-center justify-center border border-[#00DDFF]/50">
                 <MessageSquare className="text-[#00DDFF]" size={24} />
               </div>
