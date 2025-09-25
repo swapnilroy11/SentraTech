@@ -4,6 +4,7 @@ import { Button } from '../components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
+  ExternalLink, 
   ChevronDown, 
   ChevronUp,
   Zap,
@@ -13,7 +14,7 @@ import {
   Mail
 } from 'lucide-react';
 import IntegrationsShowcase from '../components/IntegrationsShowcase';
-import ComponentErrorBoundary from '../components/ComponentErrorBoundary';
+import IntegrationsErrorBoundary from '../components/IntegrationsErrorBoundary';
 
 const IntegrationsPage = () => {
   const [pageLoaded, setPageLoaded] = useState(false);
