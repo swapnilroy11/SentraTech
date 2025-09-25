@@ -58,6 +58,7 @@ function App() {
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="/case-studies" element={<CaseStudiesPage />} />
               <Route path="/security" element={<SecurityPage />} />
+              <Route path="/roi-calculator" element={<ROICalculatorPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/demo-request" element={<DemoRequestPage />} />
             </Routes>
