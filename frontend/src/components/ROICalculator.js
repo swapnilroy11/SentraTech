@@ -94,17 +94,17 @@ const ROICalculator = () => {
     <section id="roi-calculator" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Calculator className="mr-2" size={14} />
-            Optimized Four-Country ROI Calculator
+            Four-Country ROI Calculator
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 font-rajdhani">
             <span className="text-[#F8F9FA]">Compare AI vs </span>
             <span className="text-[#00FF41]">Traditional BPO</span>
           </h2>
-          <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
-            Simplified calculator with just Agent Count and AHT - the metrics BPO buyers care about most.
+          <p className="text-lg text-[rgb(218,218,218)] max-w-2xl mx-auto leading-relaxed">
+            Simplified calculator with Agent Count and AHT - the metrics that matter most.
           </p>
         </div>
 
