@@ -1,12 +1,12 @@
 /* Enhanced Floating Navigation Styles */
 #quickNav {
-  position: absolute;
+  position: fixed;
   left: 20px;
-  top: 50%;
+  top: 50vh;
   transform: translateY(-50%);
   width: 60px;
   height: 60px;
-  background: rgba(26, 31, 58, 0.6);
+  background: rgba(26, 31, 58, 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 30px;
