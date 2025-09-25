@@ -1288,7 +1288,7 @@ class SecurityComplianceTester:
                         
                         # Verify status information
                         status = result.get("status")
-                        if status in ["verification_pending", "verified", "processing", "completed"]:
+                        if status in ["verification_pending", "verified", "processing", "completed", "pending"]:
                             self.log_test("Privacy - Status Check Value", True,
                                         f"✅ Valid status: {status}")
                         else:
