@@ -4,12 +4,10 @@ import { HashLink } from 'react-router-hash-link';
 import { Button } from './ui/button';
 import { Menu, X, Search } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { currentLang, toggleLanguage } = useLanguage();
 
   // Close menu on route change
   useEffect(() => {
