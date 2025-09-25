@@ -30,3 +30,5 @@ class PerformanceMonitor {
 const performanceMonitor = new PerformanceMonitor();
 
 export default performanceMonitor;
+
+export default performanceMonitor;
