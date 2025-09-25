@@ -94,4 +94,46 @@ export const insertDemoRequest = async (formData) => {
   }
 };
 
+// Helper function to insert ROI report request
+export const insertROIReport = async (email, roiData) => {
+  try {
+    console.log('Saving ROI report request:', email, roiData);
+    
+    const { data, error } = await supabase
+      .from('roi_reports')
+      .insert([{
+        email: email.toLowerCase().trim(),
+        country: roiData.country,
+        agent_count: roiData.agentCount,
+        aht_minutes: roiData.ahtMinutes,
+        call_volume: roiData.callVolume,
+        traditional_cost: roiData.tradCost,
+        ai_cost: roiData.aiCost,
+        monthly_savings: roiData.monthlySavings,
+        annual_savings: roiData.annualSavings,
+        roi_percentage: roiData.roi,
+        cost_reduction: roiData.reduction,
+        created_at: new Date().toISOString()
+      }], { returning: 'minimal' });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ ROI report request saved to Supabase successfully');
+
+    return {
+      success: true,
+      message: 'ROI report request submitted successfully! You will receive the detailed report via email within 24 hours.'
+    };
+  } catch (error) {
+    console.error('Supabase ROI report insertion error:', error);
+    return {
+      success: false,
+      error: error.message,
+      message: 'Failed to submit ROI report request. Please try again.'
+    };
+  }
+};
+
 export default supabase;
