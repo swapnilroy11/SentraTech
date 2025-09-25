@@ -198,13 +198,20 @@ const IntegrationsShowcase = () => {
 
           {/* CTA Button */}
           <Button 
-            className={`w-full ${integration.status === 'available' 
-              ? 'bg-[#00FF41] text-black hover:bg-[#00e83a]' 
+            className={`w-full ${integration.status === 'connected' 
+              ? 'bg-green-500 text-white hover:bg-green-600' 
+              : integration.status === 'available'
+              ? 'bg-[#00FF41] text-black hover:bg-[#00e83a]'
               : 'bg-[rgb(42,42,42)] text-[rgb(161,161,170)] cursor-not-allowed'
             }`}
-            disabled={integration.status !== 'available'}
+            disabled={integration.status === 'coming_soon'}
           >
-            {integration.status === 'available' ? (
+            {integration.status === 'connected' ? (
+              <>
+                <CheckCircle size={16} className="mr-2" />
+                Connected
+              </>
+            ) : integration.status === 'available' ? (
               <>
                 <ExternalLink size={16} className="mr-2" />
                 Connect Now
