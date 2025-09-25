@@ -3346,34 +3346,46 @@ class SecurityComplianceTester:
 
 
 if __name__ == "__main__":
-    print("🔒 SentraTech Backend Testing - Comprehensive Security Headers Verification")
+    print("🚀 SentraTech API Load & Stability Testing - Production Readiness Assessment")
     print("=" * 90)
-    print("Focus: Production-Ready Security Headers for SentraTech Deployment")
-    print("Testing: HSTS, CSP, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy")
+    print("Focus: Comprehensive API Load Testing for Production Deployment")
+    print("Testing: Concurrent load, response times, error rates, throughput, and data integrity")
     print("=" * 90)
     
-    # Run Comprehensive Security Headers tests
-    security_headers_tester = SecurityHeadersTester()
-    headers_success = security_headers_tester.run_security_headers_tests()
+    # Run Comprehensive Load Testing
+    load_tester = LoadTestingFramework()
+    production_ready = load_tester.run_comprehensive_load_tests()
     
     print("\n" + "=" * 90)
-    print("🏁 FINAL SECURITY HEADERS VERIFICATION RESULTS")
+    print("🏁 FINAL PRODUCTION READINESS ASSESSMENT")
     print("=" * 90)
     
-    if headers_success:
-        print("🎉 ALL CRITICAL SECURITY HEADERS TESTS PASSED!")
-        print("✅ HSTS (HTTP Strict Transport Security) properly configured")
-        print("✅ CSP (Content Security Policy) preventing XSS attacks")
-        print("✅ X-Frame-Options protecting against clickjacking")
-        print("✅ X-Content-Type-Options preventing MIME sniffing")
-        print("✅ X-XSS-Protection configured correctly")
-        print("✅ Referrer-Policy controlling information leakage")
-        print("✅ Additional security headers implemented")
-        print("✅ No sensitive information exposure detected")
-        print("✅ CORS policy appropriately configured")
-        print("\n🚀 SentraTech is READY for production deployment!")
+    if production_ready:
+        print("🎉 SENTRATECH API IS PRODUCTION READY!")
+        print("✅ Demo Request API: Handles 50 concurrent requests efficiently")
+        print("✅ Health Check API: Responds to 100 concurrent requests quickly")
+        print("✅ ROI Calculator API: Processes 40 concurrent calculations accurately")
+        print("✅ Analytics Endpoints: Handle concurrent load with good performance")
+        print("✅ Burst Load Handling: System stable under sudden traffic spikes")
+        print("✅ Sustained Load Performance: Maintains performance over time")
+        print("✅ Mixed Endpoint Testing: No resource contention detected")
+        print("✅ Data Integrity: Concurrent operations maintain data consistency")
+        print("\n🚀 SentraTech is READY for production deployment with confidence!")
+        print("📊 Recommended next steps:")
+        print("   • Set up production monitoring and alerting")
+        print("   • Configure auto-scaling based on load test results")
+        print("   • Implement rate limiting for production traffic")
+        print("   • Schedule regular load testing for ongoing validation")
     else:
-        print("⚠️ CRITICAL SECURITY ISSUES DETECTED")
-        print("❌ Some security headers are missing or misconfigured")
+        print("⚠️ PRODUCTION READINESS ISSUES DETECTED")
+        print("❌ Some API endpoints are not meeting performance requirements")
         print("❌ Production deployment should be delayed until issues are resolved")
-        print("\n🔧 Please review the detailed test results above and fix the identified issues.")
+        print("\n🔧 Please review the detailed test results above and address:")
+        print("   • Response time optimization for slow endpoints")
+        print("   • Error rate reduction for failing requests")
+        print("   • Throughput improvements for high-traffic scenarios")
+        print("   • Data integrity fixes for concurrent operations")
+        print("   • Infrastructure scaling to handle target load")
+    
+    print(f"\n📈 Overall Assessment: {'PRODUCTION READY' if production_ready else 'NEEDS IMPROVEMENT'}")
+    print("=" * 90)
