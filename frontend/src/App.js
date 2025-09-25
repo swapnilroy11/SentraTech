@@ -34,6 +34,9 @@ function App() {
         <SpaceBackground intensity={0.8} particles={300} />
         
         <BrowserRouter>
+          {/* GA4 Analytics Tracking */}
+          <Analytics />
+          
           {/* Floating Left Navigation - moved inside BrowserRouter */}
           <FloatingNavigation />
           
