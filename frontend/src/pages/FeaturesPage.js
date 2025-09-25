@@ -162,8 +162,8 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* ROI Calculator Section - Better spacing and design */}
-      <section id="roi-calculator" className="py-12 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
+      {/* ROI Calculator Section - More compact */}
+      <section id="roi-calculator" className="py-8 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
         {/* Visual separator */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent opacity-50"></div>
         
