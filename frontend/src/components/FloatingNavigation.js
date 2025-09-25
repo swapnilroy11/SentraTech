@@ -15,7 +15,6 @@ const FloatingNavigation = () => {
     { id: 'voice', path: '/features#multi-channel', icon: MessageSquare, label: 'Voice Agents' },
     { id: 'journey', path: '/features#customer-journey', icon: Route, label: 'Journey' },
     { id: 'cases', path: '/case-studies', icon: Users, label: 'Case Studies' },
-    { id: 'integrations', path: '/integrations', icon: Briefcase, label: 'Integrations' },
     { id: 'security', path: '/security', icon: Shield, label: 'Security' },
     { id: 'pricing', path: '/pricing', icon: DollarSign, label: 'Pricing' },
     { id: 'demo', path: '/demo-request', icon: FileText, label: 'Demo' }
