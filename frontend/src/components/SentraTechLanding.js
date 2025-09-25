@@ -643,7 +643,8 @@ const SentraTechLanding = () => {
           border-radius: 50%;
           pointer-events: none;
           z-index: 9999;
-          transition: transform 0.1s ease;
+          transition: transform 0.05s ease;
+          box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
         }
         
         .cursor-particle {
@@ -654,7 +655,8 @@ const SentraTechLanding = () => {
           border-radius: 50%;
           pointer-events: none;
           z-index: 9998;
-          animation: particleFade 0.5s ease-out forwards;
+          animation: particleTrail 0.8s ease-out forwards;
+          box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
         }
         
         @keyframes particleFade {
