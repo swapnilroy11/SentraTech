@@ -22,32 +22,10 @@ const FeaturesPage = () => {
               Features & <span className="text-[#00FF41]">Customer Journey</span>
             </h1>
             
-            <p className="text-base text-[rgb(161,161,170)] mb-4 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-[rgb(161,161,170)] mb-6 max-w-3xl mx-auto leading-relaxed">
               Discover how our AI-powered platform transforms customer support through intelligent automation, 
               real-time analytics, and seamless integrations.
             </p>
-
-            {/* Better sized Stats Bar */}
-            <div className="flex flex-wrap justify-center gap-3 mt-3">
-              {[
-                { icon: Zap, value: '47ms', label: 'AI Response' },
-                { icon: Users, value: '70%', label: 'Automation' },
-                { icon: CheckCircle, value: '96%', label: 'First Call Resolution' },
-                { value: '4.2min', label: 'Avg Handle Time' },
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 + index * 0.03 }}
-                  className="flex items-center space-x-2 bg-[rgba(0,255,65,0.08)] border border-[rgba(0,255,65,0.25)] rounded-lg px-4 py-2.5 min-w-0"
-                >
-                  {stat.icon && <stat.icon size={16} className="text-[#00FF41] flex-shrink-0" />}
-                  <span className="text-[#00FF41] font-bold text-lg font-rajdhani">{stat.value}</span>
-                  <span className="text-[rgb(161,161,170)] text-sm flex-shrink-0">{stat.label}</span>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </section>
