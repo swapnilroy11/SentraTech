@@ -35,6 +35,9 @@ function App() {
           {/* GA4 Analytics Tracking */}
           <Analytics />
           
+          {/* Scroll to Top on Route Change */}
+          <ScrollToTop />
+          
           {/* Floating Left Navigation - moved inside BrowserRouter */}
           <FloatingNavigation />
           
