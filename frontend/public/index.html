@@ -12,7 +12,21 @@
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-75HTVL1QME');
+          
+          gtag('config', 'G-75HTVL1QME', {
+            // Enhanced ecommerce and conversion tracking
+            send_page_view: false, // We'll handle this manually for SPA
+            custom_map: {
+              'custom_parameter_1': 'company_name',
+              'custom_parameter_2': 'reference_id'
+            }
+          });
+          
+          // Set up conversion tracking
+          gtag('config', 'G-75HTVL1QME', {
+            'custom_parameter_company_name': 'company_name',
+            'custom_parameter_reference_id': 'reference_id'
+          });
         </script>
         <!--
       manifest.json provides metadata used when your web app is installed on a
