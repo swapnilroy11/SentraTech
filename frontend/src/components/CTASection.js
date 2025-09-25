@@ -400,10 +400,19 @@ const CTASection = () => {
             </CardHeader>
 
             <CardContent className="p-0">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                onSubmit={handleSubmit} 
+                className="space-y-6"
+                aria-label="Demo Request Form"
+                noValidate
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
+                    <label htmlFor="demo-name" className="sr-only">Full Name (required)</label>
                     <Input
+                      id="demo-name"
+                      name="name"
+                      type="text"
                       placeholder="Full Name *"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
@@ -418,6 +427,9 @@ const CTASection = () => {
                         }
                       }}
                       required
+                      aria-required="true"
+                      aria-invalid={fieldErrors.name ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.name ? "name-error" : undefined}
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.name 
                           ? 'border-red-500 focus:border-red-500' 
@@ -425,7 +437,14 @@ const CTASection = () => {
                       }`}
                     />
                     {fieldErrors.name && (
-                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.name}</p>
+                      <p 
+                        id="name-error" 
+                        className="text-red-400 text-xs mt-1 ml-1"
+                        role="alert"
+                        aria-live="polite"
+                      >
+                        {fieldErrors.name}
+                      </p>
                     )}
                   </div>
                   <div>
