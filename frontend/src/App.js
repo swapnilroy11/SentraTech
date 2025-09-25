@@ -18,6 +18,7 @@ import HomePage from "./pages/HomePage";
 import FeaturesPage from "./pages/FeaturesPage";
 import CaseStudiesPage from "./pages/CaseStudiesPage";
 import SecurityPage from "./pages/SecurityPage";
+import ROICalculatorPage from "./pages/ROICalculatorPage";
 import PricingPage from "./pages/PricingPage";
 import DemoRequestPage from "./pages/DemoRequestPage";
 
