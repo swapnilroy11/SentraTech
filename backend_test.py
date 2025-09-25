@@ -1035,6 +1035,696 @@ class GA4ConversionTrackingTester:
         return len(self.failed_tests) == 0
 
 
+class SecurityHeadersTester:
+    """Comprehensive Security Headers Testing for SentraTech Production Readiness"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def test_hsts_header(self):
+        """Test HTTP Strict Transport Security (HSTS) header"""
+        print("\n=== Testing HSTS (HTTP Strict Transport Security) ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/health", 
+            "/demo/request",
+            "/roi/calculate",
+            "/metrics/live"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🔒 Testing HSTS on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                hsts_header = response.headers.get('Strict-Transport-Security')
+                
+                if hsts_header:
+                    self.log_test(f"HSTS - {endpoint} Presence", True, 
+                                f"✅ HSTS header present: {hsts_header}")
+                    
+                    # Check for proper directives
+                    if 'max-age=' in hsts_header:
+                        # Extract max-age value
+                        import re
+                        max_age_match = re.search(r'max-age=(\d+)', hsts_header)
+                        if max_age_match:
+                            max_age = int(max_age_match.group(1))
+                            # Minimum 1 year (31536000 seconds)
+                            if max_age >= 31536000:
+                                self.log_test(f"HSTS - {endpoint} Max-Age", True,
+                                            f"✅ Sufficient max-age: {max_age} seconds ({max_age/31536000:.1f} years)")
+                            else:
+                                self.log_test(f"HSTS - {endpoint} Max-Age", False,
+                                            f"❌ Insufficient max-age: {max_age} seconds (< 1 year)")
+                        else:
+                            self.log_test(f"HSTS - {endpoint} Max-Age", False,
+                                        f"❌ max-age directive malformed")
+                    else:
+                        self.log_test(f"HSTS - {endpoint} Max-Age", False,
+                                    f"❌ Missing max-age directive")
+                    
+                    # Check for includeSubDomains
+                    if 'includeSubDomains' in hsts_header:
+                        self.log_test(f"HSTS - {endpoint} IncludeSubDomains", True,
+                                    f"✅ includeSubDomains directive present")
+                    else:
+                        self.log_test(f"HSTS - {endpoint} IncludeSubDomains", False,
+                                    f"⚠️ includeSubDomains directive missing")
+                    
+                    # Check for preload (optional but recommended)
+                    if 'preload' in hsts_header:
+                        self.log_test(f"HSTS - {endpoint} Preload", True,
+                                    f"✅ preload directive present")
+                    else:
+                        self.log_test(f"HSTS - {endpoint} Preload", False,
+                                    f"⚠️ preload directive missing (optional)")
+                        
+                else:
+                    self.log_test(f"HSTS - {endpoint} Presence", False,
+                                f"❌ HSTS header missing")
+                    
+            except Exception as e:
+                self.log_test(f"HSTS - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_csp_header(self):
+        """Test Content Security Policy (CSP) header"""
+        print("\n=== Testing CSP (Content Security Policy) ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🛡️ Testing CSP on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                csp_header = response.headers.get('Content-Security-Policy')
+                
+                if csp_header:
+                    self.log_test(f"CSP - {endpoint} Presence", True,
+                                f"✅ CSP header present: {csp_header[:100]}...")
+                    
+                    # Check that inline scripts are blocked (no 'unsafe-inline' for script-src)
+                    if 'script-src' in csp_header:
+                        if "'unsafe-inline'" not in csp_header or 'script-src' not in csp_header.split("'unsafe-inline'")[0]:
+                            self.log_test(f"CSP - {endpoint} Script Security", True,
+                                        f"✅ Inline scripts properly restricted")
+                        else:
+                            # Check if unsafe-inline is specifically for script-src
+                            script_src_part = ""
+                            parts = csp_header.split(';')
+                            for part in parts:
+                                if 'script-src' in part:
+                                    script_src_part = part
+                                    break
+                            
+                            if "'unsafe-inline'" in script_src_part:
+                                self.log_test(f"CSP - {endpoint} Script Security", False,
+                                            f"❌ Unsafe inline scripts allowed in script-src")
+                            else:
+                                self.log_test(f"CSP - {endpoint} Script Security", True,
+                                            f"✅ Script-src properly configured")
+                    else:
+                        self.log_test(f"CSP - {endpoint} Script Directive", False,
+                                    f"⚠️ script-src directive missing")
+                    
+                    # Check for common necessary domains (GA4, fonts, etc.)
+                    necessary_domains = ['googleapis.com', 'gstatic.com', 'googletagmanager.com']
+                    allowed_domains = []
+                    
+                    for domain in necessary_domains:
+                        if domain in csp_header:
+                            allowed_domains.append(domain)
+                    
+                    if allowed_domains:
+                        self.log_test(f"CSP - {endpoint} Necessary Domains", True,
+                                    f"✅ Necessary domains allowed: {', '.join(allowed_domains)}")
+                    else:
+                        self.log_test(f"CSP - {endpoint} Necessary Domains", False,
+                                    f"⚠️ No necessary domains found (may block GA4, fonts)")
+                    
+                    # Check for default-src directive
+                    if 'default-src' in csp_header:
+                        self.log_test(f"CSP - {endpoint} Default Source", True,
+                                    f"✅ default-src directive present")
+                    else:
+                        self.log_test(f"CSP - {endpoint} Default Source", False,
+                                    f"⚠️ default-src directive missing")
+                        
+                else:
+                    self.log_test(f"CSP - {endpoint} Presence", False,
+                                f"❌ CSP header missing")
+                    
+            except Exception as e:
+                self.log_test(f"CSP - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_frame_options_header(self):
+        """Test X-Frame-Options header"""
+        print("\n=== Testing X-Frame-Options ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate",
+            "/metrics/live"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🖼️ Testing X-Frame-Options on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                frame_options = response.headers.get('X-Frame-Options')
+                
+                if frame_options:
+                    self.log_test(f"Frame Options - {endpoint} Presence", True,
+                                f"✅ X-Frame-Options header present: {frame_options}")
+                    
+                    # Check for proper values (DENY or SAMEORIGIN)
+                    if frame_options.upper() in ['DENY', 'SAMEORIGIN']:
+                        self.log_test(f"Frame Options - {endpoint} Value", True,
+                                    f"✅ Proper value for clickjacking prevention: {frame_options}")
+                        
+                        # DENY is more secure than SAMEORIGIN
+                        if frame_options.upper() == 'DENY':
+                            self.log_test(f"Frame Options - {endpoint} Security Level", True,
+                                        f"✅ Maximum security with DENY")
+                        else:
+                            self.log_test(f"Frame Options - {endpoint} Security Level", True,
+                                        f"✅ Good security with SAMEORIGIN")
+                    else:
+                        self.log_test(f"Frame Options - {endpoint} Value", False,
+                                    f"❌ Invalid value: {frame_options} (should be DENY or SAMEORIGIN)")
+                        
+                else:
+                    self.log_test(f"Frame Options - {endpoint} Presence", False,
+                                f"❌ X-Frame-Options header missing")
+                    
+            except Exception as e:
+                self.log_test(f"Frame Options - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_content_type_options_header(self):
+        """Test X-Content-Type-Options header"""
+        print("\n=== Testing X-Content-Type-Options ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate",
+            "/analytics/track"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"📄 Testing X-Content-Type-Options on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                content_type_options = response.headers.get('X-Content-Type-Options')
+                
+                if content_type_options:
+                    self.log_test(f"Content Type Options - {endpoint} Presence", True,
+                                f"✅ X-Content-Type-Options header present: {content_type_options}")
+                    
+                    # Check for proper value (nosniff)
+                    if content_type_options.lower() == 'nosniff':
+                        self.log_test(f"Content Type Options - {endpoint} Value", True,
+                                    f"✅ MIME type sniffing prevented: {content_type_options}")
+                    else:
+                        self.log_test(f"Content Type Options - {endpoint} Value", False,
+                                    f"❌ Invalid value: {content_type_options} (should be 'nosniff')")
+                        
+                else:
+                    self.log_test(f"Content Type Options - {endpoint} Presence", False,
+                                f"❌ X-Content-Type-Options header missing")
+                    
+            except Exception as e:
+                self.log_test(f"Content Type Options - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_xss_protection_header(self):
+        """Test X-XSS-Protection header"""
+        print("\n=== Testing X-XSS-Protection ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🛡️ Testing X-XSS-Protection on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                xss_protection = response.headers.get('X-XSS-Protection')
+                
+                if xss_protection:
+                    self.log_test(f"XSS Protection - {endpoint} Presence", True,
+                                f"✅ X-XSS-Protection header present: {xss_protection}")
+                    
+                    # Check for proper configuration (1; mode=block)
+                    if '1' in xss_protection and 'mode=block' in xss_protection:
+                        self.log_test(f"XSS Protection - {endpoint} Configuration", True,
+                                    f"✅ Proper XSS protection configuration: {xss_protection}")
+                    elif '1' in xss_protection:
+                        self.log_test(f"XSS Protection - {endpoint} Configuration", True,
+                                    f"✅ XSS protection enabled: {xss_protection}")
+                    else:
+                        self.log_test(f"XSS Protection - {endpoint} Configuration", False,
+                                    f"❌ XSS protection not properly configured: {xss_protection}")
+                        
+                else:
+                    self.log_test(f"XSS Protection - {endpoint} Presence", False,
+                                f"❌ X-XSS-Protection header missing")
+                    
+            except Exception as e:
+                self.log_test(f"XSS Protection - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_referrer_policy_header(self):
+        """Test Referrer-Policy header"""
+        print("\n=== Testing Referrer-Policy ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate",
+            "/analytics/track"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🔗 Testing Referrer-Policy on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                referrer_policy = response.headers.get('Referrer-Policy')
+                
+                if referrer_policy:
+                    self.log_test(f"Referrer Policy - {endpoint} Presence", True,
+                                f"✅ Referrer-Policy header present: {referrer_policy}")
+                    
+                    # Check for recommended policies
+                    recommended_policies = [
+                        'strict-origin-when-cross-origin',
+                        'strict-origin',
+                        'same-origin',
+                        'no-referrer'
+                    ]
+                    
+                    if referrer_policy.lower() in [p.lower() for p in recommended_policies]:
+                        self.log_test(f"Referrer Policy - {endpoint} Value", True,
+                                    f"✅ Good referrer policy: {referrer_policy}")
+                        
+                        if referrer_policy.lower() == 'strict-origin-when-cross-origin':
+                            self.log_test(f"Referrer Policy - {endpoint} Recommendation", True,
+                                        f"✅ Using recommended policy: {referrer_policy}")
+                        else:
+                            self.log_test(f"Referrer Policy - {endpoint} Recommendation", True,
+                                        f"✅ Using secure policy: {referrer_policy}")
+                    else:
+                        self.log_test(f"Referrer Policy - {endpoint} Value", False,
+                                    f"⚠️ Less secure referrer policy: {referrer_policy}")
+                        
+                else:
+                    self.log_test(f"Referrer Policy - {endpoint} Presence", False,
+                                f"❌ Referrer-Policy header missing")
+                    
+            except Exception as e:
+                self.log_test(f"Referrer Policy - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_additional_security_headers(self):
+        """Test additional security headers (Permissions-Policy, COEP, COOP, CORP)"""
+        print("\n=== Testing Additional Security Headers ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request"
+        ]
+        
+        additional_headers = {
+            'Permissions-Policy': 'Browser feature restrictions',
+            'Cross-Origin-Embedder-Policy': 'COEP header for cross-origin isolation',
+            'Cross-Origin-Opener-Policy': 'COOP header for cross-origin isolation',
+            'Cross-Origin-Resource-Policy': 'CORP header for resource sharing'
+        }
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🔐 Testing additional security headers on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                for header, description in additional_headers.items():
+                    header_value = response.headers.get(header)
+                    
+                    if header_value:
+                        self.log_test(f"Additional Headers - {endpoint} {header}", True,
+                                    f"✅ {description}: {header_value}")
+                        
+                        # Validate specific header values
+                        if header == 'Cross-Origin-Embedder-Policy':
+                            if header_value in ['require-corp', 'credentialless']:
+                                self.log_test(f"Additional Headers - {endpoint} COEP Value", True,
+                                            f"✅ Valid COEP value: {header_value}")
+                            else:
+                                self.log_test(f"Additional Headers - {endpoint} COEP Value", False,
+                                            f"❌ Invalid COEP value: {header_value}")
+                        
+                        elif header == 'Cross-Origin-Opener-Policy':
+                            if header_value in ['same-origin', 'same-origin-allow-popups', 'unsafe-none']:
+                                self.log_test(f"Additional Headers - {endpoint} COOP Value", True,
+                                            f"✅ Valid COOP value: {header_value}")
+                            else:
+                                self.log_test(f"Additional Headers - {endpoint} COOP Value", False,
+                                            f"❌ Invalid COOP value: {header_value}")
+                        
+                        elif header == 'Cross-Origin-Resource-Policy':
+                            if header_value in ['same-site', 'same-origin', 'cross-origin']:
+                                self.log_test(f"Additional Headers - {endpoint} CORP Value", True,
+                                            f"✅ Valid CORP value: {header_value}")
+                            else:
+                                self.log_test(f"Additional Headers - {endpoint} CORP Value", False,
+                                            f"❌ Invalid CORP value: {header_value}")
+                                
+                    else:
+                        self.log_test(f"Additional Headers - {endpoint} {header}", False,
+                                    f"⚠️ {description} missing (optional but recommended)")
+                        
+            except Exception as e:
+                self.log_test(f"Additional Headers - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_headers_consistency_across_methods(self):
+        """Test that security headers are consistent across different HTTP methods"""
+        print("\n=== Testing Headers Consistency Across HTTP Methods ===")
+        
+        test_endpoint = "/demo/request"
+        methods_to_test = ['GET', 'POST', 'OPTIONS']
+        
+        headers_by_method = {}
+        
+        for method in methods_to_test:
+            try:
+                print(f"🔄 Testing {method} method on {test_endpoint}...")
+                
+                if method == 'GET':
+                    response = requests.get(f"{BACKEND_URL}{test_endpoint}", timeout=10)
+                elif method == 'POST':
+                    # Use valid demo request data for POST
+                    test_data = {
+                        "name": "Security Test",
+                        "email": "security@test.com",
+                        "company": "Security Test Corp"
+                    }
+                    response = requests.post(f"{BACKEND_URL}{test_endpoint}", json=test_data, timeout=10)
+                elif method == 'OPTIONS':
+                    response = requests.options(f"{BACKEND_URL}{test_endpoint}", timeout=10)
+                
+                # Extract security headers
+                security_headers = [
+                    'Strict-Transport-Security',
+                    'Content-Security-Policy', 
+                    'X-Frame-Options',
+                    'X-Content-Type-Options',
+                    'X-XSS-Protection',
+                    'Referrer-Policy'
+                ]
+                
+                method_headers = {}
+                for header in security_headers:
+                    method_headers[header] = response.headers.get(header)
+                
+                headers_by_method[method] = method_headers
+                
+                # Count present headers
+                present_headers = sum(1 for v in method_headers.values() if v is not None)
+                self.log_test(f"Method Consistency - {method} Headers Present", True,
+                            f"✅ {present_headers}/{len(security_headers)} security headers present")
+                
+            except Exception as e:
+                self.log_test(f"Method Consistency - {method} Exception", False, f"❌ Exception: {str(e)}")
+        
+        # Compare consistency across methods
+        if len(headers_by_method) >= 2:
+            methods = list(headers_by_method.keys())
+            base_method = methods[0]
+            
+            for compare_method in methods[1:]:
+                consistent_headers = 0
+                total_headers = len(security_headers)
+                
+                for header in security_headers:
+                    base_value = headers_by_method[base_method].get(header)
+                    compare_value = headers_by_method[compare_method].get(header)
+                    
+                    if base_value == compare_value:
+                        consistent_headers += 1
+                
+                consistency_rate = (consistent_headers / total_headers) * 100
+                
+                if consistency_rate >= 80:  # 80% consistency threshold
+                    self.log_test(f"Method Consistency - {base_method} vs {compare_method}", True,
+                                f"✅ Headers consistent: {consistency_rate:.1f}%")
+                else:
+                    self.log_test(f"Method Consistency - {base_method} vs {compare_method}", False,
+                                f"❌ Headers inconsistent: {consistency_rate:.1f}%")
+    
+    def test_sensitive_information_exposure(self):
+        """Test that headers don't leak sensitive information"""
+        print("\n=== Testing Sensitive Information Exposure ===")
+        
+        endpoints_to_test = [
+            "/",
+            "/demo/request",
+            "/roi/calculate"
+        ]
+        
+        sensitive_patterns = [
+            r'server\s*:\s*.*apache.*\d+\.\d+',  # Apache version
+            r'server\s*:\s*.*nginx.*\d+\.\d+',   # Nginx version
+            r'x-powered-by\s*:\s*.*',             # Technology stack
+            r'x-aspnet-version\s*:\s*.*',         # ASP.NET version
+            r'x-runtime\s*:\s*.*',                # Runtime information
+            r'x-version\s*:\s*.*',                # Version information
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                print(f"🔍 Testing sensitive information exposure on {endpoint}...")
+                response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=10)
+                
+                # Check all response headers
+                sensitive_found = []
+                
+                for header_name, header_value in response.headers.items():
+                    header_line = f"{header_name}: {header_value}".lower()
+                    
+                    for pattern in sensitive_patterns:
+                        import re
+                        if re.search(pattern, header_line, re.IGNORECASE):
+                            sensitive_found.append(f"{header_name}: {header_value}")
+                
+                if not sensitive_found:
+                    self.log_test(f"Information Exposure - {endpoint} Headers", True,
+                                f"✅ No sensitive information exposed in headers")
+                else:
+                    self.log_test(f"Information Exposure - {endpoint} Headers", False,
+                                f"❌ Sensitive information exposed: {'; '.join(sensitive_found)}")
+                
+                # Check for common problematic headers
+                problematic_headers = ['Server', 'X-Powered-By', 'X-AspNet-Version', 'X-Runtime']
+                
+                for prob_header in problematic_headers:
+                    if prob_header in response.headers:
+                        header_value = response.headers[prob_header]
+                        # Check if it reveals version information
+                        import re
+                        if re.search(r'\d+\.\d+', header_value):
+                            self.log_test(f"Information Exposure - {endpoint} {prob_header}", False,
+                                        f"⚠️ Version information exposed: {prob_header}: {header_value}")
+                        else:
+                            self.log_test(f"Information Exposure - {endpoint} {prob_header}", True,
+                                        f"✅ {prob_header} present but no version info: {header_value}")
+                
+            except Exception as e:
+                self.log_test(f"Information Exposure - {endpoint} Exception", False, f"❌ Exception: {str(e)}")
+    
+    def test_cors_security(self):
+        """Test CORS policy security"""
+        print("\n=== Testing CORS Policy Security ===")
+        
+        test_endpoint = "/demo/request"
+        
+        try:
+            print(f"🌐 Testing CORS policy on {test_endpoint}...")
+            
+            # Test preflight request
+            headers = {
+                'Origin': 'https://malicious-site.com',
+                'Access-Control-Request-Method': 'POST',
+                'Access-Control-Request-Headers': 'Content-Type'
+            }
+            
+            response = requests.options(f"{BACKEND_URL}{test_endpoint}", headers=headers, timeout=10)
+            
+            # Check CORS headers
+            cors_headers = {
+                'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers'),
+                'Access-Control-Allow-Credentials': response.headers.get('Access-Control-Allow-Credentials')
+            }
+            
+            # Check if CORS is too permissive
+            allow_origin = cors_headers['Access-Control-Allow-Origin']
+            
+            if allow_origin == '*':
+                self.log_test("CORS Security - Allow Origin", False,
+                            f"❌ CORS too permissive: Access-Control-Allow-Origin: *")
+            elif allow_origin and 'sentratech' in allow_origin.lower():
+                self.log_test("CORS Security - Allow Origin", True,
+                            f"✅ CORS properly restricted: {allow_origin}")
+            elif allow_origin:
+                self.log_test("CORS Security - Allow Origin", True,
+                            f"✅ CORS configured: {allow_origin}")
+            else:
+                self.log_test("CORS Security - Allow Origin", True,
+                            f"✅ CORS not configured (restrictive by default)")
+            
+            # Check credentials handling
+            allow_credentials = cors_headers['Access-Control-Allow-Credentials']
+            if allow_credentials == 'true' and allow_origin == '*':
+                self.log_test("CORS Security - Credentials", False,
+                            f"❌ Dangerous CORS config: credentials=true with origin=*")
+            else:
+                self.log_test("CORS Security - Credentials", True,
+                            f"✅ CORS credentials properly configured")
+            
+            # Check allowed methods
+            allow_methods = cors_headers['Access-Control-Allow-Methods']
+            if allow_methods:
+                dangerous_methods = ['DELETE', 'PUT', 'PATCH']
+                found_dangerous = [method for method in dangerous_methods if method in allow_methods.upper()]
+                
+                if found_dangerous:
+                    self.log_test("CORS Security - Methods", False,
+                                f"⚠️ Potentially dangerous methods allowed: {', '.join(found_dangerous)}")
+                else:
+                    self.log_test("CORS Security - Methods", True,
+                                f"✅ Safe methods configured: {allow_methods}")
+            
+        except Exception as e:
+            self.log_test("CORS Security - Exception", False, f"❌ Exception: {str(e)}")
+    
+    def run_security_headers_tests(self):
+        """Run all comprehensive security header tests"""
+        print("🔒 Starting Comprehensive Security Headers Testing for SentraTech Production Readiness")
+        print("=" * 90)
+        print("Testing critical HTTP security headers for production deployment:")
+        print("• HSTS (HTTP Strict Transport Security) - HTTPS enforcement")
+        print("• CSP (Content Security Policy) - XSS attack prevention") 
+        print("• X-Frame-Options - Clickjacking protection")
+        print("• X-Content-Type-Options - MIME sniffing prevention")
+        print("• X-XSS-Protection - XSS filter configuration")
+        print("• Referrer-Policy - Referrer information control")
+        print("• Additional headers (Permissions-Policy, COEP, COOP, CORP)")
+        print("• Cross-method consistency and CORS security")
+        print("• Sensitive information exposure prevention")
+        print("=" * 90)
+        
+        # Run all security header tests
+        self.test_hsts_header()
+        self.test_csp_header()
+        self.test_frame_options_header()
+        self.test_content_type_options_header()
+        self.test_xss_protection_header()
+        self.test_referrer_policy_header()
+        self.test_additional_security_headers()
+        self.test_headers_consistency_across_methods()
+        self.test_sensitive_information_exposure()
+        self.test_cors_security()
+        
+        # Print comprehensive summary
+        print("\n" + "=" * 90)
+        print("📊 COMPREHENSIVE SECURITY HEADERS TEST SUMMARY")
+        print("=" * 90)
+        print(f"Total Tests: {len(self.test_results)}")
+        print(f"✅ Passed: {len(self.passed_tests)}")
+        print(f"❌ Failed: {len(self.failed_tests)}")
+        
+        success_rate = (len(self.passed_tests) / len(self.test_results)) * 100 if self.test_results else 0
+        print(f"📈 Success Rate: {success_rate:.1f}%")
+        
+        # Categorize results
+        critical_failures = []
+        warnings = []
+        
+        for test in self.failed_tests:
+            if any(critical in test for critical in ['HSTS', 'CSP', 'Frame Options', 'XSS Protection']):
+                critical_failures.append(test)
+            else:
+                warnings.append(test)
+        
+        if critical_failures:
+            print(f"\n🚨 CRITICAL SECURITY ISSUES:")
+            for test in critical_failures:
+                print(f"   - {test}")
+        
+        if warnings:
+            print(f"\n⚠️ SECURITY WARNINGS:")
+            for test in warnings:
+                print(f"   - {test}")
+        
+        if self.passed_tests:
+            print(f"\n✅ SECURITY COMPLIANCE ACHIEVED:")
+            for test in self.passed_tests:
+                if any(important in test for important in ['HSTS', 'CSP', 'Frame Options', 'Content Type', 'XSS']):
+                    print(f"   - {test}")
+        
+        print("\n🎯 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 90:
+            print("✅ EXCELLENT: Ready for production deployment")
+        elif success_rate >= 75:
+            print("⚠️ GOOD: Minor security improvements recommended")
+        elif success_rate >= 60:
+            print("⚠️ FAIR: Several security issues need attention")
+        else:
+            print("❌ POOR: Critical security issues must be resolved")
+        
+        print(f"\n🔐 Security Headers Implementation Status:")
+        print(f"• HSTS: {'✅ Implemented' if any('HSTS' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        print(f"• CSP: {'✅ Implemented' if any('CSP' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        print(f"• X-Frame-Options: {'✅ Implemented' if any('Frame Options' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        print(f"• X-Content-Type-Options: {'✅ Implemented' if any('Content Type Options' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        print(f"• X-XSS-Protection: {'✅ Implemented' if any('XSS Protection' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        print(f"• Referrer-Policy: {'✅ Implemented' if any('Referrer Policy' in test and test in self.passed_tests for test in self.test_results) else '❌ Missing/Misconfigured'}")
+        
+        return len(critical_failures) == 0
+
+
 class SecurityComplianceTester:
     """Test Security Headers and GDPR/CCPA Privacy Compliance Features"""
     
