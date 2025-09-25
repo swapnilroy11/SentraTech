@@ -177,21 +177,21 @@ const CookieBanner = () => {
         <>
           {/* Modal Backdrop */}
           <div
-            className="fixed inset-0 z-60 bg-black bg-opacity-50"
+            className="fixed inset-0 z-[100] bg-black bg-opacity-50"
             aria-hidden="true"
             onClick={handleClosePreferences}
           />
           
           {/* Modal Container */}
           <div
-            className="fixed inset-0 z-60 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             aria-labelledby="preferences-title"
             aria-describedby="preferences-description"
           >
             <div
-              className="bg-[#161B22] border border-[rgb(63,63,63)] rounded-lg p-6 w-full max-w-md shadow-2xl relative"
+              className="bg-[#161B22] border border-[rgb(63,63,63)] rounded-lg p-6 w-full max-w-md shadow-2xl relative z-[110]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
