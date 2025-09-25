@@ -37,10 +37,157 @@ logger = logging.getLogger(__name__)
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
+# MongoDB Enterprise Connection with Connection Pooling
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
+
+# Configure connection with enterprise-grade settings
+client = AsyncIOMotorClient(
+    mongo_url,
+    # Connection Pool Settings
+    minPoolSize=10,          # Minimum connections to maintain
+    maxPoolSize=100,         # Maximum connections in pool
+    maxIdleTimeMS=30000,     # Close connections after 30s of inactivity
+    waitQueueTimeoutMS=5000, # Wait max 5s for connection from pool
+    
+    # Performance Settings
+    serverSelectionTimeoutMS=5000,  # 5s timeout for server selection
+    connectTimeoutMS=10000,         # 10s timeout for initial connection
+    socketTimeoutMS=20000,          # 20s timeout for socket operations
+    
+    # Reliability Settings
+    retryWrites=True,               # Retry failed writes
+    retryReads=True,                # Retry failed reads
+    readPreference='primaryPreferred', # Read from primary, fallback to secondary
+    
+    # Compression for better network performance
+    compressors='snappy,zlib,zstd',
+    
+    # Logging and monitoring
+    appname='sentratech-api',       # Application name for monitoring
+)
+
 db = client[os.environ['DB_NAME']]
+
+# Database optimization configurations
+DATABASE_CONFIG = {
+    'batch_size': 1000,           # Batch operations for better performance
+    'index_background': True,     # Create indexes in background
+    'write_concern_w': 1,         # Write to primary
+    'write_concern_j': True,      # Journal writes for durability
+    'read_concern_level': 'majority', # Read majority committed data
+}
+
+async def ensure_database_indexes():
+    """Create database indexes for optimal query performance"""
+    try:
+        # Demo requests indexes
+        await db.demo_requests.create_index([("email", 1)], background=True)
+        await db.demo_requests.create_index([("created_at", -1)], background=True)
+        await db.demo_requests.create_index([("company", "text"), ("name", "text")], background=True)
+        
+        # ROI calculations indexes
+        await db.roi_calculations.create_index([("id", 1)], unique=True, background=True)
+        await db.roi_calculations.create_index([("created_at", -1)], background=True)
+        
+        # Chat sessions and messages indexes
+        await db.chat_sessions.create_index([("session_id", 1)], unique=True, background=True)
+        await db.chat_messages.create_index([("session_id", 1), ("timestamp", 1)], background=True)
+        
+        # Analytics indexes
+        await db.page_views.create_index([("timestamp", -1)], background=True)
+        await db.page_views.create_index([("page_path", 1), ("timestamp", -1)], background=True)
+        await db.user_interactions.create_index([("session_id", 1), ("timestamp", -1)], background=True)
+        
+        # Privacy requests indexes
+        await db.privacy_requests.create_index([("id", 1)], unique=True, background=True)
+        await db.privacy_requests.create_index([("email", 1)], background=True)
+        
+        # Performance metrics indexes
+        await db.performance_metrics.create_index([("timestamp", -1)], background=True)
+        await db.performance_metrics.create_index([("metric_name", 1), ("timestamp", -1)], background=True)
+        
+        logger.info("✅ Database indexes created successfully")
+    except Exception as e:
+        logger.error(f"❌ Error creating database indexes: {str(e)}")
+
+# Connection health check
+async def check_database_health():
+    """Check database connection health"""
+    try:
+        # Ping database
+        await client.admin.command('ping')
+        
+        # Get server status
+        server_status = await client.admin.command('serverStatus')
+        
+        return {
+            'status': 'healthy',
+            'connections': server_status.get('connections', {}),
+            'version': server_status.get('version'),
+            'uptime': server_status.get('uptime')
+        }
+    except Exception as e:
+        logger.error(f"Database health check failed: {str(e)}")
+        return {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+
+# Query optimization utilities
+class DatabaseOptimizer:
+    @staticmethod
+    async def bulk_insert(collection_name: str, documents: List[Dict]):
+        """Optimized bulk insert operation"""
+        try:
+            collection = db[collection_name]
+            result = await collection.insert_many(
+                documents,
+                ordered=False,  # Continue on errors
+                bypass_document_validation=False
+            )
+            return result.inserted_ids
+        except Exception as e:
+            logger.error(f"Bulk insert failed for {collection_name}: {str(e)}")
+            raise
+
+    @staticmethod
+    async def paginated_find(collection_name: str, query: Dict, page: int = 1, limit: int = 20, sort_field: str = "_id", sort_order: int = -1):
+        """Optimized paginated query with proper sorting"""
+        try:
+            collection = db[collection_name]
+            skip = (page - 1) * limit
+            
+            cursor = collection.find(query).sort(sort_field, sort_order).skip(skip).limit(limit)
+            documents = await cursor.to_list(length=limit)
+            
+            # Get total count for pagination
+            total = await collection.count_documents(query)
+            
+            return {
+                'documents': documents,
+                'total': total,
+                'page': page,
+                'limit': limit,
+                'total_pages': (total + limit - 1) // limit
+            }
+        except Exception as e:
+            logger.error(f"Paginated find failed for {collection_name}: {str(e)}")
+            raise
+
+    @staticmethod
+    async def aggregate_with_optimization(collection_name: str, pipeline: List[Dict], allow_disk_use: bool = True):
+        """Optimized aggregation pipeline"""
+        try:
+            collection = db[collection_name]
+            cursor = collection.aggregate(
+                pipeline,
+                allowDiskUse=allow_disk_use,  # Allow disk usage for large datasets
+                maxTimeMS=30000  # 30 second timeout
+            )
+            return await cursor.to_list(length=None)
+        except Exception as e:
+            logger.error(f"Aggregation failed for {collection_name}: {str(e)}")
+            raise
 
 # Create the main app without a prefix
 app = FastAPI()
