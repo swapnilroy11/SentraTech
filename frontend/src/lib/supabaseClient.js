@@ -24,16 +24,18 @@ export const insertDemoRequest = async (formData) => {
         phone: formData.phone || null,
         message: formData.message || null,
         created_at: new Date().toISOString()
-      }])
-      .select(); // Return the inserted record
+      }], { returning: 'minimal' }); // Use minimal returning to avoid RLS SELECT issues
 
     if (error) {
       throw error;
     }
 
+    // Generate a temporary ID for GA4 tracking since we're using minimal returning
+    const tempId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     return {
       success: true,
-      data: data[0],
+      data: { id: tempId }, // Return temporary ID for tracking
       message: 'Demo request submitted successfully!'
     };
   } catch (error) {
