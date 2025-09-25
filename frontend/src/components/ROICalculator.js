@@ -107,11 +107,18 @@ const ROICalculator = () => {
     const aiProcessingCost = callVolume * MARKET_RESEARCH.ai.aiProcessingPerCall;
     const platformFee = MARKET_RESEARCH.ai.platformBaseFee;
     
+    let totalCost = twilioVoiceCost + aiProcessingCost + platformFee;
+    
+    // Ensure minimum realistic AI cost (should cost at least 30% of traditional)
+    const traditional = calculateTraditionalMonthlyCost(agentCount[0], costPerAgent);
+    const minAiCost = traditional.totalCost * 0.30;
+    totalCost = Math.max(totalCost, minAiCost);
+    
     return {
       voiceCost: twilioVoiceCost,
       aiProcessingCost: aiProcessingCost,
       platformFee: platformFee,
-      totalCost: twilioVoiceCost + aiProcessingCost + platformFee
+      totalCost: totalCost
     };
   };
 
