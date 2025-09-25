@@ -80,7 +80,10 @@ const FloatingNavigation = () => {
           zIndex: 9998
         }}
       >
-        <div className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.3)] rounded-2xl p-6 min-w-[240px] shadow-2xl shadow-[rgba(0,255,65,0.2)] max-h-[80vh] overflow-y-auto">
+        <div 
+          className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.3)] rounded-2xl p-6 min-w-[240px] shadow-2xl shadow-[rgba(0,255,65,0.2)] max-h-[80vh] overflow-y-auto"
+          data-floating-nav="true"
+        >
           {/* Company Slogan */}
           <div className="mb-6 pb-4 border-b border-[rgba(0,255,65,0.2)]">
             <div className="text-center">
