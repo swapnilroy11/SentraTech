@@ -110,27 +110,34 @@ const ROICalculator = () => {
 
         {/* Improved Country Selection Buttons */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-[rgb(26,28,30)] rounded-2xl p-2 border border-[rgba(255,255,255,0.1)]">
+          <div className="inline-flex bg-[rgb(26,28,30)] rounded-2xl p-2 border border-[rgba(255,255,255,0.1)] shadow-lg">
             {COUNTRIES.map((country) => (
               <button
                 key={country.name}
                 onClick={() => handleCountryChange(country.name)}
-                className={`relative px-4 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                className={`relative px-4 py-3 rounded-xl font-medium transition-all duration-300 ease-out flex items-center space-x-2 transform ${
                   selectedCountry === country.name 
-                    ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/25 transform scale-105' 
-                    : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)] hover:scale-102'
+                    ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/25 scale-105 z-10' 
+                    : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)] hover:scale-102 hover:shadow-md'
                 }`}
               >
                 <span className="text-lg">{country.flag}</span>
                 <div className="text-left">
-                  <div className="text-sm font-semibold">{country.name}</div>
-                  <div className="text-xs opacity-75">${country.baseCost}/mo</div>
+                  <div className="text-sm font-semibold leading-tight">{country.name}</div>
+                  <div className="text-xs opacity-75 leading-tight">${country.baseCost}/mo</div>
                 </div>
                 
                 {/* Active indicator */}
                 {selectedCountry === country.name && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[#00FF41] rounded-full shadow-lg"></div>
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[#00FF41] rounded-full shadow-lg animate-pulse"></div>
                 )}
+                
+                {/* Hover glow effect */}
+                <div className={`absolute inset-0 rounded-xl transition-opacity duration-300 ${
+                  selectedCountry === country.name 
+                    ? 'opacity-100 bg-gradient-to-r from-[#00FF41]/10 to-[#00DDFF]/10' 
+                    : 'opacity-0 hover:opacity-100 bg-gradient-to-r from-[#00FF41]/5 to-[#00DDFF]/5'
+                }`}></div>
               </button>
             ))}
           </div>
