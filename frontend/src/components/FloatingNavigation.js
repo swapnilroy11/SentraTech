@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { Menu, X, Home, Zap, Users, Calculator, FileText, DollarSign, MessageSquare, Shield, Route } from 'lucide-react';
 import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 
