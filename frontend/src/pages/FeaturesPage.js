@@ -9,8 +9,8 @@ import CustomerJourney from '../components/CustomerJourney';
 const FeaturesPage = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]">
-      {/* Hero Section - Much more compact */}
-      <section className="pt-8 pb-4 relative overflow-hidden">
+      {/* Hero Section - Balanced spacing */}
+      <section className="pt-8 pb-6 relative overflow-hidden">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
