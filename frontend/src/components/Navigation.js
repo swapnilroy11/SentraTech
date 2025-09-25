@@ -113,25 +113,55 @@ const Navigation = () => {
           {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors"
+              onClick={handleMenuToggle}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation-menu"
+              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors relative z-50"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-[#2a2a2a]">
-            <div className="flex flex-col space-y-3 pt-4">
+        {/* Mobile Menu Overlay */}
+        <div 
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+            isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none z-40'
+          }`}
+          onClick={handleMenuItemClick}
+          aria-hidden="true"
+        />
+
+        {/* Mobile Menu Panel */}
+        <div 
+          id="mobile-navigation-menu"
+          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] border-l border-[#2a2a2a] transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {/* Mobile Menu Header */}
+          <div className="flex items-center justify-between p-4 border-b border-[#2a2a2a]">
+            <SentraTechLogo className="h-8" />
+            <button
+              onClick={handleMenuToggle}
+              aria-label="Close navigation menu"
+              className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Mobile Menu Items */}
+          <div className="flex flex-col p-4">
+            <div className="space-y-2">
               {navigationItems.map((item) => (
                 <HashLink
                   key={item.path}
                   smooth
                   to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg transition-all duration-300 font-medium ${
+                  onClick={handleMenuItemClick}
+                  className={`block px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
                     isActivePath(item.path)
                       ? 'text-[#00FF41] bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)]'
                       : 'text-[#e2e8f0] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.05)]'
@@ -140,11 +170,27 @@ const Navigation = () => {
                   {item.label}
                 </HashLink>
               ))}
-              <div className="flex items-center justify-between pt-4 border-t border-[#2a2a2a]">
-                <Link to="/demo-request" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl">
-                    Request Demo
-                  </Button>
+            </div>
+
+            {/* Mobile Menu Actions */}
+            <div className="mt-6 pt-6 border-t border-[#2a2a2a] space-y-4">
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="w-full px-4 py-2 bg-[#1a1a1a] rounded-xl text-sm text-[#e2e8f0] hover:text-[#00FF41] border border-[#2a2a2a] transition-colors"
+              >
+                {currentLang === 'en' ? 'বাং' : 'ENG'}
+              </button>
+
+              {/* Demo Request Button */}
+              <Link to="/demo-request" onClick={handleMenuItemClick} className="block">
+                <Button className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-3 rounded-xl font-rajdhani">
+                  Request Demo
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
                 </Link>
                 <button 
                   onClick={toggleLanguage}
