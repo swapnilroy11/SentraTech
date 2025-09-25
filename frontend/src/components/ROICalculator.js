@@ -537,10 +537,10 @@ const ROICalculator = () => {
                 <div className="flex justify-between items-center p-3 bg-[rgb(38,40,42)] rounded-xl">
                   <div>
                     <div className="text-white font-semibold">Industry Benchmark</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">Average 70-85% cost reduction</div>
+                    <div className="text-[rgb(161,161,170)] text-sm">Average 30-70% cost reduction</div>
                   </div>
                   <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                    ✓ Verified
+                    ✓ Calibrated
                   </Badge>
                 </div>
               </CardContent>
