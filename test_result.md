@@ -432,9 +432,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Supabase Demo Request Integration"
-  stuck_tasks:
-    - "Supabase Demo Request Integration"
+    - "Cookie Consent Banner & Privacy Compliance"
+  stuck_tasks: []
   test_all: false
   test_priority: "critical_first"
 
