@@ -242,19 +242,21 @@ input[type="range"]::-moz-range-thumb:hover {
   background: linear-gradient(135deg, #059669, #0891b2);
 }
 
-/* Optimized Smooth Transitions for Performance */
+/* Ultra-optimized CSS for maximum performance */
 * {
-  transition-property: color, background-color, border-color, opacity, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 100ms; /* Reduced for snappier feel */
+  /* Minimal transition properties for speed */
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
-/* Performance optimizations for smooth animations */
+/* Critical performance optimizations */
 *,
 *::before,
 *::after {
-  transform-style: preserve-3d;
+  /* Hardware acceleration and GPU optimization */
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: flat;
+  -webkit-transform-style: flat;
 }
 
 /* Reduce motion for users who prefer it */
