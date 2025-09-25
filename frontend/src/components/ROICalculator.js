@@ -421,12 +421,6 @@ const ROICalculator = () => {
                     {error}
                   </div>
                 )}
-
-                {savedSuccessfully && (
-                  <div className="mt-6 p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm text-center">
-                    ✅ ROI calculation saved successfully!
-                  </div>
-                )}
               </CardContent>
             </Card>
 
