@@ -43,8 +43,9 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navigationItems.map((item) => (
-              <Link
+              <HashLink
                 key={item.path}
+                smooth
                 to={item.path}
                 className={`relative px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
                   isActivePath(item.path)
@@ -53,7 +54,7 @@ const Navigation = () => {
                 }`}
               >
                 {item.label}
-              </Link>
+              </HashLink>
             ))}
             
             {/* Search Icon */}
