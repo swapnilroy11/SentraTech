@@ -2326,87 +2326,34 @@ class SecurityComplianceTester:
 
 
 if __name__ == "__main__":
-    print("🔒 SentraTech Backend Testing - Security & Privacy Compliance Focus")
-    print("=" * 80)
-    print("Focus: Security Headers and GDPR/CCPA Data Protection Features")
-    print("=" * 80)
+    print("🔒 SentraTech Backend Testing - Comprehensive Security Headers Verification")
+    print("=" * 90)
+    print("Focus: Production-Ready Security Headers for SentraTech Deployment")
+    print("Testing: HSTS, CSP, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy")
+    print("=" * 90)
     
-    # Run Security & Privacy Compliance tests
-    security_tester = SecurityComplianceTester()
-    security_success = security_tester.run_security_compliance_tests()
+    # Run Comprehensive Security Headers tests
+    security_headers_tester = SecurityHeadersTester()
+    headers_success = security_headers_tester.run_security_headers_tests()
     
-    print("\n" + "=" * 80)
-    print("🏁 FINAL SECURITY & PRIVACY COMPLIANCE RESULTS")
-    print("=" * 80)
+    print("\n" + "=" * 90)
+    print("🏁 FINAL SECURITY HEADERS VERIFICATION RESULTS")
+    print("=" * 90)
     
-    if security_success:
-        print("🎉 ALL SECURITY & PRIVACY COMPLIANCE TESTS PASSED!")
-        print("✅ SecurityHeadersMiddleware working correctly")
-        print("✅ GDPR/CCPA data protection endpoints functional")
-        print("✅ Data privacy scenarios working properly")
-        print("✅ Backend security validation operational")
-        print("✅ Input sanitization and audit trails working")
+    if headers_success:
+        print("🎉 ALL CRITICAL SECURITY HEADERS TESTS PASSED!")
+        print("✅ HSTS (HTTP Strict Transport Security) properly configured")
+        print("✅ CSP (Content Security Policy) preventing XSS attacks")
+        print("✅ X-Frame-Options protecting against clickjacking")
+        print("✅ X-Content-Type-Options preventing MIME sniffing")
+        print("✅ X-XSS-Protection configured correctly")
+        print("✅ Referrer-Policy controlling information leakage")
+        print("✅ Additional security headers implemented")
+        print("✅ No sensitive information exposure detected")
+        print("✅ CORS policy appropriately configured")
+        print("\n🚀 SentraTech is READY for production deployment!")
     else:
-        print("⚠️ SOME SECURITY & PRIVACY COMPLIANCE TESTS FAILED")
-        print("❌ Review failed tests above for specific security/privacy issues")
-        print("🔧 Security/privacy features may need fixes before deployment")
-    
-    print(f"\n📊 Security & Privacy Compliance Status: {'✅ COMPLIANT' if security_success else '❌ NEEDS WORK'}")
-    
-    # Also run a quick connectivity test
-    print("\n" + "=" * 60)
-    print("🔄 Running Quick Security Feature Connectivity Test")
-    print("=" * 60)
-    
-    try:
-        response = requests.get(f"{BACKEND_URL}/", timeout=10)
-        if response.status_code == 200:
-            print("✅ Backend API connectivity confirmed")
-            
-            # Check if security headers are present
-            headers = response.headers
-            security_headers_present = 0
-            security_headers_total = 6
-            
-            required_headers = [
-                "Strict-Transport-Security",
-                "Content-Security-Policy", 
-                "X-Frame-Options",
-                "X-Content-Type-Options",
-                "X-XSS-Protection",
-                "Referrer-Policy"
-            ]
-            
-            for header in required_headers:
-                if header in headers:
-                    security_headers_present += 1
-                    print(f"✅ {header}: {headers[header]}")
-                else:
-                    print(f"❌ Missing: {header}")
-            
-            print(f"📊 Security Headers: {security_headers_present}/{security_headers_total} present")
-            
-            # Test one privacy endpoint
-            test_privacy_request = {
-                "email": "connectivity.test@example.com",
-                "request_type": "export"
-            }
-            
-            privacy_response = requests.post(f"{BACKEND_URL}/privacy/data-request", 
-                                           json=test_privacy_request, timeout=15)
-            if privacy_response.status_code == 200:
-                result = privacy_response.json()
-                if result.get("request_id") and result.get("status"):
-                    print(f"✅ Privacy endpoints operational")
-                    print(f"✅ Request ID: {result.get('request_id')}")
-                    print(f"✅ Status: {result.get('status')}")
-                else:
-                    print(f"⚠️ Privacy endpoint issues: {result}")
-            else:
-                print(f"❌ Privacy endpoint error: {privacy_response.status_code}")
-        else:
-            print(f"❌ Backend API connectivity failed: {response.status_code}")
-    except Exception as e:
-        print(f"❌ Connectivity test failed: {str(e)}")
-    
-    print(f"\n🔒 Overall Security & Privacy Readiness: {'✅ READY FOR DEPLOYMENT' if security_success else '❌ REQUIRES FIXES'}")
+        print("⚠️ CRITICAL SECURITY ISSUES DETECTED")
+        print("❌ Some security headers are missing or misconfigured")
+        print("❌ Production deployment should be delayed until issues are resolved")
+        print("\n🔧 Please review the detailed test results above and fix the identified issues.")
