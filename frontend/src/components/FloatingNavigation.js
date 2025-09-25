@@ -66,9 +66,9 @@ const FloatingNavigation = () => {
         )}
       </button>
 
-      {/* Navigation Menu - Enhanced positioning */}
+      {/* Navigation Menu - Viewport-centered positioning */}
       <div
-        className={`absolute left-20 top-1/2 transform -translate-y-1/2 transition-all duration-500 ${
+        className={`transition-all duration-500 ${
           isOpen
             ? 'opacity-100 translate-x-0 pointer-events-auto'
             : 'opacity-0 -translate-x-8 pointer-events-none'
@@ -76,7 +76,7 @@ const FloatingNavigation = () => {
         style={{
           position: 'absolute',
           left: '80px',
-          top: '50%',
+          top: '0',
           transform: 'translateY(-50%)',
           zIndex: 9998
         }}
