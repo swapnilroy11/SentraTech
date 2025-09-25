@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -27,6 +27,11 @@ import TermsOfServicePage from "./pages/TermsOfServicePage";
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
+
+// Enterprise Utilities
+import serviceWorkerRegistration from "./utils/serviceWorkerRegistration";
+import performanceMonitor from "./utils/performanceMonitoring";
+import errorTracker from "./utils/errorTracking";
 
 function App() {
   return (
