@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { sendDemoRequestEmail } from './spacemailClient';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
@@ -54,12 +53,12 @@ export const insertSubscription = async (email) => {
   }
 };
 
-// Helper function to insert a demo request with email notification
+// Helper function to insert a demo request
 export const insertDemoRequest = async (formData) => {
   try {
     console.log('Submitting demo request to Supabase...', formData);
     
-    // Step 1: Insert into Supabase database
+    // Insert into Supabase database
     const { data, error } = await supabase
       .from('demo_requests')
       .insert([{
@@ -77,26 +76,13 @@ export const insertDemoRequest = async (formData) => {
 
     console.log('✅ Demo request saved to Supabase successfully');
 
-    // Step 2: Send email notification via SpaceMail
-    console.log('Sending email notification via SpaceMail...');
-    
-    const emailResult = await sendDemoRequestEmail(formData);
-    
-    if (emailResult.success) {
-      console.log('✅ Email notification sent successfully via SpaceMail');
-    } else {
-      console.warn('⚠️ Email notification failed but database insert succeeded:', emailResult.error);
-      // Don't fail the entire request if email fails - the demo request is still saved
-    }
-
     // Generate a temporary ID for GA4 tracking since we're using minimal returning
     const tempId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
       success: true,
       data: { id: tempId }, // Return temporary ID for tracking
-      message: 'Demo request submitted successfully! You will hear from us within 24 hours.',
-      emailSent: emailResult.success
+      message: 'Demo request submitted successfully! You will hear from us within 24 hours.'
     };
   } catch (error) {
     console.error('Supabase insertion error:', error);
@@ -107,5 +93,7 @@ export const insertDemoRequest = async (formData) => {
     };
   }
 };
+
+export default supabase;
 
 export default supabase;
