@@ -5,7 +5,7 @@ Test form endpoint with different email formats
 
 import requests
 
-BACKEND_URL = "https://sentra-dark.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-performance.preview.emergentagent.com/api"
 
 def test_form_with_email(email, description):
     """Test form endpoint with specific email"""
