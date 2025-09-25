@@ -12,12 +12,15 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
+  // Only English language - Bengali removed completely
   const [currentLang, setCurrentLang] = useState('en');
 
   const t = translations[currentLang];
 
+  // Language toggle function removed - only English supported
   const toggleLanguage = () => {
-    setCurrentLang(prev => prev === 'en' ? 'bn' : 'en');
+    // No-op since we only support English now
+    console.log('Language switching disabled - English only');
   };
 
   return (
