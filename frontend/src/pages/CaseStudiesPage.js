@@ -138,9 +138,9 @@ const CaseStudiesPage = () => {
             <p className="text-xl text-[rgb(161,161,170)] mb-8">
               See how SentraTech integrates seamlessly with your existing tools and platforms
             </p>
-            <Link to="/integrations">
+            <Link to="/security">
               <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 mx-auto">
-                <span>See Integrations</span>
+                <span>Security & Compliance</span>
                 <ArrowRight size={24} />
               </Button>
             </Link>
