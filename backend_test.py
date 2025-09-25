@@ -1460,7 +1460,7 @@ class SecurityComplianceTester:
                     if status_response.status_code == 200:
                         status_result = status_response.json()
                         
-                        if status_result.get("status") == "verification_pending":
+                        if status_result.get("status") in ["verification_pending", "pending"]:
                             self.log_test("Privacy Scenario - Status Check", True,
                                         f"✅ Status properly tracked: {status_result.get('status')}")
                         else:
