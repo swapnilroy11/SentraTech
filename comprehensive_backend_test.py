@@ -365,11 +365,12 @@ class ComprehensiveBackendTester:
         # Test 1: POST /api/analytics/track
         try:
             track_data = {
-                "event_type": "page_view",
-                "page_url": "/test-page",
-                "user_agent": "Mozilla/5.0 (Test Browser)",
                 "session_id": str(uuid.uuid4()),
-                "metadata": {"test": "regression"}
+                "event_type": "page_view",
+                "page_path": "/test-page",
+                "page_title": "Test Page",
+                "user_agent": "Mozilla/5.0 (Test Browser)",
+                "additional_data": {"test": "regression"}
             }
             
             response = self.session.post(f"{BACKEND_URL}/analytics/track", json=track_data, timeout=10)
@@ -391,21 +392,22 @@ class ComprehensiveBackendTester:
         
         # Test 2: POST /api/analytics/conversion
         try:
-            conversion_data = {
-                "event_type": "demo_request",
+            conversion_params = {
+                "session_id": str(uuid.uuid4()),
+                "event_name": "demo_request",
+                "page_path": "/demo-request",
                 "funnel_step": "form_submission",
                 "conversion_value": 100,
-                "user_id": str(uuid.uuid4()),
-                "metadata": {"source": "regression_test"}
+                "user_id": str(uuid.uuid4())
             }
             
-            response = self.session.post(f"{BACKEND_URL}/analytics/conversion", json=conversion_data, timeout=10)
+            response = self.session.post(f"{BACKEND_URL}/analytics/conversion", params=conversion_params, timeout=10)
             
             if response.status_code == 200:
                 result = response.json()
                 if result.get("success"):
                     self.log_test("Analytics - Conversion Tracking", True, 
-                                f"Conversion tracked: {conversion_data['event_type']}")
+                                f"Conversion tracked: {conversion_params['event_name']}")
                 else:
                     self.log_test("Analytics - Conversion Tracking", False, 
                                 f"Conversion tracking failed: {result}")
