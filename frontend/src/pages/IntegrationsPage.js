@@ -381,7 +381,7 @@ const IntegrationsPage = () => {
         </section>
 
         {/* Integrations Showcase Component */}
-        <ComponentErrorBoundary>
+        <IntegrationsErrorBoundary>
           <React.Suspense fallback={
             <div className="py-20 bg-[#0D1117] flex items-center justify-center">
               <div className="text-center">
