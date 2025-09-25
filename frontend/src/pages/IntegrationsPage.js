@@ -419,7 +419,7 @@ const IntegrationsPage = () => {
           </div>
         </section>
       </div>
-    </ComponentErrorBoundary>
+    </IntegrationsErrorBoundary>
   );
 };
 
