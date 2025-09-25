@@ -2895,8 +2895,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_db_client():
-    """Initialize database connections and indexes on startup"""
-    logger.info("🚀 Starting SentraTech API server...")
+    """Initialize database connections, indexes, and performance optimizations on startup"""
+    logger.info("🚀 Starting SentraTech API server with performance optimizations...")
     
     # Check database health
     health_status = await check_database_health()
@@ -2910,7 +2910,13 @@ async def startup_db_client():
     # Create database indexes for optimal performance
     await ensure_database_indexes()
     
-    logger.info("🎯 SentraTech API server started successfully")
+    # Initialize cache warming for improved performance
+    await warm_cache()
+    
+    # Start background cache maintenance
+    asyncio.create_task(cache_maintenance())
+    
+    logger.info("🎯 SentraTech API server started successfully with performance optimizations")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
