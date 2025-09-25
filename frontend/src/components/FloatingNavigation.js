@@ -50,25 +50,25 @@ const FloatingNavigation = () => {
         )}
       </button>
 
-      {/* Navigation Menu */}
+      {/* Navigation Menu - Enhanced */}
       <div
-        className={`absolute left-16 top-1/2 transform -translate-y-1/2 transition-all duration-500 ${
+        className={`absolute left-20 top-1/2 transform -translate-y-1/2 transition-all duration-500 ${
           isOpen
             ? 'opacity-100 translate-x-0 pointer-events-auto'
             : 'opacity-0 -translate-x-8 pointer-events-none'
         }`}
       >
-        <div className="bg-[rgba(17,17,19,0.95)] backdrop-blur-md border border-[rgba(0,255,65,0.2)] rounded-2xl p-4 min-w-[200px]">
+        <div className="bg-[rgba(10,10,10,0.95)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.3)] rounded-2xl p-6 min-w-[220px] shadow-2xl shadow-[rgba(0,255,65,0.2)]">
           {/* Company Slogan */}
-          <div className="mb-6 pb-4 border-b border-[rgba(255,255,255,0.1)]">
+          <div className="mb-6 pb-4 border-b border-[rgba(0,255,65,0.2)]">
             <div className="text-center">
-              <h3 className="text-[#00FF41] font-bold text-sm mb-2 font-rajdhani">
+              <h3 className="text-[#00FF41] font-bold text-lg mb-3 font-rajdhani">
                 SentraTech
               </h3>
-              <div className="space-y-1 text-xs text-[rgb(161,161,170)]">
-                <div className="text-[#00FF41]">Beyond</div>
+              <div className="space-y-1 text-sm text-[rgb(161,161,170)]">
+                <div className="text-[#00FF41] font-medium">Beyond</div>
                 <div className="text-[rgb(161,161,170)]">•</div>
-                <div className="text-[#00FF41]">Better</div>
+                <div className="text-[#00FF41] font-medium">Better</div>
                 <div className="text-[rgb(161,161,170)]">•</div>
                 <div className="text-[#00FF41]">Boundless</div>
               </div>
