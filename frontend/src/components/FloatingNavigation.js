@@ -45,7 +45,7 @@ const FloatingNavigation = () => {
         pointerEvents: 'auto'
       }}
     >
-      {/* Toggle Button - Always floating and centered */}
+      {/* Toggle Button - Truly fixed to viewport center */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         data-floating-nav="true"
@@ -55,7 +55,7 @@ const FloatingNavigation = () => {
         aria-label="Toggle floating navigation menu"
         style={{
           position: 'relative',
-          zIndex: 10000,
+          zIndex: 'auto',
           animationDuration: '3s'
         }}
       >
