@@ -5,7 +5,7 @@ import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
-  Calculator, TrendingUp, DollarSign, 
+  Calculator, TrendingUp, DollarSign, Clock,
   Users, Zap, Loader2, Target, Mail, X, 
   ArrowDown, ArrowUp, Sparkles
 } from 'lucide-react';
@@ -14,9 +14,10 @@ import { COUNTRIES } from '../utils/costBaselines';
 import { supabase } from '../lib/supabaseClient';
 
 const ROICalculator = () => {
-  // Simplified State Management - Only Agent Count
+  // State Management - Agent Count and AHT
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [agentCount, setAgentCount] = useState(50);
+  const [agentCount, setAgentCount] = useState(10);  // Default 10 as specified
+  const [ahtMinutes, setAhtMinutes] = useState(7);   // Default 7 as specified
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -27,28 +28,14 @@ const ROICalculator = () => {
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  // Default AHT = 7 minutes as specified
-  const DEFAULT_AHT = 7;
-
-  // Real-time calculation with fixed AHT
+  // Real-time calculation with both Agent Count and AHT
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
         setIsCalculating(true);
-        if (agentCount > 0) {
-          const metrics = calculateROI(selectedCountry, agentCount, DEFAULT_AHT);
-          
-          // Calculate real per-call costs
-          const callVolume = agentCount * ((8*60)/DEFAULT_AHT) * 22;
-          const tradPerCall = (metrics.tradCost / callVolume).toFixed(2);
-          const aiPerCall = (metrics.aiCost / callVolume).toFixed(2);
-          
-          setResults({
-            ...metrics,
-            callVolume,
-            tradPerCall: parseFloat(tradPerCall),
-            aiPerCall: parseFloat(aiPerCall)
-          });
+        if (agentCount > 0 && ahtMinutes > 0) {
+          const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
+          setResults(metrics);
           setError(null);
         }
       } catch (error) {
@@ -60,7 +47,7 @@ const ROICalculator = () => {
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [selectedCountry, agentCount]);
+  }, [selectedCountry, agentCount, ahtMinutes]);
 
   // Handle country selection
   const handleCountryChange = (country) => {
@@ -108,7 +95,7 @@ const ROICalculator = () => {
         email: email.trim(),
         country: selectedCountry,
         agent_count: agentCount,
-        aht_minutes: DEFAULT_AHT,
+        aht_minutes: ahtMinutes,
         call_volume: results.callVolume,
         traditional_cost: results.tradCost,
         ai_cost: results.aiCost,
@@ -198,15 +185,15 @@ const ROICalculator = () => {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          {/* Agent Count Input Section */}
+          {/* Two-Panel Input Section */}
           <div className="mb-12">
             <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
               <CardHeader className="p-0 mb-8">
                 <CardTitle className="text-2xl text-white flex items-center justify-center space-x-4">
                   <div className="p-3 bg-[#00FF41]/20 rounded-xl border border-[#00FF41]/50">
-                    <Users size={24} className="text-[#00FF41]" />
+                    <Calculator size={24} className="text-[#00FF41]" />
                   </div>
-                  <span>Agent Count</span>
+                  <span>Input Parameters</span>
                   {isCalculating && (
                     <div className="animate-spin">
                       <Loader2 size={24} className="text-[#00FF41]" />
@@ -215,70 +202,142 @@ const ROICalculator = () => {
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="p-0 space-y-8">
-                {/* Agent Count Display */}
-                <div className="text-center">
-                  <div className="text-8xl font-black text-[#00FF41] mb-4 font-rajdhani">
-                    {agentCount}
-                  </div>
-                  <div className="text-lg text-[rgb(161,161,170)]">agents</div>
-                </div>
-                
-                {/* Slider */}
-                <div className="mb-6">
-                  <input
-                    type="range"
-                    min="1"
-                    max="500"
-                    value={agentCount}
-                    onChange={(e) => setAgentCount(parseInt(e.target.value))}
-                    className="w-full h-3 bg-slate-700 rounded-full appearance-none cursor-pointer slider-gradient"
-                    style={{
-                      background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(agentCount/500)*100}%, #374151 ${(agentCount/500)*100}%, #374151 100%)`
-                    }}
-                  />
-                  <div className="flex justify-between text-sm text-[rgb(161,161,170)] mt-2">
-                    <span>1</span>
-                    <span>500</span>
-                  </div>
-                </div>
-                
-                {/* Number Input */}
-                <div className="max-w-md mx-auto">
-                  <Input
-                    type="number"
-                    value={agentCount}
-                    onChange={(e) => {
-                      const value = Math.max(1, Math.min(500, parseInt(e.target.value) || 1));
-                      setAgentCount(value);
-                    }}
-                    className="bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white rounded-xl text-2xl py-6 text-center font-semibold focus:border-[#00FF41] focus:ring-[#00FF41]/20"
-                    min="1"
-                    max="500"
-                  />
-                </div>
-
-                {/* Call Volume Info */}
-                <div className="bg-[rgb(38,40,42)] rounded-xl p-6 border border-[rgb(63,63,63)] max-w-md mx-auto">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="text-white font-semibold text-lg">Monthly Call Volume</div>
-                    <div className="text-2xl font-bold text-[#00FF41]">
-                      {formatNumber(results.callVolume || 0)}
+              <CardContent className="p-0">
+                {/* Two Side-by-Side Panels */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  
+                  {/* Left Panel: Agent Count */}
+                  <div className="bg-[rgb(38,40,42)] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="p-2 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50 mr-3">
+                        <Users size={20} className="text-[#00FF41]" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-white">Agent Count</h3>
+                    </div>
+                    
+                    <div className="text-center mb-6">
+                      <div className="text-6xl font-black text-[#00FF41] mb-2 font-rajdhani">
+                        {agentCount}
+                      </div>
+                      <div className="text-sm text-[rgb(161,161,170)]">agents</div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {/* Slider */}
+                      <div>
+                        <input
+                          type="range"
+                          min="1"
+                          max="500"
+                          value={agentCount}
+                          onChange={(e) => setAgentCount(parseInt(e.target.value))}
+                          className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer slider-gradient"
+                          style={{
+                            background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(agentCount/500)*100}%, #374151 ${(agentCount/500)*100}%, #374151 100%)`
+                          }}
+                        />
+                        <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
+                          <span>1</span>
+                          <span>500</span>
+                        </div>
+                      </div>
+                      
+                      {/* Number Input */}
+                      <Input
+                        type="number"
+                        value={agentCount}
+                        onChange={(e) => {
+                          const value = Math.max(1, Math.min(500, parseInt(e.target.value) || 1));
+                          setAgentCount(value);
+                        }}
+                        className="bg-[rgb(26,28,30)] border-[#00FF41]/50 text-white rounded-lg text-lg py-3 text-center font-semibold focus:border-[#00FF41] focus:ring-[#00FF41]/20"
+                        min="1"
+                        max="500"
+                      />
                     </div>
                   </div>
-                  <div className="text-[rgb(161,161,170)] text-sm">
-                    {agentCount} agents × 7min AHT × 8hrs/day × 22 days
+
+                  {/* Right Panel: Average Handle Time */}
+                  <div className="bg-[rgb(38,40,42)] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="p-2 bg-[#00DDFF]/20 rounded-lg border border-[#00DDFF]/50 mr-3">
+                        <Clock size={20} className="text-[#00DDFF]" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-white">Average Handle Time</h3>
+                    </div>
+                    
+                    <div className="text-center mb-6">
+                      <div className="text-6xl font-black text-[#00DDFF] mb-2 font-rajdhani">
+                        {ahtMinutes}
+                      </div>
+                      <div className="text-sm text-[rgb(161,161,170)]">minutes</div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {/* Slider */}
+                      <div>
+                        <input
+                          type="range"
+                          min="2"
+                          max="20"
+                          step="1"
+                          value={ahtMinutes}
+                          onChange={(e) => setAhtMinutes(parseInt(e.target.value))}
+                          className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer"
+                          style={{
+                            background: `linear-gradient(to right, #00DDFF 0%, #00DDFF ${((ahtMinutes-2)/(20-2))*100}%, #374151 ${((ahtMinutes-2)/(20-2))*100}%, #374151 100%)`
+                          }}
+                        />
+                        <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
+                          <span>2min</span>
+                          <span>20min</span>
+                        </div>
+                      </div>
+                      
+                      {/* Number Input */}
+                      <Input
+                        type="number"
+                        value={ahtMinutes}
+                        onChange={(e) => {
+                          const value = Math.max(2, Math.min(20, parseInt(e.target.value) || 2));
+                          setAhtMinutes(value);
+                        }}
+                        className="bg-[rgb(26,28,30)] border-[#00DDFF]/50 text-white rounded-lg text-lg py-3 text-center font-semibold focus:border-[#00DDFF] focus:ring-[#00DDFF]/20"
+                        min="2"
+                        max="20"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Call Volume Display */}
+                <div className="mt-6 bg-[rgb(38,40,42)] rounded-xl p-6 border border-[rgb(63,63,63)]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-[#FFD700]/20 rounded-lg border border-[#FFD700]/50">
+                        <Calculator size={20} className="text-[#FFD700]" />
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold text-lg">Monthly Call Volume</div>
+                        <div className="text-[rgb(161,161,170)] text-sm">
+                          {agentCount} agents × {Math.floor((8 * 60) / ahtMinutes)} calls/day × 22 days
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-[#FFD700]">
+                      {formatNumber(results.callVolume || 0)}
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Three-Card Layout */}
+          {/* Three-Card Result Layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             
             {/* Card 1: Traditional BPO Cost */}
-            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-2xl p-6 hover:scale-102 transition-all duration-300 hover:border-[#00FF41] hover:shadow-lg hover:shadow-[#00FF41]/25">
+            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-xl p-6 hover:scale-102 transition-all duration-300 hover:shadow-lg hover:shadow-[#00FF41]/25">
               <CardContent className="p-0 text-center">
                 <div className="flex items-center justify-center mb-4">
                   <DollarSign size={28} className="text-red-400 mr-3" />
@@ -294,7 +353,7 @@ const ROICalculator = () => {
             </Card>
 
             {/* Card 2: SentraTech AI Cost */}
-            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-2xl p-6 hover:scale-102 transition-all duration-300 hover:border-[#00FF41] hover:shadow-lg hover:shadow-[#00FF41]/25">
+            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-xl p-6 hover:scale-102 transition-all duration-300 hover:shadow-lg hover:shadow-[#00FF41]/25">
               <CardContent className="p-0 text-center">
                 <div className="flex items-center justify-center mb-4">
                   <Zap size={28} className="text-[#00DDFF] mr-3" />
@@ -310,7 +369,7 @@ const ROICalculator = () => {
             </Card>
 
             {/* Card 3: Savings & ROI */}
-            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-2xl p-6 hover:scale-102 transition-all duration-300 hover:border-[#00FF41] hover:shadow-lg hover:shadow-[#00FF41]/25">
+            <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-xl p-6 hover:scale-102 transition-all duration-300 hover:shadow-lg hover:shadow-[#00FF41]/25">
               <CardContent className="p-0 text-center">
                 <div className="flex items-center justify-center mb-4">
                   <TrendingUp size={28} className="text-emerald-400 mr-3" />
@@ -358,7 +417,7 @@ const ROICalculator = () => {
                 </div>
                 <div className="text-center">
                   <div className="text-[rgb(161,161,170)] text-sm mb-1">AHT</div>
-                  <div className="text-[#00FF41] font-bold text-lg">{DEFAULT_AHT}min</div>
+                  <div className="text-[#FFD700] font-bold text-lg">{ahtMinutes}min</div>
                 </div>
                 <div className="text-center">
                   <div className="text-[rgb(161,161,170)] text-sm mb-1">Calls/Month</div>
@@ -378,9 +437,6 @@ const ROICalculator = () => {
               <Target className="mr-3" size={24} />
               Get Detailed ROI Report
             </Button>
-            <p className="text-[rgb(161,161,170)] text-sm mt-4">
-              {selectedCountry} BPO vs AI automation comparison • Schedule demo for validation
-            </p>
           </div>
         </div>
 
@@ -435,12 +491,12 @@ const ROICalculator = () => {
                       <div className="text-[#00DDFF]">{agentCount}</div>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">Monthly Savings:</div>
-                      <div className="text-[#00FF41] font-bold">{formatCurrency(results.monthlySavings)}</div>
+                      <div className="text-white font-semibold">AHT:</div>
+                      <div className="text-[#FFD700]">{ahtMinutes} min</div>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">ROI:</div>
-                      <div className="text-[#00DDFF] font-bold">{results.roiPercent || 0}%</div>
+                      <div className="text-white font-semibold">Monthly Savings:</div>
+                      <div className="text-[#00FF41] font-bold">{formatCurrency(results.monthlySavings)}</div>
                     </div>
                   </div>
                 </div>
