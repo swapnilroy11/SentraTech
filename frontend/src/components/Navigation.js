@@ -78,11 +78,19 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]">
+    <nav 
+      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]"
+      role="navigation" 
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-4">
+          <Link 
+            to="/" 
+            className="flex items-center space-x-4"
+            aria-label="SentraTech homepage"
+          >
             <SentraTechLogo 
               width={48} 
               height={48} 
@@ -93,20 +101,23 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <ul className="hidden md:flex items-center space-x-8" role="menubar">
             {navigationItems.map((item) => (
-              <HashLink
-                key={item.path}
-                smooth
-                to={item.path}
-                className={`relative px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
-                  isActivePath(item.path)
-                    ? 'text-[#00FF41] bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)]'
-                    : 'text-[#e2e8f0] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.05)]'
-                }`}
-              >
-                {item.label}
-              </HashLink>
+              <li key={item.path} role="none">
+                <HashLink
+                  smooth
+                  to={item.path}
+                  role="menuitem"
+                  aria-current={isActivePath(item.path) ? 'page' : undefined}
+                  className={`relative px-4 py-2 rounded-lg transition-all duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-black ${
+                    isActivePath(item.path)
+                      ? 'text-[#00FF41] bg-[rgba(0,255,65,0.1)] border border-[rgba(0,255,65,0.3)]'
+                      : 'text-[#e2e8f0] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.05)]'
+                  }`}
+                >
+                  {item.label}
+                </HashLink>
+              </li>
             ))}
             
             {/* Search Icon */}
