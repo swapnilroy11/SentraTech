@@ -16,7 +16,7 @@ body {
     color: #F8F9FA;
 }
 
-/* Smooth scrolling for anchor links - Optimized */
+/* Smooth, fast scrolling */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 20px;
@@ -24,6 +24,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
+  /* Reduce reflows and repaints */
+  contain: layout style paint;
 }
 
 /* Optimize scrolling performance */
