@@ -296,5 +296,3 @@ const FloatingNavScrollable = () => {
 };
 
 export default FloatingNavScrollable;
-
-export default FloatingNavScrollable;
