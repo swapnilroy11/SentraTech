@@ -84,7 +84,7 @@ const IntegrationsPage = () => {
   ];
 
   return (
-    <ComponentErrorBoundary>
+    <IntegrationsErrorBoundary>
       <div className="min-h-screen bg-[#0D1117] text-[#FFFFFF]" style={{ backgroundColor: '#0D1117', minHeight: '100vh' }}>
         {/* Debug info */}
         {process.env.NODE_ENV === 'development' && (
