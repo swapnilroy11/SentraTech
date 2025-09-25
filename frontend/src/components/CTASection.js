@@ -437,6 +437,9 @@ const CTASection = () => {
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       onBlur={(e) => {
+                        // Track form interaction
+                        trackFormInteraction('name', 'blur');
+                        
                         // Validate on blur for immediate feedback
                         const errorMessage = validateField('name', e.target.value);
                         if (errorMessage) {
