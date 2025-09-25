@@ -34,37 +34,42 @@ const FloatingNavigation = () => {
   };
 
   return (
-    <div 
-      className="hidden md:block"
-      style={{
-        position: 'fixed',
-        left: '24px',
-        top: '50vh', // Use viewport height for true centering
-        transform: 'translateY(-50%)',
-        zIndex: 9999,
-        pointerEvents: 'auto'
-      }}
-    >
-      {/* Toggle Button - Truly fixed to viewport center */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        data-floating-nav="true"
-        className={`w-16 h-16 bg-[rgba(0,255,65,0.2)] backdrop-blur-xl border-3 border-[rgba(0,255,65,0.6)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.35)] hover:scale-110 hover:border-[rgba(0,255,65,0.8)] shadow-2xl shadow-[rgba(0,255,65,0.4)] animate-pulse ${
-          isOpen ? 'rotate-180 bg-[rgba(0,255,65,0.3)] scale-110' : ''
-        }`}
-        aria-label="Toggle floating navigation menu"
+    <>
+      {/* Floating Navigation Button - Always Visible */}
+      <div 
+        className="floating-nav-container"
         style={{
-          position: 'relative',
-          zIndex: 'auto',
-          animationDuration: '3s'
+          position: 'fixed',
+          left: '20px',
+          top: '50vh',
+          transform: 'translateY(-50%)',
+          zIndex: 99999,
+          pointerEvents: 'auto',
+          display: window.innerWidth >= 768 ? 'block' : 'none'
         }}
       >
-        {isOpen ? (
-          <X size={24} className="text-[#00FF41] drop-shadow-lg" />
-        ) : (
-          <Menu size={24} className="text-[#00FF41] drop-shadow-lg" />
-        )}
-      </button>
+        {/* Toggle Button - Enhanced for maximum visibility */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          data-floating-nav="true"
+          className={`floating-nav-btn w-18 h-18 bg-[rgba(0,255,65,0.25)] backdrop-blur-2xl border-4 border-[rgba(0,255,65,0.7)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-125 hover:border-[rgba(0,255,65,0.9)] shadow-2xl shadow-[rgba(0,255,65,0.5)] ${
+            isOpen ? 'rotate-180 bg-[rgba(0,255,65,0.35)] scale-125' : ''
+          }`}
+          aria-label="Quick Navigation Menu"
+          style={{
+            position: 'relative',
+            zIndex: 100000,
+            width: '72px',
+            height: '72px',
+            animation: 'gentle-pulse 4s ease-in-out infinite'
+          }}
+        >
+          {isOpen ? (
+            <X size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+          ) : (
+            <Menu size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+          )}
+        </button>
 
       {/* Navigation Menu - Viewport-centered positioning */}
       <div
