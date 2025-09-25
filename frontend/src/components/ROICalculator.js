@@ -52,35 +52,93 @@ const ROICalculator = () => {
     setError(null);
   };
 
-  // Save ROI calculation to backend
-  const saveROICalculation = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      setSavedSuccessfully(false);
+  // Handle opening email modal
+  const handleGetROIReport = () => {
+    if (Object.keys(results).length === 0) {
+      setError('Please adjust inputs to generate calculations first.');
+      return;
+    }
+    setShowEmailModal(true);
+    setError(null);
+  };
 
+  // Handle email modal close
+  const closeEmailModal = () => {
+    setShowEmailModal(false);
+    setEmail('');
+    setError(null);
+  };
+
+  // Submit ROI report to Supabase
+  const submitROIReport = async (e) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      setIsSubmittingReport(true);
+      setError(null);
+
+      // Submit to Supabase
+      const result = await insertROIReport(email.trim(), results);
+      
+      if (result.success) {
+        setReportSubmitted(true);
+        setSavedSuccessfully(true);
+        setShowEmailModal(false);
+        setEmail('');
+        
+        // Also save to backend for analytics
+        await saveToBackend();
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setSavedSuccessfully(false);
+          setReportSubmitted(false);
+        }, 5000);
+      } else {
+        setError(result.message || 'Failed to submit ROI report request.');
+      }
+    } catch (err) {
+      console.error('Error submitting ROI report:', err);
+      setError('Failed to submit ROI report request. Please try again.');
+    } finally {
+      setIsSubmittingReport(false);
+    }
+  };
+
+  // Save to backend for analytics (optional)
+  const saveToBackend = async () => {
+    try {
       const requestData = {
         input_data: {
           agent_count: agentCount,
-          average_handle_time: ahtMinutes * 60, // convert to seconds
+          average_handle_time: ahtMinutes * 60,
           monthly_call_volume: results.callVolume || 0,
           cost_per_agent: results.tradCost ? results.tradCost / agentCount : 0
         },
         user_info: {
           timestamp: new Date().toISOString(),
-          source: 'optimized_four_country_calculator',
-          country: selectedCountry
+          source: 'four_country_roi_report',
+          country: selectedCountry,
+          email_provided: true
         }
       };
 
       await axios.post(`${BACKEND_URL}/api/roi/save`, requestData);
-      setSavedSuccessfully(true);
-      setTimeout(() => setSavedSuccessfully(false), 3000);
     } catch (err) {
-      console.error('Error saving ROI calculation:', err);
-      setError('Failed to save calculation. Please try again.');
-    } finally {
-      setIsLoading(false);
+      console.error('Backend save error (non-critical):', err);
+      // Don't show error to user as this is just for analytics
     }
   };
 
