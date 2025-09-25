@@ -27,7 +27,7 @@ const ROICalculator = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Market Research Constants - CALIBRATED FOR REALISTIC SCENARIOS
+  // Real-World Market Research Constants - Based on 2024-2025 Industry Data
   const MARKET_RESEARCH = {
     traditionalAgentCost: {
       us_dedicated: { min: 2600, max: 3400, avg: 2800 },
@@ -40,17 +40,15 @@ const ROICalculator = () => {
       industry_max: 12, // minutes
       industry_avg: 8 // minutes
     },
-    costPerCall: {
-      traditional_min: 3,
-      traditional_max: 15,
-      traditional_avg: 8.5
+    interactions: {
+      traditional_cost: 4.5, // $3-$6 per interaction (industry average)
+      ai_cost: 0.375, // $0.25-$0.50 per interaction (85-90% cost reduction)
+      cost_reduction_rate: 0.85 // 85% cost reduction (industry standard)
     },
     ai: {
-      twilioVoicePerMin: 0.15, // Calibrated to $0.15 per minute for realistic scenarios
-      aiProcessingPerCall: 0.75, // Calibrated to $0.75 per call for realistic costs
-      platformBaseFee: 2500, // Calibrated to $2,500 monthly platform fee
-      automationRate: 0.65, // 65% automation (more conservative)
-      costReductionRate: 0.50 // 50% cost reduction (realistic target)
+      automationRate: 0.80, // 80% automation (industry leading)
+      paybackPeriod: { min: 4, max: 6 }, // 4-6 months per research
+      platformBaseFee: 1500 // Monthly platform fee
     }
   };
 
