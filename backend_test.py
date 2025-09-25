@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend Testing for SentraTech Demo Request System
-Tests Airtable integration, Google Sheets fallback, enhanced logging, and source tracking
+Comprehensive API Load and Stability Testing for SentraTech Production Readiness
+Tests concurrent load, response times, error rates, and data integrity under stress
 """
 
 import requests
@@ -10,8 +10,13 @@ import time
 import asyncio
 import websockets
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, List
 import urllib.parse
+import threading
+import concurrent.futures
+import statistics
+import random
+import string
 
 # Backend URL from environment
 BACKEND_URL = "https://sentra-dark.preview.emergentagent.com/api"
