@@ -1,11 +1,40 @@
 // Google Analytics 4 Event Tracking Utilities
 
 /**
- * Track a custom GA4 event
+ * Check if analytics consent has been granted
+ * @returns {boolean} True if analytics consent is granted
+ */
+const hasAnalyticsConsent = () => {
+  try {
+    const consentData = localStorage.getItem('cookieConsent');
+    if (!consentData) {
+      return false; // No consent given yet
+    }
+
+    if (consentData === 'all') {
+      return true; // All cookies accepted
+    }
+
+    const consent = JSON.parse(consentData);
+    return consent?.analytics === true;
+  } catch (error) {
+    console.warn('Error checking analytics consent:', error);
+    return false; // Default to no consent on error
+  }
+};
+
+/**
+ * Track a custom GA4 event (only if consent is granted)
  * @param {string} eventName - The name of the event
  * @param {Object} eventParameters - Event parameters (optional)
  */
 export const trackEvent = (eventName, eventParameters = {}) => {
+  // Check consent before tracking
+  if (!hasAnalyticsConsent()) {
+    console.log(`GA4 event "${eventName}" not tracked - no analytics consent`);
+    return;
+  }
+
   if (typeof window.gtag === 'function') {
     window.gtag('event', eventName, {
       send_to: 'G-75HTVL1QME',
@@ -15,7 +44,7 @@ export const trackEvent = (eventName, eventParameters = {}) => {
     });
     
     // Optional: Log for debugging (remove in production)
-    console.log('GA4 Event tracked:', eventName, eventParameters);
+    console.log('GA4 Event tracked (with consent):', eventName, eventParameters);
   } else {
     console.warn('Google Analytics gtag not available for event:', eventName);
   }
