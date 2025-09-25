@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 
 // Components
 import Navigation from "./components/Navigation";
@@ -13,6 +14,7 @@ import ChatWidget from "./components/ChatWidget";
 import Analytics from "./components/Analytics";
 import ScrollToTop from "./components/ScrollToTop";
 import CookieBanner from "./components/CookieBanner";
+import SEOManager from "./components/SEOManager";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -24,6 +26,7 @@ import PricingPage from "./pages/PricingPage";
 import DemoRequestPage from "./pages/DemoRequestPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
