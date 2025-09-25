@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -6,7 +6,8 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, DollarSign, Clock, 
-  Users, BarChart3, Zap, Loader2, Target, Mail, X, PhoneCall
+  Users, BarChart3, Zap, Loader2, Target, Mail, X, PhoneCall,
+  ArrowRight, Sparkles, TrendingDown, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { calculateROI } from '../utils/calculatorLogic';
 import { BASE_COST, AI_COST, COUNTRIES } from '../utils/costBaselines';
@@ -15,12 +16,17 @@ import { supabase } from '../lib/supabaseClient';
 const ROICalculator = () => {
   // State Management
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [selectedMetric, setSelectedMetric] = useState('agents'); // 'agents' or 'totalCalls'
+  const [selectedMetric, setSelectedMetric] = useState('agents');
   const [agentCount, setAgentCount] = useState(50);
   const [ahtMinutes, setAhtMinutes] = useState(5);
   const [totalCalls, setTotalCalls] = useState(25000);
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+  
+  // Animation states
+  const [showBreakdown, setShowBreakdown] = useState(false);
+  const [animateResults, setAnimateResults] = useState(false);
   
   // Email modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -28,46 +34,58 @@ const ROICalculator = () => {
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  // Real-time calculation when inputs change
+  // Refs for animations
+  const resultsRef = useRef(null);
+
+  // Real-time calculation with debounce
   useEffect(() => {
-    try {
-      if (selectedMetric === 'agents') {
-        if (agentCount > 0 && ahtMinutes > 0) {
-          const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
-          setResults(metrics);
-          setError(null);
+    const timer = setTimeout(() => {
+      try {
+        setIsCalculating(true);
+        if (selectedMetric === 'agents') {
+          if (agentCount > 0 && ahtMinutes > 0) {
+            const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
+            setResults(metrics);
+            setAnimateResults(true);
+            setTimeout(() => setAnimateResults(false), 600);
+            setError(null);
+          }
+        } else {
+          if (totalCalls > 0) {
+            const metrics = calculateROI(selectedCountry, 1, 5, totalCalls);
+            const adjustedMetrics = {
+              ...metrics,
+              tradCost: totalCalls * metrics.tradPerCall,
+              aiCost: totalCalls * metrics.aiPerCall,
+              monthlySavings: totalCalls * (metrics.tradPerCall - metrics.aiPerCall),
+              annualSavings: totalCalls * (metrics.tradPerCall - metrics.aiPerCall) * 12,
+              roiPercent: metrics.tradPerCall > 0 ? parseInt(((totalCalls * (metrics.tradPerCall - metrics.aiPerCall) * 12) / (totalCalls * metrics.aiPerCall * 12) * 100).toFixed(0)) : 0,
+              costReduction: metrics.tradPerCall > 0 ? parseInt(((metrics.tradPerCall - metrics.aiPerCall) / metrics.tradPerCall * 100).toFixed(0)) : 0
+            };
+            setResults(adjustedMetrics);
+            setAnimateResults(true);
+            setTimeout(() => setAnimateResults(false), 600);
+            setError(null);
+          }
         }
-      } else {
-        if (totalCalls > 0) {
-          // For total calls mode, use 1 agent and calculate per-call metrics
-          const metrics = calculateROI(selectedCountry, 1, 5, totalCalls);
-          // Adjust costs to be total costs instead of per-agent costs
-          const adjustedMetrics = {
-            ...metrics,
-            tradCost: totalCalls * metrics.tradPerCall,
-            aiCost: totalCalls * metrics.aiPerCall,
-            monthlySavings: totalCalls * (metrics.tradPerCall - metrics.aiPerCall),
-            annualSavings: totalCalls * (metrics.tradPerCall - metrics.aiPerCall) * 12,
-            roiPercent: metrics.tradPerCall > 0 ? parseInt(((totalCalls * (metrics.tradPerCall - metrics.aiPerCall) * 12) / (totalCalls * metrics.aiPerCall * 12) * 100).toFixed(0)) : 0,
-            costReduction: metrics.tradPerCall > 0 ? parseInt(((metrics.tradPerCall - metrics.aiPerCall) / metrics.tradPerCall * 100).toFixed(0)) : 0
-          };
-          setResults(adjustedMetrics);
-          setError(null);
-        }
+      } catch (error) {
+        console.error('Error calculating ROI:', error);
+        setError('Calculation error. Please check your inputs.');
+      } finally {
+        setTimeout(() => setIsCalculating(false), 300);
       }
-    } catch (error) {
-      console.error('Error calculating ROI:', error);
-      setError('Calculation error. Please check your inputs.');
-    }
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [selectedCountry, selectedMetric, agentCount, ahtMinutes, totalCalls]);
 
-  // Handle country selection
+  // Handle country selection with animation
   const handleCountryChange = (country) => {
     setSelectedCountry(country);
     setError(null);
   };
 
-  // Handle metric toggle
+  // Handle metric toggle with smooth transition
   const handleMetricToggle = (metric) => {
     setSelectedMetric(metric);
     setError(null);
@@ -157,97 +175,146 @@ const ROICalculator = () => {
     return new Intl.NumberFormat('en-US').format(Math.round(number || 0));
   };
 
-  return (
-    <section id="roi-calculator" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
-      <div className="container mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
-            <Calculator className="mr-2" size={14} />
-            ROI Calculator
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 font-rajdhani text-white">
-            ROI Analysis – <span className="text-[#00FF41]">{selectedCountry}</span>
-          </h1>
-          <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed">
-            Discover your potential savings and return on investment with SentraTech's AI-powered customer support platform. Get personalized calculations based on your current operations.
-          </p>
-        </div>
+  const getSavingsColor = (savings) => {
+    if (savings >= 10000) return 'from-emerald-500 to-green-400';
+    if (savings >= 5000) return 'from-blue-500 to-cyan-400';
+    if (savings >= 1000) return 'from-purple-500 to-indigo-400';
+    return 'from-gray-500 to-slate-400';
+  };
 
-        {/* Country Selection */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-[rgb(26,28,30)] rounded-2xl p-2 border border-[rgba(255,255,255,0.1)]">
-            {COUNTRIES.map((country) => (
+  return (
+    <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+      </div>
+
+      <div className="container mx-auto px-6 py-20 relative z-10">
+        {/* Ultra-Modern Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center mb-6">
+            <Badge className="px-6 py-3 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-emerald-400 border-emerald-500/30 backdrop-blur-xl rounded-full text-lg font-medium">
+              <Sparkles className="mr-3" size={20} />
+              AI-Powered ROI Analysis
+            </Badge>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl font-black mb-6 bg-gradient-to-r from-white via-emerald-200 to-blue-200 bg-clip-text text-transparent leading-tight">
+            ROI Calculator
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed mb-8">
+            Discover your potential savings with SentraTech's next-generation AI customer support platform. 
+            <span className="text-emerald-400 font-semibold"> Real calculations, real results.</span>
+          </p>
+
+          {/* Country Selection - Glassmorphism Style */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex bg-white/5 backdrop-blur-xl rounded-3xl p-2 border border-white/10 shadow-2xl">
+              {COUNTRIES.map((country) => (
+                <button
+                  key={country.name}
+                  onClick={() => handleCountryChange(country.name)}
+                  className={`px-8 py-4 rounded-2xl font-semibold transition-all duration-500 flex items-center space-x-3 transform hover:scale-105 ${
+                    selectedCountry === country.name 
+                      ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl shadow-emerald-500/25' 
+                      : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <span className="text-2xl">{country.flag}</span>
+                  <div className="text-left">
+                    <div className="text-sm font-bold">{country.name}</div>
+                    <div className="text-xs opacity-75">${country.baseCost}/agent</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Metric Toggle - Neumorphism Style */}
+          <div className="flex justify-center">
+            <div className="inline-flex bg-slate-800/50 backdrop-blur-xl rounded-3xl p-2 border border-slate-700/50 shadow-inner">
               <button
-                key={country.name}
-                onClick={() => handleCountryChange(country.name)}
-                className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex items-center space-x-3 ${
-                  selectedCountry === country.name 
-                    ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg' 
-                    : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)]'
+                onClick={() => handleMetricToggle('agents')}
+                className={`px-10 py-5 rounded-2xl font-semibold transition-all duration-500 flex items-center space-x-3 ${
+                  selectedMetric === 'agents' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl shadow-emerald-500/25' 
+                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
                 }`}
               >
-                <span className="text-xl">{country.flag}</span>
-                <div>
-                  <div className="text-sm font-semibold">{country.name}</div>
-                  <div className="text-xs opacity-75">${country.baseCost}/agent/mo</div>
-                </div>
+                <Users size={20} />
+                <span>Agent Count & AHT</span>
               </button>
-            ))}
+              <button
+                onClick={() => handleMetricToggle('totalCalls')}
+                className={`px-10 py-5 rounded-2xl font-semibold transition-all duration-500 flex items-center space-x-3 ${
+                  selectedMetric === 'totalCalls' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl shadow-emerald-500/25' 
+                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                <PhoneCall size={20} />
+                <span>Total Calls/Month</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Metric Selection */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-[rgb(26,28,30)] rounded-2xl p-2 border border-[rgba(255,255,255,0.1)]">
-            <button
-              onClick={() => handleMetricToggle('agents')}
-              className={`px-8 py-4 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
-                selectedMetric === 'agents' 
-                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg' 
-                  : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)]'
-              }`}
-            >
-              <Users size={18} />
-              <span>Agent Count & AHT</span>
-            </button>
-            <button
-              onClick={() => handleMetricToggle('totalCalls')}
-              className={`px-8 py-4 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
-                selectedMetric === 'totalCalls' 
-                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg' 
-                  : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)]'
-              }`}
-            >
-              <PhoneCall size={18} />
-              <span>Total Calls/Month</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Two-Column Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 max-w-7xl mx-auto">
+        {/* Main Calculator Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 max-w-7xl mx-auto">
           
-          {/* Left Column - Inputs */}
-          <div className="space-y-6">
+          {/* Input Section - Left Side */}
+          <div className="xl:col-span-5 space-y-8">
             {selectedMetric === 'agents' ? (
               <>
-                {/* Agent Count Input */}
-                <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                      <Users size={24} className="text-[#00FF41]" />
-                      <span>Agent Count</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center mb-6">
-                      <div className="text-5xl font-bold text-[#00FF41] mb-2 font-rajdhani" style={{fontSize: '48px'}}>
+                {/* Agent Count Card */}
+                <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 hover:scale-105 hover:bg-white/10">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="p-4 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-2xl">
+                          <Users size={28} className="text-emerald-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-bold text-white mb-1">Agent Count</h3>
+                          <p className="text-slate-400">Current support team size</p>
+                        </div>
+                      </div>
+                      {isCalculating && (
+                        <div className="animate-spin">
+                          <Loader2 size={24} className="text-emerald-400" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="text-center mb-8">
+                      <div className={`text-7xl font-black bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-3 transition-all duration-500 ${animateResults ? 'scale-110' : ''}`}>
                         {agentCount}
                       </div>
-                      <div className="text-lg text-[rgb(161,161,170)]">agents</div>
+                      <div className="text-lg text-slate-400 font-medium">agents</div>
                     </div>
-                    <div className="relative">
+                    
+                    <div className="space-y-6">
+                      <div className="relative">
+                        <input
+                          type="range"
+                          min="1"
+                          max="1000"
+                          value={agentCount}
+                          onChange={(e) => setAgentCount(parseInt(e.target.value))}
+                          className="w-full h-3 bg-slate-700 rounded-full appearance-none cursor-pointer slider-gradient"
+                          style={{
+                            background: `linear-gradient(to right, #10b981 0%, #10b981 ${(agentCount/1000)*100}%, #374151 ${(agentCount/1000)*100}%, #374151 100%)`
+                          }}
+                        />
+                        <div className="flex justify-between text-sm text-slate-500 mt-2">
+                          <span>1</span>
+                          <span>1000</span>
+                        </div>
+                      </div>
+                      
                       <Input
                         type="number"
                         value={agentCount}
@@ -255,31 +322,56 @@ const ROICalculator = () => {
                           const value = Math.max(1, Math.min(1000, parseInt(e.target.value) || 1));
                           setAgentCount(value);
                         }}
-                        className="bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white text-xl py-6 text-center font-bold rounded-xl"
+                        className="bg-slate-800/50 border-slate-600 text-white text-2xl py-6 text-center font-bold rounded-2xl focus:border-emerald-500 focus:ring-emerald-500/20"
                         min="1"
                         max="1000"
-                        style={{fontSize: '24px'}}
                       />
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* AHT Input */}
-                <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                      <Clock size={24} className="text-[#00DDFF]" />
-                      <span>Average Handle Time</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center mb-6">
-                      <div className="text-5xl font-bold text-[#00DDFF] mb-2 font-rajdhani" style={{fontSize: '48px'}}>
+                {/* AHT Card */}
+                <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:scale-105 hover:bg-white/10">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="p-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl">
+                          <Clock size={28} className="text-blue-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-bold text-white mb-1">Handle Time</h3>
+                          <p className="text-slate-400">Average per call duration</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center mb-8">
+                      <div className={`text-7xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-3 transition-all duration-500 ${animateResults ? 'scale-110' : ''}`}>
                         {ahtMinutes}
                       </div>
-                      <div className="text-lg text-[rgb(161,161,170)]">minutes</div>
+                      <div className="text-lg text-slate-400 font-medium">minutes</div>
                     </div>
-                    <div className="relative">
+                    
+                    <div className="space-y-6">
+                      <div className="relative">
+                        <input
+                          type="range"
+                          min="1"
+                          max="30"
+                          step="0.5"
+                          value={ahtMinutes}
+                          onChange={(e) => setAhtMinutes(parseFloat(e.target.value))}
+                          className="w-full h-3 bg-slate-700 rounded-full appearance-none cursor-pointer"
+                          style={{
+                            background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(ahtMinutes/30)*100}%, #374151 ${(ahtMinutes/30)*100}%, #374151 100%)`
+                          }}
+                        />
+                        <div className="flex justify-between text-sm text-slate-500 mt-2">
+                          <span>1m</span>
+                          <span>30m</span>
+                        </div>
+                      </div>
+                      
                       <Input
                         type="number"
                         value={ahtMinutes}
@@ -287,33 +379,58 @@ const ROICalculator = () => {
                           const value = Math.max(1, Math.min(30, parseFloat(e.target.value) || 1));
                           setAhtMinutes(value);
                         }}
-                        className="bg-[rgb(38,40,42)] border-[#00DDFF]/50 text-white text-xl py-6 text-center font-bold rounded-xl"
+                        className="bg-slate-800/50 border-slate-600 text-white text-2xl py-6 text-center font-bold rounded-2xl focus:border-blue-500 focus:ring-blue-500/20"
                         min="1"
                         max="30"
                         step="0.5"
-                        style={{fontSize: '24px'}}
                       />
                     </div>
                   </CardContent>
                 </Card>
               </>
             ) : (
-              /* Total Calls Input */
-              <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                    <PhoneCall size={24} className="text-[#00FF41]" />
-                    <span>Total Calls/Month</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center mb-6">
-                    <div className="text-5xl font-bold text-[#00FF41] mb-2 font-rajdhani" style={{fontSize: '48px'}}>
+              /* Total Calls Card */
+              <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 hover:scale-105 hover:bg-white/10">
+                <CardContent className="p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="p-4 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl">
+                        <PhoneCall size={28} className="text-emerald-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-white mb-1">Monthly Calls</h3>
+                        <p className="text-slate-400">Total call volume per month</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center mb-8">
+                    <div className={`text-6xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent mb-3 transition-all duration-500 ${animateResults ? 'scale-110' : ''}`}>
                       {formatNumber(totalCalls)}
                     </div>
-                    <div className="text-lg text-[rgb(161,161,170)]">calls</div>
+                    <div className="text-lg text-slate-400 font-medium">calls</div>
                   </div>
-                  <div className="relative">
+                  
+                  <div className="space-y-6">
+                    <div className="relative">
+                      <input
+                        type="range"
+                        min="1000"
+                        max="1000000"
+                        step="1000"
+                        value={totalCalls}
+                        onChange={(e) => setTotalCalls(parseInt(e.target.value))}
+                        className="w-full h-3 bg-slate-700 rounded-full appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #10b981 0%, #10b981 ${((totalCalls-1000)/(1000000-1000))*100}%, #374151 ${((totalCalls-1000)/(1000000-1000))*100}%, #374151 100%)`
+                        }}
+                      />
+                      <div className="flex justify-between text-sm text-slate-500 mt-2">
+                        <span>1K</span>
+                        <span>1M</span>
+                      </div>
+                    </div>
+                    
                     <Input
                       type="number"
                       value={totalCalls}
@@ -321,164 +438,197 @@ const ROICalculator = () => {
                         const value = Math.max(1000, Math.min(1000000, parseInt(e.target.value) || 1000));
                         setTotalCalls(value);
                       }}
-                      className="bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white text-xl py-6 text-center font-bold rounded-xl"
+                      className="bg-slate-800/50 border-slate-600 text-white text-2xl py-6 text-center font-bold rounded-2xl focus:border-emerald-500 focus:ring-emerald-500/20"
                       min="1000"
                       max="1000000"
-                      style={{fontSize: '24px'}}
                     />
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Monthly Calls Display */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <BarChart3 size={20} className="text-[#00FF41]" />
-                  <span>Monthly Calls</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-[#00FF41] mb-2 font-rajdhani" style={{fontSize: '36px'}}>
-                    {formatNumber(selectedMetric === 'agents' ? results.callVolume : totalCalls)}
+            {/* Call Volume Display */}
+            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl border border-slate-600/50 rounded-3xl shadow-xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <BarChart3 size={24} className="text-emerald-400" />
+                    <div>
+                      <div className="text-white font-semibold text-lg">Monthly Volume</div>
+                      <div className="text-slate-400 text-sm">
+                        {selectedMetric === 'agents' 
+                          ? `${agentCount} agents × ${ahtMinutes}min × 8hrs × 22 days`
+                          : 'Direct input'
+                        }
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-sm text-[rgb(161,161,170)]">
-                    {selectedMetric === 'agents' 
-                      ? `${agentCount} agents × ${ahtMinutes}min AHT × 8hrs × 22 days`
-                      : 'Direct input'
-                    }
+                  <div className="text-3xl font-bold text-emerald-400">
+                    {formatNumber(selectedMetric === 'agents' ? results.callVolume : totalCalls)}
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Right Column - ROI Analysis Cards */}
-          <div className="space-y-6">
-            {/* Traditional Cost Card */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <DollarSign size={20} className="text-red-400" />
-                  <span>Traditional Cost</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* Results Section - Right Side */}
+          <div className="xl:col-span-7 space-y-8" ref={resultsRef}>
+            
+            {/* Main Savings Hero Card */}
+            <Card className={`relative overflow-hidden rounded-3xl border-0 shadow-2xl transition-all duration-700 hover:scale-105 ${animateResults ? 'animate-pulse' : ''}`}>
+              <div className={`absolute inset-0 bg-gradient-to-br ${getSavingsColor(results.monthlySavings)} opacity-90`}></div>
+              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+              <CardContent className="relative z-10 p-12">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-red-400 mb-2 font-rajdhani" style={{fontSize: '36px'}}>
-                    {formatCurrency(results.tradCost)}
+                  <div className="flex items-center justify-center mb-4">
+                    <Sparkles size={32} className="text-white mr-3" />
+                    <h2 className="text-3xl font-bold text-white">Monthly Savings</h2>
                   </div>
-                  <div className="text-lg text-[rgb(161,161,170)]">
-                    {formatCurrency(results.tradPerCall)}/call
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Cost Card */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <Zap size={20} className="text-[#00DDFF]" />
-                  <span>AI Cost</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-[#00DDFF] mb-2 font-rajdhani" style={{fontSize: '36px'}}>
-                    {formatCurrency(results.aiCost)}
-                  </div>
-                  <div className="text-lg text-[rgb(161,161,170)]">
-                    {formatCurrency(results.aiPerCall)}/call
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Monthly Savings Card */}
-            <Card className="bg-gradient-to-br from-[#00FF41]/15 to-[#00DDFF]/15 border-2 border-[#00FF41] rounded-3xl p-6 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <TrendingUp size={20} className="text-[#00FF41]" />
-                  <span>Monthly Savings</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center mb-4">
-                  <div className="text-5xl font-bold text-[#00FF41] mb-3 font-rajdhani" style={{fontSize: '48px'}}>
+                  
+                  <div className={`text-8xl md:text-9xl font-black text-white mb-6 transition-all duration-500 ${animateResults ? 'scale-110' : ''}`}>
                     {formatCurrency(results.monthlySavings)}
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-1">✓ Cost Reduction</div>
-                    <div className="text-2xl font-bold text-[#00FF41]" style={{fontSize: '24px'}}>
-                      {results.costReduction || 0}%
+                  
+                  <div className="grid grid-cols-2 gap-8 mt-8">
+                    <div className="text-center">
+                      <div className="text-white/80 text-lg mb-2">Cost Reduction</div>
+                      <div className="text-4xl font-black text-white flex items-center justify-center">
+                        <TrendingDown size={32} className="mr-2" />
+                        {results.costReduction || 0}%
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-[rgb(161,161,170)] mb-1">✓ ROI</div>
-                    <div className="text-2xl font-bold text-[#00DDFF]" style={{fontSize: '24px'}}>
-                      {results.roiPercent || 0}%
+                    <div className="text-center">
+                      <div className="text-white/80 text-lg mb-2">ROI</div>
+                      <div className="text-4xl font-black text-white flex items-center justify-center">
+                        <TrendingUp size={32} className="mr-2" />
+                        {results.roiPercent || 0}%
+                      </div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Annual Savings Card */}
-            <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-white flex items-center space-x-3">
-                  <Calculator size={20} className="text-[#00FF41]" />
-                  <span>Annual Savings</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+            {/* Cost Comparison Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Traditional Cost */}
+              <Card className="bg-gradient-to-br from-red-500/10 to-orange-500/10 backdrop-blur-xl border border-red-500/20 rounded-3xl shadow-xl hover:shadow-red-500/10 transition-all duration-500 hover:scale-105">
+                <CardContent className="p-8 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <DollarSign size={28} className="text-red-400 mr-3" />
+                    <h3 className="text-xl font-bold text-white">Traditional BPO</h3>
+                  </div>
+                  <div className="text-5xl font-black text-red-400 mb-4">
+                    {formatCurrency(results.tradCost)}
+                  </div>
+                  <div className="text-lg text-red-300/80">
+                    {formatCurrency(results.tradPerCall)}/call
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* AI Cost */}
+              <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl shadow-xl hover:shadow-blue-500/10 transition-all duration-500 hover:scale-105">
+                <CardContent className="p-8 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <Zap size={28} className="text-blue-400 mr-3" />
+                    <h3 className="text-xl font-bold text-white">SentraTech AI</h3>
+                  </div>
+                  <div className="text-5xl font-black text-blue-400 mb-4">
+                    {formatCurrency(results.aiCost)}
+                  </div>
+                  <div className="text-lg text-blue-300/80">
+                    {formatCurrency(results.aiPerCall)}/call
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Annual Projection */}
+            <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-xl hover:shadow-emerald-500/10 transition-all duration-500 hover:scale-105">
+              <CardContent className="p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <Calculator size={24} className="text-emerald-400" />
+                    <h3 className="text-2xl font-bold text-white">Annual Projection</h3>
+                  </div>
+                  <button
+                    onClick={() => setShowBreakdown(!showBreakdown)}
+                    className="text-slate-400 hover:text-white transition-colors"
+                  >
+                    {showBreakdown ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  </button>
+                </div>
+                
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-[#00FF41] mb-2 font-rajdhani" style={{fontSize: '36px'}}>
+                  <div className="text-6xl font-black bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
                     {formatCurrency(results.annualSavings)}
                   </div>
-                  <div className="text-sm text-[rgb(161,161,170)]">
-                    12 months projection
-                  </div>
+                  <div className="text-slate-400 text-lg">Total savings over 12 months</div>
                 </div>
+
+                {/* Expandable Breakdown */}
+                {showBreakdown && (
+                  <div className="mt-8 p-6 bg-slate-800/30 rounded-2xl border border-slate-700/30 transition-all duration-500">
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div>
+                        <div className="text-slate-400 text-sm mb-1">Market</div>
+                        <div className="text-emerald-400 font-bold text-lg">{selectedCountry}</div>
+                      </div>
+                      <div>
+                        <div className="text-slate-400 text-sm mb-1">
+                          {selectedMetric === 'agents' ? 'Agents' : 'Calls/Month'}
+                        </div>
+                        <div className="text-blue-400 font-bold text-lg">
+                          {selectedMetric === 'agents' ? agentCount : formatNumber(totalCalls)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
-            {/* CTA Button */}
-            <div className="text-center pt-6">
+            {/* CTA Section */}
+            <div className="text-center pt-8">
               <Button 
                 size="lg"
                 onClick={handleGetROIReport}
-                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-bold px-12 py-6 rounded-xl transform hover:scale-105 transition-all duration-200 text-xl font-rajdhani shadow-lg shadow-[#00FF41]/30"
+                className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold px-16 py-6 rounded-3xl transform hover:scale-110 transition-all duration-300 text-2xl shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/50"
               >
-                <Target className="mr-3" size={24} />
+                <Target className="mr-4" size={28} />
                 Get Detailed ROI Report
+                <ArrowRight className="ml-4" size={28} />
               </Button>
+              <p className="text-slate-400 text-lg mt-6">
+                Receive your personalized analysis within 24 hours
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Email Modal */}
+        {/* Ultra-Modern Email Modal */}
         {showEmailModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
-            <div className="bg-[rgb(26,28,30)] rounded-2xl p-8 max-w-md w-full mx-4 border border-[#00FF41]/30 shadow-2xl">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-3">
-                  <Mail size={20} className="text-[#00FF41]" />
-                  <h3 className="text-xl font-bold text-white">Get Your ROI Report</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xl">
+            <div className="bg-white/10 backdrop-blur-2xl rounded-3xl p-10 max-w-lg w-full mx-4 border border-white/20 shadow-2xl transform animate-in slide-in-from-bottom duration-500">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-2xl">
+                    <Mail size={24} className="text-emerald-400" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-white">Get Your ROI Report</h3>
                 </div>
-                <button onClick={closeEmailModal} className="text-[rgb(161,161,170)] hover:text-white">
-                  <X size={20} />
+                <button
+                  onClick={closeEmailModal}
+                  className="text-slate-400 hover:text-white transition-colors hover:bg-white/10 rounded-xl p-2"
+                >
+                  <X size={24} />
                 </button>
               </div>
 
-              <form onSubmit={submitROIReport}>
-                <div className="mb-6">
-                  <Label htmlFor="email" className="text-white text-lg font-semibold mb-3 block">
+              <form onSubmit={submitROIReport} className="space-y-8">
+                <div>
+                  <Label htmlFor="email" className="text-white text-xl font-semibold mb-4 block">
                     Email Address
                   </Label>
                   <Input
@@ -487,87 +637,96 @@ const ROICalculator = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your.email@company.com"
-                    className="bg-[rgb(38,40,42)] border-[#00FF41]/50 text-white rounded-xl text-lg py-4 w-full"
+                    className="bg-white/10 border-white/20 text-white rounded-2xl text-lg py-4 w-full focus:border-emerald-500 focus:ring-emerald-500/20 backdrop-blur-xl"
                     required
                     autoFocus
                   />
                 </div>
 
-                <div className="bg-[rgb(38,40,42)] rounded-xl p-4 mb-6">
-                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Your ROI Report Summary:</div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-xl">
+                  <div className="text-slate-300 text-lg mb-4 font-semibold">Your ROI Summary:</div>
+                  <div className="grid grid-cols-2 gap-6">
                     <div>
-                      <div className="text-white font-semibold">Country:</div>
-                      <div className="text-[#00FF41]">{selectedCountry}</div>
+                      <div className="text-slate-400 text-sm mb-1">Market</div>
+                      <div className="text-emerald-400 font-bold text-lg">{selectedCountry}</div>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">
-                        {selectedMetric === 'agents' ? 'Agents:' : 'Calls:'}
+                      <div className="text-slate-400 text-sm mb-1">
+                        {selectedMetric === 'agents' ? 'Agents' : 'Monthly Calls'}
                       </div>
-                      <div className="text-[#00DDFF]">
+                      <div className="text-blue-400 font-bold text-lg">
                         {selectedMetric === 'agents' ? agentCount : formatNumber(totalCalls)}
                       </div>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">Monthly Savings:</div>
-                      <div className="text-[#00FF41] font-bold">{formatCurrency(results.monthlySavings)}</div>
+                      <div className="text-slate-400 text-sm mb-1">Monthly Savings</div>
+                      <div className="text-emerald-400 font-bold text-lg">{formatCurrency(results.monthlySavings)}</div>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">ROI:</div>
-                      <div className="text-[#00DDFF] font-bold">{results.roiPercent || 0}%</div>
+                      <div className="text-slate-400 text-sm mb-1">ROI</div>
+                      <div className="text-blue-400 font-bold text-lg">{results.roiPercent || 0}%</div>
                     </div>
                   </div>
                 </div>
 
                 {error && (
-                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                  <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-2xl text-red-400 text-sm backdrop-blur-xl">
                     {error}
                   </div>
                 )}
 
-                <div className="flex space-x-3">
+                <div className="flex space-x-4">
                   <Button
                     type="button"
                     onClick={closeEmailModal}
                     variant="outline"
-                    className="flex-1 border-[rgb(63,63,63)] text-white hover:bg-[rgb(38,40,42)]"
+                    className="flex-1 border-white/20 text-white hover:bg-white/10 rounded-2xl py-3 backdrop-blur-xl"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={isSubmittingReport}
-                    className="flex-1 bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold"
+                    className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold rounded-2xl py-3 transform hover:scale-105 transition-all duration-300"
                   >
                     {isSubmittingReport ? (
                       <>
-                        <Loader2 className="animate-spin mr-2" size={16} />
+                        <Loader2 className="animate-spin mr-2" size={18} />
                         Submitting...
                       </>
                     ) : (
-                      'Send ROI Report'
+                      <>
+                        <ArrowRight className="mr-2" size={18} />
+                        Send ROI Report
+                      </>
                     )}
                   </Button>
                 </div>
               </form>
 
-              <p className="text-[rgb(161,161,170)] text-xs mt-4 text-center">
-                You'll receive a detailed ROI analysis within 24 hours
+              <p className="text-slate-400 text-sm mt-6 text-center">
+                You'll receive a comprehensive ROI analysis within 24 hours
               </p>
             </div>
           </div>
         )}
 
-        {/* Success Message */}
+        {/* Success Toast */}
         {reportSubmitted && (
-          <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-lg">
-            ✅ ROI report request submitted successfully!
+          <div className="fixed top-8 right-8 z-50 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-2xl shadow-2xl transform animate-in slide-in-from-right duration-500 backdrop-blur-xl">
+            <div className="flex items-center space-x-3">
+              <Sparkles size={20} />
+              <span className="font-semibold">ROI report request submitted successfully!</span>
+            </div>
           </div>
         )}
 
-        {error && (
-          <div className="fixed bottom-4 right-4 z-50 bg-red-500 text-white px-6 py-4 rounded-xl shadow-lg max-w-md">
-            ❌ {error}
+        {error && !showEmailModal && (
+          <div className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-4 rounded-2xl shadow-2xl max-w-md transform animate-in slide-in-from-bottom duration-500 backdrop-blur-xl">
+            <div className="flex items-center space-x-3">
+              <X size={20} />
+              <span className="font-semibold">{error}</span>
+            </div>
           </div>
         )}
       </div>
