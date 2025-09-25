@@ -155,6 +155,10 @@ const CTASection = () => {
         }));
         setError('Please fix the highlighted fields below');
       });
+      
+      // Track form validation errors in GA4
+      trackFormErrors(newErrors);
+      
       console.log('Validation failed, returning false'); // Debug log
       return false;
     } else {
