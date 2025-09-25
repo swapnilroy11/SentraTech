@@ -34,10 +34,10 @@ export function calculateROI(country, agentCount, ahtMinutes, totalCalls = null)
     };
   }
   
-  // Determine callVolume
-  const callVolume = totalCalls 
-    ? totalCalls 
-    : Math.floor(agentCount * ((8*60)/ahtMinutes) * 22);
+  // Calculate monthly call volume using specified formula
+  const workMinutesPerMonth = 8 * 60 * 22;  // 8 hours * 60 minutes * 22 working days
+  const callsPerAgent = workMinutesPerMonth / ahtMinutes;
+  const callVolume = Math.floor(agentCount * callsPerAgent);
 
   // Traditional cost
   const tradCost = agentCount * BASE_COST[country];
