@@ -1231,18 +1231,24 @@ async def get_status_checks():
 
 # ROI Calculator Routes
 def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
-    """Calculate ROI metrics based on India's baseline BPO costs"""
+    """Calculate ROI metrics with updated cost baselines and 30% profit margin"""
     
-    # India Baseline BPO Cost Constants
-    BASE_AGENT_COST = 500  # $ per agent per month (India BPO baseline)
+    # Multi-Country BPO Cost Baselines (unchanged)
+    BASE_COST = {
+        'Bangladesh': 300,
+        'India': 500,
+        'Philippines': 600,
+        'Vietnam': 550
+    }
+    
+    # SentraTech AI infrastructure cost (30% profit margin): $154×1.3 ≈ $200/agent·month
+    AI_COST_PER_AGENT = 200
+    AUTOMATION_RATE = 0.70  # 70% automation rate
+    
+    # Use India baseline for traditional cost calculation
+    BASE_AGENT_COST = BASE_COST['India']
     TECHNOLOGY_COST_PER_AGENT = 50  # software/tools estimate per agent
     INFRASTRUCTURE_COST_PER_AGENT = 30  # office/infrastructure estimate per agent
-    
-    # AI Cost Constants  
-    TWILIO_COST_PER_MIN = 0.018  # $0.018 per minute
-    AI_PROCESS_COST_PER_MIN = 0.05  # $0.05 per minute
-    PLATFORM_BASE_FEE = 297  # base infrastructure fee
-    AUTOMATION_RATE = 0.80  # 80% automation rate
     
     # Traditional BPO Monthly Cost Calculation
     traditional_labor_cost = input_data.agent_count * BASE_AGENT_COST
@@ -1250,12 +1256,13 @@ def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
     traditional_infrastructure_cost = input_data.agent_count * INFRASTRUCTURE_COST_PER_AGENT
     traditional_total_cost = traditional_labor_cost + traditional_technology_cost + traditional_infrastructure_cost
     
-    # AI-Powered Monthly Cost Calculation
-    avg_call_duration_min = input_data.average_handle_time / 60  # convert seconds to minutes
-    twilio_cost = input_data.monthly_call_volume * avg_call_duration_min * TWILIO_COST_PER_MIN
-    ai_processing_cost = input_data.monthly_call_volume * avg_call_duration_min * AI_PROCESS_COST_PER_MIN
-    ai_platform_fee = PLATFORM_BASE_FEE
-    ai_total_cost = twilio_cost + ai_processing_cost + ai_platform_fee
+    # AI-Powered Monthly Cost Calculation (simplified to per-agent cost)
+    ai_total_cost = input_data.agent_count * AI_COST_PER_AGENT
+    
+    # For backward compatibility, distribute AI cost across components
+    ai_platform_fee = ai_total_cost * 0.3  # 30% platform fee
+    ai_processing_cost = ai_total_cost * 0.5  # 50% processing cost
+    twilio_cost = ai_total_cost * 0.2  # 20% voice cost
     
     # ROI and Savings Calculations
     monthly_savings = traditional_total_cost - ai_total_cost
@@ -1266,7 +1273,7 @@ def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
     roi_percentage = (annual_savings / (ai_total_cost * 12) * 100) if ai_total_cost > 0 else 0
     payback_period_months = (ai_total_cost * 12) / monthly_savings if monthly_savings > 0 else float('inf')
     
-    # Ensure realistic ranges for India BPO baseline
+    # Ensure realistic ranges
     cost_reduction_percentage = max(0, cost_reduction_percentage)  # Can be negative for low volumes
     roi_percentage = max(0, roi_percentage) if monthly_savings > 0 else 0
     payback_period_months = min(240, max(0, payback_period_months)) if monthly_savings > 0 else float('inf')
