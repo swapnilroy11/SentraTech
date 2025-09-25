@@ -1,7 +1,8 @@
 // SentraTech Real User Monitoring (RUM) & Core Web Vitals
 // Enterprise-grade performance tracking and optimization
 
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+// Import web-vitals functions (with fallback for older versions)
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals/attribution';
 
 class PerformanceMonitor {
   constructor() {
