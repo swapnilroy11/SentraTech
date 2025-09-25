@@ -448,7 +448,10 @@ const CTASection = () => {
                     )}
                   </div>
                   <div>
+                    <label htmlFor="demo-email" className="sr-only">Work Email (required)</label>
                     <Input
+                      id="demo-email"
+                      name="email"
                       type="email"
                       placeholder="Work Email *"
                       value={formData.email}
@@ -464,6 +467,9 @@ const CTASection = () => {
                         }
                       }}
                       required
+                      aria-required="true"
+                      aria-invalid={fieldErrors.email ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.email ? "email-error" : undefined}
                       className={`bg-[rgb(38,40,42)] border text-white placeholder-[rgb(161,161,170)] rounded-xl ${
                         fieldErrors.email 
                           ? 'border-red-500 focus:border-red-500' 
@@ -471,7 +477,14 @@ const CTASection = () => {
                       }`}
                     />
                     {fieldErrors.email && (
-                      <p className="text-red-400 text-xs mt-1 ml-1">{fieldErrors.email}</p>
+                      <p 
+                        id="email-error"
+                        className="text-red-400 text-xs mt-1 ml-1"
+                        role="alert"
+                        aria-live="polite"
+                      >
+                        {fieldErrors.email}
+                      </p>
                     )}
                   </div>
                 </div>
