@@ -2374,8 +2374,67 @@ async def update_user_status(
         logger.error(f"Error updating user status: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update user status")
 
+# Security Headers Middleware
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        
+        # Add security headers
+        security_headers = {
+            # HTTP Strict Transport Security (HSTS)
+            "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+            
+            # Content Security Policy (CSP) - Blocking inline scripts
+            "Content-Security-Policy": (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://us.i.posthog.com; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+                "font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: https:; "
+                "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://us.i.posthog.com wss: https:; "
+                "frame-ancestors 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'"
+            ),
+            
+            # X-Frame-Options (prevent clickjacking)
+            "X-Frame-Options": "DENY",
+            
+            # X-Content-Type-Options (prevent MIME sniffing)
+            "X-Content-Type-Options": "nosniff",
+            
+            # X-XSS-Protection (XSS filtering)
+            "X-XSS-Protection": "1; mode=block",
+            
+            # Referrer Policy (control referrer information)
+            "Referrer-Policy": "strict-origin-when-cross-origin",
+            
+            # Permissions Policy (control browser features)
+            "Permissions-Policy": (
+                "camera=(), microphone=(), geolocation=(), "
+                "payment=(), usb=(), magnetometer=(), gyroscope=(), "
+                "accelerometer=(), ambient-light-sensor=()"
+            ),
+            
+            # Additional security headers
+            "X-Permitted-Cross-Domain-Policies": "none",
+            "Cross-Origin-Embedder-Policy": "require-corp",
+            "Cross-Origin-Opener-Policy": "same-origin",
+            "Cross-Origin-Resource-Policy": "cross-origin"
+        }
+        
+        # Apply all security headers
+        for header, value in security_headers.items():
+            response.headers[header] = value
+        
+        return response
+
+
 # Include the router in the main app
 app.include_router(api_router)
+
+# Add security middleware
+app.add_middleware(SecurityHeadersMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
