@@ -221,7 +221,8 @@ class ROIInput(BaseModel):
     agent_count: int = Field(..., gt=0, le=1000, description="Current agent count (1-1000)")
     average_handle_time: int = Field(..., gt=60, le=1800, description="Average handle time in seconds (1-30 minutes)") 
     monthly_call_volume: int = Field(..., gt=0, description="Monthly call volume (must be positive)")
-    cost_per_agent: float = Field(..., gt=500, le=10000, description="Cost per agent per month in USD ($500-$10,000)")
+    cost_per_agent: float = Field(..., gt=200, le=10000, description="Cost per agent per month in USD ($200-$10,000)")
+    country: Optional[str] = Field(None, description="Country for cost baseline (Bangladesh, India, Philippines, Vietnam)")
     
 class ROIResults(BaseModel):
     # Traditional cost breakdown
