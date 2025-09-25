@@ -92,8 +92,6 @@ export const insertDemoRequest = async (formData) => {
       message: 'Failed to submit demo request. Please try again.'
     };
   }
-};
-
 export default supabase;
 
 export default supabase;
