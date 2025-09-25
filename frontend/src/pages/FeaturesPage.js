@@ -22,10 +22,35 @@ const FeaturesPage = () => {
               Features & <span className="text-[#00FF41]">Customer Journey</span>
             </h1>
             
-            <p className="text-base text-[rgb(161,161,170)] mb-6 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
               Discover how our AI-powered platform transforms customer support through intelligent automation, 
               real-time analytics, and seamless integrations.
             </p>
+
+            {/* Performance Stats Cards - Mimicking Case Studies Page Design */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
+              {[
+                { value: '47ms', label: 'AI Response Time' },
+                { value: '70%', label: 'Automation Rate' },
+                { value: '96%', label: 'First Call Resolution' },
+                { value: '4.2min', label: 'Average Handle Time' }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6"
+                >
+                  <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-[rgb(161,161,170)]">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
