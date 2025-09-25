@@ -187,7 +187,7 @@ const FeaturesPage = () => {
       </section>
 
       {/* Enhanced CTA Section - Better breathing room */}
-      <section className="py-10 bg-[#0A0A0A] relative">
+      <section className="py-10 bg-[#0A0A0A] relative" id="features-cta">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
