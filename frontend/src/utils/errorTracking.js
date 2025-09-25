@@ -41,10 +41,9 @@ class ErrorTracker {
   captureMessage() {}
   setUserContext() {}
   setExtraContext() {}
-  getErrorStats() { return {}; }
 }
 
-// Initialize lightweight error tracker
+// Initialize lightweight error tracker - single declaration
 const errorTracker = new ErrorTracker();
 
 // Export for external access
