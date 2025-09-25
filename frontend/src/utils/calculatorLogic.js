@@ -92,25 +92,10 @@ export function isValidCountry(country) {
   return country && BASE_COST.hasOwnProperty(country);
 }
 
-/**
- * Calculate break-even point for AI vs Traditional BPO
- * @param {string} country - Selected country
- * @returns {number} Agent count where AI becomes cost-effective
- */
-export function calculateBreakeven(country) {
-  if (!isValidCountry(country)) return 0;
-  
-  const traditionalCostPerAgent = BASE_COST[country];
-  
-  // AI is cost-effective when AI_COST < traditionalCostPerAgent
-  return traditionalCostPerAgent > AI_COST ? 1 : 0;
-}
-
 export default {
   calculateROI,
   getCountries,
   isValidCountry,
-  calculateBreakeven,
   BASE_COST,
   AI_COST
 };
