@@ -732,6 +732,33 @@ Keep responses concise and focused on how SentraTech can solve their customer su
 async def root():
     return {"message": "Hello World"}
 
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint with performance metrics"""
+    start_time = time.time()
+    
+    try:
+        # Quick database ping
+        await client.admin.command('ping')
+        
+        # Get cache statistics
+        cache_stats = SpecializedCaches.get_all_stats()
+        
+        response_time = (time.time() - start_time) * 1000
+        
+        return {
+            "status": "healthy",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "response_time_ms": round(response_time, 2),
+            "database": "connected",
+            "cache_stats": cache_stats,
+            "version": "1.0.0-optimized"
+        }
+    except Exception as e:
+        response_time = (time.time() - start_time) * 1000
+        logger.error(f"Health check failed after {response_time:.2f}ms: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
+
 # Google Sheets Service
 class AirtableService:
     """Airtable integration service for demo requests and analytics"""
