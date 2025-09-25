@@ -548,9 +548,12 @@ class PerformanceMonitor {
       recommendations.push('Optimize Largest Contentful Paint - consider image optimization, server response time, and render-blocking resources');
     }
 
-    // Check FID
+    // Check FID or INP
     if (this.metrics.FID && this.metrics.FID.value > 300) {
       recommendations.push('Reduce First Input Delay - minimize JavaScript execution time and use code splitting');
+    }
+    if (this.metrics.INP && this.metrics.INP.value > 500) {
+      recommendations.push('Improve Interaction to Next Paint - optimize event handlers and reduce main thread blocking');
     }
 
     // Check CLS
