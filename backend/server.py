@@ -1231,55 +1231,64 @@ async def get_status_checks():
 
 # ROI Calculator Routes
 def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
-    """Calculate ROI metrics based on input parameters"""
+    """Calculate ROI metrics based on market research and real-world data"""
     
-    # Current costs
-    monthly_volume = input_data.call_volume
-    current_monthly_cost = monthly_volume * input_data.current_cost_per_call
-    current_annual_cost = current_monthly_cost * 12
+    # Market Research Constants
+    TECHNOLOGY_COST_PER_AGENT = 200  # per month
+    INFRASTRUCTURE_COST_PER_AGENT = 150  # per month (office, utilities)
+    TWILIO_VOICE_PER_MIN = 0.018  # $0.018 per minute
+    AI_PROCESSING_PER_CALL = 0.05  # AI inference cost per call
+    PLATFORM_BASE_FEE = 297  # Monthly Twilio infrastructure
+    AUTOMATION_RATE = 0.75  # 75% automation based on research
     
-    # SentraTech improvements (these are based on typical performance gains)
-    automation_rate = 0.7  # 70% automation
-    aht_reduction = 0.35   # 35% AHT reduction
-    cost_reduction = 0.45  # 45% cost reduction
+    # Traditional BPO Cost Calculation
+    traditional_labor_cost = input_data.agent_count * input_data.cost_per_agent
+    traditional_technology_cost = input_data.agent_count * TECHNOLOGY_COST_PER_AGENT
+    traditional_infrastructure_cost = input_data.agent_count * INFRASTRUCTURE_COST_PER_AGENT
+    traditional_total_cost = traditional_labor_cost + traditional_technology_cost + traditional_infrastructure_cost
     
-    # New costs with SentraTech
-    new_cost_per_call = input_data.current_cost_per_call * (1 - cost_reduction)
-    new_monthly_cost = monthly_volume * new_cost_per_call
-    new_annual_cost = new_monthly_cost * 12
+    # AI Cost Calculation
+    avg_call_duration_min = input_data.average_handle_time / 60  # convert seconds to minutes
+    ai_voice_cost = input_data.monthly_call_volume * avg_call_duration_min * TWILIO_VOICE_PER_MIN
+    ai_processing_cost = input_data.monthly_call_volume * AI_PROCESSING_PER_CALL
+    ai_platform_fee = PLATFORM_BASE_FEE
+    ai_total_cost = ai_voice_cost + ai_processing_cost + ai_platform_fee
     
-    # Savings calculations
-    monthly_savings = current_monthly_cost - new_monthly_cost
-    annual_savings = current_annual_cost - new_annual_cost
+    # Savings and ROI Calculations
+    monthly_savings = traditional_total_cost - ai_total_cost
+    annual_savings = monthly_savings * 12
+    cost_reduction_percentage = (monthly_savings / traditional_total_cost * 100) if traditional_total_cost > 0 else 0
+    roi_percentage = (annual_savings / (ai_total_cost * 12) * 100) if ai_total_cost > 0 else 0
+    payback_period_months = (ai_total_cost * 12) / monthly_savings if monthly_savings > 0 else float('inf')
     
-    # Time savings
-    new_aht = input_data.average_handle_time * (1 - aht_reduction)
-    time_saved_per_call = input_data.average_handle_time - new_aht
-    total_time_saved_monthly = (time_saved_per_call * monthly_volume) / 3600  # hours
+    # Per-call metrics
+    traditional_cost_per_call = traditional_total_cost / input_data.monthly_call_volume if input_data.monthly_call_volume > 0 else 0
+    ai_cost_per_call = ai_total_cost / input_data.monthly_call_volume if input_data.monthly_call_volume > 0 else 0
     
-    # Automation metrics
-    automated_calls = monthly_volume * automation_rate
-    human_assisted_calls = monthly_volume * (1 - automation_rate)
-    
-    # ROI calculation
-    roi = (annual_savings / new_annual_cost) * 100 if new_annual_cost > 0 else 0
+    # Volume metrics 
+    automated_calls = int(input_data.monthly_call_volume * AUTOMATION_RATE)
+    human_assisted_calls = input_data.monthly_call_volume - automated_calls
     
     return ROIResults(
-        current_monthly_cost=current_monthly_cost,
-        current_annual_cost=current_annual_cost,
-        new_monthly_cost=new_monthly_cost,
-        new_annual_cost=new_annual_cost,
-        monthly_savings=monthly_savings,
-        annual_savings=annual_savings,
-        cost_reduction_percent=cost_reduction * 100,
-        new_aht=new_aht,
-        time_saved_per_call=time_saved_per_call,
-        total_time_saved_monthly=total_time_saved_monthly,
-        aht_reduction_percent=aht_reduction * 100,
+        traditional_labor_cost=traditional_labor_cost,
+        traditional_technology_cost=traditional_technology_cost,
+        traditional_infrastructure_cost=traditional_infrastructure_cost,
+        traditional_total_cost=traditional_total_cost,
+        ai_voice_cost=ai_voice_cost,
+        ai_processing_cost=ai_processing_cost,
+        ai_platform_fee=ai_platform_fee,
+        ai_total_cost=ai_total_cost,
+        monthly_savings=max(0, monthly_savings),
+        annual_savings=max(0, annual_savings),
+        cost_reduction_percentage=max(0, cost_reduction_percentage),
+        roi_percentage=max(0, roi_percentage),
+        payback_period_months=min(240, max(0, payback_period_months)),  # Cap at 20 years
+        traditional_cost_per_call=traditional_cost_per_call,
+        ai_cost_per_call=ai_cost_per_call,
+        call_volume_processed=input_data.monthly_call_volume,
         automated_calls=automated_calls,
         human_assisted_calls=human_assisted_calls,
-        automation_rate=automation_rate * 100,
-        roi=roi
+        automation_rate=AUTOMATION_RATE * 100
     )
 
 @api_router.post("/roi/calculate", response_model=ROIResults)
