@@ -168,7 +168,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between p-4 border-b border-[#2a2a2a]">
             <SentraTechLogo className="h-8" />
             <button
-              onClick={handleMenuToggle}
+              onClick={handleMenuClose}
               aria-label="Close navigation menu"
               className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors"
             >
