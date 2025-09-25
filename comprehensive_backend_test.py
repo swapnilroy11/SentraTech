@@ -226,9 +226,9 @@ class ComprehensiveBackendTester:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get("status") == "success" and result.get("request_id"):
+                if result.get("status") == "success" and "requestId" in result:
                     self.log_test("Demo Request - Form Data Endpoint", True, 
-                                f"Form submission successful, Request ID: {result['request_id']}")
+                                f"Form submission successful, Request ID: {result['requestId']}")
                 else:
                     self.log_test("Demo Request - Form Data Endpoint", False, 
                                 f"Invalid form response: {result}")
