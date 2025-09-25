@@ -68,15 +68,39 @@ const IntegrationsShowcase = () => {
     return filtered;
   }, [activeCategory, searchTerm, data]);
 
-  // Component lifecycle logging
-  useEffect(() => {
-    console.log('IntegrationsShowcase: Component mounting');
-    setIsLoaded(true);
-    
-    return () => {
-      console.log('IntegrationsShowcase: Component unmounting');
-    };
-  }, []);
+  // Loading state
+  if (!isLoaded || !data) {
+    return (
+      <div className="py-20 bg-[#0D1117] flex items-center justify-center" style={{ backgroundColor: '#0D1117' }}>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[rgba(0,255,65,0.3)] rounded-full animate-spin border-t-[#00FF41] mx-auto mb-6"></div>
+          <h3 className="text-2xl font-bold text-[#00FF41] mb-2">Loading Integrations</h3>
+          <p className="text-[#C9D1D9]">Preparing your integration showcase...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state - if data failed to load
+  if (data.length === 0) {
+    return (
+      <div className="py-20 bg-[#0D1117] flex items-center justify-center" style={{ backgroundColor: '#0D1117' }}>
+        <div className="text-center">
+          <div className="w-16 h-16 bg-[rgba(255,107,107,0.1)] rounded-full flex items-center justify-center mx-auto mb-6">
+            <ExternalLink size={32} className="text-[#FF6B6B]" />
+          </div>
+          <h3 className="text-2xl font-bold text-[#FFFFFF] mb-2">No Integrations Available</h3>
+          <p className="text-[#C9D1D9] mb-6">We're working on loading the integration data.</p>
+          <Button 
+            onClick={() => window.location.reload()}
+            className="bg-[#00FF41] text-[#0D1117] hover:bg-[#00e83a]"
+          >
+            Retry Loading
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const integrationCategories = [
     { id: 'all', name: 'All Integrations', icon: Globe },
