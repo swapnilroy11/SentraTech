@@ -48,6 +48,9 @@ function App() {
           {/* Global Chat Widget */}
           <ChatWidget />
           
+          {/* Cookie Consent Banner */}
+          <CookieBanner />
+          
           {/* Global Navigation */}
           <Navigation />
           
