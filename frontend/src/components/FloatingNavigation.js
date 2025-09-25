@@ -34,18 +34,19 @@ const FloatingNavigation = () => {
   };
 
   return (
-    <div className="fixed left-6 top-1/2 transform -translate-y-1/2 z-40">
-      {/* Toggle Button */}
+    <div className="fixed left-6 top-1/2 transform -translate-y-1/2 z-50">
+      {/* Toggle Button - Enhanced visibility */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-12 h-12 bg-[rgba(0,255,65,0.1)] backdrop-blur-md border border-[rgba(0,255,65,0.3)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.2)] hover:scale-110 ${
-          isOpen ? 'rotate-180' : ''
+        className={`w-14 h-14 bg-[rgba(0,255,65,0.15)] backdrop-blur-xl border-2 border-[rgba(0,255,65,0.4)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.25)] hover:scale-110 hover:border-[rgba(0,255,65,0.6)] shadow-lg shadow-[rgba(0,255,65,0.2)] ${
+          isOpen ? 'rotate-180 bg-[rgba(0,255,65,0.25)]' : ''
         }`}
+        aria-label="Toggle floating navigation menu"
       >
         {isOpen ? (
-          <X size={20} className="text-[#00FF41]" />
+          <X size={22} className="text-[#00FF41]" />
         ) : (
-          <Menu size={20} className="text-[#00FF41]" />
+          <Menu size={22} className="text-[#00FF41]" />
         )}
       </button>
 
