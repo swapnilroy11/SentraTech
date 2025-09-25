@@ -1137,6 +1137,43 @@ class EmailService:
             logger.error(f"Error sending internal notification: {str(e)}")
             return {"success": False, "message": f"Internal notification error: {str(e)}"}
 
+# Performance optimization helper functions
+async def store_demo_request_optimized(demo_request: DemoRequest, reference_id: str):
+    """Optimized database storage for demo requests"""
+    try:
+        demo_record = {
+            "id": reference_id,
+            "email": demo_request.email,
+            "name": demo_request.name,
+            "company": demo_request.company,
+            "phone": demo_request.phone,
+            "call_volume": demo_request.call_volume,
+            "message": demo_request.message,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "source": "website_form_optimized"
+        }
+        await db.demo_requests.insert_one(demo_record)
+        return {"success": True}
+    except Exception as e:
+        logger.error(f"Optimized database storage failed: {str(e)}")
+        raise e
+
+async def fallback_to_sheets(demo_request: DemoRequest, reference_id: str):
+    """Background task for Google Sheets fallback"""
+    try:
+        sheets_result = await sheets_service.submit_demo_request(demo_request)
+        if sheets_result.get("success"):
+            logger.info(f"✅ Sheets fallback successful for {reference_id}")
+            # Update database record with sheets info
+            await db.demo_requests.update_one(
+                {"id": reference_id},
+                {"$set": {"sheets_fallback": sheets_result, "sheets_timestamp": datetime.now(timezone.utc).isoformat()}}
+            )
+        else:
+            logger.warning(f"⚠️ Sheets fallback failed for {reference_id}: {sheets_result.get('message')}")
+    except Exception as e:
+        logger.error(f"Sheets fallback error for {reference_id}: {str(e)}")
+
 # Initialize services
 sheets_service = GoogleSheetsService()
 airtable_service = AirtableService()
