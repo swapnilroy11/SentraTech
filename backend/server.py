@@ -2374,6 +2374,273 @@ async def update_user_status(
         logger.error(f"Error updating user status: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update user status")
 
+
+# ============================================================================
+# GDPR/CCPA Data Protection Endpoints
+# ============================================================================
+
+class DataExportRequest(BaseModel):
+    email: EmailStr
+    request_type: str = Field(..., regex="^(export|deletion)$")
+    verification_token: Optional[str] = None
+
+class DataExportResponse(BaseModel):
+    message: str
+    request_id: str
+    status: str
+    estimated_completion: Optional[str] = None
+
+@api_router.post("/privacy/data-request", response_model=DataExportResponse)
+async def request_data_export_or_deletion(request: DataExportRequest):
+    """
+    Handle GDPR/CCPA data export or deletion requests
+    """
+    try:
+        request_id = str(uuid.uuid4())
+        timestamp = datetime.now(timezone.utc)
+        
+        # Log the privacy request
+        privacy_request = {
+            "id": request_id,
+            "email": request.email,
+            "request_type": request.request_type,
+            "status": "pending",
+            "created_at": timestamp.isoformat(),
+            "ip_address": "anonymized",  # IP anonymization for privacy
+            "verification_token": str(uuid.uuid4())
+        }
+        
+        # Store in database
+        await db.privacy_requests.insert_one(privacy_request)
+        
+        # Send verification email (mock for now)
+        logger.info(f"📧 Privacy request {request.request_type} initiated for {request.email} - ID: {request_id}")
+        
+        response_message = {
+            "export": "Data export request received. You will receive an email with instructions to verify your request.",
+            "deletion": "Data deletion request received. You will receive an email with instructions to verify your request."
+        }
+        
+        return DataExportResponse(
+            message=response_message[request.request_type],
+            request_id=request_id,
+            status="verification_pending",
+            estimated_completion="7 business days after verification"
+        )
+        
+    except Exception as e:
+        logger.error(f"Error processing privacy request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process privacy request")
+
+@api_router.get("/privacy/data-export/{request_id}")
+async def get_privacy_request_status(request_id: str):
+    """
+    Check the status of a privacy request
+    """
+    try:
+        request_data = await db.privacy_requests.find_one({"id": request_id})
+        
+        if not request_data:
+            raise HTTPException(status_code=404, detail="Privacy request not found")
+        
+        return {
+            "request_id": request_id,
+            "status": request_data.get("status", "unknown"),
+            "created_at": request_data.get("created_at"),
+            "request_type": request_data.get("request_type"),
+            "message": f"Request is {request_data.get('status', 'unknown')}"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error checking privacy request status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to check request status")
+
+@api_router.post("/privacy/verify-request/{request_id}")
+async def verify_privacy_request(request_id: str, verification_token: str):
+    """
+    Verify a privacy request using the verification token
+    """
+    try:
+        request_data = await db.privacy_requests.find_one({
+            "id": request_id,
+            "verification_token": verification_token
+        })
+        
+        if not request_data:
+            raise HTTPException(status_code=404, detail="Invalid verification token or request not found")
+        
+        # Update status to verified
+        await db.privacy_requests.update_one(
+            {"id": request_id},
+            {
+                "$set": {
+                    "status": "verified",
+                    "verified_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        request_type = request_data.get("request_type")
+        email = request_data.get("email")
+        
+        if request_type == "deletion":
+            # Perform data deletion
+            await perform_data_deletion(email)
+            message = "Your data deletion request has been verified and processing has begun."
+        else:
+            # Prepare data export
+            await prepare_data_export(email, request_id)
+            message = "Your data export request has been verified and will be processed within 7 business days."
+        
+        return {
+            "message": message,
+            "status": "verified",
+            "request_id": request_id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error verifying privacy request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to verify privacy request")
+
+async def perform_data_deletion(email: str):
+    """
+    Delete user data across all collections (GDPR Right to be Forgotten)
+    """
+    try:
+        collections_to_clean = [
+            "demo_requests",
+            "subscriptions", 
+            "roi_calculations",
+            "chat_sessions",
+            "chat_messages",
+            "user_interactions",
+            "page_views",
+            "conversion_events"
+        ]
+        
+        deletion_results = {}
+        
+        for collection in collections_to_clean:
+            try:
+                result = await db[collection].delete_many({"email": email})
+                deletion_results[collection] = result.deleted_count
+                logger.info(f"🗑️ Deleted {result.deleted_count} records from {collection} for {email}")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not clean collection {collection}: {str(e)}")
+                deletion_results[collection] = "error"
+        
+        # Log the deletion for audit purposes (anonymized)
+        audit_log = {
+            "id": str(uuid.uuid4()),
+            "action": "data_deletion",
+            "email_hash": hash(email),  # Store hash instead of actual email
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "deletion_results": deletion_results
+        }
+        
+        await db.audit_log.insert_one(audit_log)
+        logger.info(f"✅ Data deletion completed for user (anonymized audit trail created)")
+        
+    except Exception as e:
+        logger.error(f"Error performing data deletion: {str(e)}")
+        raise
+
+async def prepare_data_export(email: str, request_id: str):
+    """
+    Prepare data export for the user (GDPR Right to Access)
+    """
+    try:
+        user_data = {}
+        
+        # Collect data from various collections
+        collections_to_export = [
+            "demo_requests",
+            "subscriptions",
+            "roi_calculations", 
+            "chat_sessions",
+            "chat_messages"
+        ]
+        
+        for collection in collections_to_export:
+            try:
+                cursor = db[collection].find({"email": email})
+                data = await cursor.to_list(length=None)
+                
+                # Remove MongoDB ObjectIds and clean up data
+                cleaned_data = []
+                for item in data:
+                    if "_id" in item:
+                        del item["_id"]
+                    cleaned_data.append(item)
+                
+                user_data[collection] = cleaned_data
+                logger.info(f"📊 Collected {len(cleaned_data)} records from {collection}")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not export from collection {collection}: {str(e)}")
+                user_data[collection] = "export_error"
+        
+        # Store export data (in production, this would be encrypted and stored securely)
+        export_record = {
+            "request_id": request_id,
+            "email": email,
+            "export_data": user_data,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "ready",
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=30)).isoformat()
+        }
+        
+        await db.data_exports.insert_one(export_record)
+        logger.info(f"📦 Data export prepared for request {request_id}")
+        
+    except Exception as e:
+        logger.error(f"Error preparing data export: {str(e)}")
+        raise
+
+@api_router.get("/privacy/download-export/{request_id}")
+async def download_data_export(request_id: str):
+    """
+    Download prepared data export
+    """
+    try:
+        export_data = await db.data_exports.find_one({"request_id": request_id})
+        
+        if not export_data:
+            raise HTTPException(status_code=404, detail="Data export not found or expired")
+        
+        # Check if export has expired
+        expires_at = datetime.fromisoformat(export_data.get("expires_at"))
+        if datetime.now(timezone.utc) > expires_at:
+            # Clean up expired export
+            await db.data_exports.delete_one({"request_id": request_id})
+            raise HTTPException(status_code=410, detail="Data export has expired")
+        
+        # Remove MongoDB ObjectId and sensitive fields
+        export_data.pop("_id", None)
+        export_data.pop("email", None)  # Don't include email in the download
+        
+        return {
+            "request_id": request_id,
+            "export_date": export_data.get("created_at"),
+            "data": export_data.get("export_data", {}),
+            "format": "json",
+            "message": "Your personal data export as requested under GDPR/CCPA"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error downloading data export: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to download data export")
+
+
+# ============================================================================
+# End of GDPR/CCPA Data Protection Endpoints  
+# ============================================================================
+
 # Security Headers Middleware
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
