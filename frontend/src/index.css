@@ -16,10 +16,20 @@ body {
     color: #F8F9FA;
 }
 
-/* Smooth scrolling for anchor links */
+/* Smooth scrolling for anchor links - Optimized */
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 20px; /* Account for any potential fixed headers */
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px;
+  /* Performance optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+/* Optimize scrolling performance */
+body {
+  overflow-x: hidden; /* Prevent horizontal scroll issues */
+  scroll-behavior: smooth;
 }
 
 code {
