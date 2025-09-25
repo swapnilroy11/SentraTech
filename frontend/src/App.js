@@ -30,7 +30,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 
 // Enterprise Utilities
 import serviceWorkerRegistration from "./utils/serviceWorkerRegistration";
-import performanceMonitor from "./utils/performanceMonitoring";
+// import performanceMonitor from "./utils/performanceMonitoring"; // Temporarily disabled
 import errorTracker from "./utils/errorTracking";
 
 function App() {
