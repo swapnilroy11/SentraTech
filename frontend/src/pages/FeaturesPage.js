@@ -84,7 +84,7 @@ const FeaturesPage = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
             {/* Voice Agent Demo - Enhanced design */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
