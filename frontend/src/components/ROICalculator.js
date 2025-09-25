@@ -138,17 +138,17 @@ const ROICalculator = () => {
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Simplified Input Controls */}
-          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-8">
-            <CardHeader className="p-0 mb-8">
-              <CardTitle className="text-2xl text-white flex items-center space-x-3">
-                <div className="p-3 bg-[#00FF41]/20 rounded-xl border border-[#00FF41]/50">
-                  <BarChart3 size={24} className="text-[#00FF41]" />
+          <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-3xl p-6">
+            <CardHeader className="p-0 mb-6">
+              <CardTitle className="text-xl text-white flex items-center space-x-3">
+                <div className="p-2 bg-[#00FF41]/20 rounded-xl border border-[#00FF41]/50">
+                  <BarChart3 size={20} className="text-[#00FF41]" />
                 </div>
                 <span>Calculator Inputs</span>
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-0 space-y-10">
+            <CardContent className="p-0 space-y-8">
               {/* Selected Country Display */}
               <div className="bg-gradient-to-r from-[#00FF41]/15 to-[#00DDFF]/15 rounded-2xl p-6 border-2 border-[#00FF41]/40">
                 <div className="flex items-center justify-between">
