@@ -24,9 +24,21 @@ const Navigation = () => {
       document.body.style.overflow = 'unset';
     }
     
-    // Cleanup on unmount
+    // Handle Escape key
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+    
+    // Cleanup on unmount or menu close
     return () => {
       document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [isMenuOpen]);
 
@@ -47,6 +59,18 @@ const Navigation = () => {
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMenuClose = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsMenuOpen(false);
+  };
+
+  const handleOverlayClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsMenuOpen(false);
   };
 
   const handleMenuItemClick = () => {
