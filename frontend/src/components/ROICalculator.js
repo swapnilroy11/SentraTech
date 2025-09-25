@@ -23,6 +23,12 @@ const ROICalculator = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [savedSuccessfully, setSavedSuccessfully] = useState(false);
+  
+  // Email modal state
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
