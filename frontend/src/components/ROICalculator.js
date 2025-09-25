@@ -150,19 +150,16 @@ const ROICalculator = () => {
 
             <CardContent className="p-0 space-y-8">
               {/* Selected Country Display */}
-              <div className="bg-gradient-to-r from-[#00FF41]/15 to-[#00DDFF]/15 rounded-2xl p-6 border-2 border-[#00FF41]/40">
+              <div className="bg-gradient-to-r from-[#00FF41]/10 to-[#00DDFF]/10 rounded-xl p-4 border border-[#00FF41]/30">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[#00FF41] font-semibold text-lg mb-1">Selected Market</div>
-                    <div className="text-white text-2xl font-bold mb-2">{selectedCountry}</div>
+                    <div className="text-[#00FF41] font-semibold mb-1">Selected Market</div>
+                    <div className="text-white text-xl font-bold mb-1">{selectedCountry}</div>
                     <div className="text-[rgb(161,161,170)] text-sm">
-                      Traditional BPO: {formatCurrency(COUNTRIES.find(c => c.name === selectedCountry)?.baseCost)}/agent/month
-                    </div>
-                    <div className="text-[rgb(161,161,170)] text-sm">
-                      AI Cost: $154/agent/month (+20% buffer)
+                      Traditional: {formatCurrency(COUNTRIES.find(c => c.name === selectedCountry)?.baseCost)}/agent • AI: $154/agent
                     </div>
                   </div>
-                  <div className="text-5xl">
+                  <div className="text-3xl">
                     {COUNTRIES.find(c => c.name === selectedCountry)?.flag}
                   </div>
                 </div>
