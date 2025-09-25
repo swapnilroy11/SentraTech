@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import { calculateROI } from '../utils/calculatorLogic';
 import { COUNTRIES } from '../utils/costBaselines';
-import { insertROIReport } from '../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 const ROICalculator = () => {
   // Simplified State Management - Only Agent Count and AHT
