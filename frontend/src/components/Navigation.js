@@ -98,8 +98,9 @@ const Navigation = () => {
           <div className="md:hidden mt-4 pb-4 border-t border-[#2a2a2a]">
             <div className="flex flex-col space-y-3 pt-4">
               {navigationItems.map((item) => (
-                <Link
+                <HashLink
                   key={item.path}
+                  smooth
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg transition-all duration-300 font-medium ${
@@ -109,7 +110,7 @@ const Navigation = () => {
                   }`}
                 >
                   {item.label}
-                </Link>
+                </HashLink>
               ))}
               <div className="flex items-center justify-between pt-4 border-t border-[#2a2a2a]">
                 <Link to="/demo-request" onClick={() => setIsMenuOpen(false)}>
