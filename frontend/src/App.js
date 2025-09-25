@@ -49,7 +49,6 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="/case-studies" element={<CaseStudiesPage />} />
-              <Route path="/integrations" element={<IntegrationsPage />} />
               <Route path="/security" element={<SecurityPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/demo-request" element={<DemoRequestPage />} />
