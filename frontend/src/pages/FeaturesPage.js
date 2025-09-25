@@ -57,8 +57,6 @@ const FeaturesPage = () => {
 
       {/* Customer Journey Section - Better breathing room */}
       <section id="customer-journey" className="py-10 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative">
-        {/* Subtle top border for visual separation */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent opacity-30"></div>
         <CustomerJourney />
       </section>
 
