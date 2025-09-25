@@ -345,7 +345,7 @@ const ROICalculator = () => {
                   <Label className="text-white text-base lg:text-lg">
                     Average Handle Time: {averageHandleTime[0]} minutes
                   </Label>
-                  <Tooltip content="AI handles calls at $0.15-$0.75 per minute vs. traditional $3-$15 per call, with realistic 30-70% cost reduction in enterprise deployments">
+                  <Tooltip content="Industry research 2024-2025: AI handles interactions at $0.25-$0.50 vs. traditional $3-$6 per interaction, achieving 85-90% cost reduction with 4-6 month payback period">
                     <Info size={16} className="ml-2 text-[rgb(161,161,170)] cursor-help" />
                   </Tooltip>
                 </div>
