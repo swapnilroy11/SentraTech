@@ -6,26 +6,68 @@
         <meta name="theme-color" content="#000000" />
         <meta name="description" content="SentraTech - AI-Powered Customer Support Platform" />
         
-        <!-- Google tag (gtag.js) -->
+        <!-- Google tag (gtag.js) - Conditional Loading Based on Cookie Consent -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-75HTVL1QME"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           
+          // Initialize gtag with consent mode (disabled by default)
+          gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'wait_for_update': 500,
+          });
+          
+          // Configure GA4 but don't send page views initially
           gtag('config', 'G-75HTVL1QME', {
-            // Enhanced ecommerce and conversion tracking
-            send_page_view: false, // We'll handle this manually for SPA
+            send_page_view: false, // We'll handle this manually based on consent
+            anonymize_ip: true, // Ensure IP anonymization
             custom_map: {
               'custom_parameter_1': 'company_name',
               'custom_parameter_2': 'reference_id'
             }
           });
           
-          // Set up conversion tracking
-          gtag('config', 'G-75HTVL1QME', {
-            'custom_parameter_company_name': 'company_name',
-            'custom_parameter_reference_id': 'reference_id'
+          // Function to update consent based on user choice
+          window.updateGoogleAnalyticsConsent = function(hasAnalyticsConsent) {
+            if (hasAnalyticsConsent) {
+              // Grant consent and enable analytics
+              gtag('consent', 'update', {
+                'analytics_storage': 'granted'
+              });
+              
+              // Send initial page view if consent is granted
+              gtag('event', 'page_view', {
+                page_title: document.title,
+                page_location: window.location.href,
+                page_path: window.location.pathname,
+                send_to: 'G-75HTVL1QME'
+              });
+              
+              console.log('Google Analytics consent granted and initialized');
+            } else {
+              // Keep consent denied
+              gtag('consent', 'update', {
+                'analytics_storage': 'denied'
+              });
+              
+              console.log('Google Analytics consent denied');
+            }
+          };
+          
+          // Check for existing consent on page load
+          document.addEventListener('DOMContentLoaded', function() {
+            try {
+              const consentData = localStorage.getItem('cookieConsent');
+              if (consentData) {
+                const consent = consentData === 'all' ? true : JSON.parse(consentData).analytics;
+                window.updateGoogleAnalyticsConsent(consent);
+              }
+            } catch (error) {
+              console.warn('Error checking cookie consent:', error);
+            }
           });
         </script>
         <!--
