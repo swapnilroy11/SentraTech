@@ -16,6 +16,7 @@ const Navigation = () => {
     { name: 'Features', path: '/features', label: 'Features' },
     { name: 'Case Studies', path: '/case-studies', label: 'Case Studies' },
     { name: 'Security', path: '/security', label: 'Security' },
+    { name: 'ROI Calculator', path: '/roi-calculator', label: 'ROI Calculator' },
     { name: 'Pricing', path: '/pricing', label: 'Pricing' }
   ];
 
