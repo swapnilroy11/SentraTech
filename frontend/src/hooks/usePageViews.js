@@ -7,11 +7,12 @@ const usePageViews = () => {
   useEffect(() => {
     // Check if gtag is available (loaded from Google Analytics script)
     if (typeof window.gtag === 'function') {
-      // Send pageview event for Single Page Application (SPA)
-      window.gtag('config', 'G-75HTVL1QME', {
+      // Send manual page_view event for Single Page Application (SPA)
+      window.gtag('event', 'page_view', {
         page_title: document.title,
         page_location: window.location.href,
         page_path: location.pathname + location.search + location.hash,
+        send_to: 'G-75HTVL1QME'
       });
       
       // Optional: Log for debugging (remove in production)
