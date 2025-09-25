@@ -12,7 +12,8 @@ const FeaturesPage = () => {
       {/* SEO Management for Features Page */}
       <SEOManager />
       
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="features-page">
+      <main role="main" aria-label="SentraTech Features - AI Customer Support Capabilities">
+        <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="features-page">
       {/* Hero Section - Balanced spacing */}
       <section className="pt-8 pb-6 relative overflow-hidden" id="features-hero">
         <div className="container mx-auto px-6">
