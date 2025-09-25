@@ -12,6 +12,47 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Optional: Add helper functions for common operations
 export const demoRequestsTable = () => supabase.from('demo_requests');
+export const subscriptionsTable = () => supabase.from('subscriptions');
+
+// Helper function to insert a newsletter subscription
+export const insertSubscription = async (email) => {
+  try {
+    console.log('Subscribing email to newsletter:', email);
+    
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .insert([{
+        email: email.toLowerCase().trim(), // Normalize email
+        created_at: new Date().toISOString()
+      }], { returning: 'minimal' });
+
+    if (error) {
+      // Check if it's a duplicate email error
+      if (error.code === '23505' || error.message.includes('unique constraint')) {
+        return {
+          success: false,
+          error: 'duplicate',
+          message: 'This email is already subscribed to our newsletter.'
+        };
+      }
+      throw error;
+    }
+
+    console.log('✅ Email subscribed successfully');
+
+    return {
+      success: true,
+      message: 'Successfully subscribed to our newsletter!'
+    };
+  } catch (error) {
+    console.error('Newsletter subscription error:', error);
+    return {
+      success: false,
+      error: error.message,
+      message: 'Failed to subscribe. Please try again later.'
+    };
+  }
+};
 
 // Helper function to insert a demo request with email notification
 export const insertDemoRequest = async (formData) => {
