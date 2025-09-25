@@ -108,26 +108,32 @@ const ROICalculator = () => {
           </p>
         </div>
 
-        {/* Country Selection Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {COUNTRIES.map((country) => (
-            <Button
-              key={country.name}
-              onClick={() => handleCountryChange(country.name)}
-              variant={selectedCountry === country.name ? "default" : "outline"}
-              className={`px-6 py-4 rounded-xl font-semibold transition-all duration-200 ${
-                selectedCountry === country.name 
-                  ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/30 border-2 border-[#00FF41]' 
-                  : 'border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:bg-[#00FF41]/10'
-              }`}
-            >
-              <span className="mr-3 text-xl">{country.flag}</span>
-              <div className="text-left">
-                <div className="font-bold text-lg">{country.name}</div>
-                <div className="text-sm opacity-80">${country.baseCost}/agent • {country.description}</div>
-              </div>
-            </Button>
-          ))}
+        {/* Improved Country Selection Buttons */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-[rgb(26,28,30)] rounded-2xl p-2 border border-[rgba(255,255,255,0.1)]">
+            {COUNTRIES.map((country) => (
+              <button
+                key={country.name}
+                onClick={() => handleCountryChange(country.name)}
+                className={`relative px-4 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                  selectedCountry === country.name 
+                    ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/25 transform scale-105' 
+                    : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)] hover:scale-102'
+                }`}
+              >
+                <span className="text-lg">{country.flag}</span>
+                <div className="text-left">
+                  <div className="text-sm font-semibold">{country.name}</div>
+                  <div className="text-xs opacity-75">${country.baseCost}/mo</div>
+                </div>
+                
+                {/* Active indicator */}
+                {selectedCountry === country.name && (
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[#00FF41] rounded-full shadow-lg"></div>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 max-w-7xl mx-auto">
