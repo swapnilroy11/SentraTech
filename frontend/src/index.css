@@ -96,3 +96,204 @@ code {
     font-family: 'Rajdhani', sans-serif;
     }
 }
+
+/* Custom Slider Styles */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  height: 12px;
+  border-radius: 6px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  cursor: pointer;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+}
+
+/* Glassmorphism Effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Particle Animation */
+@keyframes particle-float {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(90px, -90px, 0) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  animation: particle-float 6s ease-out infinite;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #059669, #0891b2);
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Focus States */
+*:focus {
+  outline: 2px solid rgba(16, 185, 129, 0.5);
+  outline-offset: 2px;
+}
+
+/* Custom Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #10b981, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Neumorphism Styles */
+.neumorphism {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  box-shadow: 
+    20px 20px 60px #0a101a,
+    -20px -20px 60px #24344c;
+}
+
+.neumorphism-inset {
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+  box-shadow: 
+    inset 20px 20px 60px #0a101a,
+    inset -20px -20px 60px #24344c;
+}
+
+/* Button Hover Effects */
+.btn-glow:hover {
+  box-shadow: 
+    0 0 30px rgba(16, 185, 129, 0.4),
+    0 0 60px rgba(16, 185, 129, 0.2),
+    0 0 90px rgba(16, 185, 129, 0.1);
+}
+
+/* Card Hover Effects */
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading Animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.loading-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
