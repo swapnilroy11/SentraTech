@@ -53,12 +53,10 @@ const IntegrationsShowcase = () => {
 
   // Performance optimization: memoize filtered integrations
   const filteredIntegrations = useMemo(() => {
-    console.log('IntegrationsShowcase: Filtering integrations');
-    let filtered = integrations;
-
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(integration => integration.category === activeCategory);
-    }
+    if (!data) return [];
+    
+    console.log('IntegrationsShowcase: Filtering integrations', { activeCategory, searchTerm });
+    let filtered = getIntegrationsByCategory(activeCategory);
 
     if (searchTerm) {
       filtered = filtered.filter(integration => 
@@ -68,7 +66,7 @@ const IntegrationsShowcase = () => {
     }
 
     return filtered;
-  }, [activeCategory, searchTerm, integrations]);
+  }, [activeCategory, searchTerm, data]);
 
   // Component lifecycle logging
   useEffect(() => {
