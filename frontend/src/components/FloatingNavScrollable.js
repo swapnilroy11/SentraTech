@@ -5,14 +5,13 @@ import { HashLink } from 'react-router-hash-link';
 const FloatingNavScrollable = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Navigation items
+  // Navigation items - exactly as specified in user requirements
   const navigationItems = [
-    { path: '/#home', label: 'Home', icon: '🏠' },
-    { path: '/#features', label: 'Beyond', icon: '⚡' },
-    { path: '/#customer-journey', label: 'Journey', icon: '🛣️' },
-    { path: '/roi-calculator', label: 'ROI Calc', icon: '📊' },
-    { path: '/pricing', label: 'Better', icon: '💰' },
-    { path: '/demo-request', label: 'Contact', icon: '📞' }
+    { path: '/', label: 'Home', icon: '🏠' },
+    { path: '/roi-calculator', label: 'ROI Calculator', icon: '📈' },
+    { path: '/features', label: 'Features', icon: '⚡' },
+    { path: '/demo-request', label: 'Demo Request', icon: '▶️' },
+    { path: '/#customer-journey', label: 'Customer Journey', icon: '🛤️' }
   ];
 
   const toggleMenu = () => {
@@ -23,50 +22,69 @@ const FloatingNavScrollable = () => {
     setIsExpanded(false);
   };
 
+  // Handle keyboard navigation
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      setIsExpanded(false);
+    }
+  };
+
   useEffect(() => {
     // Close menu when clicking outside
     const handleClickOutside = (event) => {
-      if (isExpanded && !event.target.closest('#floatNav')) {
+      if (isExpanded && !event.target.closest('#quickNav')) {
+        setIsExpanded(false);
+      }
+    };
+
+    // Close menu on Escape key
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
         setIsExpanded(false);
       }
     };
 
     if (isExpanded) {
       document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('keydown', handleEscapeKey);
+      };
     }
   }, [isExpanded]);
 
   return (
     <>
-      {/* Custom CSS Styles */}
-      <style jsx>{`
-        #floatNav {
+      {/* Global CSS for floating navigation - exactly as specified */}
+      <style jsx global>{`
+        #quickNav {
           position: absolute;
           left: 20px;
-          top: 200px;
+          top: 50%;
+          transform: translateY(-50%);
           width: 60px;
           height: 60px;
           background: rgba(26, 31, 58, 0.6);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           border-radius: 30px;
           box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
-          z-index: 999;
-          transition: all 0.3s ease;
+          z-index: 9999;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
         }
 
-        #floatNav.expanded {
+        #quickNav.expanded {
           width: auto;
           height: auto;
-          border-radius: 25px;
-          padding: 15px;
+          border-radius: 30px;
+          padding: 10px;
           min-width: 200px;
         }
 
-        #floatNav button {
-          width: 100%;
+        #quickNav button {
+          width: 60px;
           height: 60px;
           background: transparent;
           border: none;
@@ -76,72 +94,87 @@ const FloatingNavScrollable = () => {
           cursor: pointer;
           border-radius: 30px;
           transition: all 0.3s ease;
+          position: relative;
         }
 
-        #floatNav:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 24px rgba(0, 212, 255, 0.4);
+        #quickNav:hover {
+          transform: translateY(-50%) scale(1.05);
+          box-shadow: 0 6px 30px rgba(0, 212, 255, 0.4);
         }
 
-        .icon {
+        .hamburger-icon {
           color: #00d4ff;
           font-size: 24px;
           font-weight: bold;
           transition: transform 0.3s ease;
+          user-select: none;
         }
 
-        #floatNav.expanded .icon {
+        #quickNav.expanded .hamburger-icon {
           transform: rotate(180deg);
         }
 
-        #floatNav ul {
+        #quickNav ul {
           display: none;
           list-style: none;
           padding: 0;
           margin: 10px 0 0 0;
         }
 
-        #floatNav.expanded ul {
+        #quickNav.expanded ul {
           display: block;
-          animation: slide-down 0.3s ease;
+          animation: slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        #floatNav li {
-          width: 180px;
-          height: 45px;
-          margin-bottom: 10px;
-          border-radius: 15px;
-          background: rgba(0, 212, 255, 0.1);
-          border: 1px solid rgba(0, 212, 255, 0.3);
-          transition: all 0.3s ease;
+        #quickNav li {
+          margin-bottom: 8px;
+          border-radius: 20px;
+          background: rgba(0, 212, 255, 0.08);
+          border: 1px solid rgba(0, 212, 255, 0.2);
+          transition: all 0.2s ease;
+          min-height: 44px; /* Touch-friendly size */
         }
 
-        #floatNav li:hover {
-          background: rgba(0, 212, 255, 0.2);
-          border-color: rgba(0, 212, 255, 0.5);
-          transform: translateX(5px);
+        #quickNav li:last-child {
+          margin-bottom: 0;
         }
 
-        #floatNav li a {
+        #quickNav li:hover,
+        #quickNav li:focus-within {
+          background: rgba(0, 212, 255, 0.15);
+          border-color: rgba(0, 212, 255, 0.4);
+          transform: translateX(3px);
+          box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
+        }
+
+        #quickNav li a {
           display: flex;
           align-items: center;
-          padding: 12px 15px;
+          padding: 12px 16px;
           text-decoration: none;
-          color: #00d4ff;
+          color: #ffffff;
           font-size: 14px;
           font-weight: 500;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
           width: 100%;
-          height: 100%;
-          border-radius: 15px;
+          min-height: 44px;
+          border-radius: 20px;
+          transition: all 0.2s ease;
         }
 
-        #floatNav li a:hover {
-          color: #ffffff;
+        #quickNav li a:hover,
+        #quickNav li a:focus {
+          color: #00d4ff;
+          outline: 2px solid rgba(0, 212, 255, 0.3);
+          outline-offset: 2px;
         }
 
-        #floatNav li .menu-icon {
-          margin-right: 10px;
+        #quickNav .menu-icon {
+          margin-right: 12px;
           font-size: 16px;
+          width: 20px;
+          text-align: center;
+          flex-shrink: 0;
         }
 
         @keyframes slide-down {
@@ -155,59 +188,79 @@ const FloatingNavScrollable = () => {
           }
         }
 
-        /* Responsive Design */
+        /* Responsive Design - Touch-friendly on mobile */
         @media (max-width: 480px) {
-          #floatNav {
+          #quickNav {
+            left: 15px;
             width: 70px;
             height: 70px;
           }
 
-          #floatNav button {
+          #quickNav button {
+            width: 70px;
             height: 70px;
           }
 
-          .icon {
+          .hamburger-icon {
             font-size: 28px;
           }
 
-          #floatNav li {
-            width: 200px;
-            height: 50px;
+          #quickNav li {
+            min-height: 48px; /* Larger touch target on mobile */
           }
 
-          #floatNav li a {
-            padding: 15px;
+          #quickNav li a {
+            padding: 14px 18px;
             font-size: 16px;
+            min-height: 48px;
+          }
+
+          #quickNav.expanded {
+            min-width: 220px;
           }
         }
 
-        /* Hide on very small screens */
-        @media (max-width: 320px) {
-          #floatNav {
-            display: none;
+        /* Ensure high contrast for accessibility */
+        @media (prefers-contrast: high) {
+          #quickNav {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00d4ff;
+          }
+          
+          #quickNav li {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+          }
+        }
+
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+          #quickNav,
+          #quickNav *,
+          @keyframes slide-down {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>
 
-      {/* Floating Navigation */}
+      {/* Floating Navigation Component */}
       <div 
-        id="floatNav" 
+        id="quickNav" 
         className={isExpanded ? 'expanded' : ''}
-        style={{
-          position: 'absolute',
-          left: '20px',
-          top: '200px'
-        }}
       >
         <button 
           onClick={toggleMenu}
+          onKeyDown={handleKeyDown}
           aria-label="Main navigation"
           aria-expanded={isExpanded}
+          type="button"
         >
-          <span className="icon">☰</span>
+          <span className="hamburger-icon">☰</span>
         </button>
         
-        <ul role="menu">
+        <ul role="menu" aria-label="Quick access menu">
           {navigationItems.map((item, index) => (
             <li key={index} role="none">
               {item.path.startsWith('/#') ? (
@@ -216,9 +269,10 @@ const FloatingNavScrollable = () => {
                   to={item.path}
                   onClick={handleMenuItemClick}
                   role="menuitem"
-                  tabIndex="0"
+                  tabIndex={isExpanded ? 0 : -1}
+                  aria-label={`Navigate to ${item.label}`}
                 >
-                  <span className="menu-icon">{item.icon}</span>
+                  <span className="menu-icon" role="img" aria-hidden="true">{item.icon}</span>
                   {item.label}
                 </HashLink>
               ) : (
@@ -226,9 +280,10 @@ const FloatingNavScrollable = () => {
                   to={item.path}
                   onClick={handleMenuItemClick}
                   role="menuitem"
-                  tabIndex="0"
+                  tabIndex={isExpanded ? 0 : -1}
+                  aria-label={`Navigate to ${item.label}`}
                 >
-                  <span className="menu-icon">{item.icon}</span>
+                  <span className="menu-icon" role="img" aria-hidden="true">{item.icon}</span>
                   {item.label}
                 </Link>
               )}
