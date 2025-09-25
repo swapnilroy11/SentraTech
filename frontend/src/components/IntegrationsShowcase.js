@@ -132,8 +132,13 @@ const IntegrationsShowcase = () => {
               <div>
                 <h3 className="text-white font-bold text-lg">{integration.name}</h3>
                 <div className="flex items-center space-x-2">
-                  {integration.status === 'available' ? (
+                  {integration.status === 'connected' ? (
                     <Badge className="bg-green-500/10 text-green-500 border-green-500/30 text-xs">
+                      <CheckCircle size={12} className="mr-1" />
+                      Connected
+                    </Badge>
+                  ) : integration.status === 'available' ? (
+                    <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/30 text-xs">
                       <CheckCircle size={12} className="mr-1" />
                       Available
                     </Badge>
