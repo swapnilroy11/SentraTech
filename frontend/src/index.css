@@ -232,11 +232,31 @@ input[type="range"]::-moz-range-thumb:hover {
   background: linear-gradient(135deg, #059669, #0891b2);
 }
 
-/* Smooth Transitions */
+/* Optimized Smooth Transitions for Performance */
 * {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, opacity, transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 100ms; /* Reduced for snappier feel */
+}
+
+/* Performance optimizations for smooth animations */
+*,
+*::before,
+*::after {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Focus States */
