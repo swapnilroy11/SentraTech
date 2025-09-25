@@ -232,16 +232,19 @@ const CookieBanner = () => {
                   <h3 className="text-white font-medium">Analytics Cookies</h3>
                   <p className="text-gray-400 text-sm">Help us improve our website performance</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="relative inline-flex items-center cursor-pointer z-10">
                   <input
                     type="checkbox"
                     className="sr-only"
                     checked={preferences.analytics}
                     onChange={() => handlePreferenceChange('analytics')}
                   />
-                  <div className={`w-11 h-6 rounded-full transition-colors duration-200 ${
-                    preferences.analytics ? 'bg-[#00FF41]' : 'bg-gray-600'
-                  }`}>
+                  <div 
+                    className={`w-11 h-6 rounded-full transition-colors duration-200 relative z-20 ${
+                      preferences.analytics ? 'bg-[#00FF41]' : 'bg-gray-600'
+                    }`}
+                    onClick={() => handlePreferenceChange('analytics')}
+                  >
                     <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
                       preferences.analytics ? 'translate-x-5' : 'translate-x-0'
                     } mt-0.5 ml-0.5`}></div>
