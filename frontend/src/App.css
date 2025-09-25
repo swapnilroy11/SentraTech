@@ -176,7 +176,7 @@ h1, h2, h3, h4, h5, h6 {
   animation: twinkle 3s ease-in-out infinite;
 }
 
-/* Interactive Button Styles */
+/* Interactive Button Styles - Optimized */
 .btn-primary {
   background: var(--accent-primary);
   color: var(--bg-primary);
@@ -187,15 +187,17 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, transform 0.1s ease;
   position: relative;
   overflow: hidden;
+  /* Performance optimization */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+  transform: translateY(-1px); /* Reduced movement */
 }
 
 .btn-primary:active {
@@ -203,7 +205,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--accent-pressed);
 }
 
-/* Matrix-style glow effect */
+/* Simplified Matrix-style glow effect */
 .btn-primary::before {
   content: '';
   position: absolute;
@@ -211,24 +213,25 @@ h1, h2, h3, h4, h5, h6 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.3s ease; /* Reduced duration */
 }
 
 .btn-primary:hover::before {
   left: 100%;
 }
 
-/* Card Hover Effects */
+/* Optimized Card Hover Effects */
 .card-hover {
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.15s ease;
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
+  will-change: transform; /* Performance hint */
 }
 
 .card-hover:hover {
-  transform: translateY(-8px) rotate(1deg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px); /* Reduced movement */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Reduced shadow */
   border-color: var(--accent-primary);
 }
 
