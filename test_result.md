@@ -56,6 +56,19 @@
 ##   test_all: false
 ##   test_priority: "high_first"  # or "sequential" or "stuck_first"
 ##
+
+test_plan:
+  current_focus:
+    - "Performance Optimization"
+  stuck_tasks:
+    - "Performance Optimization"
+  test_all: false
+  test_priority: "stuck_first"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
   - task: "ROI Calculator Frontend Comprehensive Testing"
     implemented: true
     working: true
