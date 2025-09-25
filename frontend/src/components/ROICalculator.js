@@ -69,7 +69,7 @@ const ROICalculator = () => {
     setError(null);
   };
 
-  // Submit ROI report to Supabase
+  // Submit ROI report to Supabase using exact specification
   const submitROIReport = async (e) => {
     e.preventDefault();
     
@@ -89,29 +89,73 @@ const ROICalculator = () => {
       setIsSubmittingReport(true);
       setError(null);
 
-      // Submit to Supabase
-      const result = await insertROIReport(email.trim(), results);
-      
-      if (result.success) {
-        setReportSubmitted(true);
-        setSavedSuccessfully(true);
-        setShowEmailModal(false);
-        setEmail('');
-        
-        // Also save to backend for analytics
-        await saveToBackend();
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          setSavedSuccessfully(false);
-          setReportSubmitted(false);
-        }, 5000);
-      } else {
-        setError(result.message || 'Failed to submit ROI report request.');
+      // Extract values from results for exact field mapping
+      const {
+        callVolume,
+        tradCost: traditionalCost,
+        aiCost: aiMonthlyCost,
+        monthlySavings,
+        annualSavings,
+        roi: roiPercent,
+        reduction: costReduction
+      } = results;
+
+      console.log('Submitting ROI report to Supabase:', {
+        email: email.trim(),
+        selectedCountry,
+        agentCount,
+        ahtMinutes,
+        callVolume,
+        traditionalCost,
+        aiMonthlyCost,
+        monthlySavings,
+        annualSavings,
+        roiPercent,
+        costReduction
+      });
+
+      // Save to Supabase using exact specification
+      const { data, error } = await supabase
+        .from('roi_reports')
+        .insert([{
+          email: email.trim(),
+          country: selectedCountry,
+          agent_count: agentCount,
+          aht_minutes: ahtMinutes,
+          call_volume: callVolume,
+          traditional_cost: traditionalCost,
+          ai_cost: aiMonthlyCost,
+          monthly_savings: monthlySavings,
+          annual_savings: annualSavings,
+          roi_percent: roiPercent,
+          cost_reduction: costReduction,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) {
+        throw error;
       }
+
+      console.log('✅ ROI report saved to Supabase successfully:', data);
+      
+      // Success handling
+      setReportSubmitted(true);
+      setSavedSuccessfully(true);
+      setShowEmailModal(false);
+      setEmail('');
+      
+      // Also save to backend for analytics
+      await saveToBackend();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setSavedSuccessfully(false);
+        setReportSubmitted(false);
+      }, 5000);
+
     } catch (err) {
-      console.error('Error submitting ROI report:', err);
-      setError('Failed to submit ROI report request. Please try again.');
+      console.error('Error submitting ROI report to Supabase:', err);
+      setError(`Failed to submit ROI report request: ${err.message || 'Please try again.'}`);
     } finally {
       setIsSubmittingReport(false);
     }
