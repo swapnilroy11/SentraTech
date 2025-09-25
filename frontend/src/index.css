@@ -28,10 +28,13 @@ html {
   contain: layout style paint;
 }
 
-/* Optimize scrolling performance */
+/* Ultra-optimized body */
 body {
-  overflow-x: hidden; /* Prevent horizontal scroll issues */
+  overflow-x: hidden; /* Prevent horizontal scroll */
   scroll-behavior: smooth;
+  /* Performance optimizations */
+  will-change: scroll-position;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 code {
