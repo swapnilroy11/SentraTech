@@ -27,8 +27,6 @@ const CTASection = () => {
   const [fieldErrors, setFieldErrors] = useState({});
   const [contactId, setContactId] = useState('');
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-
   const handleInputChange = (field, value) => {
     // Update form data
     setFormData(prev => ({ 
