@@ -34,6 +34,49 @@ import performanceMonitor from "./utils/performanceMonitoring";
 import errorTracker from "./utils/errorTracking";
 
 function App() {
+  useEffect(() => {
+    // Initialize enterprise-grade features
+    initializeEnterpriseFeatures();
+  }, []);
+
+  const initializeEnterpriseFeatures = () => {
+    console.log('🚀 Initializing SentraTech Enterprise Features...');
+    
+    // Register Service Worker for PWA capabilities
+    serviceWorkerRegistration.register({
+      onUpdate: (registration) => {
+        console.log('🔄 App update available');
+        // Show update notification to users
+        if (window.confirm('New version available! Reload to update?')) {
+          window.location.reload();
+        }
+      },
+      onSuccess: (registration) => {
+        console.log('✅ App cached for offline use');
+        // Optional: Show offline capabilities notification
+      }
+    });
+
+    // Request notification permission for updates
+    serviceWorkerRegistration.requestNotificationPermission();
+    
+    // Precache important resources
+    serviceWorkerRegistration.precacheImportantResources();
+    
+    // Add breadcrumbs for error tracking
+    errorTracker.addBreadcrumb('app_initialized', {
+      timestamp: new Date().toISOString(),
+      url: window.location.href
+    });
+    
+    // Set performance monitoring context
+    if (performanceMonitor) {
+      console.log('📊 Performance monitoring active');
+    }
+    
+    console.log('✅ Enterprise features initialized successfully');
+  };
+
   return (
     <LanguageProvider>
       <div className="App">
