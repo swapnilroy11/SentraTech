@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from './ui/badge';
 import { Brain } from 'lucide-react';
-import HorizontalJourney from './HorizontalJourney';
+import CustomerJourneySimple from './CustomerJourneySimple';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const CustomerJourney = () => {
