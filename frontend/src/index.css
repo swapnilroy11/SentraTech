@@ -16,6 +16,12 @@ body {
     color: #F8F9FA;
 }
 
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20px; /* Account for any potential fixed headers */
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
