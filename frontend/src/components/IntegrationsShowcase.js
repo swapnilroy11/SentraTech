@@ -241,7 +241,7 @@ const IntegrationsShowcase = () => {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {integrationCategories.map((category) => {
+          {categories.map((category) => {
             const Icon = category.icon;
             return (
               <motion.button
