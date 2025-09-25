@@ -102,7 +102,7 @@ const IntegrationsShowcase = () => {
     );
   }
 
-  const integrationCategories = [
+  const categories = [
     { id: 'all', name: 'All Integrations', icon: Globe },
     { id: 'crm', name: 'CRM & Sales', icon: Users },
     { id: 'communication', name: 'Communication', icon: MessageSquare },
