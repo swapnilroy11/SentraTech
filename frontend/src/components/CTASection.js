@@ -520,6 +520,9 @@ const CTASection = () => {
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
                       onBlur={(e) => {
+                        // Track form interaction
+                        trackFormInteraction('phone', 'blur');
+                        
                         // Validate on blur for immediate feedback (only if not empty)
                         if (e.target.value.trim()) {
                           const errorMessage = validateField('phone', e.target.value);
