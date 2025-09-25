@@ -71,7 +71,7 @@ const FeaturesPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-8"
           >
-            <div className="flex items-center justify-center space-x-4 mb-2">
+            <div className="flex items-center justify-center space-x-4 mb-3">
               <div className="w-12 h-12 bg-[#00DDFF]/20 rounded-full flex items-center justify-center border border-[#00DDFF]/50">
                 <MessageSquare className="text-[#00DDFF]" size={24} />
               </div>
@@ -79,7 +79,7 @@ const FeaturesPage = () => {
                 Multi-Channel Support
               </h2>
             </div>
-            <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto">
+            <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto mb-2">
               Deliver consistent, intelligent customer experiences across all touchpoints with human-like AI agents.
             </p>
           </motion.div>
