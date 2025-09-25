@@ -699,16 +699,16 @@ class ComprehensiveBackendTester:
                     result = response.json()
                     if "ai_response" in result and result["ai_response"]:
                         # Check if AI response contains SentraTech-related content
-                        ai_response = result["ai_response"].lower()
+                        ai_response_text = str(result["ai_response"]).lower()
                         sentratech_keywords = ["sentratech", "automation", "ai", "support", "platform"]
-                        found_keywords = [kw for kw in sentratech_keywords if kw in ai_response]
+                        found_keywords = [kw for kw in sentratech_keywords if kw in ai_response_text]
                         
                         if found_keywords:
                             self.log_test("Live Chat - AI Message Response", True, 
                                         f"AI response contextual: found keywords {found_keywords}")
                         else:
                             self.log_test("Live Chat - AI Message Response", True, 
-                                        f"AI response received (length: {len(result['ai_response'])})")
+                                        f"AI response received (length: {len(str(result['ai_response']))})")
                     else:
                         self.log_test("Live Chat - AI Message Response", False, 
                                     f"No AI response: {result}")
