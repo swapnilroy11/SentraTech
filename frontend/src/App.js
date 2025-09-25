@@ -70,9 +70,9 @@ function App() {
     });
     
     // Set performance monitoring context
-    if (performanceMonitor) {
-      console.log('📊 Performance monitoring active');
-    }
+    // if (performanceMonitor) {
+    //   console.log('📊 Performance monitoring active');
+    // }
     
     console.log('✅ Enterprise features initialized successfully');
   };
