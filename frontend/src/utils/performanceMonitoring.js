@@ -1,21 +1,24 @@
 // SentraTech Real User Monitoring (RUM) & Core Web Vitals
 // Enterprise-grade performance tracking and optimization
 
-// Import web-vitals functions
-let getCLS, getFID, getFCP, getLCP, getTTFB;
+// Import web-vitals functions (v5.x API)
+let onCLS, onFID, onFCP, onLCP, onTTFB, onINP;
 
-// Dynamic import for web-vitals (handles different versions)
+// Dynamic import for web-vitals with proper v5 API
 try {
   const webVitals = require('web-vitals');
-  getCLS = webVitals.getCLS || webVitals.onCLS;
-  getFID = webVitals.getFID || webVitals.onFID;
-  getFCP = webVitals.getFCP || webVitals.onFCP;
-  getLCP = webVitals.getLCP || webVitals.onLCP;
-  getTTFB = webVitals.getTTFB || webVitals.onTTFB;
+  onCLS = webVitals.onCLS;
+  onFID = webVitals.onFID || webVitals.onINP; // FID deprecated, use INP as fallback
+  onFCP = webVitals.onFCP;
+  onLCP = webVitals.onLCP;
+  onTTFB = webVitals.onTTFB;
+  onINP = webVitals.onINP || webVitals.onFID; // INP is the new metric replacing FID
 } catch (error) {
   console.warn('Web Vitals library not available:', error);
-  // Fallback functions
-  getCLS = getFID = getFCP = getLCP = getTTFB = () => console.warn('Web Vitals not available');
+  // Fallback functions that won't break the app
+  onCLS = onFID = onFCP = onLCP = onTTFB = onINP = (callback) => {
+    console.warn('Web Vitals not available');
+  };
 }
 
 class PerformanceMonitor {
