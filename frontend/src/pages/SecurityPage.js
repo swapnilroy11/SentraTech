@@ -284,7 +284,8 @@ const SecurityPage = () => {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </main>
   );
 };
 
