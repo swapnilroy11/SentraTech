@@ -189,9 +189,16 @@ const CaseStudies = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
+              whileHover={{ 
+                scale: 1.05, 
+                y: -5,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
             >
               <Card 
-                className="bg-[rgb(26,28,30)] border border-[rgba(0,255,65,0.3)] rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 h-full"
+                className="bg-[rgb(26,28,30)] border border-[rgba(0,255,65,0.3)] rounded-xl overflow-hidden cursor-pointer h-full group
+                           hover:border-[#00FF41] hover:shadow-lg hover:shadow-[rgba(0,255,65,0.2)] 
+                           transition-all duration-300 ease-out transform-gpu"
                 onClick={() => setSelectedCase(caseStudy)}
               >
                 <CardContent className="p-6">
