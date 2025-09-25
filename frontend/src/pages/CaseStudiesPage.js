@@ -124,7 +124,7 @@ const CaseStudiesPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#0A0A0A]">
+      <section className="py-20 bg-[#0A0A0A]" id="case-studies-cta">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
