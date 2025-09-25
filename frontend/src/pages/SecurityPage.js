@@ -272,11 +272,11 @@ const SecurityPage = () => {
               Ready for Enterprise-Grade Security?
             </h2>
             <p className="text-xl text-[rgb(161,161,170)] mb-8">
-              See our transparent pricing plans with comprehensive security included at every tier
+              Calculate your ROI with our secure, compliant platform that meets all enterprise requirements
             </p>
-            <Link to="/pricing">
+            <Link to="/roi-calculator">
               <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 mx-auto">
-                <span>View Pricing Plans</span>
+                <span>Calculate Your ROI</span>
                 <ArrowRight size={24} />
               </Button>
             </Link>
