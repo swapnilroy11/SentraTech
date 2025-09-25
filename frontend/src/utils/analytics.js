@@ -8,6 +8,7 @@
 export const trackEvent = (eventName, eventParameters = {}) => {
   if (typeof window.gtag === 'function') {
     window.gtag('event', eventName, {
+      send_to: 'G-75HTVL1QME',
       ...eventParameters,
       // Add timestamp for better tracking
       timestamp: new Date().toISOString(),
