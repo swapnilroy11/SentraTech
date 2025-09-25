@@ -128,9 +128,14 @@ const ROICalculator = () => {
     
     const monthlySavings = traditional.totalCost - ai.totalCost;
     const annualSavings = monthlySavings * 12;
-    const roiPercentage = ((annualSavings / (ai.totalCost * 12)) * 100);
-    const costReductionPercentage = ((monthlySavings / traditional.totalCost) * 100);
-    const paybackPeriodMonths = (ai.totalCost * 12) / monthlySavings;
+    let roiPercentage = ((annualSavings / (ai.totalCost * 12)) * 100);
+    let costReductionPercentage = ((monthlySavings / traditional.totalCost) * 100);
+    let paybackPeriodMonths = (ai.totalCost * 12) / monthlySavings;
+    
+    // Ensure realistic ranges based on market research
+    costReductionPercentage = Math.min(70, Math.max(0, costReductionPercentage)); // Cap at 70%
+    roiPercentage = Math.min(500, Math.max(0, roiPercentage)); // Cap at 500%
+    paybackPeriodMonths = Math.min(240, Math.max(6, paybackPeriodMonths)); // Between 6-240 months
     
     // Calculate per-call costs
     const traditionalCostPerCall = traditional.totalCost / monthlyCallVolume;
@@ -139,11 +144,11 @@ const ROICalculator = () => {
     return {
       traditional,
       ai,
-      monthlySavings,
-      annualSavings,
-      roiPercentage: Math.max(0, roiPercentage),
-      costReductionPercentage: Math.max(0, costReductionPercentage),
-      paybackPeriodMonths: Math.max(0, paybackPeriodMonths),
+      monthlySavings: Math.max(0, monthlySavings),
+      annualSavings: Math.max(0, annualSavings),
+      roiPercentage,
+      costReductionPercentage,
+      paybackPeriodMonths,
       traditionalCostPerCall,
       aiCostPerCall,
       callVolumeProcessed: monthlyCallVolume,
