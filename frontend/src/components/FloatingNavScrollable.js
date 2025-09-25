@@ -12,7 +12,7 @@ const FloatingNavScrollable = () => {
     { path: '/roi-calculator', label: 'ROI Calculator', icon: '📈' },
     { path: '/features', label: 'Features', icon: '⚡' },
     { path: '/demo-request', label: 'Demo Request', icon: '▶️' },
-    { path: '/#customer-journey', label: 'Customer Journey', icon: '🛤️' }
+    { path: '/features#customer-journey', label: 'Customer Journey', icon: '🛤️' }
   ];
 
   const toggleMenu = () => {
