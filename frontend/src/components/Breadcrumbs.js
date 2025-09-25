@@ -11,6 +11,7 @@ const Breadcrumbs = () => {
     'case-studies': 'Case Studies',
     'integrations': 'Integrations',
     'security': 'Security & Compliance',
+    'roi-calculator': 'ROI Calculator',
     'pricing': 'Pricing',
     'demo-request': 'Demo Request'
   };
