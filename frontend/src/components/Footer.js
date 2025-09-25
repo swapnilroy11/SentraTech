@@ -73,44 +73,6 @@ const Footer = () => {
                 Transforming customer support with AI-powered automation and human expertise. 
                 Reduce costs by 40-60% while improving satisfaction scores.
               </p>
-
-              {/* Key Features */}
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <div className="p-1.5 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50">
-                    <Zap size={16} className="text-[#00FF41]" />
-                  </div>
-                  <span className="text-[rgb(218,218,218)] text-sm">Sub-50ms AI Routing</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="p-1.5 bg-[#00DDFF]/20 rounded-lg border border-[#00DDFF]/50">
-                    <Shield size={16} className="text-[#00DDFF]" />
-                  </div>
-                  <span className="text-[rgb(218,218,218)] text-sm">Enterprise Compliance</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="p-1.5 bg-[rgb(192,192,192)]/20 rounded-lg border border-[rgb(192,192,192)]/50">
-                    <Globe size={16} className="text-[rgb(192,192,192)]" />
-                  </div>
-                  <span className="text-[rgb(218,218,218)] text-sm">Global Scale Operations</span>
-                </div>
-              </div>
-
-              {/* Contact Info */}
-              <div className="space-y-3 pt-4">
-                <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-                  <Mail size={16} className="text-[#DAFF01]" />
-                  <span className="text-sm">hello@sentratech.ai</span>
-                </div>
-                <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-                  <Phone size={16} className="text-[#00DDFF]" />
-                  <span className="text-sm">+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-                  <MapPin size={16} className="text-[rgb(192,192,192)]" />
-                  <span className="text-sm">San Francisco, CA</span>
-                </div>
-              </div>
             </div>
 
             {/* Links Sections */}
