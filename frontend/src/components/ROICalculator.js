@@ -348,8 +348,9 @@ const ROICalculator = () => {
                     value={costPerAgent}
                     onChange={(e) => setCostPerAgent(parseFloat(e.target.value) || 0)}
                     className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
-                    step="100"
-                    min="1000"
+                    step="50"
+                    min="300"
+                    max="1000"
                   />
                 </div>
               </div>
