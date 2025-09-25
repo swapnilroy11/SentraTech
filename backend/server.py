@@ -1249,13 +1249,21 @@ def calculate_roi_metrics(input_data: ROIInput) -> ROIResults:
     )
 
 @api_router.post("/roi/calculate", response_model=ROIResults)
+@cached(ttl=1800, key_prefix="roi_calculation")  # Cache ROI calculations for 30 minutes
 async def calculate_roi(input_data: ROIInput):
-    """Calculate ROI metrics without saving to database"""
+    """Calculate ROI metrics without saving to database - PERFORMANCE OPTIMIZED"""
+    start_time = time.time()
+    
     try:
         results = calculate_roi_metrics(input_data)
+        
+        response_time = (time.time() - start_time) * 1000
+        logger.info(f"ROI calculation completed in {response_time:.2f}ms")
+        
         return results
     except Exception as e:
-        logger.error(f"Error calculating ROI: {str(e)}")
+        response_time = (time.time() - start_time) * 1000
+        logger.error(f"ROI calculation failed after {response_time:.2f}ms: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error calculating ROI: {str(e)}")
 
 class ROISaveRequest(BaseModel):
