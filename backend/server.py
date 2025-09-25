@@ -285,11 +285,13 @@ class DemoRequest(BaseModel):
         return v.strip() if v else ""
 
 class DemoRequestResponse(BaseModel):
-    success: bool
+    success: bool = True
     contact_id: str = None
     message: str
     reference_id: str = None
     source: str = None
+    status: str = "submitted"
+    integration_status: Optional[Dict[str, Any]] = None
 
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
