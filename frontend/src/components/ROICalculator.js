@@ -355,12 +355,29 @@ const ROICalculator = () => {
                   <Input
                     id="costPerAgent"
                     type="number"
-                    value={costPerAgent}
-                    onChange={(e) => setCostPerAgent(parseFloat(e.target.value) || 0)}
+                    value={costPerAgent || ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '' || value === '0') {
+                        setCostPerAgent('');
+                      } else {
+                        const numValue = parseFloat(value);
+                        if (!isNaN(numValue) && numValue > 0) {
+                          setCostPerAgent(numValue);
+                        }
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value);
+                      if (isNaN(value) || value < 300) {
+                        setCostPerAgent(500); // Reset to baseline if invalid
+                      }
+                    }}
                     className="pl-10 bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white rounded-xl text-base py-3"
                     step="50"
                     min="300"
                     max="1000"
+                    placeholder="500"
                   />
                 </div>
               </div>
