@@ -68,9 +68,9 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] pt-20">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] pt-20" id="home">
       {/* Hero Section */}
-      <section className="py-20 relative overflow-hidden">
+      <section className="py-20 relative overflow-hidden" id="hero">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
