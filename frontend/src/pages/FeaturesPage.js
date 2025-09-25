@@ -450,7 +450,8 @@ const FeaturesPage = () => {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 
