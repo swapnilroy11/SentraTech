@@ -21,6 +21,1021 @@ import string
 # Backend URL from environment
 BACKEND_URL = "https://sentra-dark.preview.emergentagent.com/api"
 
+class LoadTestingFramework:
+    """Comprehensive API Load and Stability Testing Framework"""
+    
+    def __init__(self):
+        self.test_results = []
+        self.failed_tests = []
+        self.passed_tests = []
+        self.load_test_results = {}
+        
+    def log_test(self, test_name: str, passed: bool, details: str = ""):
+        """Log test results"""
+        result = {
+            "test": test_name,
+            "passed": passed,
+            "details": details,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.test_results.append(result)
+        
+        if passed:
+            self.passed_tests.append(test_name)
+            print(f"✅ PASS: {test_name}")
+        else:
+            self.failed_tests.append(test_name)
+            print(f"❌ FAIL: {test_name} - {details}")
+            
+        if details:
+            print(f"   Details: {details}")
+    
+    def generate_realistic_demo_data(self) -> Dict[str, Any]:
+        """Generate realistic demo request data for load testing"""
+        companies = [
+            "TechCorp Solutions", "Global Dynamics Inc", "Innovation Labs", 
+            "Digital Ventures", "Enterprise Systems", "CloudTech Partners",
+            "DataFlow Industries", "SmartOps Corporation", "NextGen Solutions",
+            "Quantum Technologies", "Apex Innovations", "Stellar Enterprises"
+        ]
+        
+        first_names = [
+            "Sarah", "Michael", "Jennifer", "David", "Lisa", "Robert",
+            "Emily", "James", "Amanda", "Christopher", "Jessica", "Daniel"
+        ]
+        
+        last_names = [
+            "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller",
+            "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez"
+        ]
+        
+        domains = [
+            "techcorp.com", "globalinc.com", "innovationlabs.io", "digitalventures.net",
+            "enterprise-sys.com", "cloudtech.co", "dataflow.org", "smartops.biz"
+        ]
+        
+        messages = [
+            "Interested in AI customer support platform for our growing business",
+            "Looking to reduce support costs and improve response times",
+            "Need demo to evaluate automation capabilities for our call center",
+            "Exploring AI solutions to handle high volume customer inquiries",
+            "Want to see how SentraTech can integrate with our existing systems",
+            "Seeking cost-effective solution for 24/7 customer support coverage"
+        ]
+        
+        call_volumes = ["500-1000", "1000-2500", "2500-5000", "5000-10000", "10000+"]
+        
+        # Generate random but realistic data
+        first_name = random.choice(first_names)
+        last_name = random.choice(last_names)
+        company = random.choice(companies)
+        domain = random.choice(domains)
+        
+        return {
+            "name": f"{first_name} {last_name}",
+            "email": f"{first_name.lower()}.{last_name.lower()}@{domain}",
+            "company": company,
+            "phone": f"+1{random.randint(200, 999)}{random.randint(200, 999)}{random.randint(1000, 9999)}",
+            "message": random.choice(messages),
+            "call_volume": random.choice(call_volumes)
+        }
+    
+    def generate_realistic_roi_data(self) -> Dict[str, Any]:
+        """Generate realistic ROI calculation data for load testing"""
+        return {
+            "call_volume": random.randint(1000, 50000),
+            "current_cost_per_call": round(random.uniform(2.50, 15.00), 2),
+            "average_handle_time": random.randint(180, 900),  # 3-15 minutes
+            "agent_count": random.randint(5, 200)
+        }
+    
+    def make_concurrent_requests(self, endpoint: str, method: str = "GET", 
+                                data: Dict = None, num_requests: int = 10, 
+                                timeout: int = 30) -> Dict[str, Any]:
+        """Make concurrent requests to an endpoint and measure performance"""
+        
+        def make_single_request(request_id: int) -> Dict[str, Any]:
+            start_time = time.time()
+            try:
+                if method.upper() == "POST":
+                    if endpoint == "/demo/request":
+                        # Generate unique data for each request to avoid duplicates
+                        request_data = self.generate_realistic_demo_data()
+                        request_data["email"] = f"loadtest{request_id}_{int(time.time())}@example.com"
+                    elif endpoint == "/roi/calculate":
+                        request_data = self.generate_realistic_roi_data()
+                    else:
+                        request_data = data or {}
+                    
+                    response = requests.post(f"{BACKEND_URL}{endpoint}", 
+                                           json=request_data, timeout=timeout)
+                else:
+                    response = requests.get(f"{BACKEND_URL}{endpoint}", timeout=timeout)
+                
+                end_time = time.time()
+                response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+                
+                return {
+                    "request_id": request_id,
+                    "status_code": response.status_code,
+                    "response_time": response_time,
+                    "success": 200 <= response.status_code < 300,
+                    "error": None,
+                    "response_size": len(response.content) if response.content else 0
+                }
+                
+            except requests.exceptions.Timeout:
+                return {
+                    "request_id": request_id,
+                    "status_code": 0,
+                    "response_time": timeout * 1000,
+                    "success": False,
+                    "error": "Timeout",
+                    "response_size": 0
+                }
+            except Exception as e:
+                end_time = time.time()
+                return {
+                    "request_id": request_id,
+                    "status_code": 0,
+                    "response_time": (end_time - start_time) * 1000,
+                    "success": False,
+                    "error": str(e),
+                    "response_size": 0
+                }
+        
+        # Execute concurrent requests
+        print(f"🚀 Executing {num_requests} concurrent {method} requests to {endpoint}...")
+        
+        start_time = time.time()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=min(num_requests, 50)) as executor:
+            futures = [executor.submit(make_single_request, i) for i in range(num_requests)]
+            results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        end_time = time.time()
+        
+        # Calculate metrics
+        successful_requests = [r for r in results if r["success"]]
+        failed_requests = [r for r in results if not r["success"]]
+        
+        response_times = [r["response_time"] for r in successful_requests]
+        
+        if response_times:
+            avg_response_time = statistics.mean(response_times)
+            median_response_time = statistics.median(response_times)
+            p95_response_time = sorted(response_times)[int(0.95 * len(response_times))] if len(response_times) > 1 else response_times[0]
+            max_response_time = max(response_times)
+            min_response_time = min(response_times)
+        else:
+            avg_response_time = median_response_time = p95_response_time = max_response_time = min_response_time = 0
+        
+        total_time = (end_time - start_time)
+        requests_per_second = num_requests / total_time if total_time > 0 else 0
+        
+        # Calculate error breakdown
+        error_breakdown = {}
+        for result in failed_requests:
+            error_type = result.get("error", f"HTTP_{result['status_code']}")
+            error_breakdown[error_type] = error_breakdown.get(error_type, 0) + 1
+        
+        return {
+            "endpoint": endpoint,
+            "method": method,
+            "total_requests": num_requests,
+            "successful_requests": len(successful_requests),
+            "failed_requests": len(failed_requests),
+            "success_rate": (len(successful_requests) / num_requests) * 100,
+            "total_time": total_time,
+            "requests_per_second": requests_per_second,
+            "avg_response_time": avg_response_time,
+            "median_response_time": median_response_time,
+            "p95_response_time": p95_response_time,
+            "max_response_time": max_response_time,
+            "min_response_time": min_response_time,
+            "error_breakdown": error_breakdown,
+            "raw_results": results
+        }
+    
+    def test_demo_request_load(self):
+        """Test POST /api/demo/request with 50 concurrent requests (<300ms target)"""
+        print("\n=== Testing Demo Request API Load (50 concurrent requests) ===")
+        
+        result = self.make_concurrent_requests(
+            endpoint="/demo/request",
+            method="POST",
+            num_requests=50,
+            timeout=30
+        )
+        
+        self.load_test_results["demo_request"] = result
+        
+        # Evaluate results against targets
+        target_response_time = 300  # ms
+        min_success_rate = 95  # %
+        
+        # Test 1: Response Time
+        if result["avg_response_time"] <= target_response_time:
+            self.log_test("Demo Request Load - Average Response Time", True,
+                        f"✅ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        else:
+            self.log_test("Demo Request Load - Average Response Time", False,
+                        f"❌ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        
+        # Test 2: 95th Percentile Response Time
+        if result["p95_response_time"] <= target_response_time * 1.5:  # Allow 50% more for p95
+            self.log_test("Demo Request Load - 95th Percentile Response Time", True,
+                        f"✅ 95th percentile: {result['p95_response_time']:.2f}ms")
+        else:
+            self.log_test("Demo Request Load - 95th Percentile Response Time", False,
+                        f"❌ 95th percentile: {result['p95_response_time']:.2f}ms (too slow)")
+        
+        # Test 3: Success Rate
+        if result["success_rate"] >= min_success_rate:
+            self.log_test("Demo Request Load - Success Rate", True,
+                        f"✅ Success rate: {result['success_rate']:.1f}% ({result['successful_requests']}/{result['total_requests']})")
+        else:
+            self.log_test("Demo Request Load - Success Rate", False,
+                        f"❌ Success rate: {result['success_rate']:.1f}% (target: >{min_success_rate}%)")
+        
+        # Test 4: Throughput
+        min_rps = 10  # Minimum requests per second
+        if result["requests_per_second"] >= min_rps:
+            self.log_test("Demo Request Load - Throughput", True,
+                        f"✅ Throughput: {result['requests_per_second']:.2f} RPS")
+        else:
+            self.log_test("Demo Request Load - Throughput", False,
+                        f"❌ Throughput: {result['requests_per_second']:.2f} RPS (target: >{min_rps} RPS)")
+        
+        # Test 5: Error Analysis
+        if result["failed_requests"] == 0:
+            self.log_test("Demo Request Load - Error Rate", True,
+                        f"✅ No errors detected")
+        else:
+            error_details = ", ".join([f"{k}: {v}" for k, v in result["error_breakdown"].items()])
+            self.log_test("Demo Request Load - Error Rate", False,
+                        f"❌ {result['failed_requests']} errors: {error_details}")
+        
+        print(f"📊 Demo Request Load Test Summary:")
+        print(f"   Total Requests: {result['total_requests']}")
+        print(f"   Successful: {result['successful_requests']} ({result['success_rate']:.1f}%)")
+        print(f"   Failed: {result['failed_requests']}")
+        print(f"   Avg Response Time: {result['avg_response_time']:.2f}ms")
+        print(f"   95th Percentile: {result['p95_response_time']:.2f}ms")
+        print(f"   Max Response Time: {result['max_response_time']:.2f}ms")
+        print(f"   Throughput: {result['requests_per_second']:.2f} RPS")
+    
+    def test_health_check_load(self):
+        """Test GET /api/health with 100 concurrent requests (<100ms target)"""
+        print("\n=== Testing Health Check API Load (100 concurrent requests) ===")
+        
+        result = self.make_concurrent_requests(
+            endpoint="/health",
+            method="GET",
+            num_requests=100,
+            timeout=10
+        )
+        
+        self.load_test_results["health_check"] = result
+        
+        # Evaluate results against targets
+        target_response_time = 100  # ms
+        min_success_rate = 99  # % (health check should be very reliable)
+        
+        # Test 1: Response Time
+        if result["avg_response_time"] <= target_response_time:
+            self.log_test("Health Check Load - Average Response Time", True,
+                        f"✅ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        else:
+            self.log_test("Health Check Load - Average Response Time", False,
+                        f"❌ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        
+        # Test 2: Success Rate
+        if result["success_rate"] >= min_success_rate:
+            self.log_test("Health Check Load - Success Rate", True,
+                        f"✅ Success rate: {result['success_rate']:.1f}%")
+        else:
+            self.log_test("Health Check Load - Success Rate", False,
+                        f"❌ Success rate: {result['success_rate']:.1f}% (target: >{min_success_rate}%)")
+        
+        # Test 3: Consistency (low variance in response times)
+        if len([r for r in result["raw_results"] if r["success"]]) > 1:
+            response_times = [r["response_time"] for r in result["raw_results"] if r["success"]]
+            variance = statistics.variance(response_times) if len(response_times) > 1 else 0
+            std_dev = statistics.stdev(response_times) if len(response_times) > 1 else 0
+            
+            if std_dev <= target_response_time * 0.5:  # Standard deviation should be low
+                self.log_test("Health Check Load - Response Consistency", True,
+                            f"✅ Low response time variance (std dev: {std_dev:.2f}ms)")
+            else:
+                self.log_test("Health Check Load - Response Consistency", False,
+                            f"❌ High response time variance (std dev: {std_dev:.2f}ms)")
+        
+        print(f"📊 Health Check Load Test Summary:")
+        print(f"   Total Requests: {result['total_requests']}")
+        print(f"   Successful: {result['successful_requests']} ({result['success_rate']:.1f}%)")
+        print(f"   Avg Response Time: {result['avg_response_time']:.2f}ms")
+        print(f"   Throughput: {result['requests_per_second']:.2f} RPS")
+    
+    def test_roi_calculator_load(self):
+        """Test POST /api/roi/calculate with 40 concurrent requests (<250ms target)"""
+        print("\n=== Testing ROI Calculator API Load (40 concurrent requests) ===")
+        
+        result = self.make_concurrent_requests(
+            endpoint="/roi/calculate",
+            method="POST",
+            num_requests=40,
+            timeout=20
+        )
+        
+        self.load_test_results["roi_calculator"] = result
+        
+        # Evaluate results against targets
+        target_response_time = 250  # ms
+        min_success_rate = 95  # %
+        
+        # Test 1: Response Time
+        if result["avg_response_time"] <= target_response_time:
+            self.log_test("ROI Calculator Load - Average Response Time", True,
+                        f"✅ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        else:
+            self.log_test("ROI Calculator Load - Average Response Time", False,
+                        f"❌ Avg response time: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+        
+        # Test 2: Success Rate
+        if result["success_rate"] >= min_success_rate:
+            self.log_test("ROI Calculator Load - Success Rate", True,
+                        f"✅ Success rate: {result['success_rate']:.1f}%")
+        else:
+            self.log_test("ROI Calculator Load - Success Rate", False,
+                        f"❌ Success rate: {result['success_rate']:.1f}% (target: >{min_success_rate}%)")
+        
+        # Test 3: Calculation Accuracy (verify responses contain expected fields)
+        successful_responses = [r for r in result["raw_results"] if r["success"]]
+        if successful_responses:
+            # Sample a few responses to verify structure
+            sample_size = min(5, len(successful_responses))
+            accuracy_test_passed = True
+            
+            for i in range(sample_size):
+                try:
+                    # Make a test request to verify response structure
+                    test_data = self.generate_realistic_roi_data()
+                    response = requests.post(f"{BACKEND_URL}/roi/calculate", json=test_data, timeout=10)
+                    if response.status_code == 200:
+                        result_data = response.json()
+                        required_fields = ["current_monthly_cost", "annual_savings", "roi", "automation_rate"]
+                        missing_fields = [field for field in required_fields if field not in result_data]
+                        if missing_fields:
+                            accuracy_test_passed = False
+                            break
+                    else:
+                        accuracy_test_passed = False
+                        break
+                except:
+                    accuracy_test_passed = False
+                    break
+            
+            if accuracy_test_passed:
+                self.log_test("ROI Calculator Load - Calculation Accuracy", True,
+                            f"✅ ROI calculations returning correct data structure")
+            else:
+                self.log_test("ROI Calculator Load - Calculation Accuracy", False,
+                            f"❌ ROI calculations may have data structure issues")
+        
+        print(f"📊 ROI Calculator Load Test Summary:")
+        print(f"   Total Requests: {result['total_requests']}")
+        print(f"   Successful: {result['successful_requests']} ({result['success_rate']:.1f}%)")
+        print(f"   Avg Response Time: {result['avg_response_time']:.2f}ms")
+        print(f"   Throughput: {result['requests_per_second']:.2f} RPS")
+    
+    def test_analytics_endpoints_load(self):
+        """Test analytics endpoints with 20 concurrent requests (<300ms target)"""
+        print("\n=== Testing Analytics Endpoints Load (20 concurrent requests each) ===")
+        
+        analytics_endpoints = [
+            "/metrics/live",
+            "/metrics/dashboard", 
+            "/metrics/kpis",
+            "/analytics/stats"
+        ]
+        
+        analytics_results = {}
+        
+        for endpoint in analytics_endpoints:
+            print(f"🔍 Testing {endpoint}...")
+            
+            result = self.make_concurrent_requests(
+                endpoint=endpoint,
+                method="GET",
+                num_requests=20,
+                timeout=15
+            )
+            
+            analytics_results[endpoint] = result
+            
+            # Evaluate results
+            target_response_time = 300  # ms
+            min_success_rate = 90  # %
+            
+            # Response Time Test
+            if result["avg_response_time"] <= target_response_time:
+                self.log_test(f"Analytics Load - {endpoint} Response Time", True,
+                            f"✅ Avg: {result['avg_response_time']:.2f}ms")
+            else:
+                self.log_test(f"Analytics Load - {endpoint} Response Time", False,
+                            f"❌ Avg: {result['avg_response_time']:.2f}ms (target: <{target_response_time}ms)")
+            
+            # Success Rate Test
+            if result["success_rate"] >= min_success_rate:
+                self.log_test(f"Analytics Load - {endpoint} Success Rate", True,
+                            f"✅ Success: {result['success_rate']:.1f}%")
+            else:
+                self.log_test(f"Analytics Load - {endpoint} Success Rate", False,
+                            f"❌ Success: {result['success_rate']:.1f}% (target: >{min_success_rate}%)")
+        
+        self.load_test_results["analytics"] = analytics_results
+        
+        # Overall analytics performance
+        all_response_times = []
+        all_success_rates = []
+        
+        for endpoint, result in analytics_results.items():
+            all_response_times.append(result["avg_response_time"])
+            all_success_rates.append(result["success_rate"])
+        
+        if all_response_times:
+            avg_analytics_response_time = statistics.mean(all_response_times)
+            avg_analytics_success_rate = statistics.mean(all_success_rates)
+            
+            if avg_analytics_response_time <= 300 and avg_analytics_success_rate >= 90:
+                self.log_test("Analytics Load - Overall Performance", True,
+                            f"✅ Overall analytics performance acceptable")
+            else:
+                self.log_test("Analytics Load - Overall Performance", False,
+                            f"❌ Overall analytics performance issues")
+    
+    def test_burst_load_scenario(self):
+        """Test burst load scenario - all requests simultaneously"""
+        print("\n=== Testing Burst Load Scenario ===")
+        
+        # Test burst load on demo request endpoint
+        print("🚀 Testing burst load on demo request endpoint...")
+        
+        burst_result = self.make_concurrent_requests(
+            endpoint="/demo/request",
+            method="POST", 
+            num_requests=25,  # Smaller burst to avoid overwhelming
+            timeout=45
+        )
+        
+        # Evaluate burst performance
+        max_acceptable_response_time = 5000  # 5 seconds for burst scenario
+        min_success_rate = 80  # Lower threshold for burst
+        
+        if burst_result["max_response_time"] <= max_acceptable_response_time:
+            self.log_test("Burst Load - Peak Response Time", True,
+                        f"✅ Max response time: {burst_result['max_response_time']:.2f}ms")
+        else:
+            self.log_test("Burst Load - Peak Response Time", False,
+                        f"❌ Max response time: {burst_result['max_response_time']:.2f}ms (too slow)")
+        
+        if burst_result["success_rate"] >= min_success_rate:
+            self.log_test("Burst Load - Success Rate", True,
+                        f"✅ Burst success rate: {burst_result['success_rate']:.1f}%")
+        else:
+            self.log_test("Burst Load - Success Rate", False,
+                        f"❌ Burst success rate: {burst_result['success_rate']:.1f}% (target: >{min_success_rate}%)")
+        
+        # Check for timeout errors specifically
+        timeout_errors = burst_result["error_breakdown"].get("Timeout", 0)
+        if timeout_errors == 0:
+            self.log_test("Burst Load - Timeout Handling", True,
+                        f"✅ No timeout errors during burst")
+        else:
+            self.log_test("Burst Load - Timeout Handling", False,
+                        f"❌ {timeout_errors} timeout errors during burst")
+        
+        self.load_test_results["burst_load"] = burst_result
+    
+    def test_sustained_load_scenario(self):
+        """Test sustained load scenario - gradual ramp-up and sustained load"""
+        print("\n=== Testing Sustained Load Scenario ===")
+        
+        print("📈 Testing sustained load with gradual ramp-up...")
+        
+        # Simulate sustained load by making requests over time
+        sustained_results = []
+        total_requests = 30
+        ramp_up_time = 15  # seconds
+        sustain_time = 30   # seconds
+        
+        # Phase 1: Ramp-up
+        print("Phase 1: Ramp-up over 15 seconds...")
+        ramp_up_start = time.time()
+        
+        for i in range(total_requests // 2):  # Half the requests during ramp-up
+            if i > 0:
+                time.sleep(ramp_up_time / (total_requests // 2))  # Spread requests over ramp-up time
+            
+            try:
+                demo_data = self.generate_realistic_demo_data()
+                demo_data["email"] = f"sustained{i}_{int(time.time())}@example.com"
+                
+                start_time = time.time()
+                response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_data, timeout=30)
+                end_time = time.time()
+                
+                sustained_results.append({
+                    "phase": "ramp_up",
+                    "request_id": i,
+                    "response_time": (end_time - start_time) * 1000,
+                    "success": 200 <= response.status_code < 300,
+                    "status_code": response.status_code
+                })
+                
+            except Exception as e:
+                sustained_results.append({
+                    "phase": "ramp_up",
+                    "request_id": i,
+                    "response_time": 30000,  # Timeout
+                    "success": False,
+                    "error": str(e)
+                })
+        
+        # Phase 2: Sustained load
+        print("Phase 2: Sustained load for 30 seconds...")
+        sustain_start = time.time()
+        
+        while time.time() - sustain_start < sustain_time:
+            try:
+                demo_data = self.generate_realistic_demo_data()
+                demo_data["email"] = f"sustained_sustain_{int(time.time())}@example.com"
+                
+                start_time = time.time()
+                response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_data, timeout=20)
+                end_time = time.time()
+                
+                sustained_results.append({
+                    "phase": "sustain",
+                    "request_id": len(sustained_results),
+                    "response_time": (end_time - start_time) * 1000,
+                    "success": 200 <= response.status_code < 300,
+                    "status_code": response.status_code
+                })
+                
+                time.sleep(2)  # 2 second intervals during sustained phase
+                
+            except Exception as e:
+                sustained_results.append({
+                    "phase": "sustain",
+                    "request_id": len(sustained_results),
+                    "response_time": 20000,
+                    "success": False,
+                    "error": str(e)
+                })
+        
+        # Analyze sustained load results
+        ramp_up_results = [r for r in sustained_results if r["phase"] == "ramp_up"]
+        sustain_results = [r for r in sustained_results if r["phase"] == "sustain"]
+        
+        ramp_up_success_rate = (len([r for r in ramp_up_results if r["success"]]) / len(ramp_up_results)) * 100 if ramp_up_results else 0
+        sustain_success_rate = (len([r for r in sustain_results if r["success"]]) / len(sustain_results)) * 100 if sustain_results else 0
+        
+        # Test ramp-up performance
+        if ramp_up_success_rate >= 85:
+            self.log_test("Sustained Load - Ramp-up Performance", True,
+                        f"✅ Ramp-up success rate: {ramp_up_success_rate:.1f}%")
+        else:
+            self.log_test("Sustained Load - Ramp-up Performance", False,
+                        f"❌ Ramp-up success rate: {ramp_up_success_rate:.1f}% (target: >85%)")
+        
+        # Test sustained performance
+        if sustain_success_rate >= 80:
+            self.log_test("Sustained Load - Sustained Performance", True,
+                        f"✅ Sustained success rate: {sustain_success_rate:.1f}%")
+        else:
+            self.log_test("Sustained Load - Sustained Performance", False,
+                        f"❌ Sustained success rate: {sustain_success_rate:.1f}% (target: >80%)")
+        
+        # Check for performance degradation
+        if sustain_results:
+            sustain_response_times = [r["response_time"] for r in sustain_results if r["success"]]
+            if sustain_response_times:
+                avg_sustain_response_time = statistics.mean(sustain_response_times)
+                if avg_sustain_response_time <= 1000:  # 1 second
+                    self.log_test("Sustained Load - Performance Degradation", True,
+                                f"✅ No significant performance degradation (avg: {avg_sustain_response_time:.2f}ms)")
+                else:
+                    self.log_test("Sustained Load - Performance Degradation", False,
+                                f"❌ Performance degradation detected (avg: {avg_sustain_response_time:.2f}ms)")
+        
+        self.load_test_results["sustained_load"] = {
+            "total_requests": len(sustained_results),
+            "ramp_up_success_rate": ramp_up_success_rate,
+            "sustain_success_rate": sustain_success_rate,
+            "ramp_up_results": ramp_up_results,
+            "sustain_results": sustain_results
+        }
+    
+    def test_mixed_endpoint_scenario(self):
+        """Test mixed endpoint scenario - distribute load across multiple endpoints"""
+        print("\n=== Testing Mixed Endpoint Scenario ===")
+        
+        print("🔀 Testing mixed load across multiple endpoints...")
+        
+        # Define endpoint mix
+        endpoint_mix = [
+            {"endpoint": "/demo/request", "method": "POST", "weight": 40, "requests": 20},
+            {"endpoint": "/roi/calculate", "method": "POST", "weight": 30, "requests": 15},
+            {"endpoint": "/health", "method": "GET", "weight": 20, "requests": 10},
+            {"endpoint": "/metrics/live", "method": "GET", "weight": 10, "requests": 5}
+        ]
+        
+        mixed_results = {}
+        
+        # Execute mixed load test using threading for true concurrency
+        def execute_endpoint_load(endpoint_config):
+            endpoint = endpoint_config["endpoint"]
+            method = endpoint_config["method"]
+            num_requests = endpoint_config["requests"]
+            
+            return self.make_concurrent_requests(
+                endpoint=endpoint,
+                method=method,
+                num_requests=num_requests,
+                timeout=25
+            )
+        
+        # Execute all endpoint tests concurrently
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            futures = {executor.submit(execute_endpoint_load, config): config["endpoint"] 
+                      for config in endpoint_mix}
+            
+            for future in concurrent.futures.as_completed(futures):
+                endpoint = futures[future]
+                try:
+                    result = future.result()
+                    mixed_results[endpoint] = result
+                except Exception as e:
+                    print(f"❌ Error testing {endpoint}: {str(e)}")
+        
+        # Analyze mixed load results
+        total_requests = sum(config["requests"] for config in endpoint_mix)
+        total_successful = sum(result["successful_requests"] for result in mixed_results.values())
+        overall_success_rate = (total_successful / total_requests) * 100 if total_requests > 0 else 0
+        
+        # Test overall mixed load performance
+        if overall_success_rate >= 85:
+            self.log_test("Mixed Load - Overall Success Rate", True,
+                        f"✅ Mixed load success rate: {overall_success_rate:.1f}%")
+        else:
+            self.log_test("Mixed Load - Overall Success Rate", False,
+                        f"❌ Mixed load success rate: {overall_success_rate:.1f}% (target: >85%)")
+        
+        # Test for resource contention
+        high_response_time_endpoints = []
+        for endpoint, result in mixed_results.items():
+            if result["avg_response_time"] > 1000:  # 1 second threshold
+                high_response_time_endpoints.append(f"{endpoint}: {result['avg_response_time']:.2f}ms")
+        
+        if not high_response_time_endpoints:
+            self.log_test("Mixed Load - Resource Contention", True,
+                        f"✅ No resource contention detected")
+        else:
+            self.log_test("Mixed Load - Resource Contention", False,
+                        f"❌ Possible resource contention: {', '.join(high_response_time_endpoints)}")
+        
+        # Test endpoint isolation (failures in one shouldn't affect others)
+        endpoint_success_rates = {endpoint: result["success_rate"] for endpoint, result in mixed_results.items()}
+        isolated_endpoints = [endpoint for endpoint, rate in endpoint_success_rates.items() if rate >= 80]
+        
+        if len(isolated_endpoints) >= len(endpoint_mix) * 0.75:  # At least 75% of endpoints should be healthy
+            self.log_test("Mixed Load - Endpoint Isolation", True,
+                        f"✅ Good endpoint isolation: {len(isolated_endpoints)}/{len(endpoint_mix)} endpoints healthy")
+        else:
+            self.log_test("Mixed Load - Endpoint Isolation", False,
+                        f"❌ Poor endpoint isolation: only {len(isolated_endpoints)}/{len(endpoint_mix)} endpoints healthy")
+        
+        self.load_test_results["mixed_load"] = mixed_results
+        
+        # Print detailed mixed load summary
+        print(f"📊 Mixed Load Test Summary:")
+        for endpoint, result in mixed_results.items():
+            print(f"   {endpoint}: {result['successful_requests']}/{result['total_requests']} "
+                  f"({result['success_rate']:.1f}%) - Avg: {result['avg_response_time']:.2f}ms")
+    
+    def test_data_integrity_under_load(self):
+        """Test data integrity during concurrent operations"""
+        print("\n=== Testing Data Integrity Under Load ===")
+        
+        print("🔍 Testing concurrent demo request submissions for data integrity...")
+        
+        # Create unique test data for integrity checking
+        base_email = f"integrity_test_{int(time.time())}"
+        test_requests = []
+        
+        for i in range(10):
+            demo_data = self.generate_realistic_demo_data()
+            demo_data["email"] = f"{base_email}_{i}@integrity.test"
+            demo_data["company"] = f"Integrity Test Corp {i}"
+            test_requests.append(demo_data)
+        
+        # Submit concurrent requests
+        def submit_demo_request(request_data):
+            try:
+                response = requests.post(f"{BACKEND_URL}/demo/request", json=request_data, timeout=30)
+                if response.status_code == 200:
+                    result = response.json()
+                    return {
+                        "success": True,
+                        "email": request_data["email"],
+                        "company": request_data["company"],
+                        "reference_id": result.get("reference_id"),
+                        "response": result
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "email": request_data["email"],
+                        "error": f"HTTP {response.status_code}"
+                    }
+            except Exception as e:
+                return {
+                    "success": False,
+                    "email": request_data["email"],
+                    "error": str(e)
+                }
+        
+        # Execute concurrent submissions
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(submit_demo_request, req) for req in test_requests]
+            submission_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        
+        # Analyze data integrity
+        successful_submissions = [r for r in submission_results if r["success"]]
+        
+        # Test 1: All submissions should succeed
+        if len(successful_submissions) == len(test_requests):
+            self.log_test("Data Integrity - Concurrent Submissions", True,
+                        f"✅ All {len(test_requests)} concurrent submissions successful")
+        else:
+            failed_count = len(test_requests) - len(successful_submissions)
+            self.log_test("Data Integrity - Concurrent Submissions", False,
+                        f"❌ {failed_count} submissions failed out of {len(test_requests)}")
+        
+        # Test 2: Check for duplicate reference IDs (race condition test)
+        reference_ids = [r["reference_id"] for r in successful_submissions if r.get("reference_id")]
+        unique_reference_ids = set(reference_ids)
+        
+        if len(reference_ids) == len(unique_reference_ids):
+            self.log_test("Data Integrity - Unique Reference IDs", True,
+                        f"✅ All reference IDs unique (no race conditions)")
+        else:
+            duplicates = len(reference_ids) - len(unique_reference_ids)
+            self.log_test("Data Integrity - Unique Reference IDs", False,
+                        f"❌ {duplicates} duplicate reference IDs detected (race condition)")
+        
+        # Test 3: Verify data persistence (check if data was stored correctly)
+        time.sleep(5)  # Allow time for background processing
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/demo/requests?limit=50", timeout=15)
+            if response.status_code == 200:
+                stored_requests = response.json().get("requests", [])
+                
+                # Check if our test requests were stored
+                stored_emails = [req.get("email", "") for req in stored_requests]
+                test_emails = [r["email"] for r in successful_submissions]
+                
+                found_emails = [email for email in test_emails if email in stored_emails]
+                
+                if len(found_emails) >= len(successful_submissions) * 0.8:  # At least 80% should be found
+                    self.log_test("Data Integrity - Data Persistence", True,
+                                f"✅ Data persistence verified: {len(found_emails)}/{len(successful_submissions)} requests found")
+                else:
+                    self.log_test("Data Integrity - Data Persistence", False,
+                                f"❌ Data persistence issues: only {len(found_emails)}/{len(successful_submissions)} requests found")
+            else:
+                self.log_test("Data Integrity - Data Persistence", False,
+                            f"❌ Cannot verify data persistence: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Data Integrity - Data Persistence", False,
+                        f"❌ Error verifying data persistence: {str(e)}")
+        
+        # Test 4: Database consistency check (verify no data corruption)
+        if successful_submissions:
+            sample_submission = successful_submissions[0]
+            try:
+                # Verify the stored data matches what was submitted
+                response = requests.get(f"{BACKEND_URL}/demo/requests?limit=50", timeout=15)
+                if response.status_code == 200:
+                    stored_requests = response.json().get("requests", [])
+                    matching_request = None
+                    
+                    for req in stored_requests:
+                        if req.get("email") == sample_submission["email"]:
+                            matching_request = req
+                            break
+                    
+                    if matching_request:
+                        # Check if key fields match
+                        original_company = sample_submission["company"]
+                        stored_company = matching_request.get("company", "")
+                        
+                        if original_company == stored_company:
+                            self.log_test("Data Integrity - Data Consistency", True,
+                                        f"✅ Data consistency verified")
+                        else:
+                            self.log_test("Data Integrity - Data Consistency", False,
+                                        f"❌ Data inconsistency: expected '{original_company}', got '{stored_company}'")
+                    else:
+                        self.log_test("Data Integrity - Data Consistency", False,
+                                    f"❌ Cannot find matching request for consistency check")
+                        
+            except Exception as e:
+                self.log_test("Data Integrity - Data Consistency", False,
+                            f"❌ Error checking data consistency: {str(e)}")
+    
+    def generate_production_readiness_report(self):
+        """Generate comprehensive production readiness report"""
+        print("\n" + "=" * 80)
+        print("📊 SENTRATECH API LOAD & STABILITY TESTING - PRODUCTION READINESS REPORT")
+        print("=" * 80)
+        
+        # Overall summary
+        total_tests = len(self.test_results)
+        passed_tests = len(self.passed_tests)
+        failed_tests = len(self.failed_tests)
+        success_rate = (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+        
+        print(f"📈 Overall Test Results:")
+        print(f"   Total Tests: {total_tests}")
+        print(f"   ✅ Passed: {passed_tests}")
+        print(f"   ❌ Failed: {failed_tests}")
+        print(f"   📊 Success Rate: {success_rate:.1f}%")
+        
+        # Load testing summary
+        print(f"\n🚀 Load Testing Summary:")
+        
+        if "demo_request" in self.load_test_results:
+            result = self.load_test_results["demo_request"]
+            print(f"   Demo Request API (50 concurrent):")
+            print(f"     Success Rate: {result['success_rate']:.1f}%")
+            print(f"     Avg Response: {result['avg_response_time']:.2f}ms (target: <300ms)")
+            print(f"     95th Percentile: {result['p95_response_time']:.2f}ms")
+            print(f"     Throughput: {result['requests_per_second']:.2f} RPS")
+        
+        if "health_check" in self.load_test_results:
+            result = self.load_test_results["health_check"]
+            print(f"   Health Check API (100 concurrent):")
+            print(f"     Success Rate: {result['success_rate']:.1f}%")
+            print(f"     Avg Response: {result['avg_response_time']:.2f}ms (target: <100ms)")
+            print(f"     Throughput: {result['requests_per_second']:.2f} RPS")
+        
+        if "roi_calculator" in self.load_test_results:
+            result = self.load_test_results["roi_calculator"]
+            print(f"   ROI Calculator API (40 concurrent):")
+            print(f"     Success Rate: {result['success_rate']:.1f}%")
+            print(f"     Avg Response: {result['avg_response_time']:.2f}ms (target: <250ms)")
+            print(f"     Throughput: {result['requests_per_second']:.2f} RPS")
+        
+        # Stability metrics
+        print(f"\n📊 Stability Metrics:")
+        
+        # Calculate overall error rate
+        total_requests = 0
+        total_errors = 0
+        
+        for test_name, result in self.load_test_results.items():
+            if isinstance(result, dict) and "total_requests" in result:
+                total_requests += result["total_requests"]
+                total_errors += result["failed_requests"]
+        
+        if total_requests > 0:
+            overall_error_rate = (total_errors / total_requests) * 100
+            print(f"   Overall Error Rate: {overall_error_rate:.2f}%")
+            print(f"   Total Requests Processed: {total_requests}")
+            print(f"   Total Errors: {total_errors}")
+        
+        # Production readiness assessment
+        print(f"\n🎯 Production Readiness Assessment:")
+        
+        readiness_score = 0
+        max_score = 0
+        
+        # Criteria 1: Response Times
+        max_score += 25
+        if "demo_request" in self.load_test_results:
+            demo_result = self.load_test_results["demo_request"]
+            if demo_result["avg_response_time"] <= 300:
+                readiness_score += 25
+                print(f"   ✅ Response Times: PASS (Demo API: {demo_result['avg_response_time']:.2f}ms)")
+            else:
+                print(f"   ❌ Response Times: FAIL (Demo API: {demo_result['avg_response_time']:.2f}ms > 300ms)")
+        
+        # Criteria 2: Error Rates
+        max_score += 25
+        if total_requests > 0 and overall_error_rate <= 5:
+            readiness_score += 25
+            print(f"   ✅ Error Rates: PASS ({overall_error_rate:.2f}% < 5%)")
+        else:
+            print(f"   ❌ Error Rates: FAIL ({overall_error_rate:.2f}% > 5%)")
+        
+        # Criteria 3: Throughput
+        max_score += 25
+        if "demo_request" in self.load_test_results:
+            demo_result = self.load_test_results["demo_request"]
+            if demo_result["requests_per_second"] >= 5:
+                readiness_score += 25
+                print(f"   ✅ Throughput: PASS ({demo_result['requests_per_second']:.2f} RPS)")
+            else:
+                print(f"   ❌ Throughput: FAIL ({demo_result['requests_per_second']:.2f} RPS < 5)")
+        
+        # Criteria 4: Stability
+        max_score += 25
+        if success_rate >= 80:
+            readiness_score += 25
+            print(f"   ✅ Stability: PASS ({success_rate:.1f}% test success rate)")
+        else:
+            print(f"   ❌ Stability: FAIL ({success_rate:.1f}% < 80%)")
+        
+        # Final readiness score
+        final_readiness = (readiness_score / max_score) * 100 if max_score > 0 else 0
+        
+        print(f"\n🏆 FINAL PRODUCTION READINESS SCORE: {final_readiness:.1f}%")
+        
+        if final_readiness >= 90:
+            print(f"   🎉 EXCELLENT - Ready for production deployment")
+        elif final_readiness >= 75:
+            print(f"   ✅ GOOD - Ready for production with minor optimizations")
+        elif final_readiness >= 60:
+            print(f"   ⚠️ FAIR - Needs improvements before production")
+        else:
+            print(f"   ❌ POOR - Significant issues need resolution")
+        
+        # Recommendations
+        print(f"\n💡 Recommendations:")
+        
+        if failed_tests > 0:
+            print(f"   • Address {failed_tests} failed test cases")
+            
+        if "demo_request" in self.load_test_results:
+            demo_result = self.load_test_results["demo_request"]
+            if demo_result["avg_response_time"] > 300:
+                print(f"   • Optimize demo request API response time")
+            if demo_result["success_rate"] < 95:
+                print(f"   • Improve demo request API reliability")
+        
+        if total_requests > 0 and overall_error_rate > 2:
+            print(f"   • Investigate and reduce error rates")
+        
+        print(f"   • Consider implementing rate limiting for production")
+        print(f"   • Set up monitoring and alerting for key metrics")
+        print(f"   • Plan for horizontal scaling if needed")
+        
+        return final_readiness
+    
+    def run_comprehensive_load_tests(self):
+        """Run all comprehensive load and stability tests"""
+        print("🚀 Starting Comprehensive API Load & Stability Testing")
+        print("=" * 80)
+        print("Testing SentraTech API endpoints for production readiness:")
+        print("• Demo Request API: 50 concurrent requests (<300ms target)")
+        print("• Health Check API: 100 concurrent requests (<100ms target)")
+        print("• ROI Calculator API: 40 concurrent requests (<250ms target)")
+        print("• Analytics Endpoints: 20 concurrent requests each (<300ms target)")
+        print("• Burst Load Testing: Simultaneous request handling")
+        print("• Sustained Load Testing: Performance over time")
+        print("• Mixed Endpoint Testing: Resource contention analysis")
+        print("• Data Integrity Testing: Concurrent operation safety")
+        print("=" * 80)
+        
+        # Execute all load tests
+        try:
+            # Core endpoint load tests
+            self.test_demo_request_load()
+            self.test_health_check_load()
+            self.test_roi_calculator_load()
+            self.test_analytics_endpoints_load()
+            
+            # Advanced load scenarios
+            self.test_burst_load_scenario()
+            self.test_sustained_load_scenario()
+            self.test_mixed_endpoint_scenario()
+            
+            # Data integrity tests
+            self.test_data_integrity_under_load()
+            
+        except Exception as e:
+            print(f"❌ Critical error during load testing: {str(e)}")
+            self.log_test("Load Testing Framework", False, f"Critical error: {str(e)}")
+        
+        # Generate comprehensive report
+        readiness_score = self.generate_production_readiness_report()
+        
+        return readiness_score >= 75  # Return True if ready for production
+
+
 class AirtableGoogleSheetsIntegrationTester:
     """Test the Demo Request backend integration with Airtable and Google Sheets fallback"""
     
