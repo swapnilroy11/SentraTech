@@ -392,7 +392,7 @@ const IntegrationsPage = () => {
           }>
             <IntegrationsShowcase />
           </React.Suspense>
-        </ComponentErrorBoundary>
+        </IntegrationsErrorBoundary>
 
         {/* CTA Section */}
         <section className="py-20 bg-[#0D1117]">
