@@ -12,6 +12,7 @@ import FloatingNavigation from "./components/FloatingNavigation";
 import ChatWidget from "./components/ChatWidget";
 import Analytics from "./components/Analytics";
 import ScrollToTop from "./components/ScrollToTop";
+import CookieBanner from "./components/CookieBanner";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -21,6 +22,8 @@ import SecurityPage from "./pages/SecurityPage";
 import ROICalculatorPage from "./pages/ROICalculatorPage";
 import PricingPage from "./pages/PricingPage";
 import DemoRequestPage from "./pages/DemoRequestPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
