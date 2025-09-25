@@ -1,45 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
+// Ultra-fast, smooth page transitions
 const pageVariants = {
   initial: {
-    opacity: 0,
-    x: -10  // Reduced movement for smoother performance
+    opacity: 0
   },
   in: {
-    opacity: 1,
-    x: 0
+    opacity: 1
   },
   out: {
-    opacity: 0,
-    x: 10  // Reduced movement for smoother performance
+    opacity: 0
   }
 };
 
 const pageTransition = {
   type: 'tween',
-  ease: 'easeOut',  // Simpler easing
-  duration: 0.15    // Reduced duration for snappier feel
+  ease: 'easeOut',
+  duration: 0.1 // Ultra-fast transition
 };
 
 const PageTransition = ({ children }) => {
   const location = useLocation();
-  const [showContent, setShowContent] = useState(true);
-
-  useEffect(() => {
-    // Simplified transition logic - remove loading state for better performance
-    setShowContent(false);
-    
-    // Use single requestAnimationFrame instead of double
-    const timer = setTimeout(() => {
-      setShowContent(true);
-    }, 50); // Minimal delay for smooth transition
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -52,17 +35,18 @@ const PageTransition = ({ children }) => {
         transition={pageTransition}
         className="w-full min-h-screen"
         style={{ 
-          backgroundColor: '#0A0A0A', 
+          backgroundColor: '#0A0A0A',
           minHeight: '100vh',
           position: 'relative',
           zIndex: 1,
-          // Performance optimizations
-          willChange: 'transform, opacity',
+          // Critical performance optimizations
+          willChange: 'opacity',
           backfaceVisibility: 'hidden',
-          perspective: 1000
+          WebkitBackfaceVisibility: 'hidden',
+          transform: 'translateZ(0)' // Force hardware acceleration
         }}
       >
-        {showContent && children}
+        {children}
       </motion.div>
     </AnimatePresence>
   );
