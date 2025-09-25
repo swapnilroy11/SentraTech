@@ -43,25 +43,25 @@ function App() {
     console.log('🚀 Initializing SentraTech Enterprise Features...');
     
     try {
-      // Register Service Worker for PWA capabilities
-      serviceWorkerRegistration.register({
-        onUpdate: (registration) => {
-          console.log('🔄 App update available');
-          // Show update notification to users
-          if (window.confirm('New version available! Reload to update?')) {
-            window.location.reload();
+      // Only register service worker in production or if supported
+      if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'production' || window.location.protocol === 'https:')) {
+        serviceWorkerRegistration.register({
+          onUpdate: (registration) => {
+            console.log('🔄 App update available');
+          },
+          onSuccess: (registration) => {
+            console.log('✅ App cached for offline use');
           }
-        },
-        onSuccess: (registration) => {
-          console.log('✅ App cached for offline use');
-        }
-      });
+        });
 
-      // Request notification permission for updates
-      serviceWorkerRegistration.requestNotificationPermission();
-      
-      // Precache important resources
-      serviceWorkerRegistration.precacheImportantResources();
+        // Request notification permission for updates
+        serviceWorkerRegistration.requestNotificationPermission();
+        
+        // Precache important resources
+        serviceWorkerRegistration.precacheImportantResources();
+      } else {
+        console.log('⚠️ Service Worker not supported or not in production mode');
+      }
       
       // Add breadcrumbs for error tracking
       if (errorTracker) {
