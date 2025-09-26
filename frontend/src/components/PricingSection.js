@@ -4,10 +4,18 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { CheckCircle, Star, Zap, Crown, ArrowRight } from 'lucide-react';
 import { mockData } from '../data/mock';
+import ContactSalesSlideIn from './ContactSalesSlideIn';
 
 const PricingSection = () => {
   const [billingPeriod, setBillingPeriod] = useState('monthly');
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const handleContactSales = (planName) => {
+    setSelectedPlan(planName);
+    setIsContactSalesOpen(true);
+  };
 
   return (
     <section id="pricing" className="py-20 bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)]">
