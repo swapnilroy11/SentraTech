@@ -86,7 +86,7 @@ const DemoRequestPage = () => {
       </section>
 
       {/* Demo Request Form */}
-      <section className="pt-24 pb-16 bg-[#0A0A0A]">
+      <section className="pt-16 pb-20 bg-[#0A0A0A]">
         <CTASection />
       </section>
     </div>
