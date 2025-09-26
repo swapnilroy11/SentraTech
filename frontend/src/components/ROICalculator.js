@@ -43,13 +43,18 @@ const ROICalculator = () => {
     const calculateMetrics = () => {
       try {
         setIsCalculating(true);
-        console.log('Calculating ROI with:', { selectedCountry, agentCount, ahtMinutes, useManualVolume, manualCallVolume });
-        
         if (agentCount > 0 && ahtMinutes > 0) {
           const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
           const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes, callVolumeOverride);
           
-          console.log('Calculated metrics:', metrics);
+          console.log('ROI Results:', {
+            country: metrics.country,
+            costReduction: metrics.costReduction,
+            roiPercent: metrics.roiPercent,
+            tradCost: metrics.tradCost,
+            aiCost: metrics.aiCost,
+            monthlySavings: metrics.monthlySavings
+          });
           setResults(metrics);
           setError(null);
         } else {
