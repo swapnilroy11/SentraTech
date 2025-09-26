@@ -36,7 +36,9 @@ const ROICalculator = () => {
       try {
         setIsCalculating(true);
         if (agentCount > 0 && ahtMinutes > 0) {
-          const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
+          // Use manual call volume if provided, otherwise calculate automatically
+          const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
+          const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes, callVolumeOverride);
           setResults(metrics);
           setError(null);
         }
