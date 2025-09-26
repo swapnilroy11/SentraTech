@@ -28,6 +28,11 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
 
   // UTM and tracking data
   const [utmData, setUtmData] = useState({});
+  
+  // Focus trap references
+  const drawerRef = useRef(null);
+  const firstFocusableRef = useRef(null);
+  const lastFocusableRef = useRef(null);
 
   useEffect(() => {
     // Capture UTM parameters and referrer data
