@@ -136,4 +136,62 @@ export const insertROIReport = async (email, roiData) => {
   }
 };
 
+// Helper function to insert a contact request
+export const insertContactRequest = async (formData) => {
+  try {
+    console.log('Submitting contact request to Supabase...', formData);
+    
+    // Get client IP and other metadata
+    const clientMetadata = {
+      userAgent: navigator.userAgent,
+      referrer: document.referrer,
+      timestamp: new Date().toISOString(),
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
+    };
+    
+    // Insert into Supabase database
+    const { data, error } = await supabase
+      .from('contact_requests')
+      .insert([{
+        full_name: formData.fullName,
+        work_email: formData.workEmail.toLowerCase().trim(),
+        phone: formData.phone || null,
+        company_name: formData.companyName,
+        company_website: formData.companyWebsite || null,
+        monthly_volume: formData.monthlyVolume,
+        plan_selected: formData.planSelected || null,
+        preferred_contact_method: formData.preferredContactMethod || 'email',
+        message: formData.message || null,
+        utm_data: formData.utmData || {},
+        metadata: {
+          ...clientMetadata,
+          deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+        },
+        consent_marketing: formData.consentMarketing || false,
+        created_at: new Date().toISOString()
+      }], { returning: 'minimal' });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ Contact request saved to Supabase successfully');
+
+    return {
+      success: true,
+      message: 'Contact request submitted successfully! Our sales team will reach out within one business day.'
+    };
+  } catch (error) {
+    console.error('Supabase contact request insertion error:', error);
+    return {
+      success: false,
+      error: error.message,
+      message: 'Failed to submit contact request. Please try again.'
+    };
+  }
+};
+
 export default supabase;
