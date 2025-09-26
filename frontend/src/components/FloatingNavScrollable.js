@@ -90,7 +90,7 @@ const FloatingNavScrollable = () => {
         <ul role="menu" aria-label="Quick access menu">
           {navigationItems.map((item, index) => (
             <li key={index} role="none">
-              {item.path.startsWith('/#') ? (
+              {item.path.includes('#') ? (
                 <HashLink
                   smooth
                   to={item.path}
