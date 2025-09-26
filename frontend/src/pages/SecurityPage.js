@@ -6,6 +6,56 @@ import { ArrowRight, Shield, Lock, FileText } from 'lucide-react';
 import SecurityCompliance from '../components/SecurityCompliance';
 
 const SecurityPage = () => {
+  // Handle hash navigation on page load and URL changes  
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash.substring(1); // Remove #
+      if (hash) {
+        console.log('Security page: Attempting to scroll to hash:', hash);
+        
+        // Use multiple attempts with increasing delays to handle dynamic content
+        const attemptScroll = (attempt = 1) => {
+          const element = document.getElementById(hash);
+          if (element) {
+            console.log(`Security page: Found element with ID: ${hash} on attempt ${attempt}`);
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest'
+            });
+            
+            // Add a small offset to account for any fixed headers
+            setTimeout(() => {
+              window.scrollBy(0, -20);
+            }, 100);
+            
+            return true;
+          } else {
+            console.log(`Security page: Element not found with ID: ${hash} on attempt ${attempt}`);
+            if (attempt <= 6) {
+              setTimeout(() => attemptScroll(attempt + 1), attempt * 300);
+              return false;
+            }
+          }
+        };
+
+        // Start scrolling attempt after page content loads
+        setTimeout(() => attemptScroll(), 500);
+      }
+    };
+
+    // Handle initial load
+    handleHashNavigation();
+
+    // Listen for hash changes (back/forward navigation)
+    window.addEventListener('hashchange', handleHashNavigation);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('hashchange', handleHashNavigation);
+    };
+  }, []);
+
   return (
     <main role="main" aria-label="SentraTech Security & Compliance">
       <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="security">
