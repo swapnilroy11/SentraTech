@@ -182,7 +182,7 @@ export const mockData = {
         "24/7 priority support",
         "Enhanced compliance suite"
       ],
-      cta: "Request Demo",
+      cta: null,
       popular: true
     },
     {
