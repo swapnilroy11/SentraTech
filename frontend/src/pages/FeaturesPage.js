@@ -20,14 +20,30 @@ const FeaturesPage = () => {
           if (element) {
             console.log(`Features page: Found element with ID: ${hash} on attempt ${attempt}`);
             
-            // Force element to be visible first (in case of animation issues)
+            // Force element and all children to be visible (prevent dark screen issues)
             element.style.visibility = 'visible';
             element.style.opacity = '1';
+            element.style.display = 'block';
+            
+            // Force all child elements to be visible as well
+            const childElements = element.querySelectorAll('*');
+            childElements.forEach(child => {
+              child.style.visibility = 'visible';
+              child.style.opacity = '1';
+            });
+            
+            // Special handling for canvas elements (Three.js)
+            const canvasElements = element.querySelectorAll('canvas');
+            canvasElements.forEach(canvas => {
+              canvas.style.display = 'block';
+              canvas.style.visibility = 'visible';
+              canvas.style.opacity = '1';
+            });
             
             // Get element position for debugging
             const rect = element.getBoundingClientRect();
             const elementTop = window.pageYOffset + rect.top;
-            console.log(`Element ${hash} position: y=${elementTop}, viewport=${window.innerHeight}`);
+            console.log(`Element ${hash} position: y=${elementTop}, viewport=${window.innerHeight}, visible=${element.offsetHeight > 0}`);
             
             // Try multiple scroll methods for maximum compatibility
             try {
@@ -52,6 +68,20 @@ const FeaturesPage = () => {
                     behavior: 'smooth'
                   });
                 }
+                
+                // Final visibility check after scrolling
+                setTimeout(() => {
+                  const finalRect = element.getBoundingClientRect();
+                  const isVisible = finalRect.top >= 0 && finalRect.top <= window.innerHeight;
+                  console.log(`Final visibility check for ${hash}: visible=${isVisible}, top=${finalRect.top}`);
+                  
+                  // Force a repaint to ensure content is rendered
+                  element.style.transform = 'translateZ(0)';
+                  setTimeout(() => {
+                    element.style.transform = '';
+                  }, 100);
+                }, 500);
+                
               }, 1000);
               
             } catch (error) {
