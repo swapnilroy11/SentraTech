@@ -288,22 +288,15 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-            className="fixed right-0 top-0 h-full w-full sm:w-full md:w-80 lg:w-80 bg-[#0A0A0A] z-50 overflow-y-auto shadow-2xl"
+            className="fixed right-0 top-0 h-full bg-[#0A0A0A] z-50 overflow-y-auto shadow-2xl"
             style={{
               position: 'fixed',
               right: 0,
               top: 0,
               height: '100vh',
               overflowY: 'auto',
-              width: '100vw'
-            }}
-            // Use CSS media queries for better responsiveness
-            onLoad={(e) => {
-              if (typeof window !== 'undefined') {
-                if (window.innerWidth >= 768) {
-                  e.target.style.width = '320px';
-                }
-              }
+              width: '100vw',
+              maxWidth: '100vw'
             }}
             role="dialog"
             aria-modal="true"
