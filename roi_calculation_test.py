@@ -72,8 +72,11 @@ class ROICalculationTester:
             call_volume = call_volume_override
         else:
             work_minutes_per_month = 8 * 60 * 22  # 8 hours × 60 minutes × 22 days = 10,560
-            calls_per_agent = work_minutes_per_month / aht_minutes
-            call_volume = math.floor(agent_count * calls_per_agent)
+            if aht_minutes > 0:
+                calls_per_agent = work_minutes_per_month / aht_minutes
+                call_volume = math.floor(agent_count * calls_per_agent)
+            else:
+                call_volume = 0
         
         # Calculate costs
         traditional_cost = agent_count * BASE_COST[country]
