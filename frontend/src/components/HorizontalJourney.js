@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 import { Card, CardContent } from './ui/card';
