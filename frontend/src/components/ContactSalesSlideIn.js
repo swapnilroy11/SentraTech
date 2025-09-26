@@ -301,23 +301,29 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
             aria-modal="true"
             aria-labelledby="contact-sales-title"
           >
-            {/* Header */}
-            <div className="sticky top-0 bg-[#071014] border-b border-[rgba(255,255,255,0.1)] p-6 z-10">
+            {/* Header with green top border */}
+            <div className="border-t-4 border-[#00FF41] bg-[#0A0A0A] px-6 py-6">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-bold text-white">Contact Sales</h2>
+                <h2 
+                  id="contact-sales-title"
+                  className="text-2xl font-bold text-white"
+                >
+                  Contact Sales—Quick, Tailored Quote
+                </h2>
                 <Button
+                  ref={firstFocusableRef}
                   variant="ghost"
                   size="sm"
                   onClick={handleClose}
-                  className="text-[rgb(161,161,170)] hover:text-white hover:bg-[rgba(255,255,255,0.1)]"
+                  className="text-[rgb(161,161,170)] hover:text-white hover:bg-[rgba(255,255,255,0.1)] rounded-full"
                   disabled={isSubmitting}
+                  aria-label="Close contact sales form"
                 >
                   <X size={20} />
                 </Button>
               </div>
-              <p className="text-[rgb(161,161,170)]">Quick, Tailored Quote</p>
               {selectedPlan && (
-                <Badge className="mt-2 bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
+                <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
                   {selectedPlan} Plan Selected
                 </Badge>
               )}
