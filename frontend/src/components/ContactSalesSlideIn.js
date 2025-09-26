@@ -301,7 +301,8 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
               height: '100vh',
               overflowY: 'auto',
               width: typeof window !== 'undefined' && window.innerWidth >= 768 ? '320px' : '100vw',
-              maxWidth: '100vw'
+              maxWidth: '100vw',
+              pointerEvents: 'auto'
             }}
             role="dialog"
             aria-modal="true"
