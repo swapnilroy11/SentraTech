@@ -54,9 +54,9 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
   }, [selectedPlan]);
 
   const monthlyVolumeOptions = [
-    { value: 'under_10k', label: '<10k' },
-    { value: '10k_50k', label: '10k-50k' },
-    { value: 'over_50k', label: '50k+' }
+    { value: '<10k', label: '<10k' },
+    { value: '10k-50k', label: '10k-50k' },
+    { value: '50k+', label: '50k+' }
   ];
 
   const contactMethodOptions = [
