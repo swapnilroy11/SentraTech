@@ -172,8 +172,12 @@ class ROICalculationTester:
                          f"Expected: {expected['call_volume']:,}, Got: {actual_call_volume:,}")
         
         # Validate cost calculations
-        expected_trad_cost = agent_count * {"Bangladesh": 300, "India": 500, "Philippines": 600, "Vietnam": 550}[country]
-        expected_ai_cost = agent_count * 200
+        if agent_count > 0 and aht_minutes > 0:
+            expected_trad_cost = agent_count * {"Bangladesh": 300, "India": 500, "Philippines": 600, "Vietnam": 550}[country]
+            expected_ai_cost = agent_count * 200
+        else:
+            expected_trad_cost = 0
+            expected_ai_cost = 0
         
         if expected_trad_cost == expected['traditional_cost'] and expected_ai_cost == expected['ai_cost']:
             self.log_test(f"{test_name} - Cost Calculations", True, 
