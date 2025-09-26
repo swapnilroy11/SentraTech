@@ -266,7 +266,8 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
     }, 300);
   };
 
-  return (
+  // Render using portal for proper positioning
+  const drawerContent = (
     <AnimatePresence>
       {isOpen && (
         <>
@@ -275,17 +276,30 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/80 z-50"
+            style={{ backdropFilter: 'blur(4px)' }}
             onClick={handleClose}
           />
           
-          {/* Slide-in Panel */}
+          {/* Slide-Over Drawer */}
           <motion.div
+            ref={drawerRef}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed right-0 top-0 h-full w-full md:w-[400px] bg-[#071014] border-l-3 border-[#00FF41] z-50 overflow-y-auto"
+            transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
+            className="fixed right-0 top-0 h-full w-full md:w-80 bg-[#0A0A0A] z-50 overflow-y-auto shadow-2xl"
+            style={{
+              position: 'fixed',
+              right: 0,
+              top: 0,
+              height: '100vh',
+              overflowY: 'auto',
+              width: window.innerWidth <= 768 ? '100vw' : '320px'
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-sales-title"
           >
             {/* Header */}
             <div className="sticky top-0 bg-[#071014] border-b border-[rgba(255,255,255,0.1)] p-6 z-10">
