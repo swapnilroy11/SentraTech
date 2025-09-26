@@ -7,13 +7,13 @@ const DemoRequestPage = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="demo-request">
       {/* Hero Section */}
-      <section className="py-20 relative overflow-hidden">
+      <section className="pt-20 pb-16 relative overflow-hidden">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto mb-20"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
             <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight">
               Request Your <span className="text-[#00FF41]">Demo</span>
