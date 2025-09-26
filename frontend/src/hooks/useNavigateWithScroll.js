@@ -53,10 +53,17 @@ export const useNavigateWithScroll = () => {
 
   // Handle scrolling after navigation
   useEffect(() => {
-    if (location.state?.scrollTo) {
-      scrollToSection(location.state.scrollTo);
-      // Clear the state
-      navigate(location.pathname, { replace: true, state: {} });
+    // Check for hash in URL or state
+    const hashFromUrl = location.hash.substring(1); // Remove #
+    const scrollTarget = location.state?.scrollTo || hashFromUrl;
+    
+    if (scrollTarget) {
+      console.log('Scrolling to target from URL/state:', scrollTarget);
+      scrollToSection(scrollTarget);
+      // Clear the state but keep the hash in URL
+      if (location.state?.scrollTo) {
+        navigate(location.pathname + location.hash, { replace: true, state: {} });
+      }
     }
   }, [location, navigate]);
 
