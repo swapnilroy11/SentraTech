@@ -142,8 +142,8 @@ const Navigation = () => {
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation-menu"
               aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              className={`w-10 h-10 bg-[rgba(0,255,65,0.1)] backdrop-blur-md border border-[rgba(0,255,65,0.3)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.2)] hover:scale-110 relative z-50 ${
-                isMenuOpen ? 'bg-[rgba(0,255,65,0.2)] border-[rgba(0,255,65,0.5)]' : ''
+              className={`w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 relative z-50 shadow-lg ${
+                isMenuOpen ? 'bg-[rgba(0,255,65,0.4)] border-[rgba(0,255,65,0.7)]' : ''
               }`}
             >
               {isMenuOpen ? (
