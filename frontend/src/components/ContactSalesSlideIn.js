@@ -101,6 +101,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
 
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.style.pointerEvents = 'auto';
       document.removeEventListener('keydown', handleEscKey);
       document.removeEventListener('keydown', handleTabKey);
     };
