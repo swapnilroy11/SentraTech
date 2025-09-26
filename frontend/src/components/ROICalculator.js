@@ -38,28 +38,34 @@ const ROICalculator = () => {
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  // Optimized real-time calculation with debouncing
+  // Real-time calculation with immediate updates
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const calculateMetrics = () => {
       try {
         setIsCalculating(true);
+        console.log('Calculating ROI with:', { selectedCountry, agentCount, ahtMinutes, useManualVolume, manualCallVolume });
+        
         if (agentCount > 0 && ahtMinutes > 0) {
-          // Use manual call volume if provided, otherwise calculate automatically
           const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
           const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes, callVolumeOverride);
+          
+          console.log('Calculated metrics:', metrics);
           setResults(metrics);
           setError(null);
+        } else {
+          // Reset to empty results if invalid inputs
+          setResults({});
         }
       } catch (error) {
         console.error('Error calculating ROI:', error);
         setError('Calculation error. Please check your inputs.');
       } finally {
-        // Faster loading state resolution
-        setTimeout(() => setIsCalculating(false), 150);
+        setTimeout(() => setIsCalculating(false), 100);
       }
-    }, 100); // Reduced debounce time for faster response
+    };
 
-    return () => clearTimeout(timer);
+    // Calculate immediately, no debouncing
+    calculateMetrics();
   }, [selectedCountry, agentCount, ahtMinutes, useManualVolume, manualCallVolume]);
 
   // Handle country selection
