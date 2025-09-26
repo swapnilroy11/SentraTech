@@ -558,14 +558,26 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - Properly Centered */}
+      {/* Journey Stage Details Modal - Transform Centered */}
       <AnimatePresence>
         {selectedPanel && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(12px)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
             onClick={() => setSelectedPanel(null)}
           >
             <motion.div
@@ -573,7 +585,20 @@ const HorizontalJourney = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '90%',
+                maxWidth: '32rem',
+                maxHeight: '90vh',
+                backgroundColor: 'rgb(26, 28, 30)',
+                border: '2px solid #00FF41',
+                borderRadius: '1.5rem',
+                overflowY: 'auto',
+                zIndex: 10000
+              }}
             >
               <div className="p-8">
                 <div className="flex items-center justify-between mb-6">
