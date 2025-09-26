@@ -196,7 +196,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Menu Items - Enhanced visibility */}
-          <div className="flex flex-col p-6">
+          <div className="flex flex-col p-6 bg-[#0A0A0A]" style={{ backgroundColor: '#0A0A0A' }}>
             <div className="space-y-3">
               {navigationItems.map((item) => (
                 <HashLink
