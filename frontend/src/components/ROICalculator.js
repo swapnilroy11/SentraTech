@@ -159,21 +159,77 @@ const ROICalculator = () => {
               <button
                 key={country.name}
                 onClick={() => handleCountryChange(country.name)}
-                className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex items-center space-x-3 transform hover:scale-105 ${
+                className={`px-6 py-4 rounded-xl font-medium transition-all duration-300 flex items-center space-x-4 transform hover:scale-105 relative overflow-hidden ${
                   selectedCountry === country.name 
                     ? 'bg-[#00FF41] text-[#0A0A0A] shadow-lg shadow-[#00FF41]/25 z-10' 
                     : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)] hover:scale-102 hover:shadow-md'
                 }`}
               >
-                <span className="text-xl">{country.flag}</span>
-                <div className="text-left">
-                  <div className="text-sm font-semibold leading-tight">{country.name}</div>
-                  <div className="text-xs opacity-75 leading-tight">${country.baseCost}/agent</div>
+                {/* 3D Flag with enhanced effects */}
+                <div className="relative">
+                  <div 
+                    className={`text-3xl filter transition-all duration-300 ${
+                      selectedCountry === country.name 
+                        ? 'drop-shadow-lg scale-110 brightness-110' 
+                        : 'drop-shadow-md hover:scale-105 hover:brightness-110'
+                    }`}
+                    style={{
+                      textShadow: selectedCountry === country.name 
+                        ? '2px 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(0,255,65,0.3)' 
+                        : '1px 1px 3px rgba(0,0,0,0.3)',
+                      transform: selectedCountry === country.name 
+                        ? 'perspective(100px) rotateY(-5deg) rotateX(5deg)' 
+                        : 'perspective(100px) rotateY(0deg) rotateX(0deg)'
+                    }}
+                  >
+                    {country.flag}
+                  </div>
+                  
+                  {/* 3D depth effect */}
+                  <div 
+                    className={`absolute inset-0 text-3xl opacity-30 transition-all duration-300 ${
+                      selectedCountry === country.name ? 'block' : 'hidden'
+                    }`}
+                    style={{
+                      transform: 'perspective(100px) rotateY(-5deg) rotateX(5deg) translateZ(-2px)',
+                      filter: 'blur(1px)',
+                      color: '#00FF41'
+                    }}
+                  >
+                    {country.flag}
+                  </div>
+                </div>
+
+                <div className="text-left flex-1">
+                  <div className="flex items-center space-x-2">
+                    <div className={`text-sm font-bold leading-tight ${
+                      selectedCountry === country.name ? 'text-[#0A0A0A]' : 'text-white'
+                    }`}>
+                      {country.name}
+                    </div>
+                    <div className={`text-xs px-2 py-1 rounded-full font-medium ${
+                      selectedCountry === country.name 
+                        ? 'bg-[#0A0A0A]/20 text-[#0A0A0A]' 
+                        : 'bg-[#00FF41]/20 text-[#00FF41]'
+                    }`}>
+                      ${country.baseCost}/agent
+                    </div>
+                  </div>
+                  <div className={`text-xs opacity-75 leading-tight mt-1 ${
+                    selectedCountry === country.name ? 'text-[#0A0A0A]/70' : 'text-[rgb(161,161,170)]'
+                  }`}>
+                    {country.description}
+                  </div>
                 </div>
                 
-                {/* Active indicator */}
+                {/* Active indicator with enhanced effect */}
                 {selectedCountry === country.name && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[#00FF41] rounded-full shadow-lg animate-pulse"></div>
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#0A0A0A] rounded-full shadow-lg animate-pulse border-2 border-[#00FF41]"></div>
+                )}
+                
+                {/* Subtle background glow for active state */}
+                {selectedCountry === country.name && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00FF41]/10 via-[#00FF41]/5 to-[#00FF41]/10 rounded-xl pointer-events-none"></div>
                 )}
               </button>
             ))}
