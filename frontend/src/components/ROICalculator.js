@@ -275,20 +275,20 @@ const ROICalculator = () => {
                 {/* Three Side-by-Side Panels */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   
-                  {/* Left Panel: Agent Count */}
-                  <div className="bg-[rgb(38,40,42)] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="p-2 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50 mr-3">
-                        <Users size={20} className="text-[#00FF41]" />
+                  {/* First Panel: Agent Count */}
+                  <div className="bg-[rgb(38,40,42)] rounded-xl p-3 border border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="p-1.5 bg-[#00FF41]/20 rounded-lg border border-[#00FF41]/50 mr-2">
+                        <Users size={16} className="text-[#00FF41]" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white">Agent Count</h3>
+                      <h3 className="text-base font-semibold text-white">Agent Count</h3>
                     </div>
                     
-                    <div className="text-center mb-6">
-                      <div className="text-6xl font-black text-[#00FF41] mb-2 font-rajdhani">
+                    <div className="text-center mb-4">
+                      <div className="text-4xl font-black text-[#00FF41] mb-1 font-rajdhani">
                         {agentCount}
                       </div>
-                      <div className="text-sm text-[rgb(161,161,170)]">agents</div>
+                      <div className="text-xs text-[rgb(161,161,170)]">agents</div>
                     </div>
                     
                     <div className="space-y-4">
