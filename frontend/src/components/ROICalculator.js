@@ -377,24 +377,80 @@ const ROICalculator = () => {
                       />
                     </div>
                   </div>
-                </div>
-
-                {/* Call Volume Display */}
-                <div className="mt-6 bg-[rgb(38,40,42)] rounded-xl p-6 border border-[rgb(63,63,63)]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-[#FFD700]/20 rounded-lg border border-[#FFD700]/50">
-                        <Calculator size={20} className="text-[#FFD700]" />
+                  {/* Third Panel: Call Volume */}
+                  <div className="bg-[rgb(38,40,42)] rounded-xl p-3 border border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="p-1.5 bg-[#FFD700]/20 rounded-lg border border-[#FFD700]/50 mr-2">
+                        <Calculator size={16} className="text-[#FFD700]" />
                       </div>
-                      <div>
-                        <div className="text-white font-semibold text-lg">Monthly Call Volume</div>
-                        <div className="text-[rgb(161,161,170)] text-sm">
-                          {agentCount} agents × {Math.floor((8 * 60) / ahtMinutes)} calls/day × 22 days
-                        </div>
-                      </div>
+                      <h3 className="text-base font-semibold text-white">Call Volume</h3>
                     </div>
-                    <div className="text-3xl font-bold text-[#FFD700]">
-                      {formatNumber(results.callVolume || 0)}
+                    
+                    <div className="text-center mb-4">
+                      <div className="text-4xl font-black text-[#FFD700] mb-1 font-rajdhani">
+                        {formatNumber(useManualVolume && manualCallVolume ? manualCallVolume : (results.callVolume || 0))}
+                      </div>
+                      <div className="text-xs text-[rgb(161,161,170)]">monthly calls</div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      {/* Manual/Auto Toggle */}
+                      <div className="flex items-center justify-center space-x-2 mb-3">
+                        <button
+                          onClick={() => setUseManualVolume(!useManualVolume)}
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                            useManualVolume 
+                              ? 'bg-[#FFD700] text-[#0A0A0A]' 
+                              : 'bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/50'
+                          }`}
+                        >
+                          {useManualVolume ? 'Manual' : 'Auto'}
+                        </button>
+                      </div>
+                      
+                      {useManualVolume ? (
+                        <>
+                          {/* Manual Slider */}
+                          <div>
+                            <input
+                              type="range"
+                              min="1000"
+                              max="100000"
+                              step="1000"
+                              value={manualCallVolume || 10000}
+                              onChange={(e) => setManualCallVolume(parseInt(e.target.value))}
+                              className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer"
+                              style={{
+                                background: `linear-gradient(to right, #FFD700 0%, #FFD700 ${((manualCallVolume || 10000)/100000)*100}%, #374151 ${((manualCallVolume || 10000)/100000)*100}%, #374151 100%)`
+                              }}
+                            />
+                            <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
+                              <span>1k</span>
+                              <span>100k</span>
+                            </div>
+                          </div>
+                          
+                          {/* Manual Number Input */}
+                          <Input
+                            type="number"
+                            value={manualCallVolume || ''}
+                            placeholder="Enter call volume"
+                            onChange={(e) => {
+                              const value = Math.max(1000, Math.min(100000, parseInt(e.target.value) || 10000));
+                              setManualCallVolume(value);
+                            }}
+                            className="bg-[rgb(26,28,30)] border-[#FFD700]/50 text-white rounded-lg text-sm py-2 text-center font-semibold focus:border-[#FFD700] focus:ring-[#FFD700]/20"
+                            min="1000"
+                            max="100000"
+                          />
+                        </>
+                      ) : (
+                        <div className="text-center py-2">
+                          <div className="text-xs text-[rgb(161,161,170)] leading-tight">
+                            Auto: {agentCount} agents × {Math.floor((8 * 60 * 22) / ahtMinutes)} calls
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
