@@ -21,7 +21,7 @@ import string
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://calcperf-ui.preview.emergentagent.com/api"
+BACKEND_URL = "https://sleek-support.preview.emergentagent.com/api"
 
 class ComprehensiveBackendTester:
     """Comprehensive Backend API Testing Framework"""
