@@ -307,7 +307,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
               <div className="flex items-center justify-between mb-2">
                 <h2 
                   id="contact-sales-title"
-                  className="text-2xl font-bold text-white"
+                  className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight"
                 >
                   Contact Sales—Quick, Tailored Quote
                 </h2>
