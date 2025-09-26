@@ -540,12 +540,74 @@ const ROICalculator = () => {
           </div>
         )}
 
-        {/* Success Message Overlay */}
+        {/* Enhanced Success Confirmation Modal */}
         {reportSubmitted && (
-          <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-lg">
-            <div className="flex items-center space-x-2">
-              <Sparkles size={20} />
-              <span>✅ ROI report request submitted successfully!</span>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+            <div className="bg-[rgb(26,28,30)] rounded-2xl p-8 max-w-md w-full mx-4 border border-[#00FF41]/50 shadow-2xl">
+              <div className="text-center">
+                {/* Success Icon */}
+                <div className="mx-auto w-16 h-16 bg-[#00FF41]/20 rounded-full flex items-center justify-center mb-4">
+                  <Sparkles size={32} className="text-[#00FF41]" />
+                </div>
+                
+                {/* Success Message */}
+                <h3 className="text-2xl font-bold text-white mb-3 font-rajdhani">
+                  Report Submitted Successfully!
+                </h3>
+                
+                <p className="text-[rgb(161,161,170)] text-lg mb-6 leading-relaxed">
+                  Your ROI analysis request has been submitted to <span className="text-[#00FF41] font-semibold">{email}</span>
+                </p>
+                
+                {/* Report Details Summary */}
+                <div className="bg-[rgb(38,40,42)] rounded-xl p-4 mb-6 border border-[#00FF41]/20">
+                  <div className="text-sm text-[rgb(161,161,170)] mb-2">Report Details:</div>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="text-left">
+                      <div className="text-[#00FF41] font-semibold">Country:</div>
+                      <div className="text-white">{selectedCountry}</div>
+                    </div>
+                    <div className="text-left">
+                      <div className="text-[#00DDFF] font-semibold">Agents:</div>
+                      <div className="text-white">{agentCount}</div>
+                    </div>
+                    <div className="text-left">
+                      <div className="text-[#FFD700] font-semibold">AHT:</div>
+                      <div className="text-white">{ahtMinutes} min</div>
+                    </div>
+                    <div className="text-left">
+                      <div className="text-[#00FF41] font-semibold">Savings:</div>
+                      <div className="text-white font-bold">{formatCurrency(results.monthlySavings)}/mo</div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Next Steps */}
+                <div className="bg-[#00FF41]/10 rounded-xl p-4 mb-6 border border-[#00FF41]/30">
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">📧 What's Next?</div>
+                  <div className="text-white text-sm text-left space-y-1">
+                    <div>• Detailed ROI report will be sent to your email</div>
+                    <div>• Includes cost breakdown and implementation roadmap</div>
+                    <div>• Our team will follow up within 24 hours</div>
+                  </div>
+                </div>
+                
+                {/* Action Button */}
+                <Button
+                  onClick={() => setReportSubmitted(false)}
+                  className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 text-lg"
+                >
+                  Continue Exploring
+                </Button>
+                
+                {/* Close Button */}
+                <button
+                  onClick={() => setReportSubmitted(false)}
+                  className="absolute top-4 right-4 text-[rgb(161,161,170)] hover:text-white transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
           </div>
         )}
