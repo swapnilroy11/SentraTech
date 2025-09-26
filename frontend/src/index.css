@@ -42,6 +42,19 @@ code {
         monospace;
 }
 
+/* 3D Flying Flag Animation */
+@keyframes flagFly {
+  0% {
+    transform: perspective(150px) rotateY(-10deg) rotateX(10deg) translateY(0px);
+  }
+  50% {
+    transform: perspective(150px) rotateY(-8deg) rotateX(8deg) translateY(-2px);
+  }
+  100% {
+    transform: perspective(150px) rotateY(-12deg) rotateX(12deg) translateY(-1px);
+  }
+}
+
 
 
 @layer base {
