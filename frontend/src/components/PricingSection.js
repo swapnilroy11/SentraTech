@@ -118,7 +118,7 @@ const PricingSection = () => {
                             ${price.toLocaleString()}
                           </span>
                           <span className="text-[rgb(161,161,170)]">
-                            /{tier.period}
+                            /{billingPeriod === '24months' ? '24 months' : '36 months'}
                           </span>
                         </div>
                         {billingPeriod === '36months' && typeof tier.price === 'number' && (
