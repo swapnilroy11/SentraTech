@@ -85,13 +85,10 @@ const DemoRequestPage = () => {
         </div>
       </section>
 
-      {/* Demo Request Form */}
-      <section className="pt-16 pb-0 bg-[#0A0A0A]">
+      {/* Demo Request Form - Extended to bottom */}
+      <section className="pt-16 bg-[#0A0A0A] min-h-screen flex flex-col justify-center">
         <CTASection />
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 };
