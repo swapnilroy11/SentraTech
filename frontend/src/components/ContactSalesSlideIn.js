@@ -49,6 +49,62 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
     setUtmData(utmParams);
   }, []);
 
+  // Focus trap and ESC key handling
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Focus trap
+    const focusableElements = drawerRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements && focusableElements.length > 0) {
+      firstFocusableRef.current = focusableElements[0];
+      lastFocusableRef.current = focusableElements[focusableElements.length - 1];
+      
+      // Focus first element
+      setTimeout(() => firstFocusableRef.current?.focus(), 100);
+    }
+
+    // ESC key handler
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    // Tab key handler for focus trap
+    const handleTabKey = (event) => {
+      if (event.key === 'Tab') {
+        if (event.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstFocusableRef.current) {
+            event.preventDefault();
+            lastFocusableRef.current?.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastFocusableRef.current) {
+            event.preventDefault();
+            firstFocusableRef.current?.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+    document.addEventListener('keydown', handleTabKey);
+
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscKey);
+      document.removeEventListener('keydown', handleTabKey);
+    };
+  }, [isOpen, onClose]);
+
   // Update selected plan when prop changes
   useEffect(() => {
     if (selectedPlan) {
