@@ -123,7 +123,7 @@ const PricingSection = () => {
                         </div>
                         {billingPeriod === '36months' && typeof tier.price === 'number' && (
                           <div className="text-sm text-[rgb(161,161,170)] mt-1">
-                            ${tier.price}/month billed for 24 months
+                            ${tier.price}/24 months (was ${Math.round(tier.price / 0.9)})
                           </div>
                         )}
                       </>
