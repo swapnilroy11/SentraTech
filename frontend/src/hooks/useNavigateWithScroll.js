@@ -29,29 +29,26 @@ export const useNavigateWithScroll = () => {
   };
 
   const scrollToSection = (sectionId) => {
-    setTimeout(() => {
+    // Try multiple attempts with different delays
+    const attemptScroll = (attempt = 1) => {
       const element = document.getElementById(sectionId);
       if (element) {
-        console.log('Found element with ID:', sectionId);
+        console.log(`Found element with ID: ${sectionId} on attempt ${attempt}`);
         element.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
       } else {
-        console.log('Element not found with ID:', sectionId);
-        // Try again after a longer delay in case the content is still loading
-        setTimeout(() => {
-          const retryElement = document.getElementById(sectionId);
-          if (retryElement) {
-            console.log('Found element on retry:', sectionId);
-            retryElement.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        }, 500);
+        console.log(`Element not found with ID: ${sectionId} on attempt ${attempt}`);
+        if (attempt <= 5) {
+          // Try again with increasing delays to handle dynamic content
+          setTimeout(() => attemptScroll(attempt + 1), attempt * 200);
+        }
       }
-    }, 300);
+    };
+
+    // Start first attempt after a small delay
+    setTimeout(() => attemptScroll(), 300);
   };
 
   // Handle scrolling after navigation
