@@ -28,7 +28,7 @@ const ROICalculator = () => {
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  // Real-time calculation with both Agent Count and AHT
+  // Optimized real-time calculation with debouncing
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
@@ -42,9 +42,10 @@ const ROICalculator = () => {
         console.error('Error calculating ROI:', error);
         setError('Calculation error. Please check your inputs.');
       } finally {
-        setTimeout(() => setIsCalculating(false), 300);
+        // Faster loading state resolution
+        setTimeout(() => setIsCalculating(false), 150);
       }
-    }, 200);
+    }, 100); // Reduced debounce time for faster response
 
     return () => clearTimeout(timer);
   }, [selectedCountry, agentCount, ahtMinutes]);
