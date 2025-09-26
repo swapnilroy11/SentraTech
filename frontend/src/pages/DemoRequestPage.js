@@ -86,12 +86,12 @@ const DemoRequestPage = () => {
       </section>
 
       {/* Demo Request Form */}
-      <section className="py-20 bg-[#0A0A0A]">
+      <section className="py-24 bg-[#0A0A0A]">
         <CTASection />
       </section>
 
       {/* Trust Indicators */}
-      <section className="py-16 bg-gradient-to-r from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
+      <section className="py-20 bg-gradient-to-r from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
