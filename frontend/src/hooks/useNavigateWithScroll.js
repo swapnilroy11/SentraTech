@@ -32,12 +32,26 @@ export const useNavigateWithScroll = () => {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
+        console.log('Found element with ID:', sectionId);
         element.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
+      } else {
+        console.log('Element not found with ID:', sectionId);
+        // Try again after a longer delay in case the content is still loading
+        setTimeout(() => {
+          const retryElement = document.getElementById(sectionId);
+          if (retryElement) {
+            console.log('Found element on retry:', sectionId);
+            retryElement.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 500);
       }
-    }, 100);
+    }, 300);
   };
 
   // Handle scrolling after navigation
