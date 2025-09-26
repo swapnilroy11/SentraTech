@@ -559,48 +559,45 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - React Portal with Proper Centering */}
+      {/* Journey Stage Details Modal - React Portal with Bulletproof Centering */}
       {selectedPanel && createPortal(
-        <AnimatePresence>
+        <div
+          className="customer-journey-modal-overlay"
+          style={{
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(12px)',
+            zIndex: '99999',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClick={() => setSelectedPanel(null)}
+        >
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="modal-overlay"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+            className="customer-journey-modal-content"
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              backdropFilter: 'blur(12px)',
-              zIndex: 9999
+              maxWidth: '32rem',
+              width: '90%',
+              maxHeight: '90vh',
+              backgroundColor: 'rgb(26, 28, 30)',
+              border: '2px solid #00FF41',
+              borderRadius: '1.5rem',
+              overflowY: 'auto',
+              padding: '2rem',
+              margin: 'auto',
+              position: 'relative'
             }}
-            onClick={() => setSelectedPanel(null)}
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="modal"
-              style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                maxWidth: '32rem',
-                width: '90%',
-                maxHeight: '90vh',
-                backgroundColor: 'rgb(26, 28, 30)',
-                border: '2px solid #00FF41',
-                borderRadius: '1.5rem',
-                overflowY: 'auto',
-                zIndex: 10000,
-                padding: '2rem'
-              }}
-            >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
                   <div 
