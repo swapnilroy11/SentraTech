@@ -116,7 +116,8 @@ const ROICalculator = () => {
       setShowEmailModal(false);
       setEmail('');
       
-      setTimeout(() => setReportSubmitted(false), 5000);
+      // Auto-close confirmation after 10 seconds (longer for better UX)
+      setTimeout(() => setReportSubmitted(false), 10000);
 
     } catch (err) {
       console.error('Error submitting ROI report:', err);
