@@ -224,33 +224,52 @@ const PricingPage = () => {
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full text-left bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-xl p-6 hover:border-[rgba(0,255,65,0.3)] transition-all duration-300"
+                  className={`w-full text-left bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] rounded-xl p-6 hover:border-[rgba(0,255,65,0.3)] transition-all duration-300 ${
+                    openFAQ === index ? 'border-[rgba(0,255,65,0.3)] rounded-b-none' : ''
+                  }`}
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white pr-4">
                       {item.question}
                     </h3>
-                    {openFAQ === index ? (
-                      <ChevronUp className="text-[#00FF41] flex-shrink-0" size={24} />
-                    ) : (
+                    <motion.div
+                      animate={{ rotate: openFAQ === index ? 180 : 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
                       <ChevronDown className="text-[#00FF41] flex-shrink-0" size={24} />
-                    )}
+                    </motion.div>
                   </div>
                 </button>
                 
-                {openFAQ === index && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-b-xl p-6 -mt-1"
-                  >
-                    <p className="text-[rgb(218,218,218)] leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </motion.div>
-                )}
+                <AnimatePresence>
+                  {openFAQ === index && (
+                    <motion.div
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
+                      exit={{ opacity: 0, scaleY: 0 }}
+                      transition={{ 
+                        duration: 0.3, 
+                        ease: "easeInOut",
+                        opacity: { duration: 0.2 },
+                        scaleY: { duration: 0.3 }
+                      }}
+                      style={{ originY: 0 }}
+                      className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] border-t-0 rounded-b-xl overflow-hidden"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2, delay: 0.1 }}
+                        className="p-6"
+                      >
+                        <p className="text-[rgb(218,218,218)] leading-relaxed">
+                          {item.answer}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
