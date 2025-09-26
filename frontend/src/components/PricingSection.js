@@ -63,7 +63,7 @@ const PricingSection = () => {
           {mockData.pricing.map((tier, index) => {
             const isPopular = tier.popular;
             const price = typeof tier.price === 'number' 
-              ? billingPeriod === 'annual' ? Math.round(tier.price * 0.8) : tier.price
+              ? billingPeriod === '36months' ? Math.round(tier.price * 0.9) : tier.price
               : tier.price;
             
             return (
