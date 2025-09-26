@@ -8,9 +8,10 @@ import { BASE_COST, AI_COST } from './costBaselines';
  * @param {string} country - Selected country (Bangladesh, India, Philippines, Vietnam)
  * @param {number} agentCount - Number of agents
  * @param {number} ahtMinutes - Average Handle Time in minutes per call
+ * @param {number|null} callVolumeOverride - Optional manual override for call volume
  * @returns {object} Complete ROI analysis with accurate per-call metrics
  */
-export function calculateROI(country, agentCount, ahtMinutes) {
+export function calculateROI(country, agentCount, ahtMinutes, callVolumeOverride = null) {
   // Input validation
   if (!country || !BASE_COST[country]) {
     throw new Error(`Invalid country: ${country}`);
