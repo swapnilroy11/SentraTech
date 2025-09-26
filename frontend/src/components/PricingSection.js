@@ -131,17 +131,28 @@ const PricingSection = () => {
                     )}
                   </div>
 
-                  {/* CTA Button */}
-                  <Button 
-                    className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105
-                      ${isPopular 
-                        ? 'bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a]' 
-                        : 'bg-transparent border-2 border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)]'
-                      }`}
-                  >
-                    {tier.cta}
-                    <ArrowRight size={16} className="ml-2" />
-                  </Button>
+                  {/* CTA Buttons */}
+                  <div className="space-y-3">
+                    {/* Main CTA Button */}
+                    <Button 
+                      className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105
+                        ${isPopular 
+                          ? 'bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a]' 
+                          : 'bg-transparent border-2 border-[rgb(63,63,63)] text-white hover:border-[#00FF41] hover:text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)]'
+                        }`}
+                    >
+                      {tier.cta}
+                      <ArrowRight size={16} className="ml-2" />
+                    </Button>
+                    
+                    {/* Contact Sales Button - 16px larger */}
+                    <Button 
+                      onClick={() => handleContactSales(tier.name)}
+                      className="w-full py-4 text-lg bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a] font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-[#00FF41]/25"
+                    >
+                      Contact Sales
+                    </Button>
+                  </div>
                 </CardHeader>
 
                 <CardContent className="px-8 pb-8">
