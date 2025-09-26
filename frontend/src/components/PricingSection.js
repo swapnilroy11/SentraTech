@@ -214,11 +214,19 @@ const PricingSection = () => {
           <Button 
             variant="outline"
             className="mt-6 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-xl px-8"
+            onClick={() => handleContactSales('Enterprise')}
           >
             Contact Enterprise Sales
           </Button>
         </div>
       </div>
+
+      {/* Contact Sales Slide-in Panel */}
+      <ContactSalesSlideIn 
+        isOpen={isContactSalesOpen} 
+        onClose={() => setIsContactSalesOpen(false)}
+        selectedPlan={selectedPlan}
+      />
     </section>
   );
 };
