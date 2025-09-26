@@ -85,8 +85,8 @@ const DemoRequestPage = () => {
         </div>
       </section>
 
-      {/* Demo Request Form - No bottom padding to eliminate dark space */}
-      <section className="pt-16 bg-[#0A0A0A]">
+      {/* Demo Request Form - No gap, merge with previous section */}
+      <section className="bg-[#0A0A0A]">
         <div className="pb-20">
           <CTASection />
         </div>
