@@ -19,8 +19,8 @@ export const useNavigateWithScroll = () => {
         scrollToSection(sectionId);
       } else {
         console.log('Navigating to page then scrolling');
-        // Navigate to the page first, then scroll after navigation
-        navigate(routePath, { state: { scrollTo: sectionId } });
+        // Navigate to the page with the hash in the URL and store scroll target
+        navigate(`${routePath}#${sectionId}`, { state: { scrollTo: sectionId } });
       }
     } else {
       console.log('Regular navigation to:', path);
