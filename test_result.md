@@ -172,7 +172,7 @@ metadata:
     implemented: true
     working: false
     file: "/app/frontend/src/components/HorizontalJourney.js"
-    stuck_count: 4
+    stuck_count: 5
     priority: "critical"
     needs_retesting: false
     
