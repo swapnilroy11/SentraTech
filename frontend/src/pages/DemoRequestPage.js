@@ -89,35 +89,6 @@ const DemoRequestPage = () => {
       <section className="py-24 bg-[#0A0A0A]">
         <CTASection />
       </section>
-
-      {/* Trust Indicators */}
-      <section className="py-20 bg-gradient-to-r from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {[
-              { value: '24hrs', label: 'Response Time' },
-              { value: '99.9%', label: 'Platform Uptime' },
-              { value: 'SOC2', label: 'Compliant' },
-              { value: '30-day', label: 'Free Trial' }
-            ].map((indicator, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center p-6 bg-[rgb(17,17,19)] rounded-xl border border-[rgb(63,63,63)]"
-              >
-                <div className="text-2xl font-bold text-[#00FF41] mb-2 font-rajdhani">
-                  {indicator.value}
-                </div>
-                <div className="text-sm text-[rgb(161,161,170)]">
-                  {indicator.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
