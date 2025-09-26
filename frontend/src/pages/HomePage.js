@@ -64,7 +64,7 @@ const HomePage = () => {
       title: 'Enterprise Security',
       description: 'SOC 2 compliant platform with end-to-end encryption and comprehensive auditing',
       icon: TrendingUp,
-      link: '/security'
+      link: '/security#enterprise-security'
     }
   ];
 
