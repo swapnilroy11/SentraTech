@@ -53,6 +53,19 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
   useEffect(() => {
     if (!isOpen) return;
 
+    // Close hamburger menu if it's open
+    const hamburgerMenu = document.getElementById('mobile-navigation-menu');
+    const hamburgerButton = document.querySelector('button[aria-label*="navigation menu"]');
+    
+    if (hamburgerMenu && hamburgerButton) {
+      // Check if hamburger menu is open by checking visibility
+      const isHamburgerOpen = hamburgerMenu.classList.contains('translate-x-0');
+      if (isHamburgerOpen) {
+        // Simulate click on hamburger button to close it
+        hamburgerButton.click();
+      }
+    }
+
     // Prevent body scroll and disable pointer events on background
     document.body.style.overflow = 'hidden';
     document.body.style.pointerEvents = 'none';
