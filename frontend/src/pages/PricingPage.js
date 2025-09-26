@@ -5,9 +5,15 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import PricingSection from '../components/PricingSection';
 import SEOManager from '../components/SEOManager';
+import ContactSalesSlideIn from '../components/ContactSalesSlideIn';
 
 const PricingPage = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
+
+  const handleContactSales = (planName = 'Enterprise') => {
+    setIsContactSalesOpen(true);
+  };
 
   const faqItems = [
     {
