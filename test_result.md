@@ -175,6 +175,14 @@ metadata:
     stuck_count: 4
     priority: "critical"
     needs_retesting: false
+    
+  - task: "Supabase Contact Sales Integration Testing"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/lib/supabaseClient.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
