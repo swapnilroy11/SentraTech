@@ -326,20 +326,20 @@ const ROICalculator = () => {
                     </div>
                   </div>
 
-                  {/* Right Panel: Average Handle Time */}
-                  <div className="bg-[rgb(38,40,42)] rounded-xl p-4 border border-[rgba(255,255,255,0.1)]">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="p-2 bg-[#00DDFF]/20 rounded-lg border border-[#00DDFF]/50 mr-3">
-                        <Clock size={20} className="text-[#00DDFF]" />
+                  {/* Second Panel: Average Handle Time */}
+                  <div className="bg-[rgb(38,40,42)] rounded-xl p-3 border border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="p-1.5 bg-[#00DDFF]/20 rounded-lg border border-[#00DDFF]/50 mr-2">
+                        <Clock size={16} className="text-[#00DDFF]" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white">Average Handle Time</h3>
+                      <h3 className="text-base font-semibold text-white">Handle Time</h3>
                     </div>
                     
-                    <div className="text-center mb-6">
-                      <div className="text-6xl font-black text-[#00DDFF] mb-2 font-rajdhani">
+                    <div className="text-center mb-4">
+                      <div className="text-4xl font-black text-[#00DDFF] mb-1 font-rajdhani">
                         {ahtMinutes}
                       </div>
-                      <div className="text-sm text-[rgb(161,161,170)]">minutes</div>
+                      <div className="text-xs text-[rgb(161,161,170)]">minutes</div>
                     </div>
                     
                     <div className="space-y-4">
