@@ -121,9 +121,9 @@ const PricingSection = () => {
                             /{tier.period}
                           </span>
                         </div>
-                        {billingPeriod === 'annual' && typeof tier.price === 'number' && (
+                        {billingPeriod === '36months' && typeof tier.price === 'number' && (
                           <div className="text-sm text-[rgb(161,161,170)] mt-1">
-                            ${tier.price}/month billed monthly
+                            ${tier.price}/month billed for 24 months
                           </div>
                         )}
                       </>
