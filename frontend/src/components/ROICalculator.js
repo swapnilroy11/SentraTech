@@ -144,18 +144,12 @@ const ROICalculator = () => {
   return (
     <div id="roi-calculator" className="bg-transparent">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
+        {/* Country Badge */}
+        <div className="text-center mb-8">
           <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
             <Calculator className="mr-2" size={14} />
-            ROI Calculator
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 font-rajdhani text-white">
             ROI Analysis – <span className="text-[#00FF41]">{selectedCountry}</span>
-          </h1>
-          <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed mb-12">
-            Discover your potential savings and return on investment with SentraTech's AI-powered customer support platform.
-          </p>
+          </Badge>
         </div>
 
         {/* Country Selection */}
