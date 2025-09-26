@@ -1,0 +1,566 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { X, Check, Loader2, ArrowRight, Calendar } from 'lucide-react';
+import { insertContactRequest } from '../lib/supabaseClient';
+
+const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    workEmail: '',
+    phone: '',
+    companyName: '',
+    companyWebsite: '',
+    monthlyVolume: '',
+    planSelected: selectedPlan || '',
+    preferredContactMethod: 'email',
+    scheduledTime: '',
+    message: '',
+    consentMarketing: false,
+    honeypot: '' // Anti-spam field
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', 'error'
+  const [errors, setErrors] = useState({});
+
+  // UTM and tracking data
+  const [utmData, setUtmData] = useState({});
+
+  useEffect(() => {
+    // Capture UTM parameters and referrer data
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmParams = {
+      utm_source: urlParams.get('utm_source'),
+      utm_medium: urlParams.get('utm_medium'), 
+      utm_campaign: urlParams.get('utm_campaign'),
+      utm_term: urlParams.get('utm_term'),
+      utm_content: urlParams.get('utm_content'),
+      referrer: document.referrer,
+      landing_page: window.location.href
+    };
+    setUtmData(utmParams);
+  }, []);
+
+  // Update selected plan when prop changes
+  useEffect(() => {
+    if (selectedPlan) {
+      setFormData(prev => ({
+        ...prev,
+        planSelected: selectedPlan
+      }));
+    }
+  }, [selectedPlan]);
+
+  const monthlyVolumeOptions = [
+    { value: 'under_10k', label: '<10k' },
+    { value: '10k_50k', label: '10k-50k' },
+    { value: 'over_50k', label: '50k+' }
+  ];
+
+  const contactMethodOptions = [
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'demo', label: 'Schedule Demo' }
+  ];
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Required field validation
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!formData.workEmail.trim()) {
+      newErrors.workEmail = 'Work email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.workEmail)) {
+      newErrors.workEmail = 'Please enter a valid email address';
+    }
+    if (!formData.companyName.trim()) newErrors.companyName = 'Company name is required';
+    if (!formData.monthlyVolume) newErrors.monthlyVolume = 'Please select monthly volume';
+    if (!formData.consentMarketing) newErrors.consentMarketing = 'You must agree to receive communications';
+    
+    // Demo scheduling validation
+    if (formData.preferredContactMethod === 'demo' && !formData.scheduledTime) {
+      newErrors.scheduledTime = 'Please select a preferred time for the demo';
+    }
+    
+    // Honeypot check (should be empty)
+    if (formData.honeypot) {
+      newErrors.honeypot = 'Spam detected';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const submissionData = {
+        ...formData,
+        utmData,
+        planSelected: formData.planSelected || selectedPlan
+      };
+
+      const result = await insertContactRequest(submissionData);
+      
+      if (result.success) {
+        setSubmitStatus('success');
+        
+        // Optional: Send notification to /api/notify endpoint
+        try {
+          await fetch('/api/notify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              type: 'contact_sales',
+              data: submissionData
+            })
+          });
+        } catch (notifyError) {
+          console.warn('Notification failed:', notifyError);
+          // Don't show error to user for notification failures
+        }
+      } else {
+        setSubmitStatus('error');
+        setErrors({ submit: result.message });
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      setSubmitStatus('error');
+      setErrors({ submit: 'Something went wrong. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (!isSubmitting) {
+      onClose();
+      // Reset form after animation completes
+      setTimeout(() => {
+        setFormData({
+          fullName: '',
+          workEmail: '',
+          phone: '',
+          companyName: '',
+          companyWebsite: '',
+          monthlyVolume: '',
+          planSelected: selectedPlan || '',
+          preferredContactMethod: 'email',
+          scheduledTime: '',
+          message: '',
+          consentMarketing: false,
+          honeypot: ''
+        });
+        setSubmitStatus(null);
+        setErrors({});
+      }, 300);
+    }
+  };
+
+  const handleReturnToPricing = () => {
+    onClose();
+    // Scroll to pricing section
+    setTimeout(() => {
+      const pricingSection = document.getElementById('pricing');
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  };
+
+  const handleGoToROI = () => {
+    onClose();
+    // Navigate to ROI calculator
+    setTimeout(() => {
+      window.location.href = '/roi-calculator';
+    }, 300);
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            onClick={handleClose}
+          />
+          
+          {/* Slide-in Panel */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 h-full w-full md:w-[400px] bg-[#071014] border-l-3 border-[#00FF41] z-50 overflow-y-auto"
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-[#071014] border-b border-[rgba(255,255,255,0.1)] p-6 z-10">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold text-white">Contact Sales</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClose}
+                  className="text-[rgb(161,161,170)] hover:text-white hover:bg-[rgba(255,255,255,0.1)]"
+                  disabled={isSubmitting}
+                >
+                  <X size={20} />
+                </Button>
+              </div>
+              <p className="text-[rgb(161,161,170)]">Quick, Tailored Quote</p>
+              {selectedPlan && (
+                <Badge className="mt-2 bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
+                  {selectedPlan} Plan Selected
+                </Badge>
+              )}
+            </div>
+
+            <div className="p-6">
+              {submitStatus === 'success' ? (
+                // Success State
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', delay: 0.2 }}
+                    className="w-16 h-16 bg-[#00FF41]/20 rounded-full flex items-center justify-center mx-auto mb-4"
+                  >
+                    <Check size={32} className="text-[#00FF41]" />
+                  </motion.div>
+                  
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    Thanks, {formData.fullName.split(' ')[0]}!
+                  </h3>
+                  <p className="text-[rgb(161,161,170)] mb-6 leading-relaxed">
+                    Sales will contact you within one business day.
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <Button
+                      onClick={handleReturnToPricing}
+                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold"
+                    >
+                      Return to Pricing
+                    </Button>
+                    <Button
+                      onClick={handleGoToROI}
+                      variant="outline"
+                      className="w-full border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10"
+                    >
+                      Go to ROI Calculator
+                      <ArrowRight size={16} className="ml-2" />
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : (
+                // Form State
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot field (hidden) */}
+                  <input
+                    type="text"
+                    name="honeypot"
+                    value={formData.honeypot}
+                    onChange={handleInputChange}
+                    style={{ display: 'none' }}
+                    tabIndex="-1"
+                    autoComplete="off"
+                  />
+
+                  {/* Full Name */}
+                  <div>
+                    <label htmlFor="fullName" className="block text-sm font-semibold text-white mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                        errors.fullName ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
+                      }`}
+                      placeholder="John Smith"
+                      disabled={isSubmitting}
+                    />
+                    {errors.fullName && (
+                      <p className="text-red-400 text-sm mt-1">{errors.fullName}</p>
+                    )}
+                  </div>
+
+                  {/* Work Email */}
+                  <div>
+                    <label htmlFor="workEmail" className="block text-sm font-semibold text-white mb-2">
+                      Work Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="workEmail"
+                      name="workEmail"
+                      value={formData.workEmail}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                        errors.workEmail ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
+                      }`}
+                      placeholder="john@company.com"
+                      disabled={isSubmitting}
+                    />
+                    {errors.workEmail && (
+                      <p className="text-red-400 text-sm mt-1">{errors.workEmail}</p>
+                    )}
+                  </div>
+
+                  {/* Company Name */}
+                  <div>
+                    <label htmlFor="companyName" className="block text-sm font-semibold text-white mb-2">
+                      Company Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                        errors.companyName ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
+                      }`}
+                      placeholder="Acme Corporation"
+                      disabled={isSubmitting}
+                    />
+                    {errors.companyName && (
+                      <p className="text-red-400 text-sm mt-1">{errors.companyName}</p>
+                    )}
+                  </div>
+
+                  {/* Company Website (Optional) */}
+                  <div>
+                    <label htmlFor="companyWebsite" className="block text-sm font-semibold text-white mb-2">
+                      Company Website
+                    </label>
+                    <input
+                      type="url"
+                      id="companyWebsite"
+                      name="companyWebsite"
+                      value={formData.companyWebsite}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all"
+                      placeholder="https://company.com"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  {/* Monthly Volume Chips */}
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-3">
+                      Monthly Volume *
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {monthlyVolumeOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, monthlyVolume: option.value }));
+                            if (errors.monthlyVolume) {
+                              setErrors(prev => ({ ...prev, monthlyVolume: '' }));
+                            }
+                          }}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            formData.monthlyVolume === option.value
+                              ? 'bg-[#00FF41] text-[#0A0A0A]'
+                              : 'bg-[rgba(255,255,255,0.05)] text-[rgb(161,161,170)] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/30'
+                          }`}
+                          disabled={isSubmitting}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                    {errors.monthlyVolume && (
+                      <p className="text-red-400 text-sm mt-2">{errors.monthlyVolume}</p>
+                    )}
+                  </div>
+
+                  {/* Preferred Contact Method */}
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-3">
+                      Preferred Contact Method
+                    </label>
+                    <div className="space-y-2">
+                      {contactMethodOptions.map((option) => (
+                        <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="preferredContactMethod"
+                            value={option.value}
+                            checked={formData.preferredContactMethod === option.value}
+                            onChange={handleInputChange}
+                            className="w-4 h-4 text-[#00FF41] bg-transparent border-2 border-[rgba(255,255,255,0.3)] focus:ring-[#00FF41] focus:ring-2"
+                            disabled={isSubmitting}
+                          />
+                          <span className="text-white text-sm">
+                            {option.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Schedule Demo Time (conditional) */}
+                  {formData.preferredContactMethod === 'demo' && (
+                    <div>
+                      <label htmlFor="scheduledTime" className="block text-sm font-semibold text-white mb-2">
+                        Preferred Demo Time *
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" size={16} />
+                        <input
+                          type="datetime-local"
+                          id="scheduledTime"
+                          name="scheduledTime"
+                          value={formData.scheduledTime}
+                          onChange={handleInputChange}
+                          min={new Date().toISOString().slice(0, 16)}
+                          className={`w-full pl-10 pr-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                            errors.scheduledTime ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
+                          }`}
+                          disabled={isSubmitting}
+                        />
+                      </div>
+                      {errors.scheduledTime && (
+                        <p className="text-red-400 text-sm mt-1">{errors.scheduledTime}</p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Phone (conditional for phone contact) */}
+                  {formData.preferredContactMethod === 'phone' && (
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-semibold text-white mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all"
+                        placeholder="+1 (555) 123-4567"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  )}
+
+                  {/* Message (Optional) */}
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-semibold text-white mb-2">
+                      Message (Optional)
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={3}
+                      maxLength={1000}
+                      className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all resize-none"
+                      placeholder="Tell us about your specific needs..."
+                      disabled={isSubmitting}
+                    />
+                    <p className="text-xs text-[rgb(161,161,170)] mt-1">
+                      {formData.message.length}/1000 characters
+                    </p>
+                  </div>
+
+                  {/* Consent Checkbox */}
+                  <div>
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="consentMarketing"
+                        checked={formData.consentMarketing}
+                        onChange={handleInputChange}
+                        className={`w-4 h-4 mt-1 text-[#00FF41] bg-transparent border-2 rounded focus:ring-[#00FF41] focus:ring-2 ${
+                          errors.consentMarketing ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'
+                        }`}
+                        disabled={isSubmitting}
+                      />
+                      <span className="text-sm text-[rgb(161,161,170)] leading-relaxed">
+                        I agree to receive communications from SentraTech regarding this inquiry and future product updates. *
+                      </span>
+                    </label>
+                    {errors.consentMarketing && (
+                      <p className="text-red-400 text-sm mt-1 ml-7">{errors.consentMarketing}</p>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin mr-2" />
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Request'
+                    )}
+                  </Button>
+
+                  {/* Error Display */}
+                  {errors.submit && (
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+                      <p className="text-red-400 text-sm">{errors.submit}</p>
+                    </div>
+                  )}
+                </form>
+              )}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default ContactSalesSlideIn;
