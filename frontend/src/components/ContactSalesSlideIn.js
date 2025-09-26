@@ -295,7 +295,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
               top: 0,
               height: '100vh',
               overflowY: 'auto',
-              width: '100vw',
+              width: typeof window !== 'undefined' && window.innerWidth >= 768 ? '320px' : '100vw',
               maxWidth: '100vw'
             }}
             role="dialog"
