@@ -674,6 +674,9 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
       )}
     </AnimatePresence>
   );
+
+  // Use portal to render at document.body level for proper positioning
+  return typeof document !== 'undefined' ? createPortal(drawerContent, document.body) : null;
 };
 
 export default ContactSalesSlideIn;
