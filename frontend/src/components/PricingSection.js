@@ -36,21 +36,24 @@ const PricingSection = () => {
             Start small and grow as your business expands.
           </p>
           
-          {/* Billing Toggle */}
-          <div className="flex items-center justify-center space-x-4 mb-12">
-            <span className={`text-sm ${billingPeriod === 'monthly' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
-              Monthly
+          {/* Billing Period Toggle - 24 months vs 36 months */}
+          <div className="flex items-center justify-center space-x-6 mb-12">
+            <span className={`text-sm font-medium ${billingPeriod === '24months' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
+              24 Months
             </span>
             <button
-              onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly')}
-              className="relative w-14 h-7 bg-[rgb(38,40,42)] rounded-full border border-[rgb(63,63,63)] transition-all duration-200"
+              onClick={() => setBillingPeriod(billingPeriod === '24months' ? '36months' : '24months')}
+              className="relative w-16 h-8 bg-[rgb(38,40,42)] rounded-full border border-[rgb(63,63,63)] transition-all duration-300 hover:border-[#00FF41]/50"
             >
-              <div className={`absolute w-5 h-5 bg-[#00FF41] rounded-full top-1 transition-all duration-200 ${
-                billingPeriod === 'annual' ? 'left-8' : 'left-1'
+              <div className={`absolute w-6 h-6 bg-[#00FF41] rounded-full top-1 transition-all duration-300 shadow-lg shadow-[#00FF41]/30 ${
+                billingPeriod === '36months' ? 'left-9' : 'left-1'
               }`} />
             </button>
-            <span className={`text-sm ${billingPeriod === 'annual' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
-              Annual <Badge className="ml-1 bg-[#00FF41] text-[rgb(17,17,19)] text-xs">Save 20%</Badge>
+            <span className={`text-sm font-medium ${billingPeriod === '36months' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
+              36 Months 
+              <Badge className="ml-2 bg-[#00FF41] text-[rgb(17,17,19)] text-xs font-semibold px-2 py-1">
+                Save 10%
+              </Badge>
             </span>
           </div>
         </div>
