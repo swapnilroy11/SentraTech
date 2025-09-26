@@ -295,6 +295,13 @@ const PricingPage = () => {
       </section>
         </div>
       </main>
+
+      {/* Contact Sales Slide-in Panel */}
+      <ContactSalesSlideIn 
+        isOpen={isContactSalesOpen} 
+        onClose={() => setIsContactSalesOpen(false)}
+        selectedPlan="Enterprise"
+      />
     </>
   );
 };
