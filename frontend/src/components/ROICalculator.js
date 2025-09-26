@@ -142,8 +142,8 @@ const ROICalculator = () => {
   };
 
   return (
-    <section id="roi-calculator" className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] via-[rgb(26,28,30)] to-[rgb(17,17,19)]">
-      <div className="container mx-auto px-6">
+    <div id="roi-calculator" className="bg-transparent">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
