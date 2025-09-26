@@ -52,7 +52,7 @@ const ROICalculator = () => {
     }, 100); // Reduced debounce time for faster response
 
     return () => clearTimeout(timer);
-  }, [selectedCountry, agentCount, ahtMinutes]);
+  }, [selectedCountry, agentCount, ahtMinutes, useManualVolume, manualCallVolume]);
 
   // Handle country selection
   const handleCountryChange = (country) => {
