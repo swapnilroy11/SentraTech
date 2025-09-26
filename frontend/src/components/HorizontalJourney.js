@@ -559,13 +559,14 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - Transform Centered */}
-      <AnimatePresence>
-        {selectedPanel && (
+      {/* Journey Stage Details Modal - React Portal with Proper Centering */}
+      {selectedPanel && createPortal(
+        <AnimatePresence>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="modal-overlay"
             style={{
               position: 'fixed',
               top: 0,
@@ -574,10 +575,7 @@ const HorizontalJourney = () => {
               bottom: 0,
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               backdropFilter: 'blur(12px)',
-              zIndex: 9999,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
+              zIndex: 9999
             }}
             onClick={() => setSelectedPanel(null)}
           >
@@ -586,19 +584,21 @@ const HorizontalJourney = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
+              className="modal"
               style={{
-                position: 'absolute',
+                position: 'fixed',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '90%',
                 maxWidth: '32rem',
+                width: '90%',
                 maxHeight: '90vh',
                 backgroundColor: 'rgb(26, 28, 30)',
                 border: '2px solid #00FF41',
                 borderRadius: '1.5rem',
                 overflowY: 'auto',
-                zIndex: 10000
+                zIndex: 10000,
+                padding: '2rem'
               }}
             >
               <div className="p-8">
