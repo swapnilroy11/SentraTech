@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Clock, Shield, Zap } from 'lucide-react';
 import CTASection from '../components/CTASection';
-import Footer from '../components/Footer';
 
 const DemoRequestPage = () => {
   return (
