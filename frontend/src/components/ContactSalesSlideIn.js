@@ -53,8 +53,9 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    // Prevent body scroll
+    // Prevent body scroll and disable pointer events on background
     document.body.style.overflow = 'hidden';
+    document.body.style.pointerEvents = 'none';
     
     // Focus trap
     const focusableElements = drawerRef.current?.querySelectorAll(
