@@ -279,7 +279,10 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 z-[9999]"
-            style={{ backdropFilter: 'blur(4px)' }}
+            style={{ 
+              backdropFilter: 'blur(4px)',
+              pointerEvents: 'auto'
+            }}
             onClick={handleClose}
           />
           
