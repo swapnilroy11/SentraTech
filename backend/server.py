@@ -2886,6 +2886,75 @@ async def download_data_export(request_id: str):
 # End of GDPR/CCPA Data Protection Endpoints  
 # ============================================================================
 
+# ============================================================================
+# Contact Sales Notification Endpoint  
+# ============================================================================
+
+class ContactNotification(BaseModel):
+    type: str
+    data: dict
+
+@api_router.post("/notify")
+async def send_contact_notification(notification: ContactNotification):
+    """
+    Handle contact sales notifications (Slack webhook, email, etc.)
+    This endpoint is called after successful Supabase contact submission
+    """
+    try:
+        logger.info(f"📧 Processing {notification.type} notification")
+        
+        if notification.type == "contact_sales":
+            # Extract contact data
+            contact_data = notification.data
+            
+            # Log the contact request for monitoring
+            logger.info(f"🎯 New contact sales request: {contact_data.get('fullName')} from {contact_data.get('companyName')}")
+            
+            # In a production environment, you could:
+            # 1. Send Slack notification
+            # 2. Send email to sales team
+            # 3. Create CRM record
+            # 4. Trigger automated workflows
+            
+            # Example Slack notification (commented out - requires webhook URL)
+            # slack_payload = {
+            #     "text": f"🚨 New Contact Sales Request",
+            #     "attachments": [{
+            #         "color": "good",
+            #         "fields": [
+            #             {"title": "Name", "value": contact_data.get('fullName'), "short": True},
+            #             {"title": "Company", "value": contact_data.get('companyName'), "short": True},
+            #             {"title": "Email", "value": contact_data.get('workEmail'), "short": True},
+            #             {"title": "Plan", "value": contact_data.get('planSelected', 'Not specified'), "short": True},
+            #             {"title": "Volume", "value": contact_data.get('monthlyVolume'), "short": True},
+            #             {"title": "Contact Method", "value": contact_data.get('preferredContactMethod'), "short": True}
+            #         ]
+            #     }]
+            # }
+            
+            # For now, just log the successful notification
+            return {
+                "success": True,
+                "message": "Contact notification processed successfully",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        
+        else:
+            logger.warning(f"⚠️ Unknown notification type: {notification.type}")
+            return {
+                "success": False,
+                "message": f"Unknown notification type: {notification.type}"
+            }
+            
+    except Exception as e:
+        logger.error(f"❌ Error processing contact notification: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process notification")
+
+
+# ============================================================================
+# End of Contact Sales Notification Endpoint  
+# ============================================================================
+
 # Security Headers Middleware
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
