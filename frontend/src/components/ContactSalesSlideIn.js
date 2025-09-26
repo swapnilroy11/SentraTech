@@ -121,6 +121,20 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
       document.body.style.pointerEvents = 'auto';
       document.removeEventListener('keydown', handleEscKey);
       document.removeEventListener('keydown', handleTabKey);
+      
+      // Re-enable hamburger menu when Contact Sales panel closes
+      const hamburgerMenu = document.getElementById('mobile-navigation-menu');
+      const hamburgerOverlay = document.querySelector('[data-mobile-overlay]');
+      
+      if (hamburgerMenu) {
+        hamburgerMenu.style.display = '';
+        hamburgerMenu.style.pointerEvents = '';
+      }
+      
+      if (hamburgerOverlay) {
+        hamburgerOverlay.style.display = '';
+        hamburgerOverlay.style.pointerEvents = '';
+      }
     };
   }, [isOpen, onClose]);
 
