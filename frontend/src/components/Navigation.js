@@ -177,7 +177,8 @@ const Navigation = () => {
           }}
         >
           {/* Mobile Menu Header - Enhanced */}
-          <div className="flex items-center justify-between p-6 border-b border-[rgba(0,255,65,0.4)]">
+          <div className="flex items-center justify-between p-6 border-b border-[rgba(0,255,65,0.6)] bg-[#0A0A0A]"
+               style={{ backgroundColor: '#0A0A0A' }}>
             <SentraTechLogo 
               width={32} 
               height={32} 
