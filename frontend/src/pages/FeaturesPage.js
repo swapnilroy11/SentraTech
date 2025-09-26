@@ -19,29 +19,62 @@ const FeaturesPage = () => {
           const element = document.getElementById(hash);
           if (element) {
             console.log(`Features page: Found element with ID: ${hash} on attempt ${attempt}`);
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start',
-              inline: 'nearest'
-            });
             
-            // Add a small offset to account for any fixed headers
-            setTimeout(() => {
-              window.scrollBy(0, -20);
-            }, 100);
+            // Force element to be visible first (in case of animation issues)
+            element.style.visibility = 'visible';
+            element.style.opacity = '1';
+            
+            // Get element position for debugging
+            const rect = element.getBoundingClientRect();
+            const elementTop = window.pageYOffset + rect.top;
+            console.log(`Element ${hash} position: y=${elementTop}, viewport=${window.innerHeight}`);
+            
+            // Try multiple scroll methods for maximum compatibility
+            try {
+              // Method 1: scrollIntoView with options
+              element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+              });
+              
+              // Method 2: Fallback manual scroll after a delay
+              setTimeout(() => {
+                const newRect = element.getBoundingClientRect();
+                const newElementTop = window.pageYOffset + newRect.top;
+                console.log(`After scrollIntoView, element ${hash} position: y=${newElementTop}`);
+                
+                // If element is still not in viewport, manually scroll
+                if (newElementTop > window.innerHeight || newElementTop < 0) {
+                  console.log(`Manual scroll needed for ${hash}, scrolling to ${newElementTop - 100}`);
+                  window.scrollTo({
+                    top: newElementTop - 100, // 100px offset for better positioning
+                    behavior: 'smooth'
+                  });
+                }
+              }, 1000);
+              
+            } catch (error) {
+              console.error('Scroll error for element', hash, error);
+              // Fallback: force scroll to element
+              window.scrollTo({
+                top: elementTop - 100,
+                behavior: 'smooth'
+              });
+            }
             
             return true;
           } else {
             console.log(`Features page: Element not found with ID: ${hash} on attempt ${attempt}`);
-            if (attempt <= 8) { // Increased attempts for complex animations
-              setTimeout(() => attemptScroll(attempt + 1), attempt * 300);
+            if (attempt <= 10) { // Increased attempts for complex animations
+              setTimeout(() => attemptScroll(attempt + 1), attempt * 500);
               return false;
             }
           }
         };
 
         // Start scrolling attempt after page content loads
-        setTimeout(() => attemptScroll(), 500);
+        setTimeout(() => attemptScroll(), 1000); // Increased initial delay
       }
     };
 
