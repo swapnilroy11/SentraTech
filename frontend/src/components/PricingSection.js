@@ -7,7 +7,7 @@ import { mockData } from '../data/mock';
 import ContactSalesSlideIn from './ContactSalesSlideIn';
 
 const PricingSection = () => {
-  const [billingPeriod, setBillingPeriod] = useState('monthly');
+  const [billingPeriod, setBillingPeriod] = useState('24months');
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
