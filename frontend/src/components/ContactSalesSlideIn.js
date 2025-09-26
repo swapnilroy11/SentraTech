@@ -53,17 +53,21 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    // Close hamburger menu if it's open
+    // Force close hamburger menu and disable it
     const hamburgerMenu = document.getElementById('mobile-navigation-menu');
-    const hamburgerButton = document.querySelector('button[aria-label*="navigation menu"]');
+    const hamburgerOverlay = document.querySelector('[data-mobile-overlay]');
     
-    if (hamburgerMenu && hamburgerButton) {
-      // Check if hamburger menu is open by checking visibility
-      const isHamburgerOpen = hamburgerMenu.classList.contains('translate-x-0');
-      if (isHamburgerOpen) {
-        // Simulate click on hamburger button to close it
-        hamburgerButton.click();
-      }
+    if (hamburgerMenu) {
+      // Force hamburger menu to close by adding translate-x-full class
+      hamburgerMenu.classList.remove('translate-x-0');
+      hamburgerMenu.classList.add('translate-x-full');
+      hamburgerMenu.style.display = 'none';
+      hamburgerMenu.style.pointerEvents = 'none';
+    }
+    
+    if (hamburgerOverlay) {
+      hamburgerOverlay.style.display = 'none';
+      hamburgerOverlay.style.pointerEvents = 'none';
     }
 
     // Prevent body scroll and disable pointer events on background
