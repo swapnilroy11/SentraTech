@@ -629,9 +629,26 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
 
                   {/* Submit Button */}
                   <Button
+                    ref={lastFocusableRef}
                     type="submit"
-                    className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all shadow-lg hover:shadow-[#00FF41]/30"
                     disabled={isSubmitting}
+                    style={{
+                      background: '#00FF41',
+                      color: '#0A0A0A',
+                      padding: '12px 24px',
+                      borderRadius: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSubmitting) {
+                        e.target.style.background = '#00e83a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSubmitting) {
+                        e.target.style.background = '#00FF41';
+                      }
+                    }}
                   >
                     {isSubmitting ? (
                       <>
