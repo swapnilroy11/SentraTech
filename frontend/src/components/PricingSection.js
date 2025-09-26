@@ -136,13 +136,15 @@ const PricingSection = () => {
                     {/* Only show Contact Sales Button - Matrix Green Styling */}
                     <Button 
                       onClick={() => handleContactSales(tier.name)}
-                      className="w-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-[#00FF41]/30"
+                      className="w-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-[#00FF41]/30 min-h-[48px] text-sm sm:text-base"
                       style={{
                         background: '#00FF41',
                         color: '#0A0A0A',
-                        padding: '12px 24px',
+                        padding: '14px 24px',
                         borderRadius: '8px',
-                        fontSize: '16px'
+                        fontSize: 'inherit',
+                        minHeight: '48px',
+                        touchAction: 'manipulation'
                       }}
                       onMouseEnter={(e) => {
                         e.target.style.transform = 'scale(1.05)';
