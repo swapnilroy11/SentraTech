@@ -329,41 +329,55 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
               )}
             </div>
 
-            <div className="p-6">
+            {/* Form Content */}
+            <div className="px-6 pb-6">
               {submitStatus === 'success' ? (
                 // Success State
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center"
+                  className="text-center py-8"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', delay: 0.2 }}
-                    className="w-16 h-16 bg-[#00FF41]/20 rounded-full flex items-center justify-center mx-auto mb-4"
+                    className="w-16 h-16 bg-[#00FF41]/20 rounded-full flex items-center justify-center mx-auto mb-6"
                   >
                     <Check size={32} className="text-[#00FF41]" />
                   </motion.div>
                   
-                  <h3 className="text-xl font-bold text-white mb-2">
+                  <h3 className="text-xl font-bold text-white mb-3">
                     Thanks, {formData.fullName.split(' ')[0]}!
                   </h3>
-                  <p className="text-[rgb(161,161,170)] mb-6 leading-relaxed">
-                    Sales will contact you within one business day.
+                  <p className="text-[rgb(161,161,170)] mb-8 leading-relaxed">
+                    We'll be in touch within one business day.
                   </p>
                   
                   <div className="space-y-3">
                     <Button
                       onClick={handleReturnToPricing}
-                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold"
+                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 px-6 rounded-lg transform hover:scale-105 transition-all"
+                      style={{
+                        background: '#00FF41',
+                        color: '#0A0A0A',
+                        padding: '12px 24px',
+                        borderRadius: '8px'
+                      }}
                     >
                       Return to Pricing
                     </Button>
                     <Button
+                      ref={lastFocusableRef}
                       onClick={handleGoToROI}
                       variant="outline"
-                      className="w-full border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10"
+                      className="w-full border-[#00FF41] text-[#00FF41] hover:bg-[#00FF41]/10 py-3 px-6 rounded-lg"
+                      style={{
+                        borderColor: '#00FF41',
+                        color: '#00FF41',
+                        padding: '12px 24px',
+                        borderRadius: '8px'
+                      }}
                     >
                       Go to ROI Calculator
                       <ArrowRight size={16} className="ml-2" />
