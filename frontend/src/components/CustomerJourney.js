@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge } from './ui/badge';
 import { Brain } from 'lucide-react';
-import CustomerJourneySimple from './CustomerJourneySimple';
+import HorizontalJourney from './HorizontalJourney';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const CustomerJourney = () => {
@@ -26,7 +26,7 @@ const CustomerJourney = () => {
       </div>
       
       {/* Horizontal Parallax Journey */}
-      <CustomerJourneySimple />
+      <HorizontalJourney />
     </section>
   );
 };
