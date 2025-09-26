@@ -159,7 +159,10 @@ class ROICalculationTester:
             actual_call_volume = call_volume_override
         else:
             work_minutes = 8 * 60 * 22  # 10,560 minutes
-            actual_call_volume = math.floor(agent_count * (work_minutes / aht_minutes))
+            if aht_minutes > 0:
+                actual_call_volume = math.floor(agent_count * (work_minutes / aht_minutes))
+            else:
+                actual_call_volume = 0
         
         if actual_call_volume == expected['call_volume']:
             self.log_test(f"{test_name} - Call Volume Formula", True, 
