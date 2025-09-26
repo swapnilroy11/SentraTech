@@ -59,9 +59,9 @@
 
 test_plan:
   current_focus:
-    - "Performance Optimization"
+    - "Customer Journey Interactive Cards Fix Verification"
   stuck_tasks:
-    - "Performance Optimization"
+    - "Customer Journey Interactive Cards Fix Verification"
   test_all: false
   test_priority: "stuck_first"
 
