@@ -16,8 +16,10 @@ import { supabase } from '../lib/supabaseClient';
 const ROICalculator = () => {
   // State Management - Agent Count and AHT
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [agentCount, setAgentCount] = useState(10);  // Default 10 as specified
+  const [agentCount, setAgentCount] = useState(10);     // Default 10 agents
   const [ahtMinutes, setAhtMinutes] = useState(7);   // Default 7 as specified
+  const [manualCallVolume, setManualCallVolume] = useState(null); // Manual override for call volume
+  const [useManualVolume, setUseManualVolume] = useState(false);  // Toggle for manual vs auto calculation
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
