@@ -601,95 +601,94 @@ const HorizontalJourney = () => {
                 padding: '2rem'
               }}
             >
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-4">
-                    <div 
-                      className="w-12 h-12 rounded-xl flex items-center justify-center border"
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <div 
+                    className="w-12 h-12 rounded-xl flex items-center justify-center border"
+                    style={{ 
+                      backgroundColor: `${selectedPanel.color}20`,
+                      borderColor: selectedPanel.color
+                    }}
+                  >
+                    <selectedPanel.icon size={24} style={{ color: selectedPanel.color }} />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-white">{selectedPanel.title}</h2>
+                    <p className="text-[#00FF41]">{selectedPanel.subtitle}</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => setSelectedPanel(null)}
+                  size="sm"
+                  variant="ghost"
+                  className="text-[rgb(161,161,170)] hover:text-white"
+                >
+                  <X size={20} />
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Process Overview</h3>
+                  <p className="text-[rgb(218,218,218)] leading-relaxed">
+                    {selectedPanel.description}
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Key Metrics</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[rgb(161,161,170)]">Performance</span>
+                      <span className="text-2xl font-bold" style={{ color: selectedPanel.color }}>
+                        {selectedPanel.metric}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-[rgb(161,161,170)]">Automation Rate</span>
+                      <span className="text-lg font-semibold text-[#00DDFF]">
+                        {selectedPanel.automationRate}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-white mb-3">Key Features</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {selectedPanel.keyFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <CheckCircle size={16} style={{ color: selectedPanel.color }} />
+                      <span className="text-[rgb(218,218,218)] text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Integration Channels</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPanel.channels.map((channel, index) => (
+                    <Badge
+                      key={index}
+                      className="text-xs"
                       style={{ 
                         backgroundColor: `${selectedPanel.color}20`,
-                        borderColor: selectedPanel.color
+                        color: selectedPanel.color,
+                        border: `1px solid ${selectedPanel.color}50`
                       }}
                     >
-                      <selectedPanel.icon size={24} style={{ color: selectedPanel.color }} />
-                    </div>
-                    <div>
-                      <h2 className="text-3xl font-bold text-white">{selectedPanel.title}</h2>
-                      <p className="text-[#00FF41]">{selectedPanel.subtitle}</p>
-                    </div>
-                  </div>
-                  <Button
-                    onClick={() => setSelectedPanel(null)}
-                    size="sm"
-                    variant="ghost"
-                    className="text-[rgb(161,161,170)] hover:text-white"
-                  >
-                    <X size={20} />
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-3">Process Overview</h3>
-                    <p className="text-[rgb(218,218,218)] leading-relaxed">
-                      {selectedPanel.description}
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-3">Key Metrics</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[rgb(161,161,170)]">Performance</span>
-                        <span className="text-2xl font-bold" style={{ color: selectedPanel.color }}>
-                          {selectedPanel.metric}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[rgb(161,161,170)]">Automation Rate</span>
-                        <span className="text-lg font-semibold text-[#00DDFF]">
-                          {selectedPanel.automationRate}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-3">Key Features</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {selectedPanel.keyFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <CheckCircle size={16} style={{ color: selectedPanel.color }} />
-                        <span className="text-[rgb(218,218,218)] text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Integration Channels</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedPanel.channels.map((channel, index) => (
-                      <Badge
-                        key={index}
-                        className="text-xs"
-                        style={{ 
-                          backgroundColor: `${selectedPanel.color}20`,
-                          color: selectedPanel.color,
-                          border: `1px solid ${selectedPanel.color}50`
-                        }}
-                      >
-                        {channel}
-                      </Badge>
-                    ))}
-                  </div>
+                      {channel}
+                    </Badge>
+                  ))}
                 </div>
               </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };
