@@ -221,14 +221,6 @@ const PricingSection = () => {
             Need a custom solution? Our enterprise team can work with you to create 
             a tailored package that meets your specific requirements and scale.
           </p>
-          
-          <Button 
-            variant="outline"
-            className="mt-6 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:border-[#00FF41] hover:text-[#00FF41] rounded-xl px-8"
-            onClick={() => handleContactSales('Enterprise')}
-          >
-            Contact Enterprise Sales
-          </Button>
         </div>
       </div>
 
