@@ -167,9 +167,14 @@ const Navigation = () => {
         {/* Mobile Menu Panel - Enhanced with better background */}
         <div 
           id="mobile-navigation-menu"
-          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[rgba(10,10,10,0.98)] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.4)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
+          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
+          style={{
+            backgroundColor: '#0A0A0A',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 0 50px rgba(0, 0, 0, 0.8)'
+          }}
         >
           {/* Mobile Menu Header - Enhanced */}
           <div className="flex items-center justify-between p-6 border-b border-[rgba(0,255,65,0.4)]">
