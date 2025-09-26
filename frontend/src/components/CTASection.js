@@ -599,8 +599,8 @@ const CTASection = () => {
           </Card>
         </div>
 
-        {/* Trust Indicators */}
-        <div className="mt-16 text-center">
+        {/* Trust Indicators - No bottom spacing */}
+        <div className="mt-16 pb-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center p-3 bg-[rgb(17,17,19)] rounded-lg border border-[rgb(63,63,63)]">
               <div className="text-lg font-bold text-[#00FF41] font-rajdhani">24hrs</div>
