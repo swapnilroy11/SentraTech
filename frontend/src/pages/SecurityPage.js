@@ -231,8 +231,10 @@ const SecurityPage = () => {
         </div>
       </section>
 
-      {/* Security Compliance Component */}
-      <SecurityCompliance />
+      {/* Enterprise Security Compliance Component */}
+      <div id="enterprise-security">
+        <SecurityCompliance />
+      </div>
 
       {/* Documentation Links Section */}
       <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]">
