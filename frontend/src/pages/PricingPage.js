@@ -274,7 +274,10 @@ const PricingPage = () => {
               your specific requirements and scale.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300">
+              <Button 
+                onClick={() => handleContactSales('Enterprise')}
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300"
+              >
                 Contact Enterprise Sales
               </Button>
               <Link to="/demo-request">
