@@ -571,16 +571,20 @@ const HorizontalJourney = () => {
               right: 0,
               bottom: 0,
               zIndex: 999999,
-              pointerEvents: 'auto'
+              pointerEvents: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
             }}
           >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/80 backdrop-blur-md"
               style={{ 
-                zIndex: 999999,
+                zIndex: 999998,
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -588,18 +592,20 @@ const HorizontalJourney = () => {
                 bottom: 0
               }}
               onClick={() => setSelectedPanel(null)}
+            />
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+              style={{ 
+                zIndex: 999999,
+                position: 'relative',
+                maxWidth: '32rem',
+                width: '100%'
+              }}
             >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-                style={{ 
-                  zIndex: 1000000,
-                  position: 'relative'
-                }}
-              >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-4">
