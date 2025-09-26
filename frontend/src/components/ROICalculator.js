@@ -23,6 +23,14 @@ const ROICalculator = () => {
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
+
+  // Initial calculation on component mount
+  useEffect(() => {
+    if (agentCount > 0 && ahtMinutes > 0) {
+      const initialMetrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
+      setResults(initialMetrics);
+    }
+  }, []); // Run once on mount
   
   // Email modal state
   const [showEmailModal, setShowEmailModal] = useState(false);
