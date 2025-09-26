@@ -38,7 +38,8 @@ const HorizontalJourney = () => {
       icon: MessageSquare,
       color: '#00FF41',
       automationRate: 85,
-      keyFeatures: t.journey.stages.contact.features
+      keyFeatures: t.journey.stages.contact.features,
+      channels: ['Voice', 'Chat', 'Email', 'SMS', 'Social Media']
     },
     {
       id: 'triage',
@@ -50,7 +51,8 @@ const HorizontalJourney = () => {
       icon: Brain,
       color: '#00DDFF',
       automationRate: 94,
-      keyFeatures: t.journey.stages.triage.features
+      keyFeatures: t.journey.stages.triage.features,
+      channels: ['AI Engine', 'NLP Analysis', 'Sentiment Detection', 'Priority Routing']
     },
     {
       id: 'engagement',
@@ -62,7 +64,8 @@ const HorizontalJourney = () => {
       icon: Zap,
       color: '#FFD700',
       automationRate: 70,
-      keyFeatures: t.journey.stages.engagement.features
+      keyFeatures: t.journey.stages.engagement.features,
+      channels: ['Chatbot', 'Live Agent', 'Knowledge Base', 'Self-Service']
     },
     {
       id: 'augmentation',
@@ -74,7 +77,8 @@ const HorizontalJourney = () => {
       icon: Users,
       color: '#FF6B6B',
       automationRate: 60,
-      keyFeatures: t.journey.stages.augmentation.features
+      keyFeatures: t.journey.stages.augmentation.features,
+      channels: ['Agent Dashboard', 'AI Assistant', 'CRM Integration', 'Real-time Insights']
     },
     {
       id: 'analytics',
@@ -86,7 +90,8 @@ const HorizontalJourney = () => {
       icon: BarChart3,
       color: '#9D4EDD',
       automationRate: 100,
-      keyFeatures: t.journey.stages.analytics.features
+      keyFeatures: t.journey.stages.analytics.features,
+      channels: ['Performance Metrics', 'Quality Scores', 'Satisfaction Tracking', 'Business Intelligence']
     },
     {
       id: 'outcome',
@@ -98,7 +103,8 @@ const HorizontalJourney = () => {
       icon: CheckCircle,
       color: '#00FF41',
       automationRate: 88,
-      keyFeatures: t.journey.stages.outcome.features
+      keyFeatures: t.journey.stages.outcome.features,
+      channels: ['Follow-up Automation', 'Feedback Collection', 'ML Learning', 'Process Optimization']
     }
   ];
 
