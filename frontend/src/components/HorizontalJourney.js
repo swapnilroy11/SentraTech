@@ -559,29 +559,22 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - React Portal with Bulletproof Centering */}
+      {/* Journey Stage Details Modal - React Portal with Absolute Centering */}
       {selectedPanel && createPortal(
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="customer-journey-modal-overlay"
-            style={{
-              position: 'fixed',
-              top: '0',
-              left: '0',
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              backdropFilter: 'blur(12px)',
-              zIndex: '99999',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClick={() => setSelectedPanel(null)}
-          >
+        <div
+          className="customer-journey-modal-overlay"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(12px)',
+            zIndex: 99999
+          }}
+          onClick={() => setSelectedPanel(null)}
+        >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -590,6 +583,10 @@ const HorizontalJourney = () => {
             onClick={(e) => e.stopPropagation()}
             className="customer-journey-modal-content"
             style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
               maxWidth: '32rem',
               width: '90%',
               maxHeight: '90vh',
@@ -598,8 +595,7 @@ const HorizontalJourney = () => {
               borderRadius: '1.5rem',
               overflowY: 'auto',
               padding: '2rem',
-              margin: 'auto',
-              position: 'relative'
+              zIndex: 100000
             }}
           >
               <div className="flex items-center justify-between mb-6">
