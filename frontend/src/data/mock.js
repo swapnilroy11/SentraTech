@@ -166,7 +166,7 @@ export const mockData = {
         "Email support",
         "Standard compliance"
       ],
-      cta: "Start Free Trial",
+      cta: null,
       popular: false
     },
     {
