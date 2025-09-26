@@ -614,7 +614,7 @@ const ROICalculator = () => {
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 };
 
