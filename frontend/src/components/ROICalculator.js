@@ -165,39 +165,52 @@ const ROICalculator = () => {
                     : 'text-[rgb(161,161,170)] hover:text-white hover:bg-[rgb(38,40,42)] hover:scale-102 hover:shadow-md'
                 }`}
               >
-                {/* 3D Flag with enhanced effects */}
-                <div className="relative">
+                {/* Animated 3D Flag replacing country initials */}
+                <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                  selectedCountry === country.name 
+                    ? 'bg-[#0A0A0A]/20 shadow-lg' 
+                    : 'bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)]'
+                }`}>
+                  {/* Main 3D Flag with flying animation */}
                   <div 
-                    className={`text-3xl filter transition-all duration-300 ${
+                    className={`text-2xl filter transition-all duration-500 ${
                       selectedCountry === country.name 
-                        ? 'drop-shadow-lg scale-110 brightness-110' 
-                        : 'drop-shadow-md hover:scale-105 hover:brightness-110'
+                        ? 'drop-shadow-xl scale-125 brightness-125 animate-bounce' 
+                        : 'drop-shadow-lg hover:scale-110 hover:brightness-110'
                     }`}
                     style={{
                       textShadow: selectedCountry === country.name 
-                        ? '2px 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(0,255,65,0.3)' 
-                        : '1px 1px 3px rgba(0,0,0,0.3)',
+                        ? '3px 3px 6px rgba(0,0,0,0.6), 0 0 15px rgba(0,255,65,0.4)' 
+                        : '2px 2px 4px rgba(0,0,0,0.4)',
                       transform: selectedCountry === country.name 
-                        ? 'perspective(100px) rotateY(-5deg) rotateX(5deg)' 
-                        : 'perspective(100px) rotateY(0deg) rotateX(0deg)'
+                        ? 'perspective(150px) rotateY(-10deg) rotateX(10deg)' 
+                        : 'perspective(150px) rotateY(0deg) rotateX(0deg)',
+                      animation: selectedCountry === country.name 
+                        ? 'flagFly 2s ease-in-out infinite alternate' 
+                        : 'none'
                     }}
                   >
                     {country.flag}
                   </div>
                   
-                  {/* 3D depth effect */}
+                  {/* 3D depth shadow effect */}
                   <div 
-                    className={`absolute inset-0 text-3xl opacity-30 transition-all duration-300 ${
+                    className={`absolute inset-0 text-2xl opacity-20 transition-all duration-500 ${
                       selectedCountry === country.name ? 'block' : 'hidden'
                     }`}
                     style={{
-                      transform: 'perspective(100px) rotateY(-5deg) rotateX(5deg) translateZ(-2px)',
-                      filter: 'blur(1px)',
+                      transform: 'perspective(150px) rotateY(-10deg) rotateX(10deg) translateZ(-3px)',
+                      filter: 'blur(1.5px)',
                       color: '#00FF41'
                     }}
                   >
                     {country.flag}
                   </div>
+                  
+                  {/* Glowing ring effect for active state */}
+                  {selectedCountry === country.name && (
+                    <div className="absolute inset-0 rounded-full border-2 border-[#00FF41] opacity-50 animate-ping"></div>
+                  )}
                 </div>
 
                 <div className="text-left flex-1">
