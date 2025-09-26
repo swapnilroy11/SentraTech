@@ -183,7 +183,7 @@ const Navigation = () => {
             <button
               onClick={handleMenuClose}
               aria-label="Close navigation menu"
-              className="w-10 h-10 bg-[rgba(0,255,65,0.1)] backdrop-blur-md border border-[rgba(0,255,65,0.3)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.2)] hover:scale-110"
+              className="w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 shadow-lg"
             >
               <X size={20} className="text-[#00FF41]" />
             </button>
