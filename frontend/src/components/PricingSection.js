@@ -201,7 +201,7 @@ const PricingSection = () => {
               </button>
               <span className={`text-lg font-semibold transition-colors ${term === '36m' ? 'text-[#00FF41]' : 'text-gray-500'}`}>
                 36 Months 
-                <Badge className="ml-3 bg-[#00FF84] text-black text-sm font-bold px-3 py-1">
+                <Badge className="ml-3 bg-[#00FF41] text-black text-sm font-bold px-3 py-1">
                   Save 10%
                 </Badge>
               </span>
