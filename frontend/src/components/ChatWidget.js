@@ -113,7 +113,7 @@ const ChatWidget = () => {
                   <MessageSquare size={16} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-sm">SentraTech AI</h4>
+                  <h4 className="text-white font-semibold text-sm">Sentra AI</h4>
                   <p className="text-[rgb(161,161,170)] text-xs">
                     {isConnecting ? 'Connecting...' : 'Online • Sub-50ms response'}
                   </p>
