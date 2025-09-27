@@ -12,34 +12,18 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    product: [
-      { name: 'Platform Overview', href: '#features' },
-      { name: 'AI Routing Engine', href: '#' },
-      { name: 'Compliance Suite', href: '#' },
-      { name: 'Analytics Dashboard', href: '#' },
-      { name: 'API Documentation', href: '#' },
-      { name: 'Integration Hub', href: '#' }
-    ],
     company: [
       { name: 'About Us', href: '#about' },
       { name: 'Leadership Team', href: '#' },
       { name: 'Careers', href: '#' },
-      { name: 'Press Kit', href: '#' },
-      { name: 'Partner Program', href: '#' },
       { name: 'Investor Relations', href: '#' }
     ],
-    resources: [
-      { name: 'Customer Stories', href: '#' },
-      { name: 'ROI Calculator', href: '#' },
-      { name: 'Implementation Guide', href: '#' },
-      { name: 'Best Practices', href: '#' },
-      { name: 'Webinars', href: '#' },
+    support: [
       { name: 'Support Center', href: '#' }
     ],
     legal: [
       { name: 'Privacy Policy', href: '#' },
-      { name: 'Terms of Service', href: '#' },
-      { name: 'Security', href: '#' },
+      { name: 'Terms & Conditions', href: '#' },
       { name: 'Compliance', href: '#' },
       { name: 'Data Processing', href: '#' },
       { name: 'Cookie Policy', href: '#' }
