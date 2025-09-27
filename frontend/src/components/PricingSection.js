@@ -171,7 +171,7 @@ const PricingSection = () => {
               <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
                 <span className="text-white">Simple, Transparent</span>
                 <br />
-                <span className="text-[#00FF84]">Pricing Plans</span>
+                <span className="text-[#00FF41]">Pricing Plans</span>
               </h2>
               <p className="text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed mb-8">
                 Choose the perfect plan for your business. Scale your AI-powered customer support 
