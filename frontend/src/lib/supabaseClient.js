@@ -182,17 +182,21 @@ export const insertContactRequest = async (formData) => {
       .insert([insertData], { returning: 'minimal' });
 
     if (error) {
+      console.error('🚨 Supabase insertion error:', error);
+      console.error('🚨 Error details:', JSON.stringify(error, null, 2));
       throw error;
     }
 
-    console.log('✅ Contact request saved to Supabase successfully');
+    console.log('✅ Contact request saved to Supabase successfully:', data);
 
     return {
       success: true,
-      message: 'Contact request submitted successfully! Our sales team will reach out within one business day.'
+      message: 'Contact request submitted successfully! Our sales team will reach out within one business day.',
+      data: data
     };
   } catch (error) {
-    console.error('Supabase contact request insertion error:', error);
+    console.error('🚨 Supabase contact request insertion error:', error);
+    console.error('🚨 Full error object:', JSON.stringify(error, null, 2));
     return {
       success: false,
       error: error.message,
