@@ -59,9 +59,11 @@
 
 test_plan:
   current_focus:
-    - "Enhanced Pricing Cards Frontend Functionality Testing"
+    - "Contact Sales and Demo Request Form UI Testing"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
+    - "Demo Request Form Supabase Integration Issues"
+    - "Contact Sales Form Supabase Schema Issues"
   test_all: false
   test_priority: "high_first"
 
