@@ -167,8 +167,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
 
   const contactMethodOptions = [
     { value: 'email', label: 'Email' },
-    { value: 'phone', label: 'Phone' },
-    { value: 'demo', label: 'Schedule Demo' }
+    { value: 'phone', label: 'Phone' }
   ];
 
   const handleInputChange = (e) => {
