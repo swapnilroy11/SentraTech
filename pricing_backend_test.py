@@ -117,26 +117,22 @@ class PricingBackendTester:
             return None
     
     def test_contact_request_with_plan_metadata_growth(self):
-        """Test Contact Request API with Growth Plan Metadata"""
+        """Test Contact Request API with Growth Plan Metadata (via demo/request endpoint)"""
         print("\n=== Testing Contact Request API - Growth Plan ===")
         
         # Sample test data for Growth plan as provided in review request
         growth_plan_data = {
-            "full_name": "Bob Smith",
-            "work_email": "bob.smith@techventures.com", 
-            "company_name": "Tech Ventures Inc",
-            "monthly_volume": "10k-50k",
-            "plan_selected": "Growth",
-            "plan_id": "growth",
-            "billing_term": "36m",
-            "price_display": 1485,
-            "preferred_contact_method": "phone",
-            "consent_marketing": True
+            "name": "Bob Smith",
+            "email": "bob.smith@techventures.com", 
+            "company": "Tech Ventures Inc",
+            "phone": "+1-555-0456",
+            "message": f"Contact request for Growth plan - 36m billing term - $1485 (10% discount applied)",
+            "call_volume": "10k-50k calls/month"
         }
         
         try:
-            print(f"📝 Testing Growth plan contact request with metadata...")
-            response = requests.post(f"{BACKEND_URL}/contact/request", json=growth_plan_data, timeout=30)
+            print(f"📝 Testing Growth plan contact request via demo endpoint...")
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=growth_plan_data, timeout=30)
             
             if response.status_code == 200:
                 result = response.json()
