@@ -122,6 +122,9 @@ function App() {
             
             {/* Global Footer */}
             <Footer />
+            
+            {/* Global Chat Widget */}
+            <ChatWidget />
           </BrowserRouter>
         </div>
       </LanguageProvider>
