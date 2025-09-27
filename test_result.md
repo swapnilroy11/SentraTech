@@ -59,9 +59,11 @@
 
 test_plan:
   current_focus:
-    - "Demo Request Form Volume Fields Integration Testing"
+    - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
+    - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
+    - "Demo Request Form Supabase Submission Issue"
   test_all: false
   test_priority: "high_first"
 
