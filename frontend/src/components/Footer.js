@@ -19,10 +19,10 @@ const Footer = () => {
       { name: 'Apply Now', href: '#' }
     ],
     company: [
-      { name: 'About Us', href: '#about' },
-      { name: 'Leadership Team', href: '#' },
-      { name: 'Investor Relations', href: '#' },
-      { name: 'Support Center', href: '#' }
+      { name: 'About Us', href: '/about-us' },
+      { name: 'Leadership Team', href: '/leadership-team' },
+      { name: 'Investor Relations', href: '/investor-relations' },
+      { name: 'Support Center', href: '/support-center' }
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
