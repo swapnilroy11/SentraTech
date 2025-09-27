@@ -88,9 +88,6 @@ function App() {
             {/* Floating Left Navigation - moved inside BrowserRouter */}
             <FloatingNavScrollable />
             
-            {/* Global Chat Widget */}
-            <ChatWidget />
-            
             {/* Cookie Consent Banner */}
             <CookieBanner />
             
