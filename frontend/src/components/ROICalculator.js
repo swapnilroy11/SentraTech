@@ -405,17 +405,35 @@ const ROICalculator = () => {
                       </div>
                       
                       {/* Number Input */}
-                      <Input
-                        type="number"
-                        value={ahtMinutes}
-                        onChange={(e) => {
-                          const value = Math.max(2, Math.min(20, parseInt(e.target.value) || 2));
-                          setAhtMinutes(value);
-                        }}
-                        className="bg-[rgb(26,28,30)] border-[#00DDFF]/50 text-white rounded-lg text-lg py-3 text-center font-semibold focus:border-[#00DDFF] focus:ring-[#00DDFF]/20"
-                        min="2"
-                        max="20"
-                      />
+                      <div>
+                        <Input
+                          type="number"
+                          value={ahtMinutes}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const numValue = parseInt(inputValue) || 0;
+                            
+                            // Always allow the input
+                            setAhtMinutes(numValue);
+                            
+                            // Show warnings for out-of-range values
+                            if (numValue < 1) {
+                              setAhtWarning('⚠️ Minimum 1 minute required for calculations');
+                            } else if (numValue > 60) {
+                              setAhtWarning('⚠️ Values above 60 minutes may not be realistic');
+                            } else {
+                              setAhtWarning('');
+                            }
+                          }}
+                          className={`bg-[rgb(26,28,30)] text-white rounded-lg text-lg py-3 text-center font-semibold focus:ring-[#00DDFF]/20 ${
+                            ahtWarning ? 'border-yellow-500 focus:border-yellow-500' : 'border-[#00DDFF]/50 focus:border-[#00DDFF]'
+                          }`}
+                          placeholder="Enter minutes"
+                        />
+                        {ahtWarning && (
+                          <div className="text-yellow-400 text-xs mt-1 text-center">{ahtWarning}</div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   {/* Third Panel: Call Volume */}
