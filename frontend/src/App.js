@@ -14,6 +14,7 @@ import Analytics from "./components/Analytics";
 import ScrollToTop from "./components/ScrollToTop";
 import CookieBanner from "./components/CookieBanner";
 import SEOManager from "./components/SEOManager";
+import ChatWidget from "./components/ChatWidget";
 
 // Pages
 import HomePage from "./pages/HomePage";
