@@ -562,6 +562,41 @@ class PricingBackendTester:
         except Exception as e:
             self.log_test("JSON Validation - Exception", False, f"Exception: {str(e)}")
     
+    def test_missing_contact_request_endpoint(self):
+        """Test if dedicated Contact Request endpoint exists (should be created)"""
+        print("\n=== Testing Missing Contact Request Endpoint ===")
+        
+        # Test if /api/contact/request endpoint exists
+        sample_contact_data = {
+            "full_name": "Test User",
+            "work_email": "test@example.com",
+            "company_name": "Test Corp",
+            "monthly_volume": "10k-50k",
+            "plan_selected": "Growth",
+            "plan_id": "growth",
+            "billing_term": "36m",
+            "price_display": 1485,
+            "preferred_contact_method": "email",
+            "consent_marketing": True
+        }
+        
+        try:
+            print(f"🔍 Testing if dedicated contact request endpoint exists...")
+            response = requests.post(f"{BACKEND_URL}/contact/request", json=sample_contact_data, timeout=10)
+            
+            if response.status_code == 404:
+                self.log_test("Missing Endpoint - Contact Request API", False,
+                            f"❌ /api/contact/request endpoint missing - needs to be created for Supabase integration")
+            elif response.status_code == 200:
+                self.log_test("Missing Endpoint - Contact Request API", True,
+                            f"✅ /api/contact/request endpoint exists")
+            else:
+                self.log_test("Missing Endpoint - Contact Request API", False,
+                            f"❌ Unexpected response: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Missing Endpoint - Contact Request Exception", False, f"Exception: {str(e)}")
+    
     def test_backend_error_handling(self):
         """Test Backend Error Handling for Invalid Data"""
         print("\n=== Testing Backend Error Handling ===")
