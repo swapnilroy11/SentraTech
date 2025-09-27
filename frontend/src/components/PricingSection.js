@@ -310,20 +310,15 @@ const PricingSection = () => {
                   </ul>
                 </div>
 
-                {/* Value Metrics */}
-                <div className="mb-6 p-4 rounded-xl bg-gray-900/50 border border-gray-800">
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <div className="text-[#00FF84] text-xl font-bold">{plan.savings}</div>
-                      <div className="text-gray-400 text-xs">Cost Savings</div>
+                {/* Value Metrics - Optimized */}
+                <div className="mb-4 p-3 rounded-xl bg-gray-900/50 border border-gray-800">
+                  <div className="flex justify-between items-center text-center">
+                    <div className="flex-1">
+                      <div className="text-[#00FF84] text-lg font-bold">{plan.savings}</div>
                     </div>
-                    <div>
-                      <div className="text-[#00FF84] text-xl font-bold">{plan.setupTime}</div>
-                      <div className="text-gray-400 text-xs">Setup Time</div>
+                    <div className="flex-1">
+                      <div className="text-[#00FF84] text-lg font-bold">{plan.setupTime}</div>
                     </div>
-                  </div>
-                  <div className="mt-3 text-center">
-                    <div className="text-white text-sm font-medium">{plan.sla}</div>
                   </div>
                 </div>
 
