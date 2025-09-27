@@ -205,12 +205,15 @@ export function calculateROI({
     
     // Breakdown (if requested)
     breakdown: showInternalBreakdown ? {
-      stt_cost: stt_cost,
-      tts_cost: tts_cost,
-      llm_cost: llm_audio_cost + llm_text_cost,
-      pstn_cost: pstn_cost,
-      labor_cost_escalations: labor_cost * 0.1,
-      fixed_allocation: monthlyFixedCost / monthlyBaselineBundles,
+      stt_cost: internal_sentra_cost ? calls * (callAHT * sttRatePerMin) : null,
+      tts_cost: internal_sentra_cost ? calls * (callAHT * ttsRatePerMin) : null,
+      llm_cost: internal_sentra_cost ? 
+        ((calls * callAHT * llmTokensInPerMin / 1e6) * llmInputRatePer1M + 
+         (calls * callAHT * llmTokensOutPerMin / 1e6) * llmOutputRatePer1M +
+         interactions * ((150 + 100) / 1e6) * ((llmInputRatePer1M + llmOutputRatePer1M) / 2)) : null,
+      pstn_cost: internal_sentra_cost ? total_call_minutes * pstnRatePerMin : null,
+      labor_cost_escalations: internal_sentra_cost ? labor_cost * 0.1 : null,
+      fixed_allocation: internal_sentra_cost ? monthlyFixedCost / monthlyBaselineBundles : null,
       margin: sentra_cost_per_1k_bundle - (internal_sentra_cost || 0)
     } : null
   };
