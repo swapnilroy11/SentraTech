@@ -544,10 +544,16 @@ const ROICalculator = () => {
                 <h3 className="text-2xl font-bold text-white">Annual Projection</h3>
               </div>
               
-              <div className="text-7xl font-black bg-gradient-to-r from-[#00FF41] to-[#00DDFF] bg-clip-text text-transparent mb-4 font-rajdhani">
-                {formatCurrency(results.annualSavings)}
+              <div className={`text-7xl font-black mb-4 font-rajdhani ${
+                results.isProfit 
+                  ? 'bg-gradient-to-r from-[#00FF41] to-[#00DDFF] bg-clip-text text-transparent' 
+                  : 'text-red-400'
+              }`}>
+                {results.isProfit ? '+' : ''}{formatCurrency(Math.abs(results.annualSavings || 0))}
               </div>
-              <div className="text-[rgb(161,161,170)] text-xl mb-8">Total savings over 12 months</div>
+              <div className="text-[rgb(161,161,170)] text-xl mb-8">
+                {results.isProfit ? 'Total savings over 12 months' : 'Additional cost over 12 months'}
+              </div>
 
               {/* Breakdown */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-[rgb(38,40,42)] rounded-2xl p-6 border border-[rgb(63,63,63)]">
