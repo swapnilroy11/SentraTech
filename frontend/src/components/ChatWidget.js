@@ -102,7 +102,7 @@ const ChatWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 left-6 z-50">
       <div className={`transition-all duration-300 ${chatOpen ? 'w-80 h-96' : 'w-16 h-16'}`}>
         {chatOpen ? (
           <div className="bg-[rgb(26,28,30)] border border-[rgba(0,255,65,0.3)] rounded-2xl h-full flex flex-col">
