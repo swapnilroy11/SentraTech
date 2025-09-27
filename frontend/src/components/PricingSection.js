@@ -58,7 +58,8 @@ const PricingSection = () => {
         "Intent recognition & auto-routing",
         "Real-time analytics dashboard", 
         "Standard API & webhooks",
-        "Email support (24hr response)"
+        "Email support (24hr response)",
+        "Standard service guarantee"
       ],
       savings: "40-60%",
       setupTime: "2-3 weeks",
