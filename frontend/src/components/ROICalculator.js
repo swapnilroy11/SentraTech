@@ -392,14 +392,18 @@ const ROICalculator = () => {
                       <div>
                         <input
                           type="range"
-                          min="2"
-                          max="20"
+                          min="1"
+                          max="60"
                           step="1"
-                          value={ahtMinutes}
-                          onChange={(e) => setAhtMinutes(parseInt(e.target.value))}
+                          value={Math.min(Math.max(ahtMinutes, 1), 60)}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            setAhtMinutes(value);
+                            setAhtWarning(''); // Clear warning when using slider
+                          }}
                           className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer"
                           style={{
-                            background: `linear-gradient(to right, #00DDFF 0%, #00DDFF ${((ahtMinutes-2)/(20-2))*100}%, #374151 ${((ahtMinutes-2)/(20-2))*100}%, #374151 100%)`
+                            background: `linear-gradient(to right, #00DDFF 0%, #00DDFF ${((Math.min(Math.max(ahtMinutes, 1), 60)-1)/(60-1))*100}%, #374151 ${((Math.min(Math.max(ahtMinutes, 1), 60)-1)/(60-1))*100}%, #374151 100%)`
                           }}
                         />
                         <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
