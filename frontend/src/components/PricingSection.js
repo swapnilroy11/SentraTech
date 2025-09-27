@@ -6,11 +6,11 @@ import { motion } from 'framer-motion';
 import ContactSalesSlideIn from './ContactSalesSlideIn';
 
 /**
- * New SentraTech Pricing Section Component
- * Implements the 3-tier pricing structure with 24/36 month toggle
+ * Industry-Standard SaaS Pricing Section Component
+ * Redesigned to match modern SaaS pricing best practices
  */
 const PricingSection = () => {
-  const MATRIX_GREEN = "#00FF41";
+  const MATRIX_GREEN = "#00FF84";
   const [term, setTerm] = useState("24m"); // "24m" | "36m"
   const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
   const [prefillData, setPrefillData] = useState(null);
