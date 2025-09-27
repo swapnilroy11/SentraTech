@@ -41,19 +41,28 @@ const PricingSection = () => {
       title: "Starter",
       subtitle: "Pilot",
       tagline: "Perfect for fast pilots & quick ROI",
+      icon: "⚡",
       price: effectivePrice(basePrices.starter),
       originalPrice: basePrices.starter,
       priceNote: "per bundle (1,000 calls + 1,000 interactions)",
       subNote: "Pilot only — 3 month max",
       cta: "Start Pilot",
       features: [
-        "Up to 1k calls + 1k interactions",
-        "Basic AI automation",
-        "Core analytics",
-        "Email support"
+        "Up to 1,000 calls + 1,000 interactions per bundle",
+        "Basic AI automation (60% baseline)",
+        "Core analytics dashboard",
+        "Email support",
+        "Onboarding & integration (up to 5 hrs)"
+      ],
+      additionalFeatures: [
+        "Intent recognition & auto-routing",
+        "Real-time analytics dashboard", 
+        "Standard API & webhooks",
+        "Email support (24hr response)"
       ],
       savings: "40-60%",
       setupTime: "2-3 weeks",
+      sla: "Standard SLA",
       isPopular: false,
       popularBadge: null
     },
@@ -62,19 +71,27 @@ const PricingSection = () => {
       title: "Growth",
       subtitle: null,
       tagline: "Full omnichannel experience — optimized for scale",
+      icon: "🚀",
       price: effectivePrice(basePrices.growth),
       originalPrice: basePrices.growth,
       priceNote: "per bundle (1,000 calls + 1,000 interactions)",
       subNote: "Best value for scaling businesses",
       cta: "Contact Sales",
       features: [
-        "Up to 1k calls + 1k interactions",
+        "Up to 1,000 calls + 1,000 interactions per bundle",
         "Full omnichannel integration",
-        "Advanced analytics & BI",
-        "24/7 priority support"
+        "Advanced analytics & BI dashboards",
+        "24/7 priority support",
+        "Enhanced compliance & reporting"
+      ],
+      additionalFeatures: [
+        "Multi-language support (12+ languages)",
+        "Advanced BI & custom reporting",
+        "Dedicated success manager"
       ],
       savings: "60-75%",
       setupTime: "3-4 weeks",
+      sla: "99.9% Uptime SLA",
       isPopular: true,
       popularBadge: "Most Popular"
     },
@@ -83,19 +100,26 @@ const PricingSection = () => {
       title: "Enterprise",
       subtitle: "Dedicated",
       tagline: "Unlimited scale, dedicated success",
+      icon: "🏢",
       price: effectivePrice(basePrices.enterprise),
       originalPrice: basePrices.enterprise,
       priceNote: "per bundle (1,000 calls + 1,000 interactions)",
       subNote: "Custom contract available",
       cta: "Contact Sales",
       features: [
-        "Unlimited interactions",
-        "Custom AI training",
-        "Dedicated success manager",
-        "HIPAA, SOC2 compliance"
+        "Unlimited interactions (custom contract)",
+        "Custom AI training & dedicated model endpoints",
+        "Dedicated success manager & priority SRE",
+        "White-label & advanced compliance (HIPAA, SOC2)",
+        "SLA-backed uptime & response time"
+      ],
+      additionalFeatures: [
+        "Dedicated AI model instances",
+        "Custom integration development"
       ],
       savings: "70-85%",
       setupTime: "4-6 weeks",
+      sla: "99.99% Custom SLA",
       isPopular: false,
       popularBadge: null
     }
