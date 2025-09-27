@@ -335,7 +335,7 @@ const ROICalculator = () => {
                           }}
                           className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer slider-gradient"
                           style={{
-                            background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(Math.min(Math.max(agentCount, 1), 500)/500)*100}%, #374151 ${(Math.min(Math.max(agentCount, 1), 500)/500)*100}%, #374151 100%)`
+                            background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(Math.min(Math.max(parseInt(agentCount) || 1, 1), 500)/500)*100}%, #374151 ${(Math.min(Math.max(parseInt(agentCount) || 1, 1), 500)/500)*100}%, #374151 100%)`
                           }}
                         />
                         <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
