@@ -200,10 +200,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     if (!formData.monthlyVolume) newErrors.monthlyVolume = 'Please select monthly volume';
     if (!formData.consentMarketing) newErrors.consentMarketing = 'You must agree to receive communications';
     
-    // Demo scheduling validation
-    if (formData.preferredContactMethod === 'demo' && !formData.scheduledTime) {
-      newErrors.scheduledTime = 'Please select a preferred time for the demo';
-    }
+    // Demo scheduling validation removed
     
     // Honeypot check (should be empty)
     if (formData.honeypot) {
