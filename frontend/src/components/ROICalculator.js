@@ -418,7 +418,7 @@ const ROICalculator = () => {
                           }}
                           className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer"
                           style={{
-                            background: `linear-gradient(to right, #00DDFF 0%, #00DDFF ${((Math.min(Math.max(ahtMinutes, 1), 60)-1)/(60-1))*100}%, #374151 ${((Math.min(Math.max(ahtMinutes, 1), 60)-1)/(60-1))*100}%, #374151 100%)`
+                            background: `linear-gradient(to right, #00DDFF 0%, #00DDFF ${((Math.min(Math.max(parseInt(ahtMinutes) || 1, 1), 60)-1)/(60-1))*100}%, #374151 ${((Math.min(Math.max(parseInt(ahtMinutes) || 1, 1), 60)-1)/(60-1))*100}%, #374151 100%)`
                           }}
                         />
                         <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
