@@ -310,6 +310,7 @@ class HubSpotContact(BaseModel):
     phone: str = ""
     company: str = ""
     call_volume: str = ""
+    interaction_volume: str = ""
     message: str = ""
     created_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     source: str = "website_demo_form"
