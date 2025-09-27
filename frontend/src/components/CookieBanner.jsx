@@ -12,16 +12,26 @@ const CookieBanner = () => {
   // Check if consent has already been given
   useEffect(() => {
     const consentData = localStorage.getItem('cookieConsent');
+    
+    // Debug: Log consent status (remove in production)
+    console.log('Cookie consent status:', consentData ? 'Already given' : 'Not given');
+    
     if (!consentData) {
-      // Show banner with smooth slide-up animation after a brief delay
-      setTimeout(() => setShowBanner(true), 1000);
+      // Show modal after a shorter delay for better UX
+      setTimeout(() => {
+        setShowBanner(true);
+        console.log('Showing cookie consent modal');
+      }, 2000); // Increased to 2 seconds to let page load completely
     } else {
       // Initialize analytics based on existing consent
       try {
         const consent = JSON.parse(consentData);
         initializeAnalyticsBasedOnConsent(consent);
+        console.log('Initialized analytics with existing consent:', consent);
       } catch (error) {
         console.warn('Error parsing cookie consent data:', error);
+        // If parsing fails, show banner again
+        setTimeout(() => setShowBanner(true), 2000);
       }
     }
   }, []);
