@@ -56,11 +56,23 @@ export function calculateROI(country, agentCount, ahtMinutes, callVolumeOverride
   const tradPerCall = callVolume > 0 ? parseFloat((tradCost / callVolume).toFixed(2)) : 0;
   const aiPerCall = callVolume > 0 ? parseFloat((aiCost / callVolume).toFixed(2)) : 0;
 
-  // Savings & ROI
+  // Savings & ROI with proper negative handling
   const monthlySavings = tradCost - aiCost;
   const annualSavings = monthlySavings * 12;
-  const roiPercent = aiCost > 0 ? parseInt(((annualSavings / (aiCost * 12)) * 100).toFixed(0)) : 0;
-  const costReduction = tradCost > 0 ? parseInt(((monthlySavings / tradCost) * 100).toFixed(0)) : 0;
+  
+  // Handle positive vs negative scenarios
+  const isSavings = monthlySavings >= 0;
+  const isProfit = annualSavings >= 0;
+  
+  // Cost change percentage (always positive, but with different meaning)
+  const costChangePercent = tradCost > 0 ? Math.abs(parseInt(((monthlySavings / tradCost) * 100).toFixed(0))) : 0;
+  
+  // ROI/Loss percentage (always positive, but with different meaning)  
+  const roiLossPercent = aiCost > 0 ? Math.abs(parseInt(((annualSavings / (aiCost * 12)) * 100).toFixed(0))) : 0;
+  
+  // Legacy fields for backward compatibility
+  const costReduction = isSavings ? costChangePercent : -costChangePercent;
+  const roiPercent = isProfit ? roiLossPercent : -roiLossPercent;
 
   return { 
     country,
