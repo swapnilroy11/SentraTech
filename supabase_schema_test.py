@@ -161,7 +161,7 @@ class SupabaseSchemaUpdatedTester:
         # Test data focusing on volume fields
         volume_test_data = {
             "name": "Volume Fields Test User",
-            "email": "volume.fields@schema.test",
+            "email": "volume.fields@example.com",
             "company": "Volume Fields Test Company",
             "phone": "+1555987654",
             "call_volume": "35,000",
