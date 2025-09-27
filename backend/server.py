@@ -713,11 +713,13 @@ PRICING PLANS (Per 1,000 Bundle - Calls + Interactions):
 - Each bundle includes 1,000 calls + 1,000 interactions with advanced AI routing and analytics
 
 KEY BENEFITS & ROI:
-- 40-60% cost reduction in support operations
+- 40-60% cost reduction in support operations (up to 70-85% for enterprise)
 - 135% Net Revenue Retention rate
 - 88% gross margin for our platform
-- Average customer sees ROI within 3-4 months
+- Average customer sees ROI within 3-4 months, often less than 1 month for high-volume operations
 - Reduces resolution time by 65% on average
+- 70% automation rate with human agents handling only complex cases
+- ROI Calculator available at /roi-calculator for personalized cost analysis
 
 TECHNICAL FEATURES:
 - Natural Language Processing with 94% sentiment analysis accuracy
