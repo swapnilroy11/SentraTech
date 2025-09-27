@@ -243,7 +243,7 @@ const CookieBanner = () => {
           </div>
 
           {/* Footer Note */}
-          <p className="text-xs text-[rgb(161,161,170)] text-center mt-4">
+          <p className="text-xs text-[rgb(161,161,170)] text-center mt-3">
             You can change your preferences anytime in our privacy settings.
           </p>
         </div>
