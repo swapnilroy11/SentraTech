@@ -57,12 +57,64 @@ const ROICalculator = () => {
   const effectiveAgentHourly = customAgentHourly || currentCountry.agentHourlyLoaded;
   const effectiveBpoPerMin = customBpoPerMin || currentCountry.bpoPerMin;
 
-  // Real-time calculation with immediate updates
+  // Real-time calculation with new per-1,000 bundle logic
   useEffect(() => {
     const calculateMetrics = () => {
       try {
         setIsCalculating(true);
-        if ((agentCount > 0 || agentCount === '') && (ahtMinutes > 0 || ahtMinutes === '')) {
+        setError(null);
+
+        const calculationInputs = {
+          calls,
+          interactions,
+          callAHT,
+          interactionAHT,
+          automationPct: automationPct / 100, // Convert from percentage
+          mode,
+          agentCount: mode === 'agent_count' ? agentCount : null,
+          country: selectedCountry,
+          agentHourlyLoaded: customAgentHourly,
+          bpoPerMin: customBpoPerMin,
+          sentraPricePer1k,
+          bundlesPerMonth,
+          implCost,
+          periodMonths: 12,
+          volumeSubMode: mode === 'call_volume' ? volumeSubMode : 'auto',
+          manualAgentCount: (mode === 'call_volume' && volumeSubMode === 'manual') ? manualAgentCount : null,
+          showInternalBreakdown: false
+        };
+
+        const newResults = calculateROI(calculationInputs);
+        setResults(newResults);
+
+        // Update warnings based on results
+        const newWarnings = {};
+        if (newResults.is_cost_increase) {
+          newWarnings.cost_increase = 'Consider increasing automation or renegotiating vendor rates';
+        }
+        if (newResults.payback_months && newResults.payback_months > 24) {
+          newWarnings.long_payback = `Payback period of ${newResults.payback_months.toFixed(1)} months is quite long`;
+        }
+        setWarnings(newWarnings);
+
+      } catch (error) {
+        console.error('Calculation error:', error);
+        setError('Calculation failed. Please check your inputs.');
+      } finally {
+        setIsCalculating(false);
+      }
+    };
+
+    // Validate inputs before calculation
+    if (calls > 0 && interactions > 0 && callAHT > 0 && interactionAHT > 0) {
+      const timer = setTimeout(calculateMetrics, 150); // Debounce
+      return () => clearTimeout(timer);
+    }
+  }, [
+    calls, interactions, callAHT, interactionAHT, automationPct, mode, agentCount,
+    selectedCountry, customAgentHourly, customBpoPerMin, sentraPricePer1k, bundlesPerMonth,
+    implCost, volumeSubMode, manualAgentCount
+  ]);
           // Convert empty strings to numbers for calculation
           const agentNum = agentCount === '' ? 0 : parseInt(agentCount);
           const ahtNum = ahtMinutes === '' ? 0 : parseInt(ahtMinutes);
