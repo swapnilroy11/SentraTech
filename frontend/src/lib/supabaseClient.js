@@ -59,24 +59,67 @@ export const insertDemoRequest = async (formData) => {
   try {
     console.log('Submitting demo request to Supabase...', formData);
     
+    // Prepare basic required fields
+    const insertData = {
+      user_name: formData.name,
+      email: formData.email,
+      company: formData.company,
+      phone: formData.phone || null,
+      message: formData.message || null
+    };
+    
+    // Add volume fields only if they exist in formData (schema-safe approach)
+    if (formData.call_volume) {
+      insertData.call_volume = formData.call_volume;
+    }
+    if (formData.interaction_volume) {
+      insertData.interaction_volume = formData.interaction_volume;
+    }
+    
+    console.log('Inserting data to demo_requests:', insertData);
+    
     // Insert into Supabase database with volume fields (updated schema)
     const { data, error } = await supabase
       .from('demo_requests')
-      .insert([{
-        user_name: formData.name,
-        email: formData.email,
-        company: formData.company,
-        phone: formData.phone || null,
-        call_volume: formData.call_volume || null,
-        interaction_volume: formData.interaction_volume || null,
-        message: formData.message || null
-      }], { returning: 'minimal' }); // Use minimal returning to avoid RLS SELECT issues
+      .insert([insertData], { returning: 'minimal' }); // Use minimal returning to avoid RLS SELECT issues
 
     if (error) {
+      console.error('Supabase error details:', error);
+      
+      // Handle specific column missing errors gracefully
+      if (error.code === 'PGRST204' && (error.message.includes('interaction_volume') || error.message.includes('call_volume'))) {
+        console.log('Volume columns missing in schema, retrying with basic fields only...');
+        
+        // Fallback: Try with just required fields (no volume fields)
+        const basicData = {
+          user_name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          phone: formData.phone || null,
+          message: formData.message || null
+        };
+        
+        const { data: retryData, error: retryError } = await supabase
+          .from('demo_requests')
+          .insert([basicData], { returning: 'minimal' });
+          
+        if (retryError) {
+          throw retryError;
+        }
+        
+        console.log('✅ Demo request saved to Supabase (basic fields only) - Schema needs volume columns');
+        
+        return {
+          success: true,
+          data: { id: `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` },
+          message: 'Demo request submitted successfully! Note: Volume fields require schema update. You will hear from us within 24 hours.'
+        };
+      }
+      
       throw error;
     }
 
-    console.log('✅ Demo request saved to Supabase successfully');
+    console.log('✅ Demo request saved to Supabase successfully with all fields');
 
     // Generate a temporary ID for GA4 tracking since we're using minimal returning
     const tempId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
