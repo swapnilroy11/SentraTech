@@ -273,7 +273,7 @@ const PricingSection = () => {
                   )}
                   {term === "36m" && plan.originalPrice && (
                     <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#00FF84]/10 rounded-full">
-                      <span className="text-[#00FF84] text-sm font-semibold">
+                      <span className="text-[#00FF41] text-sm font-semibold">
                         Was ${plan.originalPrice.toLocaleString()} • Save 10%
                       </span>
                     </div>
