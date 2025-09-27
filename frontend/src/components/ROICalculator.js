@@ -327,7 +327,7 @@ const ROICalculator = () => {
                           type="range"
                           min="1"
                           max="500"
-                          value={Math.min(Math.max(agentCount, 1), 500)}
+                          value={Math.min(Math.max(parseInt(agentCount) || 1, 1), 500)}
                           onChange={(e) => {
                             const value = parseInt(e.target.value);
                             setAgentCount(value);
