@@ -916,6 +916,8 @@ class GoogleSheetsService:
                 'email': demo_request.email,
                 'company': demo_request.company,
                 'phone': demo_request.phone or '',
+                'call_volume': demo_request.call_volume or '',
+                'interaction_volume': demo_request.interaction_volume or '',
                 'message': demo_request.message or ''
             }
             
