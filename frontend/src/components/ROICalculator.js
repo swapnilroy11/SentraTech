@@ -529,7 +529,7 @@ const ROICalculator = () => {
                   </div>
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
                     <ArrowUp size={16} className="mr-1 text-emerald-400" />
-                    {results.roiPercent || 0}% ROI
+                    {(results.roiLossPercent || 0)}% {results.isProfit ? 'ROI' : 'Loss'}
                   </div>
                 </div>
               </CardContent>
