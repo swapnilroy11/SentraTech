@@ -294,7 +294,6 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
           billingTerm: prefill?.billingTerm || '24m',
           priceDisplay: prefill?.priceDisplay || null,
           preferredContactMethod: 'email',
-          scheduledTime: '',
           message: '',
           consentMarketing: false,
           honeypot: ''
