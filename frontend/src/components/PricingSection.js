@@ -91,24 +91,22 @@ const PricingSection = () => {
     },
     {
       id: "enterprise",
-      title: "Enterprise",
-      subtitle: "Dedicated",
-      tagline: "Unlimited scale, dedicated success",
+      title: "Custom",
+      subtitle: "Enterprise",
+      tagline: "Best used for custom plans and enterprise solutions",
       icon: "🏢",
-      price: effectivePrice(basePrices.enterprise),
-      originalPrice: basePrices.enterprise,
-      priceNote: "per bundle (1,000 calls + 1,000 interactions)",
-      subNote: "Custom contract available",
+      price: null,
+      originalPrice: null,
+      priceNote: "Custom pricing based on requirements",
+      subNote: "Tailored solutions for enterprise needs",
       cta: "Contact Sales",
       features: [
         "Unlimited interactions (custom contract)",
         "Custom AI training & dedicated model endpoints",
         "Dedicated success manager & priority SRE",
         "White-label & advanced compliance (HIPAA, SOC2)",
-        "SLA-backed uptime & response time"
-      ],
-      additionalFeatures: [
-        "Dedicated AI model instances",
+        "SLA-backed uptime & response time",
+        "Dedicated model instances",
         "Custom integration development",
         "99.99% custom service guarantee"
       ],
