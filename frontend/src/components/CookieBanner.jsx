@@ -134,22 +134,38 @@ const CookieBanner = () => {
 
   return (
     <>
-      {/* Cookie Consent Modal - Centered */}
+      {/* Cookie Consent Modal - Centered in Viewport */}
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-500 ease-in-out ${
+        className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-opacity duration-500 ease-in-out ${
           showBanner ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         role="dialog"
         aria-label="Cookie consent dialog"
         aria-describedby="cookie-description"
+        style={{ 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0,
+          position: 'fixed',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
       >
         {/* Modal Backdrop */}
         <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" />
         
         {/* Modal Content */}
-        <div className={`relative bg-[#161B22] border-2 border-[#00FF41]/20 rounded-2xl p-8 w-full max-w-lg shadow-2xl transform transition-all duration-500 ${
-          showBanner ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
-        }`}>
+        <div 
+          className={`relative bg-[#161B22] border-2 border-[#00FF41]/20 rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl transform transition-all duration-500 ${
+            showBanner ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+          }`}
+          style={{
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}
+        >
           {/* Header */}
           <div className="text-center mb-6">
             <div className="w-16 h-16 bg-[#00FF41]/10 border-2 border-[#00FF41]/30 rounded-full flex items-center justify-center mx-auto mb-4">
