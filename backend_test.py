@@ -19,7 +19,7 @@ import random
 import string
 
 # Backend URL from environment
-BACKEND_URL = "https://sleek-support.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentratech-ux.preview.emergentagent.com/api"
 
 class LoadTestingFramework:
     """Comprehensive API Load and Stability Testing Framework"""

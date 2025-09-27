@@ -13,7 +13,7 @@ import random
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://sleek-support.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentratech-ux.preview.emergentagent.com/api"
 
 class FocusedLoadTester:
     """Focused Load Testing for SentraTech Production Readiness"""
