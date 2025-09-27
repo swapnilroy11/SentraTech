@@ -57,6 +57,14 @@ create index on public.contact_requests using gin(utm_data);
 create index on public.contact_requests using gin(metadata);
 create index on public.contact_requests(plan_selected);
 create index on public.contact_requests(monthly_volume);
+create index on public.contact_requests(billing_term);
+create index on public.contact_requests(plan_id);
+
+-- Create indexes for demo_requests table
+create index on public.demo_requests(status);
+create index on public.demo_requests(created_at desc);
+create index on public.demo_requests(lower(email));
+create index on public.demo_requests(company);
 
 -- Create update trigger function
 create or replace function public.trigger_update_contact_requests()
