@@ -296,7 +296,7 @@ const PricingSection = () => {
                 </div>
 
                 {/* Additional Features */}
-                <div className="mb-6">
+                <div className="mb-6 flex-1">
                   <ul className="space-y-3">
                     {plan.additionalFeatures.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
@@ -327,8 +327,8 @@ const PricingSection = () => {
                   </div>
                 </div>
 
-                {/* CTA Button */}
-                <div className="mt-auto">
+                {/* CTA Button - Fixed positioning at bottom */}
+                <div className="mt-auto pt-4">
                   <Button
                     onClick={() => handleContact(plan)}
                     className="w-full bg-[#00FF84] hover:bg-[#00DD70] text-black rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 py-4 shadow-lg hover:shadow-[#00FF84]/25"
