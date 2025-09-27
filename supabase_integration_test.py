@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """
-Comprehensive Supabase Integration Testing for SentraTech
-Tests Demo Request and Contact Sales functionality with Supabase database integration
+Comprehensive Supabase Integration Testing for SentraTech Contact Forms
+Tests Supabase connection, table schemas, RLS policies, and form submissions
 """
 
 import requests
 import json
 import time
-import asyncio
+import os
 from datetime import datetime
 from typing import Dict, Any, List
-import urllib.parse
-import random
-import string
+import uuid
 
 # Backend URL from environment
 BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
+
+# Supabase configuration from frontend .env
+SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3aXNodXdwcXlmZnNtZ2xqcnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTI3ODksImV4cCI6MjA3NDMyODc4OX0.TDVTSAjMe4RBqcgaC32E9CHY9t3HpFw8EGfJnSOZriQ"
 
 class SupabaseIntegrationTester:
     """Comprehensive Supabase Integration Testing Framework"""
