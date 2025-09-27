@@ -2893,6 +2893,7 @@ async def download_data_export(request_id: str):
 class ContactNotification(BaseModel):
     type: str
     data: dict
+    planTag: Optional[str] = None  # For plan-specific notifications
 
 @api_router.post("/notify")
 async def send_contact_notification(notification: ContactNotification):
@@ -2906,26 +2907,38 @@ async def send_contact_notification(notification: ContactNotification):
         if notification.type == "contact_sales":
             # Extract contact data
             contact_data = notification.data
+            plan_tag = notification.planTag or contact_data.get('planSelected', 'General')
             
-            # Log the contact request for monitoring
-            logger.info(f"🎯 New contact sales request: {contact_data.get('fullName')} from {contact_data.get('companyName')}")
+            # Log the contact request for monitoring with plan info
+            logger.info(f"🎯 New {plan_tag} contact sales request: {contact_data.get('fullName')} from {contact_data.get('companyName')}")
+            
+            # Enhanced logging with pricing metadata
+            pricing_info = {
+                "plan_selected": contact_data.get('planSelected'),
+                "plan_id": contact_data.get('planId'),
+                "billing_term": contact_data.get('billingTerm'),
+                "price_display": contact_data.get('priceDisplay'),
+                "monthly_volume": contact_data.get('monthlyVolume')
+            }
+            logger.info(f"💰 Pricing details: {pricing_info}")
             
             # In a production environment, you could:
-            # 1. Send Slack notification
-            # 2. Send email to sales team
-            # 3. Create CRM record
-            # 4. Trigger automated workflows
+            # 1. Send Slack notification with plan tag
+            # 2. Send email to sales team with pricing context
+            # 3. Create CRM record with plan metadata
+            # 4. Trigger automated workflows based on plan type
             
-            # Example Slack notification (commented out - requires webhook URL)
+            # Example enhanced Slack notification (commented out - requires webhook URL)
             # slack_payload = {
-            #     "text": f"🚨 New Contact Sales Request",
+            #     "text": f"🚨 New {plan_tag} Contact Sales Request",
             #     "attachments": [{
-            #         "color": "good",
+            #         "color": "good" if plan_tag != "Enterprise" else "warning",
             #         "fields": [
             #             {"title": "Name", "value": contact_data.get('fullName'), "short": True},
             #             {"title": "Company", "value": contact_data.get('companyName'), "short": True},
             #             {"title": "Email", "value": contact_data.get('workEmail'), "short": True},
-            #             {"title": "Plan", "value": contact_data.get('planSelected', 'Not specified'), "short": True},
+            #             {"title": "Plan", "value": f"{plan_tag} - ${contact_data.get('priceDisplay', 'N/A')}", "short": True},
+            #             {"title": "Billing Term", "value": contact_data.get('billingTerm', 'N/A'), "short": True},
             #             {"title": "Volume", "value": contact_data.get('monthlyVolume'), "short": True},
             #             {"title": "Contact Method", "value": contact_data.get('preferredContactMethod'), "short": True}
             #         ]
@@ -2935,7 +2948,9 @@ async def send_contact_notification(notification: ContactNotification):
             # For now, just log the successful notification
             return {
                 "success": True,
-                "message": "Contact notification processed successfully",
+                "message": f"{plan_tag} contact notification processed successfully",
+                "plan_tag": plan_tag,
+                "pricing_context": pricing_info,
                 "timestamp": datetime.now(timezone.utc).isoformat()
             }
         
