@@ -212,8 +212,7 @@ const CookieBanner = () => {
                 rel="noopener noreferrer"
               >
                 Privacy Policy
-              </a>{' '}
-              and{' '}
+              </a>,{' '}
               <a
                 href="/terms-of-service"
                 className="text-[#00FF41] hover:text-[#00DD38] underline transition-colors duration-200"
@@ -221,6 +220,14 @@ const CookieBanner = () => {
                 rel="noopener noreferrer"
               >
                 Terms of Service
+              </a>, and{' '}
+              <a
+                href="/cookie-policy"
+                className="text-[#00FF41] hover:text-[#00DD38] underline transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cookie Policy
               </a>.
             </p>
           </div>
