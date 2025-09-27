@@ -108,6 +108,7 @@ function App() {
                 <Route path="/demo-request" element={<DemoRequestPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+                <Route path="/cookie-policy" element={<CookiePolicyPage />} />
                 
                 {/* Custom 404 Page */}
                 <Route path="*" element={<NotFoundPage />} />
