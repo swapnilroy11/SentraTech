@@ -11,6 +11,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Optional: Add helper functions for common operations
 export const demoRequestsTable = () => supabase.from('demo_requests');
+export const contactRequestsTable = () => supabase.from('contact_requests');
 export const subscriptionsTable = () => supabase.from('subscriptions');
 
 // Helper function to insert a newsletter subscription
