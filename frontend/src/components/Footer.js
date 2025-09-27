@@ -194,15 +194,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Floating Chat Button */}
-        <div className="fixed bottom-6 left-6 z-50">
-          <Button
-            className="bg-gradient-to-r from-[#00FF41] to-[#00DDFF] text-[#0A0A0A] hover:shadow-2xl hover:shadow-[#00FF41]/30 font-semibold px-4 py-4 rounded-full transform hover:scale-110 transition-all duration-200 font-rajdhani"
-            aria-label="Open live chat"
-          >
-            <MessageSquare size={24} />
-          </Button>
-        </div>
+        {/* Chat button removed - now handled by global ChatWidget component */}
       </div>
     </footer>
   );
