@@ -53,444 +53,535 @@ class SupabaseIntegrationTester:
         if details:
             print(f"   Details: {details}")
     
-    def generate_realistic_demo_data(self) -> Dict[str, Any]:
-        """Generate realistic demo request data"""
-        companies = [
-            "TechCorp Solutions", "Global Dynamics Inc", "Innovation Labs", 
-            "Digital Ventures", "Enterprise Systems", "CloudTech Partners",
-            "DataFlow Industries", "SmartOps Corporation", "NextGen Solutions"
-        ]
-        
-        first_names = ["Sarah", "Michael", "Jennifer", "David", "Lisa", "Robert"]
-        last_names = ["Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller"]
-        domains = ["techcorp.com", "globalinc.com", "innovationlabs.io", "digitalventures.net"]
-        
-        first_name = random.choice(first_names)
-        last_name = random.choice(last_names)
-        company = random.choice(companies)
-        domain = random.choice(domains)
-        
-        return {
-            "name": f"{first_name} {last_name}",
-            "email": f"{first_name.lower()}.{last_name.lower()}@{domain}",
-            "company": company,
-            "phone": f"+1{random.randint(200, 999)}{random.randint(200, 999)}{random.randint(1000, 9999)}",
-            "message": "Interested in AI customer support platform for our growing business",
-            "call_volume": "5000-10000",
-            "interaction_volume": "7500-15000"
-        }
-    
-    def generate_realistic_contact_sales_data(self) -> Dict[str, Any]:
-        """Generate realistic contact sales data"""
-        companies = [
-            "Enterprise Corp", "Business Solutions Inc", "Tech Innovations Ltd",
-            "Global Systems", "Digital Transform Co", "Smart Operations"
-        ]
-        
-        first_names = ["Emma", "James", "Olivia", "William", "Sophia", "Benjamin"]
-        last_names = ["Anderson", "Taylor", "Thomas", "Jackson", "White", "Harris"]
-        domains = ["enterprise.com", "business-sol.com", "techinnovations.io", "globalsys.net"]
-        
-        first_name = random.choice(first_names)
-        last_name = random.choice(last_names)
-        company = random.choice(companies)
-        domain = random.choice(domains)
-        
-        return {
-            "fullName": f"{first_name} {last_name}",
-            "workEmail": f"{first_name.lower()}.{last_name.lower()}@{domain}",
-            "companyName": company,
-            "phone": f"+1{random.randint(200, 999)}{random.randint(200, 999)}{random.randint(1000, 9999)}",
-            "companyWebsite": f"https://www.{domain}",
-            "monthlyVolume": random.choice(["<10k", "10k-50k", "50k+"]),
-            "planSelected": random.choice(["Starter Plan", "Growth Plan", "Enterprise Plan"]),
-            "planId": random.choice(["starter", "growth", "enterprise"]),
-            "billingTerm": random.choice(["24m", "36m"]),
-            "priceDisplay": random.choice(["$1,200", "$1,650", "$2,000"]),
-            "preferredContactMethod": random.choice(["email", "phone", "demo"]),
-            "message": "Looking for a comprehensive AI customer support solution",
-            "consentMarketing": True
-        }
-    
-    def test_demo_request_form_submission(self):
-        """Test Demo Request Form Submission to Supabase"""
-        print("\n=== Testing Demo Request Form Submission ===")
-        
-        # Test Case 1: Valid demo request submission
-        demo_data = self.generate_realistic_demo_data()
-        demo_data["email"] = f"demo_test_{int(time.time())}@example.com"
+    def test_supabase_connection(self):
+        """Test 1: Basic Supabase connection and authentication"""
+        print("\n=== Testing Supabase Connection ===")
         
         try:
-            print(f"📝 Submitting demo request: {demo_data['name']} from {demo_data['company']}")
-            response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_data, timeout=30)
+            # Test basic connection to Supabase REST API
+            response = requests.get(
+                f"{SUPABASE_URL}/rest/v1/",
+                headers=self.supabase_headers,
+                timeout=10
+            )
             
             if response.status_code == 200:
-                result = response.json()
-                
-                # Check response structure
-                required_fields = ["success", "message", "reference_id"]
-                missing_fields = [field for field in required_fields if field not in result]
-                
-                if not missing_fields:
-                    if result["success"] and result["reference_id"]:
-                        self.log_test("Demo Request - Form Submission", True,
-                                    f"✅ Demo request submitted successfully! Reference ID: {result['reference_id']}")
-                        
-                        # Store reference for verification
-                        self.demo_reference_id = result["reference_id"]
-                        
-                        # Test success confirmation UI
-                        if "submitted successfully" in result["message"].lower():
-                            self.log_test("Demo Request - Success Confirmation UI", True,
-                                        f"✅ Success confirmation message displayed: {result['message']}")
-                        else:
-                            self.log_test("Demo Request - Success Confirmation UI", False,
-                                        f"❌ Success message unclear: {result['message']}")
-                    else:
-                        self.log_test("Demo Request - Form Submission", False,
-                                    f"❌ Invalid response values: {result}")
-                else:
-                    self.log_test("Demo Request - Form Submission", False,
-                                f"❌ Missing response fields: {missing_fields}")
+                self.log_test("Supabase Connection - Basic Connectivity", True, 
+                            f"Successfully connected to Supabase at {SUPABASE_URL}")
             else:
-                self.log_test("Demo Request - Form Submission", False,
-                            f"❌ HTTP {response.status_code}: {response.text}")
+                self.log_test("Supabase Connection - Basic Connectivity", False, 
+                            f"Connection failed with status {response.status_code}: {response.text}")
+                return False
                 
         except Exception as e:
-            self.log_test("Demo Request - Form Submission", False, f"❌ Exception: {str(e)}")
-    
-    def test_contact_sales_form_submission(self):
-        """Test Contact Sales Form Submission to Supabase"""
-        print("\n=== Testing Contact Sales Form Submission ===")
+            self.log_test("Supabase Connection - Basic Connectivity", False, 
+                        f"Connection exception: {str(e)}")
+            return False
         
-        # Test Case 1: Valid contact sales submission
-        contact_data = self.generate_realistic_contact_sales_data()
-        contact_data["workEmail"] = f"contact_test_{int(time.time())}@example.com"
+        # Test authentication with anon key
+        try:
+            response = requests.get(
+                f"{SUPABASE_URL}/rest/v1/contact_requests?limit=1",
+                headers=self.supabase_headers,
+                timeout=10
+            )
+            
+            if response.status_code in [200, 401, 403]:  # Any of these means auth is working
+                self.log_test("Supabase Connection - Authentication", True, 
+                            f"Authentication working (status: {response.status_code})")
+            else:
+                self.log_test("Supabase Connection - Authentication", False, 
+                            f"Authentication failed with status {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Supabase Connection - Authentication", False, 
+                        f"Authentication exception: {str(e)}")
+        
+        return True
+    
+    def test_table_existence(self):
+        """Test 2: Check if required tables exist"""
+        print("\n=== Testing Table Existence ===")
+        
+        required_tables = ['contact_requests', 'demo_requests']
+        
+        for table_name in required_tables:
+            try:
+                response = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/{table_name}?limit=1",
+                    headers=self.supabase_headers,
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    self.log_test(f"Table Existence - {table_name}", True, 
+                                f"Table '{table_name}' exists and is accessible")
+                elif response.status_code == 404:
+                    self.log_test(f"Table Existence - {table_name}", False, 
+                                f"Table '{table_name}' not found (404)")
+                elif response.status_code == 401:
+                    self.log_test(f"Table Existence - {table_name}", False, 
+                                f"Table '{table_name}' exists but access denied (401) - RLS issue")
+                else:
+                    self.log_test(f"Table Existence - {table_name}", False, 
+                                f"Table '{table_name}' check failed with status {response.status_code}: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"Table Existence - {table_name}", False, 
+                            f"Exception checking table '{table_name}': {str(e)}")
+    
+    def test_table_schemas(self):
+        """Test 3: Verify table schemas match expected column names"""
+        print("\n=== Testing Table Schemas ===")
+        
+        # Expected schema for contact_requests table
+        expected_contact_columns = [
+            'full_name', 'work_email', 'company_name', 'phone', 'monthly_volume',
+            'plan_selected', 'plan_id', 'billing_term', 'price_display',
+            'preferred_contact_method', 'message'
+        ]
+        
+        # Expected schema for demo_requests table  
+        expected_demo_columns = [
+            'name', 'email', 'company', 'phone', 'message', 
+            'call_volume', 'interaction_volume'
+        ]
+        
+        # Test contact_requests schema
+        try:
+            # Try to get table schema by attempting an insert with empty data
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/contact_requests",
+                headers=self.supabase_headers,
+                json={},
+                timeout=10
+            )
+            
+            if response.status_code == 400:
+                error_text = response.text.lower()
+                missing_columns = []
+                
+                for column in expected_contact_columns:
+                    if column not in error_text and column.replace('_', ' ') not in error_text:
+                        missing_columns.append(column)
+                
+                if not missing_columns:
+                    self.log_test("Table Schema - contact_requests", True, 
+                                "All expected columns found in contact_requests table")
+                else:
+                    self.log_test("Table Schema - contact_requests", False, 
+                                f"Missing columns in contact_requests: {missing_columns}")
+            else:
+                # Try a different approach - check error message for column info
+                error_message = response.text
+                if "column" in error_message.lower():
+                    self.log_test("Table Schema - contact_requests", False, 
+                                f"Schema issue detected: {error_message}")
+                else:
+                    self.log_test("Table Schema - contact_requests", False, 
+                                f"Cannot verify schema - unexpected response: {response.status_code}")
+                    
+        except Exception as e:
+            self.log_test("Table Schema - contact_requests", False, 
+                        f"Exception checking contact_requests schema: {str(e)}")
+        
+        # Test demo_requests schema
+        try:
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/demo_requests",
+                headers=self.supabase_headers,
+                json={},
+                timeout=10
+            )
+            
+            if response.status_code == 400:
+                error_text = response.text.lower()
+                missing_columns = []
+                
+                for column in expected_demo_columns:
+                    if column not in error_text:
+                        missing_columns.append(column)
+                
+                if not missing_columns:
+                    self.log_test("Table Schema - demo_requests", True, 
+                                "All expected columns found in demo_requests table")
+                else:
+                    self.log_test("Table Schema - demo_requests", False, 
+                                f"Missing columns in demo_requests: {missing_columns}")
+            else:
+                error_message = response.text
+                if "column" in error_message.lower():
+                    self.log_test("Table Schema - demo_requests", False, 
+                                f"Schema issue detected: {error_message}")
+                else:
+                    self.log_test("Table Schema - demo_requests", False, 
+                                f"Cannot verify schema - unexpected response: {response.status_code}")
+                    
+        except Exception as e:
+            self.log_test("Table Schema - demo_requests", False, 
+                        f"Exception checking demo_requests schema: {str(e)}")
+    
+    def test_rls_policies(self):
+        """Test 4: Test Row Level Security policies for anonymous inserts"""
+        print("\n=== Testing RLS Policies ===")
+        
+        # Test contact_requests RLS policy
+        test_contact_data = {
+            "full_name": "RLS Test User",
+            "work_email": "rls.test@example.com",
+            "company_name": "RLS Test Company",
+            "phone": "+1-555-0123",
+            "monthly_volume": "<10k",
+            "plan_selected": "Growth Plan",
+            "plan_id": "growth",
+            "billing_term": "24m",
+            "price_display": "$1,650",
+            "preferred_contact_method": "email",
+            "message": "Testing RLS policy for anonymous inserts"
+        }
         
         try:
-            print(f"📝 Submitting contact sales request: {contact_data['fullName']} from {contact_data['companyName']}")
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/contact_requests",
+                headers=self.supabase_headers,
+                json=test_contact_data,
+                timeout=15
+            )
             
-            # Test the /api/notify endpoint for contact sales
-            notify_payload = {
-                "type": "contact_sales",
-                "data": contact_data,
-                "planTag": contact_data["planSelected"]
+            if response.status_code == 201:
+                self.log_test("RLS Policy - contact_requests INSERT", True, 
+                            "Anonymous INSERT allowed for contact_requests table")
+            elif response.status_code == 401:
+                self.log_test("RLS Policy - contact_requests INSERT", False, 
+                            "RLS policy blocking anonymous INSERT to contact_requests")
+            elif response.status_code == 400:
+                error_message = response.text
+                if "column" in error_message.lower() or "constraint" in error_message.lower():
+                    self.log_test("RLS Policy - contact_requests INSERT", False, 
+                                f"Schema/constraint issue: {error_message}")
+                else:
+                    self.log_test("RLS Policy - contact_requests INSERT", False, 
+                                f"Bad request: {error_message}")
+            else:
+                self.log_test("RLS Policy - contact_requests INSERT", False, 
+                            f"Unexpected response {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("RLS Policy - contact_requests INSERT", False, 
+                        f"Exception testing contact_requests RLS: {str(e)}")
+        
+        # Test demo_requests RLS policy
+        test_demo_data = {
+            "name": "RLS Demo Test User",
+            "email": "rls.demo.test@example.com",
+            "company": "RLS Demo Test Company",
+            "phone": "+1-555-0456",
+            "message": "Testing RLS policy for demo requests",
+            "call_volume": "1000-5000",
+            "interaction_volume": "2000-10000"
+        }
+        
+        try:
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/demo_requests",
+                headers=self.supabase_headers,
+                json=test_demo_data,
+                timeout=15
+            )
+            
+            if response.status_code == 201:
+                self.log_test("RLS Policy - demo_requests INSERT", True, 
+                            "Anonymous INSERT allowed for demo_requests table")
+            elif response.status_code == 401:
+                self.log_test("RLS Policy - demo_requests INSERT", False, 
+                            "RLS policy blocking anonymous INSERT to demo_requests")
+            elif response.status_code == 400:
+                error_message = response.text
+                if "column" in error_message.lower() or "constraint" in error_message.lower():
+                    self.log_test("RLS Policy - demo_requests INSERT", False, 
+                                f"Schema/constraint issue: {error_message}")
+                else:
+                    self.log_test("RLS Policy - demo_requests INSERT", False, 
+                                f"Bad request: {error_message}")
+            else:
+                self.log_test("RLS Policy - demo_requests INSERT", False, 
+                            f"Unexpected response {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("RLS Policy - demo_requests INSERT", False, 
+                        f"Exception testing demo_requests RLS: {str(e)}")
+    
+    def test_minimal_data_inserts(self):
+        """Test 5: Try minimal data inserts to isolate issues"""
+        print("\n=== Testing Minimal Data Inserts ===")
+        
+        # Test minimal contact request
+        minimal_contact = {
+            "full_name": "Minimal Test",
+            "work_email": "minimal.test@example.com",
+            "company_name": "Minimal Test Co"
+        }
+        
+        try:
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/contact_requests",
+                headers=self.supabase_headers,
+                json=minimal_contact,
+                timeout=15
+            )
+            
+            if response.status_code == 201:
+                self.log_test("Minimal Insert - contact_requests", True, 
+                            "Minimal contact request insert successful")
+            else:
+                error_details = self.parse_supabase_error(response)
+                self.log_test("Minimal Insert - contact_requests", False, 
+                            f"Status {response.status_code}: {error_details}")
+                
+        except Exception as e:
+            self.log_test("Minimal Insert - contact_requests", False, 
+                        f"Exception: {str(e)}")
+        
+        # Test minimal demo request
+        minimal_demo = {
+            "name": "Minimal Demo Test",
+            "email": "minimal.demo.test@example.com",
+            "company": "Minimal Demo Co"
+        }
+        
+        try:
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/demo_requests",
+                headers=self.supabase_headers,
+                json=minimal_demo,
+                timeout=15
+            )
+            
+            if response.status_code == 201:
+                self.log_test("Minimal Insert - demo_requests", True, 
+                            "Minimal demo request insert successful")
+            else:
+                error_details = self.parse_supabase_error(response)
+                self.log_test("Minimal Insert - demo_requests", False, 
+                            f"Status {response.status_code}: {error_details}")
+                
+        except Exception as e:
+            self.log_test("Minimal Insert - demo_requests", False, 
+                        f"Exception: {str(e)}")
+    
+    def test_constraint_validation(self):
+        """Test 6: Test data type and constraint validation"""
+        print("\n=== Testing Constraint Validation ===")
+        
+        # Test monthly_volume constraint values
+        volume_values = ['<10k', '10k-50k', '50k+', 'under_10k', '10k_50k', 'over_50k']
+        
+        for volume in volume_values:
+            test_data = {
+                "full_name": f"Volume Test {volume}",
+                "work_email": f"volume.test.{volume.replace('<', '').replace('>', '').replace('-', '').replace('_', '')}@example.com",
+                "company_name": "Volume Test Company",
+                "monthly_volume": volume
             }
             
-            response = requests.post(f"{BACKEND_URL}/notify", json=notify_payload, timeout=30)
-            
-            if response.status_code == 200:
-                result = response.json()
+            try:
+                response = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/contact_requests",
+                    headers=self.supabase_headers,
+                    json=test_data,
+                    timeout=10
+                )
                 
-                if result.get("success"):
-                    self.log_test("Contact Sales - Form Submission", True,
-                                f"✅ Contact sales request submitted successfully!")
-                    
-                    # Test plan metadata handling
-                    if contact_data["planSelected"] and contact_data["planId"]:
-                        self.log_test("Contact Sales - Plan Metadata", True,
-                                    f"✅ Plan metadata processed: {contact_data['planSelected']} ({contact_data['planId']})")
-                    else:
-                        self.log_test("Contact Sales - Plan Metadata", False,
-                                    f"❌ Plan metadata missing or incomplete")
-                    
-                    # Test billing term handling
-                    if contact_data["billingTerm"] and contact_data["priceDisplay"]:
-                        self.log_test("Contact Sales - Billing Terms", True,
-                                    f"✅ Billing terms processed: {contact_data['billingTerm']} at {contact_data['priceDisplay']}")
-                    else:
-                        self.log_test("Contact Sales - Billing Terms", False,
-                                    f"❌ Billing terms missing or incomplete")
+                if response.status_code == 201:
+                    self.log_test(f"Constraint Validation - monthly_volume '{volume}'", True, 
+                                f"Volume value '{volume}' accepted")
+                elif response.status_code == 400 and "constraint" in response.text.lower():
+                    self.log_test(f"Constraint Validation - monthly_volume '{volume}'", False, 
+                                f"Volume value '{volume}' rejected by constraint")
                 else:
-                    self.log_test("Contact Sales - Form Submission", False,
-                                f"❌ Submission failed: {result}")
-            else:
-                self.log_test("Contact Sales - Form Submission", False,
-                            f"❌ HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Contact Sales - Form Submission", False, f"❌ Exception: {str(e)}")
-    
-    def test_backend_notify_endpoint(self):
-        """Test /api/notify endpoint for notifications"""
-        print("\n=== Testing Backend /api/notify Endpoint ===")
+                    self.log_test(f"Constraint Validation - monthly_volume '{volume}'", False, 
+                                f"Unexpected response {response.status_code}: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"Constraint Validation - monthly_volume '{volume}'", False, 
+                            f"Exception: {str(e)}")
         
-        # Test Case 1: Demo request notification
-        demo_notify_data = {
-            "type": "demo_request",
-            "data": self.generate_realistic_demo_data(),
-            "source": "demo_form"
+        # Test preferred_contact_method constraint values
+        contact_methods = ['email', 'phone', 'demo']
+        
+        for method in contact_methods:
+            test_data = {
+                "full_name": f"Contact Method Test {method}",
+                "work_email": f"contact.method.{method}@example.com",
+                "company_name": "Contact Method Test Company",
+                "preferred_contact_method": method
+            }
+            
+            try:
+                response = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/contact_requests",
+                    headers=self.supabase_headers,
+                    json=test_data,
+                    timeout=10
+                )
+                
+                if response.status_code == 201:
+                    self.log_test(f"Constraint Validation - contact_method '{method}'", True, 
+                                f"Contact method '{method}' accepted")
+                elif response.status_code == 400 and "constraint" in response.text.lower():
+                    self.log_test(f"Constraint Validation - contact_method '{method}'", False, 
+                                f"Contact method '{method}' rejected by constraint")
+                else:
+                    self.log_test(f"Constraint Validation - contact_method '{method}'", False, 
+                                f"Unexpected response {response.status_code}: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"Constraint Validation - contact_method '{method}'", False, 
+                            f"Exception: {str(e)}")
+    
+    def test_full_form_submissions(self):
+        """Test 7: Test complete form submissions with realistic data"""
+        print("\n=== Testing Full Form Submissions ===")
+        
+        # Test complete contact sales form submission
+        complete_contact_data = {
+            "full_name": "Sarah Johnson",
+            "work_email": "sarah.johnson@techcorp.com",
+            "company_name": "TechCorp Solutions",
+            "phone": "+1-555-0199",
+            "company_website": "https://techcorp.com",
+            "monthly_volume": "<10k",
+            "plan_selected": "Growth Plan",
+            "plan_id": "growth",
+            "billing_term": "24m",
+            "price_display": "$1,650",
+            "preferred_contact_method": "email",
+            "message": "Interested in Growth plan for our customer support operations",
+            "consent_marketing": True,
+            "utm_data": {
+                "source": "pricing_page",
+                "medium": "web",
+                "campaign": "contact_sales"
+            },
+            "metadata": {
+                "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "referrer": "https://sentra-pricing-cards.preview.emergentagent.com/pricing",
+                "viewport": {"width": 1920, "height": 1080},
+                "source": "pricing_page",
+                "widget": "slide_in"
+            }
         }
         
         try:
-            print("📡 Testing demo request notification...")
-            response = requests.post(f"{BACKEND_URL}/notify", json=demo_notify_data, timeout=20)
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/contact_requests",
+                headers=self.supabase_headers,
+                json=complete_contact_data,
+                timeout=20
+            )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("success"):
-                    self.log_test("Backend Notify - Demo Request", True,
-                                f"✅ Demo request notification processed successfully")
-                else:
-                    self.log_test("Backend Notify - Demo Request", False,
-                                f"❌ Demo request notification failed: {result}")
+            if response.status_code == 201:
+                self.log_test("Full Form Submission - Contact Sales", True, 
+                            "Complete contact sales form submission successful")
             else:
-                self.log_test("Backend Notify - Demo Request", False,
-                            f"❌ HTTP {response.status_code}: {response.text}")
+                error_details = self.parse_supabase_error(response)
+                self.log_test("Full Form Submission - Contact Sales", False, 
+                            f"Status {response.status_code}: {error_details}")
                 
         except Exception as e:
-            self.log_test("Backend Notify - Demo Request", False, f"❌ Exception: {str(e)}")
+            self.log_test("Full Form Submission - Contact Sales", False, 
+                        f"Exception: {str(e)}")
         
-        # Test Case 2: Contact sales notification
-        contact_notify_data = {
-            "type": "contact_sales",
-            "data": self.generate_realistic_contact_sales_data(),
-            "planTag": "Growth Plan"
+        # Test complete demo request form submission
+        complete_demo_data = {
+            "name": "Michael Chen",
+            "email": "michael.chen@innovatetech.com",
+            "company": "InnovateTech Industries",
+            "phone": "+1-555-0288",
+            "message": "Looking for AI customer support solution for our growing business",
+            "call_volume": "1000-5000",
+            "interaction_volume": "2000-10000"
         }
         
         try:
-            print("📡 Testing contact sales notification...")
-            response = requests.post(f"{BACKEND_URL}/notify", json=contact_notify_data, timeout=20)
+            response = requests.post(
+                f"{SUPABASE_URL}/rest/v1/demo_requests",
+                headers=self.supabase_headers,
+                json=complete_demo_data,
+                timeout=20
+            )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("success"):
-                    self.log_test("Backend Notify - Contact Sales", True,
-                                f"✅ Contact sales notification processed successfully")
-                else:
-                    self.log_test("Backend Notify - Contact Sales", False,
-                                f"❌ Contact sales notification failed: {result}")
+            if response.status_code == 201:
+                self.log_test("Full Form Submission - Demo Request", True, 
+                            "Complete demo request form submission successful")
             else:
-                self.log_test("Backend Notify - Contact Sales", False,
-                            f"❌ HTTP {response.status_code}: {response.text}")
+                error_details = self.parse_supabase_error(response)
+                self.log_test("Full Form Submission - Demo Request", False, 
+                            f"Status {response.status_code}: {error_details}")
                 
         except Exception as e:
-            self.log_test("Backend Notify - Contact Sales", False, f"❌ Exception: {str(e)}")
+            self.log_test("Full Form Submission - Demo Request", False, 
+                        f"Exception: {str(e)}")
     
-    def test_database_connectivity(self):
-        """Test database connectivity and data persistence"""
-        print("\n=== Testing Database Connectivity ===")
+    def test_network_connectivity(self):
+        """Test 8: Test network connectivity and DNS resolution"""
+        print("\n=== Testing Network Connectivity ===")
         
-        # Test Case 1: Check if demo requests are being stored
         try:
-            print("🔍 Checking demo requests storage...")
-            response = requests.get(f"{BACKEND_URL}/demo/requests?limit=10", timeout=15)
-            
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("success") and "requests" in result:
-                    request_count = len(result["requests"])
-                    self.log_test("Database - Demo Requests Storage", True,
-                                f"✅ Demo requests table accessible, found {request_count} records")
+            # Test DNS resolution
+            import socket
+            host = "dwishuwpqyffsmgljrqy.supabase.co"
+            ip = socket.gethostbyname(host)
+            self.log_test("Network Connectivity - DNS Resolution", True, 
+                        f"DNS resolved {host} to {ip}")
+        except Exception as e:
+            self.log_test("Network Connectivity - DNS Resolution", False, 
+                        f"DNS resolution failed: {str(e)}")
+        
+        try:
+            # Test HTTPS connectivity
+            response = requests.get(SUPABASE_URL, timeout=10)
+            if response.status_code in [200, 404, 405]:  # Any response means connectivity works
+                self.log_test("Network Connectivity - HTTPS", True, 
+                            f"HTTPS connectivity working (status: {response.status_code})")
+            else:
+                self.log_test("Network Connectivity - HTTPS", False, 
+                            f"HTTPS connectivity issue (status: {response.status_code})")
+        except Exception as e:
+            self.log_test("Network Connectivity - HTTPS", False, 
+                        f"HTTPS connectivity failed: {str(e)}")
+    
+    def parse_supabase_error(self, response):
+        """Parse Supabase error response for detailed information"""
+        try:
+            if response.headers.get('content-type', '').startswith('application/json'):
+                error_data = response.json()
+                if isinstance(error_data, dict):
+                    message = error_data.get('message', '')
+                    details = error_data.get('details', '')
+                    hint = error_data.get('hint', '')
+                    code = error_data.get('code', '')
                     
-                    # Check data structure
-                    if request_count > 0:
-                        sample_request = result["requests"][0]
-                        required_fields = ["name", "email", "company", "timestamp"]
-                        missing_fields = [field for field in required_fields if field not in sample_request]
-                        
-                        if not missing_fields:
-                            self.log_test("Database - Demo Request Data Structure", True,
-                                        f"✅ Demo request data structure correct")
-                        else:
-                            self.log_test("Database - Demo Request Data Structure", False,
-                                        f"❌ Missing fields in demo requests: {missing_fields}")
-                else:
-                    self.log_test("Database - Demo Requests Storage", False,
-                                f"❌ Invalid response structure: {result}")
-            else:
-                self.log_test("Database - Demo Requests Storage", False,
-                            f"❌ HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Database - Demo Requests Storage", False, f"❌ Exception: {str(e)}")
-    
-    def test_form_validation(self):
-        """Test form validation for both demo request and contact sales"""
-        print("\n=== Testing Form Validation ===")
-        
-        # Test Case 1: Demo request with missing required fields
-        invalid_demo_data = {
-            "name": "",  # Missing name
-            "email": "invalid-email",  # Invalid email format
-            "company": "",  # Missing company
-            "phone": "123",  # Invalid phone format
-            "message": "Test message"
-        }
-        
-        try:
-            print("🔍 Testing demo request validation with invalid data...")
-            response = requests.post(f"{BACKEND_URL}/demo/request", json=invalid_demo_data, timeout=20)
-            
-            if response.status_code == 422 or response.status_code == 400:
-                self.log_test("Form Validation - Demo Request Required Fields", True,
-                            f"✅ Validation correctly rejected invalid demo request (HTTP {response.status_code})")
-            elif response.status_code == 200:
-                # Check if backend validation caught the errors
-                result = response.json()
-                if not result.get("success"):
-                    self.log_test("Form Validation - Demo Request Required Fields", True,
-                                f"✅ Backend validation caught errors: {result.get('message', 'Unknown error')}")
-                else:
-                    self.log_test("Form Validation - Demo Request Required Fields", False,
-                                f"❌ Invalid data was accepted: {result}")
-            else:
-                self.log_test("Form Validation - Demo Request Required Fields", False,
-                            f"❌ Unexpected response: HTTP {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Form Validation - Demo Request Required Fields", False, f"❌ Exception: {str(e)}")
-        
-        # Test Case 2: Valid email format validation
-        valid_demo_data = self.generate_realistic_demo_data()
-        valid_demo_data["email"] = f"valid_email_test_{int(time.time())}@example.com"
-        
-        try:
-            print("🔍 Testing demo request with valid email format...")
-            response = requests.post(f"{BACKEND_URL}/demo/request", json=valid_demo_data, timeout=20)
-            
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("success"):
-                    self.log_test("Form Validation - Email Format Validation", True,
-                                f"✅ Valid email format accepted")
-                else:
-                    self.log_test("Form Validation - Email Format Validation", False,
-                                f"❌ Valid email rejected: {result}")
-            else:
-                self.log_test("Form Validation - Email Format Validation", False,
-                            f"❌ Valid email request failed: HTTP {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Form Validation - Email Format Validation", False, f"❌ Exception: {str(e)}")
-    
-    def test_supabase_table_structure(self):
-        """Test Supabase table structure and field mapping"""
-        print("\n=== Testing Supabase Table Structure ===")
-        
-        # Test Case 1: Submit data and verify field mapping
-        demo_data = self.generate_realistic_demo_data()
-        demo_data["email"] = f"structure_test_{int(time.time())}@example.com"
-        
-        try:
-            print("🔍 Testing Supabase table structure with demo request...")
-            response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_data, timeout=30)
-            
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("success"):
-                    self.log_test("Supabase Tables - Demo Requests Table", True,
-                                f"✅ demo_requests table exists and accepts data")
+                    error_parts = []
+                    if message:
+                        error_parts.append(f"Message: {message}")
+                    if code:
+                        error_parts.append(f"Code: {code}")
+                    if details:
+                        error_parts.append(f"Details: {details}")
+                    if hint:
+                        error_parts.append(f"Hint: {hint}")
                     
-                    # Wait a moment for data to be processed
-                    time.sleep(2)
-                    
-                    # Try to retrieve the data to verify field mapping
-                    get_response = requests.get(f"{BACKEND_URL}/demo/requests?limit=5", timeout=15)
-                    if get_response.status_code == 200:
-                        get_result = get_response.json()
-                        if get_result.get("success") and get_result.get("requests"):
-                            # Look for our test record
-                            found_record = None
-                            for record in get_result["requests"]:
-                                if record.get("email") == demo_data["email"]:
-                                    found_record = record
-                                    break
-                            
-                            if found_record:
-                                # Check field mapping
-                                field_mapping_correct = True
-                                mapping_errors = []
-                                
-                                expected_mappings = {
-                                    "name": demo_data["name"],
-                                    "email": demo_data["email"],
-                                    "company": demo_data["company"],
-                                    "phone": demo_data["phone"],
-                                    "message": demo_data["message"]
-                                }
-                                
-                                for field, expected_value in expected_mappings.items():
-                                    if found_record.get(field) != expected_value:
-                                        field_mapping_correct = False
-                                        mapping_errors.append(f"{field}: expected '{expected_value}', got '{found_record.get(field)}'")
-                                
-                                if field_mapping_correct:
-                                    self.log_test("Supabase Tables - Field Mapping", True,
-                                                f"✅ Field mapping correct for demo_requests table")
-                                else:
-                                    self.log_test("Supabase Tables - Field Mapping", False,
-                                                f"❌ Field mapping errors: {'; '.join(mapping_errors)}")
-                                
-                                # Check timestamp field
-                                if found_record.get("timestamp") or found_record.get("created_at"):
-                                    self.log_test("Supabase Tables - Timestamp Fields", True,
-                                                f"✅ Timestamp field working correctly")
-                                else:
-                                    self.log_test("Supabase Tables - Timestamp Fields", False,
-                                                f"❌ Timestamp field missing or incorrect")
-                            else:
-                                self.log_test("Supabase Tables - Data Persistence", False,
-                                            f"❌ Submitted record not found in database")
-                    else:
-                        self.log_test("Supabase Tables - Data Retrieval", False,
-                                    f"❌ Cannot retrieve data to verify field mapping")
-                else:
-                    self.log_test("Supabase Tables - Demo Requests Table", False,
-                                f"❌ demo_requests table submission failed: {result}")
-            else:
-                self.log_test("Supabase Tables - Demo Requests Table", False,
-                            f"❌ demo_requests table not accessible: HTTP {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Supabase Tables - Demo Requests Table", False, f"❌ Exception: {str(e)}")
+                    return " | ".join(error_parts) if error_parts else response.text
+            
+            return response.text
+        except:
+            return response.text
     
-    def test_error_handling(self):
-        """Test error handling and display"""
-        print("\n=== Testing Error Handling ===")
-        
-        # Test Case 1: Network timeout simulation (using very short timeout)
-        try:
-            print("🔍 Testing error handling with timeout...")
-            demo_data = self.generate_realistic_demo_data()
-            
-            # Use very short timeout to simulate network issues
-            response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_data, timeout=0.001)
-            
-            # This should timeout, so if we get here, something's wrong
-            self.log_test("Error Handling - Network Timeout", False,
-                        f"❌ Request should have timed out but didn't")
-            
-        except requests.exceptions.Timeout:
-            self.log_test("Error Handling - Network Timeout", True,
-                        f"✅ Network timeout handled correctly")
-        except Exception as e:
-            self.log_test("Error Handling - Network Timeout", True,
-                        f"✅ Network error handled: {str(e)}")
-        
-        # Test Case 2: Invalid JSON payload
-        try:
-            print("🔍 Testing error handling with invalid JSON...")
-            response = requests.post(f"{BACKEND_URL}/demo/request", 
-                                   data="invalid json", 
-                                   headers={'Content-Type': 'application/json'},
-                                   timeout=20)
-            
-            if response.status_code >= 400:
-                self.log_test("Error Handling - Invalid JSON", True,
-                            f"✅ Invalid JSON properly rejected (HTTP {response.status_code})")
-            else:
-                self.log_test("Error Handling - Invalid JSON", False,
-                            f"❌ Invalid JSON was accepted: HTTP {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Error Handling - Invalid JSON", True,
-                        f"✅ Invalid JSON error handled: {str(e)}")
-    
-    def generate_comprehensive_report(self):
-        """Generate comprehensive Supabase integration test report"""
+    def generate_diagnostic_report(self):
+        """Generate comprehensive diagnostic report"""
         print("\n" + "=" * 80)
-        print("📊 SUPABASE INTEGRATION TESTING - COMPREHENSIVE REPORT")
+        print("🔍 SUPABASE INTEGRATION DIAGNOSTIC REPORT")
         print("=" * 80)
         
         # Overall summary
@@ -499,187 +590,143 @@ class SupabaseIntegrationTester:
         failed_tests = len(self.failed_tests)
         success_rate = (passed_tests / total_tests) * 100 if total_tests > 0 else 0
         
-        print(f"📈 Overall Test Results:")
+        print(f"📊 Overall Test Results:")
         print(f"   Total Tests: {total_tests}")
         print(f"   ✅ Passed: {passed_tests}")
         print(f"   ❌ Failed: {failed_tests}")
-        print(f"   📊 Success Rate: {success_rate:.1f}%")
+        print(f"   📈 Success Rate: {success_rate:.1f}%")
         
-        # Test categories summary
-        print(f"\n🎯 Test Categories Summary:")
+        # Categorize failures
+        connection_failures = [t for t in self.failed_tests if "Connection" in t]
+        table_failures = [t for t in self.failed_tests if "Table" in t]
+        rls_failures = [t for t in self.failed_tests if "RLS" in t]
+        schema_failures = [t for t in self.failed_tests if "Schema" in t]
+        constraint_failures = [t for t in self.failed_tests if "Constraint" in t]
+        submission_failures = [t for t in self.failed_tests if "Submission" in t]
         
-        categories = {
-            "Demo Request Form": [t for t in self.test_results if "Demo Request" in t["test"]],
-            "Contact Sales Form": [t for t in self.test_results if "Contact Sales" in t["test"]],
-            "Backend Integration": [t for t in self.test_results if "Backend" in t["test"] or "Notify" in t["test"]],
-            "Database Operations": [t for t in self.test_results if "Database" in t["test"] or "Supabase" in t["test"]],
-            "Form Validation": [t for t in self.test_results if "Validation" in t["test"]],
-            "Error Handling": [t for t in self.test_results if "Error" in t["test"]]
-        }
+        print(f"\n🚨 Failure Analysis:")
+        if connection_failures:
+            print(f"   🔌 Connection Issues: {len(connection_failures)}")
+            for failure in connection_failures:
+                print(f"     - {failure}")
         
-        for category, tests in categories.items():
-            if tests:
-                category_passed = len([t for t in tests if t["passed"]])
-                category_total = len(tests)
-                category_rate = (category_passed / category_total) * 100 if category_total > 0 else 0
-                
-                status_icon = "✅" if category_rate >= 80 else "⚠️" if category_rate >= 60 else "❌"
-                print(f"   {status_icon} {category}: {category_passed}/{category_total} ({category_rate:.1f}%)")
+        if table_failures:
+            print(f"   📋 Table Issues: {len(table_failures)}")
+            for failure in table_failures:
+                print(f"     - {failure}")
         
-        # Critical issues
-        print(f"\n🚨 Critical Issues:")
-        critical_failures = [t for t in self.test_results if not t["passed"] and 
-                           any(keyword in t["test"] for keyword in ["Form Submission", "Database", "Supabase"])]
+        if rls_failures:
+            print(f"   🔒 RLS Policy Issues: {len(rls_failures)}")
+            for failure in rls_failures:
+                print(f"     - {failure}")
         
-        if critical_failures:
-            for failure in critical_failures:
-                print(f"   ❌ {failure['test']}: {failure['details']}")
-        else:
-            print(f"   ✅ No critical issues detected")
+        if schema_failures:
+            print(f"   📝 Schema Issues: {len(schema_failures)}")
+            for failure in schema_failures:
+                print(f"     - {failure}")
         
-        # Integration readiness assessment
-        print(f"\n🎯 Supabase Integration Readiness Assessment:")
+        if constraint_failures:
+            print(f"   ⚠️ Constraint Issues: {len(constraint_failures)}")
+            for failure in constraint_failures:
+                print(f"     - {failure}")
         
-        readiness_score = 0
-        max_score = 0
-        
-        # Criteria 1: Form Submissions (25 points)
-        max_score += 25
-        form_tests = [t for t in self.test_results if "Form Submission" in t["test"]]
-        form_passed = len([t for t in form_tests if t["passed"]])
-        form_total = len(form_tests)
-        
-        if form_total > 0 and (form_passed / form_total) >= 0.8:
-            readiness_score += 25
-            print(f"   ✅ Form Submissions: PASS ({form_passed}/{form_total})")
-        else:
-            print(f"   ❌ Form Submissions: FAIL ({form_passed}/{form_total})")
-        
-        # Criteria 2: Database Integration (25 points)
-        max_score += 25
-        db_tests = [t for t in self.test_results if "Database" in t["test"] or "Supabase" in t["test"]]
-        db_passed = len([t for t in db_tests if t["passed"]])
-        db_total = len(db_tests)
-        
-        if db_total > 0 and (db_passed / db_total) >= 0.8:
-            readiness_score += 25
-            print(f"   ✅ Database Integration: PASS ({db_passed}/{db_total})")
-        else:
-            print(f"   ❌ Database Integration: FAIL ({db_passed}/{db_total})")
-        
-        # Criteria 3: Backend API Integration (25 points)
-        max_score += 25
-        api_tests = [t for t in self.test_results if "Backend" in t["test"] or "Notify" in t["test"]]
-        api_passed = len([t for t in api_tests if t["passed"]])
-        api_total = len(api_tests)
-        
-        if api_total > 0 and (api_passed / api_total) >= 0.8:
-            readiness_score += 25
-            print(f"   ✅ Backend API Integration: PASS ({api_passed}/{api_total})")
-        else:
-            print(f"   ❌ Backend API Integration: FAIL ({api_passed}/{api_total})")
-        
-        # Criteria 4: Form Validation & Error Handling (25 points)
-        max_score += 25
-        validation_tests = [t for t in self.test_results if "Validation" in t["test"] or "Error" in t["test"]]
-        validation_passed = len([t for t in validation_tests if t["passed"]])
-        validation_total = len(validation_tests)
-        
-        if validation_total > 0 and (validation_passed / validation_total) >= 0.7:
-            readiness_score += 25
-            print(f"   ✅ Validation & Error Handling: PASS ({validation_passed}/{validation_total})")
-        else:
-            print(f"   ❌ Validation & Error Handling: FAIL ({validation_passed}/{validation_total})")
-        
-        # Final readiness score
-        final_readiness = (readiness_score / max_score) * 100 if max_score > 0 else 0
-        
-        print(f"\n🏆 FINAL SUPABASE INTEGRATION READINESS SCORE: {final_readiness:.1f}%")
-        
-        if final_readiness >= 90:
-            print(f"   🎉 EXCELLENT - Supabase integration is production-ready")
-        elif final_readiness >= 75:
-            print(f"   ✅ GOOD - Supabase integration ready with minor optimizations")
-        elif final_readiness >= 60:
-            print(f"   ⚠️ FAIR - Supabase integration needs improvements")
-        else:
-            print(f"   ❌ POOR - Significant Supabase integration issues need resolution")
+        if submission_failures:
+            print(f"   📤 Form Submission Issues: {len(submission_failures)}")
+            for failure in submission_failures:
+                print(f"     - {failure}")
         
         # Recommendations
-        print(f"\n💡 Recommendations:")
+        print(f"\n💡 Diagnostic Recommendations:")
         
-        if failed_tests > 0:
-            print(f"   • Address {failed_tests} failed test cases")
+        if connection_failures:
+            print(f"   🔌 Connection Issues:")
+            print(f"     • Verify Supabase URL: {SUPABASE_URL}")
+            print(f"     • Check anon key validity")
+            print(f"     • Verify network connectivity")
         
-        if final_readiness < 90:
-            print(f"   • Review and fix critical integration issues")
-            print(f"   • Verify Supabase table structures and permissions")
-            print(f"   • Test form validation edge cases")
-            print(f"   • Implement proper error handling and user feedback")
+        if table_failures:
+            print(f"   📋 Table Issues:")
+            print(f"     • Verify tables 'contact_requests' and 'demo_requests' exist")
+            print(f"     • Check table names for spaces or special characters")
+            print(f"     • Ensure tables are in 'public' schema")
         
-        print(f"   • Monitor Supabase performance and error rates in production")
-        print(f"   • Set up alerts for form submission failures")
-        print(f"   • Consider implementing retry logic for network failures")
+        if rls_failures:
+            print(f"   🔒 RLS Policy Issues:")
+            print(f"     • Create RLS policy: CREATE POLICY 'Allow anonymous inserts' ON contact_requests FOR INSERT TO anon WITH CHECK (true);")
+            print(f"     • Create RLS policy: CREATE POLICY 'Allow anonymous inserts' ON demo_requests FOR INSERT TO anon WITH CHECK (true);")
+            print(f"     • Verify RLS is enabled on tables")
         
-        return final_readiness
+        if schema_failures:
+            print(f"   📝 Schema Issues:")
+            print(f"     • Verify column names match frontend expectations")
+            print(f"     • Check for missing columns in table definitions")
+            print(f"     • Ensure data types are compatible")
+        
+        if constraint_failures:
+            print(f"   ⚠️ Constraint Issues:")
+            print(f"     • Update monthly_volume constraint to allow '<10k', '10k-50k', '50k+'")
+            print(f"     • Update preferred_contact_method constraint to allow 'email', 'phone', 'demo'")
+            print(f"     • Check for other constraint mismatches")
+        
+        # Configuration summary
+        print(f"\n⚙️ Configuration Summary:")
+        print(f"   Supabase URL: {SUPABASE_URL}")
+        print(f"   Anon Key: {SUPABASE_ANON_KEY[:20]}...")
+        print(f"   Expected Tables: contact_requests, demo_requests")
+        print(f"   Required RLS: Anonymous INSERT policies")
+        
+        return success_rate >= 80  # Return True if diagnostic passes
     
-    def run_comprehensive_supabase_tests(self):
-        """Run all comprehensive Supabase integration tests"""
-        print("🚀 Starting Comprehensive Supabase Integration Testing")
+    def run_comprehensive_diagnostics(self):
+        """Run all Supabase integration diagnostic tests"""
+        print("🔍 Starting Comprehensive Supabase Integration Diagnostics")
         print("=" * 80)
-        print("Testing SentraTech Supabase integration for:")
-        print("• Demo Request Form (/demo-request page)")
-        print("• Contact Sales Form (pricing cards slide-in)")
-        print("• Backend /api/notify endpoint")
-        print("• Supabase database tables (demo_requests, Contact Request)")
-        print("• Form validation and error handling")
+        print("Diagnosing Supabase connection and table setup issues:")
+        print("• Basic connectivity and authentication")
+        print("• Table existence verification")
+        print("• Schema validation")
+        print("• RLS policy testing")
+        print("• Constraint validation")
+        print("• Full form submission testing")
+        print("• Network connectivity analysis")
         print("=" * 80)
         
-        # Execute all tests
+        # Execute all diagnostic tests
         try:
-            # Core functionality tests
-            self.test_demo_request_form_submission()
-            self.test_contact_sales_form_submission()
-            self.test_backend_notify_endpoint()
-            
-            # Database and integration tests
-            self.test_database_connectivity()
-            self.test_supabase_table_structure()
-            
-            # Validation and error handling tests
-            self.test_form_validation()
-            self.test_error_handling()
+            self.test_supabase_connection()
+            self.test_table_existence()
+            self.test_table_schemas()
+            self.test_rls_policies()
+            self.test_minimal_data_inserts()
+            self.test_constraint_validation()
+            self.test_full_form_submissions()
+            self.test_network_connectivity()
             
         except Exception as e:
-            print(f"❌ Critical error during Supabase integration testing: {str(e)}")
-            self.log_test("Supabase Integration Testing Framework", False, f"Critical error: {str(e)}")
+            print(f"❌ Critical error during diagnostics: {str(e)}")
+            self.log_test("Diagnostic Framework", False, f"Critical error: {str(e)}")
         
-        # Generate comprehensive report
-        readiness_score = self.generate_comprehensive_report()
+        # Generate comprehensive diagnostic report
+        diagnostic_success = self.generate_diagnostic_report()
         
-        return readiness_score >= 75  # Return True if ready for production
+        return diagnostic_success
 
 
 def main():
-    """Main function to run Supabase integration tests"""
+    """Main function to run Supabase integration diagnostics"""
+    print("🚀 SentraTech Supabase Integration Diagnostics")
+    print("Testing for 'Failed to submit contact request' error causes")
+    print("=" * 80)
+    
     tester = SupabaseIntegrationTester()
+    success = tester.run_comprehensive_diagnostics()
     
-    print("🔍 SentraTech Supabase Integration Testing")
-    print("Testing Demo Request and Contact Sales functionality")
-    print("-" * 60)
-    
-    # Run comprehensive tests
-    is_ready = tester.run_comprehensive_supabase_tests()
-    
-    print(f"\n{'='*60}")
-    if is_ready:
-        print("🎉 SUPABASE INTEGRATION IS READY FOR PRODUCTION!")
+    if success:
+        print(f"\n🎉 DIAGNOSTIC COMPLETE - Issues identified and solutions provided")
     else:
-        print("⚠️ SUPABASE INTEGRATION NEEDS ATTENTION BEFORE PRODUCTION")
-    print(f"{'='*60}")
+        print(f"\n🚨 DIAGNOSTIC COMPLETE - Critical issues found requiring immediate attention")
     
-    return is_ready
-
+    return success
 
 if __name__ == "__main__":
     main()
