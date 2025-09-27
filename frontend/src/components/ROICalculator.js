@@ -5,7 +5,7 @@ import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { 
-  Calculator, TrendingUp, DollarSign, Clock,
+  Calculator, TrendingUp, TrendingDown, DollarSign, Clock,
   Users, Zap, Loader2, Target, Mail, X, 
   ArrowDown, ArrowUp, Sparkles
 } from 'lucide-react';
