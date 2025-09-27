@@ -93,7 +93,7 @@ class SupabaseSchemaUpdatedTester:
         # Test data as specified in the review request
         test_data = {
             "name": "Updated Schema Test",  # This should map to user_name in Supabase
-            "email": "updated@schema.test",
+            "email": "updated@example.com",
             "company": "Updated Schema Company",
             "phone": "+1555123456",
             "call_volume": "35,000",
