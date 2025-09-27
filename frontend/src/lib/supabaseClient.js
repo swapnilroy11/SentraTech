@@ -59,15 +59,14 @@ export const insertDemoRequest = async (formData) => {
   try {
     console.log('Submitting demo request to Supabase...', formData);
     
-    // Insert into Supabase database
+    // Insert into Supabase database (only fields that exist in the table)
     const { data, error } = await supabase
       .from('demo_requests')
       .insert([{
         "User Name": formData.name,
         email: formData.email,
         company: formData.company,
-        phone: formData.phone || null,
-        message: formData.message || null
+        phone: formData.phone || null
       }], { returning: 'minimal' }); // Use minimal returning to avoid RLS SELECT issues
 
     if (error) {
