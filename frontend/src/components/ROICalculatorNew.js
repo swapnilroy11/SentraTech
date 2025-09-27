@@ -474,7 +474,7 @@ const ROICalculatorNew = () => {
                     <Input
                       type="number"
                       value={periodMonths}
-                      onChange={(e) => setPeriodMonths(Math.max(1, Math.min(36, parseInt(e.target.value) || 12))}
+                      onChange={(e) => setPeriodMonths(Math.max(1, Math.min(36, parseInt(e.target.value) || 12)))}
                       className="bg-[rgb(26,28,30)] border-[rgba(255,255,255,0.1)] text-white"
                       min="1"
                       max="36"
