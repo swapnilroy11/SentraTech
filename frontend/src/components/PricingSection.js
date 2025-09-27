@@ -141,7 +141,7 @@ const PricingSection = () => {
       <section id="pricing" className="py-12 bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)]">
         <div className="container mx-auto px-6">
           {/* Section Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <Badge className="mb-4 bg-[rgba(0,255,132,0.1)] text-[#00FF84] border-[#00FF84]/30 px-3 py-1">
               <Star className="mr-2" size={14} />
               Transparent Pricing
