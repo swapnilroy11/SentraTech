@@ -169,42 +169,53 @@ const PricingSection = () => {
         <div className="container mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
-              <Star className="mr-2" size={14} />
-              Transparent Pricing
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 font-rajdhani">
-              <span className="text-[#F8F9FA]">Choose Your</span>
-              <br />
-              <span className="text-[#00FF41]">Growth Plan</span>
-            </h2>
-            <p className="text-xl text-[rgb(218,218,218)] max-w-3xl mx-auto leading-relaxed mb-8">
-              Scale your customer support operations with our flexible pricing tiers. 
-              Start small and grow as your business expands.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Badge className="mb-6 bg-[rgba(0,255,132,0.1)] text-[#00FF84] border-[#00FF84]/30 px-4 py-2">
+                <Star className="mr-2" size={16} />
+                Transparent Pricing
+              </Badge>
+              <h2 className="text-5xl md:text-6xl font-extrabold mb-6 font-inter">
+                <span className="text-white">Simple, Transparent</span>
+                <br />
+                <span className="text-[#00FF84]">Pricing Plans</span>
+              </h2>
+              <p className="text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed mb-10">
+                Choose the perfect plan for your business. Scale your AI-powered customer support 
+                with flexible pricing that grows with you.
+              </p>
+            </motion.div>
             
-            {/* Billing Period Toggle - 24 months vs 36 months */}
-            <div className="flex items-center justify-center space-x-6 mb-12">
-              <span className={`text-sm font-medium ${term === '24m' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
+            {/* Billing Period Toggle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center justify-center space-x-8 mb-12"
+            >
+              <span className={`text-lg font-semibold transition-colors ${term === '24m' ? 'text-[#00FF84]' : 'text-gray-500'}`}>
                 24 Months
               </span>
               <button
                 onClick={handleToggleChange}
-                className="relative w-16 h-8 bg-[rgb(38,40,42)] rounded-full border border-[rgb(63,63,63)] transition-all duration-300 hover:border-[#00FF41]/50"
+                className="relative w-20 h-10 bg-gray-800 rounded-full border border-gray-700 transition-all duration-300 hover:border-[#00FF84]/50 focus:outline-none focus:ring-2 focus:ring-[#00FF84]/50"
                 aria-pressed={term === "36m"}
-                title="Toggle billing term"
+                aria-label="Toggle billing term"
               >
-                <div className={`absolute w-6 h-6 bg-[#00FF41] rounded-full top-1 transition-all duration-300 shadow-lg shadow-[#00FF41]/30 ${
-                  term === '36m' ? 'left-9' : 'left-1'
+                <div className={`absolute w-8 h-8 bg-[#00FF84] rounded-full top-1 transition-all duration-300 shadow-lg shadow-[#00FF84]/40 ${
+                  term === '36m' ? 'left-11' : 'left-1'
                 }`} />
               </button>
-              <span className={`text-sm font-medium ${term === '36m' ? 'text-[#00FF41]' : 'text-[rgb(161,161,170)]'}`}>
+              <span className={`text-lg font-semibold transition-colors ${term === '36m' ? 'text-[#00FF84]' : 'text-gray-500'}`}>
                 36 Months 
-                <Badge className="ml-2 bg-[#00FF41] text-[rgb(17,17,19)] text-xs font-semibold px-2 py-1">
+                <Badge className="ml-3 bg-[#00FF84] text-black text-sm font-bold px-3 py-1">
                   Save 10%
                 </Badge>
               </span>
-            </div>
+            </motion.div>
           </div>
 
           {/* Pricing Cards */}
