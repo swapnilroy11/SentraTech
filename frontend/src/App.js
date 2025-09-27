@@ -10,7 +10,6 @@ import PageTransition from "./components/PageTransition";
 import Footer from "./components/Footer";
 import SpaceBackground from "./components/SpaceBackground";
 import FloatingNavScrollable from "./components/FloatingNavScrollable";
-import ChatWidget from "./components/ChatWidget";
 import Analytics from "./components/Analytics";
 import ScrollToTop from "./components/ScrollToTop";
 import CookieBanner from "./components/CookieBanner";
