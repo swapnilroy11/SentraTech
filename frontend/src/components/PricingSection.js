@@ -195,7 +195,7 @@ const PricingSection = () => {
                 aria-pressed={term === "36m"}
                 aria-label="Toggle billing term"
               >
-                <div className={`absolute w-8 h-8 bg-[#00FF84] rounded-full top-1 transition-all duration-300 shadow-lg shadow-[#00FF84]/40 ${
+                <div className={`absolute w-8 h-8 bg-[#00FF41] rounded-full top-1 transition-all duration-300 shadow-lg shadow-[#00FF41]/40 ${
                   term === '36m' ? 'left-11' : 'left-1'
                 }`} />
               </button>
