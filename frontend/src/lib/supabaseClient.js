@@ -157,7 +157,7 @@ export const insertContactRequest = async (formData) => {
     
     // Insert into Supabase database with new plan metadata fields
     const { data, error } = await supabase
-      .from('Contact Request')
+      .from('Contract Sale Request')
       .insert([{
         full_name: formData.fullName,
         work_email: formData.workEmail.toLowerCase().trim(),
