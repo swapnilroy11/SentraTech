@@ -51,6 +51,37 @@ const PricingSection = () => {
         "Email support",
         "Onboarding & integration (up to 5 hrs)"
       ],
+      detailedFeatures: [
+        {
+          category: "AI Capabilities",
+          items: [
+            "Intent recognition & routing",
+            "Sentiment analysis",
+            "Auto-response generation",
+            "Basic NLP processing"
+          ]
+        },
+        {
+          category: "Analytics & Reporting", 
+          items: [
+            "Real-time dashboard",
+            "Basic performance metrics",
+            "Monthly reports",
+            "Cost savings tracking"
+          ]
+        },
+        {
+          category: "Support & Integration",
+          items: [
+            "Email support (24-hour response)",
+            "Standard API access",
+            "Basic webhooks",
+            "Essential training materials"
+          ]
+        }
+      ],
+      savings: "Typical 40-60% cost reduction vs traditional support",
+      setupTime: "2-3 weeks",
       ribbon: null,
       accent: false
     },
@@ -70,6 +101,37 @@ const PricingSection = () => {
         "24/7 priority support",
         "Enhanced compliance & reporting"
       ],
+      detailedFeatures: [
+        {
+          category: "Advanced AI Features",
+          items: [
+            "Multi-language support (12+ languages)",
+            "Advanced conversation flow management",
+            "Predictive customer behavior analysis",
+            "Custom AI model fine-tuning"
+          ]
+        },
+        {
+          category: "Enterprise Analytics",
+          items: [
+            "Advanced BI dashboards",
+            "Custom report builder",
+            "Real-time alerting system",
+            "Trend analysis & forecasting"
+          ]
+        },
+        {
+          category: "Premium Support",
+          items: [
+            "24/7 priority support",
+            "Dedicated customer success manager",
+            "Advanced integration support",
+            "Monthly strategy sessions"
+          ]
+        }
+      ],
+      savings: "Typical 60-75% cost reduction vs traditional support",
+      setupTime: "3-4 weeks",
       ribbon: "Most Popular",
       accent: true
     },
@@ -89,6 +151,37 @@ const PricingSection = () => {
         "White-label & advanced compliance (HIPAA, SOC2)",
         "SLA-backed uptime & response time"
       ],
+      detailedFeatures: [
+        {
+          category: "Enterprise AI Platform",
+          items: [
+            "Dedicated AI model instances",
+            "Custom training on your data",
+            "White-label deployment options",
+            "Advanced workflow automation"
+          ]
+        },
+        {
+          category: "Compliance & Security",
+          items: [
+            "HIPAA, SOC2, GDPR compliance",
+            "Enterprise-grade security",
+            "Custom data retention policies",
+            "Audit trail & logging"
+          ]
+        },
+        {
+          category: "Dedicated Success Team",
+          items: [
+            "Dedicated success manager",
+            "Priority SRE support",
+            "Quarterly business reviews",
+            "Custom integration development"
+          ]
+        }
+      ],
+      savings: "Typical 70-85% cost reduction vs traditional support",
+      setupTime: "4-6 weeks",
       ribbon: null,
       accent: false
     }
