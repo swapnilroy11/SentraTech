@@ -345,18 +345,27 @@ const ROICalculator = () => {
                           value={agentCount}
                           onChange={(e) => {
                             const inputValue = e.target.value;
-                            const numValue = parseInt(inputValue) || 0;
                             
-                            // Always allow the input
-                            setAgentCount(numValue);
-                            
-                            // Show warnings for out-of-range values
-                            if (numValue < 1) {
+                            // Handle empty input
+                            if (inputValue === '') {
+                              setAgentCount('');
                               setAgentWarning('⚠️ Minimum 1 agent required for calculations');
-                            } else if (numValue > 500) {
-                              setAgentWarning('⚠️ Values above 500 agents may not be accurate');
-                            } else {
-                              setAgentWarning('');
+                              return;
+                            }
+                            
+                            // Only accept valid numbers (no leading zeros unless it's just "0")
+                            if (/^\d+$/.test(inputValue) || inputValue === '0') {
+                              const numValue = parseInt(inputValue);
+                              setAgentCount(numValue);
+                              
+                              // Show warnings for out-of-range values
+                              if (numValue < 1) {
+                                setAgentWarning('⚠️ Minimum 1 agent required for calculations');
+                              } else if (numValue > 500) {
+                                setAgentWarning('⚠️ Values above 500 agents may not be accurate');
+                              } else {
+                                setAgentWarning('');
+                              }
                             }
                           }}
                           className={`bg-[rgb(26,28,30)] text-white rounded-lg text-lg py-3 text-center font-semibold focus:ring-[#00FF41]/20 ${
