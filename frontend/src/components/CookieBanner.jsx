@@ -134,44 +134,57 @@ const CookieBanner = () => {
 
   return (
     <>
-      {/* Cookie Consent Modal - Centered in Viewport */}
+      {/* Cookie Consent Modal - Absolutely Centered */}
       <div
-        className={`fixed inset-0 flex items-center justify-center p-4 transition-opacity duration-500 ease-in-out ${
+        className={`transition-opacity duration-500 ease-in-out ${
           showBanner ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         role="dialog"
         aria-label="Cookie consent dialog"
         aria-describedby="cookie-description"
-        style={{ 
-          zIndex: 99999,
+        style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: showBanner ? 'flex' : 'none'
+          top: '0',
+          left: '0',
+          width: '100vw',
+          height: '100vh',
+          zIndex: 99999,
+          display: showBanner ? 'block' : 'none'
         }}
       >
         {/* Modal Backdrop */}
         <div 
-          className="absolute inset-0 bg-black"
-          style={{ 
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             backdropFilter: 'blur(8px)'
           }}
         />
         
-        {/* Modal Content */}
+        {/* Modal Content - Absolutely Centered */}
         <div 
-          className={`relative bg-[#161B22] border-2 border-[#00FF41] rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl transform transition-all duration-500 ${
+          className={`transform transition-all duration-500 ${
             showBanner ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
           }`}
           style={{
-            zIndex: 100000,
-            maxHeight: '90vh',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '480px',
+            maxHeight: '80vh',
             overflowY: 'auto',
             backgroundColor: '#161B22',
-            border: '2px solid #00FF41'
+            border: '2px solid #00FF41',
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            zIndex: 100000
           }}
         >
           {/* Header */}
