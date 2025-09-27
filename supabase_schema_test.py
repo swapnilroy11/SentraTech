@@ -355,7 +355,7 @@ class SupabaseSchemaUpdatedTester:
                     # Look for our test request
                     found_request = None
                     for req in requests_data:
-                        if req.get("email") == "updated@schema.test":
+                        if req.get("email") == "updated@example.com":
                             found_request = req
                             break
                     
