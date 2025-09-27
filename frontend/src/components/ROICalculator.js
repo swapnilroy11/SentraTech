@@ -321,11 +321,15 @@ const ROICalculator = () => {
                           type="range"
                           min="1"
                           max="500"
-                          value={agentCount}
-                          onChange={(e) => setAgentCount(parseInt(e.target.value))}
+                          value={Math.min(Math.max(agentCount, 1), 500)}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            setAgentCount(value);
+                            setAgentWarning(''); // Clear warning when using slider
+                          }}
                           className="w-full h-2 bg-slate-700 rounded-full appearance-none cursor-pointer slider-gradient"
                           style={{
-                            background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(agentCount/500)*100}%, #374151 ${(agentCount/500)*100}%, #374151 100%)`
+                            background: `linear-gradient(to right, #00FF41 0%, #00FF41 ${(Math.min(Math.max(agentCount, 1), 500)/500)*100}%, #374151 ${(Math.min(Math.max(agentCount, 1), 500)/500)*100}%, #374151 100%)`
                           }}
                         />
                         <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
