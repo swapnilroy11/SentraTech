@@ -138,7 +138,7 @@ const PricingSection = () => {
 
   return (
     <>
-      <section id="pricing" className="py-20 bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)]">
+      <section id="pricing" className="py-12 bg-gradient-to-br from-[rgb(26,28,30)] to-[rgb(17,17,19)]">
         <div className="container mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-8">
