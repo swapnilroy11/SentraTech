@@ -208,7 +208,7 @@ const CookieBanner = () => {
           <div className="flex flex-col gap-3">
             <button
               onClick={handleAcceptAll}
-              className="w-full px-6 py-3 bg-[#00FF41] text-black hover:bg-[#00DD38] font-semibold text-sm 
+              className="w-full px-6 py-2.5 bg-[#00FF41] text-black hover:bg-[#00DD38] font-semibold text-sm 
                        rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
                        focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50 transform hover:scale-105"
               disabled={isLoading}
@@ -217,10 +217,10 @@ const CookieBanner = () => {
               {isLoading ? 'Processing...' : 'Accept All Cookies'}
             </button>
             
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <button
                 onClick={handleRejectAll}
-                className="flex-1 px-4 py-3 border-2 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:text-white hover:border-[rgb(161,161,170)]
+                className="flex-1 px-3 py-2.5 border-2 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:text-white hover:border-[rgb(161,161,170)]
                          font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
                          focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
                 disabled={isLoading}
@@ -231,7 +231,7 @@ const CookieBanner = () => {
               
               <button
                 onClick={handleManagePreferences}
-                className="flex-1 px-4 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10 
+                className="flex-1 px-3 py-2.5 border-2 border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10 
                          font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
                          focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
                 disabled={isLoading}
