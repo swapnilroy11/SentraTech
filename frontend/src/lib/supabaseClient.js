@@ -140,7 +140,8 @@ export const insertROIReport = async (email, roiData) => {
 // Helper function to insert a contact request
 export const insertContactRequest = async (formData) => {
   try {
-    console.log('Submitting contact request to Supabase...', formData);
+    console.log('🔍 Submitting contact request to Supabase...', formData);
+    console.log('🔍 Form data fields:', Object.keys(formData));
     
     // Get client IP and other metadata
     const clientMetadata = {
