@@ -296,19 +296,8 @@ const PricingSection = () => {
                   </ul>
                 </div>
 
-                {/* Additional Features */}
+                {/* Spacer to maintain layout */}
                 <div className="mb-6 flex-1">
-                  <ul className="space-y-3">
-                    {plan.additionalFeatures.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle 
-                          size={18} 
-                          className="text-[#00FF84] flex-shrink-0 mt-0.5" 
-                        />
-                        <span className="text-gray-300 text-sm leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
 
                 {/* Value Metrics - Optimized */}
