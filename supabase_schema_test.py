@@ -213,7 +213,7 @@ class SupabaseSchemaUpdatedTester:
         # Test data with comprehensive message
         message_test_data = {
             "name": "Message Field Test User",
-            "email": "message.field@schema.test",
+            "email": "message.field@example.com",
             "company": "Message Field Test Company",
             "phone": "+1555456789",
             "call_volume": "35,000",
