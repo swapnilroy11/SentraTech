@@ -141,15 +141,23 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     };
   }, [isOpen, onClose]);
 
-  // Update selected plan when prop changes
+  // Update prefill data when props change
   useEffect(() => {
-    if (selectedPlan) {
+    if (prefill) {
+      setFormData(prev => ({
+        ...prev,
+        planSelected: prefill.planSelected || prev.planSelected,
+        planId: prefill.planId || prev.planId,
+        billingTerm: prefill.billingTerm || prev.billingTerm,
+        priceDisplay: prefill.priceDisplay || prev.priceDisplay
+      }));
+    } else if (selectedPlan && selectedPlan !== formData.planSelected) {
       setFormData(prev => ({
         ...prev,
         planSelected: selectedPlan
       }));
     }
-  }, [selectedPlan]);
+  }, [selectedPlan, prefill]);
 
   const monthlyVolumeOptions = [
     { value: '<10k', label: '<10k' },
