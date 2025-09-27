@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { Label } from './ui/label';
+import { Label } = './ui/label';
 import { 
   Calculator, TrendingUp, TrendingDown, DollarSign, Clock,
   Users, Zap, Loader2, Target, Mail, X, 
@@ -14,29 +14,27 @@ import { COUNTRIES } from '../utils/costBaselines';
 import { supabase } from '../lib/supabaseClient';
 
 const ROICalculator = () => {
-  // State Management - Updated for new per-1,000 bundle logic
+  // State Management - Updated for new per-1,000 bundle logic but keeping UI similar
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [mode, setMode] = useState('call_volume'); // 'agent_count', 'call_volume', 'per_bundle'
   
-  // Bundle configuration (per-1,000 bundle pricing)
-  const [calls, setCalls] = useState(1000);
-  const [interactions, setInteractions] = useState(1000);
-  const [callAHT, setCallAHT] = useState(8);
-  const [interactionAHT, setInteractionAHT] = useState(5);
+  // Bundle configuration (per-1,000 bundle pricing) - but displayed as familiar inputs
+  const [agentCount, setAgentCount] = useState(10); // UI shows this, but maps to new logic
+  const [ahtMinutes, setAhtMinutes] = useState(7); // Combined AHT for simplicity
   const [automationPct, setAutomationPct] = useState(60); // UI percentage (0-100)
+  const [manualCallVolume, setManualCallVolume] = useState(null); // Manual override
+  const [useManualVolume, setUseManualVolume] = useState(false); // Toggle
   
-  // Mode-specific inputs
-  const [agentCount, setAgentCount] = useState(10);
-  const [volumeSubMode, setVolumeSubMode] = useState('auto'); // 'auto', 'manual'
-  const [manualAgentCount, setManualAgentCount] = useState(10);
+  // Internal bundle calculations (hidden from UI to maintain familiar interface)
+  const calls = 1000; // Fixed at 1000 for per-bundle pricing
+  const interactions = 1000; // Fixed at 1000 for per-bundle pricing
+  const callAHT = ahtMinutes; // Use the UI AHT for calls
+  const interactionAHT = Math.max(1, ahtMinutes * 0.6); // Estimate interaction AHT as 60% of call AHT
   
-  // Business settings
+  // Business settings (hidden in advanced section)
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [sentraPricePer1k, setSentraPricePer1k] = useState(1200);
   const [bundlesPerMonth, setBundlesPerMonth] = useState(1);
   const [implCost, setImplCost] = useState(0);
-  
-  // Advanced settings
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [customAgentHourly, setCustomAgentHourly] = useState(null);
   const [customBpoPerMin, setCustomBpoPerMin] = useState(null);
   
@@ -45,6 +43,8 @@ const ROICalculator = () => {
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [warnings, setWarnings] = useState({});
+  const [agentWarning, setAgentWarning] = useState('');
+  const [ahtWarning, setAhtWarning] = useState('');
 
   // Email modal state (kept from original)
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -64,14 +64,15 @@ const ROICalculator = () => {
         setIsCalculating(true);
         setError(null);
 
+        // Map old UI inputs to new calculation logic
         const calculationInputs = {
-          calls,
-          interactions,
-          callAHT,
-          interactionAHT,
+          calls: calls, // Fixed 1000 for per-bundle
+          interactions: interactions, // Fixed 1000 for per-bundle
+          callAHT: callAHT,
+          interactionAHT: interactionAHT,
           automationPct: automationPct / 100, // Convert from percentage
-          mode,
-          agentCount: mode === 'agent_count' ? agentCount : null,
+          mode: useManualVolume ? 'agent_count' : 'call_volume', // Map UI toggle to modes
+          agentCount: useManualVolume ? agentCount : null,
           country: selectedCountry,
           agentHourlyLoaded: customAgentHourly,
           bpoPerMin: customBpoPerMin,
@@ -79,21 +80,45 @@ const ROICalculator = () => {
           bundlesPerMonth,
           implCost,
           periodMonths: 12,
-          volumeSubMode: mode === 'call_volume' ? volumeSubMode : 'auto',
-          manualAgentCount: (mode === 'call_volume' && volumeSubMode === 'manual') ? manualAgentCount : null,
+          volumeSubMode: useManualVolume ? 'manual' : 'auto',
+          manualAgentCount: useManualVolume ? agentCount : null,
           showInternalBreakdown: false
         };
 
         const newResults = calculateROI(calculationInputs);
-        setResults(newResults);
+        
+        // Map new results to old result structure for UI compatibility
+        const mappedResults = {
+          ...newResults,
+          // Legacy fields for UI compatibility
+          country: selectedCountry,
+          agentCount: agentCount,
+          ahtMinutes: ahtMinutes,
+          callVolume: Math.round(newResults.total_minutes / ahtMinutes), // Estimate call volume
+          tradCost: newResults.traditional_bpo_cost_per_bundle,
+          aiCost: newResults.sentra_price_per_bundle,
+          tradPerCall: newResults.traditional_bpo_cost_per_bundle / calls,
+          aiPerCall: newResults.sentra_price_per_bundle / calls,
+          monthlySavings: newResults.monthly_savings,
+          annualSavings: newResults.annual_savings,
+          roiPercent: newResults.roi_percent,
+          costReduction: newResults.percent_reduction,
+          isSavings: newResults.is_profitable,
+          isProfit: newResults.is_profitable,
+          costChangePercent: Math.abs(newResults.percent_reduction),
+          roiLossPercent: Math.abs(newResults.roi_percent)
+        };
+        
+        setResults(mappedResults);
+
+        // Input validation warnings (kept from original)
+        setAgentWarning(agentCount < 1 || agentCount > 1000 ? 'Agent count should be between 1-1000' : '');
+        setAhtWarning(ahtMinutes < 1 || ahtMinutes > 60 ? 'AHT should be between 1-60 minutes' : '');
 
         // Update warnings based on results
         const newWarnings = {};
         if (newResults.is_cost_increase) {
           newWarnings.cost_increase = 'Consider increasing automation or renegotiating vendor rates';
-        }
-        if (newResults.payback_months && newResults.payback_months > 24) {
-          newWarnings.long_payback = `Payback period of ${newResults.payback_months.toFixed(1)} months is quite long`;
         }
         setWarnings(newWarnings);
 
@@ -106,48 +131,14 @@ const ROICalculator = () => {
     };
 
     // Validate inputs before calculation
-    if (calls > 0 && interactions > 0 && callAHT > 0 && interactionAHT > 0) {
+    if (agentCount > 0 && ahtMinutes > 0) {
       const timer = setTimeout(calculateMetrics, 150); // Debounce
       return () => clearTimeout(timer);
     }
   }, [
-    calls, interactions, callAHT, interactionAHT, automationPct, mode, agentCount,
-    selectedCountry, customAgentHourly, customBpoPerMin, sentraPricePer1k, bundlesPerMonth,
-    implCost, volumeSubMode, manualAgentCount
+    agentCount, ahtMinutes, automationPct, selectedCountry, useManualVolume, manualCallVolume,
+    customAgentHourly, customBpoPerMin, sentraPricePer1k, bundlesPerMonth, implCost
   ]);
-          // Convert empty strings to numbers for calculation
-          const agentNum = agentCount === '' ? 0 : parseInt(agentCount);
-          const ahtNum = ahtMinutes === '' ? 0 : parseInt(ahtMinutes);
-          
-          if (agentNum > 0 && ahtNum > 0) {
-            const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
-            const metrics = calculateROI(selectedCountry, agentNum, ahtNum, callVolumeOverride);
-          
-          console.log('ROI Results:', {
-            country: metrics.country,
-            costReduction: metrics.costReduction,
-            roiPercent: metrics.roiPercent,
-            tradCost: metrics.tradCost,
-            aiCost: metrics.aiCost,
-            monthlySavings: metrics.monthlySavings
-          });
-            setResults(metrics);
-            setError(null);
-          } else {
-            // Reset to empty results if invalid inputs
-            setResults({});
-          }
-        }
-      } catch (error) {
-        console.error('Error calculating ROI:', error);
-        setError('Calculation error. Please check your inputs.');
-      } finally {
-        setTimeout(() => setIsCalculating(false), 100);
-      }
-    };
-
-    // Calculate immediately, no debouncing
-    calculateMetrics();
   }, [selectedCountry, agentCount, ahtMinutes, useManualVolume, manualCallVolume]);
 
   // Handle country selection
