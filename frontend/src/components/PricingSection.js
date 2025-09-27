@@ -267,86 +267,130 @@ const PricingSection = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-start">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch">
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 h-[520px] ${
+                className={`rounded-2xl p-8 relative shadow-xl transition-all duration-300 flex flex-col ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
                 }`}
+                style={{ minHeight: '800px' }}
               >
-                {/* Popular Badge - Fixed positioning */}
+                {/* Popular Badge */}
                 {plan.ribbon && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
-                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-3 py-1 text-sm font-semibold whitespace-nowrap">
-                      <Crown size={14} className="mr-1" />
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
+                      <Crown size={16} className="mr-2" />
                       {plan.ribbon}
                     </Badge>
                   </div>
                 )}
 
-                {/* Plan Icon & Header - Fixed height: 60px */}
-                <div className="mb-4 flex items-center gap-3 h-[60px]">
+                {/* Plan Icon & Header */}
+                <div className="mb-6 flex items-center gap-4">
                   <div 
-                    className="h-12 w-12 rounded-lg flex items-center justify-center text-green-400 text-lg flex-shrink-0"
-                    style={{ backgroundColor: plan.accent ? `${MATRIX_GREEN}20` : "rgba(255,255,255,0.05)" }}
+                    className="h-16 w-16 rounded-xl flex items-center justify-center text-xl flex-shrink-0 font-bold"
+                    style={{ 
+                      backgroundColor: plan.accent ? `${MATRIX_GREEN}20` : "rgba(255,255,255,0.05)",
+                      color: plan.accent ? MATRIX_GREEN : "#00DDFF"
+                    }}
                   >
                     ★
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-xl font-bold mb-1 truncate" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                    <h3 className="text-2xl font-bold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                       {plan.title}
                       {plan.subtitle && (
-                        <span className="text-sm font-normal text-gray-400 ml-2">({plan.subtitle})</span>
+                        <span className="text-base font-normal text-gray-400 ml-2">({plan.subtitle})</span>
                       )}
                     </h3>
-                    <p className="text-sm text-gray-300 line-clamp-2">{plan.tagline}</p>
+                    <p className="text-base text-gray-300 leading-relaxed">{plan.tagline}</p>
                   </div>
                 </div>
 
-                {/* Price Display - Fixed height: 80px */}
-                <div className="mb-4 h-[80px]">
-                  <div className="text-3xl font-extrabold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
-                    ${plan.price.toLocaleString()}
+                {/* Price Display */}
+                <div className="mb-8">
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <span className="text-4xl font-extrabold" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                      ${plan.price.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-gray-400 font-medium">/month</span>
                   </div>
-                  <div className="text-xs text-gray-400 mb-1">per bundle (1,000 calls + 1,000 interactions)</div>
+                  <div className="text-sm text-gray-400 mb-2 font-medium">per bundle (1,000 calls + 1,000 interactions)</div>
                   {plan.priceSubtext && (
-                    <div className="text-xs text-gray-500">{plan.priceSubtext}</div>
+                    <div className="text-sm text-orange-400 font-medium">{plan.priceSubtext}</div>
                   )}
                   {term === "36m" && (
-                    <div className="text-xs text-green-400 mt-1">
-                      Was ${basePrices[plan.id].toLocaleString()} (10% savings)
+                    <div className="text-sm text-green-400 mt-2 font-semibold">
+                      Was ${basePrices[plan.id].toLocaleString()} • Save 10%
                     </div>
                   )}
                 </div>
 
-                {/* Features List - Fixed height: 260px */}
-                <div className="h-[260px] overflow-y-auto mb-4">
-                  <ul className="space-y-2 text-sm text-gray-300">
+                {/* Key Benefits */}
+                <div className="mb-8">
+                  <h4 className="text-lg font-semibold text-white mb-4">Key Features</h4>
+                  <ul className="space-y-3">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2">
+                      <li key={i} className="flex items-start gap-3">
                         <CheckCircle 
-                          size={16} 
+                          size={18} 
                           className={`mt-0.5 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
                         />
-                        <span className="leading-relaxed">{feature}</span>
+                        <span className="text-gray-300 leading-relaxed font-medium">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* CTA Button - Precisely 72px from bottom for ALL cards */}
-                <div className="absolute bottom-[24px] left-6 right-6">
+                {/* Detailed Features */}
+                <div className="mb-8 flex-1">
+                  <h4 className="text-lg font-semibold text-white mb-4">What's Included</h4>
+                  <div className="space-y-5">
+                    {plan.detailedFeatures.map((category, i) => (
+                      <div key={i}>
+                        <h5 className="text-sm font-semibold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
+                          {category.category}
+                        </h5>
+                        <ul className="space-y-2 ml-4">
+                          {category.items.map((item, j) => (
+                            <li key={j} className="text-sm text-gray-400 flex items-start gap-2">
+                              <span className="text-gray-500 mt-1">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Value Proposition */}
+                <div className="mb-8 p-4 rounded-lg" style={{backgroundColor: plan.accent ? `${MATRIX_GREEN}10` : "rgba(255,255,255,0.03)"}}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-300">Expected Savings</span>
+                    <span className="text-sm font-bold" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
+                      {plan.savings}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-gray-300">Setup Time</span>
+                    <span className="text-sm font-medium text-gray-400">{plan.setupTime}</span>
+                  </div>
+                </div>
+
+                {/* CTA Button - Always at bottom */}
+                <div className="mt-auto">
                   <Button
                     onClick={() => handleContact(plan)}
-                    className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-2"
+                    className="w-full py-4 rounded-lg font-bold text-lg text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-3"
                     style={{ background: MATRIX_GREEN }}
                   >
                     {plan.cta}
                   </Button>
-                  <div className="text-xs text-gray-500 text-center leading-tight h-[28px] flex items-center justify-center">
+                  <div className="text-xs text-gray-500 text-center leading-relaxed">
                     By clicking you agree to our Privacy Policy. {plan.id === 'starter' && 'Pilot requires prepayment.'}
                   </div>
                 </div>
