@@ -157,7 +157,7 @@ const PricingSection = () => {
             </p>
             
             {/* Billing Period Toggle */}
-            <div className="flex items-center justify-center space-x-6 mb-8">
+            <div className="flex items-center justify-center space-x-6 mb-6">
               <span className={`text-base font-semibold transition-colors ${term === '24m' ? 'text-[#00FF84]' : 'text-gray-500'}`}>
                 24 Months
               </span>
