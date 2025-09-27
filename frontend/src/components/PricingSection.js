@@ -174,11 +174,11 @@ const PricingSection = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 h-[600px] ${
+                className={`rounded-2xl p-6 pb-[100px] relative shadow-xl transition-all duration-300 ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
@@ -229,22 +229,20 @@ const PricingSection = () => {
                   )}
                 </div>
 
-                {/* Features List - Fixed height area */}
-                <div className="h-[280px] overflow-hidden">
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle 
-                          size={16} 
-                          className={`mt-1 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
-                        />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {/* Features List */}
+                <ul className="space-y-2 text-sm text-gray-300">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <CheckCircle 
+                        size={16} 
+                        className={`mt-1 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
+                      />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
 
-                {/* CTA Button - Absolutely positioned at bottom */}
+                {/* CTA Button - Fixed position at bottom with consistent spacing */}
                 <div className="absolute bottom-6 left-6 right-6">
                   <Button
                     onClick={() => handleContact(plan)}
