@@ -44,10 +44,12 @@ export function calculateROI(country, agentCount, ahtMinutes, callVolumeOverride
     callVolume = Math.floor(agentCount * callsPerAgent);
   }
 
-  // Traditional cost
-  const tradCost = agentCount * BASE_COST[country];
+  // Traditional cost (labor-based: scales with call volume)
+  const hourlyRate = BASE_COST[country] / (8 * 22); // Convert monthly agent cost to hourly rate
+  const totalLaborHours = (callVolume * ahtMinutes) / 60; // Total hours needed for all calls
+  const tradCost = totalLaborHours * hourlyRate;
 
-  // AI cost (with 30% profit margin: $154×1.3 ≈ $200/agent·month)
+  // AI cost (infrastructure-based: fixed per agent regardless of call volume)
   const aiCost = agentCount * AI_COST;
 
   // Per-call costs
