@@ -538,7 +538,7 @@ const ROICalculator = () => {
                       ) : (
                         <div className="text-center py-2">
                           <div className="text-xs text-[rgb(161,161,170)] leading-tight">
-                            Auto: {agentCount} agents × {Math.floor((8 * 60 * 22) / ahtMinutes)} calls
+                            Auto: {agentCount === '' ? 0 : agentCount} agents × {(parseInt(ahtMinutes) || 1) > 0 ? Math.floor((8 * 60 * 22) / (parseInt(ahtMinutes) || 1)) : 0} calls
                           </div>
                         </div>
                       )}
