@@ -78,34 +78,11 @@ const PricingSection = () => {
         "24/7 priority support",
         "Enhanced compliance & reporting"
       ],
-      detailedFeatures: [
-        {
-          category: "Advanced AI Features",
-          items: [
-            "Multi-language support (12+ languages)",
-            "Advanced conversation flow management",
-            "Predictive customer behavior analysis",
-            "Custom AI model fine-tuning"
-          ]
-        },
-        {
-          category: "Enterprise Analytics",
-          items: [
-            "Advanced BI dashboards",
-            "Custom report builder",
-            "Real-time alerting system",
-            "Trend analysis & forecasting"
-          ]
-        },
-        {
-          category: "Premium Support",
-          items: [
-            "24/7 priority support",
-            "Dedicated customer success manager",
-            "Advanced integration support",
-            "Monthly strategy sessions"
-          ]
-        }
+      highlights: [
+        "Multi-language support (12+ languages)",
+        "Advanced BI & custom reporting",
+        "24/7 priority support",
+        "Dedicated success manager"
       ],
       savings: "Typical 60-75% cost reduction vs traditional support",
       setupTime: "3-4 weeks",
