@@ -83,6 +83,7 @@ create trigger contact_requests_before_update
 
 -- Enable Row Level Security
 alter table public.contact_requests enable row level security;
+alter table public.demo_requests enable row level security;
 
 -- Create RLS policies
 -- Policy for inserting new contact requests (anyone can submit)
