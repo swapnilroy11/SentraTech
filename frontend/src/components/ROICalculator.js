@@ -407,8 +407,8 @@ const ROICalculator = () => {
                           }}
                         />
                         <div className="flex justify-between text-xs text-[rgb(161,161,170)] mt-1">
-                          <span>2min</span>
-                          <span>20min</span>
+                          <span>1min</span>
+                          <span>60min</span>
                         </div>
                       </div>
                       
