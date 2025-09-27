@@ -831,6 +831,7 @@ class PricingBackendTester:
             
             # Test JSON and Error Handling
             self.test_json_payload_validation()
+            self.test_missing_contact_request_endpoint()
             self.test_backend_error_handling()
             
         except Exception as e:
