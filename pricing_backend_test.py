@@ -622,7 +622,13 @@ class PricingBackendTester:
         
         try:
             print(f"🔍 Testing incomplete data handling...")
-            response = requests.post(f"{BACKEND_URL}/contact/request", json=incomplete_data, timeout=20)
+            # Convert to demo request format
+            demo_incomplete_data = {
+                "name": incomplete_data["full_name"],
+                # Missing email - should cause validation error
+                "company": incomplete_data["company_name"]
+            }
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_incomplete_data, timeout=20)
             
             # Backend should return validation error
             if response.status_code in [400, 422]:
