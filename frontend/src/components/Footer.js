@@ -41,75 +41,50 @@ const Footer = () => {
     <footer className="bg-[rgb(26,28,30)] border-t border-[rgba(255,255,255,0.1)] mt-20">
       <div className="container mx-auto px-6">
         {/* Main Footer Content */}
-        <div className="py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Brand Section */}
-            <div className="lg:col-span-4 space-y-6">
+            <div className="lg:col-span-2 space-y-4">
               {/* SentraTech Logo */}
               <SentraTechLogo 
                 width={48} 
                 height={48} 
                 showText={true} 
                 textColor="#00FF41"
-                className="mb-6"
+                className="mb-4"
               />
               
-              <p className="text-[rgb(218,218,218)] text-lg leading-relaxed max-w-md">
+              <p className="text-[rgb(218,218,218)] text-base leading-relaxed max-w-md">
                 Transforming customer support with AI-powered automation and human expertise. 
                 Reduce costs by 40-60% while improving satisfaction scores.
               </p>
             </div>
 
             {/* Links Sections */}
-            <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-              {/* Product Links */}
-              <div>
-                <h3 className="text-white font-semibold text-lg mb-6">Product</h3>
-                <ul className="space-y-3">
-                  {footerLinks.product.map((link, index) => (
-                    <li key={index}>
-                      <a 
-                        href={link.href}
-                        className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors text-sm group flex items-center"
-                      >
-                        <span>{link.name}</span>
-                        <ArrowRight size={12} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Company Links */}
               <div>
-                <h3 className="text-white font-semibold text-lg mb-6">Company</h3>
-                <ul className="space-y-3">
+                <h3 className="text-white font-semibold text-base mb-4">Company</h3>
+                <ul className="space-y-2">
                   {footerLinks.company.map((link, index) => (
                     <li key={index}>
                       <a 
                         href={link.href}
-                        className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors text-sm group flex items-center"
+                        className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors text-sm group flex items-center"
                       >
                         <span>{link.name}</span>
-                        <ArrowRight size={12} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
+                        <ArrowRight size={10} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
                       </a>
                     </li>
                   ))}
-                </ul>
-              </div>
-
-              {/* Resources Links */}
-              <div>
-                <h3 className="text-white font-semibold text-lg mb-6">Resources</h3>
-                <ul className="space-y-3">
-                  {footerLinks.resources.map((link, index) => (
+                  {footerLinks.support.map((link, index) => (
                     <li key={index}>
                       <a 
                         href={link.href}
-                        className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors text-sm group flex items-center"
+                        className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors text-sm group flex items-center"
                       >
                         <span>{link.name}</span>
-                        <ArrowRight size={12} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
+                        <ArrowRight size={10} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
                       </a>
                     </li>
                   ))}
@@ -117,21 +92,21 @@ const Footer = () => {
               </div>
 
               {/* Legal Links */}
-              <div>
-                <h3 className="text-white font-semibold text-lg mb-6">Legal</h3>
-                <ul className="space-y-3">
+              <div className="md:col-span-2">
+                <h3 className="text-white font-semibold text-base mb-4">Legal</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {footerLinks.legal.map((link, index) => (
-                    <li key={index}>
+                    <div key={index}>
                       <a 
                         href={link.href}
-                        className="text-[rgb(218,218,218)] hover:text-[#DAFF01] transition-colors text-sm group flex items-center"
+                        className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors text-sm group flex items-center"
                       >
                         <span>{link.name}</span>
-                        <ArrowRight size={12} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
+                        <ArrowRight size={10} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
                       </a>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>
