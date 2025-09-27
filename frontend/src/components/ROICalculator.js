@@ -410,7 +410,7 @@ const ROICalculator = () => {
                           min="1"
                           max="60"
                           step="1"
-                          value={Math.min(Math.max(ahtMinutes, 1), 60)}
+                          value={Math.min(Math.max(parseInt(ahtMinutes) || 1, 1), 60)}
                           onChange={(e) => {
                             const value = parseInt(e.target.value);
                             setAhtMinutes(value);
