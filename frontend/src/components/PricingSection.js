@@ -51,14 +51,9 @@ const PricingSection = () => {
         "Up to 1,000 calls + 1,000 interactions per bundle",
         "Basic AI automation (60% baseline)",
         "Core analytics dashboard",
-        "Email support",
-        "Onboarding & integration (up to 5 hrs)"
-      ],
-      additionalFeatures: [
-        "Intent recognition & auto-routing",
-        "Real-time analytics dashboard", 
-        "Standard API & webhooks",
         "Email support (24hr response)",
+        "Guided onboarding (up to 5 hrs)",
+        "Standard API & webhooks",
         "Standard service guarantee"
       ],
       savings: "40-60%",
