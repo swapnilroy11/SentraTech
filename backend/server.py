@@ -1186,6 +1186,7 @@ async def store_demo_request_optimized(demo_request: DemoRequest, reference_id: 
             "company": demo_request.company,
             "phone": demo_request.phone,
             "call_volume": demo_request.call_volume,
+            "interaction_volume": demo_request.interaction_volume,
             "message": demo_request.message,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "source": "website_form_optimized"
