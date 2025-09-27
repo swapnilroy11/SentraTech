@@ -62,6 +62,23 @@ const CookieBanner = () => {
     }, 500);
   };
 
+  const handleRejectAll = async () => {
+    setIsLoading(true);
+    
+    // Save minimal consent (only essential cookies)
+    const essentialOnly = { analytics: false, marketing: false };
+    localStorage.setItem('cookieConsent', JSON.stringify(essentialOnly));
+    
+    // Initialize analytics with no consent
+    initializeAnalyticsBasedOnConsent(essentialOnly);
+    
+    // Hide banner with animation
+    setTimeout(() => {
+      setShowBanner(false);
+      setIsLoading(false);
+    }, 500);
+  };
+
   const handleManagePreferences = () => {
     setShowPreferences(true);
   };
