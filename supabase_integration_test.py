@@ -26,6 +26,12 @@ class SupabaseIntegrationTester:
         self.test_results = []
         self.failed_tests = []
         self.passed_tests = []
+        self.supabase_headers = {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": f"Bearer {SUPABASE_ANON_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+        }
         
     def log_test(self, test_name: str, passed: bool, details: str = ""):
         """Log test results"""
