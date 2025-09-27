@@ -166,9 +166,6 @@ export const insertContactRequest = async (formData) => {
         company_website: formData.companyWebsite || null,
         monthly_volume: formData.monthlyVolume,
         plan_selected: formData.planSelected || null,
-        plan_id: formData.planId || null,
-        billing_term: formData.billingTerm || null,
-        price_display: formData.priceDisplay || null,
         preferred_contact_method: formData.preferredContactMethod || 'email',
         message: formData.message || null,
         utm_data: formData.utmData || {},
@@ -176,9 +173,7 @@ export const insertContactRequest = async (formData) => {
           ...clientMetadata,
           deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
         },
-        consent_marketing: formData.consentMarketing || false,
-        status: 'pending',
-        created_at: new Date().toISOString()
+        consent_marketing: formData.consentMarketing || false
       }], { returning: 'minimal' });
 
     if (error) {
