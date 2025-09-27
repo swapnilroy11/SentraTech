@@ -53,8 +53,8 @@ const ROICalculator = () => {
           const ahtNum = ahtMinutes === '' ? 0 : parseInt(ahtMinutes);
           
           if (agentNum > 0 && ahtNum > 0) {
-          const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
-          const metrics = calculateROI(selectedCountry, agentCount, ahtMinutes, callVolumeOverride);
+            const callVolumeOverride = useManualVolume && manualCallVolume ? manualCallVolume : null;
+            const metrics = calculateROI(selectedCountry, agentNum, ahtNum, callVolumeOverride);
           
           console.log('ROI Results:', {
             country: metrics.country,
