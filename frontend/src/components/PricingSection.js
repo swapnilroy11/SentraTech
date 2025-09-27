@@ -51,34 +51,11 @@ const PricingSection = () => {
         "Email support",
         "Onboarding & integration (up to 5 hrs)"
       ],
-      detailedFeatures: [
-        {
-          category: "AI Capabilities",
-          items: [
-            "Intent recognition & routing",
-            "Sentiment analysis",
-            "Auto-response generation",
-            "Basic NLP processing"
-          ]
-        },
-        {
-          category: "Analytics & Reporting", 
-          items: [
-            "Real-time dashboard",
-            "Basic performance metrics",
-            "Monthly reports",
-            "Cost savings tracking"
-          ]
-        },
-        {
-          category: "Support & Integration",
-          items: [
-            "Email support (24-hour response)",
-            "Standard API access",
-            "Basic webhooks",
-            "Essential training materials"
-          ]
-        }
+      highlights: [
+        "Intent recognition & auto-routing",
+        "Real-time analytics dashboard", 
+        "Standard API & webhooks",
+        "Email support (24hr response)"
       ],
       savings: "Typical 40-60% cost reduction vs traditional support",
       setupTime: "2-3 weeks",
