@@ -88,7 +88,8 @@ const PricingSection = () => {
       additionalFeatures: [
         "Multi-language support (12+ languages)",
         "Advanced BI & custom reporting",
-        "Dedicated success manager"
+        "Dedicated success manager",
+        "99.9% uptime guarantee"
       ],
       savings: "60-75%",
       setupTime: "3-4 weeks",
