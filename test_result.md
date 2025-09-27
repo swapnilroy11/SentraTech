@@ -59,7 +59,7 @@
 
 test_plan:
   current_focus:
-    - "Homepage Navigation Button Performance Fix"
+    - "NEW SentraTech Pricing UI Implementation Testing"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
   test_all: false
