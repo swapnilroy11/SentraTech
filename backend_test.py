@@ -15,13 +15,12 @@ import uuid
 BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
 
 class DemoRequestVolumeFieldsTester:
-    """Comprehensive API Load and Stability Testing Framework"""
+    """Demo Request Form Testing with New Volume Fields"""
     
     def __init__(self):
         self.test_results = []
         self.failed_tests = []
         self.passed_tests = []
-        self.load_test_results = {}
         
     def log_test(self, test_name: str, passed: bool, details: str = ""):
         """Log test results"""
