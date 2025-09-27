@@ -704,10 +704,13 @@ CORE PLATFORM CAPABILITIES:
 - Enterprise Integrations: 50+ platforms (Salesforce, HubSpot, Zendesk, ServiceNow)
 - 99.9% Platform Uptime with enterprise-grade security (SOC 2 Type II, GDPR compliant)
 
-PRICING PLANS:
-- Starter: $299/month - Up to 1,000 tickets, basic AI features
-- Growth: $899/month - Up to 5,000 tickets, advanced analytics, integrations
-- Enterprise: Custom pricing - Unlimited tickets, dedicated success manager, custom features
+PRICING PLANS (Per 1,000 Bundle - Calls + Interactions):
+- Starter (Pilot): $1,200/month per bundle - Perfect for small teams testing AI capabilities
+- Growth: $1,650/month per bundle - Most popular plan for growing businesses  
+- Enterprise (Dedicated): $2,000/month per bundle - Full enterprise features and dedicated support
+- 24-month billing: Standard pricing as above
+- 36-month billing: 10% discount (Starter: $1,080, Growth: $1,485, Enterprise: $1,800)
+- Each bundle includes 1,000 calls + 1,000 interactions with advanced AI routing and analytics
 
 KEY BENEFITS & ROI:
 - 40-60% cost reduction in support operations
