@@ -234,7 +234,7 @@ const PricingSection = () => {
                     ? "from-[#0A0F0A] via-[#0E1410] to-[#0A0F0A] ring-2 ring-[#00FF84] shadow-2xl shadow-[#00FF84]/20" 
                     : "from-[#0E0E0E] to-[#1A1A1A] border border-gray-800 hover:border-gray-700"
                 }`}
-                style={{ minHeight: '580px' }}
+                style={{ minHeight: '540px' }}
               >
                 {/* Popular Badge */}
                 {plan.isPopular && (
