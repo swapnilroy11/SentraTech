@@ -156,26 +156,30 @@ export const insertContactRequest = async (formData) => {
       widget: 'slide_in'
     };
     
+    const insertData = {
+      full_name: formData.fullName,
+      work_email: formData.workEmail?.toLowerCase().trim(),
+      phone: formData.phone || null,
+      company_name: formData.companyName,
+      company_website: formData.companyWebsite || null,
+      monthly_volume: formData.monthlyVolume,
+      plan_selected: formData.planSelected || null,
+      preferred_contact_method: formData.preferredContactMethod || 'email',
+      message: formData.message || null,
+      utm_data: formData.utmData || {},
+      metadata: {
+        ...clientMetadata,
+        deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+      },
+      consent_marketing: formData.consentMarketing || false
+    };
+
+    console.log('🔍 Inserting data to Contract Sale Request table:', insertData);
+
     // Insert into Supabase database with new plan metadata fields
     const { data, error } = await supabase
       .from('Contract Sale Request')
-      .insert([{
-        full_name: formData.fullName,
-        work_email: formData.workEmail.toLowerCase().trim(),
-        phone: formData.phone || null,
-        company_name: formData.companyName,
-        company_website: formData.companyWebsite || null,
-        monthly_volume: formData.monthlyVolume,
-        plan_selected: formData.planSelected || null,
-        preferred_contact_method: formData.preferredContactMethod || 'email',
-        message: formData.message || null,
-        utm_data: formData.utmData || {},
-        metadata: {
-          ...clientMetadata,
-          deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
-        },
-        consent_marketing: formData.consentMarketing || false
-      }], { returning: 'minimal' });
+      .insert([insertData], { returning: 'minimal' });
 
     if (error) {
       throw error;
