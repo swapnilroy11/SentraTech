@@ -121,6 +121,22 @@ create policy sales_update_contact_requests on public.contact_requests
 -- Grant permissions
 grant select, insert on public.contact_requests to authenticated;
 grant select, insert on public.contact_requests to anon;
+grant select, insert on public.demo_requests to authenticated;
+grant select, insert on public.demo_requests to anon;
+
+-- Create RLS policies for demo_requests
+-- Policy for inserting new demo requests (anyone can submit)
+create policy insert_demo_requests on public.demo_requests
+  for insert with check (true);
+
+-- Policy for admin access to demo_requests
+create policy admin_all_demo_requests on public.demo_requests
+  for all using (
+    current_setting('request.jwt.claims.role', true) = 'admin'
+    or current_setting('request.jwt.claims.sub', true)::uuid in (
+      select id from auth.users where email like '%@sentratech.com'
+    )
+  );
 
 -- Create enum types for better data validation (optional)
 create type contact_method_enum as enum ('email', 'phone', 'demo');
