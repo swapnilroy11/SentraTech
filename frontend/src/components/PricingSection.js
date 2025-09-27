@@ -178,7 +178,7 @@ const PricingSection = () => {
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 grid grid-rows-[auto_auto_auto_1fr_auto] min-h-[600px] ${
+                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 h-[600px] ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
@@ -194,7 +194,7 @@ const PricingSection = () => {
                   </div>
                 )}
 
-                {/* Plan Icon & Header - Row 1 */}
+                {/* Plan Icon & Header */}
                 <div className="mb-6 flex items-center gap-3">
                   <div 
                     className="h-12 w-12 rounded-lg flex items-center justify-center text-green-400"
@@ -213,8 +213,8 @@ const PricingSection = () => {
                   </div>
                 </div>
 
-                {/* Price Display - Row 2 */}
-                <div className="my-6">
+                {/* Price Display */}
+                <div className="mb-6">
                   <div className="text-3xl font-extrabold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                     ${plan.price.toLocaleString()}
                   </div>
@@ -229,24 +229,23 @@ const PricingSection = () => {
                   )}
                 </div>
 
-                {/* Features List - Row 3 (flexible height) */}
-                <ul className="mt-4 mb-6 space-y-2 text-sm text-gray-300">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle 
-                        size={16} 
-                        className={`mt-1 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
-                      />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Features List - Fixed height area */}
+                <div className="h-[280px] overflow-hidden">
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle 
+                          size={16} 
+                          className={`mt-1 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
+                        />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                {/* Spacer - Row 4 (grows to fill space) */}
-                <div className="flex-grow"></div>
-
-                {/* CTA Button - Row 5 (always at bottom) */}
-                <div className="mt-4">
+                {/* CTA Button - Absolutely positioned at bottom */}
+                <div className="absolute bottom-6 left-6 right-6">
                   <Button
                     onClick={() => handleContact(plan)}
                     className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
