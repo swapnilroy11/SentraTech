@@ -608,32 +608,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                     </div>
                   </div>
 
-                  {/* Schedule Demo Time (conditional) */}
-                  {formData.preferredContactMethod === 'demo' && (
-                    <div>
-                      <label htmlFor="scheduledTime" className="block text-sm font-semibold text-white mb-2">
-                        Preferred Demo Time *
-                      </label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" size={16} />
-                        <input
-                          type="datetime-local"
-                          id="scheduledTime"
-                          name="scheduledTime"
-                          value={formData.scheduledTime}
-                          onChange={handleInputChange}
-                          min={new Date().toISOString().slice(0, 16)}
-                          className={`w-full pl-10 pr-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
-                            errors.scheduledTime ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
-                          }`}
-                          disabled={isSubmitting}
-                        />
-                      </div>
-                      {errors.scheduledTime && (
-                        <p className="text-red-400 text-sm mt-1">{errors.scheduledTime}</p>
-                      )}
-                    </div>
-                  )}
+                  {/* Schedule Demo Time section removed */}
 
                   {/* Phone (conditional for phone contact) */}
                   {formData.preferredContactMethod === 'phone' && (
