@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
 """
-Comprehensive API Load and Stability Testing for SentraTech Production Readiness
-Tests concurrent load, response times, error rates, and data integrity under stress
+Demo Request Form Testing with New Volume Fields - Supabase Integration Testing
+Tests the updated demo request form with call_volume and interaction_volume fields
 """
 
 import requests
 import json
 import time
-import asyncio
-import websockets
 from datetime import datetime
 from typing import Dict, Any, List
-import urllib.parse
-import threading
-import concurrent.futures
-import statistics
-import random
-import string
+import uuid
 
 # Backend URL from environment
 BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
