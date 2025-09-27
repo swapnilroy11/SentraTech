@@ -536,7 +536,7 @@ const SentraTechLanding = () => {
                     <MessageSquare size={16} className="text-[#0A0A0A]" />
                   </div>
                   <div>
-                    <div className="text-white text-sm font-semibold">SentraTech AI</div>
+                    <div className="text-white text-sm font-semibold">Sentra AI</div>
                     <div className="text-[#00FF41] text-xs">
                       {isConnecting ? 'Connecting...' : 
                        connectionError ? 'Offline' : 
