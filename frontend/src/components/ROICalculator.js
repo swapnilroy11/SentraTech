@@ -532,11 +532,19 @@ const ROICalculator = () => {
                 </div>
                 <div className="space-y-1">
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
-                    <ArrowDown size={16} className="mr-1 text-emerald-400" />
+                    {results.isSavings ? (
+                      <ArrowDown size={16} className="mr-1 text-emerald-400" />
+                    ) : (
+                      <ArrowUp size={16} className="mr-1 text-red-400" />
+                    )}
                     {(results.costChangePercent || 0)}% {results.isSavings ? 'Cost Reduction' : 'Cost Increase'}
                   </div>
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
-                    <ArrowUp size={16} className="mr-1 text-emerald-400" />
+                    {results.isProfit ? (
+                      <ArrowUp size={16} className="mr-1 text-emerald-400" />
+                    ) : (
+                      <ArrowDown size={16} className="mr-1 text-red-400" />
+                    )}
                     {(results.roiLossPercent || 0)}% {results.isProfit ? 'ROI' : 'Loss'}
                   </div>
                 </div>
