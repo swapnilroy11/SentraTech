@@ -164,7 +164,7 @@ const PricingSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge className="mb-6 bg-[rgba(0,255,132,0.1)] text-[#00FF84] border-[#00FF84]/30 px-4 py-2">
+              <Badge className="mb-6 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30 px-4 py-2">
                 <Star className="mr-2" size={16} />
                 Transparent Pricing
               </Badge>
