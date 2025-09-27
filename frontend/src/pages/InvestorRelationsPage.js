@@ -413,33 +413,35 @@ const InvestorRelationsPage = () => {
             about SentraTech's financial performance, strategy, or investment opportunities.
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="text-left">
-              <h3 className="text-lg font-semibold text-white mb-4">Investor Relations Contacts</h3>
-              <ul className="space-y-3">
-                <li>
-                  <span className="text-white font-medium">CEO & Co-Founder: </span>
-                  <a href="mailto:sarah@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">sarah@sentratech.net</a>
-                </li>
-                <li>
-                  <span className="text-white font-medium">CFO: </span>
-                  <a href="mailto:jennifer@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">jennifer@sentratech.net</a>
-                </li>
-                <li>
-                  <span className="text-white font-medium">Investor Relations: </span>
-                  <a href="mailto:investors@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">investors@sentratech.net</a>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="text-left">
-              <h3 className="text-lg font-semibold text-white mb-4">Reporting Schedule</h3>
-              <ul className="space-y-2 text-[rgb(218,218,218)] text-sm">
-                <li>• Quarterly investor updates</li>
-                <li>• Annual financial reporting</li>
-                <li>• Monthly operational metrics (board)</li>
-                <li>• Ad-hoc strategic announcements</li>
-              </ul>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-semibold text-white mb-4">Investor Relations Contacts</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <span className="text-white font-medium">CEO & Co-Founder: </span>
+                    <a href="mailto:sarah@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">sarah@sentratech.net</a>
+                  </li>
+                  <li>
+                    <span className="text-white font-medium">CFO: </span>
+                    <a href="mailto:jennifer@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">jennifer@sentratech.net</a>
+                  </li>
+                  <li>
+                    <span className="text-white font-medium">Investor Relations: </span>
+                    <a href="mailto:investors@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">investors@sentratech.net</a>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-semibold text-white mb-4">Reporting Schedule</h3>
+                <ul className="space-y-2 text-[rgb(218,218,218)] text-sm">
+                  <li>• Quarterly investor updates</li>
+                  <li>• Annual financial reporting</li>
+                  <li>• Monthly operational metrics (board)</li>
+                  <li>• Ad-hoc strategic announcements</li>
+                </ul>
+              </div>
             </div>
           </div>
           
