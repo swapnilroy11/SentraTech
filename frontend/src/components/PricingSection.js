@@ -91,7 +91,7 @@ const PricingSection = () => {
       ],
       savings: "60-75%",
       setupTime: "3-4 weeks",
-      sla: "99.9% Uptime SLA",
+      sla: "99.9% Uptime",
       isPopular: true,
       popularBadge: "Most Popular"
     },
