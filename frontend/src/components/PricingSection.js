@@ -260,55 +260,46 @@ const PricingSection = () => {
                   )}
                 </div>
 
-                {/* Key Benefits */}
-                <div className="mb-8">
-                  <h4 className="text-lg font-semibold text-white mb-4">Key Features</h4>
-                  <ul className="space-y-3">
+                {/* Key Features */}
+                <div className="mb-5">
+                  <h4 className="text-base font-semibold text-white mb-3">Key Features</h4>
+                  <ul className="space-y-2">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
+                      <li key={i} className="flex items-start gap-2">
                         <CheckCircle 
-                          size={18} 
+                          size={16} 
                           className={`mt-0.5 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
                         />
-                        <span className="text-gray-300 leading-relaxed font-medium">{feature}</span>
+                        <span className="text-sm text-gray-300">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Detailed Features */}
-                <div className="mb-8 flex-1">
-                  <h4 className="text-lg font-semibold text-white mb-4">What's Included</h4>
-                  <div className="space-y-5">
-                    {plan.detailedFeatures.map((category, i) => (
-                      <div key={i}>
-                        <h5 className="text-sm font-semibold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
-                          {category.category}
-                        </h5>
-                        <ul className="space-y-2 ml-4">
-                          {category.items.map((item, j) => (
-                            <li key={j} className="text-sm text-gray-400 flex items-start gap-2">
-                              <span className="text-gray-500 mt-1">•</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                {/* Highlights */}
+                <div className="mb-5 flex-1">
+                  <h4 className="text-base font-semibold text-white mb-3">Highlights</h4>
+                  <ul className="space-y-2">
+                    {plan.highlights.map((highlight, i) => (
+                      <li key={i} className="text-sm text-gray-400 flex items-start gap-2">
+                        <span className="text-gray-500 mt-1">•</span>
+                        <span>{highlight}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
                 {/* Value Proposition */}
-                <div className="mb-8 p-4 rounded-lg" style={{backgroundColor: plan.accent ? `${MATRIX_GREEN}10` : "rgba(255,255,255,0.03)"}}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-300">Expected Savings</span>
-                    <span className="text-sm font-bold" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
+                <div className="mb-5 p-3 rounded-lg text-sm" style={{backgroundColor: plan.accent ? `${MATRIX_GREEN}10` : "rgba(255,255,255,0.03)"}}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-semibold text-gray-300">Expected Savings</span>
+                    <span className="font-bold text-xs" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
                       {plan.savings}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-300">Setup Time</span>
-                    <span className="text-sm font-medium text-gray-400">{plan.setupTime}</span>
+                    <span className="font-semibold text-gray-300">Setup Time</span>
+                    <span className="font-medium text-gray-400 text-xs">{plan.setupTime}</span>
                   </div>
                 </div>
 
