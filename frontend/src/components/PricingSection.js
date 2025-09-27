@@ -202,12 +202,12 @@ const PricingSection = () => {
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-8 relative shadow-xl transition-all duration-300 flex flex-col ${
+                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 flex flex-col ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
                 }`}
-                style={{ minHeight: '800px' }}
+                style={{ height: '580px' }}
               >
                 {/* Popular Badge */}
                 {plan.ribbon && (
