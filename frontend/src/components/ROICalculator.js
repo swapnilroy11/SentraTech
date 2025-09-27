@@ -428,18 +428,27 @@ const ROICalculator = () => {
                           value={ahtMinutes}
                           onChange={(e) => {
                             const inputValue = e.target.value;
-                            const numValue = parseInt(inputValue) || 0;
                             
-                            // Always allow the input
-                            setAhtMinutes(numValue);
-                            
-                            // Show warnings for out-of-range values
-                            if (numValue < 1) {
+                            // Handle empty input
+                            if (inputValue === '') {
+                              setAhtMinutes('');
                               setAhtWarning('⚠️ Minimum 1 minute required for calculations');
-                            } else if (numValue > 60) {
-                              setAhtWarning('⚠️ Values above 60 minutes may not be realistic');
-                            } else {
-                              setAhtWarning('');
+                              return;
+                            }
+                            
+                            // Only accept valid numbers (no leading zeros unless it's just "0")
+                            if (/^\d+$/.test(inputValue) || inputValue === '0') {
+                              const numValue = parseInt(inputValue);
+                              setAhtMinutes(numValue);
+                              
+                              // Show warnings for out-of-range values
+                              if (numValue < 1) {
+                                setAhtWarning('⚠️ Minimum 1 minute required for calculations');
+                              } else if (numValue > 60) {
+                                setAhtWarning('⚠️ Values above 60 minutes may not be realistic');
+                              } else {
+                                setAhtWarning('');
+                              }
                             }
                           }}
                           className={`bg-[rgb(26,28,30)] text-white rounded-lg text-lg py-3 text-center font-semibold focus:ring-[#00DDFF]/20 ${
