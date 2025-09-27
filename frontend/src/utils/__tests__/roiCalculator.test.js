@@ -202,7 +202,7 @@ describe('ROI Calculator - Per-1k Bundle Pricing', () => {
     const result = calculateROI(inputs);
 
     // Only 5% human minutes needed
-    expect(result.human_minutes_needed).toBe(650); // 13000 * 0.05
+    expect(Math.round(result.human_minutes_needed)).toBe(650); // 13000 * 0.05 (rounded for floating point)
     expect(Math.round(result.human_hours_needed * 100) / 100).toBe(10.83); // 650/60
     
     // Should still have same BPO cost (based on total minutes)
