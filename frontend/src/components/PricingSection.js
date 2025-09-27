@@ -105,34 +105,11 @@ const PricingSection = () => {
         "White-label & advanced compliance (HIPAA, SOC2)",
         "SLA-backed uptime & response time"
       ],
-      detailedFeatures: [
-        {
-          category: "Enterprise AI Platform",
-          items: [
-            "Dedicated AI model instances",
-            "Custom training on your data",
-            "White-label deployment options",
-            "Advanced workflow automation"
-          ]
-        },
-        {
-          category: "Compliance & Security",
-          items: [
-            "HIPAA, SOC2, GDPR compliance",
-            "Enterprise-grade security",
-            "Custom data retention policies",
-            "Audit trail & logging"
-          ]
-        },
-        {
-          category: "Dedicated Success Team",
-          items: [
-            "Dedicated success manager",
-            "Priority SRE support",
-            "Quarterly business reviews",
-            "Custom integration development"
-          ]
-        }
+      highlights: [
+        "Dedicated AI model instances",
+        "HIPAA, SOC2, GDPR compliance",
+        "Priority SRE support",
+        "Custom integration development"
       ],
       savings: "Typical 70-85% cost reduction vs traditional support",
       setupTime: "4-6 weeks",
