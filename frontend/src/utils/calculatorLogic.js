@@ -86,7 +86,12 @@ export function calculateROI(country, agentCount, ahtMinutes, callVolumeOverride
     monthlySavings, 
     annualSavings, 
     roiPercent, 
-    costReduction 
+    costReduction,
+    // New fields for proper negative handling
+    isSavings,
+    isProfit,
+    costChangePercent,
+    roiLossPercent
   };
 }
 
