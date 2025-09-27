@@ -516,11 +516,19 @@ const ROICalculator = () => {
             <Card className="bg-gradient-to-br from-[#0F1113] to-[#161B22] border border-[#00FF41] rounded-xl p-6 hover:scale-102 transition-all duration-300 hover:shadow-lg hover:shadow-[#00FF41]/25">
               <CardContent className="p-0 text-center">
                 <div className="flex items-center justify-center mb-4">
-                  <TrendingUp size={28} className="text-emerald-400 mr-3" />
-                  <h3 className="text-base text-[rgb(200,200,200)] font-medium">Your Savings & ROI</h3>
+                  {results.isSavings ? (
+                    <TrendingUp size={28} className="text-emerald-400 mr-3" />
+                  ) : (
+                    <TrendingDown size={28} className="text-red-400 mr-3" />
+                  )}
+                  <h3 className="text-base text-[rgb(200,200,200)] font-medium">
+                    {results.isSavings ? 'Your Savings & ROI' : 'Additional Cost & Loss'}
+                  </h3>
                 </div>
-                <div className="text-4xl font-bold text-[#00FF41] mb-3 font-rajdhani">
-                  {formatCurrency(results.monthlySavings)}
+                <div className={`text-4xl font-bold mb-3 font-rajdhani ${
+                  results.isSavings ? 'text-[#00FF41]' : 'text-red-400'
+                }`}>
+                  {results.isSavings ? '+' : '-'}{formatCurrency(Math.abs(results.monthlySavings || 0))}
                 </div>
                 <div className="space-y-1">
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
