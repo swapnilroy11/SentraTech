@@ -257,7 +257,7 @@ const CTASection = () => {
                 setFieldErrors({});
                 setFormData({
                   name: '', email: '', company: '', phone: '', 
-                  message: '', call_volume: ''
+                  message: '', call_volume: '', interaction_volume: ''
                 });
               }}
               className="bg-[#00FF41] text-[rgb(17,17,19)] hover:bg-[#00e83a] rounded-xl px-6"
