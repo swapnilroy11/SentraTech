@@ -5,7 +5,7 @@
 create extension if not exists pgcrypto;
 create extension if not exists pg_trgm;
 
--- Create contact_requests table
+-- Create contact_requests table (also known as "Contact Request" table)
 create table public.contact_requests (
   id uuid not null default gen_random_uuid() primary key,
   full_name text not null,
@@ -15,6 +15,9 @@ create table public.contact_requests (
   company_website text null,
   monthly_volume text not null,
   plan_selected text null,
+  plan_id text null,
+  billing_term text null,
+  price_display text null,
   preferred_contact_method text null,
   message text null,
   status text not null default 'pending',
@@ -29,6 +32,21 @@ create table public.contact_requests (
   metadata jsonb default '{}',
   consent_marketing boolean not null default false,
   scheduled_time timestamptz null
+);
+
+-- Create demo_requests table for demo request functionality
+create table public.demo_requests (
+  id uuid not null default gen_random_uuid() primary key,
+  name text not null,
+  email text not null,
+  company text not null,
+  phone text null,
+  message text null,
+  call_volume text null,
+  interaction_volume text null,
+  status text not null default 'pending',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 -- Create indexes for better performance
