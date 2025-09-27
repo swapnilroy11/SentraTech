@@ -113,42 +113,42 @@ const Footer = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="py-12 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">
+        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="max-w-3xl mx-auto text-center">
+            <h3 className="text-xl font-bold text-white mb-3">
               Stay Updated with SentraTech
             </h3>
-            <p className="text-[rgb(218,218,218)] mb-8 max-w-2xl mx-auto">
+            <p className="text-[rgb(218,218,218)] mb-6 max-w-xl mx-auto text-sm">
               Get the latest insights on AI-powered customer support, industry trends, 
               and platform updates delivered to your inbox.
             </p>
             
             <NewsletterSubscribe />
             
-            <p className="text-xs text-[rgb(161,161,170)] mt-4">
+            <p className="text-xs text-[rgb(161,161,170)] mt-3">
               No spam, unsubscribe anytime. We respect your privacy.
             </p>
           </div>
         </div>
 
         {/* Contact Information */}
-        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-12">
-            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-              <Mail size={20} className="text-[#00FF41]" />
-              <a href="mailto:info@sentratech.net" className="hover:text-[#00FF41] transition-colors">
+        <div className="py-6 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-8">
+            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
+              <Mail size={16} className="text-[#00FF41]" />
+              <a href="mailto:info@sentratech.net" className="hover:text-[#00FF41] transition-colors text-sm">
                 info@sentratech.net
               </a>
             </div>
-            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-              <Phone size={20} className="text-[#00FF41]" />
-              <a href="tel:+447424293951" className="hover:text-[#00FF41] transition-colors">
+            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
+              <Phone size={16} className="text-[#00FF41]" />
+              <a href="tel:+447424293951" className="hover:text-[#00FF41] transition-colors text-sm">
                 +44 7424293951
               </a>
             </div>
-            <div className="flex items-center space-x-3 text-[rgb(218,218,218)]">
-              <MapPin size={20} className="text-[#00FF41]" />
-              <span>London, UK</span>
+            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
+              <MapPin size={16} className="text-[#00FF41]" />
+              <span className="text-sm">London, UK</span>
             </div>
           </div>
         </div>
