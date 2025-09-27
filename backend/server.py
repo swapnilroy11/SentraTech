@@ -1770,7 +1770,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
         # Send welcome message
         welcome_message = {
             "type": "system",
-            "content": "Connected to SentraTech AI Assistant. How can I help you today?",
+            "content": "👋 Hello! I'm Sentra AI, your intelligent assistant for SentraTech. I can help you learn about our AI-powered customer support platform, pricing, features, ROI benefits, and answer any questions about how we can transform your customer support operations. What would you like to know?",
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
         await websocket.send_text(json.dumps(welcome_message))
