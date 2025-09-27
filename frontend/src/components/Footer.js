@@ -12,21 +12,22 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
+    careers: [
+      { name: 'Open Positions', href: '#' },
+      { name: 'Life at SentraTech', href: '#' },
+      { name: 'Benefits & Perks', href: '#' },
+      { name: 'Apply Now', href: '#' }
+    ],
     company: [
       { name: 'About Us', href: '#about' },
       { name: 'Leadership Team', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Investor Relations', href: '#' }
-    ],
-    support: [
+      { name: 'Investor Relations', href: '#' },
       { name: 'Support Center', href: '#' }
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
-      { name: 'Terms & Conditions', href: '/terms-of-service' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
-      { name: 'Compliance', href: '/security' },
-      { name: 'Data Processing', href: '/privacy-policy#data-processing' }
+      { name: 'Terms & Conditions', href: '/terms-of-service' }
     ]
   };
 
