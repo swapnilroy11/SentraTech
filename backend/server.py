@@ -1082,22 +1082,6 @@ class EmailService:
         try:
             # Temporarily disabled due to CSS syntax issues in f-string
             return {"success": True, "message": "Email confirmation disabled temporarily"}
-            
-            subject = "Demo Request Confirmation - SentraTech"
-            
-            html_content = """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>
-                    body { font-family: Arial, sans-serif; color: #333; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background-color: #0A0A0A; color: white; padding: 20px; text-align: center; }
-                    .content { background-color: #f9f9f9; padding: 30px; }
-                    .footer { background-color: #1a1a1a; color: #ccc; padding: 20px; text-align: center; font-size: 12px; }
-                    .highlight { color: #00FF41; font-weight: bold; }
-                </style>
-            </head>
             <body>
                 <div class="container">
                     <div class="header">
