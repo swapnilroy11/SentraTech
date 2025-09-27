@@ -416,7 +416,7 @@ class SupabaseSchemaUpdatedTester:
         
         success_test_data = {
             "name": "Success Response Test",
-            "email": "success@schema.test",
+            "email": "success@example.com",
             "company": "Success Response Company",
             "phone": "+1555999999",
             "call_volume": "35,000",
