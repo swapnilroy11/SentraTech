@@ -219,125 +219,131 @@ const PricingSection = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
-            {plans.map((plan) => (
-              <article 
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {plans.map((plan, index) => (
+              <motion.article 
                 key={plan.id} 
-                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 flex flex-col ${
-                  plan.accent 
-                    ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
-                    : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 * index }}
+                whileHover={{ 
+                  y: -8,
+                  boxShadow: plan.isPopular 
+                    ? "0 25px 50px -12px rgba(0, 255, 132, 0.25)" 
+                    : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+                }}
+                className={`relative rounded-3xl p-8 transition-all duration-300 bg-gradient-to-br ${
+                  plan.isPopular
+                    ? "from-[#0A0F0A] via-[#0E1410] to-[#0A0F0A] ring-2 ring-[#00FF84] shadow-2xl shadow-[#00FF84]/20" 
+                    : "from-[#0E0E0E] to-[#1A1A1A] border border-gray-800 hover:border-gray-700"
                 }`}
-                style={{ height: '580px' }}
+                style={{ minHeight: '600px' }}
               >
                 {/* Popular Badge */}
-                {plan.ribbon && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
+                {plan.isPopular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-[#00FF84] text-black px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
                       <Crown size={16} className="mr-2" />
-                      {plan.ribbon}
+                      {plan.popularBadge}
                     </Badge>
                   </div>
                 )}
 
-                {/* Plan Icon & Header */}
-                <div className="mb-5 flex items-center gap-3">
-                  <div 
-                    className="h-12 w-12 rounded-lg flex items-center justify-center text-lg flex-shrink-0 font-bold"
-                    style={{ 
-                      backgroundColor: plan.accent ? `${MATRIX_GREEN}20` : "rgba(255,255,255,0.05)",
-                      color: plan.accent ? MATRIX_GREEN : "#00DDFF"
-                    }}
-                  >
-                    ★
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-xl font-bold mb-1" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
-                      {plan.title}
-                      {plan.subtitle && (
-                        <span className="text-sm font-normal text-gray-400 ml-2">({plan.subtitle})</span>
-                      )}
-                    </h3>
-                    <p className="text-sm text-gray-300">{plan.tagline}</p>
-                  </div>
+                {/* Plan Header */}
+                <div className="text-center mb-8">
+                  <div className="text-4xl mb-4">{plan.icon}</div>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {plan.title}
+                    {plan.subtitle && (
+                      <span className="text-base font-normal text-gray-400 ml-2">({plan.subtitle})</span>
+                    )}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{plan.tagline}</p>
                 </div>
 
                 {/* Price Display */}
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-3xl font-extrabold" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                <div className="text-center mb-8">
+                  <div className="flex items-baseline justify-center mb-2">
+                    <span className="text-5xl font-extrabold text-white">
                       ${plan.price.toLocaleString()}
                     </span>
-                    <span className="text-sm text-gray-400">/month</span>
+                    <span className="text-gray-400 text-lg ml-2">/month</span>
                   </div>
-                  <div className="text-xs text-gray-400 mb-1">per bundle (1,000 calls + 1,000 interactions)</div>
-                  {plan.priceSubtext && (
-                    <div className="text-xs text-orange-400 font-medium">{plan.priceSubtext}</div>
+                  <p className="text-gray-500 text-sm mb-3">{plan.priceNote}</p>
+                  {plan.subNote && (
+                    <p className="text-[#00FF84] text-sm font-medium">{plan.subNote}</p>
                   )}
                   {term === "36m" && (
-                    <div className="text-xs text-green-400 mt-1 font-semibold">
-                      Was ${basePrices[plan.id].toLocaleString()} • Save 10%
+                    <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#00FF84]/10 rounded-full">
+                      <span className="text-[#00FF84] text-sm font-semibold">
+                        Was ${plan.originalPrice.toLocaleString()} • Save 10%
+                      </span>
                     </div>
                   )}
                 </div>
 
-                {/* Key Features */}
-                <div className="mb-5">
-                  <h4 className="text-base font-semibold text-white mb-3">Key Features</h4>
-                  <ul className="space-y-2">
+                {/* Features List */}
+                <div className="mb-6">
+                  <h4 className="text-white font-semibold mb-4">What's Included</h4>
+                  <ul className="space-y-3">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2">
+                      <li key={i} className="flex items-start gap-3">
                         <CheckCircle 
-                          size={16} 
-                          className={`mt-0.5 flex-shrink-0 ${plan.accent ? 'text-[#00FF41]' : 'text-[#00DDFF]'}`} 
+                          size={18} 
+                          className="text-[#00FF84] flex-shrink-0 mt-0.5" 
                         />
-                        <span className="text-sm text-gray-300">{feature}</span>
+                        <span className="text-gray-300 text-sm leading-relaxed">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Highlights */}
-                <div className="mb-5 flex-1">
-                  <h4 className="text-base font-semibold text-white mb-3">Highlights</h4>
+                <div className="mb-8">
                   <ul className="space-y-2">
                     {plan.highlights.map((highlight, i) => (
-                      <li key={i} className="text-sm text-gray-400 flex items-start gap-2">
-                        <span className="text-gray-500 mt-1">•</span>
-                        <span>{highlight}</span>
+                      <li key={i} className="flex items-start gap-3 text-sm">
+                        <Zap size={14} className="text-[#00FF84] flex-shrink-0 mt-1" />
+                        <span className="text-gray-400">{highlight}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Value Proposition */}
-                <div className="mb-5 p-3 rounded-lg text-sm" style={{backgroundColor: plan.accent ? `${MATRIX_GREEN}10` : "rgba(255,255,255,0.03)"}}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-gray-300">Expected Savings</span>
-                    <span className="font-bold text-xs" style={{color: plan.accent ? MATRIX_GREEN : "#00DDFF"}}>
-                      {plan.savings}
-                    </span>
+                {/* Value Metrics */}
+                <div className="mb-8 p-4 rounded-xl bg-gray-900/50 border border-gray-800">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-[#00FF84] text-xl font-bold">{plan.savings}</div>
+                      <div className="text-gray-400 text-xs">Cost Savings</div>
+                    </div>
+                    <div>
+                      <div className="text-[#00FF84] text-xl font-bold">{plan.setupTime}</div>
+                      <div className="text-gray-400 text-xs">Setup Time</div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-300">Setup Time</span>
-                    <span className="font-medium text-gray-400 text-xs">{plan.setupTime}</span>
+                  <div className="mt-3 text-center">
+                    <div className="text-white text-sm font-medium">{plan.sla}</div>
                   </div>
                 </div>
 
-                {/* CTA Button - Always at bottom */}
+                {/* CTA Button */}
                 <div className="mt-auto">
                   <Button
                     onClick={() => handleContact(plan)}
-                    className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-2"
-                    style={{ background: MATRIX_GREEN }}
+                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 ${
+                      plan.ctaType === 'primary' 
+                        ? 'bg-[#00FF84] hover:bg-[#00DD70] text-black shadow-lg hover:shadow-[#00FF84]/25' 
+                        : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 hover:border-gray-600'
+                    }`}
                   >
                     {plan.cta}
                   </Button>
-                  <div className="text-xs text-gray-500 text-center">
-                    By clicking you agree to our Privacy Policy. {plan.id === 'starter' && 'Pilot requires prepayment.'}
-                  </div>
+                  <p className="text-gray-500 text-xs text-center mt-3">
+                    {plan.id === 'starter' ? 'Pilot requires prepayment' : 'No setup fees • Cancel anytime'}
+                  </p>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
