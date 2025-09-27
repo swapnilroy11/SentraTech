@@ -154,18 +154,18 @@ const Footer = () => {
         </div>
 
         {/* Bottom Footer */}
-        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+        <div className="py-6 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
             {/* Copyright */}
-            <div className="text-[rgb(161,161,170)] text-sm">
+            <div className="text-[rgb(161,161,170)] text-sm text-center md:text-left">
               © {currentYear} SentraTech. All rights reserved. 
-              <span className="ml-2 text-[rgb(218,218,218)]">Built with AI + Human Intelligence.</span>
+              <span className="block md:inline md:ml-2 text-[rgb(218,218,218)]">Built with AI + Human Intelligence.</span>
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
               <span className="text-[rgb(161,161,170)] text-sm">Follow us:</span>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 {socialLinks.map((social, index) => {
                   const Icon = social.icon;
                   return (
@@ -175,9 +175,9 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="w-10 h-10 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl flex items-center justify-center text-[rgb(161,161,170)] hover:text-[#DAFF01] hover:border-[#DAFF01] hover:bg-[#DAFF01]/10 transform hover:scale-110 transition-all duration-200"
+                      className="w-8 h-8 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg flex items-center justify-center text-[rgb(161,161,170)] hover:text-[#00FF41] hover:border-[#00FF41] hover:bg-[#00FF41]/10 transform hover:scale-110 transition-all duration-200"
                     >
-                      <Icon size={20} />
+                      <Icon size={16} />
                     </a>
                   );
                 })}
