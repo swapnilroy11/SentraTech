@@ -191,7 +191,7 @@ const PricingSection = () => {
               </span>
               <button
                 onClick={handleToggleChange}
-                className="relative w-20 h-10 bg-gray-800 rounded-full border border-gray-700 transition-all duration-300 hover:border-[#00FF84]/50 focus:outline-none focus:ring-2 focus:ring-[#00FF84]/50"
+                className="relative w-20 h-10 bg-gray-800 rounded-full border border-gray-700 transition-all duration-300 hover:border-[#00FF41]/50 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50"
                 aria-pressed={term === "36m"}
                 aria-label="Toggle billing term"
               >
