@@ -229,13 +229,28 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
       const submissionData = {
         ...formData,
         utmData,
-        planSelected: formData.planSelected || selectedPlan
+        planSelected: formData.planSelected || selectedPlan || (prefill?.planSelected),
+        planId: formData.planId || (prefill?.planId),
+        billingTerm: formData.billingTerm || (prefill?.billingTerm) || '24m',
+        priceDisplay: formData.priceDisplay || (prefill?.priceDisplay)
       };
 
       const result = await insertContactRequest(submissionData);
       
       if (result.success) {
         setSubmitStatus('success');
+        
+        // Analytics event for successful form submission
+        if (window && window.dataLayer) {
+          window.dataLayer.push({
+            event: "contact_form_submit",
+            planId: submissionData.planId,
+            planSelected: submissionData.planSelected,
+            billingTerm: submissionData.billingTerm,
+            priceDisplay: submissionData.priceDisplay,
+            supabaseId: result.id || `contact_${Date.now()}`
+          });
+        }
         
         // Optional: Send notification to /api/notify endpoint
         try {
@@ -246,7 +261,8 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             },
             body: JSON.stringify({
               type: 'contact_sales',
-              data: submissionData
+              data: submissionData,
+              planTag: submissionData.planSelected
             })
           });
         } catch (notifyError) {
