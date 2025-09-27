@@ -113,6 +113,10 @@ function App() {
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms-of-service" element={<TermsOfServicePage />} />
                 <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+                <Route path="/about-us" element={<AboutUsPage />} />
+                <Route path="/leadership-team" element={<LeadershipTeamPage />} />
+                <Route path="/investor-relations" element={<InvestorRelationsPage />} />
+                <Route path="/support-center" element={<SupportCenterPage />} />
                 
                 {/* Custom 404 Page */}
                 <Route path="*" element={<NotFoundPage />} />
