@@ -21,7 +21,7 @@ import string
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://ux-legal-revamp.preview.emergentagent.com/api"
 
 class ComprehensiveBackendTester:
     """Comprehensive Backend API Testing Framework"""

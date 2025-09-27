@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://ux-legal-revamp.preview.emergentagent.com/api"
 
 class ContactSalesPricingBackendTester:
     """Comprehensive backend testing for Contact Sales and Pricing functionality"""

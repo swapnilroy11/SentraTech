@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import urllib.parse
 
 # Backend URL from environment
-BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://ux-legal-revamp.preview.emergentagent.com/api"
 
 # Supabase configuration from frontend/.env
 SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"
