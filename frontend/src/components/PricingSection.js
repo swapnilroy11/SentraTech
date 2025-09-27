@@ -41,10 +41,13 @@ const PricingSection = () => {
       title: "Starter",
       subtitle: "Pilot",
       tagline: "Perfect for fast pilots & quick ROI",
+      icon: "⚡",
       price: effectivePrice(basePrices.starter),
-      priceDisplay: `$${effectivePrice(basePrices.starter).toLocaleString()} / per bundle (1,000 calls + 1,000 interactions)`,
-      priceSubtext: "Pilot only — 3 month max",
+      originalPrice: basePrices.starter,
+      priceNote: "per bundle (1,000 calls + 1,000 interactions)",
+      subNote: "Pilot only — 3 month max",
       cta: "Start Pilot",
+      ctaType: "primary",
       features: [
         "Up to 1,000 calls + 1,000 interactions per bundle",
         "Basic AI automation (60% baseline)",
@@ -53,25 +56,28 @@ const PricingSection = () => {
         "Onboarding & integration (up to 5 hrs)"
       ],
       highlights: [
-        "Intent recognition & auto-routing",
-        "Real-time analytics dashboard", 
-        "Standard API & webhooks",
-        "Email support (24hr response)"
+        "Fast setup in 2-3 weeks",
+        "40-60% cost savings vs traditional",
+        "Dedicated pilot success team"
       ],
-      savings: "Typical 40-60% cost reduction vs traditional support",
+      savings: "40-60%",
       setupTime: "2-3 weeks",
-      ribbon: null,
-      accent: false
+      sla: "Standard SLA",
+      isPopular: false,
+      popularBadge: null
     },
     {
       id: "growth",
       title: "Growth",
       subtitle: null,
       tagline: "Full omnichannel experience — optimized for scale",
+      icon: "🚀",
       price: effectivePrice(basePrices.growth),
-      priceDisplay: `$${effectivePrice(basePrices.growth).toLocaleString()} / per bundle (1,000 calls + 1,000 interactions)`,
-      priceSubtext: null,
+      originalPrice: basePrices.growth,
+      priceNote: "per bundle (1,000 calls + 1,000 interactions)",
+      subNote: "Best value for scaling businesses",
       cta: "Contact Sales",
+      ctaType: "primary",
       features: [
         "Up to 1,000 calls + 1,000 interactions per bundle",
         "Full omnichannel integration",
@@ -80,25 +86,28 @@ const PricingSection = () => {
         "Enhanced compliance & reporting"
       ],
       highlights: [
-        "Multi-language support (12+ languages)",
-        "Advanced BI & custom reporting",
-        "24/7 priority support",
-        "Dedicated success manager"
+        "Most popular for growing companies",
+        "60-75% cost savings vs traditional",
+        "99.9% uptime SLA guarantee"
       ],
-      savings: "Typical 60-75% cost reduction vs traditional support",
+      savings: "60-75%",
       setupTime: "3-4 weeks",
-      ribbon: "Most Popular",
-      accent: true
+      sla: "99.9% Uptime SLA",
+      isPopular: true,
+      popularBadge: "Most Popular"
     },
     {
       id: "enterprise",
       title: "Enterprise",
       subtitle: "Dedicated",
       tagline: "Unlimited scale, dedicated success",
+      icon: "🏢",
       price: effectivePrice(basePrices.enterprise),
-      priceDisplay: `$${effectivePrice(basePrices.enterprise).toLocaleString()} / per bundle (1,000 calls + 1,000 interactions)`,
-      priceSubtext: null,
-      cta: "Contact Sales (Enterprise)",
+      originalPrice: basePrices.enterprise,
+      priceNote: "per bundle (1,000 calls + 1,000 interactions)",
+      subNote: "Custom contract available",
+      cta: "Contact Sales",
+      ctaType: "secondary",
       features: [
         "Unlimited interactions (custom contract)",
         "Custom AI training & dedicated model endpoints",
@@ -107,15 +116,15 @@ const PricingSection = () => {
         "SLA-backed uptime & response time"
       ],
       highlights: [
-        "Dedicated AI model instances",
-        "HIPAA, SOC2, GDPR compliance",
-        "Priority SRE support",
-        "Custom integration development"
+        "Enterprise-grade security & compliance",
+        "70-85% cost savings vs traditional",
+        "99.99% uptime with custom SLA"
       ],
-      savings: "Typical 70-85% cost reduction vs traditional support",
-      setupTime: "4-6 weeks",
-      ribbon: null,
-      accent: false
+      savings: "70-85%",
+      setupTime: "4-6 weeks", 
+      sla: "99.99% Custom SLA",
+      isPopular: false,
+      popularBadge: null
     }
   ]), [term]);
 
