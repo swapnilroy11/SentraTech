@@ -14,6 +14,17 @@ const PricingSection = () => {
   const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
   const [prefillData, setPrefillData] = useState(null);
 
+  // Analytics event for pricing page view
+  React.useEffect(() => {
+    if (window && window.dataLayer) {
+      window.dataLayer.push({
+        event: "pricing_view",
+        referrer: document.referrer,
+        ab_test_group: "new_pricing_2025"
+      });
+    }
+  }, []);
+
   // Base list prices (per bundle)
   const basePrices = {
     starter: 1200,
