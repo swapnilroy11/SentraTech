@@ -229,12 +229,12 @@ const PricingSection = () => {
                     ? "0 25px 50px -12px rgba(0, 255, 132, 0.25)" 
                     : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
                 }}
-                className={`relative rounded-3xl p-8 transition-all duration-300 bg-gradient-to-br ${
+                className={`relative rounded-3xl p-8 transition-all duration-300 bg-gradient-to-br flex flex-col ${
                   plan.isPopular
                     ? "from-[#0A0F0A] via-[#0E1410] to-[#0A0F0A] ring-2 ring-[#00FF84] shadow-2xl shadow-[#00FF84]/20" 
                     : "from-[#0E0E0E] to-[#1A1A1A] border border-gray-800 hover:border-gray-700"
                 }`}
-                style={{ minHeight: '520px' }}
+                style={{ minHeight: '580px' }}
               >
                 {/* Popular Badge */}
                 {plan.isPopular && (
