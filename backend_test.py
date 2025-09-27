@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
+BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
 
 class DemoRequestVolumeFieldsTester:
     """Demo Request Form Testing with New Volume Fields"""

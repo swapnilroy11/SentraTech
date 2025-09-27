@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
+BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
 
 class ROICalculatorAlgorithmTester:
     """Test the updated ROI Calculator with new algorithm enhancements"""

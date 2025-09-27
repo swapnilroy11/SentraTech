@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
+BACKEND_URL = "https://supabase-forms.preview.emergentagent.com/api"
 
 def test_review_request_scenario():
     """Test the exact scenario from the review request"""

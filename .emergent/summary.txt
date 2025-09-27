@@ -1,75 +1,53 @@
 <analysis>
-The AI engineer's work involved a comprehensive series of UI/UX and functional enhancements for the SentraTech application. Initial efforts focused on redesigning the Contact Sales slide-in panel for the pricing page, addressing Supabase integration failures, and resolving critical positioning issues by implementing a fixed, right-side slide-over drawer with robust accessibility features. Concurrently, pricing card buttons were streamlined, and the hamburger menu's transparency on mobile/tablet was fixed, followed by resolving a complex overlap where clicking Contact Sales opened the navigation menu instead. Significant work was also done on the ROI Calculator, including a complete revamp of the pricing toggle to 24/36 Months with a 10% discount, optimizing FAQ dropdown animations, and resolving a major performance issue causing the ROI Calculator page to load blank. Further enhancements included adding animated 3D flags to country selection cards, implementing manual call volume adjustment, and meticulously refining the ROI calculation logic to handle negative savings as Cost Increase. The most recent activity centers on addressing persistent lag in homepage navigation buttons linked to specific sections.
+The previous AI engineer meticulously refined the SentraTech application, primarily focusing on two core areas: iterative enhancement of the pricing page UI and critical debugging/integration of contact forms with Supabase. The pricing page underwent multiple rounds of adjustments, starting from filling empty space, then compressing cards to fit a single screen, reverting to a beautiful design with specific content removal, and finally standardizing green color themes and simplifying value propositions. Concurrently, significant effort was dedicated to fixing persistent submission issues for both Contact Sales and Demo Request forms, which involved extensive Supabase schema debugging, table name corrections, column mapping, and integrating new fields like Monthly Interaction Volume. The work demonstrated an iterative approach to UI/UX and a systematic, though challenging, resolution of data persistence issues.
 </analysis>
 
 <product_requirements>
-The SentraTech app is a high-conversion, dark-themed AI + BI customer support platform featuring a sleek UI with Matrix Green accents, glass-morphism, Rajdhani font, particle cursor, and rich animations. It integrates CRM forms (Supabase), LLM chat, and dynamic KPI counters. The ROI Calculator, now a multi-country tool (Bangladesh, India, Philippines, Vietnam) with market-research-backed baselines, saves detailed reports to Supabase.
+The SentraTech application aims to be a high-conversion AI + BI customer support platform with a dark theme. Initial requirements included UI/UX improvements like accessible Contact Sales slide-in, streamlined pricing CTAs, and a refined ROI Calculator with 24/36-month pricing and country-specific baselines.
 
-Recent work included:
-1.  **Contact Sales Panel Revamp**: Replace the existing popup to top behavior with an inline, right-side slide-over drawer (320px wide on desktop, full-width on mobile), ensuring , focus trap, ESC close, and ARIA attributes. It also included cleaning up Start Free Trial from Starter, Request Demo from Growth, and duplicate Contact Sales from Enterprise cards, while standardizing matrix-green CTA styling. The form layout, submission UX (inline spinner, success state), and secondary actions were also specified.
-2.  **Pricing Toggle**: Replace Monthly/Yearly with 24 months / 36 months options, applying a 10% discount for 36-month contracts.
-3.  **FAQ Animations**: Fix laggy dropdown transitions for a smooth effect.
-4.  **ROI Calculator Page Load**: Resolve slow loading/blank page issue for the Calculate Your Savings section.
-5.  **3D Flags**: Add animated 3D flag pictures next to country names, replacing country initials, on ROI calculator cards.
-6.  **Manual Call Volume**: Add a manual Call Volume adjustment card similar to Agent Count, keeping automatic calculation logic intact, with auto/manual toggle.
-7.  **ROI Logic Refinement**: Ensure ROI and Cost Reduction are dynamic, not fixed. Specifically, adjust language to Cost Increase for negative savings, with corresponding visual and logical updates.
-8.  **Input Field Flexibility**: Allow free manual typing in Agent Count and AHT fields, removing restrictive minimums (e.g., allow 0, 1), and implement validation warnings for out-of-range values.
-9.  **Leading Zero Removal**: Eliminate leading zeros (e.g., 01 instead of 1) in calculator input fields.
-10. **Homepage Navigation Smoothness**: Fix laggy transitions for hash-scrolling buttons (Multi-Channel Support, Customer Journey, 70% Automation, Real-time Metrics, Enterprise Security).
+Major recent feature additions included:
+1.  **New Pricing UI:** A 3-tier pricing model (Starter, Growth, Enterprise) with a 24/36-month toggle, dynamic pricing, matrix green styling, and a Most Popular ribbon. CTAs must prefill Contact Sales data and trigger analytics/Supabase events. The UI has been iterated multiple times to be compact, professional, industry-standard, and visually consistent with the main site's matrix green theme, removing verbose elements and standardizing content. The Enterprise card was converted to a Custom plan with dynamic features.
+2.  **Per-1,000 Bundle ROI Calculator:** Initially developed with a new UI, but later integrated into the original  using per 1,000 calls + 1,000 interactions bundles, Call Volume Mode, Agent Count Mode, Per-Bundle Mode, and country-specific baselines (Philippines, India, Bangladesh, Vietnam).
+3.  **Form Functionality & Supabase Integration:** Ensure Contact Sales and Demo Request forms work reliably. This included adding Monthly Interaction Volume to the Demo Request form, fixing submission errors, ensuring proper UI confirmation, and aligning frontend data fields with the backend Supabase schema, including creating/updating necessary SQL tables and policies. The Schedule Demo option was also removed from the Contact Sales form.
 </product_requirements>
 
 <key_technical_concepts>
-- **Full-stack**: React, FastAPI, MongoDB, Supabase.
-- **Frontend**: Tailwind CSS, Framer Motion for animations (, ),  for navigation (including hash links),  from ,  for modals/drawers, CSS 3D transforms.
-- **Backend**: FastAPI for API endpoints.
-- **UI/UX**: Responsive design, accessibility (ARIA, focus traps), glassmorphism, form handling, modal/drawer implementation, input validation with warnings.
+-   **Full-stack**: React, FastAPI, MongoDB, Supabase (PostgreSQL backend).
+-   **Frontend**: Tailwind CSS for styling, React for UI,  for navigation, Framer Motion for animations,  from , CSS Grid/Flexbox for layout.
+-   **Backend**: FastAPI for API endpoints, Supabase for data persistence.
+-   **Data Persistence**: Supabase (PostgreSQL) schema management, Row Level Security (RLS), and indexing.
 </key_technical_concepts>
 
 <code_architecture>
 
-- ****: This component was entirely revamped to implement the detailed slide-over panel, including form fields, Supabase submission, accessibility features, and responsiveness. Its  was significantly increased to  to resolve layering conflicts with other UI elements like the hamburger menu.
-- ****: Modified to remove unwanted CTA buttons (Start Free Trial, Request Demo, duplicate Contact Sales) from pricing cards and to trigger the new  component. It also contains the pricing toggle logic.
-- ****: Updated to fix Supabase table name and constraint value mismatches, ensuring successful form submissions to the  table.
-- ****: Edited to update  data, specifically removing the unwanted CTAs from the pricing cards.
-- ****: The hamburger menu's transparency was fixed by adjusting its  opacity, and the mobile menu panel's background and borders were made more opaque for better visibility. Logic was added to ensure the hamburger menu is suppressed when the Contact Sales panel is open.
-- ****: The FAQ section within this page was updated. Laggy dropdown animations were fixed by replacing  with  transforms using Framer Motion's  for smooth transitions.
-- ****: Performance issues leading to a blank page on initial load were resolved by removing  animations that wrapped the  component, ensuring instant rendering. It also contains hardcoded marketing statistics that were a source of confusion.
-- ****: This central component underwent extensive modifications.
-    -   Its initial rendering  animations were replaced with  for immediate loading.
-    -   It now supports a pricing toggle (24 months / 36 months) with a 10% discount logic.
-    -   Country selection cards were enhanced with animated 3D flag emojis, replacing plain initials.
-    -   A manual call volume adjustment card was added, transitioning the layout to three columns and making existing cards smaller.
-    -   Input fields (Agent Count, AHT) were made fully editable, removing restrictive  attributes and implementing validation warnings instead of blocking input.
-    -   The leading zero issue in input fields was resolved by refining input value handling.
-    -   The UI for ROI and Cost Reduction was updated to dynamically display Cost Increase and Loss with red styling and correct directional arrows when savings are negative.
--   ****: The core ROI calculation logic was fundamentally corrected. Traditional BPO costs now scale dynamically with , while SentraTech AI costs remain fixed per . New flags (, ) were introduced to handle negative savings scenarios.
--   ****: Contains the  data with flag emojis and per-country cost baselines used by the ROI Calculator.
--   ****: Custom  animation was added here for the 3D flag effects.
--   ****: This custom hook is currently suspected to be the cause of laggy hash navigation on the homepage buttons. It contains multiple timeouts, heavy logging, and complex retry logic.
+-   ****: Central component for pricing card display. This file underwent extensive modifications to implement multiple UI iterations for 3-tier pricing, toggle functionality, dynamic content, responsiveness, and visual styling, including content trimming, font adjustments, button alignment, and matrix green color synchronization.
+-   ****: Handles the slide-over contact form. Modified to integrate with pricing card selections, remove the Schedule Demo option and its associated logic/validation, and adjust form fields to match Supabase schema requirements.
+-   ****: Contains the Demo Request form. Modified to include Monthly Interaction Volume and Monthly Call Volume fields, adapting form state and UI to match Supabase schema changes.
+-   ****: Renders the Demo Request form. Used indirectly via .
+-   ****: Manages Supabase interactions. Critical for handling Contact Sales and Demo Request submissions. Modified numerous times to correct table names (, , ), column mappings ( vs ), and to include/exclude specific fields (, , , , , , ) based on evolving database schemas and debugging.
+-   ****: (NEW) Initially provided a template for Supabase setup. This file and similar ad-hoc SQL scripts (e.g., , ) were crucial for defining the Supabase schema, including table creation, column additions, indexing, RLS policies, and permissions for  and  tables.
+-   ****: The FastAPI backend. Its  endpoint was confirmed to handle plan metadata after Supabase insertions, indicating backend support for form submissions.
 </code_architecture>
 
 <pending_tasks>
-- Fix modal positioning for Customer Journey interactive cards (currently appears incorrectly, multiple failed attempts).
-- Complete synchronized-style particle cursor trail.
-- Ensure all six case study cards have uniform hover effects.
-- Implement lazy-loading and critical CSS inlining.
-- Re-enable and debug the service worker registration.
-- Address the performance issues and lag with homepage navigation buttons that use  for hash-scrolling.
+-   Fix modal positioning for Customer Journey interactive cards.
+-   Complete synchronized-style particle cursor trail.
+-   Ensure all six case study cards have uniform hover effects.
+-   Implement lazy-loading and critical CSS inlining.
+-   Re-enable and debug the service worker registration.
 </pending_tasks>
 
 <current_work>
-Immediately before this summary request, the AI engineer was tasked with resolving the laggy and non-smooth transitions observed when clicking homepage navigation buttons such as Multi-Channel Support, Customer Journey, 70% Automation, Real-time Metrics, and Enterprise Security. The user explicitly noted that the ROI Calculator button was smooth, implying a specific issue with hash-scrolling navigation.
+Immediately before this summary, the AI engineer successfully finalized the integration of the Demo Request form with a specific Supabase schema provided by the user. This involved ensuring that the frontend's  and  correctly map form fields like , , , , , , and  to the corresponding columns in the  Supabase table.
 
-The AI engineer identified that these problematic buttons in  are utilizing a custom hook named . Upon inspecting , the AI engineer pinpointed several potential performance bottlenecks:
-1.  **Multiple timeout delays**: The hook uses  multiple times (300ms initial, plus up to 5 retries with 200ms each), which can accumulate and cause noticeable delays.
-2.  **Heavy console logging**: Extensive logging within the hook on every navigation could contribute to performance overhead.
-3.  **Complex retry logic**: The retry mechanism, while intended for robustness, might be too aggressive or inefficient, potentially leading to UI freezing during navigation attempts.
-4.  **State management overhead**: Unnecessary state updates and re-renders within the hook could be impacting performance.
+The process included:
+1.  **Updating Frontend Fields**: Re-adding Monthly Call Volume and Monthly Interaction Volume input fields to the Demo Request form in , ensuring they were visually organized and integrated into the existing UI without altering the overall design.
+2.  **Schema Alignment**: Modifying  to correctly send data to the  table, specifically addressing the column name change from  to  (snake_case).
+3.  **Extensive Testing**: Performing comprehensive backend and frontend tests to confirm that form submissions successfully create records in Supabase, that all fields are stored correctly, and that no schema cache errors or submission failures occur.
 
-The AI engineer's last action was to identify these performance issues within the  hook and was about to proceed with fixing them to ensure smooth hash-scrolling for the specified homepage buttons.
+The latest communication confirms the updated Supabase schema is working perfectly with 100% success rate, indicating that the Demo Request form is fully functional and correctly integrated with the user's specified database structure.
 </current_work>
 
 <optional_next_step>
-Optimize the  hook by reducing timeouts, streamlining retry logic, and minimizing state management overhead.
+Verify the demo request form's end-to-end functionality on the frontend after the final Supabase SQL script has been applied by the user.
 </optional_next_step>
-
