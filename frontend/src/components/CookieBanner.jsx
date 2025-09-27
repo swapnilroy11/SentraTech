@@ -328,23 +328,24 @@ const CookieBanner = () => {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleSavePreferences}
+                className="w-full px-6 py-3 bg-[#00FF41] text-black hover:bg-[#00DD38] font-semibold text-sm 
+                         rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
+                         focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50 transform hover:scale-105"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Saving Preferences...' : 'Save My Preferences'}
+              </button>
+              
               <button
                 onClick={handleClosePreferences}
-                className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500
-                         font-medium text-sm rounded-md transition-all duration-200 focus:outline-none focus:ring-2 
+                className="w-full px-6 py-3 border-2 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:text-white hover:border-[rgb(161,161,170)]
+                         font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
                          focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22]"
               >
                 Cancel
-              </button>
-              <button
-                onClick={handleSavePreferences}
-                className="flex-1 px-4 py-2 bg-[#00FF41] text-black hover:bg-[#00DD38] font-medium text-sm 
-                         rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
-                         focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Saving...' : 'Save Preferences'}
               </button>
             </div>
             </div>
