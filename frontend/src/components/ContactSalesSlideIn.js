@@ -390,9 +390,12 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                   <X size={20} />
                 </Button>
               </div>
-              {selectedPlan && (
+              {selectedPlan || prefill?.planSelected && (
                 <Badge className="bg-[#00FF41]/20 text-[#00FF41] border-[#00FF41]/30">
-                  {selectedPlan} Plan Selected
+                  {selectedPlan || prefill?.planSelected} Plan Selected
+                  {prefill?.billingTerm && (
+                    <span className="ml-1">({prefill.billingTerm === '36m' ? '36 Months' : '24 Months'})</span>
+                  )}
                 </Badge>
               )}
             </div>
