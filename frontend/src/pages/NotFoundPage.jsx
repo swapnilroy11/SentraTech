@@ -152,10 +152,10 @@ const NotFoundPage = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a 
-                  href="mailto:support@sentratech.com"
+                  href="mailto:info@sentratech.net"
                   className="text-[#00FF41] hover:text-[#00DD38] transition-colors font-medium"
                 >
-                  📧 support@sentratech.com
+                  📧 info@sentratech.net
                 </a>
                 
                 <span className="hidden sm:block text-gray-600">|</span>
