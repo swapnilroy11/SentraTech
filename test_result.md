@@ -59,7 +59,7 @@
 
 test_plan:
   current_focus:
-    - "NEW SentraTech Pricing Backend Integration Testing"
+    - "NEW Per-1,000 Bundle ROI Calculator Implementation Testing"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
   test_all: false
