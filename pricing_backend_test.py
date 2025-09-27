@@ -164,26 +164,22 @@ class PricingBackendTester:
             return None
     
     def test_contact_request_with_plan_metadata_enterprise(self):
-        """Test Contact Request API with Enterprise Plan Metadata"""
+        """Test Contact Request API with Enterprise Plan Metadata (via demo/request endpoint)"""
         print("\n=== Testing Contact Request API - Enterprise Plan ===")
         
         # Sample test data for Enterprise plan
         enterprise_plan_data = {
-            "full_name": "Carol Davis",
-            "work_email": "carol.davis@enterprise.com", 
-            "company_name": "Enterprise Solutions Ltd",
-            "monthly_volume": "50k+",
-            "plan_selected": "Enterprise",
-            "plan_id": "enterprise",
-            "billing_term": "36m",
-            "price_display": 1800,
-            "preferred_contact_method": "demo",
-            "consent_marketing": True
+            "name": "Carol Davis",
+            "email": "carol.davis@enterprise.com", 
+            "company": "Enterprise Solutions Ltd",
+            "phone": "+1-555-0789",
+            "message": f"Contact request for Enterprise plan - 36m billing term - $1800 (10% discount applied)",
+            "call_volume": "50k+ calls/month"
         }
         
         try:
-            print(f"📝 Testing Enterprise plan contact request with metadata...")
-            response = requests.post(f"{BACKEND_URL}/contact/request", json=enterprise_plan_data, timeout=30)
+            print(f"📝 Testing Enterprise plan contact request via demo endpoint...")
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=enterprise_plan_data, timeout=30)
             
             if response.status_code == 200:
                 result = response.json()
