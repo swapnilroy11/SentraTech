@@ -96,16 +96,11 @@ export const insertDemoRequest = async (formData) => {
       if (error.code === 'PGRST204' && (error.message.includes('interaction_volume') || error.message.includes('call_volume'))) {
         console.log('Volume columns missing in schema, retrying with basic fields only...');
         
-        // Fallback: Try with only the most basic required fields
+        // Ultra-minimal fallback: Only the most essential fields
         const basicData = {
           user_name: formData.name,
           email: formData.email,
           company: formData.company
-        };
-        
-        // Only add phone if it exists and we're confident the column exists
-        if (formData.phone) {
-          basicData.phone = formData.phone;
         }
         
         const { data: retryData, error: retryError } = await supabase
