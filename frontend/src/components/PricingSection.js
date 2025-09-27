@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { CheckCircle, Star, Crown } from 'lucide-react';
+import { CheckCircle, Star, Crown, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 import ContactSalesSlideIn from './ContactSalesSlideIn';
 
 /**
