@@ -91,8 +91,8 @@ const PricingSection = () => {
     },
     {
       id: "enterprise",
-      title: "Custom",
-      subtitle: "Enterprise",
+      title: "Enterprise",
+      subtitle: null,
       tagline: "Best used for custom plans and enterprise solutions",
       icon: "🏢",
       price: null,
