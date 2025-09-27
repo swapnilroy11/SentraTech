@@ -547,7 +547,32 @@ const CTASection = () => {
                   </div>
                 </div>
 
-                {/* Volume fields removed - not in database schema */}
+                {/* Volume Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-2">
+                      Monthly Call Volume
+                    </label>
+                    <Input
+                      placeholder="e.g., 50,000 or <10k"
+                      value={formData.call_volume}
+                      onChange={(e) => handleInputChange('call_volume', e.target.value)}
+                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl focus:border-[#00FF41]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-white mb-2">
+                      Monthly Interaction Volume
+                      <span className="text-xs text-gray-400 block font-normal">Chat/SMS/Email/Social</span>
+                    </label>
+                    <Input
+                      placeholder="e.g., 75,000 or 10k-50k"
+                      value={formData.interaction_volume}
+                      onChange={(e) => handleInputChange('interaction_volume', e.target.value)}
+                      className="bg-[rgb(38,40,42)] border-[rgb(63,63,63)] text-white placeholder-[rgb(161,161,170)] rounded-xl focus:border-[#00FF41]"
+                    />
+                  </div>
+                </div>
 
                 <div>
                   <Textarea
