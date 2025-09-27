@@ -27,6 +27,10 @@ import DemoRequestPage from "./pages/DemoRequestPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
 import CookiePolicyPage from "./pages/CookiePolicyPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import LeadershipTeamPage from "./pages/LeadershipTeamPage";
+import InvestorRelationsPage from "./pages/InvestorRelationsPage";
+import SupportCenterPage from "./pages/SupportCenterPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Contexts
