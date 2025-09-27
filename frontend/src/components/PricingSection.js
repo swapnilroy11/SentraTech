@@ -174,47 +174,47 @@ const PricingSection = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-start">
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 h-[520px] overflow-hidden ${
+                className={`rounded-2xl p-6 relative shadow-xl transition-all duration-300 h-[520px] ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
                 }`}
               >
-                {/* Popular Badge */}
+                {/* Popular Badge - Fixed positioning */}
                 {plan.ribbon && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-4 py-2 text-sm font-semibold">
-                      <Crown size={16} className="mr-1" />
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
+                    <Badge className="bg-[#00FF41] text-[rgb(17,17,19)] px-3 py-1 text-sm font-semibold whitespace-nowrap">
+                      <Crown size={14} className="mr-1" />
                       {plan.ribbon}
                     </Badge>
                   </div>
                 )}
 
-                {/* Plan Icon & Header */}
-                <div className="mb-6 flex items-center gap-3">
+                {/* Plan Icon & Header - Fixed height: 60px */}
+                <div className="mb-4 flex items-center gap-3 h-[60px]">
                   <div 
-                    className="h-12 w-12 rounded-lg flex items-center justify-center text-green-400 text-lg"
+                    className="h-12 w-12 rounded-lg flex items-center justify-center text-green-400 text-lg flex-shrink-0"
                     style={{ backgroundColor: plan.accent ? `${MATRIX_GREEN}20` : "rgba(255,255,255,0.05)" }}
                   >
                     ★
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-1" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xl font-bold mb-1 truncate" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                       {plan.title}
                       {plan.subtitle && (
                         <span className="text-sm font-normal text-gray-400 ml-2">({plan.subtitle})</span>
                       )}
                     </h3>
-                    <p className="text-sm text-gray-300">{plan.tagline}</p>
+                    <p className="text-sm text-gray-300 line-clamp-2">{plan.tagline}</p>
                   </div>
                 </div>
 
-                {/* Price Display - Compact */}
-                <div className="mb-6 h-[80px]">
+                {/* Price Display - Fixed height: 80px */}
+                <div className="mb-4 h-[80px]">
                   <div className="text-3xl font-extrabold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                     ${plan.price.toLocaleString()}
                   </div>
@@ -229,9 +229,9 @@ const PricingSection = () => {
                   )}
                 </div>
 
-                {/* Features List - Compact */}
-                <div className="h-[240px] overflow-y-auto mb-6">
-                  <ul className="space-y-3 text-sm text-gray-300">
+                {/* Features List - Fixed height: 260px */}
+                <div className="h-[260px] overflow-y-auto mb-4">
+                  <ul className="space-y-2 text-sm text-gray-300">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <CheckCircle 
@@ -244,16 +244,16 @@ const PricingSection = () => {
                   </ul>
                 </div>
 
-                {/* CTA Button - Fixed position at bottom */}
-                <div className="absolute bottom-6 left-6 right-6">
+                {/* CTA Button - Exactly 72px from bottom for ALL cards */}
+                <div className="absolute bottom-6 left-6 right-6 h-[60px]">
                   <Button
                     onClick={() => handleContact(plan)}
-                    className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-3"
+                    className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-2"
                     style={{ background: MATRIX_GREEN }}
                   >
                     {plan.cta}
                   </Button>
-                  <div className="text-xs text-gray-500 text-center">
+                  <div className="text-xs text-gray-500 text-center leading-tight">
                     By clicking you agree to our Privacy Policy. {plan.id === 'starter' && 'Pilot requires prepayment.'}
                   </div>
                 </div>
