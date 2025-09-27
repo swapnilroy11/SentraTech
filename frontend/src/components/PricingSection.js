@@ -181,63 +181,55 @@ const PricingSection = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 max-w-[1200px] mx-auto items-stretch">
             {plans.map((plan, index) => (
-              <motion.article 
+              <article 
                 key={plan.id} 
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
-                whileHover={{ 
-                  y: -8,
-                  boxShadow: plan.isPopular 
-                    ? "0 25px 50px -12px rgba(0, 255, 132, 0.25)" 
-                    : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-                }}
-                className={`relative rounded-3xl p-8 transition-all duration-300 bg-gradient-to-br ${
+                role="region"
+                aria-labelledby={`plan-${plan.id}-title`}
+                className={`relative rounded-2xl p-4 md:p-6 transition-all duration-300 bg-gradient-to-br flex flex-col justify-between ${
                   plan.isPopular
-                    ? "from-[#0A0F0A] via-[#0E1410] to-[#0A0F0A] ring-2 ring-[#00FF84] shadow-2xl shadow-[#00FF84]/20" 
+                    ? "from-[#0A0F0A] via-[#0E1410] to-[#0A0F0A] border border-[#00FF84] shadow-lg" 
                     : "from-[#0E0E0E] to-[#1A1A1A] border border-gray-800 hover:border-gray-700"
                 }`}
-                style={{ minHeight: '600px' }}
+                style={{ maxHeight: '440px', overflow: 'hidden' }}
               >
                 {/* Popular Badge */}
                 {plan.isPopular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-[#00FF84] text-black px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
-                      <Crown size={16} className="mr-2" />
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-[#00FF84] text-black px-3 py-1 text-xs font-bold whitespace-nowrap">
+                      <Crown size={14} className="mr-1" />
                       {plan.popularBadge}
                     </Badge>
                   </div>
                 )}
 
                 {/* Plan Header */}
-                <div className="text-center mb-8">
-                  <div className="text-4xl mb-4">{plan.icon}</div>
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                <div className="text-center mb-4">
+                  <h3 id={`plan-${plan.id}-title`} className="text-xl md:text-2xl font-semibold text-white mb-1">
                     {plan.title}
                     {plan.subtitle && (
-                      <span className="text-base font-normal text-gray-400 ml-2">({plan.subtitle})</span>
+                      <span className="text-sm font-normal text-gray-400 ml-2">({plan.subtitle})</span>
                     )}
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{plan.tagline}</p>
+                  <p className="text-gray-400 text-xs leading-relaxed">{plan.tagline}</p>
                 </div>
 
                 {/* Price Display */}
-                <div className="text-center mb-8">
-                  <div className="flex items-baseline justify-center mb-2">
-                    <span className="text-5xl font-extrabold text-white">
+                <div className="text-center mb-4">
+                  <div className="flex items-baseline justify-center mb-1">
+                    <span className="text-2xl md:text-3xl font-extrabold text-white leading-tight">
                       ${plan.price.toLocaleString()}
                     </span>
-                    <span className="text-gray-400 text-lg ml-2">/month</span>
+                    <span className="text-gray-400 text-sm ml-1">/month</span>
                   </div>
-                  <p className="text-gray-500 text-sm mb-3">{plan.priceNote}</p>
+                  <p className="text-gray-500 text-xs mb-2">{plan.priceNote}</p>
                   {plan.subNote && (
-                    <p className="text-[#00FF84] text-sm font-medium">{plan.subNote}</p>
+                    <p className="text-[#00FF84] text-xs font-medium">{plan.subNote}</p>
                   )}
                   {term === "36m" && (
-                    <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#00FF84]/10 rounded-full">
-                      <span className="text-[#00FF84] text-sm font-semibold">
+                    <div className="inline-flex items-center gap-1 mt-1 px-2 py-1 bg-[#00FF84]/10 rounded-full">
+                      <span className="text-[#00FF84] text-xs font-semibold">
                         Was ${plan.originalPrice.toLocaleString()} • Save 10%
                       </span>
                     </div>
@@ -245,13 +237,13 @@ const PricingSection = () => {
                 </div>
 
                 {/* Features List */}
-                <div className="mb-6">
-                  <h4 className="text-white font-semibold mb-4">What's Included</h4>
-                  <ul className="space-y-3">
+                <div className="mb-4 flex-1">
+                  <h4 className="text-white font-semibold text-sm mb-3">What's Included</h4>
+                  <ul className="space-y-2">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
+                      <li key={i} className="flex items-start gap-2">
                         <CheckCircle 
-                          size={18} 
+                          size={16} 
                           className="text-[#00FF84] flex-shrink-0 mt-0.5" 
                         />
                         <span className="text-gray-300 text-sm leading-relaxed">{feature}</span>
@@ -260,52 +252,34 @@ const PricingSection = () => {
                   </ul>
                 </div>
 
-                {/* Highlights */}
-                <div className="mb-8">
-                  <ul className="space-y-2">
-                    {plan.highlights.map((highlight, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <Zap size={14} className="text-[#00FF84] flex-shrink-0 mt-1" />
-                        <span className="text-gray-400">{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Value Metrics */}
-                <div className="mb-8 p-4 rounded-xl bg-gray-900/50 border border-gray-800">
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <div className="text-[#00FF84] text-xl font-bold">{plan.savings}</div>
+                {/* Value Metrics Chip */}
+                <div className="mb-4 p-3 rounded-lg bg-gray-900/50 border border-gray-800">
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex-1">
+                      <div className="text-[#00FF84] font-bold">{plan.savings}</div>
                       <div className="text-gray-400 text-xs">Cost Savings</div>
                     </div>
-                    <div>
-                      <div className="text-[#00FF84] text-xl font-bold">{plan.setupTime}</div>
+                    <div className="flex-1 text-right">
+                      <div className="text-[#00FF84] font-bold">{plan.setupTime}</div>
                       <div className="text-gray-400 text-xs">Setup Time</div>
                     </div>
-                  </div>
-                  <div className="mt-3 text-center">
-                    <div className="text-white text-sm font-medium">{plan.sla}</div>
                   </div>
                 </div>
 
                 {/* CTA Button */}
-                <div className="mt-auto">
+                <div>
                   <Button
                     onClick={() => handleContact(plan)}
-                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 ${
-                      plan.ctaType === 'primary' 
-                        ? 'bg-[#00FF84] hover:bg-[#00DD70] text-black shadow-lg hover:shadow-[#00FF84]/25' 
-                        : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 hover:border-gray-600'
-                    }`}
+                    className="w-full bg-[#00FF84] hover:bg-[#00DD70] text-black rounded-lg py-2 px-6 font-semibold transition-all duration-300 transform hover:scale-105"
+                    style={{ height: '44px' }}
                   >
                     {plan.cta}
                   </Button>
-                  <p className="text-gray-500 text-xs text-center mt-3">
-                    {plan.id === 'starter' ? 'Pilot requires prepayment' : 'No setup fees • Cancel anytime'}
+                  <p className="text-gray-500 text-xs text-center mt-2">
+                    By clicking you agree to our Privacy Policy.
                   </p>
                 </div>
-              </motion.article>
+              </article>
             ))}
           </div>
         </div>
