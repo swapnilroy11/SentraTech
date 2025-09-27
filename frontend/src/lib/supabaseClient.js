@@ -149,10 +149,12 @@ export const insertContactRequest = async (formData) => {
       viewport: {
         width: window.innerWidth,
         height: window.innerHeight
-      }
+      },
+      source: 'pricing_page',
+      widget: 'slide_in'
     };
     
-    // Insert into Supabase database
+    // Insert into Supabase database with new plan metadata fields
     const { data, error } = await supabase
       .from('Contact Request')
       .insert([{
@@ -163,6 +165,9 @@ export const insertContactRequest = async (formData) => {
         company_website: formData.companyWebsite || null,
         monthly_volume: formData.monthlyVolume,
         plan_selected: formData.planSelected || null,
+        plan_id: formData.planId || null,
+        billing_term: formData.billingTerm || null,
+        price_display: formData.priceDisplay || null,
         preferred_contact_method: formData.preferredContactMethod || 'email',
         message: formData.message || null,
         utm_data: formData.utmData || {},
@@ -171,6 +176,7 @@ export const insertContactRequest = async (formData) => {
           deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
         },
         consent_marketing: formData.consentMarketing || false,
+        status: 'pending',
         created_at: new Date().toISOString()
       }], { returning: 'minimal' });
 
