@@ -10,7 +10,7 @@ import ContactSalesSlideIn from './ContactSalesSlideIn';
  * Redesigned to match modern SaaS pricing best practices
  */
 const PricingSection = () => {
-  const MATRIX_GREEN = "#00FF84";
+  const MATRIX_GREEN = "#00FF41";
   const [term, setTerm] = useState("24m"); // "24m" | "36m"
   const [isContactSalesOpen, setIsContactSalesOpen] = useState(false);
   const [prefillData, setPrefillData] = useState(null);
