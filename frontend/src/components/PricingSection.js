@@ -232,7 +232,7 @@ const PricingSection = () => {
                 {/* Popular Badge */}
                 {plan.isPopular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge className="bg-[#00FF84] text-black px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
+                    <Badge className="bg-[#00FF41] text-black px-4 py-2 text-sm font-bold whitespace-nowrap shadow-lg">
                       <Crown size={16} className="mr-2" />
                       {plan.popularBadge}
                     </Badge>
