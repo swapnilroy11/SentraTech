@@ -806,6 +806,7 @@ class AirtableService:
                             "Phone": demo_request.phone or "",
                             "Message": demo_request.message or "",
                             "Call Volume": demo_request.call_volume or "",
+                            "Interaction Volume": demo_request.interaction_volume or "",
                             "Preferred Date": current_time.strftime("%Y-%m-%d"),
                             "Status": "Pending",
                             "Source": "Website Form",
