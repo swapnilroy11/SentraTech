@@ -220,9 +220,9 @@ const PricingSection = () => {
                 )}
 
                 {/* Plan Icon & Header */}
-                <div className="mb-6 flex items-center gap-4">
+                <div className="mb-5 flex items-center gap-3">
                   <div 
-                    className="h-16 w-16 rounded-xl flex items-center justify-center text-xl flex-shrink-0 font-bold"
+                    className="h-12 w-12 rounded-lg flex items-center justify-center text-lg flex-shrink-0 font-bold"
                     style={{ 
                       backgroundColor: plan.accent ? `${MATRIX_GREEN}20` : "rgba(255,255,255,0.05)",
                       color: plan.accent ? MATRIX_GREEN : "#00DDFF"
@@ -231,30 +231,30 @@ const PricingSection = () => {
                     ★
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-2xl font-bold mb-2" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                    <h3 className="text-xl font-bold mb-1" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                       {plan.title}
                       {plan.subtitle && (
-                        <span className="text-base font-normal text-gray-400 ml-2">({plan.subtitle})</span>
+                        <span className="text-sm font-normal text-gray-400 ml-2">({plan.subtitle})</span>
                       )}
                     </h3>
-                    <p className="text-base text-gray-300 leading-relaxed">{plan.tagline}</p>
+                    <p className="text-sm text-gray-300">{plan.tagline}</p>
                   </div>
                 </div>
 
                 {/* Price Display */}
-                <div className="mb-8">
-                  <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-4xl font-extrabold" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-3xl font-extrabold" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                       ${plan.price.toLocaleString()}
                     </span>
-                    <span className="text-sm text-gray-400 font-medium">/month</span>
+                    <span className="text-sm text-gray-400">/month</span>
                   </div>
-                  <div className="text-sm text-gray-400 mb-2 font-medium">per bundle (1,000 calls + 1,000 interactions)</div>
+                  <div className="text-xs text-gray-400 mb-1">per bundle (1,000 calls + 1,000 interactions)</div>
                   {plan.priceSubtext && (
-                    <div className="text-sm text-orange-400 font-medium">{plan.priceSubtext}</div>
+                    <div className="text-xs text-orange-400 font-medium">{plan.priceSubtext}</div>
                   )}
                   {term === "36m" && (
-                    <div className="text-sm text-green-400 mt-2 font-semibold">
+                    <div className="text-xs text-green-400 mt-1 font-semibold">
                       Was ${basePrices[plan.id].toLocaleString()} • Save 10%
                     </div>
                   )}
