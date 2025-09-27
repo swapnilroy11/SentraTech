@@ -22,11 +22,11 @@ const Footer = () => {
       { name: 'Support Center', href: '#' }
     ],
     legal: [
-      { name: 'Privacy Policy', href: '#' },
-      { name: 'Terms & Conditions', href: '#' },
-      { name: 'Compliance', href: '#' },
-      { name: 'Data Processing', href: '#' },
-      { name: 'Cookie Policy', href: '#' }
+      { name: 'Privacy Policy', href: '/privacy-policy' },
+      { name: 'Terms & Conditions', href: '/terms-of-service' },
+      { name: 'Cookie Policy', href: '/cookie-policy' },
+      { name: 'Compliance', href: '/security' },
+      { name: 'Data Processing', href: '/privacy-policy#data-processing' }
     ]
   };
 
