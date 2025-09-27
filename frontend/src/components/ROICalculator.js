@@ -525,7 +525,7 @@ const ROICalculator = () => {
                 <div className="space-y-1">
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
                     <ArrowDown size={16} className="mr-1 text-emerald-400" />
-                    {Math.abs(results.costReduction || 0).toFixed(0)}% Cost Reduction
+                    {(results.costChangePercent || 0)}% {results.isSavings ? 'Cost Reduction' : 'Cost Increase'}
                   </div>
                   <div className="text-base text-[rgb(160,160,160)] flex items-center justify-center">
                     <ArrowUp size={16} className="mr-1 text-emerald-400" />
