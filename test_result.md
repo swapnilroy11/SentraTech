@@ -69,9 +69,9 @@ test_plan:
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
-  test_sequence: 3
-  run_ui: false
+  version: "1.1"
+  test_sequence: 4
+  run_ui: true
 
 backend:
   - task: "NEW SentraTech Pricing Backend Integration Testing"
