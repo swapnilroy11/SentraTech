@@ -59,11 +59,9 @@
 
 test_plan:
   current_focus:
-    - "Contact Sales and Demo Request Form UI Testing"
+    - "Customer Journey Interactive Cards Fix Verification"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
-    - "Demo Request Form Supabase Integration Issues"
-    - "Contact Sales Form Supabase Schema Issues"
   test_all: false
   test_priority: "high_first"
 
