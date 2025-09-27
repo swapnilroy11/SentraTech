@@ -397,7 +397,7 @@ const ROICalculator = () => {
                     
                     <div className="text-center mb-4">
                       <div className="text-4xl font-black text-[#00DDFF] mb-1 font-rajdhani">
-                        {ahtMinutes}
+                        {ahtMinutes === '' ? '0' : ahtMinutes}
                       </div>
                       <div className="text-xs text-[rgb(161,161,170)]">minutes</div>
                     </div>
