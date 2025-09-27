@@ -201,16 +201,29 @@ const CookieBanner = () => {
               {isLoading ? 'Processing...' : 'Accept All Cookies'}
             </button>
             
-            <button
-              onClick={handleManagePreferences}
-              className="w-full px-6 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10 
-                       font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
-                       focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
-              disabled={isLoading}
-              aria-label="Manage cookie preferences"
-            >
-              Manage Preferences
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleRejectAll}
+                className="flex-1 px-4 py-3 border-2 border-[rgb(63,63,63)] text-[rgb(218,218,218)] hover:text-white hover:border-[rgb(161,161,170)]
+                         font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
+                         focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
+                disabled={isLoading}
+                aria-label="Reject optional cookies"
+              >
+                Reject All
+              </button>
+              
+              <button
+                onClick={handleManagePreferences}
+                className="flex-1 px-4 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10 
+                         font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
+                         focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
+                disabled={isLoading}
+                aria-label="Manage cookie preferences"
+              >
+                Customize
+              </button>
+            </div>
           </div>
 
           {/* Footer Note */}
