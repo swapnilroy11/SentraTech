@@ -269,7 +269,7 @@ const PricingSection = () => {
                   </div>
                   <p className="text-gray-500 text-sm mb-3">{plan.priceNote}</p>
                   {plan.subNote && (
-                    <p className="text-[#00FF84] text-sm font-medium">{plan.subNote}</p>
+                    <p className="text-[#00FF41] text-sm font-medium">{plan.subNote}</p>
                   )}
                   {term === "36m" && plan.originalPrice && (
                     <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#00FF84]/10 rounded-full">
