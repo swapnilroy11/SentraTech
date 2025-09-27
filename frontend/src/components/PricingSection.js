@@ -178,7 +178,7 @@ const PricingSection = () => {
             {plans.map((plan) => (
               <article 
                 key={plan.id} 
-                className={`rounded-2xl p-8 relative shadow-xl transition-all duration-300 min-h-[650px] flex flex-col ${
+                className={`rounded-2xl p-8 relative shadow-xl transition-all duration-300 h-[700px] overflow-hidden ${
                   plan.accent 
                     ? "ring-2 ring-green-400 bg-gradient-to-br from-[#00FF41]/10 to-[#00DDFF]/10 shadow-2xl shadow-[#00FF41]/20" 
                     : "bg-[#0e1410] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/50"
@@ -213,8 +213,8 @@ const PricingSection = () => {
                   </div>
                 </div>
 
-                {/* Price Display */}
-                <div className="mb-8">
+                {/* Price Display - Fixed height area */}
+                <div className="mb-8 h-[120px]">
                   <div className="text-4xl font-extrabold mb-3" style={{color: plan.accent ? MATRIX_GREEN : "white"}}>
                     ${plan.price.toLocaleString()}
                   </div>
@@ -229,8 +229,8 @@ const PricingSection = () => {
                   )}
                 </div>
 
-                {/* Features List - Flexible area that grows */}
-                <div className="flex-grow mb-8">
+                {/* Features List - Fixed height area */}
+                <div className="h-[300px] overflow-y-auto mb-8">
                   <ul className="space-y-4 text-sm text-gray-300">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
@@ -244,8 +244,8 @@ const PricingSection = () => {
                   </ul>
                 </div>
 
-                {/* CTA Button - Always at bottom with consistent positioning */}
-                <div className="mt-auto">
+                {/* CTA Button - Fixed position at bottom for ALL cards */}
+                <div className="absolute bottom-8 left-8 right-8">
                   <Button
                     onClick={() => handleContact(plan)}
                     className="w-full py-4 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-4"
