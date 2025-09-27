@@ -59,14 +59,20 @@ export const insertDemoRequest = async (formData) => {
   try {
     console.log('Submitting demo request to Supabase...', formData);
     
-    // Prepare basic required fields
+    // Prepare basic required fields (core only)
     const insertData = {
       user_name: formData.name,
       email: formData.email,
-      company: formData.company,
-      phone: formData.phone || null,
-      message: formData.message || null
+      company: formData.company
     };
+    
+    // Only add optional fields if they exist and the schema supports them
+    if (formData.phone) {
+      insertData.phone = formData.phone;
+    }
+    if (formData.message) {
+      insertData.message = formData.message;
+    }
     
     // Add volume fields only if they exist in formData (schema-safe approach)
     if (formData.call_volume) {
