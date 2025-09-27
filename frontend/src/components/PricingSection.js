@@ -304,10 +304,10 @@ const PricingSection = () => {
                 <div className="mb-4 p-3 rounded-xl bg-gray-900/50 border border-gray-800">
                   <div className="flex justify-between items-center text-center">
                     <div className="flex-1">
-                      <div className="text-[#00FF84] text-lg font-bold">{plan.savings}</div>
+                      <div className="text-[#00FF41] text-lg font-bold">{plan.savings}</div>
                     </div>
                     <div className="flex-1">
-                      <div className="text-[#00FF84] text-lg font-bold">{plan.setupTime}</div>
+                      <div className="text-[#00FF41] text-lg font-bold">{plan.setupTime}</div>
                     </div>
                   </div>
                 </div>
