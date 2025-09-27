@@ -78,11 +78,8 @@ const PricingSection = () => {
         "Full omnichannel integration",
         "Advanced analytics & BI dashboards",
         "24/7 priority support",
-        "Enhanced compliance & reporting"
-      ],
-      additionalFeatures: [
+        "Enhanced compliance & reporting",
         "Multi-language support (12+ languages)",
-        "Advanced BI & custom reporting",
         "Dedicated success manager",
         "99.9% uptime guarantee"
       ],
