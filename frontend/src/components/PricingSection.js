@@ -307,12 +307,12 @@ const PricingSection = () => {
                 <div className="mt-auto">
                   <Button
                     onClick={() => handleContact(plan)}
-                    className="w-full py-4 rounded-lg font-bold text-lg text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-3"
+                    className="w-full py-3 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 hover:shadow-lg mb-2"
                     style={{ background: MATRIX_GREEN }}
                   >
                     {plan.cta}
                   </Button>
-                  <div className="text-xs text-gray-500 text-center leading-relaxed">
+                  <div className="text-xs text-gray-500 text-center">
                     By clicking you agree to our Privacy Policy. {plan.id === 'starter' && 'Pilot requires prepayment.'}
                   </div>
                 </div>
