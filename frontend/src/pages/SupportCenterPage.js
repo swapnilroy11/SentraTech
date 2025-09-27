@@ -37,7 +37,7 @@ const SupportCenterPage = () => {
       icon: Mail,
       action: 'Send Email',
       color: 'bg-purple-600',
-      href: 'mailto:support@sentratech.net'
+      href: 'mailto:info@sentratech.net'
     }
   ];
 
