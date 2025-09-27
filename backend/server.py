@@ -268,6 +268,7 @@ class DemoRequest(BaseModel):
     company: str  # Required field, no default value
     phone: str = ""
     call_volume: str = ""
+    interaction_volume: str = ""
     message: str = ""
     
     @validator('name')
