@@ -186,7 +186,7 @@ const PricingSection = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex items-center justify-center space-x-8 mb-8"
             >
-              <span className={`text-lg font-semibold transition-colors ${term === '24m' ? 'text-[#00FF84]' : 'text-gray-500'}`}>
+              <span className={`text-lg font-semibold transition-colors ${term === '24m' ? 'text-[#00FF41]' : 'text-gray-500'}`}>
                 24 Months
               </span>
               <button
