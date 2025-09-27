@@ -219,7 +219,7 @@ const PricingSection = () => {
                 whileHover={{ 
                   y: -8,
                   boxShadow: plan.isPopular 
-                    ? "0 25px 50px -12px rgba(0, 255, 132, 0.25)" 
+                    ? "0 25px 50px -12px rgba(0, 255, 65, 0.25)" 
                     : "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
                 }}
                 className={`relative rounded-3xl p-8 transition-all duration-300 bg-gradient-to-br flex flex-col ${
