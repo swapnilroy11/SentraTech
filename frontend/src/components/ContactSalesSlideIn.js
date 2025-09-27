@@ -6,7 +6,7 @@ import { Badge } from './ui/badge';
 import { X, Check, Loader2, ArrowRight, Calendar } from 'lucide-react';
 import { insertContactRequest } from '../lib/supabaseClient';
 
-const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
+const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = null }) => {
   const [formData, setFormData] = useState({
     fullName: '',
     workEmail: '',
@@ -14,7 +14,10 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null }) => {
     companyName: '',
     companyWebsite: '',
     monthlyVolume: '',
-    planSelected: selectedPlan || '',
+    planSelected: selectedPlan || (prefill?.planSelected) || '',
+    planId: prefill?.planId || '',
+    billingTerm: prefill?.billingTerm || '24m',
+    priceDisplay: prefill?.priceDisplay || null,
     preferredContactMethod: 'email',
     scheduledTime: '',
     message: '',
