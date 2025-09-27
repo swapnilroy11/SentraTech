@@ -107,68 +107,89 @@ const CookieBanner = () => {
 
   return (
     <>
-      {/* Cookie Banner */}
+      {/* Cookie Consent Modal - Centered */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 transition-transform duration-500 ease-in-out ${
-          showBanner ? 'translate-y-0' : 'translate-y-full'
+        className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-500 ease-in-out ${
+          showBanner ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         role="dialog"
-        aria-label="Cookie consent banner"
+        aria-label="Cookie consent dialog"
         aria-describedby="cookie-description"
       >
-        {/* Banner Content */}
-        <div className="w-full max-w-4xl mx-auto px-4 py-6 bg-[#161B22] border-t border-[rgb(63,63,63)] shadow-2xl">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            {/* Message and Links */}
-            <div className="flex-1">
-              <p id="cookie-description" className="text-gray-300 text-sm mb-2">
-                We use cookies to enhance your experience. By continuing, you agree to our{' '}
-                <a
-                  href="/privacy-policy"
-                  className="text-gray-400 hover:text-[#00FF41] underline transition-colors duration-200"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Privacy Policy
-                </a>{' '}
-                and{' '}
-                <a
-                  href="/terms-of-service"
-                  className="text-gray-400 hover:text-[#00FF41] underline transition-colors duration-200"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Terms of Service
-                </a>
-                .
-              </p>
+        {/* Modal Backdrop */}
+        <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" />
+        
+        {/* Modal Content */}
+        <div className={`relative bg-[#161B22] border-2 border-[#00FF41]/20 rounded-2xl p-8 w-full max-w-lg shadow-2xl transform transition-all duration-500 ${
+          showBanner ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+        }`}>
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 bg-[#00FF41]/10 border-2 border-[#00FF41]/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-[#00FF41]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 min-w-fit">
-              <button
-                onClick={handleManagePreferences}
-                className="px-4 py-2 border border-[#00FF41] text-[#00FF41] hover:bg-[#00FF41] hover:text-black 
-                         font-medium text-sm rounded-md transition-all duration-200 focus:outline-none focus:ring-2 
-                         focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
-                disabled={isLoading}
-                aria-label="Manage cookie preferences"
-              >
-                Manage Preferences
-              </button>
-              
-              <button
-                onClick={handleAcceptAll}
-                className="px-6 py-2 bg-[#00FF41] text-black hover:bg-[#00DD38] font-medium text-sm 
-                         rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
-                         focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
-                disabled={isLoading}
-                aria-label="Accept all cookies"
-              >
-                {isLoading ? 'Processing...' : 'Accept All'}
-              </button>
-            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Cookie Preferences</h2>
+            <p className="text-[rgb(161,161,170)] text-sm">
+              We value your privacy and want to be transparent about our data usage.
+            </p>
           </div>
+
+          {/* Message */}
+          <div className="mb-6">
+            <p id="cookie-description" className="text-[rgb(218,218,218)] text-sm leading-relaxed text-center">
+              We use cookies to enhance your experience, analyze site usage, and personalize content. 
+              By continuing, you agree to our{' '}
+              <a
+                href="/privacy-policy"
+                className="text-[#00FF41] hover:text-[#00DD38] underline transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Privacy Policy
+              </a>{' '}
+              and{' '}
+              <a
+                href="/terms-of-service"
+                className="text-[#00FF41] hover:text-[#00DD38] underline transition-colors duration-200"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms of Service
+              </a>.
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={handleAcceptAll}
+              className="w-full px-6 py-3 bg-[#00FF41] text-black hover:bg-[#00DD38] font-semibold text-sm 
+                       rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41] 
+                       focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50 transform hover:scale-105"
+              disabled={isLoading}
+              aria-label="Accept all cookies"
+            >
+              {isLoading ? 'Processing...' : 'Accept All Cookies'}
+            </button>
+            
+            <button
+              onClick={handleManagePreferences}
+              className="w-full px-6 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10 
+                       font-medium text-sm rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 
+                       focus:ring-[#00FF41] focus:ring-offset-2 focus:ring-offset-[#161B22] disabled:opacity-50"
+              disabled={isLoading}
+              aria-label="Manage cookie preferences"
+            >
+              Manage Preferences
+            </button>
+          </div>
+
+          {/* Footer Note */}
+          <p className="text-xs text-[rgb(161,161,170)] text-center mt-4">
+            You can change your preferences anytime in our privacy settings.
+          </p>
         </div>
       </div>
 
