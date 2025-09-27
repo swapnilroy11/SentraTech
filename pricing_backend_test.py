@@ -582,7 +582,14 @@ class PricingBackendTester:
         
         try:
             print(f"🔍 Testing invalid plan data handling...")
-            response = requests.post(f"{BACKEND_URL}/contact/request", json=invalid_plan_data, timeout=20)
+            # Convert to demo request format
+            demo_invalid_data = {
+                "name": invalid_plan_data["full_name"],
+                "email": invalid_plan_data["work_email"],
+                "company": invalid_plan_data["company_name"],
+                "message": f"Invalid plan test: {invalid_plan_data['plan_selected']}"
+            }
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=demo_invalid_data, timeout=20)
             
             # Backend should either accept it gracefully or return appropriate error
             if response.status_code in [200, 400, 422]:
