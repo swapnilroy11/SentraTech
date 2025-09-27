@@ -335,17 +335,35 @@ const ROICalculator = () => {
                       </div>
                       
                       {/* Number Input */}
-                      <Input
-                        type="number"
-                        value={agentCount}
-                        onChange={(e) => {
-                          const value = Math.max(1, Math.min(500, parseInt(e.target.value) || 1));
-                          setAgentCount(value);
-                        }}
-                        className="bg-[rgb(26,28,30)] border-[#00FF41]/50 text-white rounded-lg text-lg py-3 text-center font-semibold focus:border-[#00FF41] focus:ring-[#00FF41]/20"
-                        min="1"
-                        max="500"
-                      />
+                      <div>
+                        <Input
+                          type="number"
+                          value={agentCount}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const numValue = parseInt(inputValue) || 0;
+                            
+                            // Always allow the input
+                            setAgentCount(numValue);
+                            
+                            // Show warnings for out-of-range values
+                            if (numValue < 1) {
+                              setAgentWarning('⚠️ Minimum 1 agent required for calculations');
+                            } else if (numValue > 500) {
+                              setAgentWarning('⚠️ Values above 500 agents may not be accurate');
+                            } else {
+                              setAgentWarning('');
+                            }
+                          }}
+                          className={`bg-[rgb(26,28,30)] text-white rounded-lg text-lg py-3 text-center font-semibold focus:ring-[#00FF41]/20 ${
+                            agentWarning ? 'border-yellow-500 focus:border-yellow-500' : 'border-[#00FF41]/50 focus:border-[#00FF41]'
+                          }`}
+                          placeholder="Enter agent count"
+                        />
+                        {agentWarning && (
+                          <div className="text-yellow-400 text-xs mt-1 text-center">{agentWarning}</div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
