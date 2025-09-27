@@ -67,6 +67,8 @@ export const insertDemoRequest = async (formData) => {
         company: formData.company,
         phone: formData.phone || null,
         message: formData.message || null,
+        call_volume: formData.call_volume || null,
+        interaction_volume: formData.interaction_volume || null,
         created_at: new Date().toISOString()
       }], { returning: 'minimal' }); // Use minimal returning to avoid RLS SELECT issues
 
