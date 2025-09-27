@@ -19,7 +19,8 @@ const CTASection = () => {
     company: '',
     phone: '',
     message: '',
-    call_volume: ''
+    call_volume: '',
+    interaction_volume: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
