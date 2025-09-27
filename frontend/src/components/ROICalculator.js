@@ -20,6 +20,10 @@ const ROICalculator = () => {
   const [ahtMinutes, setAhtMinutes] = useState(7);   // Default 7 as specified
   const [manualCallVolume, setManualCallVolume] = useState(null); // Manual override for call volume
   const [useManualVolume, setUseManualVolume] = useState(false);  // Toggle for manual vs auto calculation
+  
+  // Validation warnings
+  const [agentWarning, setAgentWarning] = useState('');
+  const [ahtWarning, setAhtWarning] = useState('');
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
