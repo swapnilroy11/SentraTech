@@ -117,7 +117,8 @@ const PricingSection = () => {
       ],
       additionalFeatures: [
         "Dedicated AI model instances",
-        "Custom integration development"
+        "Custom integration development",
+        "99.99% custom service guarantee"
       ],
       savings: "70-85%",
       setupTime: "4-6 weeks",
