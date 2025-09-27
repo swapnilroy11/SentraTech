@@ -92,15 +92,15 @@ class PricingBackendTester:
                 # Verify response structure
                 if result.get("success"):
                     self.log_test("Contact Request - Starter Plan Success", True, 
-                                f"✅ Starter plan contact request successful")
+                                f"✅ Starter plan contact request successful via demo endpoint")
                     
-                    # Verify plan metadata was processed
-                    if "plan_selected" in str(result) or "starter" in str(result):
-                        self.log_test("Contact Request - Starter Plan Metadata", True,
-                                    f"✅ Plan metadata included in response")
+                    # Verify reference ID was generated
+                    if result.get("reference_id"):
+                        self.log_test("Contact Request - Starter Plan Reference ID", True,
+                                    f"✅ Reference ID generated: {result.get('reference_id')}")
                     else:
-                        self.log_test("Contact Request - Starter Plan Metadata", False,
-                                    f"❌ Plan metadata missing from response")
+                        self.log_test("Contact Request - Starter Plan Reference ID", False,
+                                    f"❌ No reference ID in response")
                     
                     return result
                 else:
