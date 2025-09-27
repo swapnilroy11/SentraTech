@@ -315,7 +315,7 @@ const ROICalculator = () => {
                     
                     <div className="text-center mb-4">
                       <div className="text-4xl font-black text-[#00FF41] mb-1 font-rajdhani">
-                        {agentCount}
+                        {agentCount === '' ? '0' : agentCount}
                       </div>
                       <div className="text-xs text-[rgb(161,161,170)]">agents</div>
                     </div>
