@@ -316,7 +316,7 @@ const PricingSection = () => {
                 <div className="mt-auto pt-4">
                   <Button
                     onClick={() => handleContact(plan)}
-                    className="w-full bg-[#00FF84] hover:bg-[#00DD70] text-black rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 py-4 shadow-lg hover:shadow-[#00FF84]/25"
+                    className="w-full bg-[#00FF41] hover:bg-[#00DD35] text-black rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 py-4 shadow-lg hover:shadow-[#00FF41]/25"
                   >
                     {plan.cta}
                   </Button>
