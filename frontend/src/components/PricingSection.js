@@ -254,16 +254,24 @@ const PricingSection = () => {
                 {/* Price Display */}
                 <div className="text-center mb-6">
                   <div className="flex items-baseline justify-center mb-2">
-                    <span className="text-4xl font-extrabold text-white">
-                      ${plan.price.toLocaleString()}
-                    </span>
-                    <span className="text-gray-400 text-lg ml-2">/month</span>
+                    {plan.price ? (
+                      <>
+                        <span className="text-4xl font-extrabold text-white">
+                          ${plan.price.toLocaleString()}
+                        </span>
+                        <span className="text-gray-400 text-lg ml-2">/month</span>
+                      </>
+                    ) : (
+                      <span className="text-4xl font-extrabold text-white">
+                        Custom
+                      </span>
+                    )}
                   </div>
                   <p className="text-gray-500 text-sm mb-3">{plan.priceNote}</p>
                   {plan.subNote && (
                     <p className="text-[#00FF84] text-sm font-medium">{plan.subNote}</p>
                   )}
-                  {term === "36m" && (
+                  {term === "36m" && plan.originalPrice && (
                     <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#00FF84]/10 rounded-full">
                       <span className="text-[#00FF84] text-sm font-semibold">
                         Was ${plan.originalPrice.toLocaleString()} • Save 10%
