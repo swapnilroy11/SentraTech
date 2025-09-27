@@ -245,66 +245,85 @@ const CookieBanner = () => {
               </div>
 
             {/* Preference Options */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-5 mb-8">
               {/* Essential Cookies - Always Enabled */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-white font-medium">Essential Cookies</h3>
-                  <p className="text-gray-400 text-sm">Required for the website to function properly</p>
+              <div className="bg-[#00FF41]/5 border border-[#00FF41]/20 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-semibold flex items-center">
+                      <svg className="w-4 h-4 text-[#00FF41] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Essential Cookies
+                    </h3>
+                    <p className="text-[rgb(161,161,170)] text-sm mt-1">Required for the website to function properly</p>
+                  </div>
+                  <div className="text-[#00FF41] text-sm font-semibold bg-[#00FF41]/10 px-3 py-1 rounded-full">Always Active</div>
                 </div>
-                <div className="text-[#00FF41] text-sm font-medium">Always Active</div>
               </div>
 
               {/* Analytics Cookies */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-white font-medium">Analytics Cookies</h3>
-                  <p className="text-gray-400 text-sm">Help us improve our website performance</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer z-10">
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={preferences.analytics}
-                    onChange={() => handlePreferenceChange('analytics')}
-                  />
-                  <div 
-                    className={`w-11 h-6 rounded-full transition-colors duration-200 relative z-20 ${
-                      preferences.analytics ? 'bg-[#00FF41]' : 'bg-gray-600'
-                    }`}
-                    onClick={() => handlePreferenceChange('analytics')}
-                  >
-                    <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
-                      preferences.analytics ? 'translate-x-5' : 'translate-x-0'
-                    } mt-0.5 ml-0.5`}></div>
+              <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1 mr-4">
+                    <h3 className="text-white font-semibold flex items-center">
+                      <svg className="w-4 h-4 text-[rgb(161,161,170)] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 00-2-2z" />
+                      </svg>
+                      Analytics Cookies
+                    </h3>
+                    <p className="text-[rgb(161,161,170)] text-sm mt-1">Help us improve our website performance and user experience</p>
                   </div>
-                </label>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={preferences.analytics}
+                      onChange={() => handlePreferenceChange('analytics')}
+                    />
+                    <div 
+                      className={`w-12 h-6 rounded-full transition-colors duration-300 relative ${
+                        preferences.analytics ? 'bg-[#00FF41]' : 'bg-[rgb(63,63,63)]'
+                      }`}
+                    >
+                      <div className={`w-5 h-5 bg-white rounded-full shadow-lg transform transition-transform duration-300 ${
+                        preferences.analytics ? 'translate-x-6' : 'translate-x-0.5'
+                      } mt-0.5`}></div>
+                    </div>
+                  </label>
+                </div>
               </div>
 
               {/* Marketing Cookies */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-white font-medium">Marketing Cookies</h3>
-                  <p className="text-gray-400 text-sm">Used for personalized advertising and marketing</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer z-10">
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={preferences.marketing}
-                    onChange={() => handlePreferenceChange('marketing')}
-                  />
-                  <div 
-                    className={`w-11 h-6 rounded-full transition-colors duration-200 relative z-20 ${
-                      preferences.marketing ? 'bg-[#00FF41]' : 'bg-gray-600'
-                    }`}
-                    onClick={() => handlePreferenceChange('marketing')}
-                  >
-                    <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
-                      preferences.marketing ? 'translate-x-5' : 'translate-x-0'
-                    } mt-0.5 ml-0.5`}></div>
+              <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1 mr-4">
+                    <h3 className="text-white font-semibold flex items-center">
+                      <svg className="w-4 h-4 text-[rgb(161,161,170)] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                      Marketing Cookies
+                    </h3>
+                    <p className="text-[rgb(161,161,170)] text-sm mt-1">Used for personalized advertising and targeted content</p>
                   </div>
-                </label>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={preferences.marketing}
+                      onChange={() => handlePreferenceChange('marketing')}
+                    />
+                    <div 
+                      className={`w-12 h-6 rounded-full transition-colors duration-300 relative ${
+                        preferences.marketing ? 'bg-[#00FF41]' : 'bg-[rgb(63,63,63)]'
+                      }`}
+                    >
+                      <div className={`w-5 h-5 bg-white rounded-full shadow-lg transform transition-transform duration-300 ${
+                        preferences.marketing ? 'translate-x-6' : 'translate-x-0.5'
+                      } mt-0.5`}></div>
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
 
