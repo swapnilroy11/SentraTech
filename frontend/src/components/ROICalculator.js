@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { Label } = './ui/label';
+import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, TrendingDown, DollarSign, Clock,
   Users, Zap, Loader2, Target, Mail, X, 
