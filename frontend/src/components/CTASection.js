@@ -205,7 +205,7 @@ const CTASection = () => {
         // Clear form data after successful submission
         setFormData({
           name: '', email: '', company: '', phone: '', 
-          message: '', call_volume: '', interaction_volume: ''
+          message: ''
         });
         setFieldErrors({}); // Clear any field errors
       } else {
