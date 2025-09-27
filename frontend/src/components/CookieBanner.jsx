@@ -180,7 +180,7 @@ const CookieBanner = () => {
           </div>
 
           {/* Message */}
-          <div className="mb-6">
+          <div className="mb-5">
             <p id="cookie-description" className="text-[rgb(218,218,218)] text-sm leading-relaxed text-center">
               We use cookies to enhance your experience, analyze site usage, and personalize content. 
               By continuing, you agree to our{' '}
