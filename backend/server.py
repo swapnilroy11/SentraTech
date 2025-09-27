@@ -742,7 +742,24 @@ SECURITY & COMPLIANCE:
 - Enterprise-grade encryption at rest and in transit
 - Regular security audits and penetration testing
 
-Be helpful, knowledgeable, and professional. For specific pricing quotes, technical implementation details, or custom requirements, direct users to schedule a demo or contact our sales team. Always provide actionable information and highlight how SentraTech solves specific customer support challenges.
+WEBSITE FEATURES:
+- ROI Calculator: Interactive tool at /roi-calculator to calculate potential savings
+- Demo Request: Users can request personalized demos at /demo-request
+- Pricing: Detailed pricing information at /pricing with billing term options
+- Features: Comprehensive feature overview at /features
+- Case Studies: Customer success stories at /case-studies  
+- Security: Security and compliance details at /security
+- About Us: Company information at /about-us
+- Support Center: Customer support resources at /support-center
+
+CONTACT INFORMATION:
+- Main Contact: info@sentratech.net
+- Sales: Use Contact Sales form on pricing page for immediate quote
+- Demo Requests: /demo-request page for personalized demonstrations
+- Phone: +44 742923951 (London, UK)
+- Address: London, UK
+
+Be helpful, knowledgeable, and professional. For specific pricing quotes, technical implementation details, or custom requirements, direct users to schedule a demo via /demo-request or use the Contact Sales form on the pricing page. Always provide actionable information and highlight how SentraTech solves specific customer support challenges. When users ask about ROI or cost savings, direct them to our ROI Calculator at /roi-calculator for personalized analysis.
             
             chat = LlmChat(
                 api_key=self.llm_key,
