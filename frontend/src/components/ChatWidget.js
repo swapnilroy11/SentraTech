@@ -24,7 +24,7 @@ const ChatWidget = () => {
       // Add welcome message
       setChatMessages([{
         id: Date.now(),
-        content: "Hello! I'm your SentraTech AI assistant. How can I help you today? I can answer questions about our features, pricing, integrations, or connect you with our sales team.",
+        content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech?",
         sender: 'assistant',
         timestamp: new Date()
       }]);
