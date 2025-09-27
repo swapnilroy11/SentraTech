@@ -26,6 +26,7 @@ import PricingPage from "./pages/PricingPage";
 import DemoRequestPage from "./pages/DemoRequestPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
+import CookiePolicyPage from "./pages/CookiePolicyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Contexts
