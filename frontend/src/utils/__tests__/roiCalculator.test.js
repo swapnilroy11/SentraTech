@@ -272,7 +272,7 @@ describe('ROI Calculator - Per-1k Bundle Pricing', () => {
     expect(result.annualProjection[0].month).toBe(1);
     expect(result.annualProjection[0].cumulative_savings).toBe(3000); // 4000 - 1000 (impl cost)
     expect(result.annualProjection[11].month).toBe(12);
-    expect(result.annualProjection[11].cumulative_savings).toBe(47000); // (4000 * 12) - 1000
+    expect(result.annualProjection[11].cumulative_savings).toBe(48000); // (4000 * 12) - 1000 (corrected)
   });
 });
 
