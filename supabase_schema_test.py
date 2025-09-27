@@ -256,7 +256,7 @@ class SupabaseSchemaUpdatedTester:
         test_cases = [
             {
                 "name": "Cache Test 1",
-                "email": "cache1@schema.test",
+                "email": "cache1@example.com",
                 "company": "Cache Test Company 1",
                 "phone": "+1555111111",
                 "call_volume": "25,000",
@@ -265,7 +265,7 @@ class SupabaseSchemaUpdatedTester:
             },
             {
                 "name": "Cache Test 2", 
-                "email": "cache2@schema.test",
+                "email": "cache2@example.com",
                 "company": "Cache Test Company 2",
                 "phone": "+1555222222",
                 "call_volume": "45,000",
@@ -274,7 +274,7 @@ class SupabaseSchemaUpdatedTester:
             },
             {
                 "name": "Cache Test 3",
-                "email": "cache3@schema.test", 
+                "email": "cache3@example.com", 
                 "company": "Cache Test Company 3",
                 "phone": "+1555333333",
                 "call_volume": "15,000",
