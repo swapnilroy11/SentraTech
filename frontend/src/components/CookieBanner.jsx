@@ -176,13 +176,13 @@ const CookieBanner = () => {
         >
           {/* Header */}
           <div className="text-center mb-5">
-            <div className="w-12 h-12 bg-[#00FF41]/10 border-2 border-[#00FF41]/30 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-[#00FF41]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-[#00FF41] rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <h2 className="text-xl font-bold text-white mb-2">Cookie Preferences</h2>
-            <p className="text-[rgb(161,161,170)] text-sm">
+            <p className="text-gray-300 text-sm">
               We value your privacy and want to be transparent about our data usage.
             </p>
           </div>
