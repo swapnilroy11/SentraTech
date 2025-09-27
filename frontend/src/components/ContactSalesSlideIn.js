@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { X, Check, Loader2, ArrowRight, Calendar } from 'lucide-react';
+import { X, Check, Loader2, ArrowRight } from 'lucide-react';
 import { insertContactRequest } from '../lib/supabaseClient';
 
 const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = null }) => {
