@@ -7,40 +7,55 @@ import { Label } from './ui/label';
 import { 
   Calculator, TrendingUp, TrendingDown, DollarSign, Clock,
   Users, Zap, Loader2, Target, Mail, X, 
-  ArrowDown, ArrowUp, Sparkles
+  ArrowDown, ArrowUp, Sparkles, Settings, ChevronDown, ChevronUp
 } from 'lucide-react';
-import { calculateROI } from '../utils/calculatorLogic';
+import { calculateROI, formatCurrency, formatNumber } from '../utils/calculatorLogic';
 import { COUNTRIES } from '../utils/costBaselines';
 import { supabase } from '../lib/supabaseClient';
 
 const ROICalculator = () => {
-  // State Management - Agent Count and AHT
+  // State Management - Updated for new per-1,000 bundle logic
   const [selectedCountry, setSelectedCountry] = useState('Bangladesh');
-  const [agentCount, setAgentCount] = useState(10);     // Default 10 agents
-  const [ahtMinutes, setAhtMinutes] = useState(7);   // Default 7 as specified
-  const [manualCallVolume, setManualCallVolume] = useState(null); // Manual override for call volume
-  const [useManualVolume, setUseManualVolume] = useState(false);  // Toggle for manual vs auto calculation
+  const [mode, setMode] = useState('call_volume'); // 'agent_count', 'call_volume', 'per_bundle'
   
-  // Validation warnings
-  const [agentWarning, setAgentWarning] = useState('');
-  const [ahtWarning, setAhtWarning] = useState('');
+  // Bundle configuration (per-1,000 bundle pricing)
+  const [calls, setCalls] = useState(1000);
+  const [interactions, setInteractions] = useState(1000);
+  const [callAHT, setCallAHT] = useState(8);
+  const [interactionAHT, setInteractionAHT] = useState(5);
+  const [automationPct, setAutomationPct] = useState(60); // UI percentage (0-100)
+  
+  // Mode-specific inputs
+  const [agentCount, setAgentCount] = useState(10);
+  const [volumeSubMode, setVolumeSubMode] = useState('auto'); // 'auto', 'manual'
+  const [manualAgentCount, setManualAgentCount] = useState(10);
+  
+  // Business settings
+  const [sentraPricePer1k, setSentraPricePer1k] = useState(1200);
+  const [bundlesPerMonth, setBundlesPerMonth] = useState(1);
+  const [implCost, setImplCost] = useState(0);
+  
+  // Advanced settings
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [customAgentHourly, setCustomAgentHourly] = useState(null);
+  const [customBpoPerMin, setCustomBpoPerMin] = useState(null);
+  
+  // State for results and UI
   const [results, setResults] = useState({});
   const [error, setError] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [warnings, setWarnings] = useState({});
 
-  // Initial calculation on component mount
-  useEffect(() => {
-    if (agentCount > 0 && ahtMinutes > 0) {
-      const initialMetrics = calculateROI(selectedCountry, agentCount, ahtMinutes);
-      setResults(initialMetrics);
-    }
-  }, []); // Run once on mount
-  
-  // Email modal state
+  // Email modal state (kept from original)
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
+
+  // Get current country data
+  const currentCountry = COUNTRIES.find(c => c.name === selectedCountry) || COUNTRIES[0];
+  const effectiveAgentHourly = customAgentHourly || currentCountry.agentHourlyLoaded;
+  const effectiveBpoPerMin = customBpoPerMin || currentCountry.bpoPerMin;
 
   // Real-time calculation with immediate updates
   useEffect(() => {
