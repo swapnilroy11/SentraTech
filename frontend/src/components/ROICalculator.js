@@ -64,11 +64,12 @@ const ROICalculator = () => {
             aiCost: metrics.aiCost,
             monthlySavings: metrics.monthlySavings
           });
-          setResults(metrics);
-          setError(null);
-        } else {
-          // Reset to empty results if invalid inputs
-          setResults({});
+            setResults(metrics);
+            setError(null);
+          } else {
+            // Reset to empty results if invalid inputs
+            setResults({});
+          }
         }
       } catch (error) {
         console.error('Error calculating ROI:', error);
