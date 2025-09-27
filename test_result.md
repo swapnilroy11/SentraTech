@@ -59,11 +59,11 @@
 
 test_plan:
   current_focus:
-    - "Customer Journey Interactive Cards Fix Verification"
+    - "Homepage Navigation Button Performance Fix"
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 metadata:
   created_by: "main_agent"
