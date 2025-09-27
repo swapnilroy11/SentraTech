@@ -17,11 +17,11 @@ const CookieBanner = () => {
     console.log('Cookie consent status:', consentData ? 'Already given' : 'Not given');
     
     if (!consentData) {
-      // Show modal immediately for first-time visitors
+      // Show modal quickly for better UX
       setTimeout(() => {
         setShowBanner(true);
         console.log('Showing cookie consent modal in viewport');
-      }, 800); // Reduced delay - show as soon as page elements are loaded
+      }, 300); // Faster appearance for immediate visibility
     } else {
       // Initialize analytics based on existing consent
       try {
