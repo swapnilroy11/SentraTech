@@ -1,71 +1,90 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useNavigateWithScroll = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const scrollTimeoutRef = useRef(null);
 
   const navigateToSection = (path) => {
-    console.log('Navigating to:', path);
-    
     // Check if it's an anchor link
     if (path.includes('#')) {
       const [routePath, sectionId] = path.split('#');
-      console.log('Anchor navigation - Route:', routePath, 'Section:', sectionId);
       
       // If we're already on the right page, just scroll
       if (location.pathname === routePath) {
-        console.log('Already on correct page, scrolling to:', sectionId);
         scrollToSection(sectionId);
       } else {
-        console.log('Navigating to page then scrolling');
-        // Navigate to the page with the hash in the URL and store scroll target
-        navigate(`${routePath}#${sectionId}`, { state: { scrollTo: sectionId } });
+        // Navigate to the page with the hash in the URL
+        navigate(`${routePath}#${sectionId}`);
       }
     } else {
-      console.log('Regular navigation to:', path);
       navigate(path);
     }
   };
 
   const scrollToSection = (sectionId) => {
-    // Try multiple attempts with different delays
-    const attemptScroll = (attempt = 1) => {
+    // Clear any existing timeout
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    // Fast scroll attempt using requestAnimationFrame for smoothness
+    const fastAttempt = () => {
       const element = document.getElementById(sectionId);
       if (element) {
-        console.log(`Found element with ID: ${sectionId} on attempt ${attempt}`);
         element.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
-      } else {
-        console.log(`Element not found with ID: ${sectionId} on attempt ${attempt}`);
-        if (attempt <= 5) {
-          // Try again with increasing delays to handle dynamic content
-          setTimeout(() => attemptScroll(attempt + 1), attempt * 200);
-        }
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediate scroll first
+    if (fastAttempt()) return;
+
+    // If not found immediately, try with minimal delay for dynamic content
+    const attemptScroll = (attempt = 1) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        requestAnimationFrame(() => {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+        return;
+      }
+      
+      // Only retry twice more with short delays
+      if (attempt <= 2) {
+        scrollTimeoutRef.current = setTimeout(() => attemptScroll(attempt + 1), 150);
       }
     };
 
-    // Start first attempt after a small delay
-    setTimeout(() => attemptScroll(), 300);
+    // Start with minimal delay
+    scrollTimeoutRef.current = setTimeout(() => attemptScroll(), 100);
   };
 
   // Handle scrolling after navigation
   useEffect(() => {
-    // Check for hash in URL or state
-    const hashFromUrl = location.hash.substring(1); // Remove #
-    const scrollTarget = location.state?.scrollTo || hashFromUrl;
+    const hashFromUrl = location.hash.substring(1);
     
-    if (scrollTarget) {
-      console.log('Scrolling to target from URL/state:', scrollTarget);
-      scrollToSection(scrollTarget);
-      // Clear the state but keep the hash in URL
-      if (location.state?.scrollTo) {
-        navigate(location.pathname + location.hash, { replace: true, state: {} });
-      }
+    if (hashFromUrl) {
+      scrollToSection(hashFromUrl);
     }
-  }, [location, navigate]);
+  }, [location.pathname, location.hash]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return navigateToSection;
 };
