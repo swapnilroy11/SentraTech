@@ -14,7 +14,7 @@ import uuid
 # Backend URL from environment
 BACKEND_URL = "https://sentra-pricing-cards.preview.emergentagent.com/api"
 
-class LoadTestingFramework:
+class DemoRequestVolumeFieldsTester:
     """Comprehensive API Load and Stability Testing Framework"""
     
     def __init__(self):
