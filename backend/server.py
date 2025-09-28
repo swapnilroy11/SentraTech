@@ -28,6 +28,7 @@ from passlib.context import CryptContext
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends, status
 import aiosmtplib
+import httpx
 import aiohttp
 
 # Import performance optimization modules
