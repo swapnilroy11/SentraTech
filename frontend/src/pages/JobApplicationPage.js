@@ -556,30 +556,30 @@ const JobApplicationPage = () => {
             {/* Application Summary */}
             <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg p-6">
               <h4 className="text-lg font-semibold text-white mb-4">Application Summary</h4>
-              <div className="grid md:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-[rgb(161,161,170)]">Name:</span>
-                  <span className="text-white ml-2">{formData.firstName} {formData.lastName}</span>
+              <div className="space-y-3 text-sm">
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">Name:</span>
+                  <span className="text-white break-words">{formData.firstName} {formData.lastName}</span>
                 </div>
-                <div>
-                  <span className="text-[rgb(161,161,170)]">Email:</span>
-                  <span className="text-white ml-2">{formData.email}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">Email:</span>
+                  <span className="text-white break-all">{formData.email}</span>
                 </div>
-                <div>
-                  <span className="text-[rgb(161,161,170)]">Location:</span>
-                  <span className="text-white ml-2">{formData.location}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">Location:</span>
+                  <span className="text-white break-words">{formData.location}</span>
                 </div>
-                <div>
-                  <span className="text-[rgb(161,161,170)]">Resume:</span>
-                  <span className="text-white ml-2">{resume ? resume.name : 'Not uploaded'}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">Resume:</span>
+                  <span className="text-white break-words">{resume ? resume.name : 'Not provided'}</span>
                 </div>
-                <div>
-                  <span className="text-[rgb(161,161,170)]">LinkedIn:</span>
-                  <span className="text-white ml-2">{formData.linkedinProfile || 'Not provided'}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">LinkedIn:</span>
+                  <span className="text-white break-all">{formData.linkedinProfile || 'Not provided'}</span>
                 </div>
-                <div>
-                  <span className="text-[rgb(161,161,170)]">Experience:</span>
-                  <span className="text-white ml-2">{formData.relevantExperience || 'Not specified'}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
+                  <span className="text-white">{formData.relevantExperience || '0-1'}</span>
                 </div>
               </div>
             </div>
