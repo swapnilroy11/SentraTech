@@ -73,6 +73,7 @@ test_plan:
     - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "ROI Calculator Email Modal Auto-Close Bug Fix Testing"
     - "Enhanced Customer Journey Modal with Comprehensive Step-by-Step Information"
+    - "Comprehensive SentraTech Forms Dashboard Synchronization Testing"
   test_all: false
   test_priority: "high_first"
 
