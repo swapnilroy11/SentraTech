@@ -29,20 +29,20 @@ const NewsletterSubscribe = () => {
     setMessage('');
 
     try {
-      // Use enhanced dashboard config with proper authentication
-      const { FORM_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/formConfig.js');
+      // Use form submission helper
+      const { FORM_CONFIG, submitForm, clearFormCache } = await import('../config/formConfig.js');
       
       // Clear any cached data
       clearFormCache();
       
-      // Prepare data for new dashboard endpoint
-      const dashboardData = {
+      // Prepare data for backend endpoint
+      const formData = {
         email: email.trim(),
         name: '' // Optional field
       };
       
-      // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
+      // Submit using form helper function
+      const result = await submitForm(FORM_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, formData);
       
       if (result.success) {
         setStatus('success');
