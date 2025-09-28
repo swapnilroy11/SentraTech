@@ -158,6 +158,7 @@ function App() {
                 <Route path="/support-center" element={<SupportCenterPage />} />
                 <Route path="/contact-sales-management" element={<ContactSalesPage />} />
                 <Route path="/careers" element={<CareersPage />} />
+                <Route path="/careers/apply/:jobId" element={<JobApplicationPage />} />
                 
                 {/* Custom 404 Page */}
                 <Route path="*" element={<NotFoundPage />} />
