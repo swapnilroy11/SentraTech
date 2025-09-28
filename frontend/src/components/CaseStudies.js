@@ -130,6 +130,114 @@ const CaseStudies = () => {
         author: "Sarah Mitchell",
         position: "Operations Director"  
       }
+    },
+    
+    {
+      id: 4,
+      company: "FinanceFirst Banking",
+      location: "Sylhet, Bangladesh",
+      industry: "Financial Services",
+      companySize: "320 employees",
+      flag: "🇧🇩",
+      logo: "FF",
+      description: "Regional banking institution serving 100,000+ customers with digital banking and microfinance services across northeastern Bangladesh.",
+      challenge: "Handling 1,500+ daily customer inquiries about loans, account issues, and digital banking with limited support staff causing long wait times.",
+      
+      metrics: {
+        costReduction: { before: "৳95,000/month", after: "৳35,000/month", improvement: "63%" },
+        responseTime: { before: "35 min", after: "1.5 min", improvement: "96%" },
+        satisfaction: { before: "74%", after: "93%", improvement: "19%" },
+        automationRate: { before: "12%", after: "80%", improvement: "68%" },
+        businessIntelligence: { before: "Monthly reports", after: "Real-time fraud detection", improvement: "95% fraud reduction" },
+        analytics: { before: "Manual tracking", after: "Predictive loan analytics", improvement: "40% approval rate increase" }
+      },
+      
+      results: [
+        "Loan application status updates automated via SMS integration",
+        "Account balance inquiries resolved instantly through AI chatbot",
+        "Digital banking onboarding streamlined with AI assistance", 
+        "Fraud detection improved with real-time transaction monitoring",
+        "Customer acquisition increased by 45% through better service"
+      ],
+      
+      implementation: "7 weeks",
+      testimonial: {
+        quote: "SentraTech revolutionized our customer service. We now detect fraud in real-time and our customers get instant responses 24/7.",
+        author: "Mohammad Hasan",
+        position: "Head of Digital Banking"
+      }
+    },
+    
+    {
+      id: 5,
+      company: "EduTech Learning Hub",
+      location: "Manchester, UK",
+      industry: "Education Technology", 
+      companySize: "120 employees",
+      flag: "🇬🇧",
+      logo: "EL",
+      description: "Online education platform serving 25,000+ students across UK with personalized learning experiences and certification programs.",
+      challenge: "Managing student inquiries, technical support, and course guidance with overwhelmed support team during peak enrollment periods.",
+      
+      metrics: {
+        costReduction: { before: "£12,000/month", after: "£4,500/month", improvement: "62%" },
+        responseTime: { before: "22 min", after: "2 min", improvement: "91%" },
+        satisfaction: { before: "81%", after: "97%", improvement: "16%" },
+        automationRate: { before: "18%", after: "88%", improvement: "70%" },
+        businessIntelligence: { before: "Basic analytics", after: "Learning path optimization", improvement: "30% completion rate" },
+        analytics: { before: "Course completion only", after: "Full learning journey tracking", improvement: "Engagement +55%" }
+      },
+      
+      results: [
+        "Course enrollment and payment queries handled automatically",
+        "Technical troubleshooting resolved through intelligent help system",
+        "Personalized learning recommendations increased engagement by 55%",
+        "Student retention improved by 40% through proactive support",
+        "Peak enrollment periods managed without additional staff"
+      ],
+      
+      implementation: "5 weeks",
+      testimonial: {
+        quote: "Our students love the instant help and personalized guidance. SentraTech helped us scale from 10,000 to 25,000 students seamlessly.",
+        author: "Emma Thompson",
+        position: "Student Success Director"
+      }
+    },
+    
+    {
+      id: 6,
+      company: "GreenLogistics Transport",
+      location: "Birmingham, UK",
+      industry: "Logistics & Transport",
+      companySize: "180 employees",
+      flag: "🇬🇧", 
+      logo: "GL",
+      description: "Eco-friendly logistics company serving 500+ business clients with sustainable delivery solutions across UK metropolitan areas.",
+      challenge: "Coordinating delivery schedules, tracking inquiries, and customer communications while scaling operations across multiple cities.",
+      
+      metrics: {
+        costReduction: { before: "£15,000/month", after: "£5,800/month", improvement: "61%" },
+        responseTime: { before: "28 min", after: "1.8 min", improvement: "94%" },
+        satisfaction: { before: "77%", after: "95%", improvement: "18%" },
+        automationRate: { before: "25%", after: "85%", improvement: "60%" },
+        businessIntelligence: { before: "Basic delivery tracking", after: "Predictive route optimization", improvement: "25% efficiency gain" },
+        analytics: { before: "Manual reporting", after: "Real-time fleet analytics", improvement: "Carbon footprint -30%" }
+      },
+      
+      results: [
+        "Delivery tracking and updates automated via WhatsApp integration",
+        "Route optimization reduced fuel consumption by 30%", 
+        "Customer communications streamlined across multiple channels",
+        "Peak delivery periods handled with 25% improved efficiency",
+        "Client satisfaction increased leading to 50% more repeat business"
+      ],
+      
+      implementation: "6 weeks", 
+      testimonial: {
+        quote: "SentraTech helped us maintain our green mission while scaling rapidly. Our clients love the real-time tracking and our drivers love the optimized routes.",
+        author: "James Wilson",
+        position: "Operations Manager"
+      }
     }
   ];
 
