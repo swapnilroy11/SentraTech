@@ -924,10 +924,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
                 response = await client.post(
                     dashboard_url,
                     json=demo_request.dict(),
-                    headers={
-                        "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
-                    }
+                    headers=DashboardConfig.get_headers()
                 )
                 
                 if response.status_code in [200, 201]:
@@ -1021,10 +1018,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
                 response = await client.post(
                     dashboard_url,
                     json=contact_request.dict(),
-                    headers={
-                        "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
-                    }
+                    headers=DashboardConfig.get_headers()
                 )
                 
                 if response.status_code in [200, 201]:
@@ -1118,10 +1112,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
                 response = await client.post(
                     dashboard_url,
                     json=roi_report.dict(),
-                    headers={
-                        "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
-                    }
+                    headers=DashboardConfig.get_headers()
                 )
                 
                 if response.status_code in [200, 201]:
@@ -1210,10 +1201,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
                 response = await client.post(
                     dashboard_url,
                     json=subscription.dict(),
-                    headers={
-                        "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
-                    }
+                    headers=DashboardConfig.get_headers()
                 )
                 
                 if response.status_code in [200, 201]:
