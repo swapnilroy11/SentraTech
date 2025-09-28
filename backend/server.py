@@ -1092,63 +1092,6 @@ class EmailService:
         try:
             # Temporarily disabled due to CSS syntax issues in f-string
             return {"success": True, "message": "Internal notification disabled temporarily"}
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1>🚨 NEW DEMO REQUEST</h1>
-                        <p class="urgent">Action Required within 2 hours</p>
-                    </div>
-                    <div class="content">
-                        <h2>Demo Request from {demo_request.company}</h2>
-                        
-                        <div class="details">
-                            <h3>Contact Information:</h3>
-                            <p><strong>Name:</strong> {demo_request.name}<br>
-                            <strong>Email:</strong> {demo_request.email}<br>
-                            <strong>Company:</strong> {demo_request.company}<br>
-                            <strong>Phone:</strong> {demo_request.phone or 'Not provided'}</p>
-                            
-                            <h3>Message:</h3>
-                            <p>{demo_request.message or 'No additional message provided'}</p>
-                            
-                            <h3>Submitted:</h3>
-                            <p>{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
-                        </div>
-                        
-                        <h3>Next Steps:</h3>
-                        <ul>
-                            <li>Review company profile and prepare personalized demo</li>
-                            <li>Contact within 2 business hours</li>
-                            <li>Schedule demo meeting</li>
-                        </ul>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """
-            
-            text_content = f"""
-            🚨 NEW DEMO REQUEST - Action Required within 2 hours
-            
-            Demo Request from {demo_request.company}
-            
-            Contact Information:
-            Name: {demo_request.name}
-            Email: {demo_request.email}
-            Company: {demo_request.company}
-            Phone: {demo_request.phone or 'Not provided'}
-            
-            Message: {demo_request.message or 'No additional message provided'}
-            
-            Submitted: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}
-            
-            Next Steps:
-            - Review company profile and prepare personalized demo
-            - Contact within 2 business hours  
-            - Schedule demo meeting
-            """
-            
-            return await self.send_email(self.sales_email, subject, html_content, text_content)
             
         except Exception as e:
             logger.error(f"Error sending internal notification: {str(e)}")
