@@ -1,0 +1,57 @@
+# NetworkPolicy to Allow Egress Traffic to External APIs
+# Apply with: kubectl apply -f 02-network-policy-egress.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-external-api-egress
+  namespace: emergent-agents-env  # Update to your actual namespace
+spec:
+  podSelector: {}  # Apply to all pods in namespace
+  policyTypes:
+  - Egress
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS traffic to external APIs
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow HTTP traffic (if needed)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+  # Allow internal cluster communication
+  - to:
+    - namespaceSelector: {}
+  # Allow communication within the same namespace
+  - to:
+    - podSelector: {}
+---
+# Alternative: More specific policy for api.sentratech.net
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-sentratech-api
+  namespace: emergent-agents-env
+spec:
+  podSelector:
+    matchLabels:
+      app: backend  # Update to match your backend pod labels
+  policyTypes:
+  - Egress
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
