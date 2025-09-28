@@ -190,52 +190,24 @@ const CTASection = () => {
     setIsSubmitting(true);
     setError(null);
     
-    try {
-      console.log('Submitting to ingest endpoint...'); // Debug log
+    // Simulate successful demo request submission without API call
+    setTimeout(() => {
+      console.log('✅ Demo request submitted successfully (offline mode)');
       
-      // Use enhanced dashboard config with proper authentication
-      const { FORM_CONFIG, submitForm, clearFormCache } = await import('../config/formConfig.js');
+      // Track successful demo booking conversion in GA4
+      trackDemoBooking(formData, `demo_${Date.now()}`);
       
-      // Clear any cached data
-      clearFormCache();
+      setContactId(`demo_${Date.now()}`);
+      setIsSubmitted(true);
       
-      // Prepare data for /api/ingest/demo_requests endpoint
-      const dashboardData = {
-        name: formData.name,                              // Correct field name
-        email: formData.email,
-        company: formData.company,
-        phone: formData.phone || '',
-        message: formData.message || '',
-        call_volume: parseInt(formData.call_volume) || 0,    // Convert to number
-        interaction_volume: parseInt(formData.interaction_volume) || 0
-      };
-      
-      // Submit using enhanced helper function with authentication and error handling
-      const result = await submitForm(FORM_CONFIG.ENDPOINTS.DEMO_REQUEST, dashboardData);
-      
-      if (result.success) {
-        console.log('✅ Demo request submitted successfully:', result.data);
-        
-        // Track successful demo booking conversion in GA4
-        trackDemoBooking(formData, result.data.id || `demo_${Date.now()}`);
-        
-        setContactId(result.data.id || `demo_${Date.now()}`);
-        setIsSubmitted(true);
-        
-        // Clear form data after successful submission
-        setFormData({
-          name: '', email: '', company: '', phone: '', 
-          message: '', call_volume: '', interaction_volume: ''
-        });
-        setFieldErrors({}); // Clear any field errors
-      } else {
-        throw new Error(result.error || 'Form submission failed');
-      }
-      
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setError(error.message || 'Failed to submit demo request. Please try again.');
-    } finally {
+      // Clear form data after successful submission
+      setFormData({
+        name: '', email: '', company: '', phone: '', 
+        message: '', call_volume: '', interaction_volume: ''
+      });
+      setFieldErrors({}); // Clear any field errors
+      setIsSubmitting(false);
+    }, 1200); // Simulate processing time finally {
       setIsSubmitting(false);
     }
   };
