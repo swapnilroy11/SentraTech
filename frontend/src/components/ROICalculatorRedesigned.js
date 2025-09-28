@@ -239,7 +239,7 @@ const ROICalculatorRedesigned = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+          'X-INGEST-KEY': 'test-ingest-key-12345'
         },
         body: JSON.stringify(reportData)
       });
