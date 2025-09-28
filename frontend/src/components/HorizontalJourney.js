@@ -641,10 +641,10 @@ const HorizontalJourney = () => {
             className="customer-journey-modal-overlay"
             style={{
               position: 'fixed',
-              top: '0px',
-              left: '0px',
-              right: '0px',
-              bottom: '0px',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               width: '100vw',
               height: '100vh',
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -654,8 +654,7 @@ const HorizontalJourney = () => {
               alignItems: 'center',
               justifyContent: 'center',
               padding: '20px',
-              margin: '0px',
-              transform: 'translate3d(0, 0, 0)'
+              boxSizing: 'border-box'
             }}
             onClick={closeModal}
           >
