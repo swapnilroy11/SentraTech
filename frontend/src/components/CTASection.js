@@ -198,8 +198,9 @@ const CTASection = () => {
       
       // Prepare data for ingest endpoint
       const ingestData = {
-        company_name: formData.company,
-        contact_email: formData.email,
+        user_name: formData.name,
+        email: formData.email,
+        company: formData.company,
         phone: formData.phone,
         call_volume: formData.call_volume,
         interaction_volume: formData.interaction_volume,
