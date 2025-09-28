@@ -14,11 +14,10 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { 
-  validateROICalculation, 
-  formatCurrencyPrecise, 
-  formatPercentagePrecise,
-  CALCULATION_CONSTANTS 
-} from '../utils/roiCalculatorTests';
+  formatCurrencyProtected, 
+  formatPercentageProtected,
+  runProtectedTests 
+} from '../utils/roiCalculatorFixed';
 
 // Country data with flags and cost information
 const COUNTRIES = {
