@@ -1936,23 +1936,266 @@ async def get_subscriptions_status():
         logger.error(f"Error fetching subscriptions: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch subscriptions")
 
-@api_router.get("/ingest/job_applications/status")
-async def get_job_applications_status():
-    """Get status of job applications for debugging"""
+@api_router.post("/candidates/update_status")
+async def update_candidate_status(request: Request, status_update: CandidateStatusUpdate):
+    """
+    🔒 PROTECTED - Update candidate status and send notification email
+    """
     try:
-        applications = await db.job_applications.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        # Find candidate
+        candidate = await db.job_applications.find_one({"id": status_update.candidate_id})
+        if not candidate:
+            raise HTTPException(status_code=404, detail="Candidate not found")
         
-        # Convert ObjectId to string for JSON serialization
-        for app in applications:
-            if '_id' in app:
-                app['_id'] = str(app['_id'])
+        # Update candidate status
+        update_data = {
+            "status": status_update.new_status,
+            "last_updated": datetime.now(timezone.utc).isoformat(),
+            "updated_by": status_update.updated_by
+        }
+        
+        if status_update.notes:
+            update_data["recruiter_notes"] = status_update.notes
+        
+        # Add to candidate interactions
+        interaction = {
+            "type": "status_update",
+            "from_status": candidate.get("status", "unknown"),
+            "to_status": status_update.new_status,
+            "notes": status_update.notes,
+            "updated_by": status_update.updated_by,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.job_applications.update_one(
+            {"id": status_update.candidate_id},
+            {
+                "$set": update_data,
+                "$push": {"candidate_interactions": interaction}
+            }
+        )
+        
+        # Send status update email (if not rejected status - handle that separately)
+        if status_update.new_status in ["under_review", "hired"]:
+            try:
+                email_notification = EmailNotification(
+                    recipient_email=candidate["email"],
+                    subject="Application Status Update",
+                    template_name=status_update.new_status,
+                    template_data={
+                        "candidate_name": candidate.get("full_name", f"{candidate.get('first_name', '')} {candidate.get('last_name', '')}"),
+                        "position": candidate.get("position_applied", candidate.get("position", "Customer Support Specialist"))
+                    }
+                )
+                
+                email_sent = await email_service.send_notification(email_notification)
+                
+                if email_sent:
+                    await db.job_applications.update_one(
+                        {"id": status_update.candidate_id},
+                        {
+                            "$push": {
+                                "email_notifications": {
+                                    "status": status_update.new_status,
+                                    "sent_at": datetime.now(timezone.utc).isoformat(),
+                                    "email": candidate["email"]
+                                }
+                            }
+                        }
+                    )
+                
+            except Exception as e:
+                logger.warning(f"Failed to send status update email: {str(e)}")
         
         return {
-            "total_count": await db.job_applications.count_documents({}),
-            "recent_applications": applications
+            "status": "success",
+            "message": f"Candidate status updated to {status_update.new_status}",
+            "candidate_id": status_update.candidate_id
         }
+        
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Failed to get job applications status: {str(e)}")
+        logger.error(f"Status update error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.post("/candidates/schedule_interview")
+async def schedule_interview(request: Request, interview_data: InterviewSchedule):
+    """
+    🔒 PROTECTED - Schedule interview with Google Calendar integration
+    """
+    try:
+        # Find candidate
+        candidate = await db.job_applications.find_one({"id": interview_data.candidate_id})
+        if not candidate:
+            raise HTTPException(status_code=404, detail="Candidate not found")
+        
+        candidate_name = candidate.get("full_name", f"{candidate.get('first_name', '')} {candidate.get('last_name', '')}")
+        
+        # Create calendar event
+        calendar_event = await calendar_service.create_interview_event(interview_data, candidate_name)
+        
+        # Update candidate record
+        interview_record = {
+            "candidate_id": interview_data.candidate_id,
+            "interview_datetime": interview_data.interview_datetime,
+            "duration_minutes": interview_data.duration_minutes,
+            "interviewer_email": interview_data.interviewer_email,
+            "interview_type": interview_data.interview_type,
+            "notes": interview_data.notes,
+            "calendar_event": calendar_event,
+            "scheduled_at": datetime.now(timezone.utc).isoformat(),
+            "status": "scheduled"
+        }
+        
+        # Add interaction record
+        interaction = {
+            "type": "interview_scheduled",
+            "interview_datetime": interview_data.interview_datetime,
+            "interviewer": interview_data.interviewer_email,
+            "notes": interview_data.notes,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.job_applications.update_one(
+            {"id": interview_data.candidate_id},
+            {
+                "$set": {
+                    "status": "interview_scheduled",
+                    "interview_event": interview_record,
+                    "last_updated": datetime.now(timezone.utc).isoformat()
+                },
+                "$push": {"candidate_interactions": interaction}
+            }
+        )
+        
+        # Send interview notification email
+        try:
+            from datetime import datetime as dt
+            import dateutil.parser
+            
+            interview_dt = dateutil.parser.parse(interview_data.interview_datetime)
+            
+            email_notification = EmailNotification(
+                recipient_email=candidate["email"],
+                subject="Interview Scheduled",
+                template_name="interview_scheduled",
+                template_data={
+                    "candidate_name": candidate_name,
+                    "position": candidate.get("position_applied", candidate.get("position", "Customer Support Specialist")),
+                    "interview_date": interview_dt.strftime("%A, %B %d, %Y"),
+                    "interview_time": interview_dt.strftime("%I:%M %p"),
+                    "duration": interview_data.duration_minutes,
+                    "interview_type": interview_data.interview_type.title(),
+                    "interviewer_name": interview_data.interviewer_email.split('@')[0].title(),
+                    "calendar_link": calendar_event.get('calendar_link', '') if calendar_event else ''
+                }
+            )
+            
+            email_sent = await email_service.send_notification(email_notification)
+            
+            if email_sent:
+                await db.job_applications.update_one(
+                    {"id": interview_data.candidate_id},
+                    {
+                        "$push": {
+                            "email_notifications": {
+                                "status": "interview_scheduled",
+                                "sent_at": datetime.now(timezone.utc).isoformat(),
+                                "email": candidate["email"]
+                            }
+                        }
+                    }
+                )
+            
+        except Exception as e:
+            logger.warning(f"Failed to send interview notification: {str(e)}")
+        
+        return {
+            "status": "success",
+            "message": "Interview scheduled successfully",
+            "candidate_id": interview_data.candidate_id,
+            "calendar_event": calendar_event,
+            "interview_datetime": interview_data.interview_datetime
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Interview scheduling error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.get("/candidates")
+async def get_candidates(request: Request, status: Optional[str] = None, limit: int = 50, offset: int = 0):
+    """
+    🔒 PROTECTED - Get candidates with filtering and pagination
+    """
+    try:
+        # Build query
+        query = {}
+        if status:
+            query["status"] = status
+        
+        # Get candidates with pagination
+        candidates = await db.job_applications.find(query).sort("created_at", -1).skip(offset).limit(limit).to_list(length=limit)
+        total_count = await db.job_applications.count_documents(query)
+        
+        # Format response
+        formatted_candidates = []
+        for candidate in candidates:
+            formatted_candidate = {
+                "id": candidate.get("id"),
+                "name": candidate.get("full_name", f"{candidate.get('first_name', '')} {candidate.get('last_name', '')}"),
+                "email": candidate.get("email"),
+                "phone": candidate.get("phone"),
+                "location": candidate.get("location"),
+                "position": candidate.get("position_applied", candidate.get("position", "Customer Support Specialist")),
+                "status": candidate.get("status", "received"),
+                "experience_years": candidate.get("experience_years"),
+                "created_at": candidate.get("created_at"),
+                "last_updated": candidate.get("last_updated"),
+                "has_interview": bool(candidate.get("interview_event")),
+                "interview_date": candidate.get("interview_event", {}).get("interview_datetime") if candidate.get("interview_event") else None,
+                "email_notifications_count": len(candidate.get("email_notifications", [])),
+                "interactions_count": len(candidate.get("candidate_interactions", []))
+            }
+            formatted_candidates.append(formatted_candidate)
+        
+        return {
+            "status": "success",
+            "candidates": formatted_candidates,
+            "total_count": total_count,
+            "offset": offset,
+            "limit": limit,
+            "has_more": (offset + limit) < total_count
+        }
+        
+    except Exception as e:
+        logger.error(f"Get candidates error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.get("/candidates/{candidate_id}")
+async def get_candidate_detail(request: Request, candidate_id: str):
+    """
+    🔒 PROTECTED - Get detailed candidate information
+    """
+    try:
+        candidate = await db.job_applications.find_one({"id": candidate_id})
+        if not candidate:
+            raise HTTPException(status_code=404, detail="Candidate not found")
+        
+        # Remove MongoDB _id field
+        candidate.pop("_id", None)
+        
+        return {
+            "status": "success",
+            "candidate": candidate
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get candidate detail error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 # Google Sheets Service
