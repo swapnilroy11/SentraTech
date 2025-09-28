@@ -13,7 +13,9 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     phone: '',
     companyName: '',
     companyWebsite: '',
-    monthlyVolume: '',
+    callVolume: '',
+    interactionVolume: '',
+    monthlyVolume: '', // Keep for backwards compatibility
     planSelected: selectedPlan || (prefill?.planSelected) || '',
     planId: prefill?.planId || '',
     billingTerm: prefill?.billingTerm || '24m',
