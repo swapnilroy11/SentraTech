@@ -423,7 +423,7 @@ const JobApplicationPage = () => {
                       <>
                         <Upload size={20} className="text-[rgb(161,161,170)]" />
                         <span className="text-sm text-[rgb(161,161,170)]">Upload Resume (PDF/Word)</span>
-                        <span className="text-xs text-[rgb(161,161,170)]">Max 8MB</span>
+                        <span className="text-xs text-[rgb(161,161,170)]">Max 5MB</span>
                       </>
                     )}
                   </label>
