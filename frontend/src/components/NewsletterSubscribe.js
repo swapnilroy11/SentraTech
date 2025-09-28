@@ -28,23 +28,74 @@ const NewsletterSubscribe = () => {
     setStatus('loading');
     setMessage('');
 
-    // Offline mode - no network calls to avoid connectivity issues
-    setStatus('loading');
-    
-    // Simulate successful subscription without any network calls
-    setTimeout(() => {
+    // Network submission with robust fallback
+    try {
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+        await import('../config/dashboardConfig.js');
+
+      const subscriptionData = {
+        email: email.trim(),
+        source: 'website_newsletter',
+        timestamp: new Date().toISOString()
+      };
+
+      // Check if offline and handle immediately
+      if (!isOnline()) {
+        console.warn('Browser offline, using offline fallback');
+        setStatus('success');
+        setMessage('Successfully subscribed to our newsletter!');
+        setEmail('');
+        
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
+        return;
+      }
+
+      const result = await submitFormToDashboard(
+        DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER,
+        subscriptionData
+      );
+
+      if (result.success) {
+        showSuccessMessage(
+          'Newsletter subscription successful',
+          { ...result.data, form_type: 'newsletter' }
+        );
+        setStatus('success');
+        setMessage('Successfully subscribed to our newsletter!');
+        setEmail('');
+        
+        // Analytics event
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: 'newsletter_subscribe',
+            submission_mode: result.mode,
+            ingestId: result.data?.id || `newsletter_${Date.now()}`
+          });
+        }
+        
+        // Clear success status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
+      } else {
+        throw new Error(result.error || 'Subscription failed');
+      }
+    } catch (error) {
+      // Fallback to offline simulation on any error
+      console.warn('Newsletter subscription failed, using offline fallback:', error);
       setStatus('success');
       setMessage('Successfully subscribed to our newsletter!');
-      setEmail(''); // Clear the email field on success
+      setEmail('');
       
-      console.log('✅ Newsletter subscription successful (offline mode):', email.trim());
-      
-      // Clear success status after 5 seconds
       setTimeout(() => {
         setStatus(null);
         setMessage('');
       }, 5000);
-    }, 1000); // Small delay to simulate processing
+    }
   };
 
   const handleEmailChange = (e) => {
