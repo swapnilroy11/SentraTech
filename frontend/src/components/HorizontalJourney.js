@@ -638,8 +638,6 @@ const HorizontalJourney = () => {
       {/* Journey Stage Details Modal - React Portal with Perfect Centering */}
       <AnimatePresence>
         {selectedPanel && (() => {
-          console.log('🎯 Modal is rendering! selectedPanel:', selectedPanel?.title);
-          
           // Create or get modal container
           let modalContainer = document.getElementById('customer-journey-modal-root');
           if (!modalContainer) {
@@ -648,10 +646,11 @@ const HorizontalJourney = () => {
             modalContainer.style.position = 'fixed';
             modalContainer.style.top = '0';
             modalContainer.style.left = '0';
+            modalContainer.style.width = '100%';
+            modalContainer.style.height = '100%';
             modalContainer.style.zIndex = '99999';
             modalContainer.style.pointerEvents = 'auto';
             document.body.appendChild(modalContainer);
-            console.log('🎯 Created modal container:', modalContainer);
           }
           
           return createPortal(
