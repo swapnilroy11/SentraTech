@@ -551,8 +551,8 @@ const JobApplicationPage = () => {
                   <span className="text-white break-words">{resume ? resume.name : 'Not provided'}</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">LinkedIn:</span>
-                  <span className="text-white break-all">{formData.linkedinProfile || 'Not provided'}</span>
+                  <span className="text-[rgb(161,161,170)] font-medium">Portfolio:</span>
+                  <span className="text-white break-all">{formData.portfolioWebsite || 'Not provided'}</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
