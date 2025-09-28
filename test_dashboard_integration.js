@@ -34,11 +34,10 @@ const submitApplication = async (formData) => {
     console.log('🚀 Testing SentraTech Dashboard Integration...');
     console.log('📊 Sending application data:', JSON.stringify(formData, null, 2));
     
-    const response = await fetch('https://customer-dashboard-3.preview.emergentagent.com/api/ingest/job_applications', {
+    const response = await fetch('https://sentra-admin-dash.preview.emergentagent.com/api/forms/job-application', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'X-INGEST-KEY': 'test-ingest-key-12345'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
     });
