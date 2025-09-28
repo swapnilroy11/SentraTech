@@ -199,15 +199,15 @@ const CTASection = () => {
       // Clear any cached data
       clearFormCache();
       
-      // Prepare data for dashboard endpoint
+      // Prepare data for /api/ingest/demo_requests endpoint
       const dashboardData = {
-        name: formData.name,
+        name: formData.name,                              // Correct field name
         email: formData.email,
         company: formData.company,
         phone: formData.phone || '',
         message: formData.message || '',
-        monthly_volume: formData.call_volume || '',
-        current_cost: formData.interaction_volume || ''
+        call_volume: parseInt(formData.call_volume) || 0,    // Convert to number
+        interaction_volume: parseInt(formData.interaction_volume) || 0
       };
       
       // Submit using enhanced helper function with authentication and error handling
