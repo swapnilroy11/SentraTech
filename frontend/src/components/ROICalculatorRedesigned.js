@@ -45,6 +45,8 @@ const COUNTRIES = {
 // Fixed automation percentage as per requirements
 const AUTOMATION_PERCENTAGE = 70;
 const SENTRATECH_COST_PER_1K = 1200; // Default SentraTech pricing
+const CALL_COST_PER_1K = 738; // 61.5% of bundle cost
+const INTERACTION_COST_PER_1K = 462; // 38.5% of bundle cost
 
 const ROICalculatorRedesigned = () => {
   // Essential inputs only
