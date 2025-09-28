@@ -81,34 +81,77 @@ const ChatWidget = () => {
     }
   };
 
-  // Send message via REST API
+  // Send message with network fallback
   const sendMessageREST = async (sessionId, message) => {
     try {
-      const response = await axios.post(
-        `${BACKEND_URL}/api/chat/message`,
-        {},
-        {
-          params: {
-            session_id: sessionId,
-            message: message
-          }
-        }
-      );
-
-      if (response.data && response.data.ai_response) {
+      const { submitChatMessage, isOnline } = await import('../config/dashboardConfig.js');
+      
+      // Check if offline or using offline session
+      if (!isOnline() || sessionId.startsWith('offline_') || sessionId.startsWith('fallback_') || sessionId.startsWith('error_')) {
+        console.warn('Using offline chat response');
+        const { generateOfflineResponse } = await import('../config/dashboardConfig.js');
+        const result = generateOfflineResponse(message);
+        
         const aiMessage = {
-          id: response.data.ai_response.id,
-          content: response.data.ai_response.content,
+          id: Date.now(),
+          content: result.response,
           sender: 'assistant',
-          timestamp: new Date(response.data.ai_response.timestamp)
+          timestamp: new Date()
         };
         setChatMessages(prev => [...prev, aiMessage]);
         setIsTyping(false);
+        setConnectionError(null);
+        return;
+      }
+
+      // Try network submission
+      const result = await submitChatMessage(message, sessionId);
+      
+      if (result.success) {
+        const aiMessage = {
+          id: Date.now(),
+          content: result.response,
+          sender: 'assistant',
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, aiMessage]);
+        setIsTyping(false);
+        setConnectionError(null);
+        
+        // Update session ID if provided
+        if (result.conversationId && result.conversationId !== sessionId) {
+          setChatSessionId(result.conversationId);
+        }
+      } else {
+        throw new Error(result.error || 'Chat response failed');
       }
     } catch (error) {
-      console.error('REST API message error:', error);
-      setConnectionError('Failed to send message');
+      console.warn('Network chat failed, using offline response:', error.message);
+      
+      try {
+        const { generateOfflineResponse } = await import('../config/dashboardConfig.js');
+        const result = generateOfflineResponse(message);
+        
+        const aiMessage = {
+          id: Date.now(),
+          content: result.response,
+          sender: 'assistant',
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, aiMessage]);
+      } catch (fallbackError) {
+        // Ultimate fallback
+        const aiMessage = {
+          id: Date.now(),
+          content: "I apologize, but I'm currently experiencing technical difficulties. Please try contacting our support team directly for assistance, or visit our help documentation.",
+          sender: 'assistant',
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, aiMessage]);
+      }
+      
       setIsTyping(false);
+      setConnectionError(null);
     }
   };
 
