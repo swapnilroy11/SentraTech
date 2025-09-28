@@ -176,7 +176,7 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
       clearFormCache();
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, data);
+      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.JOB_APPLICATION, data);
       
       if (result.success) {
         setSubmitStatus('success');
