@@ -583,8 +583,8 @@ const JobApplicationPage = () => {
                   <input
                     type="checkbox"
                     id="consent-contact"
-                    checked={formData.consentForContact}
-                    onChange={(e) => handleInputChange('consentForContact', e.target.checked)}
+                    checked={formData.consent_for_contact}
+                    onChange={(e) => handleInputChange('consent_for_contact', e.target.checked)}
                     className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
                   />
                   <label htmlFor="consent-contact" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
