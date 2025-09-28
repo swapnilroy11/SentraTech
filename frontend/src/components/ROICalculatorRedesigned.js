@@ -120,13 +120,15 @@ const ROICalculatorRedesigned = () => {
     }
 
     const country = COUNTRIES[selectedCountry];
-    const totalVolume = calls + interactions;
     
-    // Assume 5 minutes average handle time for calculations
-    const avgHandleTime = 5; // minutes
+    // Different AHT for calls vs interactions
+    const callAHT = 8; // minutes per call
+    const interactionAHT = 5; // minutes per interaction
     
-    // Traditional BPO Cost Calculation
-    const totalMinutes = totalVolume * avgHandleTime;
+    // Traditional BPO Cost Calculation with separate AHT
+    const callMinutes = calls * callAHT;
+    const interactionMinutes = interactions * interactionAHT;
+    const totalMinutes = callMinutes + interactionMinutes;
     const traditionalMonthlyCost = totalMinutes * country.bpoPerMin;
     
     // SentraTech Cost Calculation with proportional pricing
