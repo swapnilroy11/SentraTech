@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 
-// Components
+// Components (loaded immediately as they're used globally)
 import Navigation from "./components/Navigation";
 import Breadcrumbs from "./components/Breadcrumbs";
 import PageTransition from "./components/PageTransition";
@@ -16,25 +16,27 @@ import CookieBanner from "./components/CookieBanner";
 import SEOManager from "./components/SEOManager";
 import ChatWidget from "./components/ChatWidget";
 
-// Pages
+// Critical pages (loaded immediately)
 import HomePage from "./pages/HomePage";
-import FeaturesPage from "./pages/FeaturesPage";
-import CaseStudiesPage from "./pages/CaseStudiesPage";
-import SecurityPage from "./pages/SecurityPage";
-import ROICalculatorPage from "./pages/ROICalculatorPage";
-import PricingPage from "./pages/PricingPage";
-import DemoRequestPage from "./pages/DemoRequestPage";
-import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
-import TermsOfServicePage from "./pages/TermsOfServicePage";
-import CookiePolicyPage from "./pages/CookiePolicyPage";
-import AboutUsPage from "./pages/AboutUsPage";
-import LeadershipTeamPage from "./pages/LeadershipTeamPage";
-import InvestorRelationsPage from "./pages/InvestorRelationsPage";
-import SupportCenterPage from "./pages/SupportCenterPage";
-import ContactSalesPage from "./pages/ContactSalesPage";
-import CareersPage from "./pages/CareersPage";
-import JobApplicationPage from "./pages/JobApplicationPage";
 import NotFoundPage from "./pages/NotFoundPage";
+
+// Lazy-loaded pages for performance optimization
+const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
+const CaseStudiesPage = lazy(() => import("./pages/CaseStudiesPage"));
+const SecurityPage = lazy(() => import("./pages/SecurityPage"));
+const ROICalculatorPage = lazy(() => import("./pages/ROICalculatorPage"));
+const PricingPage = lazy(() => import("./pages/PricingPage"));
+const DemoRequestPage = lazy(() => import("./pages/DemoRequestPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
+const TermsOfServicePage = lazy(() => import("./pages/TermsOfServicePage"));
+const CookiePolicyPage = lazy(() => import("./pages/CookiePolicyPage"));
+const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
+const LeadershipTeamPage = lazy(() => import("./pages/LeadershipTeamPage"));
+const InvestorRelationsPage = lazy(() => import("./pages/InvestorRelationsPage"));
+const SupportCenterPage = lazy(() => import("./pages/SupportCenterPage"));
+const ContactSalesPage = lazy(() => import("./pages/ContactSalesPage"));
+const CareersPage = lazy(() => import("./pages/CareersPage"));
+const JobApplicationPage = lazy(() => import("./pages/JobApplicationPage"));
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
