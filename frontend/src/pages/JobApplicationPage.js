@@ -517,7 +517,7 @@ const JobApplicationPage = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Name:</span>
-                  <span className="text-white break-words">{formData.firstName} {formData.lastName}</span>
+                  <span className="text-white break-words">{formData.full_name}</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Email:</span>
