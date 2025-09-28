@@ -841,7 +841,7 @@ const JobApplicationPage = () => {
                     <Globe size={24} className="text-[#00FF41]" />
                     <span>Work Environment</span>
                   </h2>
-                  <p className="text-[rgb(161,161,170)] leading-relaxed">{job.workEnvironment}</p>
+                  <p className="text-[rgb(218,218,218)] text-lg leading-relaxed">{job.workEnvironment}</p>
                 </div>
               </div>
               
