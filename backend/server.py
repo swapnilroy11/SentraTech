@@ -3614,6 +3614,101 @@ async def subscribe_newsletter(request: NewsletterRequest):
         logger.error(f"❌ Error processing newsletter subscription: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to process newsletter subscription. Please try again.")
 
+# ROI Calculator Form Models (for email submission)
+class ROICalculatorRequest(BaseModel):
+    country: str = Field(..., min_length=2, max_length=50)
+    monthlyVolume: int = Field(..., gt=0, description="Monthly call volume")
+    interactionVolume: int = Field(..., gt=0, description="Monthly interaction volume")
+    email: Optional[EmailStr] = None
+
+class ROICalculatorResponse(BaseModel):
+    success: bool
+    message: str
+    reference_id: str
+    timestamp: str
+    roi_summary: Optional[dict] = None
+
+@api_router.post("/roi/submit", response_model=ROICalculatorResponse)
+async def submit_roi_report(request: ROICalculatorRequest):
+    """
+    Submit ROI calculator form with email for report
+    Endpoint: POST /api/roi/submit
+    """
+    try:
+        logger.info(f"📊 ROI report request: {request.email} for {request.country}")
+        
+        # Generate a reference ID for tracking
+        reference_id = str(uuid.uuid4())
+        
+        # Create simplified ROI calculation
+        # Estimate agent count based on volume (assuming 200 calls per agent per month)
+        estimated_agents = max(1, request.monthlyVolume // 200)
+        
+        # Country-based cost estimates
+        country_costs = {
+            "Bangladesh": {"cost_per_agent": 800, "avg_handle_time": 300},
+            "India": {"cost_per_agent": 1000, "avg_handle_time": 280},
+            "Philippines": {"cost_per_agent": 1200, "avg_handle_time": 320},
+            "Vietnam": {"cost_per_agent": 900, "avg_handle_time": 290},
+            "United States": {"cost_per_agent": 4000, "avg_handle_time": 400},
+            "United Kingdom": {"cost_per_agent": 3500, "avg_handle_time": 380},
+            "default": {"cost_per_agent": 1500, "avg_handle_time": 350}
+        }
+        
+        cost_data = country_costs.get(request.country, country_costs["default"])
+        
+        # Calculate basic ROI metrics
+        traditional_monthly_cost = estimated_agents * cost_data["cost_per_agent"]
+        ai_monthly_cost = request.monthlyVolume * 2.5  # Estimated $2.5 per call with AI
+        monthly_savings = traditional_monthly_cost - ai_monthly_cost
+        annual_savings = monthly_savings * 12
+        roi_percentage = (annual_savings / (ai_monthly_cost * 12)) * 100 if ai_monthly_cost > 0 else 0
+        
+        roi_summary = {
+            "country": request.country,
+            "monthly_volume": request.monthlyVolume,
+            "estimated_agents": estimated_agents,
+            "traditional_monthly_cost": traditional_monthly_cost,
+            "ai_monthly_cost": ai_monthly_cost,
+            "monthly_savings": monthly_savings,
+            "annual_savings": annual_savings,
+            "roi_percentage": round(roi_percentage, 1)
+        }
+        
+        # Prepare data for storage
+        roi_data = {
+            "id": reference_id,
+            "email": request.email,
+            "country": request.country,
+            "monthly_volume": request.monthlyVolume,
+            "interaction_volume": request.interactionVolume,
+            "roi_summary": roi_summary,
+            "status": "submitted",
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Store in database
+        roi_dict = roi_data.copy()
+        roi_dict['created_at'] = roi_dict['created_at'].isoformat()
+        roi_dict['updated_at'] = roi_dict['updated_at'].isoformat()
+        
+        await db.roi_reports.insert_one(roi_dict)
+        
+        logger.info(f"✅ ROI report request stored - Reference: {reference_id}")
+        
+        return ROICalculatorResponse(
+            success=True,
+            message="ROI report request submitted successfully! We'll send the detailed report to your email within 24 hours.",
+            reference_id=reference_id,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            roi_summary=roi_summary
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Error processing ROI report request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process ROI report request. Please try again.")
+
 # Job Application Models
 class JobApplicationRequest(BaseModel):
     fullName: str = Field(..., min_length=2, max_length=100)
