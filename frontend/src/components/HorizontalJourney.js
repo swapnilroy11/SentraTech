@@ -432,7 +432,8 @@ const HorizontalJourney = () => {
           max-width: 32rem !important;
           width: 100% !important;
           max-height: 90vh !important;
-          margin: auto !important;
+          margin: 0 !important;
+          flex-shrink: 0 !important;
         }
         body.modal-open {
           overflow: hidden;
