@@ -168,9 +168,10 @@ const AboutUsPage = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">Our Story</h2>
             <p className="text-[rgb(161,161,170)] max-w-3xl mx-auto leading-relaxed">
-              Founded in 2022 by a team of AI researchers and customer experience veterans, SentraTech emerged 
-              from a simple observation: while AI technology was advancing rapidly, most businesses struggled 
-              to implement effective automated customer support that actually improved their customer relationships.
+              Founded in 2024 by a team of AI researchers and customer experience veterans, SentraTech emerged 
+              from a simple but powerful observation: while AI technology was advancing rapidly, most businesses 
+              struggled to implement effective automated customer support that actually improved their customer relationships.
+              We're here to change that narrative.
             </p>
           </div>
           
