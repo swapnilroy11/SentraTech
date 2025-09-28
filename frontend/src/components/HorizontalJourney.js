@@ -681,8 +681,6 @@ const HorizontalJourney = () => {
                 overflowY: 'auto',
                 padding: '2rem',
                 position: 'relative',
-                margin: 'auto',
-                transform: 'translate3d(0, 0, 0)',
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 65, 0.1)'
               }}
             >
