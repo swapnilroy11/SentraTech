@@ -1281,6 +1281,147 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         logger.error(f"Subscription ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+@api_router.post("/ingest/job_applications")
+async def ingest_job_application(request: Request, job_application: JobApplicationIngestRequest):
+    """
+    🔒 PROTECTED - Ingest job application data
+    Store job application locally and forward to dashboard
+    """
+    try:
+        # Validate required fields
+        if not job_application.fullName or not job_application.email:
+            raise HTTPException(status_code=400, detail="Full name and email are required")
+        
+        # Validate email format
+        import re
+        email_pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+        if not re.match(email_pattern, job_application.email):
+            raise HTTPException(status_code=400, detail="Invalid email format")
+        
+        # Create application data
+        application_data = {
+            "id": str(uuid.uuid4()),
+            "full_name": job_application.fullName,
+            "email": job_application.email,
+            "phone": job_application.phone,
+            "location": job_application.location,
+            "preferred_shifts": job_application.preferredShifts,
+            "availability_start_date": job_application.availabilityStartDate,
+            "cover_note": job_application.coverNote,
+            "linkedin_profile": job_application.linkedinProfile,
+            "position": job_application.position,
+            "source": job_application.source,
+            "consent_for_storage": job_application.consentForStorage,
+            "status": "received",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "resume_url": None,
+            "resume_name": None
+        }
+        
+        # Handle resume file if provided
+        if job_application.resumeFile:
+            resume_data = job_application.resumeFile
+            # In a production environment, you would:
+            # 1. Validate file type and size
+            # 2. Store file in cloud storage (S3, etc.)
+            # 3. Save the URL in resume_url field
+            # For now, we'll just store metadata
+            application_data["resume_name"] = resume_data.get("name")
+            application_data["resume_size"] = resume_data.get("size")
+            application_data["resume_type"] = resume_data.get("type")
+            # Note: In production, implement proper file storage
+        
+        # Store in local MongoDB
+        await db.job_applications.insert_one(application_data)
+        logger.info(f"Job application saved locally: {job_application.email} for {job_application.position}")
+        
+        # 🔒 PROTECTED - Use centralized dashboard config
+        # DO NOT MODIFY - Critical for dashboard integration
+        
+        # Skip external forwarding if it would create a loop
+        if not DashboardConfig.should_forward_to_dashboard():
+            logger.info("Skipping external dashboard forwarding (same host or not configured)")
+            # Update status to indicate local-only storage
+            await db.job_applications.update_one(
+                {"id": application_data["id"]},
+                {"$set": {"status": "stored_locally"}}
+            )
+            return {
+                "status": "success", 
+                "message": "Job application stored successfully in local database",
+                "id": application_data["id"]
+            }
+        
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # Forward directly to Admin Dashboard
+                dashboard_url = DashboardConfig.get_dashboard_endpoint("/api/ingest/job_applications")
+                
+                response = await client.post(
+                    dashboard_url,
+                    json=job_application.dict(),
+                    headers=DashboardConfig.get_headers()
+                )
+                
+                if response.status_code in [200, 201]:
+                    external_data = response.json()
+                    
+                    # Update local record with sync status
+                    await db.job_applications.update_one(
+                        {"id": application_data["id"]},
+                        {"$set": {"status": "synced_to_external_api", "external_id": external_data.get("id")}}
+                    )
+                    
+                    logger.info(f"Job application forwarded successfully to dashboard: {job_application.email}")
+                    
+                    return {
+                        "status": "success",
+                        "message": "Job application submitted and processed by SentraTech API",
+                        "id": application_data["id"],
+                        "external_response": external_data
+                    }
+                else:
+                    logger.warning(f"Dashboard forwarding failed with status {response.status_code}")
+                    await db.job_applications.update_one(
+                        {"id": application_data["id"]},
+                        {"$set": {"status": "external_sync_failed", "sync_error": response.text}}
+                    )
+                    
+                    return {
+                        "status": "success",
+                        "message": "Job application stored locally, external sync failed",
+                        "id": application_data["id"]
+                    }
+                    
+        except httpx.TimeoutException:
+            logger.warning("Dashboard forwarding timeout")
+            await db.job_applications.update_one(
+                {"id": application_data["id"]},
+                {"$set": {"status": "external_sync_timeout"}}
+            )
+            return {
+                "status": "success",
+                "message": "Job application stored locally, dashboard sync timeout",
+                "id": application_data["id"]
+            }
+        except Exception as forward_error:
+            logger.error(f"Dashboard forwarding error: {str(forward_error)}")
+            await db.job_applications.update_one(
+                {"id": application_data["id"]},
+                {"$set": {"status": "external_sync_error", "sync_error": str(forward_error)}}
+            )
+            return {
+                "status": "success",
+                "message": "Job application stored locally, dashboard sync error",
+                "id": application_data["id"]
+            }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Job application ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # Debug endpoints to view stored ingest data
 @api_router.get("/ingest/demo_requests/status")
 async def get_demo_requests_status():
