@@ -83,9 +83,9 @@ export const DATA_FORMATS = {
 export const validateConfig = () => {
   const errors = [];
   
-  // Check backend URL
-  if (!DASHBOARD_CONFIG.BACKEND_URL.includes('customer-flow-5')) {
-    errors.push('❌ BACKEND_URL must point to customer-flow-5 to avoid CORS issues');
+  // Check backend URL - FIXED to allow customer-flow-5
+  if (!DASHBOARD_CONFIG.BACKEND_URL.includes('customer-flow-5.preview.emergentagent.com')) {
+    errors.push('❌ BACKEND_URL must point to customer-flow-5.preview.emergentagent.com to avoid CORS issues');
   }
   
   // Check ingest key format
