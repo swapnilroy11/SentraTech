@@ -938,21 +938,26 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
                     # Update status to synced
                     await db.demo_requests.update_one(
                         {"id": demo_data["id"]},
-                        {"$set": {"status": "synced_to_dashboard"}}
+                        {"$set": {"status": "synced_to_external_api"}}
                     )
-                    logger.info(f"Demo request successfully forwarded to dashboard: {demo_request.email}")
+                    logger.info(f"Demo request successfully forwarded to external API: {demo_request.email}")
+                    
+                    # Parse response from external API
+                    api_response = response.json() if response.content else {}
+                    
                     return {
                         "status": "success", 
-                        "message": "Demo request submitted and synced to dashboard",
-                        "id": demo_data["id"]
+                        "message": "Demo request submitted and processed by SentraTech API",
+                        "id": demo_data["id"],
+                        "external_response": api_response
                     }
                 else:
-                    logger.warning(f"Dashboard sync failed ({response.status_code}), keeping local copy")
+                    logger.warning(f"External API sync failed ({response.status_code}), keeping local copy")
                     return {
                         "status": "success", 
-                        "message": "Demo request saved locally, dashboard sync will retry",
+                        "message": "Demo request saved locally, external sync will retry",
                         "id": demo_data["id"],
-                        "dashboard_status": "pending_retry"
+                        "external_status": "pending_retry"
                     }
         except httpx.ConnectError:
             logger.warning("Dashboard not reachable, keeping local copy for sync retry")
