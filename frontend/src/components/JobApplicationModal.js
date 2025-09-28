@@ -226,7 +226,8 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
-        jobData
+        jobData,
+        { formType: 'job_application_modal' }
       );
 
       if (result.success) {
