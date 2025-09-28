@@ -827,39 +827,28 @@ const HorizontalJourney = () => {
                     </div>
                   </div>
 
-                {/* Key Features */}
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <Zap className="text-[#00FF41]" size={20} />
-                    Key Features
-                  </h4>
-                  <div className="grid gap-3">
-                    {(selectedPanel.features || [
-                      'Advanced AI Processing',
-                      'Real-time Analytics', 
-                      'Quality Assurance',
-                      'Seamless Integration'
-                    ]).map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-[rgb(38,40,42)] rounded-lg border border-[rgb(63,63,63)]">
-                        <div className="w-2 h-2 bg-[#00FF41] rounded-full"></div>
-                        <span className="text-[rgb(218,218,218)]">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Integration Channels */}
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <Target className="text-[#00FF41]" size={20} />
-                    Integration Channels
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
-                      <Badge key={index} variant="outline" className="border-[#00FF41]/30 text-[#00FF41] bg-[#00FF41]/10">
-                        {channel}
-                      </Badge>
-                    ))}
+                  {/* Integration Channels */}
+                  <div className="space-y-3">
+                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                      <Target style={{ color: selectedPanel.color }} size={18} />
+                      Integration Channels
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
+                        <Badge 
+                          key={index} 
+                          variant="outline" 
+                          className="text-xs"
+                          style={{
+                            borderColor: `${selectedPanel.color}40`,
+                            color: selectedPanel.color,
+                            backgroundColor: `${selectedPanel.color}10`
+                          }}
+                        >
+                          {channel}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
