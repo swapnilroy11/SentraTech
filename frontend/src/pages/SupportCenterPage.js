@@ -421,32 +421,8 @@ const SupportCenterPage = () => {
   }, [navigate]);
 
   const handleCategoryChange = useCallback((categoryId) => {
-    // Simple, reliable approach: maintain scroll position using the FAQ section as anchor
-    const faqSection = faqSectionRef.current;
-    if (faqSection) {
-      // Get the FAQ section's current position on screen
-      const rect = faqSection.getBoundingClientRect();
-      const scrollY = window.pageYOffset;
-      const faqSectionY = scrollY + rect.top;
-      
-      // Change category immediately
-      setSelectedCategory(categoryId);
-      
-      // After React renders, restore the FAQ section to its original position
-      requestAnimationFrame(() => {
-        const newScrollY = window.pageYOffset;
-        const newRect = faqSection.getBoundingClientRect();
-        const newFaqSectionY = newScrollY + newRect.top;
-        
-        // Calculate how much the FAQ section moved and compensate
-        const deltaY = newFaqSectionY - faqSectionY;
-        if (Math.abs(deltaY) > 2) { // Only adjust if there's a meaningful difference
-          window.scrollTo(0, newScrollY - deltaY);
-        }
-      });
-    } else {
-      setSelectedCategory(categoryId);
-    }
+    // Simple category change - let CSS handle scroll stability
+    setSelectedCategory(categoryId);
   }, []);
 
   return (
