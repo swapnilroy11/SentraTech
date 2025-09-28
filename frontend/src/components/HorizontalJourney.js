@@ -705,14 +705,32 @@ const HorizontalJourney = () => {
 
                 {/* Stage Content */}
                 <div className="space-y-5 custom-scrollbar">
-                {/* Header */}
-                <div className="text-center space-y-3">
-                  <Badge variant="outline" className="border-[#00FF41] text-[#00FF41] mb-2">
-                    Stage {selectedPanel.id}
-                  </Badge>
-                  <h3 className="text-2xl font-bold text-white">{selectedPanel.title}</h3>
-                  <p className="text-lg text-[#00FF41]">{selectedPanel.subtitle}</p>
-                </div>
+                  {/* Header */}
+                  <div className="text-center space-y-3 pt-2">
+                    <div className="flex items-center justify-center space-x-3 mb-4">
+                      <div 
+                        className="w-10 h-10 rounded-xl flex items-center justify-center"
+                        style={{ 
+                          backgroundColor: `${selectedPanel.color}20`,
+                          border: `1px solid ${selectedPanel.color}40`
+                        }}
+                      >
+                        <selectedPanel.icon size={20} style={{ color: selectedPanel.color }} />
+                      </div>
+                      <Badge 
+                        variant="outline" 
+                        style={{ 
+                          borderColor: selectedPanel.color,
+                          color: selectedPanel.color,
+                          backgroundColor: `${selectedPanel.color}10`
+                        }}
+                      >
+                        Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1}
+                      </Badge>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">{selectedPanel.title}</h3>
+                    <p className="text-lg" style={{ color: selectedPanel.color }}>{selectedPanel.subtitle}</p>
+                  </div>
 
                 {/* Description */}
                 <div className="space-y-3">
