@@ -7,6 +7,7 @@ const SupportCenterPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Memoized support channels for performance
   const supportChannels = useMemo(() => [
