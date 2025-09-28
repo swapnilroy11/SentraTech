@@ -50,21 +50,33 @@ const NewsletterSubscribe = () => {
         setEmail(''); // Clear the email field on success
         
         console.log('✅ Newsletter subscription successful:', result.data);
+        
+        // Clear success status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
       } else {
         setStatus('error');
         setMessage(result.error || 'Newsletter subscription failed. Please try again.');
+        
+        // Clear error status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
       setStatus('error');
       setMessage('Something went wrong. Please try again.');
+      
+      // Clear error status after 5 seconds
+      setTimeout(() => {
+        setStatus(null);
+        setMessage('');
+      }, 5000);
     }
-
-    // Clear status after 5 seconds for all states
-    setTimeout(() => {
-      setStatus(null);
-      setMessage('');
-    }, 5000);
   };
 
   const handleEmailChange = (e) => {
