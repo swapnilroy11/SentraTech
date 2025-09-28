@@ -259,7 +259,7 @@ const JobApplicationPage = () => {
   // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
   const submitApplication = async (applicationData) => {
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
+      const { FORM_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/formConfig.js');
       
       // Clear any cached data
       clearFormCache();
