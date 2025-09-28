@@ -132,8 +132,10 @@ const ROICalculatorRedesigned = () => {
     const humanMinutes = humanHandledVolume * avgHandleTime;
     const humanCost = humanMinutes * (country.agentHourly / 60); // Convert hourly to per minute
     
-    // Calculate bundles needed (per 1,000 calls + interactions)
-    const bundlesNeeded = totalVolume / 1000;
+    // Calculate bundles needed (each bundle covers 1000 calls AND 1000 interactions)
+    const callBundles = Math.ceil(calls / 1000);
+    const interactionBundles = Math.ceil(interactions / 1000);
+    const bundlesNeeded = Math.max(callBundles, interactionBundles);
     const sentraTechPlatformCost = bundlesNeeded * SENTRATECH_COST_PER_1K;
     const sentraTechTotalCost = humanCost + sentraTechPlatformCost;
     
