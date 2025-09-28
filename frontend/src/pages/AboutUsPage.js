@@ -295,14 +295,14 @@ const AboutUsPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/demo-request')}
-              className="px-8 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200"
+              onClick={handleDemoNavigation}
+              className="px-8 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50"
             >
               Schedule Demo
             </button>
             <button
-              onClick={() => navigate('/case-studies')}
-              className="px-8 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] font-semibold rounded-xl hover:bg-[#00FF41]/10 transition-colors duration-200"
+              onClick={handleCaseStudiesNavigation}
+              className="px-8 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] font-semibold rounded-xl hover:bg-[#00FF41]/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50"
             >
               View Success Stories
             </button>
