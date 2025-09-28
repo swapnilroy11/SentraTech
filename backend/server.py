@@ -981,36 +981,15 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         # Forward to external SentraTech API
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
-                # Step 1: Authenticate with external API to get service token
-                auth_url = "https://api.sentratech.net/v1/auth/login"
-                svc_email = os.environ.get("SVC_EMAIL")
-                svc_password = os.environ.get("SVC_PASSWORD")
+                # Forward directly to Admin Dashboard
+                dashboard_url = "https://sentra-admin.preview.emergentagent.com/api/ingest/contact_requests"
                 
-                auth_response = await client.post(
-                    auth_url,
-                    json={"email": svc_email, "password": svc_password},
-                    headers={"Content-Type": "application/json"}
-                )
-                
-                if auth_response.status_code != 200:
-                    logger.error(f"External API auth failed: {auth_response.status_code}")
-                    raise httpx.ConnectError("Authentication failed with external API")
-                
-                auth_data = auth_response.json()
-                service_token = auth_data.get("access_token")
-                
-                if not service_token:
-                    logger.error("No access token received from external API")
-                    raise httpx.ConnectError("No access token from external API")
-                
-                # Step 2: Forward contact request to external API
-                api_url = "https://api.sentratech.net/v1/contact_requests"
                 response = await client.post(
-                    api_url,
+                    dashboard_url,
                     json=contact_request.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {service_token}"
+                        "X-INGEST-KEY": "test-ingest-key-12345"
                     }
                 )
                 
