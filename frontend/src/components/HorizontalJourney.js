@@ -421,13 +421,23 @@ const HorizontalJourney = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <Card 
-                className="w-[500px] h-80 bg-[#0A0A0A] border-2 border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300"
-                onClick={() => setSelectedPanel(stage)}
-                role="button"
-                tabIndex={0}
-                aria-label={`${stage.title} - ${stage.subtitle}`}
+              <motion.div
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.2, ease: "easeOut" }
+                }}
+                whileTap={{ 
+                  scale: 0.98,
+                  transition: { duration: 0.1, ease: "easeOut" }
+                }}
               >
+                <Card 
+                  className="w-[500px] h-80 bg-[#0A0A0A] border-2 border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden cursor-pointer transition-all duration-200"
+                  onClick={() => setSelectedPanel(stage)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${stage.title} - ${stage.subtitle}`}
+                >
                 <CardContent className="p-8 h-full flex flex-col">
                   {/* Header Section */}
                   <div className="flex items-center justify-between mb-6">
