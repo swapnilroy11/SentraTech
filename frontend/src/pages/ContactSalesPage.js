@@ -98,18 +98,11 @@ const ContactSalesPage = () => {
 
   const fetchContacts = async () => {
     try {
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
-      const response = await fetch(`${backendUrl}/api/ingest/contact_requests/status`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        setContacts(data.recent_requests || []);
-      } else {
-        console.error('Failed to fetch contact requests');
-        setContacts([]);
-      }
+      // Note: Contact requests now go directly to dashboard
+      // This page would need admin dashboard API integration to show real data
+      setContacts([]);
     } catch (error) {
-      console.error('Error fetching contacts:', error);
+      console.error('Error: Contact requests now submit directly to dashboard');
       setContacts([]);
     } finally {
       setLoading(false);
