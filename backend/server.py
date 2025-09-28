@@ -246,7 +246,6 @@ class CalendarService:
             service = build('calendar', 'v3', credentials=creds)
             
             # Parse interview datetime
-            from datetime import datetime, timedelta
             import dateutil.parser
             
             start_time = dateutil.parser.parse(interview_data.interview_datetime)
