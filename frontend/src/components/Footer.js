@@ -70,13 +70,13 @@ const Footer = () => {
                 <ul className="space-y-2">
                   {footerLinks.careers.map((link, index) => (
                     <li key={index}>
-                      <a 
-                        href={link.href}
+                      <Link 
+                        to={link.href}
                         className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors text-sm group flex items-center"
                       >
                         <span>{link.name}</span>
                         <ArrowRight size={10} className="ml-1 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-200" />
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
