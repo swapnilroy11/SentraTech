@@ -960,12 +960,12 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
                         "external_status": "pending_retry"
                     }
         except httpx.ConnectError:
-            logger.warning("Dashboard not reachable, keeping local copy for sync retry")
+            logger.warning("External API not reachable, keeping local copy for sync retry")
             return {
                 "status": "success", 
-                "message": "Demo request saved locally, dashboard sync will retry when available",
+                "message": "Demo request saved locally, external sync will retry when available",
                 "id": demo_data["id"],
-                "dashboard_status": "connection_failed"
+                "external_status": "connection_failed"
             }
                 
     except httpx.TimeoutException:
