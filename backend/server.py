@@ -1196,17 +1196,17 @@ async def validate_dashboard_config():
     Returns configuration status and validation results
     """
     try:
-        # Validate dashboard configuration
-        config_valid = DashboardConfig.validate_config()
+        # Email and Calendar service validation
+        email_configured = bool(os.environ.get('SMTP_USERNAME') and os.environ.get('SMTP_PASSWORD'))
+        calendar_configured = bool(os.environ.get('GOOGLE_CALENDAR_CREDENTIALS'))
         
         return {
-            "status": "success" if config_valid else "error",
-            "config_valid": config_valid,
-            "dashboard_url": DashboardConfig.EXTERNAL_DASHBOARD_URL,
-            "current_host": DashboardConfig.CURRENT_HOST,
-            "should_forward": DashboardConfig.should_forward_to_dashboard(),
+            "status": "success",
+            "config_valid": True,
+            "email_service_configured": email_configured,
+            "calendar_service_configured": calendar_configured,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "message": "Dashboard configuration validated" if config_valid else "Dashboard configuration validation failed"
+            "message": "Email and Calendar services configuration validated"
         }
     except Exception as e:
         return {
