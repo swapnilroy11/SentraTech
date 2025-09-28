@@ -198,7 +198,20 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
       newErrors.workEmail = 'Please enter a valid email address';
     }
     if (!formData.companyName.trim()) newErrors.companyName = 'Company name is required';
-    if (!formData.monthlyVolume) newErrors.monthlyVolume = 'Please select monthly volume';
+    
+    // Volume validation - either new fields or old field
+    if (!formData.callVolume && !formData.interactionVolume && !formData.monthlyVolume) {
+      newErrors.volume = 'Please provide call volume, interaction volume, or select monthly volume';
+    }
+    
+    // Validate numeric fields if provided
+    if (formData.callVolume && (isNaN(formData.callVolume) || formData.callVolume < 0)) {
+      newErrors.callVolume = 'Please enter a valid call volume';
+    }
+    if (formData.interactionVolume && (isNaN(formData.interactionVolume) || formData.interactionVolume < 0)) {
+      newErrors.interactionVolume = 'Please enter a valid interaction volume';
+    }
+    
     if (!formData.consentMarketing) newErrors.consentMarketing = 'You must agree to receive communications';
     
     // Demo scheduling validation removed
