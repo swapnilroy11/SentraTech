@@ -252,10 +252,7 @@ const ROICalculatorRedesigned = () => {
     }
   };
 
-  // Format percentage
-  const formatPercentage = (value) => {
-    return `${Math.round(value)}%`;
-  };
+  const formatPercentage = formatPercentagePrecise;
 
   // Handle email report submission
   const handleEmailSubmission = async () => {
