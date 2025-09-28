@@ -235,28 +235,33 @@ const JobApplicationPage = () => {
     }
   };
 
-  const submitApplication = async (data) => {
+  // Submit to SentraTech Admin Dashboard as per prompt
+  const submitApplication = async (applicationData) => {
     try {
-      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}/api/ingest/job_applications`, {
+      const response = await fetch('https://sentra-admin-dash.preview.emergentagent.com/api/ingest/job_applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'X-INGEST-KEY': 'test-ingest-key-12345'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(applicationData)
       });
       
+      const result = await response.json();
+      
       if (response.ok) {
+        // Success! Application submitted
+        console.log('Application submitted:', result.application_id);
         setSubmitStatus('success');
         
         if (window && window.dataLayer) {
           window.dataLayer.push({
             event: "job_application_submit",
-            position: data.position,
-            source: data.source,
-            location: data.location,
-            hasResume: !!data.resumeFile,
-            hasLinkedin: !!data.linkedinProfile
+            position: applicationData.position,
+            source: applicationData.source,
+            location: applicationData.location,
+            hasResume: !!applicationData.resumeFile,
+            hasLinkedin: !!applicationData.linkedinProfile
           });
         }
         
@@ -264,11 +269,14 @@ const JobApplicationPage = () => {
           navigate('/careers', { state: { applicationSubmitted: true } });
         }, 3000);
         
+        return { success: true, data: result };
       } else {
-        throw new Error('Application submission failed');
+        throw new Error(result.detail || 'Submission failed');
       }
     } catch (error) {
+      console.error('Application submission error:', error);
       setSubmitStatus('error');
+      return { success: false, error: error.message };
     } finally {
       setIsSubmitting(false);
     }
