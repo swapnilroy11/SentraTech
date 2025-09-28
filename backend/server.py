@@ -902,7 +902,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://sentra-admin.preview.emergentagent.com/api/ingest/demo_requests"
+                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/demo_requests"
                 
                 response = await client.post(
                     dashboard_url,
@@ -982,7 +982,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://sentra-admin.preview.emergentagent.com/api/ingest/contact_requests"
+                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/contact_requests"
                 
                 response = await client.post(
                     dashboard_url,
@@ -1062,7 +1062,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://sentra-admin.preview.emergentagent.com/api/ingest/roi_reports"
+                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/roi_reports"
                 
                 response = await client.post(
                     dashboard_url,
@@ -1137,7 +1137,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://sentra-admin.preview.emergentagent.com/api/ingest/subscriptions"
+                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/subscriptions"
                 
                 response = await client.post(
                     dashboard_url,

@@ -8,7 +8,7 @@ import websockets
 import json
 import requests
 
-BACKEND_URL = "https://support-platform-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-flow-5.preview.emergentagent.com/api"
 WEBSOCKET_URL = "wss://sentrafuture.preview.emergentagent.com/ws/chat"
 
 async def test_websocket():

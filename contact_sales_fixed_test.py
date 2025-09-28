@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://support-platform-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-flow-5.preview.emergentagent.com/api"
 
 class ContactSalesFixedTester:
     """Test the FIXED Contact Sales form submission with corrected table name"""
