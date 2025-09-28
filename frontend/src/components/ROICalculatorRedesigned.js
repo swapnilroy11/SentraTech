@@ -217,19 +217,63 @@ const ROICalculatorRedesigned = () => {
 
     setIsSubmittingReport(true);
     
-    // Offline mode - no network calls to avoid connectivity issues
-    setTimeout(() => {
-      setReportSubmitted(true);
-      setIsSubmittingReport(false);
-      
-      console.log('✅ ROI report submitted successfully (offline mode):', {
-        country: selectedCountry,
+    // Network submission with robust fallback
+    try {
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+        await import('../config/dashboardConfig.js');
+
+      const roiData = {
         email: email,
-        volume: parseFloat(callVolume) + parseFloat(interactionVolume)
-      });
-      
-      // Modal will now stay open until user clicks "Continue Exploring"
-    }, 1500); // Simulate processing time
+        country: selectedCountry,
+        call_volume: parseInt(callVolume) || 0,
+        interaction_volume: parseInt(interactionVolume) || 0,
+        total_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0),
+        calculated_savings: results?.totalSavings || 0,
+        roi_percentage: results?.roiPercentage || 0,
+        payback_period: results?.paybackPeriod || 0,
+        timestamp: new Date().toISOString()
+      };
+
+      // Check if offline and handle immediately
+      if (!isOnline()) {
+        console.warn('Browser offline, using offline fallback');
+        setReportSubmitted(true);
+        setIsSubmittingReport(false);
+        return;
+      }
+
+      const result = await submitFormToDashboard(
+        DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
+        roiData
+      );
+
+      if (result.success) {
+        showSuccessMessage(
+          'ROI report submitted successfully',
+          { ...result.data, form_type: 'roi_calculator' }
+        );
+        setReportSubmitted(true);
+        
+        // Analytics event
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: 'roi_report_submit',
+            country: selectedCountry,
+            total_volume: roiData.total_volume,
+            submission_mode: result.mode,
+            ingestId: result.data?.id || `roi_${Date.now()}`
+          });
+        }
+      } else {
+        throw new Error(result.error || 'ROI report submission failed');
+      }
+    } catch (error) {
+      // Fallback to offline simulation on any error
+      console.warn('ROI report submission failed, using offline fallback:', error);
+      setReportSubmitted(true);
+    } finally {
+      setIsSubmittingReport(false);
+    }
   };
 
   return (
