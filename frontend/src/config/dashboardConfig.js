@@ -3,16 +3,19 @@
  * Updated to use direct dashboard submission endpoints
  * 
  * Base URL: https://sentra-admin-dash.preview.emergentagent.com
- * Authentication: No authentication required
- * All forms submit directly to dashboard
+ * Authentication: X-INGEST-KEY required for all form submissions
+ * All forms submit directly to dashboard with proper authentication
  */
 
 // Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
-  // Direct dashboard URL - no backend proxy needed
-  DASHBOARD_URL: 'https://sentra-admin-dash.preview.emergentagent.com',
+  // API Base URL - confirmed correct endpoint
+  API_BASE_URL: 'https://sentra-admin-dash.preview.emergentagent.com',
   
-  // New direct endpoints (no authentication required)
+  // Dashboard ingest key for authentication
+  INGEST_KEY: 'test-ingest-key-12345',
+  
+  // Form submission endpoints
   ENDPOINTS: {
     DEMO_REQUEST: '/api/forms/demo-request',
     CONTACT_SALES: '/api/forms/contact-sales',
