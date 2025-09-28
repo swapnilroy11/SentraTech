@@ -876,6 +876,34 @@ async def health_check():
         logger.error(f"Health check failed after {response_time:.2f}ms: {str(e)}")
         raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
 
+@api_router.get("/config/validate")
+async def validate_dashboard_config():
+    """
+    🔒 PROTECTED - Validate dashboard configuration
+    Returns configuration status and validation results
+    """
+    try:
+        # Validate dashboard configuration
+        config_valid = DashboardConfig.validate_config()
+        
+        return {
+            "status": "success" if config_valid else "error",
+            "config_valid": config_valid,
+            "dashboard_url": DashboardConfig.EXTERNAL_DASHBOARD_URL,
+            "current_host": DashboardConfig.CURRENT_HOST,
+            "should_forward": DashboardConfig.should_forward_to_dashboard(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "message": "Dashboard configuration validated" if config_valid else "Dashboard configuration validation failed"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "config_valid": False,
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "message": "Configuration validation error"
+        }
+
 # Dashboard Ingest Endpoints
 @api_router.post("/ingest/demo_requests")
 async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest):
