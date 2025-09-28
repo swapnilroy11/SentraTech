@@ -1700,7 +1700,7 @@ async def ingest_job_application(request: Request, job_application: JobApplicati
                 response = await client.post(
                     dashboard_url,
                     json=external_data,
-                    headers={"X-INGEST-KEY": get_dashboard_auth_key()}
+                    headers=get_dashboard_headers()
                 )
                 
                 if response.status_code == 200:
