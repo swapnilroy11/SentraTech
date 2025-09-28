@@ -420,8 +420,8 @@ const JobApplicationPage = () => {
                   Preferred Work Shifts
                 </label>
                 <select
-                  value={formData.preferredShifts}
-                  onChange={(e) => handleInputChange('preferredShifts', e.target.value)}
+                  value={formData.preferred_shifts}
+                  onChange={(e) => handleInputChange('preferred_shifts', e.target.value)}
                   className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
                 >
                   <option value="">Select preferred shifts</option>
