@@ -142,7 +142,7 @@ const ROICalculatorRedesigned = () => {
     const humanHandledVolume = totalVolume * (1 - AUTOMATION_PERCENTAGE / 100);
     const humanMinutes = humanHandledVolume * avgHandleTime;
     const humanCost = humanMinutes * (country.agentHourly / 60);
-    const sentraTechTotalCost = humanCost + sentraTechPlatformCost;
+    const sentraTechTotalCost = sentraTechPlatformCost; // Platform cost already includes all expenses
     
     // Calculate savings and ROI
     const monthlySavings = traditionalMonthlyCost - sentraTechTotalCost;
