@@ -814,7 +814,7 @@ const JobApplicationPage = () => {
                         <span className="flex items-center justify-center w-6 h-6 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full text-xs text-[#00FF41] font-medium flex-shrink-0 mt-0.5">
                           {index + 1}
                         </span>
-                        <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">{item}</span>
+                        <span className="text-[rgb(218,218,218)] leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
