@@ -858,7 +858,7 @@ const HorizontalJourney = () => {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
     </section>
