@@ -294,36 +294,34 @@ const LeadershipTeamPage = () => {
               <Users size={48} className="text-[#00FF41] mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-white mb-4">Our Organization</h2>
               <p className="text-[rgb(161,161,170)] max-w-3xl mx-auto">
-                SentraTech operates with a hybrid organizational structure optimized for rapid innovation 
-                and customer focus. Each executive leads specialized teams while maintaining close 
-                collaboration across all functions.
+                SentraTech operates with a lean, agile organizational structure optimized for rapid innovation 
+                and customer focus. Our executive team leads specialized functions while maintaining close 
+                collaboration to deliver exceptional AI-powered customer experience solutions.
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-4">Reporting Structure</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">Leadership Structure</h3>
                 <ul className="space-y-2 text-[rgb(218,218,218)] text-sm">
-                  <li>• <strong>CEO:</strong> Strategic vision, board relations, company culture</li>
-                  <li>• <strong>CTO:</strong> AI/ML teams, platform engineering, security</li>
-                  <li>• <strong>CFO:</strong> Finance, legal, operations, business intelligence</li>
-                  <li>• <strong>CRO:</strong> Sales, partnerships, revenue operations</li>
-                  <li>• <strong>VP Product:</strong> Product management, design, user research</li>
-                  <li>• <strong>VP Customer Success:</strong> Support, success, professional services</li>
+                  <li>• <strong>CEO (Swapnil Roy):</strong> Strategic vision, company direction, stakeholder relations</li>
+                  <li>• <strong>CTO (Samiul Sakib):</strong> AI/ML development, platform architecture, technology strategy</li>
+                  <li>• <strong>CHRO (Arina Tasnim):</strong> Talent acquisition, organizational development, culture building</li>
+                  <li>• <strong>COO (Ajmal Hossen):</strong> Operations excellence, business strategy, process optimization</li>
                 </ul>
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-white mb-4">Team Composition</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">Focus Areas</h3>
                 <ul className="space-y-2 text-[rgb(218,218,218)] text-sm">
-                  <li>• <strong>Engineering:</strong> 45% of organization (AI/ML, Platform, Security)</li>
-                  <li>• <strong>Customer Facing:</strong> 30% (Sales, Success, Support)</li>
-                  <li>• <strong>Product & Design:</strong> 15% (PM, UX, Research)</li>
-                  <li>• <strong>Operations:</strong> 10% (Finance, Legal, People, Marketing)</li>
+                  <li>• <strong>AI Innovation:</strong> Cutting-edge machine learning and NLP solutions</li>
+                  <li>• <strong>Customer Success:</strong> Enterprise-grade support and customer experience</li>
+                  <li>• <strong>Scalable Growth:</strong> Building sustainable, efficient operations</li>
+                  <li>• <strong>Team Excellence:</strong> Attracting and developing world-class talent</li>
                 </ul>
                 <div className="mt-4 p-3 bg-[rgb(18,18,18)] rounded-lg border border-[#00FF41]/20">
                   <p className="text-[#00FF41] text-xs">
-                    <strong>Current Team Size:</strong> 85 employees across 12 countries
+                    <strong>Mission:</strong> Transforming customer support through AI while preserving human connection
                   </p>
                 </div>
               </div>
