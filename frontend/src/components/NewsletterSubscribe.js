@@ -28,20 +28,52 @@ const NewsletterSubscribe = () => {
     setStatus('loading');
     setMessage('');
 
-    // Simulate successful subscription without API call
-    setTimeout(() => {
-      setStatus('success');
-      setMessage('Successfully subscribed to our newsletter!');
-      setEmail(''); // Clear the email field on success
+    try {
+      // Use Dashboard integration
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
       
-      console.log('✅ Newsletter subscription successful (offline mode)');
+      // Prepare data for Admin Dashboard
+      const dashboardData = {
+        email: email.trim(),
+        name: '' // Optional field for newsletter
+      };
       
-      // Clear success status after 5 seconds
+      // Submit to SentraTech Admin Dashboard
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
+      
+      if (result.success) {
+        setStatus('success');
+        setMessage('Successfully subscribed to our newsletter!');
+        setEmail(''); // Clear the email field on success
+        
+        showSuccessMessage('Newsletter subscription successful', result.data);
+        
+        // Clear success status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
+      } else {
+        setStatus('error');
+        setMessage(result.error || 'Newsletter subscription failed. Please try again.');
+        
+        // Clear error status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setStatus('error');
+      setMessage('Something went wrong. Please try again.');
+      
+      // Clear error status after 5 seconds
       setTimeout(() => {
         setStatus(null);
         setMessage('');
       }, 5000);
-    }, 1000); // Small delay to simulate processing
+    }
   };
 
   const handleEmailChange = (e) => {
