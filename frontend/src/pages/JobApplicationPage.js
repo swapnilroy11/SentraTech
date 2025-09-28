@@ -145,8 +145,7 @@ const JobApplicationPage = () => {
     const newErrors = {};
     
     if (step === 1) {
-      if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-      if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+      if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
       if (!formData.email.trim()) newErrors.email = 'Email is required';
       if (!formData.location.trim()) newErrors.location = 'Location is required';
       
