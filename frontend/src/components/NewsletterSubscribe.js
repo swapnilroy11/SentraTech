@@ -29,8 +29,11 @@ const NewsletterSubscribe = () => {
     setMessage('');
 
     try {
-      // Use new dashboard config
-      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
+      // Use enhanced dashboard config with proper authentication
+      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
+      
+      // Clear any cached data
+      clearFormCache();
       
       // Prepare data for new dashboard endpoint
       const dashboardData = {
@@ -38,13 +41,8 @@ const NewsletterSubscribe = () => {
         name: '' // Optional field
       };
       
-      // Submit directly to dashboard (no authentication required)
-      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dashboardData)
+      // Submit using enhanced helper function with authentication and error handling
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
       });
       
       if (response.ok) {
