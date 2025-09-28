@@ -22,18 +22,18 @@ const LeadershipTeamPage = () => {
       email: 'swapnil@sentratech.net'
     },
     {
-      name: 'Samiul Sakib',
-      title: 'Chief Technology Officer',
-      image: '/images/team/samiul_sakib.jpg',
-      bio: 'Samiul leads SentraTech\'s technology vision and architecture, focusing on building scalable AI-powered customer support solutions. With extensive experience in machine learning, cloud infrastructure, and enterprise software development, he ensures our platform delivers exceptional performance and reliability.',
+      name: 'Ajmal Hossen',
+      title: 'Chief Operating Officer',
+      image: '/images/team/ajmal_hossen.jpg',
+      bio: 'Ajmal oversees SentraTech\'s operational excellence and business strategy execution. He ensures our company operates efficiently while maintaining our commitment to delivering exceptional customer experiences. His expertise spans operations management, strategic planning, and process optimization.',
       achievements: [
-        'Architected SentraTech\'s core AI platform serving enterprise clients',
-        'Expert in machine learning, natural language processing, and cloud systems',
-        'Led development of proprietary algorithms for customer interaction optimization'
+        'Streamlined operations for rapid scaling and global expansion',
+        'Implemented data-driven processes improving operational efficiency by 40%+',
+        'Expert in business operations, strategic planning, and customer success'
       ],
-      linkedin: 'https://linkedin.com/in/samiulsakib-cto',
-      twitter: 'https://twitter.com/samiulsakib',
-      email: 'samiul@sentratech.net'
+      linkedin: 'https://linkedin.com/in/ajmalhossen-coo',
+      twitter: 'https://twitter.com/ajmalhossen',
+      email: 'ajmal@sentratech.net'
     },
     {
       name: 'Arina Tasnim',
@@ -50,18 +50,18 @@ const LeadershipTeamPage = () => {
       email: 'arina@sentratech.net'
     },
     {
-      name: 'Ajmal Hossen',
-      title: 'Chief Operating Officer',
-      image: '/images/team/ajmal_hossen.jpg',
-      bio: 'Ajmal oversees SentraTech\'s operational excellence and business strategy execution. He ensures our company operates efficiently while maintaining our commitment to delivering exceptional customer experiences. His expertise spans operations management, strategic planning, and process optimization.',
+      name: 'Samiul Sakib',
+      title: 'Chief Technology Officer',
+      image: '/images/team/samiul_sakib.jpg',
+      bio: 'Samiul leads SentraTech\'s technology vision and architecture, focusing on building scalable AI-powered customer support solutions. With extensive experience in machine learning, cloud infrastructure, and enterprise software development, he ensures our platform delivers exceptional performance and reliability.',
       achievements: [
-        'Streamlined operations for rapid scaling and global expansion',
-        'Implemented data-driven processes improving operational efficiency by 40%+',
-        'Expert in business operations, strategic planning, and customer success'
+        'Architected SentraTech\'s core AI platform serving enterprise clients',
+        'Expert in machine learning, natural language processing, and cloud systems',
+        'Led development of proprietary algorithms for customer interaction optimization'
       ],
-      linkedin: 'https://linkedin.com/in/ajmalhossen-coo',
-      twitter: 'https://twitter.com/ajmalhossen',
-      email: 'ajmal@sentratech.net'
+      linkedin: 'https://linkedin.com/in/samiulsakib-cto',
+      twitter: 'https://twitter.com/samiulsakib',
+      email: 'samiul@sentratech.net'
     }
   ];
 
