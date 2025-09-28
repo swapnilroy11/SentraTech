@@ -1,129 +1,109 @@
 /**
- * 🔒 PROTECTED DASHBOARD INTEGRATION CONFIG 🔒
+ * SentraTech Dashboard Integration Config
+ * Updated to use direct dashboard submission endpoints
  * 
- * ⚠️ ⚠️ ⚠️ CRITICAL WARNING - DO NOT MODIFY ⚠️ ⚠️ ⚠️
- * 
- * This configuration is essential for dashboard data synchronization.
- * Any changes to these values will break form submissions and data flow
- * to the admin dashboard (dashboard-central-5).
- * 
- * MODIFICATION REQUIRES:
- * - Senior developer approval
- * - Full testing on staging environment
- * - Verification that dashboard-central-5 receives data
- * 
- * Last verified working: 2025-09-28
- * Configuration owner: System Administrator
+ * Base URL: https://sentra-admin-dash.preview.emergentagent.com
+ * Authentication: No authentication required
+ * All forms submit directly to dashboard
  */
 
-// 🔒 PROTECTED - Dashboard Integration Settings
+// Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
-  // Backend URL - CORRECTED to working tech-careers-3 endpoint
-  BACKEND_URL: 'https://customer-dashboard-3.preview.emergentagent.com',
+  // Direct dashboard URL - no backend proxy needed
+  DASHBOARD_URL: 'https://sentra-admin-dash.preview.emergentagent.com',
   
-  // Authentication key for customer-flow-5 backend
-  INGEST_KEY: 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6',
-  
-  // Target dashboard URL (used by backend for forwarding)
-  DASHBOARD_URL: 'dashboard-central-5.preview.emergentagent.com',
-  
-  // Endpoints
+  // New direct endpoints (no authentication required)
   ENDPOINTS: {
-    DEMO_REQUESTS: '/api/ingest/demo_requests',
-    CONTACT_REQUESTS: '/api/ingest/contact_requests', 
-    ROI_REPORTS: '/api/ingest/roi_reports',
-    SUBSCRIPTIONS: '/api/ingest/subscriptions'
+    DEMO_REQUEST: '/api/forms/demo-request',
+    CONTACT_SALES: '/api/forms/contact-sales',
+    ROI_CALCULATOR: '/api/forms/roi-calculator',
+    NEWSLETTER_SIGNUP: '/api/forms/newsletter-signup',
+    JOB_APPLICATION: '/api/forms/job-application'
   }
 };
 
-// 🔒 PROTECTED - Data Format Templates
+// Data format templates for new endpoints
 export const DATA_FORMATS = {
   DEMO_REQUEST: {
-    user_name: 'string',      // NOT company_name - backend expects user_name
-    email: 'string',          // NOT contact_email - backend expects email
-    company: 'string',        // NOT company_name - backend expects company
-    phone: 'string',
-    call_volume: 'number',
-    interaction_volume: 'number', 
-    message: 'string'
+    name: 'string (required)',
+    email: 'string (required)',
+    company: 'string (required)',
+    phone: 'string (optional)',
+    message: 'string (optional)',
+    monthly_volume: 'string (optional)',
+    current_cost: 'string (optional)'
   },
   
-  CONTACT_REQUEST: {
-    full_name: 'string',
-    work_email: 'string',
-    company_name: 'string',
-    company_website: 'string|null',
-    phone: 'string|null',
-    call_volume: 'number',
-    interaction_volume: 'number',
-    preferred_contact_method: 'string',
-    message: 'string',
-    status: 'string'
+  CONTACT_SALES: {
+    full_name: 'string (required)',
+    work_email: 'string (required)',
+    company_name: 'string (required)',
+    message: 'string (required)',
+    phone: 'string (optional)',
+    company_website: 'string (optional)',
+    call_volume: 'number (optional)',
+    interaction_volume: 'number (optional)',
+    preferred_contact_method: 'string (optional)'
   },
   
-  ROI_REPORT: {
-    company_size: 'string',
-    call_volume: 'number',
-    interaction_volume: 'number',
-    current_cost: 'number',
-    sentra_cost: 'number',
-    cost_reduction: 'number',
-    contact_email: 'string'
+  ROI_CALCULATOR: {
+    country: 'string (required)',
+    email: 'string (required)',
+    monthly_volume: 'number (optional)',
+    current_cost: 'number (optional)',
+    company_name: 'string (optional)'
   },
   
-  SUBSCRIPTION: {
-    email: 'string'
+  NEWSLETTER_SIGNUP: {
+    email: 'string (required)',
+    name: 'string (optional)'
+  },
+  
+  JOB_APPLICATION: {
+    full_name: 'string (required)',
+    email: 'string (required)',
+    position_applied: 'string (required)',
+    phone: 'string (optional)',
+    location: 'string (optional)',
+    experience_level: 'string (optional)',
+    portfolio_website: 'string (optional)',
+    preferred_shifts: 'array (optional)',
+    availability_date: 'string (optional)',
+    motivation_text: 'string (optional)',
+    resume_file: 'object (optional)',
+    consent_for_storage: 'boolean (required)'
   }
 };
 
 /**
- * 🛡️ Configuration Validation Function
- * Call this to verify critical settings are correct
+ * Form submission helper function
  */
-export const validateConfig = () => {
-  const errors = [];
-  
-  // Check backend URL - CORRECTED to allow tech-careers-3
-  if (!DASHBOARD_CONFIG.BACKEND_URL.includes('tech-careers-3.preview.emergentagent.com')) {
-    errors.push('❌ BACKEND_URL must point to tech-careers-3.preview.emergentagent.com - working endpoint');
+export const submitFormToDashboard = async (endpoint, data) => {
+  try {
+    const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      return { success: true, data: result };
+    } else {
+      throw new Error(result.detail || 'Form submission failed');
+    }
+  } catch (error) {
+    console.error('Form submission error:', error);
+    return { success: false, error: error.message };
   }
-  
-  // Check ingest key format
-  if (!DASHBOARD_CONFIG.INGEST_KEY || DASHBOARD_CONFIG.INGEST_KEY.length < 32) {
-    errors.push('❌ INGEST_KEY appears invalid or missing');
-  }
-  
-  // Check dashboard target
-  if (!DASHBOARD_CONFIG.DASHBOARD_URL.includes('dashboard-central-5')) {
-    errors.push('❌ DASHBOARD_URL should reference dashboard-central-5');
-  }
-  
-  if (errors.length > 0) {
-    console.error('🚨 DASHBOARD CONFIG VALIDATION FAILED:');
-    errors.forEach(error => console.error(error));
-    return false;
-  }
-  
-  console.log('✅ Dashboard configuration validation passed');
-  return true;
 };
 
-// 🔒 PROTECTED - Auto-validation on import
-if (typeof window !== 'undefined') {
-  validateConfig();
-}
-
 /**
- * 🔒 PROTECTED USAGE INSTRUCTIONS:
- * 
- * Import this config instead of hardcoding values:
- * 
- * ❌ Wrong:
- * const url = 'https://customer-dashboard-3.preview.emergentagent.com';
- * const key = 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6';
- * 
- * ✅ Correct:
- * import { DASHBOARD_CONFIG } from '../config/dashboardConfig.js';
- * const url = DASHBOARD_CONFIG.BACKEND_URL;
- * const key = DASHBOARD_CONFIG.INGEST_KEY;
+ * Get full dashboard endpoint URL
  */
+export const getDashboardEndpoint = (endpoint) => {
+  return `${DASHBOARD_CONFIG.DASHBOARD_URL}${endpoint}`;
+};
