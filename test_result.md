@@ -66,6 +66,7 @@ test_plan:
     - "Demo Request Form Supabase Submission Issue"
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
+    - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
   test_all: false
   test_priority: "high_first"
 
