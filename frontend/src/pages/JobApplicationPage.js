@@ -19,7 +19,6 @@ const JobApplicationPage = () => {
     location: '',
     
     // Professional Information
-    linkedinProfile: '',
     portfolioWebsite: '',
     preferredShifts: '',
     availabilityStartDate: '',
