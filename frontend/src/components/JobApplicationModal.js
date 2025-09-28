@@ -178,19 +178,20 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, data);
       
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
         setSubmitStatus('success');
+        
+        console.log('✅ Job application (modal) submitted successfully:', result.data);
         
         // Analytics event
         if (window && window.dataLayer) {
           window.dataLayer.push({
             event: "job_application_submit",
-            position: data.position,
-            source: data.source,
+            position: data.position_applied,
+            source: 'careers_modal',
             location: data.location,
-            hasResume: !!data.resumeFile,
-            hasLinkedin: !!data.linkedinProfile
+            hasResume: !!data.resume_file,
+            applicationId: result.data.application_id
           });
         }
         
@@ -200,8 +201,7 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         }, 3000);
         
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Application submission failed');
+        throw new Error(result.error || 'Job application submission failed');
       }
     } catch (error) {
       console.error('Submission error:', error);
