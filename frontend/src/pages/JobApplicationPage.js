@@ -533,11 +533,11 @@ const JobApplicationPage = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Portfolio:</span>
-                  <span className="text-white break-all">{formData.portfolioWebsite || 'Not provided'}</span>
+                  <span className="text-white break-all">{formData.portfolio_website || 'Not provided'}</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
-                  <span className="text-white">{formData.relevantExperience || '0-1'}</span>
+                  <span className="text-white">{formData.relevant_experience || '0-1'}</span>
                 </div>
               </div>
             </div>
