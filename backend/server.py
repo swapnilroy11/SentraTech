@@ -1082,64 +1082,6 @@ class EmailService:
         try:
             # Temporarily disabled due to CSS syntax issues in f-string
             return {"success": True, "message": "Email confirmation disabled temporarily"}
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1>SentraTech</h1>
-                        <p>AI-Powered Customer Support Excellence</p>
-                    </div>
-                    <div class="content">
-                        <h2>Thank you for your demo request!</h2>
-                        <p>Hi {demo_request.name},</p>
-                        <p>We've received your demo request for <span class="highlight">SentraTech's AI-powered customer support platform</span>.</p>
-                        
-                        <h3>What happens next?</h3>
-                        <ul>
-                            <li>Our team will review your request within <strong>2 business hours</strong></li>
-                            <li>We'll schedule a personalized demo tailored to {demo_request.company}'s needs</li>
-                            <li>You'll see how we can reduce your support costs by 40-60%</li>
-                        </ul>
-                        
-                        <h3>Your Request Details:</h3>
-                        <p><strong>Company:</strong> {demo_request.company}<br>
-                        <strong>Email:</strong> {demo_request.email}<br>
-                        <strong>Phone:</strong> {demo_request.phone or 'Not provided'}</p>
-                        
-                        <p>Questions? Reply to this email or call us directly.</p>
-                        <p>Best regards,<br><strong>The SentraTech Team</strong></p>
-                    </div>
-                    <div class="footer">
-                        <p>SentraTech | AI-Powered Customer Support | Beyond • Better • Boundless</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """
-            
-            text_content = f"""
-            Hi {demo_request.name},
-            
-            Thank you for requesting a demo of SentraTech's AI-powered customer support platform!
-            
-            What happens next:
-            - Our team will review your request within 2 business hours
-            - We'll schedule a personalized demo tailored to {demo_request.company}'s needs  
-            - You'll see how we can reduce your support costs by 40-60%
-            
-            Your Request Details:
-            Company: {demo_request.company}
-            Email: {demo_request.email}
-            Phone: {demo_request.phone or 'Not provided'}
-            
-            Questions? Reply to this email or call us directly.
-            
-            Best regards,
-            The SentraTech Team
-            
-            SentraTech | AI-Powered Customer Support | Beyond • Better • Boundless
-            """
-            
-            return await self.send_email(demo_request.email, subject, html_content, text_content)
             
         except Exception as e:
             logger.error(f"Error sending confirmation email: {str(e)}")
