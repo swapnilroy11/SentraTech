@@ -948,29 +948,64 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
     
     try:
-        # Forward to admin dashboard
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/contact_requests"
-            
-            # Get service credentials
-            svc_email = os.environ.get("SVC_EMAIL")
-            svc_password = os.environ.get("SVC_PASSWORD")
-            
-            response = await client.post(
-                dashboard_url,
-                json=contact_request.dict(),
-                headers={
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {svc_email}:{svc_password}"  # Simplified auth
-                }
-            )
-            
-            if response.status_code in [200, 201]:
-                logger.info(f"Contact request successfully forwarded: {contact_request.work_email}")
-                return {"status": "success", "message": "Contact request submitted successfully"}
-            else:
-                logger.error(f"Dashboard forward failed: {response.status_code} - {response.text}")
-                raise HTTPException(status_code=response.status_code, detail="Failed to submit contact request")
+        # Store locally first
+        contact_data = {
+            **contact_request.dict(),
+            "id": str(uuid.uuid4()),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "pending_dashboard_sync"
+        }
+        
+        # Save to local database as backup
+        await db.contact_requests.insert_one(contact_data)
+        logger.info(f"Contact request saved locally: {contact_request.work_email}")
+        
+        # Try to forward to admin dashboard
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/contact_requests"
+                
+                # Get service credentials
+                svc_email = os.environ.get("SVC_EMAIL")
+                svc_password = os.environ.get("SVC_PASSWORD")
+                
+                response = await client.post(
+                    dashboard_url,
+                    json=contact_request.dict(),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                    }
+                )
+                
+                if response.status_code in [200, 201]:
+                    # Update status to synced
+                    await db.contact_requests.update_one(
+                        {"id": contact_data["id"]},
+                        {"$set": {"status": "synced_to_dashboard"}}
+                    )
+                    logger.info(f"Contact request successfully forwarded to dashboard: {contact_request.work_email}")
+                    return {
+                        "status": "success", 
+                        "message": "Contact request submitted and synced to dashboard",
+                        "id": contact_data["id"]
+                    }
+                else:
+                    logger.warning(f"Dashboard sync failed ({response.status_code}), keeping local copy")
+                    return {
+                        "status": "success", 
+                        "message": "Contact request saved locally, dashboard sync will retry",
+                        "id": contact_data["id"],
+                        "dashboard_status": "pending_retry"
+                    }
+        except httpx.ConnectError:
+            logger.warning("Dashboard not reachable, keeping local copy for sync retry")
+            return {
+                "status": "success", 
+                "message": "Contact request saved locally, dashboard sync will retry when available",
+                "id": contact_data["id"],
+                "dashboard_status": "connection_failed"
+            }
                 
     except httpx.TimeoutException:
         logger.error("Dashboard request timeout")
