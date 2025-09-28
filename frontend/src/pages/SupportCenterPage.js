@@ -382,7 +382,7 @@ const SupportCenterPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
+    <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
       <SEOManager 
         title="Support Center | SentraTech - Get Help & Technical Support"
         description="Access SentraTech's comprehensive support center with 24/7 live chat, documentation, tutorials, and expert technical assistance."
@@ -393,18 +393,19 @@ const SupportCenterPage = () => {
         {/* Header */}
         <div className="mb-16">
           <button
-            onClick={() => navigate('/')}
-            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors mb-6"
+            onClick={handleBackNavigation}
+            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors duration-200 mb-6 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50 rounded-lg p-2 will-change-transform"
+            aria-label="Back to Home"
           >
             <ArrowLeft size={20} className="mr-2" />
             Back to Home
           </button>
           
           <div className="text-center">
-            <h1 className="text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Support Center
             </h1>
-            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-lg md:text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto leading-relaxed mb-8">
               Get the help you need to maximize your SentraTech experience. Our support team is available 24/7 
               with comprehensive resources, expert guidance, and proactive assistance.
             </p>
@@ -417,35 +418,35 @@ const SupportCenterPage = () => {
                 placeholder="Search for help articles, guides, or features..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl pl-12 pr-4 py-4 text-white placeholder-[rgb(161,161,170)] focus:border-[#00FF41]/50 focus:outline-none"
+                className="w-full bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl pl-12 pr-4 py-4 text-white placeholder-[rgb(161,161,170)] focus:border-[#00FF41]/50 focus:outline-none transition-colors duration-200"
               />
             </div>
           </div>
         </div>
 
-        {/* Support Channels */}
+        {/* Support Channels - Optimized */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Contact Our Support Team</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Contact Our Support Team</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
               Multiple ways to get help when you need it most. Our support team is standing by to assist you.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {supportChannels.map((channel, index) => {
               const Icon = channel.icon;
               return (
-                <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8 hover:border-[#00FF41]/30 transition-all duration-300">
+                <div key={`channel-${index}`} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6 md:p-8 hover:border-[#00FF41]/30 transition-all duration-300 will-change-transform">
                   <div className="text-center">
-                    <div className={`w-16 h-16 ${channel.color} rounded-2xl mx-auto mb-6 flex items-center justify-center`}>
-                      <Icon size={32} className="text-white" />
+                    <div className={`w-12 h-12 md:w-16 md:h-16 ${channel.color} rounded-2xl mx-auto mb-4 md:mb-6 flex items-center justify-center`}>
+                      <Icon size={24} className="text-white md:w-8 md:h-8" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-3">{channel.title}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-white mb-3">{channel.title}</h3>
                     <p className="text-[rgb(218,218,218)] text-sm mb-4 leading-relaxed">
                       {channel.description}
                     </p>
-                    <div className="space-y-2 mb-6">
+                    <div className="space-y-2 mb-4 md:mb-6">
                       <div className="flex justify-between text-xs">
                         <span className="text-[rgb(161,161,170)]">Availability:</span>
                         <span className="text-[#00FF41]">{channel.availability}</span>
@@ -457,45 +458,12 @@ const SupportCenterPage = () => {
                     </div>
                     <a
                       href={channel.href}
-                      className="inline-block w-full px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200"
+                      className="inline-block w-full px-4 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50"
                     >
                       {channel.action}
                     </a>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Popular Resources</h2>
-            <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Quick access to the most commonly requested help topics and resources.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredActions.map((action, index) => {
-              const Icon = action.icon;
-              return (
-                <a
-                  key={index}
-                  href={action.href}
-                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6 hover:border-[#00FF41]/30 transition-all duration-300 group"
-                >
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg flex items-center justify-center mr-4 group-hover:bg-[#00FF41]/20">
-                      <Icon size={24} className="text-[#00FF41]" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white">{action.title}</h3>
-                  </div>
-                  <p className="text-[rgb(218,218,218)] text-sm leading-relaxed">
-                    {action.description}
-                  </p>
-                </a>
               );
             })}
           </div>
