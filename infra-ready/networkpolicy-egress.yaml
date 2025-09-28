@@ -1,0 +1,33 @@
+# NetworkPolicy to Allow HTTPS Egress Traffic
+# Update namespace to match your environment
+# Apply with: kubectl apply -f networkpolicy-egress.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-https
+  namespace: emergent-agents-env  # UPDATE THIS TO YOUR NAMESPACE
+spec:
+  podSelector: {}  # Apply to all pods, or add specific labels
+  policyTypes:
+    - Egress
+  egress:
+    # Allow DNS resolution
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+    # Allow HTTPS traffic to external APIs
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0  # or specific CIDR for api.sentratech.net
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow internal cluster communication
+    - to:
+        - namespaceSelector: {}
+    # Allow communication within the same namespace  
+    - to:
+        - podSelector: {}
