@@ -604,30 +604,30 @@ const SupportCenterPage = () => {
           </div>
         </div>
 
-        {/* Emergency Support */}
-        <div className="text-center bg-gradient-to-r from-red-900/20 to-orange-900/20 border border-red-600/30 rounded-2xl p-8">
-          <AlertCircle size={48} className="text-red-400 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-4">Need Urgent Help?</h2>
-          <p className="text-[rgb(161,161,170)] mb-6 max-w-2xl mx-auto">
+        {/* Emergency Support - Optimized */}
+        <div className="text-center bg-gradient-to-r from-red-900/20 to-orange-900/20 border border-red-600/30 rounded-2xl p-6 md:p-8">
+          <AlertCircle size={40} className="text-red-400 mx-auto mb-4 md:mb-6 md:w-12 md:h-12" />
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Need Urgent Help?</h2>
+          <p className="text-[rgb(161,161,170)] mb-6 max-w-2xl mx-auto text-sm md:text-base">
             For critical issues affecting your production environment or urgent security concerns, 
             contact our emergency support line immediately.
           </p>
           
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div className="grid md:grid-cols-2 gap-4 md:gap-6 mb-6">
             <div className="bg-[rgb(18,18,18)] border border-red-600/30 rounded-xl p-4">
-              <h3 className="text-lg font-semibold text-white mb-2">Emergency Hotline</h3>
-              <p className="text-red-400 font-bold text-xl mb-1">+44 7424 293 951</p>
-              <p className="text-[rgb(161,161,170)] text-sm">Available 24/7 for critical issues</p>
+              <h3 className="text-base md:text-lg font-semibold text-white mb-2">Emergency Hotline</h3>
+              <p className="text-red-400 font-bold text-lg md:text-xl mb-1">+44 7424 293 951</p>
+              <p className="text-[rgb(161,161,170)] text-xs md:text-sm">Available 24/7 for critical issues</p>
             </div>
             
             <div className="bg-[rgb(18,18,18)] border border-red-600/30 rounded-xl p-4">
-              <h3 className="text-lg font-semibold text-white mb-2">Priority Email</h3>
-              <p className="text-red-400 font-bold text-xl mb-1">urgent@sentratech.net</p>
-              <p className="text-[rgb(161,161,170)] text-sm">15-minute response SLA</p>
+              <h3 className="text-base md:text-lg font-semibold text-white mb-2">Priority Email</h3>
+              <p className="text-red-400 font-bold text-lg md:text-xl mb-1">urgent@sentratech.net</p>
+              <p className="text-[rgb(161,161,170)] text-xs md:text-sm">15-minute response SLA</p>
             </div>
           </div>
           
-          <p className="text-[rgb(161,161,170)] text-sm">
+          <p className="text-[rgb(161,161,170)] text-xs md:text-sm">
             Emergency support is available to all customers for critical system outages, security incidents, 
             and data loss situations. Please use regular support channels for non-urgent issues.
           </p>
