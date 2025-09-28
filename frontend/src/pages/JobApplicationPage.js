@@ -555,7 +555,7 @@ const JobApplicationPage = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Work Authorization Status *
+                  Bangladesh Work Authorization Status *
                 </label>
                 <select
                   value={formData.work_authorization}
@@ -563,11 +563,12 @@ const JobApplicationPage = () => {
                   className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
                   required
                 >
-                  <option value="">Work Authorization Status</option>
-                  <option value="US Citizen">US Citizen</option>
-                  <option value="Green Card">Green Card Holder</option>
-                  <option value="H1B">H1B Visa</option>
-                  <option value="Need Sponsorship">Need Sponsorship</option>
+                  <option value="">Select Work Authorization Status</option>
+                  <option value="Bangladeshi Citizen">Bangladeshi Citizen</option>
+                  <option value="Permanent Resident">Permanent Resident of Bangladesh</option>
+                  <option value="Work Permit">Valid Work Permit/Visa</option>
+                  <option value="Student Visa">Student Visa (Part-time eligible)</option>
+                  <option value="Need Work Permit">Will require work permit sponsorship</option>
                 </select>
                 {errors.work_authorization && <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>}
               </div>
