@@ -29,18 +29,50 @@ const NewsletterSubscribe = () => {
     setMessage('');
 
     try {
-      const result = await insertSubscription(email);
+      // Get backend URL from environment
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
       
-      if (result.success) {
+      // Prepare data for ingest endpoint
+      const ingestData = {
+        email: email.trim(),
+        source: 'newsletter_footer',
+        preferences: {
+          updates: true,
+          product_news: true
+        }
+      };
+      
+      // Submit to ingest endpoint
+      const response = await fetch(`${backendUrl}/api/ingest/subscriptions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+        },
+        body: JSON.stringify(ingestData)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
         setStatus('success');
-        setMessage(result.message);
+        setMessage('Successfully subscribed to our newsletter!');
         setEmail(''); // Clear the email field on success
-      } else if (result.error === 'duplicate') {
-        setStatus('duplicate');
-        setMessage(result.message);
       } else {
-        setStatus('error');
-        setMessage(result.message);
+        // Fallback to old Supabase method if ingest fails
+        console.warn('Ingest endpoint failed, falling back to Supabase');
+        const result = await insertSubscription(email);
+        
+        if (result.success) {
+          setStatus('success');
+          setMessage(result.message);
+          setEmail('');
+        } else if (result.error === 'duplicate') {
+          setStatus('duplicate');
+          setMessage(result.message);
+        } else {
+          setStatus('error');
+          setMessage(result.message);
+        }
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
