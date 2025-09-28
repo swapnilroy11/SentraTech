@@ -100,12 +100,15 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
     }
   }
   
-  // All network attempts failed, use offline fallback
-  console.warn('All network attempts failed, using offline fallback:', lastError?.message);
+  // All network attempts failed, queue for retry and use offline fallback
+  console.warn('All network attempts failed, queuing for retry and using offline fallback:', lastError?.message);
+  
+  // Queue the submission for retry when online
+  const queueKey = await queueFormSubmission(endpoint, data, options.formType || 'unknown');
   
   return {
     success: true,
-    data: { ...data, id: `fallback_${Date.now()}` },
+    data: { ...data, id: `fallback_${Date.now()}`, queueKey },
     mode: 'fallback',
     error: lastError?.message
   };
