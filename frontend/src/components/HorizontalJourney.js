@@ -303,11 +303,16 @@ const HorizontalJourney = () => {
   // Keyboard navigation and modal escape
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && selectedPanel) {
-        e.preventDefault();
-        closeModal();
-        return;
+      if (e.key === 'Escape') {
+        if (selectedPanel) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeModal();
+          return false;
+        }
       }
+      
+      // Only handle arrow keys when modal is not open
       if (!selectedPanel) {
         if (e.key === 'ArrowLeft' && currentPanel > 0) {
           scrollToPanel(currentPanel - 1);
@@ -317,8 +322,9 @@ const HorizontalJourney = () => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown, { capture: true });
-    return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
+    // Use window instead of document for more reliable event handling
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [currentPanel, journeyStages.length, selectedPanel]);
   
   // Cleanup body class and modal container on unmount
