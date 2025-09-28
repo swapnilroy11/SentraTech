@@ -112,9 +112,9 @@ const LeadershipTeamPage = () => {
               Leadership Team
             </h1>
             <p className="text-xl text-[rgb(161,161,170)] max-w-4xl mx-auto leading-relaxed">
-              Meet the experienced executives and industry veterans driving SentraTech's mission to transform 
-              customer support through AI innovation. Our leadership brings deep expertise from the world's 
-              most successful technology companies.
+              Meet the passionate founders and executives driving SentraTech's mission to revolutionize 
+              customer support through AI innovation. Our leadership team combines deep technical expertise 
+              with strategic vision to deliver exceptional customer experiences.
             </p>
           </div>
         </div>
