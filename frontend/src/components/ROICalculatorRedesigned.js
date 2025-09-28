@@ -574,7 +574,11 @@ const ROICalculatorRedesigned = () => {
                   )}
                   
                   <Button
-                    onClick={() => setShowEmailModal(false)}
+                    onClick={() => {
+                      setShowEmailModal(false);
+                      setReportSubmitted(false);
+                      setEmail('');
+                    }}
                     className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] w-full"
                   >
                     Continue Exploring
