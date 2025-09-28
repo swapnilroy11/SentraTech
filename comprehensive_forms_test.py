@@ -56,19 +56,39 @@ class ComprehensiveFormsTester:
         if details:
             print(f"   Details: {details}")
     
-    def test_backend_health(self):
-        """Test backend health and configuration"""
-        print("\n=== Testing Backend Health & Configuration ===")
+    def test_backend_connectivity(self):
+        """Test basic backend connectivity"""
+        print("\n=== Testing Backend Connectivity ===")
+        
+        try:
+            response = requests.get(f"{BACKEND_URL}/", timeout=10)
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("message") == "Hello World":
+                    self.log_test("Backend Connectivity", True, f"Backend responding correctly: {result}")
+                    return True
+                else:
+                    self.log_test("Backend Connectivity", False, f"Unexpected response: {result}")
+                    return False
+            else:
+                self.log_test("Backend Connectivity", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_test("Backend Connectivity", False, f"Connection error: {str(e)}")
+            return False
+    
+    def test_health_check(self):
+        """Test backend health check"""
+        print("\n=== Testing Backend Health Check ===")
         
         try:
             response = requests.get(f"{BACKEND_URL}/health", timeout=10)
             if response.status_code == 200:
                 result = response.json()
                 if result.get("status") == "healthy":
-                    ingest_configured = result.get("ingest_configured", False)
                     response_time = result.get("response_time_ms", 0)
                     self.log_test("Backend Health Check", True, 
-                                f"Backend healthy - Response time: {response_time}ms, Ingest configured: {ingest_configured}")
+                                f"Backend healthy - Response time: {response_time}ms")
                     return True
                 else:
                     self.log_test("Backend Health Check", False, f"Backend unhealthy: {result}")
