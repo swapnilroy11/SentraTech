@@ -31,70 +31,44 @@ const NewsletterSubscribe = () => {
     try {
       setStatus('loading');
       
-      // Direct dashboard integration with better error handling
-      const dashboardUrl = 'https://sentra-admin-dash.preview.emergentagent.com/api/forms/newsletter-signup';
+      // Use Dashboard integration via local backend proxy
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
       
-      const response = await fetch(dashboardUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          name: ''
-        })
-      });
+      // Prepare data for Admin Dashboard (via proxy)
+      const dashboardData = {
+        email: email.trim(),
+        name: '' // Optional field for newsletter
+      };
       
-      console.log('Newsletter API Response:', {
-        status: response.status,
-        ok: response.ok,
-        url: dashboardUrl
-      });
+      // Submit to SentraTech Admin Dashboard via local backend proxy
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
       
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
+        setStatus('success');
+        setMessage('Successfully subscribed to our newsletter!');
+        setEmail(''); // Clear the email field on success
         
-        if (result.success) {
-          setStatus('success');
-          setMessage('Successfully subscribed to our newsletter!');
-          setEmail(''); // Clear the email field on success
-          
-          console.log('✅ Newsletter subscription successful:', result);
-          
-          // Clear success status after 5 seconds
-          setTimeout(() => {
-            setStatus(null);
-            setMessage('');
-          }, 5000);
-        } else {
-          throw new Error(result.message || 'Subscription failed');
-        }
+        showSuccessMessage('Newsletter subscription successful', result.data);
+        
+        // Clear success status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
       } else {
-        const errorText = await response.text();
-        console.error('Newsletter API Error:', {
-          status: response.status,
-          statusText: response.statusText,
-          body: errorText
-        });
-        throw new Error(`Server error: ${response.status}`);
+        setStatus('error');
+        setMessage(result.error || 'Newsletter subscription failed. Please try again.');
+        
+        // Clear error status after 5 seconds
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
       }
-      
     } catch (error) {
       console.error('Newsletter subscription error:', error);
       setStatus('error');
-      
-      // Provide more specific error messages
-      let errorMessage = 'Something went wrong. Please try again.';
-      
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        errorMessage = 'Network error: Please check your connection and try again.';
-      } else if (error.message.includes('CORS')) {
-        errorMessage = 'Connection error: Please try again or contact support.';
-      } else if (error.message.includes('Server error')) {
-        errorMessage = 'Server error: Please try again in a moment.';
-      }
-      
-      setMessage(errorMessage);
+      setMessage('Something went wrong. Please try again.');
       
       // Clear error status after 5 seconds
       setTimeout(() => {
