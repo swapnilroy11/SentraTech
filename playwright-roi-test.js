@@ -76,7 +76,7 @@ function parsePercentage(str) {
   console.log('🧮 ROI Calculator Validation Testing with Playwright');
   console.log('=' * 60);
   
-  const browser = await chromium.launch({ headless: false }); // Show browser for debugging
+  const browser = await chromium.launch({ headless: true }); // Headless mode for server environment
   const page = await browser.newPage();
   
   try {
