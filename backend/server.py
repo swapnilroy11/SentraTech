@@ -839,13 +839,18 @@ async def health_check():
         
         response_time = (time.time() - start_time) * 1000
         
+        # Check if ingest is configured
+        ingest_configured = bool(os.environ.get("INGEST_KEY") and os.environ.get("SVC_EMAIL"))
+        
         return {
             "status": "healthy",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "response_time_ms": round(response_time, 2),
             "database": "connected",
             "cache_stats": cache_stats,
-            "version": "1.0.0-optimized"
+            "version": "1.0.0-optimized",
+            "mock": False,
+            "ingest_configured": ingest_configured
         }
     except Exception as e:
         response_time = (time.time() - start_time) * 1000
