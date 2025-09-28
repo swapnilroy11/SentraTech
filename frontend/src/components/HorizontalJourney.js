@@ -975,6 +975,42 @@ const HorizontalJourney = () => {
                       </p>
                     </div>
                   </div>
+
+                  {/* Navigation Hint */}
+                  {(() => {
+                    const currentStageIndex = journeyStages.findIndex(stage => stage.id === selectedPanel.id);
+                    const nextStage = journeyStages[currentStageIndex + 1];
+                    const isLastStage = currentStageIndex === journeyStages.length - 1;
+
+                    return (
+                      <div style={{
+                        borderTop: `1px solid ${selectedPanel.color}20`,
+                        paddingTop: '12px',
+                        textAlign: 'center'
+                      }}>
+                        {!isLastStage ? (
+                          <div style={{ fontSize: '12px', color: 'rgb(161,161,170)' }}>
+                            <span>Next: </span>
+                            <span style={{ color: nextStage.color, fontWeight: 'bold' }}>
+                              Stage {currentStageIndex + 2} - {nextStage.title}
+                            </span>
+                            <div style={{ marginTop: '4px', fontSize: '11px' }}>
+                              Close this modal and click the next card to continue →
+                            </div>
+                          </div>
+                        ) : (
+                          <div style={{ fontSize: '12px', color: 'rgb(161,161,170)' }}>
+                            <span style={{ color: selectedPanel.color, fontWeight: 'bold' }}>
+                              🎉 Journey Complete!
+                            </span>
+                            <div style={{ marginTop: '4px', fontSize: '11px' }}>
+                              You now understand the complete SentraTech process
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </>
               );
             })()}
