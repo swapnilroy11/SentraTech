@@ -348,18 +348,32 @@ class SubscriptionIngestRequest(BaseModel):
     status: str = "subscribed"
 
 class JobApplicationIngestRequest(BaseModel):
-    fullName: str
+    # Personal Information - Updated field names
+    first_name: str
+    last_name: str
     email: str
     phone: Optional[str] = None
     location: str = "Bangladesh"
-    preferredShifts: Optional[str] = None
-    availabilityStartDate: Optional[str] = None
-    coverNote: Optional[str] = None
-    linkedinProfile: Optional[str] = None
-    position: str = "Customer Support Specialist"
-    source: str = "careers_page"
-    consentForStorage: bool = True
-    resumeFile: Optional[Dict] = None  # {data: base64, name: str, type: str, size: int}
+    
+    # Professional Information - Removed LinkedIn field, updated structure
+    resume_file: Optional[str] = None  # URL or base64 string
+    portfolio_website: Optional[str] = None
+    preferred_shifts: Optional[List[str]] = None  # ["Morning","Afternoon","Night","Flexible"]
+    availability_date: Optional[str] = None  # YYYY-MM-DD format
+    experience_years: Optional[str] = None  # "0-1|1-3|3-5|5+"
+    
+    # Motivation & Application Details
+    motivation_text: Optional[str] = None
+    cover_letter: Optional[str] = None
+    
+    # Legal & Meta
+    work_authorization: Optional[str] = None
+    position_applied: str = "Customer Support Specialist"
+    application_source: str = "career_site"
+    consent_for_storage: bool = True
+    
+    # System Generated (optional, will be set by server if not provided)
+    created_at: Optional[str] = None
 
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
