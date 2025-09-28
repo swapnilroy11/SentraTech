@@ -919,7 +919,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = f"{external_dashboard_url}/api/ingest/demo_requests"
+                dashboard_url = DashboardConfig.get_dashboard_endpoint("/api/ingest/demo_requests")
                 
                 response = await client.post(
                     dashboard_url,
