@@ -81,7 +81,7 @@ kubectl exec $POD_NAME -n emergent-agents-env -- curl -k https://api.sentratech.
 
 ### **4. Verify Admin Proxy Health**
 ```bash
-curl -s https://tech-careers-3.preview.emergentagent.com/api/health
+curl -s https://customer-dashboard-3.preview.emergentagent.com/api/health
 # Expected: {"ingest_configured": true}
 ```
 
@@ -117,7 +117,7 @@ cd /app
 
 ### **Authentication Test**
 ```bash
-curl -X POST https://tech-careers-3.preview.emergentagent.com/api/auth/login \
+curl -X POST https://customer-dashboard-3.preview.emergentagent.com/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"email":"swapnil.roy@sentratech.net","password":"Sentra@2025"}'
 # Expected: HTTP 200 with authentication cookies

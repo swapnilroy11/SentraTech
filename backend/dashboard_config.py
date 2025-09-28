@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # 🔒 PROTECTED - Dashboard Integration Settings
 class DashboardConfig:
     # Target dashboard for forwarding (CRITICAL - DO NOT CHANGE)
-    EXTERNAL_DASHBOARD_URL = "https://tech-careers-3.preview.emergentagent.com"
+    EXTERNAL_DASHBOARD_URL = "https://customer-dashboard-3.preview.emergentagent.com"
     
     # Current host (used for loop detection)
     CURRENT_HOST = "customer-flow-5.preview.emergentagent.com"
@@ -110,7 +110,7 @@ except Exception as e:
 Import this config instead of hardcoding values:
 
 ❌ Wrong:
-dashboard_url = "https://tech-careers-3.preview.emergentagent.com"
+dashboard_url = "https://customer-dashboard-3.preview.emergentagent.com"
 headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
 
 ✅ Correct:

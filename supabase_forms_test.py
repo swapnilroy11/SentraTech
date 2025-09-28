@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
 
 class SupabaseFormsTestFramework:
     """Test framework for Supabase form submissions after fixes"""

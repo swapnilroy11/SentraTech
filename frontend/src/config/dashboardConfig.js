@@ -19,7 +19,7 @@
 // 🔒 PROTECTED - Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
   // Backend URL - CORRECTED to working tech-careers-3 endpoint
-  BACKEND_URL: 'https://tech-careers-3.preview.emergentagent.com',
+  BACKEND_URL: 'https://customer-dashboard-3.preview.emergentagent.com',
   
   // Authentication key for customer-flow-5 backend
   INGEST_KEY: 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6',
@@ -119,7 +119,7 @@ if (typeof window !== 'undefined') {
  * Import this config instead of hardcoding values:
  * 
  * ❌ Wrong:
- * const url = 'https://tech-careers-3.preview.emergentagent.com';
+ * const url = 'https://customer-dashboard-3.preview.emergentagent.com';
  * const key = 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6';
  * 
  * ✅ Correct:

@@ -308,7 +308,7 @@ def should_forward_to_dashboard():
 
 def get_dashboard_endpoint(endpoint):
     """Get dashboard endpoint URL"""
-    external_dashboard_url = os.environ.get('EXTERNAL_DASHBOARD_URL', 'https://tech-careers-3.preview.emergentagent.com')
+    external_dashboard_url = os.environ.get('EXTERNAL_DASHBOARD_URL', 'https://customer-dashboard-3.preview.emergentagent.com')
     return f"{external_dashboard_url}{endpoint}"
 
 def get_dashboard_headers():

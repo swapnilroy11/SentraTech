@@ -21,7 +21,7 @@ import string
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
 
 class ComprehensiveBackendTester:
     """Comprehensive Backend API Testing Framework"""

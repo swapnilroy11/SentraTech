@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
 
 # Authentication key for ingest endpoints
 INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"

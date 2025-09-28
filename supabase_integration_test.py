@@ -13,7 +13,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
 
 # Supabase configuration from frontend .env
 SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"
@@ -465,7 +465,7 @@ class SupabaseIntegrationTester:
             },
             "metadata": {
                 "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "referrer": "https://tech-careers-3.preview.emergentagent.com/pricing",
+                "referrer": "https://customer-dashboard-3.preview.emergentagent.com/pricing",
                 "viewport": {"width": 1920, "height": 1080},
                 "source": "pricing_page",
                 "widget": "slide_in"
