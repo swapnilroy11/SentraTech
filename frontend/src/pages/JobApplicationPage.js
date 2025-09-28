@@ -451,8 +451,8 @@ const JobApplicationPage = () => {
                   Years of Relevant Experience
                 </label>
                 <select
-                  value={formData.relevantExperience}
-                  onChange={(e) => handleInputChange('relevantExperience', e.target.value)}
+                  value={formData.relevant_experience}
+                  onChange={(e) => handleInputChange('relevant_experience', e.target.value)}
                   className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
                 >
                   <option value="">Select experience level</option>
