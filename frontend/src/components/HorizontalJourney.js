@@ -465,15 +465,20 @@ const HorizontalJourney = () => {
           -webkit-overflow-scrolling: touch;
         }
         .smooth-modal-scroll::-webkit-scrollbar {
-          width: 6px;
+          width: 4px;
         }
         .smooth-modal-scroll::-webkit-scrollbar-track {
-          background: transparent;
-          border-radius: 3px;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          margin: 4px 0;
         }
         .smooth-modal-scroll::-webkit-scrollbar-thumb {
-          border-radius: 3px;
-          transition: all 0.3s ease;
+          border-radius: 8px;
+          transition: all 0.2s ease-out;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        }
+        .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
+          transition: all 0.1s ease-out;
         }
         .smooth-modal-scroll::-webkit-scrollbar-corner {
           background: transparent;
