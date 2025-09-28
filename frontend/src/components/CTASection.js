@@ -202,25 +202,24 @@ const CTASection = () => {
         throw new Error('Dashboard configuration validation failed');
       }
       
-      // Prepare data for ingest endpoint
-      const ingestData = {
-        user_name: formData.name,
+      // Prepare data for new dashboard endpoint
+      const dashboardData = {
+        name: formData.name,
         email: formData.email,
         company: formData.company,
-        phone: formData.phone,
-        call_volume: formData.call_volume,
-        interaction_volume: formData.interaction_volume,
-        message: formData.message
+        phone: formData.phone || '',
+        message: formData.message || '',
+        monthly_volume: formData.call_volume || '',
+        current_cost: formData.interaction_volume || ''
       };
       
-      // Submit to ingest endpoint using protected config
-      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUESTS}`, {
+      // Submit directly to dashboard (no authentication required)
+      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(ingestData)
+        body: JSON.stringify(dashboardData)
       });
       
       if (response.ok) {
