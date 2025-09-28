@@ -771,27 +771,45 @@ const HorizontalJourney = () => {
                   </ul>
                 </div>
 
-                {/* Key Metrics */}
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <BarChart3 className="text-[#00FF41]" size={20} />
-                    Key Metrics
-                  </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-[rgb(38,40,42)] rounded-lg p-3 border border-[rgb(63,63,63)]">
-                      <div className="text-2xl font-bold text-[#00FF41]">
-                        {selectedPanel.metrics?.efficiency || '95%'}
+                  {/* Key Metrics */}
+                  <div className="space-y-3">
+                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                      <BarChart3 style={{ color: selectedPanel.color }} size={18} />
+                      Key Metrics
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div 
+                        className="rounded-lg p-3"
+                        style={{ 
+                          backgroundColor: `${selectedPanel.color}10`,
+                          border: `1px solid ${selectedPanel.color}30`
+                        }}
+                      >
+                        <div 
+                          className="text-xl font-bold"
+                          style={{ color: selectedPanel.color }}
+                        >
+                          {selectedPanel.metric}
+                        </div>
+                        <div className="text-xs text-[rgb(161,161,170)]">{selectedPanel.metricLabel}</div>
                       </div>
-                      <div className="text-sm text-[rgb(161,161,170)]">Efficiency Rate</div>
-                    </div>
-                    <div className="bg-[rgb(38,40,42)] rounded-lg p-3 border border-[rgb(63,63,63)]">
-                      <div className="text-2xl font-bold text-[#00FF41]">
-                        {selectedPanel.metrics?.responseTime || '<30s'}
+                      <div 
+                        className="rounded-lg p-3"
+                        style={{ 
+                          backgroundColor: `${selectedPanel.color}10`,
+                          border: `1px solid ${selectedPanel.color}30`
+                        }}
+                      >
+                        <div 
+                          className="text-xl font-bold"
+                          style={{ color: selectedPanel.color }}
+                        >
+                          {selectedPanel.automationRate}%
+                        </div>
+                        <div className="text-xs text-[rgb(161,161,170)]">Automation</div>
                       </div>
-                      <div className="text-sm text-[rgb(161,161,170)]">Avg Response</div>
                     </div>
                   </div>
-                </div>
 
                 {/* Key Features */}
                 <div className="space-y-3">
