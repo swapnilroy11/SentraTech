@@ -59,7 +59,6 @@
 
 test_plan:
   current_focus:
-    - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
@@ -68,6 +67,8 @@ test_plan:
     - "Comprehensive Ingest Proxy Integration Testing"
     - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
     - "Updated Dashboard Integration Endpoints Testing"
+    - "ROI Calculator Frontend Canonical Test Cases Testing"
+    - "ROI Calculator Email Modal Auto-Close Bug Fix Testing"
   test_all: false
   test_priority: "high_first"
 
