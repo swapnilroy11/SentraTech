@@ -1718,7 +1718,7 @@ async def ingest_job_application(request: Request, job_application: JobApplicati
                             }
                         }
                     )
-                    logger.info(f"Job application forwarded to dashboard successfully")
+                    logger.info("Job application forwarded to dashboard successfully")
                 else:
                     external_status = f"failed_http_{response.status_code}"
                     
