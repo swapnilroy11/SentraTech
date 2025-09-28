@@ -932,7 +932,7 @@ const JobApplicationPage = () => {
                 
                 <div className="mt-6 pt-6 border-t border-[rgb(63,63,63)]">
                   <p className="text-xs text-[rgb(161,161,170)] leading-relaxed">
-                    {job.description}
+                    {job.shortDescription}
                   </p>
                 </div>
               </div>
