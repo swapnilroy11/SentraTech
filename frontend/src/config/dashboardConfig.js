@@ -10,13 +10,13 @@
 
 // Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
-  // Admin Dashboard Base URL
-  API_BASE_URL: 'https://sentra-admin-dash.preview.emergentagent.com',
+  // Use local backend as proxy to handle CORS issues
+  API_BASE_URL: process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001',
   
-  // No authentication required (public endpoints)
+  // No authentication required (proxy handles dashboard communication)
   AUTH_REQUIRED: false,
   
-  // Form submission endpoints
+  // Form submission endpoints (proxied through local backend)
   ENDPOINTS: {
     DEMO_REQUEST: '/api/forms/demo-request',
     ROI_CALCULATOR: '/api/forms/roi-calculator', 
