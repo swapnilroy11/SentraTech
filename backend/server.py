@@ -891,7 +891,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
             **demo_request.dict(),
             "id": str(uuid.uuid4()),
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "status": "pending_dashboard_sync"
+            "status": "pending_external_sync"
         }
         
         # Save to local database as backup
@@ -992,7 +992,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
             **contact_request.dict(),
             "id": str(uuid.uuid4()),
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "status": "pending_dashboard_sync"
+            "status": "pending_external_sync"
         }
         
         # Save to local database as backup
@@ -1093,7 +1093,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
             **roi_report.dict(),
             "id": str(uuid.uuid4()),
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "status": "pending_dashboard_sync"
+            "status": "pending_external_sync"
         }
         
         # Save to local database as backup
@@ -1189,7 +1189,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
             **subscription.dict(),
             "id": str(uuid.uuid4()),
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "status": "pending_dashboard_sync"
+            "status": "pending_external_sync"
         }
         
         # Save to local database as backup
