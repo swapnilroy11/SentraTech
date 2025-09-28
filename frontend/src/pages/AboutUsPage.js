@@ -193,13 +193,13 @@ const AboutUsPage = () => {
               </div>
               <div className="bg-[rgb(18,18,18)] border border-[#00FF41]/20 rounded-xl p-6">
                 <Award size={32} className="text-[#00FF41] mb-4" />
-                <h4 className="text-lg font-semibold text-white mb-2">Recognition</h4>
+                <h4 className="text-lg font-semibold text-white mb-2">Our Commitments</h4>
                 <ul className="text-[rgb(218,218,218)] space-y-2 text-sm">
-                  <li>• "Best AI Customer Support Platform 2024"</li>
-                  <li>• SOC 2 Type II Certified</li>
-                  <li>• GDPR & CCPA Compliant</li>
-                  <li>• 99.9% Platform Uptime Achievement</li>
-                  <li>• ISO 27001 Security Standards</li>
+                  <li>• Next-Generation AI Platform in Development</li>
+                  <li>• Enterprise-Grade Security Implementation</li>
+                  <li>• GDPR & Data Privacy Compliance Ready</li>
+                  <li>• Target: 99.9% Platform Uptime</li>
+                  <li>• Global Scalability Architecture</li>
                 </ul>
               </div>
             </div>
