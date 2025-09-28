@@ -77,6 +77,13 @@ const ROICalculatorRedesigned = () => {
   useEffect(() => {
     calculateROI();
   }, [selectedCountry, callVolume, interactionVolume]);
+  
+  // Run protected tests on component mount (development mode)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      runProtectedTests();
+    }
+  }, []);
 
   // Input validation
   const validateInput = (value, setter, fieldName) => {
