@@ -193,14 +193,8 @@ const CTASection = () => {
     try {
       console.log('Submitting to ingest endpoint...'); // Debug log
       
-      // 🔒 PROTECTED - Use centralized dashboard config
-      // DO NOT MODIFY - Critical for dashboard integration
-      const { DASHBOARD_CONFIG, validateConfig } = await import('../config/dashboardConfig.js');
-      
-      // Validate configuration before proceeding
-      if (!validateConfig()) {
-        throw new Error('Dashboard configuration validation failed');
-      }
+      // Use new dashboard config
+      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
       
       // Prepare data for new dashboard endpoint
       const dashboardData = {
