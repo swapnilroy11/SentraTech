@@ -901,7 +901,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         # Try to forward to admin dashboard
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/demo_requests"
+                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/demo_requests"
                 
                 # Get service credentials
                 svc_email = os.environ.get("SVC_EMAIL")
@@ -979,7 +979,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         # Try to forward to admin dashboard
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/contact_requests"
+                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/contact_requests"
                 
                 # Get service credentials
                 svc_email = os.environ.get("SVC_EMAIL")
@@ -1057,7 +1057,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         # Try to forward to admin dashboard
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/roi_reports"
+                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/roi_reports"
                 
                 # Get service credentials
                 svc_email = os.environ.get("SVC_EMAIL")
@@ -1135,7 +1135,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         # Try to forward to admin dashboard
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/subscriptions"
+                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/subscriptions"
                 
                 # Get service credentials
                 svc_email = os.environ.get("SVC_EMAIL")
