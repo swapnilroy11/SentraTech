@@ -412,9 +412,25 @@ const HorizontalJourney = () => {
         }
         .customer-journey-modal-overlay {
           will-change: opacity, backdrop-filter;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          z-index: 99999 !important;
         }
         .customer-journey-modal-content {
           will-change: transform, opacity;
+          position: relative !important;
+          max-width: 32rem !important;
+          width: 100% !important;
+          max-height: 90vh !important;
+          margin: auto !important;
         }
         body.modal-open {
           overflow: hidden;
