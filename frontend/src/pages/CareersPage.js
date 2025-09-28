@@ -9,6 +9,7 @@ const CareersPage = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Handle scrolling to anchor sections when page loads with hash
   useEffect(() => {
