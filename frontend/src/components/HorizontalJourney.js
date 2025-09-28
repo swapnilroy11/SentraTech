@@ -622,7 +622,7 @@ const HorizontalJourney = () => {
               justifyContent: 'center',
               padding: '20px'
             }}
-            onClick={() => setSelectedPanel(null)}
+            onClick={closeModal}
           >
             <motion.div
               initial={{ scale: 0.85, opacity: 0, y: 20 }}
