@@ -204,6 +204,9 @@ const ROICalculatorRedesigned = () => {
     if (!validation.savingsValid || !validation.roiValid || !validation.costReductionValid) {
       console.warn('⚠️ Calculation validation failed - check precision');
     }
+    
+    // Debug logging for development
+    logCalculationDebug(calls, interactions, calculationResults);
 
     setResults(calculationResults);
   };
