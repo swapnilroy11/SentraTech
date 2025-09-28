@@ -667,9 +667,8 @@ const HorizontalJourney = () => {
           <div
             style={{
               position: 'absolute',
-              left: `${modalPosition.x}px`,
+              left: `${modalPosition.x - 210}px`, // Center by subtracting half width (420/2)
               top: `${modalPosition.y}px`,
-              transform: 'translate(-50%, -100%)', // Center horizontally, position above
               backgroundColor: 'rgb(26, 28, 30)',
               border: `2px solid ${selectedPanel.color}`,
               borderRadius: '20px',
@@ -677,9 +676,7 @@ const HorizontalJourney = () => {
               width: '420px',
               maxWidth: '90vw',
               boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${selectedPanel.color}30`,
-              // Ensure modal doesn't go off screen
-              maxHeight: 'none',
-              overflow: 'visible'
+              zIndex: 1000000
             }}
             onClick={(e) => e.stopPropagation()}
           >
