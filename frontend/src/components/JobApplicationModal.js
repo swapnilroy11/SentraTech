@@ -113,6 +113,11 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateConfig = () => {
+    // Basic validation - in a real app, this would check if dashboard config is properly loaded
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
