@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Search, Book, MessageCircle, Phone, Mail, Clock, CheckCircle, AlertCircle, HelpCircle, FileText, Video, Zap, Users, Globe } from 'lucide-react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { ArrowLeft, Search, MessageCircle, Phone, Mail, CheckCircle, AlertCircle, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SEOManager from '../components/SEOManager';
 
