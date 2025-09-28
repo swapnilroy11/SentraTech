@@ -852,6 +852,93 @@ async def health_check():
         logger.error(f"Health check failed after {response_time:.2f}ms: {str(e)}")
         raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
 
+# Dashboard Ingest Endpoints
+@api_router.post("/ingest/demo_requests")
+async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest):
+    """Ingest demo request and forward to admin dashboard"""
+    
+    # Verify X-INGEST-KEY header
+    ingest_key = request.headers.get("X-INGEST-KEY")
+    expected_key = os.environ.get("INGEST_KEY")
+    
+    if not ingest_key or ingest_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
+    
+    try:
+        # Forward to admin dashboard
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/demo_requests"
+            
+            # Get service token (auto-minted by proxy)
+            svc_email = os.environ.get("SVC_EMAIL")
+            svc_password = os.environ.get("SVC_PASSWORD")
+            
+            response = await client.post(
+                dashboard_url,
+                json=demo_request.dict(),
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {svc_email}:{svc_password}"  # Simplified auth
+                }
+            )
+            
+            if response.status_code in [200, 201]:
+                logger.info(f"Demo request successfully forwarded: {demo_request.email}")
+                return {"status": "success", "message": "Demo request submitted successfully"}
+            else:
+                logger.error(f"Dashboard forward failed: {response.status_code} - {response.text}")
+                raise HTTPException(status_code=response.status_code, detail="Failed to submit demo request")
+                
+    except httpx.TimeoutException:
+        logger.error("Dashboard request timeout")
+        raise HTTPException(status_code=504, detail="Request timeout")
+    except Exception as e:
+        logger.error(f"Demo ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.post("/ingest/contact_requests")
+async def ingest_contact_request(request: Request, contact_request: ContactIngestRequest):
+    """Ingest contact sales request and forward to admin dashboard"""
+    
+    # Verify X-INGEST-KEY header
+    ingest_key = request.headers.get("X-INGEST-KEY")
+    expected_key = os.environ.get("INGEST_KEY")
+    
+    if not ingest_key or ingest_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
+    
+    try:
+        # Forward to admin dashboard
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/contact_requests"
+            
+            # Get service credentials
+            svc_email = os.environ.get("SVC_EMAIL")
+            svc_password = os.environ.get("SVC_PASSWORD")
+            
+            response = await client.post(
+                dashboard_url,
+                json=contact_request.dict(),
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {svc_email}:{svc_password}"  # Simplified auth
+                }
+            )
+            
+            if response.status_code in [200, 201]:
+                logger.info(f"Contact request successfully forwarded: {contact_request.work_email}")
+                return {"status": "success", "message": "Contact request submitted successfully"}
+            else:
+                logger.error(f"Dashboard forward failed: {response.status_code} - {response.text}")
+                raise HTTPException(status_code=response.status_code, detail="Failed to submit contact request")
+                
+    except httpx.TimeoutException:
+        logger.error("Dashboard request timeout")
+        raise HTTPException(status_code=504, detail="Request timeout")
+    except Exception as e:
+        logger.error(f"Contact ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # Google Sheets Service
 class AirtableService:
     """Airtable integration service for demo requests and analytics"""
