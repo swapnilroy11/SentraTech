@@ -248,15 +248,10 @@ const JobApplicationPage = () => {
       };
       
       if (resume) {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          submissionData.resume_file = reader.result; // Base64 string
-          await submitApplication(submissionData);
-        };
-        reader.readAsDataURL(resume);
-      } else {
-        await submitApplication(submissionData);
+        submissionData.resume_file = `data:${resume.type};base64,${resume.data}`;
       }
+      
+      await submitApplication(submissionData);
       
     } catch (error) {
       console.error('Application submission error:', error);
