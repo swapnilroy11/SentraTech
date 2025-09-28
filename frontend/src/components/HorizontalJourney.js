@@ -634,50 +634,16 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - React Portal with Perfect Centering */}
-      <AnimatePresence>
-        {selectedPanel && (() => {
-          // Create or get modal container
-          let modalContainer = document.getElementById('customer-journey-modal-root');
-          if (!modalContainer) {
-            modalContainer = document.createElement('div');
-            modalContainer.id = 'customer-journey-modal-root';
-            modalContainer.style.position = 'fixed';
-            modalContainer.style.top = '0';
-            modalContainer.style.left = '0';
-            modalContainer.style.width = '100%';
-            modalContainer.style.height = '100%';
-            modalContainer.style.zIndex = '99999';
-            modalContainer.style.pointerEvents = 'auto';
-            document.body.appendChild(modalContainer);
-          }
-          
-          return createPortal(
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="customer-journey-modal-overlay"
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              backdropFilter: 'blur(12px)',
-              zIndex: 99999,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px',
-              boxSizing: 'border-box'
-            }}
-            onClick={closeModal}
-          >
+      {/* Journey Stage Details Modal - Inline Modal (No Portal) */}
+      {selectedPanel && (
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-5"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(12px)'
+          }}
+        >
+          <AnimatePresence>
             <motion.div
               initial={{ scale: 0.85, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -689,110 +655,134 @@ const HorizontalJourney = () => {
                 stiffness: 300,
                 damping: 30
               }}
-              onClick={(e) => e.stopPropagation()}
-              className="customer-journey-modal-content"
+              className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto relative"
               style={{
-                maxWidth: '32rem',
-                width: '100%',
-                maxHeight: '90vh',
-                backgroundColor: 'rgb(26, 28, 30)',
-                border: '2px solid #00FF41',
-                borderRadius: '1.5rem',
-                overflowY: 'auto',
-                padding: '2rem',
-                position: 'relative',
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 65, 0.1)'
               }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center border"
-                    style={{ 
-                      backgroundColor: `${selectedPanel.color}20`,
-                      borderColor: selectedPanel.color
-                    }}
-                  >
-                    <selectedPanel.icon size={24} style={{ color: selectedPanel.color }} />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-bold text-white">{selectedPanel.title}</h2>
-                    <p className="text-[#00FF41]">{selectedPanel.subtitle}</p>
-                  </div>
-                </div>
-                <Button
-                  onClick={closeModal}
-                  size="sm"
-                  variant="ghost"
-                  className="text-[rgb(161,161,170)] hover:text-white"
-                >
-                  <X size={20} />
-                </Button>
-              </div>
+              {/* Close Button */}
+              <Button
+                onClick={closeModal}
+                variant="ghost"
+                size="sm"
+                className="absolute top-4 right-4 w-8 h-8 p-0 text-white hover:bg-white/10 z-10"
+              >
+                <X size={16} />
+              </Button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Process Overview</h3>
+              {/* Stage Content */}
+              <div className="space-y-6">
+                {/* Header */}
+                <div className="text-center space-y-3">
+                  <Badge variant="outline" className="border-[#00FF41] text-[#00FF41] mb-2">
+                    Stage {selectedPanel.id}
+                  </Badge>
+                  <h3 className="text-2xl font-bold text-white">{selectedPanel.title}</h3>
+                  <p className="text-lg text-[#00FF41]">{selectedPanel.subtitle}</p>
+                </div>
+
+                {/* Description */}
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-white">Overview</h4>
                   <p className="text-[rgb(218,218,218)] leading-relaxed">
                     {selectedPanel.description}
                   </p>
                 </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Key Metrics</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[rgb(161,161,170)]">Performance</span>
-                      <span className="text-2xl font-bold" style={{ color: selectedPanel.color }}>
-                        {selectedPanel.metric}
-                      </span>
+
+                {/* Process Overview */}
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <Brain className="text-[#00FF41]" size={20} />
+                    Process Overview
+                  </h4>
+                  <ul className="space-y-2 text-[rgb(218,218,218)]">
+                    {selectedPanel.processSteps?.map((step, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
+                        {step}
+                      </li>
+                    )) || (
+                      <>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
+                          Intelligent routing and processing of customer interactions
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
+                          AI-powered analysis and response generation
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
+                          Real-time quality monitoring and optimization
+                        </li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+
+                {/* Key Metrics */}
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <BarChart3 className="text-[#00FF41]" size={20} />
+                    Key Metrics
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-[rgb(38,40,42)] rounded-lg p-3 border border-[rgb(63,63,63)]">
+                      <div className="text-2xl font-bold text-[#00FF41]">
+                        {selectedPanel.metrics?.efficiency || '95%'}
+                      </div>
+                      <div className="text-sm text-[rgb(161,161,170)]">Efficiency Rate</div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[rgb(161,161,170)]">Automation Rate</span>
-                      <span className="text-lg font-semibold text-[#00DDFF]">
-                        {selectedPanel.automationRate}%
-                      </span>
+                    <div className="bg-[rgb(38,40,42)] rounded-lg p-3 border border-[rgb(63,63,63)]">
+                      <div className="text-2xl font-bold text-[#00FF41]">
+                        {selectedPanel.metrics?.responseTime || '<30s'}
+                      </div>
+                      <div className="text-sm text-[rgb(161,161,170)]">Avg Response</div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-3">Key Features</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {selectedPanel.keyFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <CheckCircle size={16} style={{ color: selectedPanel.color }} />
-                      <span className="text-[rgb(218,218,218)] text-sm">{feature}</span>
-                    </div>
-                  ))}
+                {/* Key Features */}
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <Zap className="text-[#00FF41]" size={20} />
+                    Key Features
+                  </h4>
+                  <div className="grid gap-3">
+                    {(selectedPanel.features || [
+                      'Advanced AI Processing',
+                      'Real-time Analytics', 
+                      'Quality Assurance',
+                      'Seamless Integration'
+                    ]).map((feature, index) => (
+                      <div key={index} className="flex items-center gap-3 p-3 bg-[rgb(38,40,42)] rounded-lg border border-[rgb(63,63,63)]">
+                        <div className="w-2 h-2 bg-[#00FF41] rounded-full"></div>
+                        <span className="text-[rgb(218,218,218)]">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Integration Channels</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedPanel.channels.map((channel, index) => (
-                    <Badge
-                      key={index}
-                      className="text-xs"
-                      style={{ 
-                        backgroundColor: `${selectedPanel.color}20`,
-                        color: selectedPanel.color,
-                        border: `1px solid ${selectedPanel.color}50`
-                      }}
-                    >
-                      {channel}
-                    </Badge>
-                  ))}
+                {/* Integration Channels */}
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <Target className="text-[#00FF41]" size={20} />
+                    Integration Channels
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
+                      <Badge key={index} variant="outline" className="border-[#00FF41]/30 text-[#00FF41] bg-[#00FF41]/10">
+                        {channel}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>
-          </motion.div>,
-          modalContainer
-        );
-        })()}
-      </AnimatePresence>
+          </AnimatePresence>
+        </div>
+      )}
     </section>
   );
 };
