@@ -59,7 +59,7 @@
 
 test_plan:
   current_focus:
-    - "ROI Calculator Backend Integration Testing"
+    - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
