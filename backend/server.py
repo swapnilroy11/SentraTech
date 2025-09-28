@@ -1142,7 +1142,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
                         {"id": roi_data["id"]},
                         {"$set": {"status": "synced_to_external_api"}}
                     )
-                    logger.info(f"ROI report successfully forwarded to dashboard: {roi_report.contact_email}")
+                    logger.info(f"ROI report successfully forwarded to external API: {roi_report.contact_email}")
                     return {
                         "status": "success", 
                         "message": "ROI report submitted and synced to dashboard",
@@ -1238,7 +1238,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
                         {"id": subscription_data["id"]},
                         {"$set": {"status": "synced_to_external_api"}}
                     )
-                    logger.info(f"Subscription successfully forwarded to dashboard: {subscription.email}")
+                    logger.info(f"Subscription successfully forwarded to external API: {subscription.email}")
                     return {
                         "status": "success", 
                         "message": "Subscription submitted and synced to dashboard",
