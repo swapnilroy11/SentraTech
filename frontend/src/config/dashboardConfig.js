@@ -1,6 +1,8 @@
 // Dashboard Configuration for SentraTech Admin Integration
 // Provides reliable form submission with robust fallback mechanisms
 
+import { set, get, keys, del } from 'idb-keyval';
+
 // Get backend URL from environment
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
 
