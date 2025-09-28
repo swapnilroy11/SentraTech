@@ -636,14 +636,19 @@ const HorizontalJourney = () => {
       {/* Journey Stage Details Modal - Inline Modal (No Portal) */}
       {selectedPanel && (
         <div 
-          className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+          className="fixed z-[99999]"
           style={{
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
             backgroundColor: 'rgba(0, 0, 0, 0.85)',
             backdropFilter: 'blur(15px)',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%'
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            boxSizing: 'border-box'
           }}
           onClick={closeModal}
         >
