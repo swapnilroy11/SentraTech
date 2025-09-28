@@ -693,14 +693,14 @@ const HorizontalJourney = () => {
               onClick={closeModal}
               style={{
                 position: 'absolute',
-                top: '8px',
-                right: '8px',
+                top: '12px',
+                right: '12px',
                 background: 'transparent',
-                border: 'none',
+                border: `1px solid ${selectedPanel.color}40`,
                 color: selectedPanel.color,
                 cursor: 'pointer',
-                padding: '4px',
-                borderRadius: '4px',
+                padding: '6px',
+                borderRadius: '6px',
                 fontSize: '16px',
                 fontWeight: 'bold',
                 lineHeight: '1'
@@ -709,120 +709,275 @@ const HorizontalJourney = () => {
               ✕
             </button>
 
-            {/* Compact Header */}
-            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+            {/* Enhanced Header */}
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{
                 display: 'inline-block',
-                padding: '2px 8px',
+                padding: '6px 16px',
                 backgroundColor: `${selectedPanel.color}20`,
-                border: `1px solid ${selectedPanel.color}60`,
-                borderRadius: '8px',
-                fontSize: '10px',
+                border: `2px solid ${selectedPanel.color}60`,
+                borderRadius: '12px',
+                fontSize: '12px',
                 color: selectedPanel.color,
-                marginBottom: '8px'
+                marginBottom: '12px',
+                fontWeight: 'bold'
               }}>
-                Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1}
+                Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1} of 6
               </div>
               <h3 style={{ 
                 color: 'white', 
-                fontSize: '20px', 
+                fontSize: '28px', 
                 fontWeight: 'bold', 
-                margin: '4px 0' 
+                margin: '8px 0',
+                letterSpacing: '-0.5px'
               }}>
                 {selectedPanel.title}
               </h3>
               <p style={{ 
                 color: selectedPanel.color, 
-                fontSize: '14px',
-                margin: '4px 0'
+                fontSize: '16px',
+                margin: '8px 0',
+                fontWeight: '500'
               }}>
                 {selectedPanel.subtitle}
               </p>
             </div>
 
-            {/* Compact Description */}
-            <div style={{ marginBottom: '16px' }}>
-              <p style={{ 
-                color: 'rgb(218,218,218)', 
-                fontSize: '13px',
-                lineHeight: '1.4',
-                textAlign: 'center'
-              }}>
-                {selectedPanel.description}
-              </p>
-            </div>
+            {(() => {
+              const stageIndex = journeyStages.findIndex(stage => stage.id === selectedPanel.id);
+              const getStepByStepContent = () => {
+                switch(stageIndex) {
+                  case 0: // Contact Stage
+                    return {
+                      overview: "The customer journey begins when your customers reach out through any communication channel. SentraTech's intelligent contact system immediately captures and analyzes every interaction.",
+                      steps: [
+                        "Customer initiates contact via phone, email, chat, or social media",
+                        "SentraTech AI instantly captures all interaction details and context",
+                        "System identifies customer intent using natural language processing",
+                        "Customer profile and history are automatically retrieved or created",
+                        "Initial sentiment analysis determines the best response approach"
+                      ],
+                      impact: "Every customer interaction is captured with 99.9% accuracy, ensuring no inquiry is lost and all context is preserved for optimal service delivery."
+                    };
+                  case 1: // Triage Stage  
+                    return {
+                      overview: "Once contact is established, SentraTech's intelligent triage system analyzes the inquiry complexity and routes it to the most appropriate resource - AI or human agent.",
+                      steps: [
+                        "AI analyzes inquiry complexity, urgency, and required expertise level",
+                        "System determines if issue can be resolved through automation",
+                        "High-complexity issues are intelligently routed to specialized human agents",
+                        "Routine inquiries are handled instantly by AI with personalized responses",
+                        "Priority scoring ensures urgent matters receive immediate attention"
+                      ],
+                      impact: "85% of routine inquiries are resolved instantly by AI, while complex issues get expert human attention, optimizing both speed and quality."
+                    };
+                  case 2: // Engagement Stage
+                    return {
+                      overview: "SentraTech engages with customers through personalized, contextual interactions that feel natural and helpful, whether delivered by AI or human agents.",
+                      steps: [
+                        "Personalized responses crafted based on customer history and preferences",
+                        "Multi-channel engagement maintains conversation context across platforms",
+                        "Real-time language translation enables global customer support",
+                        "Sentiment monitoring adjusts interaction tone and approach dynamically",
+                        "Proactive follow-ups ensure customer satisfaction and issue resolution"
+                      ],
+                      impact: "Customers experience consistent, personalized service across all touchpoints with 92% satisfaction rates and 40% faster resolution times."
+                    };
+                  case 3: // Augmentation Stage
+                    return {
+                      overview: "Human agents are augmented with AI-powered tools and insights, enabling them to provide exceptional service while maintaining the human touch for complex situations.",
+                      steps: [
+                        "AI provides real-time suggestions and relevant information to human agents",
+                        "Automated knowledge base searches surface solutions instantly",
+                        "Customer sentiment and escalation risk alerts guide agent responses",
+                        "AI drafts responses that agents can review, modify, and personalize",
+                        "Continuous learning from agent interactions improves AI recommendations"
+                      ],
+                      impact: "Human agents become 3x more efficient while delivering higher quality service, handling complex cases with AI-powered intelligence and insights."
+                    };
+                  case 4: // Analytics Stage
+                    return {
+                      overview: "Every interaction generates valuable insights that continuously improve service quality, predict customer needs, and optimize business operations.",
+                      steps: [
+                        "Real-time analytics track customer satisfaction and resolution effectiveness",
+                        "Predictive models identify potential issues before they become problems",
+                        "Performance metrics provide insights into service quality and efficiency",
+                        "Customer behavior patterns inform proactive service improvements",
+                        "Business intelligence dashboards enable data-driven decision making"
+                      ],
+                      impact: "Data-driven insights reduce customer issues by 35% through predictive prevention and continuous service optimization based on real performance metrics."
+                    };
+                  case 5: // Outcome Stage
+                    return {
+                      overview: "The customer journey concludes with measurable outcomes - satisfied customers, resolved issues, and valuable feedback that fuels continuous improvement.",
+                      steps: [
+                        "Issue resolution confirmation ensures customer satisfaction",
+                        "Automated follow-up surveys capture feedback and satisfaction scores",
+                        "Success metrics are tracked and analyzed for service optimization",
+                        "Customer loyalty indicators help identify expansion opportunities", 
+                        "Continuous feedback loop improves AI models and service processes"
+                      ],
+                      impact: "95% customer satisfaction with first-contact resolution, generating loyal customers and continuous service improvement through systematic feedback analysis."
+                    };
+                  default:
+                    return {
+                      overview: selectedPanel.description,
+                      steps: ["Advanced AI Processing", "Real-time Analytics", "Quality Assurance"],
+                      impact: "Exceptional customer service delivery."
+                    };
+                }
+              };
 
-            {/* Compact Key Metrics */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
-              <div style={{
-                backgroundColor: `${selectedPanel.color}10`,
-                border: `1px solid ${selectedPanel.color}30`,
-                borderRadius: '8px',
-                padding: '8px',
-                textAlign: 'center'
-              }}>
-                <div style={{ 
-                  color: selectedPanel.color, 
-                  fontSize: '16px', 
-                  fontWeight: 'bold' 
-                }}>
-                  {selectedPanel.metric}
-                </div>
-                <div style={{ 
-                  color: 'rgb(161,161,170)', 
-                  fontSize: '10px' 
-                }}>
-                  {selectedPanel.metricLabel}
-                </div>
-              </div>
-              <div style={{
-                backgroundColor: `${selectedPanel.color}10`,
-                border: `1px solid ${selectedPanel.color}30`,
-                borderRadius: '8px',
-                padding: '8px',
-                textAlign: 'center'
-              }}>
-                <div style={{ 
-                  color: selectedPanel.color, 
-                  fontSize: '16px', 
-                  fontWeight: 'bold' 
-                }}>
-                  {selectedPanel.automationRate}%
-                </div>
-                <div style={{ 
-                  color: 'rgb(161,161,170)', 
-                  fontSize: '10px' 
-                }}>
-                  Automation
-                </div>
-              </div>
-            </div>
-
-            {/* Compact Features */}
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {(selectedPanel.keyFeatures || [
-                  'Intelligent routing',
-                  'AI-powered analysis',
-                  'Quality monitoring'
-                ]).slice(0, 3).map((feature, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <div style={{
-                      width: '4px',
-                      height: '4px',
-                      backgroundColor: selectedPanel.color,
-                      borderRadius: '50%'
-                    }}></div>
-                    <span style={{ 
-                      color: 'rgb(218,218,218)', 
-                      fontSize: '12px' 
+              const content = getStepByStepContent();
+              
+              return (
+                <>
+                  {/* Overview Section */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '10px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
                     }}>
-                      {feature}
-                    </span>
+                      What Happens in This Stage
+                    </h4>
+                    <p style={{ 
+                      color: 'rgb(218,218,218)', 
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      marginBottom: '16px'
+                    }}>
+                      {content.overview}
+                    </p>
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  {/* Step-by-Step Process */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '12px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
+                    }}>
+                      Step-by-Step Process
+                    </h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {content.steps.map((step, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                          <div style={{
+                            minWidth: '24px',
+                            height: '24px',
+                            backgroundColor: `${selectedPanel.color}20`,
+                            border: `2px solid ${selectedPanel.color}`,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            color: selectedPanel.color,
+                            marginTop: '2px'
+                          }}>
+                            {index + 1}
+                          </div>
+                          <span style={{ 
+                            color: 'rgb(218,218,218)', 
+                            fontSize: '13px',
+                            lineHeight: '1.4',
+                            flex: 1
+                          }}>
+                            {step}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key Metrics */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}10`,
+                      border: `1px solid ${selectedPanel.color}30`,
+                      borderRadius: '12px',
+                      padding: '12px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ 
+                        color: selectedPanel.color, 
+                        fontSize: '20px', 
+                        fontWeight: 'bold' 
+                      }}>
+                        {selectedPanel.metric}
+                      </div>
+                      <div style={{ 
+                        color: 'rgb(161,161,170)', 
+                        fontSize: '11px',
+                        marginTop: '4px'
+                      }}>
+                        {selectedPanel.metricLabel}
+                      </div>
+                    </div>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}10`,
+                      border: `1px solid ${selectedPanel.color}30`,
+                      borderRadius: '12px',
+                      padding: '12px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ 
+                        color: selectedPanel.color, 
+                        fontSize: '20px', 
+                        fontWeight: 'bold' 
+                      }}>
+                        {selectedPanel.automationRate}%
+                      </div>
+                      <div style={{ 
+                        color: 'rgb(161,161,170)', 
+                        fontSize: '11px',
+                        marginTop: '4px'
+                      }}>
+                        Automation Rate
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business Impact */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '8px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
+                    }}>
+                      Business Impact
+                    </h4>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}08`,
+                      border: `1px solid ${selectedPanel.color}20`,
+                      borderRadius: '8px',
+                      padding: '12px'
+                    }}>
+                      <p style={{ 
+                        color: 'rgb(218,218,218)', 
+                        fontSize: '13px',
+                        lineHeight: '1.4',
+                        margin: 0,
+                        fontStyle: 'italic'
+                      }}>
+                        {content.impact}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
       )}
