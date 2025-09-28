@@ -413,6 +413,15 @@ const SupportCenterPage = () => {
     }
   ], []);
 
+  // Optimized navigation handlers
+  const handleBackNavigation = useCallback(() => {
+    navigate('/', { replace: false });
+  }, [navigate]);
+
+  const handleCategoryChange = useCallback((categoryId) => {
+    setSelectedCategory(categoryId);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
       <SEOManager 
