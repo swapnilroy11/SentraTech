@@ -232,19 +232,24 @@ const JobApplicationPage = () => {
         full_name: formData.full_name,
         email: formData.email,
         phone: formData.phone || null,
-        location: formData.location,
-        resume_file: null, // Will be set below if resume exists
+        location: formData.location || null,
         portfolio_website: formData.portfolio_website || null,
-        preferred_shifts: formData.preferred_shifts ? [formData.preferred_shifts] : null,
-        availability_date: formData.availability_start_date || null,
-        experience_years: formData.relevant_experience || null,
-        motivation_text: formData.why_sentratech,
+        resume_file: resume ? {
+          name: resume.name,
+          data: resume.data,
+          type: resume.type,
+          size: resume.size
+        } : null,
+        relevant_experience: formData.relevant_experience || null,
+        preferred_shifts: formData.preferred_shifts || null,
+        availability_start_date: formData.availability_start_date || null,
+        why_sentratech: formData.why_sentratech || null,
         cover_letter: formData.cover_letter || null,
-        work_authorization: formData.work_authorization,
-        position_applied: job.title,
-        application_source: "career_site",
+        work_authorization: formData.work_authorization || null,
         consent_for_storage: formData.consent_for_storage,
-        created_at: new Date().toISOString()
+        consent_for_contact: formData.consent_for_contact,
+        position: job.title,
+        source: "careers_page"
       };
       
       if (resume) {
