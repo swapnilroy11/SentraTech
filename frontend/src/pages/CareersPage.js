@@ -212,43 +212,49 @@ const CareersPage = () => {
                   key={job.id}
                   className="bg-gradient-to-r from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8 hover:border-[#00FF41]/30 transition-all duration-300"
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#00FF41]/10 text-[#00FF41] border border-[#00FF41]/20">
-                          {job.department}
-                        </span>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                          {job.type}
-                        </span>
+                  <div className="space-y-6">
+                    {/* Header section */}
+                    <div className="flex flex-wrap items-center gap-3 mb-4">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#00FF41]/10 text-[#00FF41] border border-[#00FF41]/20">
+                        {job.department}
+                      </span>
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        {job.type}
+                      </span>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-3 leading-tight">{job.title}</h3>
+                      <p className="text-[rgb(161,161,170)] mb-4 leading-relaxed">{job.description}</p>
+                    </div>
+                    
+                    {/* Job details with proper spacing */}
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <MapPin size={16} className="text-[#00FF41] flex-shrink-0" />
+                        <span className="text-[rgb(218,218,218)] truncate">{job.location}</span>
                       </div>
-                      
-                      <h3 className="text-xl font-bold text-white mb-2">{job.title}</h3>
-                      <p className="text-[rgb(161,161,170)] mb-4">{job.description}</p>
-                      
-                      <div className="flex flex-wrap gap-4 text-sm text-[rgb(218,218,218)]">
-                        <div className="flex items-center space-x-2">
-                          <MapPin size={16} className="text-[#00FF41]" />
-                          <span>{job.location}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <DollarSign size={16} className="text-[#00FF41]" />
-                          <span>{job.salary}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Clock size={16} className="text-[#00FF41]" />
-                          <span>40 hrs/week • Rotational shifts</span>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <DollarSign size={16} className="text-[#00FF41] flex-shrink-0" />
+                        <span className="text-[rgb(218,218,218)]">{job.salary}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Clock size={16} className="text-[#00FF41] flex-shrink-0" />
+                        <span className="text-[rgb(218,218,218)] truncate">Full-time • Flexible shifts</span>
                       </div>
                     </div>
                     
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <button className="px-6 py-3 bg-transparent border border-[#00FF41]/30 text-[#00FF41] rounded-lg hover:bg-[#00FF41]/10 transition-all duration-200 flex items-center justify-center space-x-2">
+                    {/* Action buttons with better spacing */}
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[rgb(63,63,63)]">
+                      <button 
+                        onClick={() => navigate(`/careers/apply/${job.id}`)}
+                        className="flex-1 px-6 py-3 bg-transparent border border-[#00FF41]/30 text-[#00FF41] rounded-lg hover:bg-[#00FF41]/10 transition-all duration-200 flex items-center justify-center space-x-2"
+                      >
                         <span>View Details</span>
                       </button>
                       <button 
                         onClick={() => handleApplyClick(job)}
-                        className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-all duration-200 flex items-center justify-center space-x-2"
+                        className="flex-1 px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-all duration-200 flex items-center justify-center space-x-2"
                       >
                         <span>Apply Now</span>
                         <ArrowRight size={16} />
