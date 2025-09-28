@@ -292,8 +292,11 @@ const HorizontalJourney = () => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && selectedPanel) {
+        e.preventDefault();
         closeModal();
-      } else if (!selectedPanel) {
+        return;
+      }
+      if (!selectedPanel) {
         if (e.key === 'ArrowLeft' && currentPanel > 0) {
           scrollToPanel(currentPanel - 1);
         } else if (e.key === 'ArrowRight' && currentPanel < journeyStages.length - 1) {
@@ -302,8 +305,8 @@ const HorizontalJourney = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
   }, [currentPanel, journeyStages.length, selectedPanel]);
   
   // Cleanup body class and modal container on unmount
