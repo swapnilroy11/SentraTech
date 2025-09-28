@@ -169,14 +169,14 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
   const submitApplication = async (data) => {
     try {
-      // Submit directly to dashboard
-      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+      // Use enhanced dashboard config with proper authentication
+      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
+      
+      // Clear any cached data
+      clearFormCache();
+      
+      // Submit using enhanced helper function with authentication and error handling
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, data);
       
       if (response.ok) {
         const result = await response.json();
