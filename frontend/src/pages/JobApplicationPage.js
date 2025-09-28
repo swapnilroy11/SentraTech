@@ -795,7 +795,7 @@ const JobApplicationPage = () => {
                       </h3>
                       <ul className="space-y-2">
                         {job.requirements?.education?.map((req, index) => (
-                          <li key={index} className="text-[rgb(161,161,170)] text-sm leading-relaxed flex items-start space-x-2">
+                          <li key={index} className="text-[rgb(218,218,218)] leading-relaxed flex items-start space-x-2">
                             <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
                             <span>{req}</span>
                           </li>
