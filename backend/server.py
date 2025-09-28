@@ -1100,21 +1100,39 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         await db.roi_reports.insert_one(roi_data)
         logger.info(f"ROI report saved locally: {roi_report.contact_email}")
         
-        # Try to forward to admin dashboard
+        # Forward to external SentraTech API
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/roi_reports"
-                
-                # Get service credentials
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # Step 1: Authenticate with external API to get service token
+                auth_url = "https://api.sentratech.net/v1/auth/login"
                 svc_email = os.environ.get("SVC_EMAIL")
                 svc_password = os.environ.get("SVC_PASSWORD")
                 
+                auth_response = await client.post(
+                    auth_url,
+                    json={"email": svc_email, "password": svc_password},
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if auth_response.status_code != 200:
+                    logger.error(f"External API auth failed: {auth_response.status_code}")
+                    raise httpx.ConnectError("Authentication failed with external API")
+                
+                auth_data = auth_response.json()
+                service_token = auth_data.get("access_token")
+                
+                if not service_token:
+                    logger.error("No access token received from external API")
+                    raise httpx.ConnectError("No access token from external API")
+                
+                # Step 2: Forward ROI report to external API
+                api_url = "https://api.sentratech.net/v1/roi_reports"
                 response = await client.post(
-                    dashboard_url,
+                    api_url,
                     json=roi_report.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                        "Authorization": f"Bearer {service_token}"
                     }
                 )
                 
