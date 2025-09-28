@@ -558,8 +558,8 @@ const SupportCenterPage = () => {
           </div>
         </div>
 
-        {/* FAQ Section - Enhanced with Stable Layout */}
-        <div ref={faqSectionRef} className="mb-20">
+        {/* FAQ Section - Stable Layout with Scroll Anchoring Fix */}
+        <div ref={faqSectionRef} className="mb-20 faq-section">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
@@ -567,7 +567,7 @@ const SupportCenterPage = () => {
             </p>
           </div>
           
-          {/* FAQ Categories - Simplified */}
+          {/* FAQ Categories */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8">
             {faqCategories.map((category) => (
               <button
@@ -584,8 +584,8 @@ const SupportCenterPage = () => {
             ))}
           </div>
           
-          {/* FAQ Items Container - Simplified */}
-          <div ref={faqContainerRef} className="min-h-[600px]">
+          {/* FAQ Items Container with Scroll Stability */}
+          <div ref={faqContainerRef} className="faq-container">
             <div className="space-y-4">
               {filteredQuestions.map((faq, index) => (
                 <div 
