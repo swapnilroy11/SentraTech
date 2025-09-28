@@ -291,34 +291,18 @@ const JobApplicationPage = () => {
               <p className="text-[rgb(161,161,170)] mb-6">Let's start with your basic contact information.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.firstName}
-                  onChange={(e) => handleInputChange('firstName', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.firstName ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                  placeholder="John"
-                />
-                {errors.firstName && <p className="text-red-400 text-xs mt-1">{errors.firstName}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) => handleInputChange('lastName', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.lastName ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                  placeholder="Doe"
-                />
-                {errors.lastName && <p className="text-red-400 text-xs mt-1">{errors.lastName}</p>}
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                value={formData.full_name}
+                onChange={(e) => handleInputChange('full_name', e.target.value)}
+                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.full_name ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                placeholder="John Doe"
+              />
+              {errors.full_name && <p className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
