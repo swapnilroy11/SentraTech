@@ -578,35 +578,112 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                     />
                   </div>
 
-                  {/* Monthly Volume Chips */}
-                  <div>
-                    <label className="block text-sm font-semibold text-white mb-3">
-                      Monthly Volume *
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {monthlyVolumeOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => {
-                            setFormData(prev => ({ ...prev, monthlyVolume: option.value }));
-                            if (errors.monthlyVolume) {
-                              setErrors(prev => ({ ...prev, monthlyVolume: '' }));
-                            }
-                          }}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            formData.monthlyVolume === option.value
-                              ? 'bg-[#00FF41] text-[#0A0A0A]'
-                              : 'bg-[rgba(255,255,255,0.05)] text-[rgb(161,161,170)] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/30'
+                  {/* Volume Fields - Enhanced with separate Call and Interaction volumes */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Call Volume */}
+                      <div>
+                        <label htmlFor="callVolume" className="block text-sm font-semibold text-white mb-2">
+                          Monthly Call Volume
+                        </label>
+                        <input
+                          type="number"
+                          id="callVolume"
+                          name="callVolume"
+                          value={formData.callVolume}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                            errors.callVolume ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
                           }`}
+                          placeholder="e.g., 5000"
+                          min="0"
                           disabled={isSubmitting}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                        />
+                        {errors.callVolume && (
+                          <p className="text-red-400 text-sm mt-1">{errors.callVolume}</p>
+                        )}
+                      </div>
+
+                      {/* Interaction Volume */}
+                      <div>
+                        <label htmlFor="interactionVolume" className="block text-sm font-semibold text-white mb-2">
+                          Monthly Interaction Volume
+                        </label>
+                        <input
+                          type="number"
+                          id="interactionVolume"
+                          name="interactionVolume"
+                          value={formData.interactionVolume}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border rounded-xl text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:ring-2 focus:ring-[#00FF41] transition-all ${
+                            errors.interactionVolume ? 'border-red-500' : 'border-[rgba(255,255,255,0.1)]'
+                          }`}
+                          placeholder="e.g., 3000"
+                          min="0"
+                          disabled={isSubmitting}
+                        />
+                        {errors.interactionVolume && (
+                          <p className="text-red-400 text-sm mt-1">{errors.interactionVolume}</p>
+                        )}
+                      </div>
                     </div>
-                    {errors.monthlyVolume && (
-                      <p className="text-red-400 text-sm mt-2">{errors.monthlyVolume}</p>
+
+                    {/* Quick Select Options */}
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-3">
+                        Or select typical volume range
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {monthlyVolumeOptions.map((option) => (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => {
+                              // Auto-populate based on selection
+                              let callVol = '', intVol = '';
+                              if (option.value === '<10k') {
+                                callVol = '3000';
+                                intVol = '2000';
+                              } else if (option.value === '10k-50k') {
+                                callVol = '15000';
+                                intVol = '10000';
+                              } else if (option.value === '50k+') {
+                                callVol = '30000';
+                                intVol = '20000';
+                              }
+                              
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                monthlyVolume: option.value,
+                                callVolume: callVol,
+                                interactionVolume: intVol
+                              }));
+                              
+                              // Clear volume errors
+                              if (errors.volume || errors.callVolume || errors.interactionVolume) {
+                                setErrors(prev => ({ 
+                                  ...prev, 
+                                  volume: '', 
+                                  callVolume: '', 
+                                  interactionVolume: '' 
+                                }));
+                              }
+                            }}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              formData.monthlyVolume === option.value
+                                ? 'bg-[#00FF41] text-[#0A0A0A]'
+                                : 'bg-[rgba(255,255,255,0.05)] text-[rgb(161,161,170)] border border-[rgba(255,255,255,0.1)] hover:border-[#00FF41]/30'
+                            }`}
+                            disabled={isSubmitting}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {errors.volume && (
+                      <p className="text-red-400 text-sm mt-2">{errors.volume}</p>
                     )}
                   </div>
 
