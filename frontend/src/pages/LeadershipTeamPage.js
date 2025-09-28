@@ -152,9 +152,22 @@ const LeadershipTeamPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {executives.map((exec, index) => (
               <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8 hover:border-[#00FF41]/30 transition-all duration-300">
-                {/* Profile Image - Will be replaced with actual photos when provided */}
-                <div className="w-32 h-32 bg-gradient-to-br from-[#00FF41]/20 to-[#00DD38]/20 border-2 border-[#00FF41]/30 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <Users size={48} className="text-[#00FF41]" />
+                {/* Profile Image */}
+                <div className="w-32 h-32 mx-auto mb-6">
+                  <img 
+                    src={exec.image} 
+                    alt={`${exec.name} - ${exec.title}`}
+                    className="w-full h-full object-cover rounded-full border-2 border-[#00FF41]/30 hover:border-[#00FF41]/60 transition-all duration-300"
+                    onError={(e) => {
+                      // Fallback to placeholder if image fails to load
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  {/* Fallback placeholder */}
+                  <div className="w-32 h-32 bg-gradient-to-br from-[#00FF41]/20 to-[#00DD38]/20 border-2 border-[#00FF41]/30 rounded-full mx-auto flex items-center justify-center" style={{display: 'none'}}>
+                    <Users size={48} className="text-[#00FF41]" />
+                  </div>
                 </div>
                 
                 {/* Name & Title */}
