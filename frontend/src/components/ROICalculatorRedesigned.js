@@ -49,9 +49,20 @@ const COUNTRIES = {
 
 // Fixed automation percentage as per requirements
 const AUTOMATION_PERCENTAGE = 70;
-const SENTRATECH_COST_PER_1K = 1650; // Updated SentraTech pricing per bundle
-const CALL_COST_PER_1K = 1014.75; // 61.5% of $1,650 bundle cost
-const INTERACTION_COST_PER_1K = 635.25; // 38.5% of $1,650 bundle cost
+const SENTRATECH_BUNDLE_COST = 1650; // SentraTech pricing per bundle
+
+// CANONICAL BUNDLE CALCULATIONS - Exact fractions for precision
+const BUNDLE_CALL_MINUTES = 1000 * 8; // 8000 minutes
+const BUNDLE_INTERACTION_MINUTES = 1000 * 5; // 5000 minutes  
+const BUNDLE_TOTAL_MINUTES = BUNDLE_CALL_MINUTES + BUNDLE_INTERACTION_MINUTES; // 13000 minutes
+
+// Exact bundle shares (not rounded percentages)
+const CALL_SHARE = BUNDLE_CALL_MINUTES / BUNDLE_TOTAL_MINUTES; // 8000/13000
+const INTERACTION_SHARE = BUNDLE_INTERACTION_MINUTES / BUNDLE_TOTAL_MINUTES; // 5000/13000
+
+// Exact derived costs (calculated using precise fractions)
+const CALL_COST_PER_1K = SENTRATECH_BUNDLE_COST * CALL_SHARE; // $1,015.38...
+const INTERACTION_COST_PER_1K = SENTRATECH_BUNDLE_COST * INTERACTION_SHARE; // $634.61...
 
 const ROICalculatorRedesigned = () => {
   // Essential inputs only
