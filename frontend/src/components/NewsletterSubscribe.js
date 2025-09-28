@@ -29,33 +29,22 @@ const NewsletterSubscribe = () => {
     setMessage('');
 
     try {
-      // 🔒 PROTECTED - Use centralized dashboard config
-      // DO NOT MODIFY - Critical for dashboard integration
-      const { DASHBOARD_CONFIG, validateConfig } = await import('../config/dashboardConfig.js');
+      // Use new dashboard config
+      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
       
-      // Validate configuration before proceeding
-      if (!validateConfig()) {
-        throw new Error('Dashboard configuration validation failed');
-      }
-      
-      // Prepare data for ingest endpoint
-      const ingestData = {
+      // Prepare data for new dashboard endpoint
+      const dashboardData = {
         email: email.trim(),
-        source: 'newsletter_footer',
-        preferences: {
-          updates: true,
-          product_news: true
-        }
+        name: '' // Optional field
       };
       
-      // Submit to subscriptions endpoint using protected config
-      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.SUBSCRIPTIONS}`, {
+      // Submit directly to dashboard (no authentication required)
+      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(ingestData)
+        body: JSON.stringify(dashboardData)
       });
       
       if (response.ok) {
