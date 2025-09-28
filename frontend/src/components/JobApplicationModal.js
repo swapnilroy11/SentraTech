@@ -169,12 +169,11 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
   const submitApplication = async (data) => {
     try {
-      // Submit to job applications endpoint
-      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}/api/ingest/job_applications`, {
+      // Submit directly to dashboard
+      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
       });
