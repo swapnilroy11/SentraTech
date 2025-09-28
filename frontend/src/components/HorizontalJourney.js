@@ -673,16 +673,18 @@ const HorizontalJourney = () => {
           <div
             style={{
               position: 'absolute',
-              left: `${modalPosition.x - 210}px`, // Center by subtracting half width (420/2)
+              left: `${modalPosition.x - 275}px`, // Center by subtracting half width (550/2)
               top: `${modalPosition.y}px`,
               backgroundColor: 'rgb(26, 28, 30)',
-              border: `2px solid ${selectedPanel.color}`,
-              borderRadius: '20px',
-              padding: '20px',
-              width: '420px',
-              maxWidth: '90vw',
-              boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${selectedPanel.color}30`,
-              zIndex: 1000000
+              border: `3px solid ${selectedPanel.color}`,
+              borderRadius: '24px',
+              padding: '28px',
+              width: '550px',
+              maxWidth: '95vw',
+              boxShadow: `0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px ${selectedPanel.color}40`,
+              zIndex: 1000000,
+              maxHeight: '85vh',
+              overflowY: 'auto'
             }}
             onClick={(e) => e.stopPropagation()}
           >
