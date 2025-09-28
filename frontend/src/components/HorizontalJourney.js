@@ -670,44 +670,25 @@ const HorizontalJourney = () => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-              {/* Custom Scrollable Content */}
-              <div 
-                className="overflow-y-auto pr-2 max-h-full"
-                style={{
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: `${selectedPanel.color}40 transparent`
-                }}
-              >
-                {/* Custom scrollbar styles */}
-                <style jsx>{`
-                  .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: ${selectedPanel.color}40;
-                    border-radius: 3px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: ${selectedPanel.color}60;
-                  }
-                `}</style>
-
-                {/* Close Button */}
-                <Button
-                  onClick={closeModal}
-                  variant="ghost"
-                  size="sm"
-                  className="absolute top-3 right-3 w-7 h-7 p-0 text-white hover:bg-white/10 z-20"
-                  style={{ 
-                    borderColor: selectedPanel.color + '40',
-                    color: selectedPanel.color
-                  }}
-                >
-                  <X size={14} />
-                </Button>
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: 'transparent',
+                border: 'none',
+                color: selectedPanel.color,
+                cursor: 'pointer',
+                padding: '8px',
+                borderRadius: '8px',
+                fontSize: '18px',
+                fontWeight: 'bold'
+              }}
+            >
+              ✕
+            </button>
 
                 {/* Stage Content */}
                 <div className="space-y-5 custom-scrollbar">
