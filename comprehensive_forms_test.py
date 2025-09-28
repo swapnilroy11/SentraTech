@@ -1,7 +1,20 @@
 #!/usr/bin/env python3
 """
-Comprehensive SentraTech Forms Testing - Dashboard Synchronization Verification
-Tests ALL 5 forms to verify dashboard synchronization is working after endpoint implementation
+Comprehensive SentraTech Forms Testing
+Tests all 5 SentraTech website form endpoints that were just fixed:
+1. Demo Request Form - POST /api/demo/request
+2. Contact Sales Form - POST /api/contact/sales  
+3. ROI Calculator Form - POST /api/roi/submit
+4. Newsletter Subscription - POST /api/newsletter/subscribe
+5. Job Application Form - POST /api/job/application
+
+Testing Requirements:
+- Test all required fields and validation
+- Test with valid and invalid data formats
+- Verify database storage by checking response IDs
+- Test authentication (should work without X-INGEST-KEY for local endpoints)
+- Confirm all endpoints return proper JSON responses
+- Validate all successful responses include appropriate success messages
 """
 
 import requests
@@ -11,9 +24,8 @@ from datetime import datetime
 from typing import Dict, Any, List
 import uuid
 
-# Backend URL from environment
-BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
-INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
+# Backend URL from frontend environment - using local endpoints
+BACKEND_URL = "http://localhost:8001/api"
 
 class ComprehensiveFormsTester:
     """Comprehensive testing for all 5 SentraTech forms"""
