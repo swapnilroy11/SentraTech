@@ -214,22 +214,22 @@ export const runProtectedTests = () => {
       name: '1000 calls + 1000 interactions (Bangladesh)',
       inputs: { calls: 1000, interactions: 1000, country: 'Bangladesh' },
       expected: {
-        traditionalMonthlyCost: 5200, // (1000×8 + 1000×5) × 0.40
-        sentraTechMonthlyCost: 1650, // 1014.75 + 635.25
+        traditionalMonthlyCost: 5200, // (1000×8 + 1000×5) × 0.40 = 13000 × 0.40
+        sentraTechMonthlyCost: 1650, // Exactly one bundle
         monthlySavings: 3550, // 5200 - 1650
         roi: 215.15, // (3550 / 1650) × 100
         costReduction: 68.27 // (3550 / 5200) × 100
       }
     },
     {
-      name: '2000 calls + 1500 interactions (Bangladesh)',
-      inputs: { calls: 2000, interactions: 1500, country: 'Bangladesh' },
+      name: '1000 calls + 2000 interactions (Bangladesh) - Canonical Test Case',
+      inputs: { calls: 1000, interactions: 2000, country: 'Bangladesh' },
       expected: {
-        traditionalMonthlyCost: 9400, // (2000×8 + 1500×5) × 0.40
-        sentraTechMonthlyCost: 2982.25, // (2×1014.75) + (1.5×635.25)
-        monthlySavings: 6417.75, // 9400 - 2982.25
-        roi: 215.15, // Should be consistent
-        costReduction: 68.27 // Should be consistent
+        traditionalMonthlyCost: 7200, // (1000×8 + 2000×5) × 0.40 = 18000 × 0.40
+        sentraTechMonthlyCost: 2284.62, // Canonical expected value
+        monthlySavings: 4915.38, // 7200 - 2284.62
+        roi: 215.15, // (4915.38 / 2284.62) × 100
+        costReduction: 68.27 // (4915.38 / 7200) × 100
       }
     }
   ];
