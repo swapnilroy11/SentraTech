@@ -559,45 +559,57 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - React Portal with Absolute Centering */}
+      {/* Journey Stage Details Modal - React Portal with Perfect Centering */}
       {selectedPanel && createPortal(
-        <div
-          className="customer-journey-modal-overlay"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(12px)',
-            zIndex: 99999
-          }}
-          onClick={() => setSelectedPanel(null)}
-        >
+        <AnimatePresence>
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={(e) => e.stopPropagation()}
-            className="customer-journey-modal-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="customer-journey-modal-overlay"
             style={{
               position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              maxWidth: '32rem',
-              width: '90%',
-              maxHeight: '90vh',
-              backgroundColor: 'rgb(26, 28, 30)',
-              border: '2px solid #00FF41',
-              borderRadius: '1.5rem',
-              overflowY: 'auto',
-              padding: '2rem',
-              zIndex: 100000
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(12px)',
+              zIndex: 99999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px'
             }}
+            onClick={() => setSelectedPanel(null)}
           >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.85, opacity: 0, y: 20 }}
+              transition={{ 
+                duration: 0.2, 
+                ease: "easeOut",
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="customer-journey-modal-content"
+              style={{
+                maxWidth: '32rem',
+                width: '100%',
+                maxHeight: '90vh',
+                backgroundColor: 'rgb(26, 28, 30)',
+                border: '2px solid #00FF41',
+                borderRadius: '1.5rem',
+                overflowY: 'auto',
+                padding: '2rem',
+                position: 'relative',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 65, 0.1)'
+              }}
+            >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
                   <div 
