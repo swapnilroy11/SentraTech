@@ -740,36 +740,52 @@ const HorizontalJourney = () => {
                   </p>
                 </div>
 
-                {/* Process Overview */}
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <Brain className="text-[#00FF41]" size={20} />
-                    Process Overview
-                  </h4>
-                  <ul className="space-y-2 text-[rgb(218,218,218)]">
-                    {selectedPanel.processSteps?.map((step, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
-                        {step}
-                      </li>
-                    )) || (
-                      <>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
-                          Intelligent routing and processing of customer interactions
+                  {/* Process Overview */}
+                  <div className="space-y-3">
+                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+                      <Brain style={{ color: selectedPanel.color }} size={18} />
+                      Process Overview
+                    </h4>
+                    <ul className="space-y-2 text-[rgb(218,218,218)]">
+                      {selectedPanel.keyFeatures?.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <CheckCircle 
+                            style={{ color: selectedPanel.color }} 
+                            className="mt-1 flex-shrink-0" 
+                            size={14} 
+                          />
+                          <span className="text-sm">{feature}</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
-                          AI-powered analysis and response generation
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle className="text-[#00FF41] mt-1 flex-shrink-0" size={16} />
-                          Real-time quality monitoring and optimization
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </div>
+                      )) || (
+                        <>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle 
+                              style={{ color: selectedPanel.color }} 
+                              className="mt-1 flex-shrink-0" 
+                              size={14} 
+                            />
+                            <span className="text-sm">Intelligent routing and processing</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle 
+                              style={{ color: selectedPanel.color }} 
+                              className="mt-1 flex-shrink-0" 
+                              size={14} 
+                            />
+                            <span className="text-sm">AI-powered analysis and response</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle 
+                              style={{ color: selectedPanel.color }} 
+                              className="mt-1 flex-shrink-0" 
+                              size={14} 
+                            />
+                            <span className="text-sm">Real-time quality monitoring</span>
+                          </li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
 
                   {/* Key Metrics */}
                   <div className="space-y-3">
