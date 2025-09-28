@@ -18,8 +18,8 @@
 
 // 🔒 PROTECTED - Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
-  // Backend URL - MUST point to customer-flow-5 to avoid CORS
-  BACKEND_URL: 'https://tech-careers-3.preview.emergentagent.com',
+  // Backend URL - UPDATED to customer-flow-5 to fix CORS issues
+  BACKEND_URL: 'https://customer-flow-5.preview.emergentagent.com',
   
   // Authentication key for customer-flow-5 backend
   INGEST_KEY: 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6',
