@@ -631,8 +631,8 @@ const HorizontalJourney = () => {
       </div>
 
       {/* Journey Stage Details Modal - React Portal with Perfect Centering */}
-      {selectedPanel && createPortal(
-        <AnimatePresence>
+      <AnimatePresence>
+        {selectedPanel && createPortal(
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
