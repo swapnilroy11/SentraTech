@@ -236,37 +236,29 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     setSubmitStatus(null);
 
     try {
-      // Prepare data for new ingest endpoint
-      const ingestData = {
+      // Prepare data for new dashboard endpoint
+      const dashboardData = {
         full_name: formData.fullName,
         work_email: formData.workEmail,
         company_name: formData.companyName,
-        company_website: formData.companyWebsite || null,
-        phone: formData.phone || null,
+        message: formData.message || `Interested in ${formData.planSelected || 'SentraTech'} plan`,
+        phone: formData.phone || '',
+        company_website: formData.companyWebsite || '',
         call_volume: parseInt(formData.callVolume) || 0,
         interaction_volume: parseInt(formData.interactionVolume) || 0,
-        preferred_contact_method: formData.preferredContactMethod === 'email' ? 'Email' : 'Phone',
-        message: formData.message || `Interested in ${formData.planSelected || 'SentraTech'} plan`,
-        status: "pending"
+        preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
       };
 
-      // 🔒 PROTECTED - Use centralized dashboard config
-      // DO NOT MODIFY - Critical for dashboard integration
-      const { DASHBOARD_CONFIG, validateConfig } = await import('../config/dashboardConfig.js');
+      // Use new dashboard config
+      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
       
-      // Validate configuration before proceeding
-      if (!validateConfig()) {
-        throw new Error('Dashboard configuration validation failed');
-      }
-      
-      // Submit to new ingest endpoint using protected config
-      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.CONTACT_REQUESTS}`, {
+      // Submit directly to dashboard (no authentication required)
+      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(ingestData)
+        body: JSON.stringify(dashboardData)
       });
 
       if (response.ok) {
