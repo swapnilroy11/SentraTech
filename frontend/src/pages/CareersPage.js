@@ -8,6 +8,24 @@ import JobApplicationModal from '../components/JobApplicationModal';
 const CareersPage = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const location = useLocation();
+
+  // Handle scrolling to anchor sections when page loads with hash
+  useEffect(() => {
+    if (location.hash) {
+      const elementId = location.hash.substring(1); // Remove the # symbol
+      const element = document.getElementById(elementId);
+      if (element) {
+        // Add a small delay to ensure the page has fully rendered
+        setTimeout(() => {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   // Current open positions
   const openPositions = [
