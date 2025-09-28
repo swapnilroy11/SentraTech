@@ -282,7 +282,7 @@ const CareersPage = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 px-6 bg-gradient-to-b from-transparent to-[rgb(26,28,30)]">
+        <section id="apply-now" className="py-20 px-6 bg-gradient-to-b from-transparent to-[rgb(26,28,30)]">
           <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Join Our Team?
