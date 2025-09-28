@@ -31,6 +31,7 @@ import AboutUsPage from "./pages/AboutUsPage";
 import LeadershipTeamPage from "./pages/LeadershipTeamPage";
 import InvestorRelationsPage from "./pages/InvestorRelationsPage";
 import SupportCenterPage from "./pages/SupportCenterPage";
+import ContactSalesPage from "./pages/ContactSalesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Contexts
