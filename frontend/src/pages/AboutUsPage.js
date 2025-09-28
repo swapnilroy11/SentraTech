@@ -221,29 +221,29 @@ const AboutUsPage = () => {
           </div>
         </div>
 
-        {/* Timeline */}
+        {/* Timeline - Optimized rendering */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Our Journey</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Our Journey</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              From startup to industry leader, here are the key milestones that shaped SentraTech.
+              From ambitious startup to next-generation platform, here are the key milestones shaping SentraTech's future.
             </p>
           </div>
           
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {milestones.map((milestone, index) => (
-              <div key={index} className="flex items-start space-x-6">
+              <div key={`milestone-${index}`} className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-[#00FF41] rounded-full flex items-center justify-center text-black font-bold">
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00FF41] rounded-full flex items-center justify-center text-black font-bold text-sm md:text-base">
                     {milestone.year.slice(-2)}
                   </div>
                 </div>
-                <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-6 flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-semibold text-white">{milestone.title}</h3>
+                <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4 md:p-6 flex-1 hover:border-[#00FF41]/30 transition-colors duration-200">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-white">{milestone.title}</h3>
                     <span className="text-[#00FF41] font-semibold text-sm">{milestone.year}</span>
                   </div>
-                  <p className="text-[rgb(218,218,218)] leading-relaxed">
+                  <p className="text-[rgb(218,218,218)] leading-relaxed text-sm md:text-base">
                     {milestone.description}
                   </p>
                 </div>
