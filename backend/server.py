@@ -898,12 +898,12 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         await db.demo_requests.insert_one(demo_data)
         logger.info(f"Demo request saved locally: {demo_request.email}")
         
-        # Forward to external SentraTech API (skip if we're the dashboard to avoid loops)
-        external_dashboard_url = "https://dashboard-central-5.preview.emergentagent.com"
-        current_host = "customer-flow-5.preview.emergentagent.com"
+        # 🔒 PROTECTED - Use centralized dashboard config
+        # DO NOT MODIFY - Critical for dashboard integration
+        from dashboard_config import DashboardConfig
         
-        # Skip external forwarding if URL would create a loop
-        if current_host in external_dashboard_url:
+        # Skip external forwarding if it would create a loop
+        if not DashboardConfig.should_forward_to_dashboard():
             logger.info("Skipping external dashboard forwarding (same host or not configured)")
             # Update status to indicate local-only storage
             await db.demo_requests.update_one(
@@ -995,12 +995,12 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         await db.contact_requests.insert_one(contact_data)
         logger.info(f"Contact request saved locally: {contact_request.work_email}")
         
-        # Forward to external SentraTech API (skip if we're the dashboard to avoid loops)
-        external_dashboard_url = "https://dashboard-central-5.preview.emergentagent.com"
-        current_host = "customer-flow-5.preview.emergentagent.com"
+        # 🔒 PROTECTED - Use centralized dashboard config
+        # DO NOT MODIFY - Critical for dashboard integration
+        from dashboard_config import DashboardConfig
         
-        # Skip external forwarding if URL would create a loop
-        if current_host in external_dashboard_url:
+        # Skip external forwarding if it would create a loop
+        if not DashboardConfig.should_forward_to_dashboard():
             logger.info("Skipping external dashboard forwarding (same host or not configured)")
             # Update status to indicate local-only storage
             await db.contact_requests.update_one(
