@@ -109,38 +109,7 @@ const ROICalculatorRedesigned = () => {
     validateInput(value, setInteractionVolumeError, 'interaction volume');
   };
 
-  // Protected calculation validation function
-  const validateCalculation = (calls, interactions, results) => {
-    const { traditionalMonthlyCost, sentraTechMonthlyCost, monthlySavings, roi, costReduction } = results;
-    
-    // Validate basic math
-    const expectedSavings = traditionalMonthlyCost - sentraTechMonthlyCost;
-    const expectedROI = sentraTechMonthlyCost > 0 ? (expectedSavings / sentraTechMonthlyCost) * 100 : 0;
-    const expectedCostReduction = traditionalMonthlyCost > 0 ? (expectedSavings / traditionalMonthlyCost) * 100 : 0;
-    
-    // Check for precision errors (tolerance of 0.01)
-    const tolerance = 0.01;
-    
-    if (Math.abs(monthlySavings - expectedSavings) > tolerance) {
-      console.error('❌ Savings calculation error:', { expected: expectedSavings, actual: monthlySavings });
-    }
-    
-    if (Math.abs(roi - expectedROI) > tolerance) {
-      console.error('❌ ROI calculation error:', { expected: expectedROI, actual: roi });
-    }
-    
-    if (Math.abs(costReduction - expectedCostReduction) > tolerance) {
-      console.error('❌ Cost reduction calculation error:', { expected: expectedCostReduction, actual: costReduction });
-    }
-    
-    return {
-      savingsValid: Math.abs(monthlySavings - expectedSavings) <= tolerance,
-      roiValid: Math.abs(roi - expectedROI) <= tolerance,
-      costReductionValid: Math.abs(costReduction - expectedCostReduction) <= tolerance
-    };
-  };
-
-  // Real-time ROI calculation with precision protection
+  // BULLETPROOF ROI calculation using protected engine
   const calculateROI = () => {
     // Reset results if inputs are invalid or empty
     if (!callVolume || !interactionVolume || callVolumeError || interactionVolumeError) {
@@ -156,70 +125,36 @@ const ROICalculatorRedesigned = () => {
       return;
     }
 
-    const country = COUNTRIES[selectedCountry];
-    
-    // Different AHT for calls vs interactions
-    const callAHT = 8; // minutes per call
-    const interactionAHT = 5; // minutes per interaction
-    
-    // Traditional BPO Cost Calculation with separate AHT (PRECISION: Use exact calculations)
-    const callMinutes = calls * callAHT;
-    const interactionMinutes = interactions * interactionAHT;
-    const totalMinutes = callMinutes + interactionMinutes;
-    const traditionalMonthlyCost = Math.round((totalMinutes * country.bpoPerMin) * 100) / 100; // Round to 2 decimals
-    
-    // SentraTech Cost Calculation with proportional pricing (PRECISION: Exact proportions)
-    const callCost = Math.round(((calls / 1000) * CALL_COST_PER_1K) * 100) / 100;
-    const interactionCost = Math.round(((interactions / 1000) * INTERACTION_COST_PER_1K) * 100) / 100;
-    const sentraTechPlatformCost = Math.round((callCost + interactionCost) * 100) / 100;
-    
-    // Calculate equivalent bundles (for display purposes)
-    const bundlesNeeded = Math.round((sentraTechPlatformCost / SENTRATECH_COST_PER_1K) * 1000) / 1000; // 3 decimal precision
-    
-    // Final costs (PRECISION: All calculations use exact math)
-    const sentraTechTotalCost = sentraTechPlatformCost;
-    
-    // Calculate savings and ROI (PRECISION: Exact calculations)
-    const monthlySavings = Math.round((traditionalMonthlyCost - sentraTechTotalCost) * 100) / 100;
-    const yearlySavings = Math.round((monthlySavings * 12) * 100) / 100;
-    const yearlyTraditionalCost = Math.round((traditionalMonthlyCost * 12) * 100) / 100;
-    const yearlySentraTechCost = Math.round((sentraTechTotalCost * 12) * 100) / 100;
-    
-    // ROI Calculation: (Savings / Investment) * 100 (PRECISION: Exact formula)
-    const roi = sentraTechTotalCost > 0 ? Math.round(((monthlySavings / sentraTechTotalCost) * 100) * 10) / 10 : 0; // 1 decimal
-    
-    // Cost reduction percentage (PRECISION: Exact formula)
-    const costReduction = traditionalMonthlyCost > 0 ? Math.round(((monthlySavings / traditionalMonthlyCost) * 100) * 10) / 10 : 0; // 1 decimal
-
-    const calculationResults = {
-      traditionalMonthlyCost,
-      sentraTechMonthlyCost: sentraTechTotalCost,
-      monthlySavings,
-      yearlyTraditionalCost,
-      yearlySentraTechCost,
-      yearlySavings,
-      roi,
-      costReduction,
-      bundlesNeeded,
-      humanHandledPercentage: 100 - AUTOMATION_PERCENTAGE
-    };
-    
-    // Protected validation using test suite
-    const validation = validateROICalculation(
-      { calls, interactions, country: selectedCountry },
-      calculationResults,
-      0.1 // tolerance
-    );
-    
-    if (!validation.valid) {
-      console.error('❌ ROI Calculation validation failed:', validation.validations);
-      console.warn('⚠️ Check calculation logic for precision errors');
+    try {
+      // Import the bulletproof engine
+      import('../utils/roiCalculatorFixed.js').then(({ ROICalculatorEngine }) => {
+        
+        // Use the protected calculation engine
+        const protectedResults = ROICalculatorEngine.calculate(calls, interactions, selectedCountry);
+        
+        console.log('🔒 Protected ROI Calculation Results:', protectedResults);
+        
+        // Map protected results to component state
+        const calculationResults = {
+          traditionalMonthlyCost: protectedResults.traditionalMonthlyCost,
+          sentraTechMonthlyCost: protectedResults.sentraTechMonthlyCost,
+          monthlySavings: protectedResults.monthlySavings,
+          yearlyTraditionalCost: protectedResults.yearlyTraditionalCost,
+          yearlySentraTechCost: protectedResults.yearlySentraTechCost,
+          yearlySavings: protectedResults.yearlySavings,
+          roi: protectedResults.roi,
+          costReduction: protectedResults.costReduction,
+          bundlesNeeded: protectedResults.bundlesNeeded,
+          humanHandledPercentage: protectedResults.humanHandledPercentage
+        };
+        
+        setResults(calculationResults);
+      });
+      
+    } catch (error) {
+      console.error('❌ ROI Calculation failed:', error);
+      setResults(null);
     }
-    
-    // Debug logging for development
-    logCalculationDebug(calls, interactions, calculationResults);
-
-    setResults(calculationResults);
   };
 
   // Use protected formatting functions
