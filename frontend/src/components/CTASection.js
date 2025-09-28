@@ -226,7 +226,8 @@ const CTASection = () => {
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST,
-        demoData
+        demoData,
+        { formType: 'demo_request' }
       );
 
       if (result.success) {
