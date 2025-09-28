@@ -79,28 +79,92 @@ export const DATA_FORMATS = {
 };
 
 /**
- * Form submission helper function
+ * Enhanced form submission helper function with proper authentication and error handling
  */
 export const submitFormToDashboard = async (endpoint, data) => {
+  const fullUrl = `${DASHBOARD_CONFIG.API_BASE_URL}${endpoint}`;
+  
+  console.log('🔄 Starting form submission:', {
+    endpoint,
+    url: fullUrl,
+    dataKeys: Object.keys(data),
+    timestamp: new Date().toISOString()
+  });
+  
   try {
-    const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${endpoint}`, {
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
       },
+      credentials: 'omit', // No cookies required
       body: JSON.stringify(data)
     });
     
+    // Log response details for debugging
+    console.log('📡 Response received:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries())
+    });
+    
+    // Handle response
+    if (!response.ok) {
+      // Log detailed error information
+      const errorText = await response.text();
+      console.error('❌ HTTP Error Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+        url: fullUrl
+      });
+      
+      // Try to parse error as JSON
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { detail: errorText || `HTTP ${response.status}: ${response.statusText}` };
+      }
+      
+      throw new Error(errorData.detail || errorData.message || `Server error: ${response.status}`);
+    }
+    
     const result = await response.json();
     
-    if (response.ok && result.success) {
+    console.log('✅ Form submission successful:', {
+      success: result.success,
+      id: result.id || result.application_id,
+      message: result.message
+    });
+    
+    if (result.success) {
       return { success: true, data: result };
     } else {
-      throw new Error(result.detail || 'Form submission failed');
+      throw new Error(result.detail || result.message || 'Form submission failed');
     }
+    
   } catch (error) {
-    console.error('Form submission error:', error);
-    return { success: false, error: error.message };
+    // Enhanced error logging
+    console.error('💥 Form submission error:', {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      url: fullUrl,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Provide user-friendly error messages
+    let userMessage = error.message;
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      userMessage = 'Network error: Please check your internet connection and try again.';
+    } else if (error.message.includes('CORS')) {
+      userMessage = 'Connection error: Please try again or contact support.';
+    }
+    
+    return { success: false, error: userMessage };
   }
 };
 
