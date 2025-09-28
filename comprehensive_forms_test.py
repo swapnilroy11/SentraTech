@@ -101,23 +101,51 @@ class ComprehensiveFormsTester:
             return False
     
     def test_demo_request_form(self):
-        """Test Demo Request Form - POST to /api/ingest/demo_requests"""
+        """Test Demo Request Form - POST /api/demo/request"""
         print("\n=== Testing Demo Request Form ===")
         
+        # Test data with all required fields
         test_data = {
-            "user_name": "Sarah Johnson",
-            "email": "sarah.johnson@techcorp.com",
-            "company": "TechCorp Solutions",
-            "company_website": "https://techcorp.com",
-            "phone": "+1-555-0123",
-            "call_volume": 15000,
-            "interaction_volume": 25000,
-            "message": "We're interested in implementing AI-powered customer support for our growing business. We handle about 15,000 calls monthly and need better automation.",
-            "source": "website_demo_form"
+            "name": "John Smith",
+            "email": "john.smith@testcompany.com",
+            "company": "Test Company Inc",
+            "phone": "+1-555-123-4567",
+            "message": "We are interested in a demo of your AI customer support platform",
+            "preferredDate": "2024-02-15"
         }
         
         try:
             print(f"📝 Submitting demo request...")
+            print(f"   Test Data: {json.dumps(test_data, indent=2)}")
+            
+            response = requests.post(f"{BACKEND_URL}/demo/request", json=test_data, timeout=30)
+            
+            print(f"   Response Status: {response.status_code}")
+            print(f"   Response Headers: {dict(response.headers)}")
+            
+            if response.status_code == 200:
+                result = response.json()
+                print(f"   Response Body: {json.dumps(result, indent=2)}")
+                
+                # Check response structure
+                if result.get("success") and result.get("reference_id"):
+                    self.reference_ids["demo_request"] = result["reference_id"]
+                    self.log_test("Demo Request Form - Valid Submission", True, 
+                                f"✅ Demo request successful! Reference ID: {result['reference_id']}")
+                    return True
+                else:
+                    self.log_test("Demo Request Form - Valid Submission", False, 
+                                f"Invalid response structure: {result}")
+                    return False
+            else:
+                error_text = response.text
+                self.log_test("Demo Request Form - Valid Submission", False, 
+                            f"HTTP {response.status_code}: {error_text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Demo Request Form - Valid Submission", False, f"Exception: {str(e)}")
+            return False
             response = requests.post(f"{BACKEND_URL}/ingest/demo_requests", 
                                    json=test_data, headers=self.headers, timeout=30)
             
