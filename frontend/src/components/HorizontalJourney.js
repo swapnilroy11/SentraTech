@@ -35,7 +35,7 @@ const HorizontalJourney = () => {
     // Calculate position to center modal above the card
     setModalPosition({
       x: rect.left + (rect.width / 2), // Center horizontally on card
-      y: rect.top + scrollY - 300 // Position above card with margin, account for scroll
+      y: rect.top + scrollY - 400 // Position above card with more margin for bigger modal
     });
     
     setSelectedPanel(stage);
