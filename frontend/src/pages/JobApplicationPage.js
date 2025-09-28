@@ -158,9 +158,9 @@ const JobApplicationPage = () => {
     }
     
     if (step === 2) {
-      if (!resume && !formData.linkedinProfile.trim()) {
-        newErrors.resume = 'Please upload a resume or provide LinkedIn profile';
-        newErrors.linkedinProfile = 'Please upload a resume or provide LinkedIn profile';
+      if (!resume && !formData.portfolioWebsite.trim()) {
+        newErrors.resume = 'Please upload a resume or provide portfolio website';
+        newErrors.portfolioWebsite = 'Please upload a resume or provide portfolio website';
       }
     }
     
