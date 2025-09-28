@@ -163,8 +163,8 @@ const JobApplicationPage = () => {
     }
     
     if (step === 3) {
-      if (!formData.whySentraTech.trim()) {
-        newErrors.whySentraTech = 'Please tell us why you want to join SentraTech';
+      if (!formData.why_sentratech.trim()) {
+        newErrors.why_sentratech = 'Please tell us why you want to join SentraTech';
       }
     }
     
