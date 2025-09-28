@@ -637,6 +637,21 @@ const HorizontalJourney = () => {
       <AnimatePresence>
         {selectedPanel && (() => {
           console.log('🎯 Modal is rendering! selectedPanel:', selectedPanel?.title);
+          
+          // Create or get modal container
+          let modalContainer = document.getElementById('customer-journey-modal-root');
+          if (!modalContainer) {
+            modalContainer = document.createElement('div');
+            modalContainer.id = 'customer-journey-modal-root';
+            modalContainer.style.position = 'fixed';
+            modalContainer.style.top = '0';
+            modalContainer.style.left = '0';
+            modalContainer.style.zIndex = '99999';
+            modalContainer.style.pointerEvents = 'auto';
+            document.body.appendChild(modalContainer);
+            console.log('🎯 Created modal container:', modalContainer);
+          }
+          
           return createPortal(
           <motion.div
             initial={{ opacity: 0 }}
