@@ -7,9 +7,9 @@ const AboutUsPage = () => {
   const navigate = useNavigate();
 
   const stats = [
-    { label: 'Enterprise Customers', value: '500+', icon: Users },
-    { label: 'Average Response Time', value: '50ms', icon: Zap },
-    { label: 'Automation Rate', value: '70%', icon: Target },
+    { label: 'Founded', value: '2024', icon: Users },
+    { label: 'AI Response Time', value: '<100ms', icon: Zap },
+    { label: 'Target Automation', value: '70%+', icon: Target },
     { label: 'Platform Uptime', value: '99.9%', icon: Shield }
   ];
 
