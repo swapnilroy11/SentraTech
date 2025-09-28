@@ -1016,7 +1016,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = f"{external_dashboard_url}/api/ingest/contact_requests"
+                dashboard_url = DashboardConfig.get_dashboard_endpoint("/api/ingest/contact_requests")
                 
                 response = await client.post(
                     dashboard_url,
