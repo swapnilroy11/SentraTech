@@ -900,32 +900,32 @@ const JobApplicationPage = () => {
         </section>
 
         {/* Main Content */}
-        <div id="application-form" className="container mx-auto max-w-4xl px-6 py-12">
-          <div className="grid lg:grid-cols-3 gap-12">
+        <div id="application-form" className="container mx-auto max-w-6xl px-6 py-12">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Job Information Sidebar */}
             <div className="lg:col-span-1">
               <div className="bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6 sticky top-6">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Briefcase size={20} className="text-[#00FF41]" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">{job.title}</h3>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-semibold text-white break-words">{job.title}</h3>
                     <p className="text-sm text-[rgb(161,161,170)]">{job.department}</p>
                   </div>
                 </div>
                 
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <MapPin size={16} className="text-[#00FF41]" />
-                    <span className="text-[rgb(218,218,218)]">{job.location}</span>
+                  <div className="flex items-start space-x-2">
+                    <MapPin size={16} className="text-[#00FF41] flex-shrink-0 mt-0.5" />
+                    <span className="text-[rgb(218,218,218)] break-words">{job.location}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock size={16} className="text-[#00FF41]" />
+                    <Clock size={16} className="text-[#00FF41] flex-shrink-0" />
                     <span className="text-[rgb(218,218,218)]">{job.type}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Users size={16} className="text-[#00FF41]" />
+                    <Users size={16} className="text-[#00FF41] flex-shrink-0" />
                     <span className="text-[rgb(218,218,218)]">Salary: {job.salary}</span>
                   </div>
                 </div>
@@ -940,11 +940,13 @@ const JobApplicationPage = () => {
 
             {/* Application Form */}
             <div className="lg:col-span-2">
-              <div className="bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8">
-                {renderStep()}
+              <div className="bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6 lg:p-8">
+                <div className="max-w-full overflow-hidden">
+                  {renderStep()}
+                </div>
                 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between pt-8 border-t border-[rgb(63,63,63)] mt-8">
+                <div className="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t border-[rgb(63,63,63)] mt-8">
                   <button
                     onClick={handlePrevious}
                     disabled={currentStep === 1}
@@ -956,7 +958,7 @@ const JobApplicationPage = () => {
                   {currentStep < steps.length ? (
                     <button
                       onClick={handleNext}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors flex items-center space-x-2"
+                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors flex items-center justify-center space-x-2"
                     >
                       <span>Continue</span>
                       <ArrowLeft size={16} className="rotate-180" />
@@ -965,7 +967,7 @@ const JobApplicationPage = () => {
                     <button
                       onClick={handleSubmit}
                       disabled={isSubmitting || submitStatus === 'success'}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                     >
                       <Send size={16} />
                       <span>{isSubmitting ? 'Submitting...' : 'Submit Application'}</span>
