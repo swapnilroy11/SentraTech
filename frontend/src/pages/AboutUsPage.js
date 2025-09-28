@@ -149,27 +149,27 @@ const AboutUsPage = () => {
           </div>
         </div>
 
-        {/* Values Section */}
+        {/* Values Section - Optimized */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Our Core Values</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Our Core Values</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              These principles guide everything we do, from product development to customer relationships.
+              These principles guide everything we do as we build the next generation of AI customer support solutions.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             {values.map((value, index) => {
               const Icon = value.icon;
               return (
-                <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8 hover:border-[#00FF41]/30 transition-colors duration-300">
+                <div key={`value-${index}`} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6 md:p-8 hover:border-[#00FF41]/30 transition-colors duration-300 transform hover:scale-105">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg flex items-center justify-center mr-4">
-                      <Icon size={24} className="text-[#00FF41]" />
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                      <Icon size={20} className="text-[#00FF41] md:w-6 md:h-6" />
                     </div>
-                    <h3 className="text-xl font-semibold text-white">{value.title}</h3>
+                    <h3 className="text-lg md:text-xl font-semibold text-white">{value.title}</h3>
                   </div>
-                  <p className="text-[rgb(218,218,218)] leading-relaxed">
+                  <p className="text-[rgb(218,218,218)] leading-relaxed text-sm md:text-base">
                     {value.description}
                   </p>
                 </div>
