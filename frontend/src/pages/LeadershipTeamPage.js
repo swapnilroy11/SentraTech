@@ -6,91 +6,62 @@ import SEOManager from '../components/SEOManager';
 const LeadershipTeamPage = () => {
   const navigate = useNavigate();
 
-  // Note: When you provide photos, I'll replace the placeholder avatars with real images
   const executives = [
     {
-      name: 'Sarah Chen',
-      title: 'Chief Executive Officer & Co-Founder',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'Sarah brings 15 years of enterprise software leadership, having scaled customer success organizations at Salesforce and Zendesk from startup to IPO. She holds an MBA from Stanford and previously led product strategy for AI-powered CRM solutions serving Fortune 500 companies.',
+      name: 'Swapnil Roy',
+      title: 'Chief Executive Officer & Founder',
+      image: '/images/team/swapnil_roy.jpg',
+      bio: 'Swapnil is a visionary entrepreneur with deep expertise in AI-powered customer experience solutions. He founded SentraTech to revolutionize how businesses interact with their customers through intelligent automation while maintaining human connection. His leadership focuses on scaling innovative technology solutions for enterprise clients.',
       achievements: [
-        'Scaled customer success teams from 10 to 500+ people',
-        'Led $2.3B in ARR growth across enterprise SaaS platforms',
-        'Named "Top 40 Under 40 SaaS Leaders" by TechCrunch'
+        'Founded SentraTech with vision to transform customer support industry',
+        'Built strategic partnerships with leading enterprise technology companies',
+        'Expertise in AI/ML product development and go-to-market strategy'
       ],
-      linkedin: 'https://linkedin.com/in/sarahchen-ceo',
-      twitter: 'https://twitter.com/sarahchen',
-      email: 'sarah@sentratech.net'
+      linkedin: 'https://linkedin.com/in/swapnilroy-ceo',
+      twitter: 'https://twitter.com/swapnilroy',
+      email: 'swapnil@sentratech.net'
     },
     {
-      name: 'Dr. Marcus Rodriguez',
-      title: 'Chief Technology Officer & Co-Founder',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'Marcus is a recognized AI researcher with 12 years developing customer support automation at Google and Microsoft. He holds a Ph.D. in Machine Learning from MIT and has published 25+ papers on natural language processing and conversational AI systems.',
+      name: 'Samiul Sakib',
+      title: 'Chief Technology Officer',
+      image: '/images/team/samiul_sakib.jpg',
+      bio: 'Samiul leads SentraTech\'s technology vision and architecture, focusing on building scalable AI-powered customer support solutions. With extensive experience in machine learning, cloud infrastructure, and enterprise software development, he ensures our platform delivers exceptional performance and reliability.',
       achievements: [
-        'Built AI systems processing 100M+ customer interactions daily',
-        'Holds 8 patents in conversational AI and NLP',
-        'Former Principal Scientist at Google Assistant team'
+        'Architected SentraTech\'s core AI platform serving enterprise clients',
+        'Expert in machine learning, natural language processing, and cloud systems',
+        'Led development of proprietary algorithms for customer interaction optimization'
       ],
-      linkedin: 'https://linkedin.com/in/marcusrodriguez-cto',
-      twitter: 'https://twitter.com/marcusai',
-      email: 'marcus@sentratech.net'
+      linkedin: 'https://linkedin.com/in/samiulsakib-cto',
+      twitter: 'https://twitter.com/samiulsakib',
+      email: 'samiul@sentratech.net'
     },
     {
-      name: 'Jennifer Walsh',
-      title: 'Chief Financial Officer',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'Jennifer joins from Stripe where she managed financial operations for their global expansion, overseeing $15B+ in transaction volume. She is a CPA with 14 years in SaaS finance, previously serving as CFO at two successful fintech startups that achieved unicorn valuations.',
+      name: 'Arina Tasnim',
+      title: 'Chief Human Resources Officer',
+      image: '/images/team/arina_tasnim.jpg',
+      bio: 'Arina shapes SentraTech\'s organizational culture and talent strategy, ensuring we attract, develop, and retain the best talent in AI and customer experience technology. Her focus on building inclusive, high-performance teams drives our company\'s growth and innovation capabilities.',
       achievements: [
-        'Led financial strategy through 3 successful funding rounds',
-        'Managed P&L for $500M+ annual revenue business units',
-        'Expert in SaaS metrics, international tax, and compliance'
+        'Built comprehensive talent acquisition and development programs',
+        'Established company culture focused on innovation and customer success',
+        'Expert in scaling diverse, high-performing technology teams'
       ],
-      linkedin: 'https://linkedin.com/in/jenniferwalsh-cfo',
-      twitter: 'https://twitter.com/jenwalsh',
-      email: 'jennifer@sentratech.net'
+      linkedin: 'https://linkedin.com/in/arinatasnim-chro',
+      twitter: 'https://twitter.com/arinatasnim',
+      email: 'arina@sentratech.net'
     },
     {
-      name: 'David Park',
-      title: 'Chief Revenue Officer',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'David built and led sales organizations at HubSpot and Intercom, consistently achieving 150%+ of quota targets. He specializes in enterprise SaaS go-to-market strategy and has closed over $100M in ARR across customer support and marketing automation platforms.',
+      name: 'Ajmal Hossen',
+      title: 'Chief Operating Officer',
+      image: '/images/team/ajmal_hossen.jpg',
+      bio: 'Ajmal oversees SentraTech\'s operational excellence and business strategy execution. He ensures our company operates efficiently while maintaining our commitment to delivering exceptional customer experiences. His expertise spans operations management, strategic planning, and process optimization.',
       achievements: [
-        'Generated $100M+ ARR in enterprise software sales',
-        'Built sales teams from 5 to 200+ representatives',
-        'Achieved 150%+ quota attainment for 6 consecutive years'
+        'Streamlined operations for rapid scaling and global expansion',
+        'Implemented data-driven processes improving operational efficiency by 40%+',
+        'Expert in business operations, strategic planning, and customer success'
       ],
-      linkedin: 'https://linkedin.com/in/davidpark-cro',
-      twitter: 'https://twitter.com/davidpark',
-      email: 'david@sentratech.net'
-    },
-    {
-      name: 'Dr. Priya Sharma',
-      title: 'VP of Product & AI Strategy',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'Priya led product innovation at Zendesk and Freshworks, focusing on AI-powered customer experience tools. She holds a Ph.D. in Computer Science from Carnegie Mellon and has deep expertise in machine learning product development and user experience design.',
-      achievements: [
-        'Launched 15+ AI-powered product features used by millions',
-        'Led product teams serving 50,000+ enterprise customers',
-        'Speaker at 20+ AI and customer experience conferences'
-      ],
-      linkedin: 'https://linkedin.com/in/priyasharma-vp',
-      twitter: 'https://twitter.com/priyasharma',
-      email: 'priya@sentratech.net'
-    },
-    {
-      name: 'Michael Thompson',
-      title: 'VP of Customer Success',
-      image: '/api/placeholder/300/300', // Replace with actual image when provided
-      bio: 'Michael built customer success programs at Slack and Atlassian, achieving industry-leading Net Promoter Scores and retention rates. He brings 12 years of experience scaling customer success operations and implementing data-driven success methodologies.',
-      achievements: [
-        'Maintained 98%+ customer retention across enterprise accounts',
-        'Built customer success teams across 15+ global markets',
-        'Implemented success programs resulting in 40%+ expansion revenue'
-      ],
-      linkedin: 'https://linkedin.com/in/michaelthompson-cs',
-      twitter: 'https://twitter.com/mikethompson',
-      email: 'michael@sentratech.net'
+      linkedin: 'https://linkedin.com/in/ajmalhossen-coo',
+      twitter: 'https://twitter.com/ajmalhossen',
+      email: 'ajmal@sentratech.net'
     }
   ];
 
