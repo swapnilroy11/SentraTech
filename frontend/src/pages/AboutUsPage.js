@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ArrowLeft, Users, Target, Zap, Shield, Globe, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SEOManager from '../components/SEOManager';
@@ -6,14 +6,15 @@ import SEOManager from '../components/SEOManager';
 const AboutUsPage = () => {
   const navigate = useNavigate();
 
-  const stats = [
+  // Memoize static data to prevent re-renders
+  const stats = useMemo(() => [
     { label: 'Founded', value: '2024', icon: Users },
     { label: 'AI Response Time', value: '<100ms', icon: Zap },
     { label: 'Target Automation', value: '70%+', icon: Target },
     { label: 'Platform Uptime', value: '99.9%', icon: Shield }
-  ];
+  ], []);
 
-  const values = [
+  const values = useMemo(() => [
     {
       icon: Users,
       title: 'Customer Obsession',
@@ -31,12 +32,12 @@ const AboutUsPage = () => {
     },
     {
       icon: Globe,
-      title: 'Global Impact',
-      description: 'Our mission extends worldwide, helping businesses of all sizes deliver outstanding customer support across every channel and timezone.'
+      title: 'Global Vision',
+      description: 'Our mission extends worldwide, positioning ourselves to help businesses of all sizes deliver outstanding customer support across every channel and timezone.'
     }
-  ];
+  ], []);
 
-  const milestones = [
+  const milestones = useMemo(() => [
     {
       year: '2024',
       title: 'Company Founded',
@@ -62,7 +63,20 @@ const AboutUsPage = () => {
       title: 'Scaling Vision',
       description: 'Positioned to become the next market leader in AI customer support, with plans to serve enterprises globally and establish industry benchmarks.'
     }
-  ];
+  ], []);
+
+  // Optimized navigation handlers
+  const handleBackNavigation = useCallback(() => {
+    navigate('/', { replace: false });
+  }, [navigate]);
+
+  const handleDemoNavigation = useCallback(() => {
+    navigate('/demo-request');
+  }, [navigate]);
+
+  const handleCaseStudiesNavigation = useCallback(() => {
+    navigate('/case-studies');
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
