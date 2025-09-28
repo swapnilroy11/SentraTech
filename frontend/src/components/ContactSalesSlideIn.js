@@ -256,7 +256,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
       clearFormCache();
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.CONTACT_SALES, dashboardData);
+      const result = await submitForm(FORM_CONFIG.ENDPOINTS.CONTACT_SALES, dashboardData);
 
       if (result.success) {
         setSubmitStatus('success');
