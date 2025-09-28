@@ -169,30 +169,33 @@ function App() {
             {/* Breadcrumbs */}
             <Breadcrumbs />
             
-            {/* Main Content with Page Transitions */}
+            {/* Main Content with Page Transitions and Lazy Loading */}
             <PageTransition>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/features" element={<FeaturesPage />} />
-                <Route path="/case-studies" element={<CaseStudiesPage />} />
-                <Route path="/security" element={<SecurityPage />} />
-                <Route path="/roi-calculator" element={<ROICalculatorPage />} />
-                <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/demo-request" element={<DemoRequestPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-                <Route path="/cookie-policy" element={<CookiePolicyPage />} />
-                <Route path="/about-us" element={<AboutUsPage />} />
-                <Route path="/leadership-team" element={<LeadershipTeamPage />} />
-                <Route path="/investor-relations" element={<InvestorRelationsPage />} />
-                <Route path="/support-center" element={<SupportCenterPage />} />
-                <Route path="/contact-sales-management" element={<ContactSalesPage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/careers/apply/:jobId" element={<JobApplicationPage />} />
-                
-                {/* Custom 404 Page */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  {/* Critical pages loaded immediately */}
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                  
+                  {/* Lazy-loaded pages for performance */}
+                  <Route path="/features" element={<FeaturesPage />} />
+                  <Route path="/case-studies" element={<CaseStudiesPage />} />
+                  <Route path="/security" element={<SecurityPage />} />
+                  <Route path="/roi-calculator" element={<ROICalculatorPage />} />
+                  <Route path="/pricing" element={<PricingPage />} />
+                  <Route path="/demo-request" element={<DemoRequestPage />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                  <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+                  <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+                  <Route path="/about-us" element={<AboutUsPage />} />
+                  <Route path="/leadership-team" element={<LeadershipTeamPage />} />
+                  <Route path="/investor-relations" element={<InvestorRelationsPage />} />
+                  <Route path="/support-center" element={<SupportCenterPage />} />
+                  <Route path="/contact-sales-management" element={<ContactSalesPage />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/careers/apply/:jobId" element={<JobApplicationPage />} />
+                </Routes>
+              </Suspense>
             </PageTransition>
             
             {/* Global Footer */}
