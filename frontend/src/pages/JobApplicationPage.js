@@ -265,7 +265,7 @@ const JobApplicationPage = () => {
       clearFormCache();
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData);
+      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData);
       
       if (result.success) {
         setSubmitStatus('success');
