@@ -59,10 +59,9 @@
 
 test_plan:
   current_focus:
-    - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
+    - "Frontend UI Integration Testing for Forms"
   stuck_tasks:
-    - "Demo Request Form Supabase Submission Issue"
-    - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
+    - "Frontend UI Integration Testing for Forms"
   completed_focus:
     - "Demo Request Form End-to-End Submission Testing"
     - "Support Center Page Comprehensive Functionality and Performance Testing"
@@ -74,6 +73,8 @@ test_plan:
     - "ROI Calculator Email Modal Auto-Close Bug Fix Testing"
     - "Enhanced Customer Journey Modal with Comprehensive Step-by-Step Information"
     - "Comprehensive SentraTech Forms Dashboard Synchronization Testing"
+    - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
+    - "Comprehensive SentraTech Forms Backend Testing"
   test_all: false
   test_priority: "high_first"
 
