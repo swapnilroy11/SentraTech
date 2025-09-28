@@ -172,5 +172,28 @@ export const submitFormToDashboard = async (endpoint, data) => {
  * Get full dashboard endpoint URL
  */
 export const getDashboardEndpoint = (endpoint) => {
-  return `${DASHBOARD_CONFIG.DASHBOARD_URL}${endpoint}`;
+  return `${DASHBOARD_CONFIG.API_BASE_URL}${endpoint}`;
+};
+
+/**
+ * Clear any cached data and force refresh
+ */
+export const clearFormCache = () => {
+  // Clear localStorage cache if any
+  const keys = Object.keys(localStorage);
+  keys.forEach(key => {
+    if (key.includes('form') || key.includes('dashboard') || key.includes('sentra')) {
+      localStorage.removeItem(key);
+    }
+  });
+  
+  // Clear sessionStorage cache if any  
+  const sessionKeys = Object.keys(sessionStorage);
+  sessionKeys.forEach(key => {
+    if (key.includes('form') || key.includes('dashboard') || key.includes('sentra')) {
+      sessionStorage.removeItem(key);
+    }
+  });
+  
+  console.log('🧹 Form cache cleared');
 };
