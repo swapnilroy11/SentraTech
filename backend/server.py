@@ -3482,6 +3482,213 @@ async def send_contact_notification(notification: ContactNotification):
 # End of Contact Sales Notification Endpoint  
 # ============================================================================
 
+# ============================================================================
+# Additional Form Submission Endpoints
+# ============================================================================
+
+# Contact Sales Form Models
+class ContactSalesRequest(BaseModel):
+    fullName: str = Field(..., min_length=2, max_length=100)
+    workEmail: EmailStr
+    companyName: str = Field(..., min_length=2, max_length=100)
+    message: str = Field(..., min_length=10, max_length=1000)
+    phone: Optional[str] = Field(None, max_length=20)
+    companyWebsite: Optional[str] = Field(None, max_length=200)
+    monthlyVolume: Optional[int] = Field(None, ge=0)
+    preferredContactMethod: Optional[str] = Field(None, max_length=50)
+
+class ContactSalesResponse(BaseModel):
+    success: bool
+    message: str
+    reference_id: str
+    timestamp: str
+
+@api_router.post("/contact/sales", response_model=ContactSalesResponse)
+async def submit_contact_sales(request: ContactSalesRequest):
+    """
+    Submit contact sales form
+    Endpoint: POST /api/contact/sales
+    """
+    try:
+        logger.info(f"📞 Contact sales request received: {request.workEmail} from {request.companyName}")
+        
+        # Generate a reference ID for tracking
+        reference_id = str(uuid.uuid4())
+        
+        # Prepare data for storage
+        contact_data = {
+            "id": reference_id,
+            "full_name": request.fullName,
+            "work_email": request.workEmail,
+            "company_name": request.companyName,
+            "message": request.message,
+            "phone": request.phone,
+            "company_website": request.companyWebsite,
+            "monthly_volume": request.monthlyVolume,
+            "preferred_contact_method": request.preferredContactMethod,
+            "status": "new",
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Store in database
+        contact_dict = contact_data.copy()
+        contact_dict['created_at'] = contact_dict['created_at'].isoformat()
+        contact_dict['updated_at'] = contact_dict['updated_at'].isoformat()
+        
+        await db.contact_sales.insert_one(contact_dict)
+        
+        logger.info(f"✅ Contact sales request stored - Reference: {reference_id}")
+        
+        return ContactSalesResponse(
+            success=True,
+            message="Contact sales request submitted successfully! We'll respond within 24 hours.",
+            reference_id=reference_id,
+            timestamp=datetime.now(timezone.utc).isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Error processing contact sales request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process contact sales request. Please try again.")
+
+# Newsletter Subscription Models
+class NewsletterRequest(BaseModel):
+    email: EmailStr
+    name: Optional[str] = Field(None, max_length=100)
+
+class NewsletterResponse(BaseModel):
+    success: bool
+    message: str
+    reference_id: str
+    timestamp: str
+
+@api_router.post("/newsletter/subscribe", response_model=NewsletterResponse)
+async def subscribe_newsletter(request: NewsletterRequest):
+    """
+    Submit newsletter subscription
+    Endpoint: POST /api/newsletter/subscribe
+    """
+    try:
+        logger.info(f"📧 Newsletter subscription request: {request.email}")
+        
+        # Generate a reference ID for tracking
+        reference_id = str(uuid.uuid4())
+        
+        # Check if email already exists
+        existing = await db.newsletter_subscriptions.find_one({"email": request.email, "status": "active"})
+        if existing:
+            return NewsletterResponse(
+                success=True,
+                message="You're already subscribed to our newsletter!",
+                reference_id=existing.get("id", reference_id),
+                timestamp=datetime.now(timezone.utc).isoformat()
+            )
+        
+        # Prepare data for storage
+        subscription_data = {
+            "id": reference_id,
+            "email": request.email,
+            "name": request.name,
+            "status": "active",
+            "subscribed_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Store in database
+        subscription_dict = subscription_data.copy()
+        subscription_dict['subscribed_at'] = subscription_dict['subscribed_at'].isoformat()
+        subscription_dict['updated_at'] = subscription_dict['updated_at'].isoformat()
+        
+        await db.newsletter_subscriptions.insert_one(subscription_dict)
+        
+        logger.info(f"✅ Newsletter subscription stored - Reference: {reference_id}")
+        
+        return NewsletterResponse(
+            success=True,
+            message="Successfully subscribed to our newsletter!",
+            reference_id=reference_id,
+            timestamp=datetime.now(timezone.utc).isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Error processing newsletter subscription: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process newsletter subscription. Please try again.")
+
+# Job Application Models
+class JobApplicationRequest(BaseModel):
+    fullName: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
+    position: str = Field(..., min_length=2, max_length=100)
+    phone: Optional[str] = Field(None, max_length=20)
+    location: Optional[str] = Field(None, max_length=100)
+    experience: Optional[str] = Field(None, max_length=50)
+    portfolio: Optional[str] = Field(None, max_length=200)
+    preferredShifts: Optional[List[str]] = None
+    availabilityDate: Optional[str] = None
+    coverNote: Optional[str] = Field(None, max_length=2000)
+    consentForStorage: bool = Field(..., description="Consent for data storage")
+
+class JobApplicationResponse(BaseModel):
+    success: bool
+    message: str
+    application_id: str
+    timestamp: str
+
+@api_router.post("/job/application", response_model=JobApplicationResponse)
+async def submit_job_application(request: JobApplicationRequest):
+    """
+    Submit job application
+    Endpoint: POST /api/job/application
+    """
+    try:
+        logger.info(f"💼 Job application received: {request.email} for {request.position}")
+        
+        # Generate an application ID for tracking
+        application_id = str(uuid.uuid4())
+        
+        # Prepare data for storage
+        application_data = {
+            "id": application_id,
+            "full_name": request.fullName,
+            "email": request.email,
+            "position": request.position,
+            "phone": request.phone,
+            "location": request.location,
+            "experience": request.experience,
+            "portfolio": request.portfolio,  
+            "preferred_shifts": request.preferredShifts,
+            "availability_date": request.availabilityDate,
+            "cover_note": request.coverNote,
+            "consent_for_storage": request.consentForStorage,
+            "status": "submitted",
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Store in database
+        application_dict = application_data.copy()
+        application_dict['created_at'] = application_dict['created_at'].isoformat()
+        application_dict['updated_at'] = application_dict['updated_at'].isoformat()
+        
+        await db.job_applications.insert_one(application_dict)
+        
+        logger.info(f"✅ Job application stored - Application ID: {application_id}")
+        
+        return JobApplicationResponse(
+            success=True,
+            message="Job application submitted successfully! We'll review your application and get back to you soon.",
+            application_id=application_id,
+            timestamp=datetime.now(timezone.utc).isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Error processing job application: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process job application. Please try again.")
+
+# ============================================================================
+# End of Additional Form Submission Endpoints
+# ============================================================================
+
 # Security Headers Middleware
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
