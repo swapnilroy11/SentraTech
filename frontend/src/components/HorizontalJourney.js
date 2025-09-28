@@ -774,45 +774,61 @@ const HorizontalJourney = () => {
               </div>
             </div>
 
-                  {/* Key Metrics */}
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <BarChart3 style={{ color: selectedPanel.color }} size={18} />
-                      Key Metrics
-                    </h4>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div 
-                        className="rounded-lg p-3"
-                        style={{ 
-                          backgroundColor: `${selectedPanel.color}10`,
-                          border: `1px solid ${selectedPanel.color}30`
-                        }}
-                      >
-                        <div 
-                          className="text-xl font-bold"
-                          style={{ color: selectedPanel.color }}
-                        >
-                          {selectedPanel.metric}
-                        </div>
-                        <div className="text-xs text-[rgb(161,161,170)]">{selectedPanel.metricLabel}</div>
-                      </div>
-                      <div 
-                        className="rounded-lg p-3"
-                        style={{ 
-                          backgroundColor: `${selectedPanel.color}10`,
-                          border: `1px solid ${selectedPanel.color}30`
-                        }}
-                      >
-                        <div 
-                          className="text-xl font-bold"
-                          style={{ color: selectedPanel.color }}
-                        >
-                          {selectedPanel.automationRate}%
-                        </div>
-                        <div className="text-xs text-[rgb(161,161,170)]">Automation</div>
-                      </div>
-                    </div>
+            {/* Key Metrics */}
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ 
+                color: 'white', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginBottom: '12px' 
+              }}>
+                Key Metrics
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{
+                  backgroundColor: `${selectedPanel.color}10`,
+                  border: `1px solid ${selectedPanel.color}30`,
+                  borderRadius: '8px',
+                  padding: '12px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    color: selectedPanel.color, 
+                    fontSize: '20px', 
+                    fontWeight: 'bold' 
+                  }}>
+                    {selectedPanel.metric}
                   </div>
+                  <div style={{ 
+                    color: 'rgb(161,161,170)', 
+                    fontSize: '12px' 
+                  }}>
+                    {selectedPanel.metricLabel}
+                  </div>
+                </div>
+                <div style={{
+                  backgroundColor: `${selectedPanel.color}10`,
+                  border: `1px solid ${selectedPanel.color}30`,
+                  borderRadius: '8px',
+                  padding: '12px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    color: selectedPanel.color, 
+                    fontSize: '20px', 
+                    fontWeight: 'bold' 
+                  }}>
+                    {selectedPanel.automationRate}%
+                  </div>
+                  <div style={{ 
+                    color: 'rgb(161,161,170)', 
+                    fontSize: '12px' 
+                  }}>
+                    Automation
+                  </div>
+                </div>
+              </div>
+            </div>
 
                   {/* Integration Channels */}
                   <div className="space-y-3">
