@@ -39,8 +39,267 @@ from googleapiclient.discovery import build
 # Import performance optimization modules
 from cache_manager import cached, cache_manager, SpecializedCaches, warm_cache, cache_maintenance
 
-# Import dashboard configuration
-from dashboard_config import DashboardConfig
+# Email Notification System
+class EmailService:
+    """Enhanced email service for candidate notifications"""
+    
+    def __init__(self):
+        self.smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+        self.smtp_port = int(os.environ.get('SMTP_PORT', '587'))
+        self.smtp_username = os.environ.get('SMTP_USERNAME', '')
+        self.smtp_password = os.environ.get('SMTP_PASSWORD', '')
+        
+    def get_email_templates(self):
+        """Email templates for different candidate statuses"""
+        return {
+            "application_received": {
+                "subject": "Application Received - {position} at SentraTech",
+                "template": """
+                Dear {candidate_name},
+
+                Thank you for your interest in the {position} role at SentraTech. 
+                We have successfully received your application and will review it carefully.
+
+                What's Next:
+                - Our recruitment team will review your application within 5-7 business days
+                - If your profile matches our requirements, we'll contact you for the next steps
+                - You can expect to hear from us by {expected_response_date}
+
+                Position Applied: {position}
+                Application ID: {application_id}
+                Submitted: {submission_date}
+
+                Thank you for considering SentraTech as your next career opportunity!
+
+                Best regards,
+                SentraTech Recruitment Team
+                careers@sentratech.net
+                """
+            },
+            "under_review": {
+                "subject": "Application Update - Under Review",
+                "template": """
+                Dear {candidate_name},
+
+                Good news! Your application for {position} is currently under review by our hiring team.
+
+                We're impressed with your background and are carefully evaluating your application 
+                alongside other qualified candidates.
+
+                Next Steps:
+                - Our team is conducting detailed reviews this week
+                - Selected candidates will be contacted for interviews
+                - We'll update you on our decision within 3-5 business days
+
+                Thank you for your patience during this process.
+
+                Best regards,
+                SentraTech Recruitment Team
+                """
+            },
+            "interview_scheduled": {
+                "subject": "Interview Scheduled - {position}",
+                "template": """
+                Dear {candidate_name},
+
+                Congratulations! We would like to invite you for an interview for the {position} role.
+
+                Interview Details:
+                - Date: {interview_date}
+                - Time: {interview_time}
+                - Duration: {duration} minutes
+                - Type: {interview_type}
+                - Interviewer: {interviewer_name}
+
+                Calendar Link: {calendar_link}
+
+                What to Expect:
+                - Discussion about your experience and background
+                - Questions about your motivation and cultural fit
+                - Technical assessment (if applicable)
+                - Opportunity to ask questions about SentraTech and the role
+
+                Please confirm your attendance by replying to this email.
+
+                Best regards,
+                SentraTech Recruitment Team
+                """
+            },
+            "hired": {
+                "subject": "Welcome to SentraTech! - Job Offer",
+                "template": """
+                Dear {candidate_name},
+
+                Congratulations! We are delighted to offer you the position of {position} at SentraTech.
+
+                We were impressed with your skills, experience, and enthusiasm during the interview process.
+
+                Next Steps:
+                - Our HR team will contact you within 24 hours with the official offer letter
+                - Please review the terms and conditions carefully
+                - We're excited to welcome you to our growing team!
+
+                Welcome to SentraTech!
+
+                Best regards,
+                SentraTech Recruitment Team
+                """
+            },
+            "rejected": {
+                "subject": "Application Update - {position}",
+                "template": """
+                Dear {candidate_name},
+
+                Thank you for your interest in the {position} role at SentraTech and for taking 
+                the time to apply.
+
+                After careful consideration, we have decided to move forward with other candidates 
+                whose profiles more closely match our current requirements.
+
+                This decision was not easy, and we were impressed by your background and enthusiasm.
+
+                We encourage you to:
+                - Keep an eye on our careers page for future opportunities
+                - Consider applying for other roles that match your skills
+                - Connect with us on LinkedIn for updates
+
+                Thank you again for considering SentraTech, and we wish you all the best in your career journey.
+
+                Best regards,
+                SentraTech Recruitment Team
+                """
+            }
+        }
+    
+    async def send_notification(self, email_data: EmailNotification):
+        """Send email notification to candidate"""
+        try:
+            templates = self.get_email_templates()
+            template = templates.get(email_data.template_name)
+            
+            if not template:
+                logger.error(f"Email template not found: {email_data.template_name}")
+                return False
+            
+            # Format email content
+            subject = template["subject"].format(**email_data.template_data)
+            body = template["template"].format(**email_data.template_data)
+            
+            # Create email message
+            msg = MIMEMultipart()
+            msg['From'] = self.smtp_username
+            msg['To'] = email_data.recipient_email
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'plain'))
+            
+            # Send email
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.smtp_username, self.smtp_password)
+                server.send_message(msg)
+            
+            logger.info(f"Email sent successfully to {email_data.recipient_email}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to send email: {str(e)}")
+            return False
+
+# Google Calendar Integration
+class CalendarService:
+    """Google Calendar integration for interview scheduling"""
+    
+    def __init__(self):
+        self.scopes = ['https://www.googleapis.com/auth/calendar']
+        self.credentials_file = os.environ.get('GOOGLE_CALENDAR_CREDENTIALS', 'calendar_credentials.json')
+        self.token_file = os.environ.get('GOOGLE_CALENDAR_TOKEN', 'calendar_token.json')
+    
+    def authenticate(self):
+        """Authenticate with Google Calendar API"""
+        creds = None
+        if os.path.exists(self.token_file):
+            creds = Credentials.from_authorized_user_file(self.token_file, self.scopes)
+        
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(GoogleRequest())
+            else:
+                if not os.path.exists(self.credentials_file):
+                    logger.warning("Google Calendar credentials not found. Calendar integration disabled.")
+                    return None
+                flow = InstalledAppFlow.from_client_secrets_file(self.credentials_file, self.scopes)
+                creds = flow.run_local_server(port=0)
+            
+            with open(self.token_file, 'w') as token:
+                token.write(creds.to_json())
+        
+        return creds
+    
+    async def create_interview_event(self, interview_data: InterviewSchedule, candidate_name: str):
+        """Create interview event in Google Calendar"""
+        try:
+            creds = self.authenticate()
+            if not creds:
+                logger.warning("Calendar integration not available")
+                return None
+            
+            service = build('calendar', 'v3', credentials=creds)
+            
+            # Parse interview datetime
+            from datetime import datetime, timedelta
+            import dateutil.parser
+            
+            start_time = dateutil.parser.parse(interview_data.interview_datetime)
+            end_time = start_time + timedelta(minutes=interview_data.duration_minutes)
+            
+            event = {
+                'summary': f'Interview - {candidate_name} ({interview_data.interview_type.title()})',
+                'description': f'''
+                Interview Details:
+                - Candidate: {candidate_name}
+                - Position: Customer Support Specialist
+                - Type: {interview_data.interview_type}
+                - Notes: {interview_data.notes or "No additional notes"}
+                
+                Interview ID: {interview_data.candidate_id}
+                ''',
+                'start': {
+                    'dateTime': start_time.isoformat(),
+                    'timeZone': 'Asia/Dhaka',
+                },
+                'end': {
+                    'dateTime': end_time.isoformat(),
+                    'timeZone': 'Asia/Dhaka',
+                },
+                'attendees': [
+                    {'email': interview_data.interviewer_email},
+                ],
+                'reminders': {
+                    'useDefault': False,
+                    'overrides': [
+                        {'method': 'email', 'minutes': 24 * 60},
+                        {'method': 'popup', 'minutes': 30},
+                    ],
+                },
+            }
+            
+            event_result = service.events().insert(calendarId='primary', body=event).execute()
+            logger.info(f"Interview event created: {event_result.get('id')}")
+            
+            return {
+                'event_id': event_result.get('id'),
+                'calendar_link': event_result.get('htmlLink'),
+                'start_time': start_time.isoformat(),
+                'end_time': end_time.isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to create calendar event: {str(e)}")
+            return None
+
+# Initialize services
+email_service = EmailService()
+calendar_service = CalendarService()
 
 # Configure logging first
 logging.basicConfig(
