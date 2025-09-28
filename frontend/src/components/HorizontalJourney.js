@@ -695,6 +695,7 @@ const HorizontalJourney = () => {
           onClick={closeModal}
         >
           <div
+            className="smooth-modal-scroll"
             style={{
               position: 'absolute',
               left: `${modalPosition.x - 275}px`, // Center by subtracting half width (550/2)
@@ -708,7 +709,9 @@ const HorizontalJourney = () => {
               boxShadow: `0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px ${selectedPanel.color}40`,
               zIndex: 1000000,
               maxHeight: '85vh',
-              overflowY: 'auto'
+              overflowY: 'auto',
+              transform: 'translateZ(0)', // Enable hardware acceleration
+              WebkitTransform: 'translateZ(0)' // Safari hardware acceleration
             }}
             onClick={(e) => e.stopPropagation()}
           >
