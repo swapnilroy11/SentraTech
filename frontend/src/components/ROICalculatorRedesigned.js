@@ -191,7 +191,7 @@ const ROICalculatorRedesigned = () => {
     }
   };
 
-  const formatPercentage = formatPercentagePrecise;
+  const formatPercentage = formatPercentageProtected;
 
   // Handle email report submission
   const handleEmailSubmission = async () => {
