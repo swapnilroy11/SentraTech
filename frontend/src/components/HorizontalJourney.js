@@ -672,15 +672,36 @@ const HorizontalJourney = () => {
                   scrollbarColor: `${selectedPanel.color}40 transparent`
                 }}
               >
-              {/* Close Button */}
-              <Button
-                onClick={closeModal}
-                variant="ghost"
-                size="sm"
-                className="absolute top-4 right-4 w-8 h-8 p-0 text-white hover:bg-white/10 z-10"
-              >
-                <X size={16} />
-              </Button>
+                {/* Custom scrollbar styles */}
+                <style jsx>{`
+                  .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                  }
+                  .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                  }
+                  .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: ${selectedPanel.color}40;
+                    border-radius: 3px;
+                  }
+                  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: ${selectedPanel.color}60;
+                  }
+                `}</style>
+
+                {/* Close Button */}
+                <Button
+                  onClick={closeModal}
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-3 right-3 w-7 h-7 p-0 text-white hover:bg-white/10 z-20"
+                  style={{ 
+                    borderColor: selectedPanel.color + '40',
+                    color: selectedPanel.color
+                  }}
+                >
+                  <X size={14} />
+                </Button>
 
               {/* Stage Content */}
               <div className="space-y-6">
