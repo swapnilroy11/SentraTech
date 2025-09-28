@@ -249,17 +249,14 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
         preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
       };
 
-      // Use new dashboard config
-      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
+      // Use enhanced dashboard config with proper authentication
+      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
       
-      // Submit directly to dashboard (no authentication required)
-      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dashboardData)
-      });
+      // Clear any cached data
+      clearFormCache();
+      
+      // Submit using enhanced helper function with authentication and error handling
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES, dashboardData);
 
       if (response.ok) {
         const result = await response.json();
