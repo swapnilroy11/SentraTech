@@ -1,0 +1,53 @@
+# Ingress Configuration with WebSocket Support
+# Update namespace, service names, and host to match your environment
+# Apply with: kubectl apply -f ingress-websocket.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin-proxy-ingress
+  namespace: emergent-agents-env  # UPDATE THIS TO YOUR NAMESPACE
+  annotations:
+    # WebSocket support annotations
+    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Additional recommended settings
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    # SSL settings
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - admin-matrix.preview.emergentagent.com
+    secretName: admin-proxy-tls
+  rules:
+  - host: admin-matrix.preview.emergentagent.com
+    http:
+      paths:
+      # WebSocket endpoint - ensure this routes to backend service port 8001
+      - path: /api/ws
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service  # UPDATE THIS TO YOUR ACTUAL SERVICE NAME
+            port:
+              number: 8001  # Ensure this matches your backend service port
+      # API endpoints - ensure this routes to backend service port 8001
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service  # UPDATE THIS TO YOUR ACTUAL SERVICE NAME
+            port:
+              number: 8001  # Ensure this matches your backend service port
+      # Frontend static files (if admin proxy serves both frontend and backend)
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service  # UPDATE THIS TO YOUR ACTUAL SERVICE NAME
+            port:
+              number: 80  # Frontend port, or same as backend if single service
