@@ -606,18 +606,17 @@ const SupportCenterPage = () => {
             </p>
           </div>
           
-          {/* FAQ Categories - Optimized with Scroll Position Management */}
+          {/* FAQ Categories - Simplified */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8">
             {faqCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.id)}
-                disabled={isTransitioning}
-                className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 will-change-transform ${
+                className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200 ${
                   selectedCategory === category.id
                     ? 'bg-[#00FF41] text-black'
                     : 'bg-[rgb(38,40,42)] text-[rgb(218,218,218)] hover:bg-[rgb(63,63,63)]'
-                } ${isTransitioning ? 'opacity-70 cursor-not-allowed' : 'opacity-100'}`}
+                }`}
               >
                 {category.name} ({category.count})
               </button>
