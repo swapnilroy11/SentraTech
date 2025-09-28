@@ -156,9 +156,9 @@ const JobApplicationPage = () => {
     }
     
     if (step === 2) {
-      if (!resume && !formData.portfolioWebsite.trim()) {
+      if (!resume && !formData.portfolio_website.trim()) {
         newErrors.resume = 'Please upload a resume or provide portfolio website';
-        newErrors.portfolioWebsite = 'Please upload a resume or provide portfolio website';
+        newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
       }
     }
     
