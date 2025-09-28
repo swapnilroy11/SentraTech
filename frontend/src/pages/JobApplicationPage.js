@@ -224,12 +224,7 @@ const JobApplicationPage = () => {
       if (resume) {
         const reader = new FileReader();
         reader.onloadend = async () => {
-          submissionData.resumeFile = {
-            data: reader.result.split(',')[1],
-            name: resume.name,
-            type: resume.type,
-            size: resume.size
-          };
+          submissionData.resume_file = reader.result; // Base64 string
           await submitApplication(submissionData);
         };
         reader.readAsDataURL(resume);
