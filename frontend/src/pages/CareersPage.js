@@ -35,7 +35,7 @@ const CareersPage = () => {
       department: 'Customer Support',
       location: 'Dhaka (Hybrid) or Remote — Bangladesh',
       type: 'Full-time',
-      salary: '35,000–60,000 BDT/month (~$330–$565 USD)',
+      salary: 'Competitive',
       description: 'Handle escalations and complex inquiries while contributing to AI assistant training.',
       requirements: [
         'Fluent English (spoken & written)',
