@@ -169,8 +169,8 @@ const JobApplicationPage = () => {
     }
     
     if (step === 4) {
-      if (!formData.consentForStorage) newErrors.consentForStorage = 'You must consent to data processing';
-      if (!formData.workAuthorization) newErrors.workAuthorization = 'Work authorization status is required';
+      if (!formData.consent_for_storage) newErrors.consent_for_storage = 'You must consent to data processing';
+      if (!formData.work_authorization) newErrors.work_authorization = 'Work authorization status is required';
     }
     
     setErrors(newErrors);
