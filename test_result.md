@@ -65,6 +65,8 @@ test_plan:
   stuck_tasks:
     - "Customer Journey Interactive Cards Fix Verification"
     - "Demo Request Form Supabase Submission Issue"
+  completed_focus:
+    - "Comprehensive Ingest Proxy Integration Testing"
   test_all: false
   test_priority: "high_first"
 
