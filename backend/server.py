@@ -380,6 +380,27 @@ class JobApplicationIngestRequest(BaseModel):
     # System Generated (optional, will be set by server if not provided)
     created_at: Optional[str] = None
 
+# Enhanced Candidate Models for Dashboard
+class CandidateStatusUpdate(BaseModel):
+    candidate_id: str
+    new_status: str  # "received", "under_review", "interview_scheduled", "interviewed", "hired", "rejected"
+    notes: Optional[str] = None
+    updated_by: str = "system"
+
+class InterviewSchedule(BaseModel):
+    candidate_id: str
+    interview_datetime: str  # ISO timestamp
+    duration_minutes: int = 60
+    interviewer_email: str
+    interview_type: str = "phone"  # "phone", "video", "in_person"
+    notes: Optional[str] = None
+
+class EmailNotification(BaseModel):
+    recipient_email: str
+    subject: str
+    template_name: str
+    template_data: Dict[str, Any]
+
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: str
