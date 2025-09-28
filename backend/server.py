@@ -1499,6 +1499,25 @@ async def get_subscriptions_status():
         logger.error(f"Error fetching subscriptions: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch subscriptions")
 
+@api_router.get("/ingest/job_applications/status")
+async def get_job_applications_status():
+    """Get status of job applications for debugging"""
+    try:
+        applications = await db.job_applications.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        
+        # Convert ObjectId to string for JSON serialization
+        for app in applications:
+            if '_id' in app:
+                app['_id'] = str(app['_id'])
+        
+        return {
+            "total_count": await db.job_applications.count_documents({}),
+            "recent_applications": applications
+        }
+    except Exception as e:
+        logger.error(f"Failed to get job applications status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # Google Sheets Service
 class AirtableService:
     """Airtable integration service for demo requests and analytics"""
