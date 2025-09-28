@@ -135,12 +135,17 @@ export const submitFormToDashboard = async (endpoint, data) => {
     const result = await response.json();
     
     console.log('✅ Form submission successful:', {
-      success: result.success,
       id: result.id || result.application_id,
-      message: result.message
+      created_at: result.created_at,
+      data: result
     });
     
-    if (result.success) {
+    // /api/ingest/* endpoints return data directly, not wrapped in {success: true}
+    // Success is indicated by HTTP 200 status and presence of ID
+    if (result.id || result.application_id) {
+      return { success: true, data: result };
+    } else if (result.success) {
+      // Handle job applications which still return {success: true} format
       return { success: true, data: result };
     } else {
       throw new Error(result.detail || result.message || 'Form submission failed');
