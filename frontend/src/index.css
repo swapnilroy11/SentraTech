@@ -55,6 +55,17 @@ body {
     opacity: 0; /* Initial state */
 }
 
+/* Prevent scroll jumping during dynamic content changes */
+.faq-container {
+    overflow-anchor: none;
+    scroll-behavior: auto;
+}
+
+/* Stable FAQ section to prevent layout shifts */
+.faq-section {
+    contain: layout;
+}
+
 /* Hide all Emergent branding permanently */
 #emergent-badge,
 [id*="emergent" i],
