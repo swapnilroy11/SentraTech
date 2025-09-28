@@ -310,10 +310,15 @@ const HorizontalJourney = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentPanel, journeyStages.length, selectedPanel]);
   
-  // Cleanup body class on unmount
+  // Cleanup body class and modal container on unmount
   useEffect(() => {
     return () => {
       document.body.classList.remove('modal-open');
+      const modalContainer = document.getElementById('customer-journey-modal-root');
+      if (modalContainer) {
+        document.body.removeChild(modalContainer);
+        console.log('🧹 Cleaned up modal container');
+      }
     };
   }, []);
 
