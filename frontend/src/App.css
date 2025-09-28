@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
-/* Custom Cursor Styles */
+/* Enhanced Custom Cursor Styles */
 .custom-cursor {
   position: fixed;
   width: 16px;
@@ -72,7 +72,9 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: transform 0.1s ease;
+  will-change: transform;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
 }
 
 .cursor-particle {
@@ -83,17 +85,26 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  animation: particleFade 0.5s ease-out forwards;
+  will-change: transform, opacity;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  animation: particleGlow 0.8s ease-out forwards;
 }
 
-@keyframes particleFade {
+@keyframes particleGlow {
   0% { 
     opacity: 1; 
-    transform: scale(1); 
+    transform: scale(1);
+    box-shadow: 0 0 4px rgba(0, 255, 65, 0.6);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
   }
   100% { 
     opacity: 0; 
-    transform: scale(0); 
+    transform: scale(0.3);
+    box-shadow: 0 0 2px rgba(0, 255, 65, 0.1);
   }
 }
 
