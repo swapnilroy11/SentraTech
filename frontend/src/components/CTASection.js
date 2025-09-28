@@ -207,9 +207,7 @@ const CTASection = () => {
       });
       setFieldErrors({}); // Clear any field errors
       setIsSubmitting(false);
-    }, 1200); // Simulate processing time finally {
-      setIsSubmitting(false);
-    }
+    }, 1200); // Simulate processing time
   };
 
   if (isSubmitted) {
