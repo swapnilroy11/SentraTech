@@ -510,7 +510,7 @@ const HorizontalJourney = () => {
               >
                 <Card 
                   className="w-[500px] h-80 bg-[#0A0A0A] border-2 border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden cursor-pointer transition-all duration-200"
-                  onClick={() => openModal(stage)}
+                  onClick={(e) => openModal(stage, e)}
                   role="button"
                   tabIndex={0}
                   aria-label={`${stage.title} - ${stage.subtitle}`}
