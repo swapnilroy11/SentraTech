@@ -419,37 +419,19 @@ const JobApplicationPage = () => {
               
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  LinkedIn Profile
-                </label>
-                <div className="relative">
-                  <Linkedin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
-                  <input
-                    type="url"
-                    value={formData.linkedinProfile}
-                    onChange={(e) => handleInputChange('linkedinProfile', e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.linkedinProfile ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                  />
-                </div>
-                {errors.linkedinProfile && <p className="text-red-400 text-xs mt-1">{errors.linkedinProfile}</p>}
-                <p className="text-xs text-[rgb(161,161,170)] mt-1">
-                  Provide either resume or LinkedIn profile (at least one required)
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
                   Portfolio/Website
                 </label>
                 <input
                   type="url"
                   value={formData.portfolioWebsite}
                   onChange={(e) => handleInputChange('portfolioWebsite', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors"
-                  placeholder="https://yourwebsite.com (optional)"
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolioWebsite ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                  placeholder="https://yourwebsite.com"
                 />
+                {errors.portfolioWebsite && <p className="text-red-400 text-xs mt-1">{errors.portfolioWebsite}</p>}
+                <p className="text-xs text-[rgb(161,161,170)] mt-1">
+                  Provide either resume or portfolio website (at least one required)
+                </p>
               </div>
               
               <div>
