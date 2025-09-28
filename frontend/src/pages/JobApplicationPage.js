@@ -777,7 +777,7 @@ const JobApplicationPage = () => {
                     
                     <div>
                       <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
-                        <Award size={18} className="text-yellow-400" />
+                        <CheckCircle size={18} className="text-yellow-400" />
                         <span>Education</span>
                       </h3>
                       <ul className="space-y-2">
