@@ -3,8 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Briefcase, Users, Award, Globe, ArrowRight, MapPin, Clock, DollarSign, CheckCircle } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEOManager from '../components/SEOManager';
-import JobApplicationModal from '../components/JobApplicationModal';
-
 const CareersPage = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
