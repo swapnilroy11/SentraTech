@@ -379,6 +379,25 @@ const HorizontalJourney = () => {
 
   return (
     <section className="relative h-screen bg-[#0A0A0A] overflow-hidden">
+      {/* Custom styles for smooth scrolling and modal positioning */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .customer-journey-modal-overlay {
+          will-change: opacity, backdrop-filter;
+        }
+        .customer-journey-modal-content {
+          will-change: transform, opacity;
+        }
+        body.modal-open {
+          overflow: hidden;
+        }
+      `}</style>
       {/* Three.js Neural Network Background */}
       <canvas
         ref={canvasRef}
