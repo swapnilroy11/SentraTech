@@ -193,10 +193,13 @@ const CTASection = () => {
     try {
       console.log('Submitting to ingest endpoint...'); // Debug log
       
-      // Use new dashboard config
-      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
+      // Use enhanced dashboard config with proper authentication
+      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
       
-      // Prepare data for new dashboard endpoint
+      // Clear any cached data
+      clearFormCache();
+      
+      // Prepare data for dashboard endpoint
       const dashboardData = {
         name: formData.name,
         email: formData.email,
@@ -207,14 +210,8 @@ const CTASection = () => {
         current_cost: formData.interaction_volume || ''
       };
       
-      // Submit directly to dashboard (no authentication required)
-      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dashboardData)
-      });
+      // Submit using enhanced helper function with authentication and error handling
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST, dashboardData);
       
       if (response.ok) {
         const result = await response.json();
