@@ -1,0 +1,53 @@
+# Ingress Configuration with WebSocket Support
+# Apply with: kubectl apply -f 03-ingress-websocket.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin-proxy-ingress
+  namespace: emergent-agents-env  # Update to your actual namespace
+  annotations:
+    # WebSocket support
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    # Additional recommended settings for SPA
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    # SSL and security
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # If using cert-manager
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - admin-matrix.preview.emergentagent.com
+    secretName: admin-proxy-tls
+  rules:
+  - host: admin-matrix.preview.emergentagent.com
+    http:
+      paths:
+      # WebSocket endpoint
+      - path: /api/ws
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service  # Update to your actual service name
+            port:
+              number: 8080  # Update to your actual service port
+      # API endpoints
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service
+            port:
+              number: 8080
+      # Frontend static files
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-proxy-service
+            port:
+              number: 8080
