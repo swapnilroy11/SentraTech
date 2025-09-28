@@ -77,7 +77,7 @@ export const DATA_FORMATS = {
 /**
  * Form submission helper function for local backend
  */
-export const submitFormToDashboard = async (endpoint, data) => {
+export const submitForm = async (endpoint, data) => {
   const fullUrl = `${FORM_CONFIG.API_BASE_URL}${endpoint}`;
   
   console.log('🔄 Starting form submission:', {
