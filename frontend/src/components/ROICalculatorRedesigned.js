@@ -233,7 +233,7 @@ const ROICalculatorRedesigned = () => {
       clearFormCache();
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.ROI_CALCULATOR, dashboardData);
+      const result = await submitForm(FORM_CONFIG.ENDPOINTS.ROI_CALCULATOR, dashboardData);
 
       if (result.success) {
         setReportSubmitted(true);
