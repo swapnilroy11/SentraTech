@@ -59,11 +59,22 @@ body {
 .faq-container {
     overflow-anchor: none;
     scroll-behavior: auto;
+    /* Fixed height approach to prevent layout shifts */
+    height: 600px;
+    min-height: 600px;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
 
 /* Stable FAQ section to prevent layout shifts */
 .faq-section {
     contain: layout;
+}
+
+/* Smooth scrolling for FAQ items within container */
+.faq-items {
+    padding: 0;
+    margin: 0;
 }
 
 /* Hide all Emergent branding permanently */
