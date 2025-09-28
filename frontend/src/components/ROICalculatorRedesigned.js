@@ -156,8 +156,8 @@ const ROICalculatorRedesigned = () => {
     }
   };
 
-  // Use protected formatting functions
-  const formatCurrency = formatCurrencyPrecise;
+  // Use bulletproof formatting functions
+  const formatCurrency = formatCurrencyProtected;
   
   // Debug calculation logger (for development)
   const logCalculationDebug = (calls, interactions, results) => {
