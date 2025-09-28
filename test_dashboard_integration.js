@@ -3,29 +3,25 @@
  * Following the exact specifications from the integration prompt
  */
 
-// Sample test data matching the prompt schema
+// Sample test data matching the new dashboard schema
 const testApplicationData = {
   "full_name": "Test Candidate",
   "email": "test@example.com",
+  "position_applied": "Customer Support Specialist",
   "phone": "+1-555-0123",
   "location": "New York, NY",
+  "experience_level": "3-5 years",
   "portfolio_website": "https://testcandidate.com",
+  "preferred_shifts": ["Morning", "Afternoon"],
+  "availability_date": "2024-02-01",
+  "motivation_text": "Excited about AI-powered solutions and the opportunity to work with cutting-edge technology in customer support automation.",
   "resume_file": {
     "name": "test_resume.pdf",
     "data": "JVBERi0xLjMKJcTl8uXrp/Og0MTGCjEgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL091dGxpbmVzIDIgMCBSCi9QYWdlcyAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAovVHlwZSAvT3V0bGluZXMKL0NvdW50IDAKPJ4K",
     "type": "application/pdf",
     "size": 156789
   },
-  "relevant_experience": "5 years of full-stack development with React and Node.js",
-  "preferred_shifts": "Full-time",
-  "availability_start_date": "2024-02-01",
-  "why_sentratech": "Excited about AI-powered solutions and the opportunity to work with cutting-edge technology in customer support automation.",
-  "cover_letter": "I am passionate about creating innovative solutions that bridge AI and human experience. My background in full-stack development aligns perfectly with SentraTech's mission.",
-  "work_authorization": "US Citizen",
-  "consent_for_storage": true,
-  "consent_for_contact": true,
-  "position": "Software Engineer",
-  "source": "careers_page"
+  "consent_for_storage": true
 };
 
 // API integration test function from the prompt
