@@ -567,8 +567,8 @@ const JobApplicationPage = () => {
                   <input
                     type="checkbox"
                     id="consent-storage"
-                    checked={formData.consentForStorage}
-                    onChange={(e) => handleInputChange('consentForStorage', e.target.checked)}
+                    checked={formData.consent_for_storage}
+                    onChange={(e) => handleInputChange('consent_for_storage', e.target.checked)}
                     className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
                   />
                   <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
@@ -577,7 +577,7 @@ const JobApplicationPage = () => {
                     privacy policy and I can request deletion at any time. *
                   </label>
                 </div>
-                {errors.consentForStorage && <p className="text-red-400 text-xs ml-7">{errors.consentForStorage}</p>}
+                {errors.consent_for_storage && <p className="text-red-400 text-xs ml-7">{errors.consent_for_storage}</p>}
                 
                 <div className="flex items-start space-x-3">
                   <input
