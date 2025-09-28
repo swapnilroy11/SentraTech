@@ -55,7 +55,8 @@ const NewsletterSubscribe = () => {
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER,
-        subscriptionData
+        subscriptionData,
+        { formType: 'newsletter' }
       );
 
       if (result.success) {
