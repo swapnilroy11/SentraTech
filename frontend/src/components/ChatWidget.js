@@ -14,27 +14,25 @@ const ChatWidget = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Create chat session
+  // Create chat session (offline mode)
   const createChatSession = async () => {
-    try {
-      setIsConnecting(true);
-      const response = await axios.post(`${BACKEND_URL}/api/chat/session`);
-      setChatSessionId(response.data.session_id);
+    setIsConnecting(true);
+    
+    // Simulate session creation without network calls
+    setTimeout(() => {
+      setChatSessionId(`offline_${Date.now()}`);
       
       // Add welcome message
       setChatMessages([{
         id: Date.now(),
-        content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech?",
+        content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Currently in offline demo mode)",
         sender: 'assistant',
         timestamp: new Date()
       }]);
       
       setIsConnecting(false);
-    } catch (error) {
-      console.error('Failed to create chat session:', error);
-      setConnectionError('Failed to start chat session');
-      setIsConnecting(false);
-    }
+      setConnectionError(null);
+    }, 1000);
   };
 
   // Send message via REST API
