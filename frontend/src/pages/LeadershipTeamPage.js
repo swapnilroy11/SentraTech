@@ -253,37 +253,41 @@ const LeadershipTeamPage = () => {
           </div>
         </div>
 
-        {/* Advisory Board */}
+        {/* Company Vision */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Strategic Advisors</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Our Vision</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Industry experts and thought leaders who provide strategic guidance and deep domain expertise.
+              Building the future of customer experience through intelligent automation and human expertise.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {advisors.map((advisor, index) => (
-              <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
-                <div className="text-center mb-4">
-                  <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Award size={24} className="text-[#00FF41]" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-1">{advisor.name}</h3>
-                  <p className="text-[#00FF41] font-medium text-sm">{advisor.title}</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Zap size={24} className="text-[#00FF41]" />
                 </div>
-                
-                <div className="mb-4">
-                  <h4 className="text-white font-semibold text-xs mb-2">EXPERTISE</h4>
-                  <p className="text-[rgb(161,161,170)] text-xs">{advisor.expertise}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-white font-semibold text-xs mb-2">CONTRIBUTION</h4>
-                  <p className="text-[rgb(161,161,170)] text-xs">{advisor.contribution}</p>
-                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Innovation First</h3>
               </div>
-            ))}
+              <p className="text-[rgb(161,161,170)] text-sm leading-relaxed">
+                We're pioneering the next generation of AI-powered customer support solutions, 
+                combining cutting-edge technology with human insight to deliver exceptional experiences.
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Globe size={24} className="text-[#00FF41]" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Global Impact</h3>
+              </div>
+              <p className="text-[rgb(161,161,170)] text-sm leading-relaxed">
+                Our mission is to transform how businesses worldwide interact with their customers, 
+                reducing costs while improving satisfaction and creating more meaningful connections.
+              </p>
+            </div>
           </div>
         </div>
 
