@@ -208,12 +208,44 @@ const ROICalculatorRedesigned = () => {
     setResults(calculationResults);
   };
 
-  // Format currency
+  // Format currency with exact precision
   const formatCurrency = (amount) => {
     if (amount === 0) return '$0';
     if (amount < 1000) return `$${Math.round(amount)}`;
-    if (amount < 1000000) return `$${(amount / 1000).toFixed(1)}K`;
-    return `$${(amount / 1000000).toFixed(1)}M`;
+    if (amount < 1000000) return `$${(Math.round(amount / 100) / 10).toFixed(1)}K`; // Exact rounding to 1 decimal
+    return `$${(Math.round(amount / 100000) / 10).toFixed(1)}M`;
+  };
+  
+  // Debug calculation logger (for development)
+  const logCalculationDebug = (calls, interactions, results) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🧮 ROI Calculation Debug:', {
+        inputs: { calls, interactions, country: selectedCountry },
+        traditionalBPO: {
+          monthly: results.traditionalMonthlyCost,
+          annual: results.yearlyTraditionalCost,
+          formula: `(${calls} × 8 + ${interactions} × 5) × $0.40`
+        },
+        sentraTech: {
+          monthly: results.sentraTechMonthlyCost,
+          annual: results.yearlySentraTechCost,
+          formula: `(${calls}/1000 × $1014.75) + (${interactions}/1000 × $635.25)`
+        },
+        savings: {
+          monthly: results.monthlySavings,
+          annual: results.yearlySavings,
+          formula: `$${results.traditionalMonthlyCost} - $${results.sentraTechMonthlyCost}`
+        },
+        roi: {
+          percentage: results.roi,
+          formula: `(${results.monthlySavings} ÷ ${results.sentraTechMonthlyCost}) × 100`
+        },
+        costReduction: {
+          percentage: results.costReduction,
+          formula: `(${results.monthlySavings} ÷ ${results.traditionalMonthlyCost}) × 100`
+        }
+      });
+    }
   };
 
   // Format percentage
