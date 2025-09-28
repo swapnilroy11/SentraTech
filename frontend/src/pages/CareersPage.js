@@ -325,15 +325,6 @@ const CareersPage = () => {
         </section>
       </div>
 
-      {/* Job Application Modal */}
-      <JobApplicationModal 
-        isOpen={isApplicationModalOpen}
-        onClose={() => {
-          setIsApplicationModalOpen(false);
-          setSelectedJob(null);
-        }}
-        job={selectedJob}
-      />
     </PageTransition>
   );
 };
