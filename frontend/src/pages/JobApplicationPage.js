@@ -604,21 +604,22 @@ const JobApplicationPage = () => {
                 {errors.workAuthorization && <p className="text-red-400 text-xs mt-1">{errors.workAuthorization}</p>}
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <input
                     type="checkbox"
                     id="consent-storage"
                     checked={formData.consentForStorage}
                     onChange={(e) => handleInputChange('consentForStorage', e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2"
+                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
                   />
                   <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I consent to SentraTech storing and processing my personal information for recruitment purposes. 
-                    I understand my data will be handled according to the privacy policy and I can request deletion at any time. *
+                    I consent to SentraTech storing and processing my personal information for 
+                    recruitment purposes. I understand my data will be handled according to the 
+                    privacy policy and I can request deletion at any time. *
                   </label>
                 </div>
-                {errors.consentForStorage && <p className="text-red-400 text-xs">{errors.consentForStorage}</p>}
+                {errors.consentForStorage && <p className="text-red-400 text-xs ml-7">{errors.consentForStorage}</p>}
                 
                 <div className="flex items-start space-x-3">
                   <input
@@ -626,10 +627,11 @@ const JobApplicationPage = () => {
                     id="consent-contact"
                     checked={formData.consentForContact}
                     onChange={(e) => handleInputChange('consentForContact', e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2"
+                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
                   />
                   <label htmlFor="consent-contact" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I agree to be contacted by SentraTech regarding this application and future opportunities that may be of interest.
+                    I agree to be contacted by SentraTech regarding this application and future 
+                    opportunities that may be of interest.
                   </label>
                 </div>
               </div>
