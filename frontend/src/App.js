@@ -91,12 +91,40 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Loading component for lazy-loaded pages
+  const LoadingFallback = () => (
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-[#00FF41]/20 border-t-[#00FF41] rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-[#00FF41] font-semibold text-lg">Loading SentraTech...</p>
+        <p className="text-[rgb(161,161,170)] text-sm mt-2">Optimizing your experience</p>
+      </div>
+    </div>
+  );
+
   const initializeEnterpriseFeatures = () => {
     console.log('🚀 Initializing SentraTech Enterprise Features...');
     
     try {
-      // Temporarily disable service worker registration in development
-      console.log('⚠️ Service Worker registration disabled in development mode');
+      // Enable service worker registration for production
+      if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+        serviceWorkerRegistration.register({
+          onSuccess: (registration) => {
+            console.log('✅ Service Worker registered successfully:', registration);
+          },
+          onUpdate: (registration) => {
+            console.log('🔄 Service Worker updated:', registration);
+          },
+          onOffline: () => {
+            console.log('📱 App is now ready to work offline');
+          },
+          onError: (error) => {
+            console.warn('⚠️ Service Worker registration failed:', error);
+          }
+        });
+      } else {
+        console.log('⚠️ Service Worker registration disabled in development mode');
+      }
       
       // Add breadcrumbs for error tracking
       if (errorTracker) {
