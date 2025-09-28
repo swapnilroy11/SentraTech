@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Briefcase, MapPin, Clock, Users, CheckCircle, AlertCircle, Upload, File, Linkedin, Send, Award, Globe } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEOManager from '../components/SEOManager';
-import { DASHBOARD_CONFIG, validateConfig } from '../config/dashboardConfig';
 
 const JobApplicationPage = () => {
   const { jobId } = useParams();
