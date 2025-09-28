@@ -655,19 +655,18 @@ const HorizontalJourney = () => {
           }}
           onClick={closeModal}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 0 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 0 }}
-            transition={{ 
-              duration: 0.15,
-              ease: "easeOut"
-            }}
-            className="relative rounded-3xl p-6 w-full max-w-lg max-h-[85vh] overflow-hidden"
+          <div
             style={{
-              background: `linear-gradient(135deg, rgba(26, 28, 30, 0.95) 0%, rgba(38, 40, 42, 0.95) 100%)`,
+              backgroundColor: 'rgb(26, 28, 30)',
               border: `2px solid ${selectedPanel.color}`,
-              boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px ${selectedPanel.color}20, 0 0 20px ${selectedPanel.color}30`
+              borderRadius: '24px',
+              padding: '24px',
+              maxWidth: '500px',
+              width: '100%',
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              position: 'relative',
+              boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${selectedPanel.color}30`
             }}
             onClick={(e) => e.stopPropagation()}
           >
