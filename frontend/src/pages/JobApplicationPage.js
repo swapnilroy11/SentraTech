@@ -256,14 +256,14 @@ const JobApplicationPage = () => {
     }
   };
 
-  // Submit to backend API (proxy to dashboard)
+  // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
   const submitApplication = async (applicationData) => {
     try {
-      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/ingest/job_applications`, {
+      const response = await fetch('https://sentra-admin-dash.preview.emergentagent.com/api/ingest/job_applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+          'X-INGEST-KEY': 'test-ingest-key-12345'
         },
         body: JSON.stringify(applicationData)
       });
@@ -294,7 +294,7 @@ const JobApplicationPage = () => {
     } catch (error) {
       console.error('Application submission error:', error);
       setSubmitStatus('error');
-      return { success: false, error: error.message };
+      throw error;
     } finally {
       setIsSubmitting(false);
     }
