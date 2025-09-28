@@ -30,11 +30,12 @@ const HorizontalJourney = () => {
     // Get the clicked card's position
     const cardElement = event.currentTarget;
     const rect = cardElement.getBoundingClientRect();
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
     
-    // Position modal above the card
+    // Calculate position to center modal above the card
     setModalPosition({
-      x: rect.left + rect.width / 2, // Center horizontally on card
-      y: rect.top - 20 // Position above card with small margin
+      x: rect.left + (rect.width / 2), // Center horizontally on card
+      y: rect.top + scrollY - 300 // Position above card with margin, account for scroll
     });
     
     setSelectedPanel(stage);
