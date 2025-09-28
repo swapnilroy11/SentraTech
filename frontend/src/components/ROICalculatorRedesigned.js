@@ -204,11 +204,16 @@ const ROICalculatorRedesigned = () => {
       humanHandledPercentage: 100 - AUTOMATION_PERCENTAGE
     };
     
-    // Validate calculations for protection against future errors
-    const validation = validateCalculation(calls, interactions, calculationResults);
+    // Protected validation using test suite
+    const validation = validateROICalculation(
+      { calls, interactions, country: selectedCountry },
+      calculationResults,
+      0.1 // tolerance
+    );
     
-    if (!validation.savingsValid || !validation.roiValid || !validation.costReductionValid) {
-      console.warn('⚠️ Calculation validation failed - check precision');
+    if (!validation.valid) {
+      console.error('❌ ROI Calculation validation failed:', validation.validations);
+      console.warn('⚠️ Check calculation logic for precision errors');
     }
     
     // Debug logging for development
