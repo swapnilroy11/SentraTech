@@ -8,7 +8,7 @@ import requests
 import json
 
 # Backend URL
-BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://form-simulator.preview.emergentagent.com/api"
 INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 
 def test_newsletter_validation():

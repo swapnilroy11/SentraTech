@@ -3500,7 +3500,7 @@ async def proxy_newsletter_signup(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-admin-dash.preview.emergentagent.com/api/forms/newsletter-signup",
+                "https://form-simulator.preview.emergentagent.com/api/forms/newsletter-signup",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -3522,7 +3522,7 @@ async def proxy_demo_request(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-admin-dash.preview.emergentagent.com/api/forms/demo-request",
+                "https://form-simulator.preview.emergentagent.com/api/forms/demo-request",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -3544,7 +3544,7 @@ async def proxy_roi_calculator(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-admin-dash.preview.emergentagent.com/api/forms/roi-calculator",
+                "https://form-simulator.preview.emergentagent.com/api/forms/roi-calculator",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -3566,7 +3566,7 @@ async def proxy_contact_sales(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-admin-dash.preview.emergentagent.com/api/forms/contact-sales",
+                "https://form-simulator.preview.emergentagent.com/api/forms/contact-sales",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -3588,7 +3588,7 @@ async def proxy_job_application(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-admin-dash.preview.emergentagent.com/api/forms/job-application",
+                "https://form-simulator.preview.emergentagent.com/api/forms/job-application",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )

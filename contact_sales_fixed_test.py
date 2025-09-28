@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://form-simulator.preview.emergentagent.com/api"
 
 class ContactSalesFixedTester:
     """Test the FIXED Contact Sales form submission with corrected table name"""
