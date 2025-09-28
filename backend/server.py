@@ -1014,6 +1014,33 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         logger.error(f"Contact ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+# Debug endpoints to view stored ingest data
+@api_router.get("/ingest/demo_requests/status")
+async def get_demo_requests_status():
+    """Get status of demo requests for debugging"""
+    try:
+        requests = await db.demo_requests.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        return {
+            "total_count": await db.demo_requests.count_documents({}),
+            "recent_requests": requests
+        }
+    except Exception as e:
+        logger.error(f"Error fetching demo requests: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch demo requests")
+
+@api_router.get("/ingest/contact_requests/status")  
+async def get_contact_requests_status():
+    """Get status of contact requests for debugging"""
+    try:
+        requests = await db.contact_requests.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        return {
+            "total_count": await db.contact_requests.count_documents({}),
+            "recent_requests": requests
+        }
+    except Exception as e:
+        logger.error(f"Error fetching contact requests: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch contact requests")
+
 # Google Sheets Service
 class AirtableService:
     """Airtable integration service for demo requests and analytics"""
