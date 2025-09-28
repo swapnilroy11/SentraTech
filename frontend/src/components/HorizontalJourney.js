@@ -647,7 +647,7 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* SIMPLE MODAL - GUARANTEED TO WORK */}
+      {/* MODAL POSITIONED ABOVE CLICKED CARD */}
       {selectedPanel && (
         <div 
           style={{
@@ -656,28 +656,29 @@ const HorizontalJourney = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(8px)',
             zIndex: 999999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px'
+            pointerEvents: 'all'
           }}
           onClick={closeModal}
         >
           <div
             style={{
+              position: 'absolute',
+              left: `${modalPosition.x}px`,
+              top: `${modalPosition.y}px`,
+              transform: 'translate(-50%, -100%)', // Center horizontally, position above
               backgroundColor: 'rgb(26, 28, 30)',
               border: `2px solid ${selectedPanel.color}`,
-              borderRadius: '24px',
-              padding: '24px',
-              maxWidth: '500px',
-              width: '100%',
-              maxHeight: '80vh',
-              overflowY: 'auto',
-              position: 'relative',
-              boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${selectedPanel.color}30`
+              borderRadius: '20px',
+              padding: '20px',
+              width: '420px',
+              maxWidth: '90vw',
+              boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${selectedPanel.color}30`,
+              // Ensure modal doesn't go off screen
+              maxHeight: 'none',
+              overflow: 'visible'
             }}
             onClick={(e) => e.stopPropagation()}
           >
