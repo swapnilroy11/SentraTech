@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Briefcase, MapPin, Clock, Users, CheckCircle, AlertCircle, Upload, File, Linkedin, Send, Award, Globe } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Briefcase, MapPin, Clock, Users, CheckCircle, AlertCircle, Upload, File, Linkedin, Send, Globe } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEOManager from '../components/SEOManager';
 
