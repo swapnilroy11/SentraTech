@@ -1599,13 +1599,13 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
 @api_router.post("/ingest/job_applications")
 async def ingest_job_application(request: Request, job_application: JobApplicationIngestRequest):
     """
-    🔒 PROTECTED - Ingest job application data
+    🔒 PROTECTED - Enhanced job application ingest with email notifications
     Store job application locally and forward to dashboard
     """
     try:
         # Validate required fields
-        if not job_application.fullName or not job_application.email:
-            raise HTTPException(status_code=400, detail="Full name and email are required")
+        if not job_application.first_name or not job_application.last_name or not job_application.email:
+            raise HTTPException(status_code=400, detail="First name, last name, and email are required")
         
         # Validate email format
         import re
@@ -1613,25 +1613,147 @@ async def ingest_job_application(request: Request, job_application: JobApplicati
         if not re.match(email_pattern, job_application.email):
             raise HTTPException(status_code=400, detail="Invalid email format")
         
-        # Create application data
+        # Generate application ID
+        application_id = str(uuid.uuid4())
+        
+        # Create enhanced application data with new schema
         application_data = {
-            "id": str(uuid.uuid4()),
-            "full_name": job_application.fullName,
+            "id": application_id,
+            "first_name": job_application.first_name,
+            "last_name": job_application.last_name,
+            "full_name": f"{job_application.first_name} {job_application.last_name}",
             "email": job_application.email,
             "phone": job_application.phone,
             "location": job_application.location,
-            "preferred_shifts": job_application.preferredShifts,
-            "availability_start_date": job_application.availabilityStartDate,
-            "cover_note": job_application.coverNote,
-            "linkedin_profile": job_application.linkedinProfile,
-            "position": job_application.position,
-            "source": job_application.source,
-            "consent_for_storage": job_application.consentForStorage,
+            "resume_file": job_application.resume_file,
+            "portfolio_website": job_application.portfolio_website,
+            "preferred_shifts": job_application.preferred_shifts,
+            "availability_date": job_application.availability_date,
+            "experience_years": job_application.experience_years,
+            "motivation_text": job_application.motivation_text,
+            "cover_letter": job_application.cover_letter,
+            "work_authorization": job_application.work_authorization,
+            "position_applied": job_application.position_applied,
+            "application_source": job_application.application_source,
+            "consent_for_storage": job_application.consent_for_storage,
             "status": "received",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "resume_url": None,
-            "resume_name": None
+            "created_at": job_application.created_at or datetime.now(timezone.utc).isoformat(),
+            
+            # Enhanced tracking fields
+            "email_notifications": [],
+            "interview_event": None,
+            "candidate_interactions": [],
+            "last_updated": datetime.now(timezone.utc).isoformat(),
+            "recruiter_notes": "",
+            "application_score": None
         }
+        
+        # Store in MongoDB
+        await db.job_applications.insert_one(application_data)
+        logger.info(f"Job application stored: {application_id}")
+        
+        # Send welcome email notification
+        try:
+            from datetime import datetime, timedelta
+            expected_response = (datetime.now() + timedelta(days=7)).strftime("%B %d, %Y")
+            
+            email_notification = EmailNotification(
+                recipient_email=job_application.email,
+                subject="Application Received",
+                template_name="application_received",
+                template_data={
+                    "candidate_name": application_data["full_name"],
+                    "position": job_application.position_applied,
+                    "application_id": application_id[:8],
+                    "submission_date": datetime.now().strftime("%B %d, %Y"),
+                    "expected_response_date": expected_response
+                }
+            )
+            
+            email_sent = await email_service.send_notification(email_notification)
+            
+            if email_sent:
+                # Track email notification
+                await db.job_applications.update_one(
+                    {"id": application_id},
+                    {
+                        "$push": {
+                            "email_notifications": {
+                                "status": "application_received",
+                                "sent_at": datetime.now(timezone.utc).isoformat(),
+                                "email": job_application.email
+                            }
+                        }
+                    }
+                )
+                logger.info(f"Welcome email sent to {job_application.email}")
+            
+        except Exception as e:
+            logger.warning(f"Failed to send welcome email: {str(e)}")
+            # Don't fail the application if email fails
+        
+        # Attempt to forward to external dashboard (with fallback)
+        external_status = "not_attempted"
+        try:
+            dashboard_url = get_dashboard_endpoint("/api/ingest/job_applications")
+            external_data = application_data.copy()
+            
+            async with httpx.AsyncClient(timeout=30) as client:
+                response = await client.post(
+                    dashboard_url,
+                    json=external_data,
+                    headers={"X-INGEST-KEY": get_dashboard_auth_key()}
+                )
+                
+                if response.status_code == 200:
+                    external_response = response.json()
+                    external_status = "success"
+                    
+                    # Update with external response data
+                    await db.job_applications.update_one(
+                        {"id": application_id},
+                        {
+                            "$set": {
+                                "external_response": external_response,
+                                "dashboard_status": "synced",
+                                "last_sync": datetime.now(timezone.utc).isoformat()
+                            }
+                        }
+                    )
+                    logger.info(f"Job application forwarded to dashboard successfully")
+                else:
+                    external_status = f"failed_http_{response.status_code}"
+                    
+        except Exception as e:
+            external_status = "connection_failed"
+            logger.warning(f"External dashboard sync failed: {str(e)}")
+            
+            # Update status in database
+            await db.job_applications.update_one(
+                {"id": application_id},
+                {
+                    "$set": {
+                        "dashboard_status": "failed",
+                        "sync_error": str(e),
+                        "last_sync_attempt": datetime.now(timezone.utc).isoformat()
+                    }
+                }
+            )
+        
+        # Return success response
+        return {
+            "status": "success",
+            "message": "Job application submitted successfully",
+            "id": application_id,
+            "external_status": external_status,
+            "email_sent": email_sent if 'email_sent' in locals() else False
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Job application ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
         
         # Handle resume file if provided
         if job_application.resumeFile:
