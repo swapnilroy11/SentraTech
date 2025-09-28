@@ -14,25 +14,71 @@ const ChatWidget = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Create chat session (offline mode)
+  // Create chat session with network fallback
   const createChatSession = async () => {
     setIsConnecting(true);
     
-    // Simulate session creation without network calls
-    setTimeout(() => {
-      setChatSessionId(`offline_${Date.now()}`);
+    try {
+      const { isOnline } = await import('../config/dashboardConfig.js');
       
-      // Add welcome message
-      setChatMessages([{
-        id: Date.now(),
-        content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Currently in offline demo mode)",
-        sender: 'assistant',
-        timestamp: new Date()
-      }]);
+      // Check if offline and handle immediately
+      if (!isOnline()) {
+        console.warn('Browser offline, starting chat in offline mode');
+        setChatSessionId(`offline_${Date.now()}`);
+        setChatMessages([{
+          id: Date.now(),
+          content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Currently offline)",
+          sender: 'assistant',
+          timestamp: new Date()
+        }]);
+        setIsConnecting(false);
+        setConnectionError(null);
+        return;
+      }
+
+      // Try to create network session
+      try {
+        const response = await axios.post(`${BACKEND_URL}/api/chat/session`, {
+          timestamp: new Date().toISOString()
+        });
+        
+        if (response.data && response.data.session_id) {
+          setChatSessionId(response.data.session_id);
+          setChatMessages([{
+            id: Date.now(),
+            content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech?",
+            sender: 'assistant',
+            timestamp: new Date()
+          }]);
+        } else {
+          throw new Error('Invalid session response');
+        }
+      } catch (networkError) {
+        console.warn('Network session creation failed, using offline mode:', networkError.message);
+        setChatSessionId(`fallback_${Date.now()}`);
+        setChatMessages([{
+          id: Date.now(),
+          content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Network unavailable, using offline mode)",
+          sender: 'assistant',
+          timestamp: new Date()
+        }]);
+      }
       
       setIsConnecting(false);
       setConnectionError(null);
-    }, 1000);
+    } catch (error) {
+      console.error('Chat session creation error:', error);
+      // Fallback to offline mode
+      setChatSessionId(`error_${Date.now()}`);
+      setChatMessages([{
+        id: Date.now(),
+        content: "Hello! I'm Sentra AI. I'm currently running in offline mode, but I can still help you with general information about SentraTech's services.",
+        sender: 'assistant',
+        timestamp: new Date()
+      }]);
+      setIsConnecting(false);
+      setConnectionError(null);
+    }
   };
 
   // Send message via REST API
