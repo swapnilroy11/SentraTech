@@ -585,74 +585,7 @@ class DemoRequestResponse(BaseModel):
     status: str = "submitted"
     integration_status: Optional[Dict[str, Any]] = None
 
-# Dashboard Ingest Models
-class DemoIngestRequest(BaseModel):
-    user_name: str
-    email: str
-    company: str
-    company_website: Optional[str] = None
-    phone: Optional[str] = None
-    call_volume: int = 0
-    interaction_volume: int = 0
-    message: str
-    source: Optional[str] = None
-
-class ContactIngestRequest(BaseModel):
-    full_name: str
-    work_email: str
-    company_name: str
-    company_website: Optional[str] = None
-    phone: Optional[str] = None
-    call_volume: int = 0
-    interaction_volume: int = 0
-    preferred_contact_method: str = "Email"
-    message: str
-    status: str = "pending"
-    assigned_rep: Optional[str] = None
-
-class ROIReportIngestRequest(BaseModel):
-    country: str
-    monthly_volume: int
-    bpo_spending: float
-    sentratech_spending: float
-    sentratech_bundles: float
-    monthly_savings: float
-    roi: float
-    cost_reduction: float
-    contact_email: str
-
-class SubscriptionIngestRequest(BaseModel):
-    email: str
-    source: Optional[str] = "website"
-    status: str = "subscribed"
-
-class JobApplicationIngestRequest(BaseModel):
-    # Personal Information - Updated field names
-    first_name: str
-    last_name: str
-    email: str
-    phone: Optional[str] = None
-    location: str = "Bangladesh"
-    
-    # Professional Information - Removed LinkedIn field, updated structure
-    resume_file: Optional[str] = None  # URL or base64 string
-    portfolio_website: Optional[str] = None
-    preferred_shifts: Optional[List[str]] = None  # ["Morning","Afternoon","Night","Flexible"]
-    availability_date: Optional[str] = None  # YYYY-MM-DD format
-    experience_years: Optional[str] = None  # "0-1|1-3|3-5|5+"
-    
-    # Motivation & Application Details
-    motivation_text: Optional[str] = None
-    cover_letter: Optional[str] = None
-    
-    # Legal & Meta
-    work_authorization: Optional[str] = None
-    position_applied: str = "Customer Support Specialist"
-    application_source: str = "career_site"
-    consent_for_storage: bool = True
-    
-    # System Generated (optional, will be set by server if not provided)
-    created_at: Optional[str] = None
+# Old ingest models removed - forms now submit directly to dashboard
 
 # Enhanced Candidate Models for Dashboard
 class CandidateStatusUpdate(BaseModel):
