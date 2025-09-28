@@ -93,8 +93,8 @@ export const submitFormToDashboard = async (endpoint, data) => {
     };
     
     // Only add authentication header if INGEST_KEY is provided
-    if (DASHBOARD_CONFIG.INGEST_KEY) {
-      headers['X-INGEST-KEY'] = DASHBOARD_CONFIG.INGEST_KEY;
+    if (FORM_CONFIG.INGEST_KEY) {
+      headers['X-INGEST-KEY'] = FORM_CONFIG.INGEST_KEY;
     }
     
     const response = await fetch(fullUrl, {
