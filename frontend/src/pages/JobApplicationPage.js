@@ -259,11 +259,12 @@ const JobApplicationPage = () => {
   // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
   const submitApplication = async (applicationData) => {
     try {
-      const response = await fetch('https://customer-dashboard-3.preview.emergentagent.com/api/ingest/job_applications', {
+      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
+      
+      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-INGEST-KEY': 'test-ingest-key-12345'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(applicationData)
       });
