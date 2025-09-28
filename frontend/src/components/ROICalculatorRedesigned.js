@@ -227,7 +227,7 @@ const ROICalculatorRedesigned = () => {
       };
 
       // Use enhanced dashboard config with proper authentication
-      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
+      const { FORM_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/formConfig.js');
       
       // Clear any cached data
       clearFormCache();
