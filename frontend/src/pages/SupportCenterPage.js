@@ -557,7 +557,7 @@ const SupportCenterPage = () => {
         </div>
 
         {/* FAQ Section - Stable Layout with Scroll Anchoring Fix */}
-        <div ref={faqSectionRef} className="mb-20 faq-section">
+        <div className="mb-20 faq-section">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
@@ -583,7 +583,7 @@ const SupportCenterPage = () => {
           </div>
           
           {/* FAQ Items Container with Scroll Stability */}
-          <div ref={faqContainerRef} className="faq-container">
+          <div className="faq-container">
             <div className="space-y-4">
               {filteredQuestions.map((faq, index) => (
                 <div 
