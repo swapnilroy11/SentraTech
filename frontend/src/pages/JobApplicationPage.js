@@ -202,22 +202,23 @@ const JobApplicationPage = () => {
       }
       
       const submissionData = {
-        fullName: `${formData.firstName} ${formData.lastName}`,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
         email: formData.email,
         phone: formData.phone || null,
         location: formData.location,
-        linkedinProfile: formData.linkedinProfile || null,
-        portfolioWebsite: formData.portfolioWebsite || null,
-        preferredShifts: formData.preferredShifts || null,
-        availabilityStartDate: formData.availabilityStartDate || null,
-        relevantExperience: formData.relevantExperience || null,
-        whySentraTech: formData.whySentraTech,
-        coverNote: formData.coverLetter || null,
-        workAuthorization: formData.workAuthorization,
-        position: job.title,
-        source: 'careers_application_page',
-        consentForStorage: formData.consentForStorage,
-        consentForContact: formData.consentForContact
+        resume_file: null, // Will be set below if resume exists
+        portfolio_website: formData.portfolioWebsite || null,
+        preferred_shifts: formData.preferredShifts ? [formData.preferredShifts] : null,
+        availability_date: formData.availabilityStartDate || null,
+        experience_years: formData.relevantExperience || null,
+        motivation_text: formData.whySentraTech,
+        cover_letter: formData.coverLetter || null,
+        work_authorization: formData.workAuthorization,
+        position_applied: job.title,
+        application_source: "career_site",
+        consent_for_storage: formData.consentForStorage,
+        created_at: new Date().toISOString()
       };
       
       if (resume) {
