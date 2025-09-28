@@ -63,9 +63,9 @@ test_plan:
     - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
     - "Demo Request Form Supabase Submission Issue"
+    - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
-    - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
     - "Updated Dashboard Integration Endpoints Testing"
     - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "ROI Calculator Email Modal Auto-Close Bug Fix Testing"
