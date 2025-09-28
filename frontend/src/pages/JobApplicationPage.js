@@ -278,9 +278,9 @@ const JobApplicationPage = () => {
       setTimeout(() => {
         navigate('/careers', { state: { applicationSubmitted: true } });
       }, 3000);
-    }, 1500); // Simulate processing time finally {
+      
       setIsSubmitting(false);
-    }
+    }, 1500); // Simulate processing time
   };
 
   const seoData = {
