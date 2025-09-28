@@ -727,8 +727,178 @@ const JobApplicationPage = () => {
           </div>
         </div>
 
+        {/* Job Details Section */}
+        <section className="py-16 px-6 bg-gradient-to-b from-[rgb(13,13,13)] to-[rgb(8,8,8)]">
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid lg:grid-cols-3 gap-12">
+              {/* Job Overview */}
+              <div className="lg:col-span-2 space-y-8">
+                {/* About This Role */}
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-4">About This Role</h2>
+                  <p className="text-[rgb(161,161,170)] leading-relaxed">{job.aboutRole}</p>
+                </div>
+                
+                {/* What Makes Us Special */}
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-4">Why Choose SentraTech?</h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {job.whatMakesUsSpecial?.map((item, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-4 bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-lg">
+                        <CheckCircle size={20} className="text-[#00FF41] flex-shrink-0 mt-0.5" />
+                        <span className="text-[rgb(218,218,218)] text-sm leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Requirements */}
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">What We're Looking For</h2>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
+                        <CheckCircle size={18} className="text-[#00FF41]" />
+                        <span>Must Have</span>
+                      </h3>
+                      <ul className="space-y-2">
+                        {job.requirements?.must_have?.map((req, index) => (
+                          <li key={index} className="text-[rgb(161,161,170)] text-sm leading-relaxed flex items-start space-x-2">
+                            <span className="w-1.5 h-1.5 bg-[#00FF41] rounded-full mt-2 flex-shrink-0"></span>
+                            <span>{req}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
+                        <Users size={18} className="text-blue-400" />
+                        <span>Preferred</span>
+                      </h3>
+                      <ul className="space-y-2">
+                        {job.requirements?.preferred?.map((req, index) => (
+                          <li key={index} className="text-[rgb(161,161,170)] text-sm leading-relaxed flex items-start space-x-2">
+                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                            <span>{req}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
+                        <Award size={18} className="text-yellow-400" />
+                        <span>Education</span>
+                      </h3>
+                      <ul className="space-y-2">
+                        {job.requirements?.education?.map((req, index) => (
+                          <li key={index} className="text-[rgb(161,161,170)] text-sm leading-relaxed flex items-start space-x-2">
+                            <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
+                            <span>{req}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Responsibilities */}
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-4">Your Responsibilities</h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {job.responsibilities?.map((item, index) => (
+                      <div key={index} className="flex items-start space-x-3">
+                        <span className="flex items-center justify-center w-6 h-6 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full text-xs text-[#00FF41] font-medium flex-shrink-0 mt-0.5">
+                          {index + 1}
+                        </span>
+                        <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Growth Path */}
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-4">Your Growth Journey</h2>
+                  <div className="space-y-4">
+                    {job.growthPath?.map((stage, index) => (
+                      <div key={index} className="flex items-start space-x-4 p-4 bg-gradient-to-r from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-lg">
+                        <div className="flex items-center justify-center w-8 h-8 bg-[#00FF41] text-black rounded-full text-sm font-bold flex-shrink-0">
+                          {index + 1}
+                        </div>
+                        <span className="text-[rgb(218,218,218)] text-sm leading-relaxed">{stage}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Work Environment */}
+                <div className="bg-gradient-to-r from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
+                  <h2 className="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+                    <Globe size={24} className="text-[#00FF41]" />
+                    <span>Work Environment</span>
+                  </h2>
+                  <p className="text-[rgb(161,161,170)] leading-relaxed">{job.workEnvironment}</p>
+                </div>
+              </div>
+              
+              {/* Application CTA Sidebar */}
+              <div className="lg:col-span-1">
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8 sticky top-6">
+                  <div className="text-center mb-6">
+                    <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <Briefcase size={24} className="text-[#00FF41]" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">Ready to Apply?</h3>
+                    <p className="text-[rgb(161,161,170)] text-sm">Join our team and help shape the future of AI-powered customer support.</p>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(161,161,170)] text-sm">Position</span>
+                      <span className="text-white text-sm font-medium">Customer Support</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(161,161,170)] text-sm">Experience</span>
+                      <span className="text-white text-sm font-medium">{job.experience}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(161,161,170)] text-sm">Education</span>
+                      <span className="text-white text-sm font-medium">{job.education}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(161,161,170)] text-sm">Location</span>
+                      <span className="text-white text-sm font-medium">Dhaka/Remote</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[rgb(161,161,170)] text-sm">Salary</span>
+                      <span className="text-white text-sm font-medium">{job.salary}</span>
+                    </div>
+                  </div>
+                  
+                  <button 
+                    onClick={() => {
+                      const applicationSection = document.getElementById('application-form');
+                      applicationSection?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="w-full px-6 py-4 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-all duration-200 flex items-center justify-center space-x-2"
+                  >
+                    <span>Start Application</span>
+                    <ArrowRight size={18} />
+                  </button>
+                  
+                  <p className="text-xs text-[rgb(161,161,170)] text-center mt-4">
+                    Application takes 5-10 minutes to complete
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Main Content */}
-        <div className="container mx-auto max-w-4xl px-6 py-12">
+        <div id="application-form" className="container mx-auto max-w-4xl px-6 py-12">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Job Information Sidebar */}
             <div className="lg:col-span-1">
