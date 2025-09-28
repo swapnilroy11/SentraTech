@@ -1225,6 +1225,44 @@ async def get_contact_requests_status():
         logger.error(f"Error fetching contact requests: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to fetch contact requests")
 
+@api_router.get("/ingest/roi_reports/status")  
+async def get_roi_reports_status():
+    """Get status of ROI reports for debugging"""
+    try:
+        reports = await db.roi_reports.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        
+        # Convert ObjectId to string for JSON serialization
+        for report in reports:
+            if '_id' in report:
+                report['_id'] = str(report['_id'])
+        
+        return {
+            "total_count": await db.roi_reports.count_documents({}),
+            "recent_reports": reports
+        }
+    except Exception as e:
+        logger.error(f"Error fetching ROI reports: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch ROI reports")
+
+@api_router.get("/ingest/subscriptions/status")  
+async def get_subscriptions_status():
+    """Get status of subscriptions for debugging"""
+    try:
+        subscriptions = await db.subscriptions.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        
+        # Convert ObjectId to string for JSON serialization
+        for subscription in subscriptions:
+            if '_id' in subscription:
+                subscription['_id'] = str(subscription['_id'])
+        
+        return {
+            "total_count": await db.subscriptions.count_documents({}),
+            "recent_subscriptions": subscriptions
+        }
+    except Exception as e:
+        logger.error(f"Error fetching subscriptions: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch subscriptions")
+
 # Google Sheets Service
 class AirtableService:
     """Airtable integration service for demo requests and analytics"""
