@@ -213,8 +213,13 @@ class ComprehensiveFormTester:
         
         test_data = {
             "country": "United States",
-            "email": "roi.test@company.com",
             "monthly_volume": 50000,
+            "bpo_spending": 125000.0,
+            "sentratech_spending": 75000.0,
+            "sentratech_bundles": 50.0,
+            "monthly_savings": 50000.0,
+            "roi": 66.7,
+            "cost_reduction": 40.0,
             "contact_email": "roi.test@company.com"
         }
         
