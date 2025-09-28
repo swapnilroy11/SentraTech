@@ -223,52 +223,69 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     setSubmitStatus(null);
 
     try {
-      const submissionData = {
-        ...formData,
-        utmData,
-        planSelected: formData.planSelected || selectedPlan || (prefill?.planSelected),
-        planId: formData.planId || (prefill?.planId),
-        billingTerm: formData.billingTerm || (prefill?.billingTerm) || '24m',
-        priceDisplay: formData.priceDisplay || (prefill?.priceDisplay)
+      // Prepare data for new ingest endpoint
+      const ingestData = {
+        full_name: formData.fullName,
+        work_email: formData.workEmail,
+        company_name: formData.companyName,
+        company_website: formData.companyWebsite || null,
+        phone: formData.phone || null,
+        call_volume: parseInt(formData.callVolume) || 0,
+        interaction_volume: parseInt(formData.interactionVolume) || 0,
+        preferred_contact_method: formData.preferredContactMethod === 'email' ? 'Email' : 'Phone',
+        message: formData.message || `Interested in ${formData.planSelected || 'SentraTech'} plan`,
+        status: "pending"
       };
 
-      const result = await insertContactRequest(submissionData);
+      // Get backend URL from environment
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
       
-      if (result.success) {
+      // Submit to new ingest endpoint
+      const response = await fetch(`${backendUrl}/api/ingest/contact_requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+        },
+        body: JSON.stringify(ingestData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
         setSubmitStatus('success');
         
         // Analytics event for successful form submission
         if (window && window.dataLayer) {
           window.dataLayer.push({
             event: "contact_form_submit",
-            planId: submissionData.planId,
-            planSelected: submissionData.planSelected,
-            billingTerm: submissionData.billingTerm,
-            priceDisplay: submissionData.priceDisplay,
-            supabaseId: result.id || `contact_${Date.now()}`
+            planId: formData.planId,
+            planSelected: formData.planSelected,
+            billingTerm: formData.billingTerm,
+            priceDisplay: formData.priceDisplay,
+            ingestId: result.id || `contact_${Date.now()}`
           });
-        }
-        
-        // Optional: Send notification to /api/notify endpoint
-        try {
-          await fetch('/api/notify', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              type: 'contact_sales',
-              data: submissionData,
-              planTag: submissionData.planSelected
-            })
-          });
-        } catch (notifyError) {
-          console.warn('Notification failed:', notifyError);
-          // Don't show error to user for notification failures
         }
       } else {
-        setSubmitStatus('error');
-        setErrors({ submit: result.message });
+        // Fallback to old Supabase method if ingest fails
+        console.warn('Ingest endpoint failed, falling back to Supabase');
+        
+        const submissionData = {
+          ...formData,
+          utmData,
+          planSelected: formData.planSelected || selectedPlan || (prefill?.planSelected),
+          planId: formData.planId || (prefill?.planId),
+          billingTerm: formData.billingTerm || (prefill?.billingTerm) || '24m',
+          priceDisplay: formData.priceDisplay || (prefill?.priceDisplay)
+        };
+
+        const result = await insertContactRequest(submissionData);
+        
+        if (result.success) {
+          setSubmitStatus('success');
+        } else {
+          setSubmitStatus('error');
+          setErrors({ submit: result.message });
+        }
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
