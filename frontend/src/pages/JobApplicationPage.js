@@ -258,29 +258,40 @@ const JobApplicationPage = () => {
 
   // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
   const submitApplication = async (applicationData) => {
-    // Simulate successful job application submission without API call
-    setTimeout(() => {
-      const applicationId = `job_${Date.now()}`;
-      console.log('✅ Job application submitted successfully (offline mode):', applicationId);
-      setSubmitStatus('success');
+    try {
+      // Use Dashboard integration
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
       
-      if (window && window.dataLayer) {
-        window.dataLayer.push({
-          event: "job_application_submit",
-          position: applicationData.position_applied,
-          source: 'careers_page',
-          location: applicationData.location,
-          hasResume: !!applicationData.resume_file,
-          applicationId: applicationId
-        });
+      // Prepare application data for SentraTech Admin Dashboard
+      const applicationData = {
+        full_name: data.fullName,
+        email: data.email,
+        position_applied: data.position || 'Customer Support Specialist',
+        phone: data.phone || '',
+        experience_level: data.experience || '',
+        motivation_text: data.coverNote || '',
+        consent_for_storage: data.consentForStorage
+      };
+      
+      // Submit to SentraTech Admin Dashboard with AI analysis
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData, (result) => {
+        // Show AI score and recommendation for job applications
+        if (result.overall_score && result.ai_recommendation) {
+          console.log(`🤖 AI Analysis: ${result.overall_score}% score - ${result.ai_recommendation}`);
+        }
+      });
+      
+      if (result.success) {
+        showSuccessMessage('Job application submitted successfully', result.data);
+        onSuccess(result.data.application_id || result.data.id || `job_${Date.now()}`);
+      } else {
+        console.error('Job application failed:', result.error);
+        onError(result.error || 'Failed to submit job application. Please try again.');
       }
-      
-      setTimeout(() => {
-        navigate('/careers', { state: { applicationSubmitted: true } });
-      }, 3000);
-      
-      setIsSubmitting(false);
-    }, 1500); // Simulate processing time
+    } catch (error) {
+      console.error('Job application error:', error);
+      onError('Something went wrong. Please try again.');
+    }
   };
 
   const seoData = {
