@@ -34,6 +34,9 @@ import aiohttp
 # Import performance optimization modules
 from cache_manager import cached, cache_manager, SpecializedCaches, warm_cache, cache_maintenance
 
+# Import dashboard configuration
+from dashboard_config import DashboardConfig
+
 # Configure logging first
 logging.basicConfig(
     level=logging.INFO,
