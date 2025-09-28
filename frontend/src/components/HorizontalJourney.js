@@ -27,6 +27,7 @@ const HorizontalJourney = () => {
   
   // Handle modal opening/closing with body scroll lock
   const openModal = (stage) => {
+    console.log('Opening modal for stage:', stage.title);
     setSelectedPanel(stage);
     document.body.classList.add('modal-open');
   };
