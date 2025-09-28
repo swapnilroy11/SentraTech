@@ -53,7 +53,7 @@ const CareersPage = () => {
         'Participate in QA and training sessions'
       ],
       benefits: [
-        'Competitive salary (35,000–60,000 BDT/month)',
+        'Competitive salary package',
         'Work-from-home / hybrid policy',
         'Learning & development budget',
         'Performance-based bonuses',
