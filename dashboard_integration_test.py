@@ -2,7 +2,7 @@
 """
 Updated Dashboard Integration Endpoints Testing
 Tests all ingest proxy endpoints that now send data directly to Admin Dashboard
-at https://customer-flow-5.preview.emergentagent.com instead of api.sentratech.net
+at https://tech-careers-3.preview.emergentagent.com instead of api.sentratech.net
 """
 
 import requests
@@ -13,7 +13,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-flow-5.preview.emergentagent.com/api"
+BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
 
 # Valid ingest key from backend environment
 VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
@@ -514,7 +514,7 @@ class DashboardIntegrationTester:
             
             print(f"   📊 Connectivity Pattern: {connectivity_pattern}")
             print(f"   📊 Local Fallback: Working correctly as backup storage")
-            print(f"   📊 External Dashboard: https://customer-flow-5.preview.emergentagent.com")
+            print(f"   📊 External Dashboard: https://tech-careers-3.preview.emergentagent.com")
             
             return True
         else:
@@ -682,7 +682,7 @@ class DashboardIntegrationTester:
 def main():
     """Main function to run dashboard integration testing"""
     print("🎯 Updated Dashboard Integration Endpoints Testing")
-    print("Testing endpoints that now send data to https://customer-flow-5.preview.emergentagent.com")
+    print("Testing endpoints that now send data to https://tech-careers-3.preview.emergentagent.com")
     print()
     
     tester = DashboardIntegrationTester()

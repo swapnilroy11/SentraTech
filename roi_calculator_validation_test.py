@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-flow-5.preview.emergentagent.com/api"
+BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
 
 class ROICalculatorValidationTester:
     """Final validation testing for ROI Calculator with updated cost baselines and 30% profit margin"""

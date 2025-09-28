@@ -11,8 +11,8 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend and Frontend URLs
-BACKEND_URL = "https://customer-flow-5.preview.emergentagent.com/api"
-FRONTEND_URL = "https://customer-flow-5.preview.emergentagent.com"
+BACKEND_URL = "https://tech-careers-3.preview.emergentagent.com/api"
+FRONTEND_URL = "https://tech-careers-3.preview.emergentagent.com"
 
 # Supabase configuration from frontend/.env
 SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"

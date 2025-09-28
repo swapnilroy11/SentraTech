@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 INGEST_KEY="a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
-ADMIN_URL="https://customer-flow-5.preview.emergentagent.com"
+ADMIN_URL="https://tech-careers-3.preview.emergentagent.com"
 API_URL="https://api.sentratech.net"
 EMAIL="swapnil.roy@sentratech.net"
 PASSWORD="Sentra@2025"
