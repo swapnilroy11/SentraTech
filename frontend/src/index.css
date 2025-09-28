@@ -16,6 +16,22 @@ body {
     color: #F8F9FA;
 }
 
+/* Hide all Emergent branding permanently */
+#emergent-badge,
+[id*="emergent" i],
+[class*="emergent" i],
+a[href*="emergent" i]:not([href*="sentratech"]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Hide any elements with "Made with" text that might be Emergent badges */
+*:not(script):not(style) {
+    /* This will be handled by JavaScript removal instead to avoid overly broad CSS */
+}
+
 /* Smooth, fast scrolling */
 html {
   scroll-behavior: smooth;
