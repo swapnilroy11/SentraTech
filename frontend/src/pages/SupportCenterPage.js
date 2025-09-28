@@ -624,31 +624,13 @@ const SupportCenterPage = () => {
             ))}
           </div>
           
-          {/* FAQ Items Container - Fixed Height to Prevent Layout Shifts */}
-          <div 
-            ref={faqContainerRef}
-            className={`transition-opacity duration-200 ease-in-out ${
-              isTransitioning ? 'opacity-80' : 'opacity-100'
-            }`}
-            style={{ 
-              minHeight: selectedCategory === 'all' ? '2000px' : 
-                         selectedCategory === 'integrations' ? '1200px' :
-                         selectedCategory === 'getting-started' ? '1000px' :
-                         selectedCategory === 'ai-features' ? '800px' :
-                         selectedCategory === 'billing' ? '700px' :
-                         '600px' // security
-            }}
-          >
+          {/* FAQ Items Container - Simplified */}
+          <div ref={faqContainerRef} className="min-h-[600px]">
             <div className="space-y-4">
               {filteredQuestions.map((faq, index) => (
                 <div 
                   key={`faq-${selectedCategory}-${index}`} 
-                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300 animate-fadeIn"
-                  style={{ 
-                    animationDelay: `${index * 30}ms`,
-                    animationDuration: '0.3s',
-                    animationFillMode: 'both'
-                  }}
+                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="text-base md:text-lg font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
