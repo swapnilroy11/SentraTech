@@ -223,10 +223,6 @@ const JobApplicationPage = () => {
     setSubmitStatus(null);
     
     try {
-      if (!validateConfig()) {
-        throw new Error('Configuration validation failed');
-      }
-      
       const submissionData = {
         full_name: formData.full_name,
         email: formData.email,
