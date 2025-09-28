@@ -171,7 +171,7 @@ class EmailService:
             }
         }
     
-    async def send_notification(self, email_data: EmailNotification):
+    async def send_notification(self, email_data: "EmailNotification"):
         """Send email notification to candidate"""
         try:
             templates = self.get_email_templates()
