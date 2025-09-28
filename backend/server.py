@@ -30,6 +30,11 @@ from fastapi import Depends, status
 import aiosmtplib
 import httpx
 import aiohttp
+import smtplib
+from google.auth.transport.requests import Request as GoogleRequest
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 # Import performance optimization modules
 from cache_manager import cached, cache_manager, SpecializedCaches, warm_cache, cache_maintenance
