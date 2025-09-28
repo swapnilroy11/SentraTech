@@ -712,7 +712,7 @@ const HorizontalJourney = () => {
               overflowY: 'auto',
               transform: 'translateZ(0)', // Enable hardware acceleration
               WebkitTransform: 'translateZ(0)', // Safari hardware acceleration
-              scrollbarColor: `${selectedPanel.color}40 transparent`
+              scrollbarColor: `${selectedPanel.color}70 ${selectedPanel.color}10`
             }}
             onClick={(e) => e.stopPropagation()}
           >
