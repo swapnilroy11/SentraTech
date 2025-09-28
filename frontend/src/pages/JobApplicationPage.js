@@ -260,44 +260,41 @@ const JobApplicationPage = () => {
     }
   };
 
-  // Submit to SentraTech Admin Dashboard as per prompt
+  // Submit to backend API (proxy to dashboard)
   const submitApplication = async (applicationData) => {
     try {
-      const response = await fetch('https://sentra-admin-dash.preview.emergentagent.com/api/ingest/job_applications', {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/ingest/job_applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': 'test-ingest-key-12345'
+          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
         },
         body: JSON.stringify(applicationData)
       });
       
-      const result = await response.json();
-      
-      if (response.ok) {
-        // Success! Application submitted
-        console.log('Application submitted:', result.application_id);
-        setSubmitStatus('success');
-        
-        if (window && window.dataLayer) {
-          window.dataLayer.push({
-            event: "job_application_submit",
-            position: applicationData.position,
-            source: applicationData.source,
-            location: applicationData.location,
-            hasResume: !!applicationData.resumeFile,
-            hasLinkedin: !!applicationData.linkedinProfile
-          });
-        }
-        
-        setTimeout(() => {
-          navigate('/careers', { state: { applicationSubmitted: true } });
-        }, 3000);
-        
-        return { success: true, data: result };
-      } else {
-        throw new Error(result.detail || 'Submission failed');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const result = await response.json();
+      setSubmitStatus('success');
+      
+      if (window && window.dataLayer) {
+        window.dataLayer.push({
+          event: "job_application_submit",
+          position: applicationData.position,
+          source: applicationData.source,
+          location: applicationData.location,
+          hasResume: !!applicationData.resumeFile,
+          hasLinkedin: !!applicationData.linkedinProfile
+        });
+      }
+      
+      setTimeout(() => {
+        navigate('/careers', { state: { applicationSubmitted: true } });
+      }, 3000);
+      
+      return result;
     } catch (error) {
       console.error('Application submission error:', error);
       setSubmitStatus('error');
