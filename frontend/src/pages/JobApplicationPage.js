@@ -549,9 +549,9 @@ const JobApplicationPage = () => {
                   Work Authorization *
                 </label>
                 <select
-                  value={formData.workAuthorization}
-                  onChange={(e) => handleInputChange('workAuthorization', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.workAuthorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
+                  value={formData.work_authorization}
+                  onChange={(e) => handleInputChange('work_authorization', e.target.value)}
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
                 >
                   <option value="">Select work authorization status</option>
                   <option value="citizen">Bangladeshi Citizen</option>
@@ -559,7 +559,7 @@ const JobApplicationPage = () => {
                   <option value="work_permit">Work Permit Holder</option>
                   <option value="other">Other (please specify in cover letter)</option>
                 </select>
-                {errors.workAuthorization && <p className="text-red-400 text-xs mt-1">{errors.workAuthorization}</p>}
+                {errors.work_authorization && <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>}
               </div>
               
               <div className="space-y-4">
