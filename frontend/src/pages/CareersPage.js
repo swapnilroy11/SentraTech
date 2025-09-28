@@ -257,7 +257,7 @@ const CareersPage = () => {
         </section>
 
         {/* Benefits & Perks */}
-        <section className="py-20 px-6">
+        <section id="benefits-perks" className="py-20 px-6">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
