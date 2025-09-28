@@ -740,52 +740,39 @@ const HorizontalJourney = () => {
               </p>
             </div>
 
-                  {/* Process Overview */}
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <Brain style={{ color: selectedPanel.color }} size={18} />
-                      Process Overview
-                    </h4>
-                    <ul className="space-y-2 text-[rgb(218,218,218)]">
-                      {selectedPanel.keyFeatures?.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <CheckCircle 
-                            style={{ color: selectedPanel.color }} 
-                            className="mt-1 flex-shrink-0" 
-                            size={14} 
-                          />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      )) || (
-                        <>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle 
-                              style={{ color: selectedPanel.color }} 
-                              className="mt-1 flex-shrink-0" 
-                              size={14} 
-                            />
-                            <span className="text-sm">Intelligent routing and processing</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle 
-                              style={{ color: selectedPanel.color }} 
-                              className="mt-1 flex-shrink-0" 
-                              size={14} 
-                            />
-                            <span className="text-sm">AI-powered analysis and response</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <CheckCircle 
-                              style={{ color: selectedPanel.color }} 
-                              className="mt-1 flex-shrink-0" 
-                              size={14} 
-                            />
-                            <span className="text-sm">Real-time quality monitoring</span>
-                          </li>
-                        </>
-                      )}
-                    </ul>
+            {/* Key Features */}
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ 
+                color: 'white', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginBottom: '12px' 
+              }}>
+                Key Features
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {(selectedPanel.keyFeatures || [
+                  'Intelligent routing and processing',
+                  'AI-powered analysis and response',
+                  'Real-time quality monitoring'
+                ]).slice(0, 3).map((feature, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{
+                      width: '6px',
+                      height: '6px',
+                      backgroundColor: selectedPanel.color,
+                      borderRadius: '50%'
+                    }}></div>
+                    <span style={{ 
+                      color: 'rgb(218,218,218)', 
+                      fontSize: '14px' 
+                    }}>
+                      {feature}
+                    </span>
                   </div>
+                ))}
+              </div>
+            </div>
 
                   {/* Key Metrics */}
                   <div className="space-y-3">
