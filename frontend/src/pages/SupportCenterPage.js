@@ -420,7 +420,48 @@ const SupportCenterPage = () => {
   }, [navigate]);
 
   const handleCategoryChange = useCallback((categoryId) => {
-    setSelectedCategory(categoryId);
+    // Prevent scroll jumping by managing the transition smoothly
+    setIsTransitioning(true);
+    
+    // Get current FAQ container position to maintain scroll position
+    const faqContainer = document.getElementById('faq-container');
+    const faqSection = document.getElementById('faq-section');
+    
+    if (faqContainer && faqSection) {
+      const containerRect = faqContainer.getBoundingClientRect();
+      const currentScrollY = window.scrollY;
+      const containerTop = containerRect.top + currentScrollY;
+      
+      // If FAQ section is visible, scroll to maintain position
+      if (containerRect.top < window.innerHeight && containerRect.bottom > 0) {
+        // Store the current position relative to FAQ section
+        const relativePosition = currentScrollY - containerTop;
+        
+        // Change category
+        setSelectedCategory(categoryId);
+        
+        // Use requestAnimationFrame to ensure DOM has updated
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // Maintain scroll position relative to FAQ section
+            const newContainerTop = faqSection.offsetTop;
+            window.scrollTo({
+              top: Math.max(0, newContainerTop + Math.min(relativePosition, 0)),
+              behavior: 'instant'
+            });
+            setIsTransitioning(false);
+          });
+        });
+      } else {
+        // If FAQ section is not in view, just change category normally
+        setSelectedCategory(categoryId);
+        setIsTransitioning(false);
+      }
+    } else {
+      // Fallback if elements not found
+      setSelectedCategory(categoryId);
+      setIsTransitioning(false);
+    }
   }, []);
 
   return (
