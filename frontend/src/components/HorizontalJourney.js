@@ -830,31 +830,34 @@ const HorizontalJourney = () => {
               </div>
             </div>
 
-                  {/* Integration Channels */}
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <Target style={{ color: selectedPanel.color }} size={18} />
-                      Integration Channels
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
-                        <Badge 
-                          key={index} 
-                          variant="outline" 
-                          className="text-xs"
-                          style={{
-                            borderColor: `${selectedPanel.color}40`,
-                            color: selectedPanel.color,
-                            backgroundColor: `${selectedPanel.color}10`
-                          }}
-                        >
-                          {channel}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+            {/* Integration Channels */}
+            <div>
+              <h4 style={{ 
+                color: 'white', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginBottom: '12px' 
+              }}>
+                Integration Channels
+              </h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      padding: '4px 8px',
+                      backgroundColor: `${selectedPanel.color}10`,
+                      border: `1px solid ${selectedPanel.color}40`,
+                      borderRadius: '12px',
+                      color: selectedPanel.color,
+                      fontSize: '12px'
+                    }}
+                  >
+                    {channel}
+                  </span>
+                ))}
               </div>
+            </div>
           </motion.div>
         </div>
       )}
