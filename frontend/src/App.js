@@ -45,6 +45,45 @@ function App() {
   useEffect(() => {
     // Initialize enterprise-grade features
     initializeEnterpriseFeatures();
+    
+    // Remove any Emergent branding badges permanently
+    const removeEmergentBadges = () => {
+      const emergentSelectors = [
+        '#emergent-badge',
+        '[id*="emergent"]',
+        '[class*="emergent"]',
+        'a[href*="emergent.sh"]',
+        'a[href*="app.emergent"]'
+      ];
+      
+      emergentSelectors.forEach(selector => {
+        try {
+          const elements = document.querySelectorAll(selector);
+          elements.forEach(el => {
+            if (el && el.textContent && el.textContent.toLowerCase().includes('emergent')) {
+              el.remove();
+            }
+          });
+        } catch (e) {
+          console.debug('Badge removal:', e.message);
+        }
+      });
+    };
+    
+    // Remove immediately and set up observer for dynamic content
+    removeEmergentBadges();
+    
+    // Set up mutation observer to catch dynamically added badges
+    const observer = new MutationObserver(() => {
+      removeEmergentBadges();
+    });
+    
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+    
+    return () => observer.disconnect();
   }, []);
 
   const initializeEnterpriseFeatures = () => {
