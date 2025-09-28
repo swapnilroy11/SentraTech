@@ -303,6 +303,31 @@ class DemoRequestResponse(BaseModel):
     status: str = "submitted"
     integration_status: Optional[Dict[str, Any]] = None
 
+# Dashboard Ingest Models
+class DemoIngestRequest(BaseModel):
+    user_name: str
+    email: str
+    company: str
+    company_website: Optional[str] = None
+    phone: Optional[str] = None
+    call_volume: int = 0
+    interaction_volume: int = 0
+    message: str
+    source: Optional[str] = None
+
+class ContactIngestRequest(BaseModel):
+    full_name: str
+    work_email: str
+    company_name: str
+    company_website: Optional[str] = None
+    phone: Optional[str] = None
+    call_volume: int = 0
+    interaction_volume: int = 0
+    preferred_contact_method: str = "Email"
+    message: str
+    status: str = "pending"
+    assigned_rep: Optional[str] = None
+
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: str
