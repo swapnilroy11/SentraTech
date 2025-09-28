@@ -15,13 +15,13 @@ export const DASHBOARD_CONFIG = {
   // Dashboard ingest key for authentication
   INGEST_KEY: 'test-ingest-key-12345',
   
-  // Form submission endpoints
+  // Form submission endpoints (actual dashboard endpoints with underscores)
   ENDPOINTS: {
-    DEMO_REQUEST: '/api/forms/demo-request',
-    CONTACT_SALES: '/api/forms/contact-sales',
-    ROI_CALCULATOR: '/api/forms/roi-calculator',
-    NEWSLETTER_SIGNUP: '/api/forms/newsletter-signup',
-    JOB_APPLICATION: '/api/forms/job-application'
+    DEMO_REQUEST: '/api/ingest/demo_requests',
+    CONTACT_SALES: '/api/ingest/contact_requests',
+    ROI_CALCULATOR: '/api/ingest/roi_reports',
+    NEWSLETTER_SIGNUP: '/api/ingest/subscriptions',
+    JOB_APPLICATION: '/api/ingest/job_applications'
   }
 };
 
