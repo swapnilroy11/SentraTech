@@ -775,7 +775,8 @@ const HorizontalJourney = () => {
             </motion.div>
           </motion.div>,
           document.body
-        )}
+        );
+        })()}
       </AnimatePresence>
     </section>
   );
