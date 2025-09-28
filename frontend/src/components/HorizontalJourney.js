@@ -706,10 +706,22 @@ const HorizontalJourney = () => {
               maxHeight: '85vh',
               overflowY: 'auto',
               transform: 'translateZ(0)', // Enable hardware acceleration
-              WebkitTransform: 'translateZ(0)' // Safari hardware acceleration
+              WebkitTransform: 'translateZ(0)', // Safari hardware acceleration
+              scrollbarColor: `${selectedPanel.color}40 transparent`
             }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Dynamic scrollbar styling */}
+            <style dangerouslySetInnerHTML={{
+              __html: `
+                .smooth-modal-scroll::-webkit-scrollbar-thumb {
+                  background: ${selectedPanel.color}25;
+                }
+                .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
+                  background: ${selectedPanel.color}40;
+                }
+              `
+            }} />
             {/* Close Button */}
             <button
               onClick={closeModal}
