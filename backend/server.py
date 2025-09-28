@@ -1030,6 +1030,162 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         logger.error(f"Contact ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+@api_router.post("/ingest/roi_reports")
+async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest):
+    """Ingest ROI report and forward to admin dashboard"""
+    
+    # Verify X-INGEST-KEY header
+    ingest_key = request.headers.get("X-INGEST-KEY")
+    expected_key = os.environ.get("INGEST_KEY")
+    
+    if not ingest_key or ingest_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
+    
+    try:
+        # Store locally first
+        roi_data = {
+            **roi_report.dict(),
+            "id": str(uuid.uuid4()),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "pending_dashboard_sync"
+        }
+        
+        # Save to local database as backup
+        await db.roi_reports.insert_one(roi_data)
+        logger.info(f"ROI report saved locally: {roi_report.contact_email}")
+        
+        # Try to forward to admin dashboard
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/roi_reports"
+                
+                # Get service credentials
+                svc_email = os.environ.get("SVC_EMAIL")
+                svc_password = os.environ.get("SVC_PASSWORD")
+                
+                response = await client.post(
+                    dashboard_url,
+                    json=roi_report.dict(),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                    }
+                )
+                
+                if response.status_code in [200, 201]:
+                    # Update status to synced
+                    await db.roi_reports.update_one(
+                        {"id": roi_data["id"]},
+                        {"$set": {"status": "synced_to_dashboard"}}
+                    )
+                    logger.info(f"ROI report successfully forwarded to dashboard: {roi_report.contact_email}")
+                    return {
+                        "status": "success", 
+                        "message": "ROI report submitted and synced to dashboard",
+                        "id": roi_data["id"]
+                    }
+                else:
+                    logger.warning(f"Dashboard sync failed ({response.status_code}), keeping local copy")
+                    return {
+                        "status": "success", 
+                        "message": "ROI report saved locally, dashboard sync will retry",
+                        "id": roi_data["id"],
+                        "dashboard_status": "pending_retry"
+                    }
+        except httpx.ConnectError:
+            logger.warning("Dashboard not reachable, keeping local copy for sync retry")
+            return {
+                "status": "success", 
+                "message": "ROI report saved locally, dashboard sync will retry when available",
+                "id": roi_data["id"],
+                "dashboard_status": "connection_failed"
+            }
+                
+    except httpx.TimeoutException:
+        logger.error("Dashboard request timeout")
+        raise HTTPException(status_code=504, detail="Request timeout")
+    except Exception as e:
+        logger.error(f"ROI report ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.post("/ingest/subscriptions")
+async def ingest_subscription(request: Request, subscription: SubscriptionIngestRequest):
+    """Ingest newsletter subscription and forward to admin dashboard"""
+    
+    # Verify X-INGEST-KEY header
+    ingest_key = request.headers.get("X-INGEST-KEY")
+    expected_key = os.environ.get("INGEST_KEY")
+    
+    if not ingest_key or ingest_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
+    
+    try:
+        # Store locally first
+        subscription_data = {
+            **subscription.dict(),
+            "id": str(uuid.uuid4()),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "pending_dashboard_sync"
+        }
+        
+        # Save to local database as backup
+        await db.subscriptions.insert_one(subscription_data)
+        logger.info(f"Subscription saved locally: {subscription.email}")
+        
+        # Try to forward to admin dashboard
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                dashboard_url = "https://admin-matrix.preview.emergentagent.com/v1/subscriptions"
+                
+                # Get service credentials
+                svc_email = os.environ.get("SVC_EMAIL")
+                svc_password = os.environ.get("SVC_PASSWORD")
+                
+                response = await client.post(
+                    dashboard_url,
+                    json=subscription.dict(),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                    }
+                )
+                
+                if response.status_code in [200, 201]:
+                    # Update status to synced
+                    await db.subscriptions.update_one(
+                        {"id": subscription_data["id"]},
+                        {"$set": {"status": "synced_to_dashboard"}}
+                    )
+                    logger.info(f"Subscription successfully forwarded to dashboard: {subscription.email}")
+                    return {
+                        "status": "success", 
+                        "message": "Subscription submitted and synced to dashboard",
+                        "id": subscription_data["id"]
+                    }
+                else:
+                    logger.warning(f"Dashboard sync failed ({response.status_code}), keeping local copy")
+                    return {
+                        "status": "success", 
+                        "message": "Subscription saved locally, dashboard sync will retry",
+                        "id": subscription_data["id"],
+                        "dashboard_status": "pending_retry"
+                    }
+        except httpx.ConnectError:
+            logger.warning("Dashboard not reachable, keeping local copy for sync retry")
+            return {
+                "status": "success", 
+                "message": "Subscription saved locally, dashboard sync will retry when available",
+                "id": subscription_data["id"],
+                "dashboard_status": "connection_failed"
+            }
+                
+    except httpx.TimeoutException:
+        logger.error("Dashboard request timeout")
+        raise HTTPException(status_code=504, detail="Request timeout")
+    except Exception as e:
+        logger.error(f"Subscription ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # Debug endpoints to view stored ingest data
 @api_router.get("/ingest/demo_requests/status")
 async def get_demo_requests_status():
