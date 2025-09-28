@@ -158,6 +158,19 @@ const JobApplicationPage = () => {
     });
   };
 
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    
+    try {
+      const result = await handleFileUpload(file);
+      setResume(result);
+      setErrors(prev => ({ ...prev, resume: null }));
+    } catch (error) {
+      setErrors(prev => ({ ...prev, resume: error }));
+      setResume(null);
+    }
+  };
+
   const validateStep = (step) => {
     const newErrors = {};
     
