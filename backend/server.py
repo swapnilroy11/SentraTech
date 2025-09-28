@@ -328,6 +328,22 @@ class ContactIngestRequest(BaseModel):
     status: str = "pending"
     assigned_rep: Optional[str] = None
 
+class ROIReportIngestRequest(BaseModel):
+    country: str
+    monthly_volume: int
+    bpo_spending: float
+    sentratech_spending: float
+    sentratech_bundles: float
+    monthly_savings: float
+    roi: float
+    cost_reduction: float
+    contact_email: str
+
+class SubscriptionIngestRequest(BaseModel):
+    email: str
+    source: Optional[str] = "website"
+    status: str = "subscribed"
+
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: str
