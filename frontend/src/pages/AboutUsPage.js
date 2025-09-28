@@ -79,7 +79,7 @@ const AboutUsPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
+    <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
       <SEOManager 
         title="About SentraTech | Next-Generation AI Customer Support Platform"
         description="Learn about SentraTech's mission to transform customer support with AI-powered automation. Founded in 2024, we're building the future of intelligent customer experiences."
@@ -91,7 +91,7 @@ const AboutUsPage = () => {
         <div className="mb-12">
           <button
             onClick={handleBackNavigation}
-            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors duration-200 mb-6 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50 rounded-lg p-2"
+            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors duration-200 mb-6 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50 rounded-lg p-2 will-change-transform"
             aria-label="Back to Home"
           >
             <ArrowLeft size={20} className="mr-2" />
