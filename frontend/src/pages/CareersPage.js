@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Briefcase, Users, Award, Globe, ArrowRight, MapPin, Clock, DollarSign, CheckCircle } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEOManager from '../components/SEOManager';
