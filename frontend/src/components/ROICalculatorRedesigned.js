@@ -235,41 +235,15 @@ const ROICalculatorRedesigned = () => {
       
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR, dashboardData);
-      });
 
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
         setReportSubmitted(true);
         
-        console.log('ROI report submitted successfully:', result);
+        console.log('✅ ROI report submitted successfully:', result.data);
         
         // Modal will now stay open until user clicks "Continue Exploring"
       } else {
-        // Fallback to Supabase if ingest fails
-        console.warn('Ingest endpoint failed, falling back to Supabase');
-        
-        const fallbackData = {
-          email,
-          country: selectedCountry,
-          call_volume: parseFloat(callVolume),
-          interaction_volume: parseFloat(interactionVolume),
-          traditional_cost: results.traditionalMonthlyCost,
-          sentratech_cost: results.sentraTechMonthlyCost,
-          monthly_savings: results.monthlySavings,
-          annual_savings: results.yearlySavings,
-          roi_percent: results.roi,
-          cost_reduction: results.costReduction
-        };
-
-        const { error } = await supabase
-          .from('roi_reports')
-          .insert([fallbackData]);
-
-        if (error) throw error;
-
-        setReportSubmitted(true);
-        
-        // Modal will stay open until user clicks "Continue Exploring"
+        throw new Error(result.error || 'Failed to submit ROI report');
       }
 
     } catch (error) {
