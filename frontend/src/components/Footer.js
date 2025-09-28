@@ -13,10 +13,10 @@ const Footer = () => {
 
   const footerLinks = {
     careers: [
-      { name: 'Open Positions', href: '#' },
-      { name: 'Life at SentraTech', href: '#' },
-      { name: 'Benefits & Perks', href: '#' },
-      { name: 'Apply Now', href: '#' }
+      { name: 'Open Positions', href: '/careers#open-positions' },
+      { name: 'Life at SentraTech', href: '/careers#company-culture' },
+      { name: 'Benefits & Perks', href: '/careers#benefits-perks' },
+      { name: 'Apply Now', href: '/careers#apply-now' }
     ],
     company: [
       { name: 'About Us', href: '/about-us' },
