@@ -212,7 +212,7 @@ export const formatCurrencyPrecise = (amount) => {
     const thousands = Math.trunc((amount / 1000) * 10) / 10;
     return `$${thousands.toFixed(1)}K`;
   }
-  return `$${(Math.trunc(amount / 100000) * 10) / 100}.toFixed(1)}M`;
+  return `$${((Math.trunc(amount / 100000) * 10) / 100).toFixed(1)}M`;
 };
 
 export const formatPercentagePrecise = (value) => {
