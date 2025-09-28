@@ -276,11 +276,7 @@ const ROICalculatorRedesigned = () => {
 
         setReportSubmitted(true);
         
-        setTimeout(() => {
-          setShowEmailModal(false);
-          setReportSubmitted(false);
-          setEmail('');
-        }, 3000);
+        // Modal will stay open until user clicks "Continue Exploring"
       }
 
     } catch (error) {
