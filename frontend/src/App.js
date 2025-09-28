@@ -156,6 +156,7 @@ function App() {
                 <Route path="/investor-relations" element={<InvestorRelationsPage />} />
                 <Route path="/support-center" element={<SupportCenterPage />} />
                 <Route path="/contact-sales-management" element={<ContactSalesPage />} />
+                <Route path="/careers" element={<CareersPage />} />
                 
                 {/* Custom 404 Page */}
                 <Route path="*" element={<NotFoundPage />} />
