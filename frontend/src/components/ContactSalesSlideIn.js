@@ -258,9 +258,10 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES, dashboardData);
 
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
         setSubmitStatus('success');
+        
+        console.log('✅ Contact sales submitted successfully:', result.data);
         
         // Analytics event for successful form submission
         if (window && window.dataLayer) {
@@ -270,30 +271,12 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             planSelected: formData.planSelected,
             billingTerm: formData.billingTerm,
             priceDisplay: formData.priceDisplay,
-            ingestId: result.id || `contact_${Date.now()}`
+            ingestId: result.data.id || `contact_${Date.now()}`
           });
         }
       } else {
-        // Fallback to old Supabase method if ingest fails
-        console.warn('Ingest endpoint failed, falling back to Supabase');
-        
-        const submissionData = {
-          ...formData,
-          utmData,
-          planSelected: formData.planSelected || selectedPlan || (prefill?.planSelected),
-          planId: formData.planId || (prefill?.planId),
-          billingTerm: formData.billingTerm || (prefill?.billingTerm) || '24m',
-          priceDisplay: formData.priceDisplay || (prefill?.priceDisplay)
-        };
-
-        const result = await insertContactRequest(submissionData);
-        
-        if (result.success) {
-          setSubmitStatus('success');
-        } else {
-          setSubmitStatus('error');
-          setErrors({ submit: result.message });
-        }
+        setSubmitStatus('error');
+        setErrors({ submit: result.error || 'Contact form submission failed' });
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
