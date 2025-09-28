@@ -703,8 +703,8 @@ const HorizontalJourney = () => {
                   <X size={14} />
                 </Button>
 
-              {/* Stage Content */}
-              <div className="space-y-6">
+                {/* Stage Content */}
+                <div className="space-y-5 custom-scrollbar">
                 {/* Header */}
                 <div className="text-center space-y-3">
                   <Badge variant="outline" className="border-[#00FF41] text-[#00FF41] mb-2">
