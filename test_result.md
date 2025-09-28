@@ -59,13 +59,11 @@
 
 test_plan:
   current_focus:
-    - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
     - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
     - "Demo Request Form Supabase Submission Issue"
-    - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
   test_all: false
