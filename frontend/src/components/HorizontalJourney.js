@@ -423,6 +423,8 @@ const HorizontalJourney = () => {
           align-items: center !important;
           justify-content: center !important;
           z-index: 99999 !important;
+          padding: 20px !important;
+          box-sizing: border-box !important;
         }
         .customer-journey-modal-content {
           will-change: transform, opacity;
