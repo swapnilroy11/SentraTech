@@ -201,9 +201,8 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
       setTimeout(() => {
         resetForm();
       }, 3000);
-    }, 1400); // Simulate processing time finally {
       setIsSubmitting(false);
-    }
+    }, 1400); // Simulate processing time
   };
 
   const handleClose = () => {
