@@ -123,6 +123,15 @@ const ContactSalesPage = () => {
     }));
   };
 
+  const resetFilters = () => {
+    setFilterConfig({
+      status: 'all',
+      contactMethod: 'all',
+      dateRange: 'all'
+    });
+    setSearchTerm('');
+  };
+
   const exportToCSV = () => {
     const csvHeaders = [
       'Name', 'Email', 'Company', 'Phone', 'Call Volume', 'Interaction Volume', 
