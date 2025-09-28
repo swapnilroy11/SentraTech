@@ -48,24 +48,63 @@ const JobApplicationPage = () => {
       location: 'Dhaka (Hybrid) or Remote — Bangladesh',
       type: 'Full-time',
       salary: 'Competitive',
-      description: 'Join our team as a Customer Support Specialist where you\'ll be the human layer for SentraTech customers, handling escalations, complex inquiries, and contributing to AI assistant training.',
-      requirements: [
-        'Fluent English (spoken & written) — professional business-level communication required',
-        '1–3 years experience in customer support or BPO (voice + digital channels preferred)',
-        'Experience with CRMs and ticketing systems (Zendesk/HubSpot/Intercom)',
-        'Strong problem-solving, ownership, and attention to detail',
-        'Reliable internet and a quiet workspace for remote shifts',
-        'Willingness to work rotational shifts (including some nights/weekends)'
+      experience: '0-1+ years (Fresh graduates welcome)',
+      education: 'Any degree/background',
+      shortDescription: 'Join SentraTech as a Customer Support Specialist and become the human bridge between AI and customer satisfaction. Work with cutting-edge technology while developing your career in the AI revolution.',
+      
+      aboutRole: 'At SentraTech, you won\'t just be answering calls – you\'ll be training the future of AI customer support. As our Customer Support Specialist, you\'ll handle the complex cases that require human empathy and intelligence, while contributing to the evolution of our AI systems. This is a unique opportunity to be at the forefront of the AI customer experience revolution.',
+      
+      whatMakesUsSpecial: [
+        'Work directly with AI systems and contribute to their training – rare opportunity to shape AI development',
+        'Comprehensive English communication training and certification programs',
+        'Career growth path from Specialist → Senior → Team Lead → Manager in 12-18 months',
+        'Learning stipend for courses, certifications, and skill development',
+        'Flexible hybrid work with modern office facilities in Dhaka',
+        'Direct mentorship from senior tech professionals and founders',
+        'Performance bonuses and fast-track promotion opportunities',
+        'Exposure to enterprise clients and international business practices'
       ],
+      
+      requirements: {
+        must_have: [
+          'Fluent English communication (spoken & written) - We provide assessment and training',
+          'Strong empathy and customer-focused mindset',
+          'Basic computer literacy and willingness to learn new tools',
+          'Reliable internet connection and quiet workspace',
+          'Flexibility for rotational shifts (we provide shift premiums)'
+        ],
+        preferred: [
+          '0-1+ years in customer service, BPO, or related field (fresh graduates encouraged)',
+          'Experience with any CRM or ticketing system',
+          'Interest in technology and AI applications',
+          'Additional language skills (Hindi, Urdu) - bonus but not required'
+        ],
+        education: [
+          'Any bachelor\'s degree or equivalent experience',
+          'HSC/A-levels with strong English background acceptable',
+          'We value attitude and communication skills over formal qualifications'
+        ]
+      },
+      
       responsibilities: [
-        'Handle inbound/outbound voice calls and digital interactions escalated from AI flows',
-        'Resolve customer queries efficiently and empathetically; meet SLAs and CSAT goals',
-        'Use SentraTech agent tools (CRM/Zendesk, internal consoles, AI-assist)',
-        'Document case notes, tag intents, and provide feedback to AI training team',
-        'Escalate technical/complex issues to engineering teams with accurate details',
-        'Achieve target KPIs: CSAT, First Contact Resolution (FCR), Average Handle Time (AHT)',
-        'Assist in QA of automated agent responses and build response templates'
-      ]
+        'Handle escalated customer interactions that require human intelligence and empathy',
+        'Resolve complex queries using SentraTech\'s AI-assisted tools and platforms',
+        'Provide feedback to AI development team to improve automated responses',
+        'Document customer interactions and contribute to knowledge base development',
+        'Achieve customer satisfaction targets while maintaining quality standards',
+        'Collaborate with international clients and internal teams',
+        'Participate in training programs and skill development initiatives',
+        'Support quality assurance and process improvement initiatives'
+      ],
+      
+      growthPath: [
+        'Month 1-3: Comprehensive training on SentraTech systems and AI tools',
+        'Month 4-6: Handle independent cases and contribute to AI training',
+        'Month 7-12: Mentor new joiners and take on specialized responsibilities',
+        'Year 2+: Opportunities for team leadership, training roles, or technical specialization'
+      ],
+      
+      workEnvironment: 'Modern, collaborative environment where your voice matters. Work alongside AI researchers, product developers, and international teams. Hybrid flexibility with state-of-the-art office facilities.'
     }
   };
 
