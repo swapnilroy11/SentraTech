@@ -617,7 +617,7 @@ const SupportCenterPage = () => {
         </div>
 
         {/* FAQ Section - Enhanced with Stable Layout */}
-        <div id="faq-section" className="mb-20">
+        <div ref={faqSectionRef} className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
@@ -632,34 +632,41 @@ const SupportCenterPage = () => {
                 key={category.id}
                 onClick={() => handleCategoryChange(category.id)}
                 disabled={isTransitioning}
-                className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200 will-change-transform ${
+                className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 will-change-transform ${
                   selectedCategory === category.id
                     ? 'bg-[#00FF41] text-black'
                     : 'bg-[rgb(38,40,42)] text-[rgb(218,218,218)] hover:bg-[rgb(63,63,63)]'
-                } ${isTransitioning ? 'opacity-70 cursor-not-allowed' : ''}`}
+                } ${isTransitioning ? 'opacity-70 cursor-not-allowed' : 'opacity-100'}`}
               >
                 {category.name} ({category.count})
               </button>
             ))}
           </div>
           
-          {/* FAQ Items - Stable Container with Minimum Height */}
+          {/* FAQ Items Container - Fixed Height to Prevent Layout Shifts */}
           <div 
-            id="faq-container" 
-            className={`transition-all duration-300 ease-in-out ${isTransitioning ? 'opacity-90' : 'opacity-100'}`}
+            ref={faqContainerRef}
+            className={`transition-opacity duration-200 ease-in-out ${
+              isTransitioning ? 'opacity-80' : 'opacity-100'
+            }`}
             style={{ 
-              minHeight: '800px', // Ensure consistent minimum height
-              transitionProperty: 'opacity'
+              minHeight: selectedCategory === 'all' ? '2000px' : 
+                         selectedCategory === 'integrations' ? '1200px' :
+                         selectedCategory === 'getting-started' ? '1000px' :
+                         selectedCategory === 'ai-features' ? '800px' :
+                         selectedCategory === 'billing' ? '700px' :
+                         '600px' // security
             }}
           >
             <div className="space-y-4">
               {filteredQuestions.map((faq, index) => (
                 <div 
                   key={`faq-${selectedCategory}-${index}`} 
-                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300 opacity-0 animate-fadeIn"
+                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300 animate-fadeIn"
                   style={{ 
-                    animationDelay: `${index * 50}ms`,
-                    animationFillMode: 'forwards'
+                    animationDelay: `${index * 30}ms`,
+                    animationDuration: '0.3s',
+                    animationFillMode: 'both'
                   }}
                 >
                   <div className="flex items-start justify-between mb-3">
