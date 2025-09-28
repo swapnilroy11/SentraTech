@@ -409,7 +409,7 @@ const JobApplicationPage = () => {
                     type="file"
                     id="resume-upload"
                     accept=".pdf,.doc,.docx"
-                    onChange={handleFileUpload}
+                    onChange={handleFileChange}
                     className="hidden"
                   />
                   <label
