@@ -43,10 +43,8 @@ const NewsletterSubscribe = () => {
       
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
-      });
       
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
         setStatus('success');
         setMessage('Successfully subscribed to our newsletter!');
         setEmail(''); // Clear the email field on success
