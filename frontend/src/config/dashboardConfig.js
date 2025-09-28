@@ -207,4 +207,116 @@ export const showSuccessMessage = (message, data = null) => {
   }
 };
 
+// Retry queue functionality for offline-to-online synchronization
+export const queueFormSubmission = async (endpoint, data, formType) => {
+  try {
+    const queueKey = `queue_${formType}_${Date.now()}`;
+    const queueData = {
+      endpoint,
+      data,
+      formType,
+      timestamp: new Date().toISOString(),
+      retryCount: 0
+    };
+    
+    await set(queueKey, queueData);
+    console.log('Form submission queued for retry:', queueKey);
+    return queueKey;
+  } catch (error) {
+    console.error('Failed to queue form submission:', error);
+    return null;
+  }
+};
+
+// Flush queued submissions when online
+export const flushQueuedSubmissions = async () => {
+  if (!isOnline()) {
+    console.log('Still offline, skipping queue flush');
+    return;
+  }
+
+  try {
+    const allKeys = await keys();
+    const queueKeys = allKeys.filter(key => typeof key === 'string' && key.startsWith('queue_'));
+    
+    if (queueKeys.length === 0) {
+      console.log('No queued submissions to flush');
+      return;
+    }
+
+    console.log(`Flushing ${queueKeys.length} queued submissions...`);
+    
+    for (const key of queueKeys) {
+      try {
+        const queueData = await get(key);
+        if (!queueData) continue;
+
+        // Increment retry count
+        queueData.retryCount = (queueData.retryCount || 0) + 1;
+        
+        // Try to submit
+        const result = await submitFormToDashboard(
+          queueData.endpoint,
+          queueData.data,
+          { retries: 1 } // Single retry for queued items
+        );
+
+        if (result.success && result.mode === 'network') {
+          // Successfully submitted via network, remove from queue
+          await del(key);
+          console.log('✅ Queued submission successful:', key);
+          
+          // Track successful queue flush
+          if (window?.dataLayer) {
+            window.dataLayer.push({
+              event: 'queued_form_submit_success',
+              form_type: queueData.formType,
+              queue_key: key,
+              retry_count: queueData.retryCount
+            });
+          }
+        } else if (queueData.retryCount >= 3) {
+          // Max retries reached, remove from queue
+          await del(key);
+          console.warn('❌ Max retries reached for queued submission:', key);
+        } else {
+          // Update retry count and keep in queue
+          await set(key, queueData);
+          console.log('🔄 Queued submission failed, will retry later:', key);
+        }
+        
+      } catch (error) {
+        console.error('Error processing queued submission:', key, error);
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error flushing queued submissions:', error);
+  }
+};
+
+// Setup automatic queue flushing
+export const setupQueueFlushing = () => {
+  // Flush on page load if online  
+  if (isOnline()) {
+    setTimeout(flushQueuedSubmissions, 2000);
+  }
+  
+  // Flush when browser comes online
+  window.addEventListener('online', () => {
+    console.log('Browser came online, flushing queued submissions...');
+    setTimeout(flushQueuedSubmissions, 1000);
+  });
+  
+  // Periodic flush every 5 minutes if online
+  setInterval(() => {
+    if (isOnline()) {
+      flushQueuedSubmissions();
+    }
+  }, 5 * 60 * 1000);
+};
+
+// Initialize queue flushing on import
+setupQueueFlushing();
+
 export default DASHBOARD_CONFIG;
