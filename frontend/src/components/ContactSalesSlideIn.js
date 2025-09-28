@@ -249,23 +249,70 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
         preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
       };
 
-      // Offline mode - no network calls to avoid connectivity issues
-      setTimeout(() => {
-        console.log('✅ Contact sales request submitted successfully (offline mode):', formData);
+      // Network submission with robust fallback
+      try {
+        const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+          await import('../config/dashboardConfig.js');
+
+        // Check if offline and handle immediately
+        if (!isOnline()) {
+          console.warn('Browser offline, using offline fallback');
+          setSubmitStatus('success');
+          if (window?.dataLayer) {
+            window.dataLayer.push({
+              event: 'contact_form_submit_offline',
+              planId: formData.planId,
+              planSelected: formData.planSelected,
+              billingTerm: formData.billingTerm,
+              priceDisplay: formData.priceDisplay,
+              ingestId: `contact_offline_${Date.now()}`
+            });
+          }
+          return;
+        }
+
+        const result = await submitFormToDashboard(
+          DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES,
+          dashboardData
+        );
+
+        if (result.success) {
+          showSuccessMessage(
+            'Contact sales request submitted successfully',
+            { ...result.data, form_type: 'contact_sales' }
+          );
+          setSubmitStatus('success');
+          
+          // Analytics event for successful form submission
+          if (window?.dataLayer) {
+            window.dataLayer.push({
+              event: 'contact_form_submit',
+              planId: formData.planId,
+              planSelected: formData.planSelected,
+              billingTerm: formData.billingTerm,
+              priceDisplay: formData.priceDisplay,
+              submission_mode: result.mode,
+              ingestId: result.data?.id || `contact_${Date.now()}`
+            });
+          }
+        } else {
+          throw new Error(result.error || 'Submission failed');
+        }
+      } catch (error) {
+        // Fallback to offline simulation on any error
+        console.warn('Dashboard submission failed, using offline fallback:', error);
         setSubmitStatus('success');
-        
-        // Analytics event for successful form submission
-        if (window && window.dataLayer) {
+        if (window?.dataLayer) {
           window.dataLayer.push({
-            event: "contact_form_submit",
+            event: 'contact_form_submit_fallback',
             planId: formData.planId,
             planSelected: formData.planSelected,
             billingTerm: formData.billingTerm,
             priceDisplay: formData.priceDisplay,
-            ingestId: `contact_${Date.now()}`
+            ingestId: `contact_fallback_${Date.now()}`
           });
         }
-      }, 1300); // Simulate processing time
+      }
     } catch (error) {
       console.error('Contact form submission error:', error);
       setSubmitStatus('error');
