@@ -169,29 +169,59 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
   const submitApplication = async (data) => {
     try {
-      // Simulate successful job application submission without API call
-      setTimeout(() => {
-        const applicationId = `job_modal_${Date.now()}`;
-        console.log('✅ Job application submitted successfully (offline mode):', applicationId);
-        setSubmitStatus('success');
+      try {
+        // Use Dashboard integration
+        const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
         
-        // Analytics event
-        if (window && window.dataLayer) {
-          window.dataLayer.push({
-            event: "job_application_submit",
-            position: data.position || 'Customer Support Specialist',
-            source: 'careers_modal',
-            location: data.location,
-            hasResume: !!data.resumeFile,
-            applicationId: applicationId
-          });
+        // Prepare data for SentraTech Admin Dashboard
+        const dashboardData = {
+          full_name: data.fullName,
+          email: data.email,
+          position_applied: data.position || 'Customer Support Specialist',
+          phone: data.phone || '',
+          experience_level: data.experience || '',
+          motivation_text: data.coverNote || '',
+          consent_for_storage: data.consentForStorage || true
+        };
+        
+        // Submit to SentraTech Admin Dashboard with AI analysis
+        const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, dashboardData, (result) => {
+          // Show AI score and recommendation for job applications
+          if (result.overall_score && result.ai_recommendation) {
+            console.log(`🤖 AI Analysis: ${result.overall_score}% score - ${result.ai_recommendation}`);
+          }
+        });
+        
+        if (result.success) {
+          showSuccessMessage('Job application submitted successfully', result.data);
+          const applicationId = result.data.application_id || result.data.id || `job_modal_${Date.now()}`;
+          setSubmitStatus('success');
+          setErrors({});
+          
+          // Track successful submission
+          if (window && window.dataLayer) {
+            window.dataLayer.push({
+              event: "job_application_submit",
+              position: data.position || 'Customer Support Specialist',
+              source: 'careers_modal',
+              location: data.location,
+              hasResume: !!data.resumeFile,
+              applicationId: applicationId
+            });
+          }
+          
+          // Reset form after delay
+          setTimeout(() => {
+            resetForm();
+          }, 3000);
+        } else {
+          throw new Error(result.error || 'Failed to submit application');
         }
-        
-        // Reset form after delay
-        setTimeout(() => {
-          resetForm();
-        }, 3000);
-      }, 1400); // Simulate processing time
+      } catch (error) {
+        console.error('Job application modal error:', error);
+        setSubmitStatus('error');
+        setErrors({ general: error.message || 'Something went wrong. Please try again.' });
+      }
     } catch (error) {
       console.error('Submission error:', error);
       setSubmitStatus('error');
