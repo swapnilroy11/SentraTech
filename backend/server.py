@@ -1262,7 +1262,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         # DO NOT MODIFY - Critical for dashboard integration
         
         # Skip external forwarding if it would create a loop
-        if not DashboardConfig.should_forward_to_dashboard():
+        if not should_forward_to_dashboard():
             logger.info("Skipping external dashboard forwarding (same host or not configured)")
             # Update status to indicate local-only storage
             await db.demo_requests.update_one(
@@ -1278,12 +1278,12 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = DashboardConfig.get_dashboard_endpoint("/api/ingest/demo_requests")
+                dashboard_url = get_dashboard_endpoint("/api/ingest/demo_requests")
                 
                 response = await client.post(
                     dashboard_url,
                     json=demo_request.dict(),
-                    headers=DashboardConfig.get_headers()
+                    headers=get_dashboard_headers()
                 )
                 
                 if response.status_code in [200, 201]:
