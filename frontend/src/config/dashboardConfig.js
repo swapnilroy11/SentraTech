@@ -18,10 +18,10 @@ export const DASHBOARD_CONFIG = {
   // Form submission endpoints (local backend API endpoints)
   ENDPOINTS: {
     DEMO_REQUEST: '/api/demo/request',
-    CONTACT_SALES: '/api/contact/sales',  // Will create this endpoint
-    ROI_CALCULATOR: '/api/roi/calculate',
-    NEWSLETTER_SIGNUP: '/api/newsletter/subscribe',  // Will create this endpoint
-    JOB_APPLICATION: '/api/job/application'  // Will create this endpoint
+    CONTACT_SALES: '/api/contact/sales',
+    ROI_CALCULATOR: '/api/roi/submit',
+    NEWSLETTER_SIGNUP: '/api/newsletter/subscribe',
+    JOB_APPLICATION: '/api/job/application'
   }
 };
 
