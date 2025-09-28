@@ -469,24 +469,24 @@ const SupportCenterPage = () => {
           </div>
         </div>
 
-        {/* Support Tiers */}
+        {/* Support Tiers - Optimized */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Support Tiers</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Support Tiers</h2>
             <p className="text-[rgb(161,161,170)] max-w-3xl mx-auto">
               Our tiered support model ensures you get the right level of assistance for your needs, 
               from self-service resources to dedicated enterprise support.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {supportTiers.map((tier, index) => (
-              <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-8">
+              <div key={`tier-${index}`} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6 md:p-8 will-change-transform">
                 <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-[#00FF41] font-bold text-lg">{index + 1}</span>
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                    <span className="text-[#00FF41] font-bold text-base md:text-lg">{index + 1}</span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{tier.tier}</h3>
+                  <h3 className="text-base md:text-lg font-bold text-white mb-2">{tier.tier}</h3>
                   <p className="text-[rgb(161,161,170)] text-sm">{tier.audience}</p>
                 </div>
                 
@@ -496,7 +496,7 @@ const SupportCenterPage = () => {
                 
                 <div className="space-y-3 mb-6">
                   {tier.features.map((feature, fIndex) => (
-                    <div key={fIndex} className="flex items-center text-sm">
+                    <div key={`feature-${index}-${fIndex}`} className="flex items-center text-sm">
                       <CheckCircle size={16} className="text-[#00FF41] mr-2 flex-shrink-0" />
                       <span className="text-[rgb(218,218,218)]">{feature}</span>
                     </div>
@@ -514,22 +514,22 @@ const SupportCenterPage = () => {
           </div>
         </div>
 
-        {/* FAQ Section */}
+        {/* FAQ Section - Enhanced */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
               Find answers to the most common questions about SentraTech's platform, features, and services.
             </p>
           </div>
           
-          {/* FAQ Categories */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
+          {/* FAQ Categories - Optimized */}
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8">
             {faqCategories.map((category) => (
               <button
                 key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                onClick={() => handleCategoryChange(category.id)}
+                className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200 will-change-transform ${
                   selectedCategory === category.id
                     ? 'bg-[#00FF41] text-black'
                     : 'bg-[rgb(38,40,42)] text-[rgb(218,218,218)] hover:bg-[rgb(63,63,63)]'
@@ -540,22 +540,22 @@ const SupportCenterPage = () => {
             ))}
           </div>
           
-          {/* FAQ Items */}
+          {/* FAQ Items - Performance optimized */}
           <div className="space-y-4">
             {filteredQuestions.map((faq, index) => (
-              <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6">
+              <div key={`faq-${selectedCategory}-${index}`} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-white pr-4">{faq.question}</h3>
-                  <div className="flex items-center space-x-2">
+                  <h3 className="text-base md:text-lg font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
+                  <div className="flex items-center space-x-2 flex-shrink-0">
                     {faq.popularity === 'Very Popular' && (
                       <span className="bg-[#00FF41]/20 text-[#00FF41] px-2 py-1 rounded text-xs font-medium">
                         Popular
                       </span>
                     )}
-                    <HelpCircle size={20} className="text-[#00FF41] flex-shrink-0" />
+                    <HelpCircle size={18} className="text-[#00FF41] md:w-5 md:h-5" />
                   </div>
                 </div>
-                <p className="text-[rgb(218,218,218)] leading-relaxed">
+                <p className="text-[rgb(218,218,218)] text-sm md:text-base leading-relaxed">
                   {faq.answer}
                 </p>
               </div>
