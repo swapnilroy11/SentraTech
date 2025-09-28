@@ -667,7 +667,7 @@ const HorizontalJourney = () => {
                   </div>
                 </div>
                 <Button
-                  onClick={() => setSelectedPanel(null)}
+                  onClick={closeModal}
                   size="sm"
                   variant="ghost"
                   className="text-[rgb(161,161,170)] hover:text-white"
