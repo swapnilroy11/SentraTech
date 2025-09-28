@@ -19,12 +19,19 @@ export const PROTECTED_CONSTANTS = Object.freeze({
   
   // SentraTech pricing - IMMUTABLE
   SENTRATECH_BUNDLE_COST: 1650, // $1,650 per bundle (1000 calls + 1000 interactions)
-  CALL_PERCENTAGE: 61.5, // 61.5% of bundle cost
-  INTERACTION_PERCENTAGE: 38.5, // 38.5% of bundle cost
   
-  // Derived costs (calculated once, immutable)
-  CALL_COST_PER_1K: 1650 * 0.615, // $1,014.75
-  INTERACTION_COST_PER_1K: 1650 * 0.385, // $635.25
+  // Bundle share calculation (canonical method)
+  BUNDLE_CALL_MINUTES: 1000 * 8, // 8000 minutes
+  BUNDLE_INTERACTION_MINUTES: 1000 * 5, // 5000 minutes  
+  BUNDLE_TOTAL_MINUTES: (1000 * 8) + (1000 * 5), // 13000 minutes
+  
+  // Exact bundle shares (not rounded percentages)
+  get CALL_SHARE() { return this.BUNDLE_CALL_MINUTES / this.BUNDLE_TOTAL_MINUTES; }, // 8000/13000
+  get INTERACTION_SHARE() { return this.BUNDLE_INTERACTION_MINUTES / this.BUNDLE_TOTAL_MINUTES; }, // 5000/13000
+  
+  // Exact derived costs (calculated using precise fractions)
+  get CALL_COST_PER_1K() { return this.SENTRATECH_BUNDLE_COST * this.CALL_SHARE; }, // $1,015.38...
+  get INTERACTION_COST_PER_1K() { return this.SENTRATECH_BUNDLE_COST * this.INTERACTION_SHARE; }, // $634.61...
   
   // Automation
   AUTOMATION_PERCENTAGE: 70
