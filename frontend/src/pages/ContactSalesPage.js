@@ -382,11 +382,38 @@ const ContactSalesPage = () => {
           </CardContent>
         </Card>
 
-        {/* Results Count */}
-        <div className="mb-4">
-          <p className="text-[rgb(161,161,170)] text-sm">
-            Showing {filteredContacts.length} of {contacts.length} contact requests
-          </p>
+        {/* Results Count and Active Filters */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <p className="text-[rgb(161,161,170)] text-sm">
+              Showing {filteredContacts.length} of {contacts.length} contact requests
+            </p>
+            
+            {/* Active Date Range Indicator */}
+            {filterConfig.dateRange !== 'all' && (
+              <div className="flex items-center space-x-2">
+                <Badge className="bg-[#00FF41] text-[#0A0A0A] text-xs font-medium px-2 py-1">
+                  <Calendar className="w-3 h-3 mr-1" />
+                  {filterConfig.dateRange === 'today' ? 'Today' : 
+                   filterConfig.dateRange === 'week' ? 'Last 7 Days' :
+                   filterConfig.dateRange === 'month' ? 'Last 30 Days' : 
+                   filterConfig.dateRange.charAt(0).toUpperCase() + filterConfig.dateRange.slice(1)}
+                </Badge>
+              </div>
+            )}
+          </div>
+          
+          {/* Active Filter Count */}
+          {(searchTerm || filterConfig.status !== 'all' || filterConfig.contactMethod !== 'all' || filterConfig.dateRange !== 'all') && (
+            <p className="text-[#00FF41] text-xs">
+              {[
+                searchTerm && 'search',
+                filterConfig.status !== 'all' && 'status',
+                filterConfig.contactMethod !== 'all' && 'method',
+                filterConfig.dateRange !== 'all' && 'date'
+              ].filter(Boolean).length} filter(s) active
+            </p>
+          )}
         </div>
 
         {/* Contact Requests Table */}
