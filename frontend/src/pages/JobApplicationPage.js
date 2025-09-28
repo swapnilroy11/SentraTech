@@ -312,7 +312,8 @@ const JobApplicationPage = () => {
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
-        jobData
+        jobData,
+        { formType: 'job_application' }
       );
 
       if (result.success) {
