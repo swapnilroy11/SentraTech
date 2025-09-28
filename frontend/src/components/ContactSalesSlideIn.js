@@ -249,24 +249,48 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
         preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
       };
 
-      // Simulate successful contact sales submission without API call
-      setTimeout(() => {
-        setSubmitStatus('success');
+      try {
+        // Use Dashboard integration
+        const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
         
-        console.log('✅ Contact sales request submitted successfully (offline mode)');
+        // Prepare data for SentraTech Admin Dashboard
+        const dashboardData = {
+          full_name: formData.fullName,
+          work_email: formData.workEmail,
+          company_name: formData.companyName,
+          message: formData.message,
+          phone: formData.phone || '',
+          preferred_contact_method: formData.preferredContactMethod || 'email'
+        };
         
-        // Analytics event for successful form submission
-        if (window && window.dataLayer) {
-          window.dataLayer.push({
-            event: "contact_form_submit",
-            planId: formData.planId,
-            planSelected: formData.planSelected,
-            billingTerm: formData.billingTerm,
-            priceDisplay: formData.priceDisplay,
-            ingestId: `contact_${Date.now()}`
-          });
+        // Submit to SentraTech Admin Dashboard
+        const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES, dashboardData);
+        
+        if (result.success) {
+          showSuccessMessage('Contact sales request submitted successfully', result.data);
+          setSubmitStatus('success');
+          
+          // Analytics event for successful form submission
+          if (window && window.dataLayer) {
+            window.dataLayer.push({
+              event: "contact_form_submit",
+              planId: formData.planId,
+              planSelected: formData.planSelected,
+              billingTerm: formData.billingTerm,
+              priceDisplay: formData.priceDisplay,
+              ingestId: `contact_${Date.now()}`
+            });
+          }
+        } else {
+          console.error('Contact sales failed:', result.error);
+          setSubmitStatus('error');
+          setErrors({ submit: result.error || 'Failed to submit contact request. Please try again.' });
         }
-      }, 1300); // Simulate processing time
+      } catch (error) {
+        console.error('Contact sales error:', error);
+        setSubmitStatus('error');
+        setErrors({ submit: 'Something went wrong. Please try again.' });
+      }
     } catch (error) {
       console.error('Contact form submission error:', error);
       setSubmitStatus('error');
