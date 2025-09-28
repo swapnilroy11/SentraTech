@@ -1184,11 +1184,28 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         await db.subscriptions.insert_one(subscription_data)
         logger.info(f"Subscription saved locally: {subscription.email}")
         
-        # Forward to Admin Dashboard
+        # Forward to Admin Dashboard (skip if we're the dashboard to avoid loops)
+        external_dashboard_url = os.environ.get("EXTERNAL_DASHBOARD_URL", "").strip()
+        current_host = "customer-flow-5.preview.emergentagent.com"
+        
+        # Skip external forwarding if no URL configured or if it would create a loop
+        if not external_dashboard_url or current_host in external_dashboard_url:
+            logger.info("Skipping external dashboard forwarding (same host or not configured)")
+            # Update status to indicate local-only storage
+            await db.subscriptions.update_one(
+                {"id": subscription_data["id"]},
+                {"$set": {"status": "stored_locally"}}
+            )
+            return {
+                "status": "success", 
+                "message": "Subscription stored successfully in local database",
+                "id": subscription_data["id"]
+            }
+        
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/subscriptions"
+                dashboard_url = f"{external_dashboard_url}/api/ingest/subscriptions"
                 
                 response = await client.post(
                     dashboard_url,
