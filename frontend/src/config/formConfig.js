@@ -173,9 +173,9 @@ export const submitForm = async (endpoint, data) => {
 };
 
 /**
- * Get full dashboard endpoint URL
+ * Get full backend endpoint URL
  */
-export const getDashboardEndpoint = (endpoint) => {
+export const getBackendEndpoint = (endpoint) => {
   return `${FORM_CONFIG.API_BASE_URL}${endpoint}`;
 };
 
