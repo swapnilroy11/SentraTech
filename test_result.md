@@ -64,6 +64,7 @@ test_plan:
   stuck_tasks:
     - "Demo Request Form Supabase Submission Issue"
   completed_focus:
+    - "Enhanced Career Site Dashboard Integration Testing"
     - "Comprehensive Ingest Proxy Integration Testing"
     - "Updated Dashboard Integration Endpoints Testing"
     - "ROI Calculator Frontend Canonical Test Cases Testing"
