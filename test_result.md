@@ -59,10 +59,12 @@
 
 test_plan:
   current_focus:
-    - "Demo Request Form End-to-End Submission Testing"
+    - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
   stuck_tasks:
     - "Demo Request Form Supabase Submission Issue"
+    - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
   completed_focus:
+    - "Demo Request Form End-to-End Submission Testing"
     - "Support Center Page Comprehensive Functionality and Performance Testing"
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Enhanced Career Site Dashboard Integration Testing"
