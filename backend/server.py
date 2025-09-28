@@ -2069,7 +2069,6 @@ async def schedule_interview(request: Request, interview_data: InterviewSchedule
         
         # Send interview notification email
         try:
-            from datetime import datetime as dt
             import dateutil.parser
             
             interview_dt = dateutil.parser.parse(interview_data.interview_datetime)
