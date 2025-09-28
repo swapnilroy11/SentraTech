@@ -207,12 +207,12 @@ export const formatCurrencyPrecise = (amount) => {
   if (amount === 0) return '$0';
   if (amount < 1000) return `$${Math.round(amount)}`;
   if (amount < 1000000) {
-    // Use Math.floor instead of Math.round for more accurate representation
-    // $3,550 should show as $3.5K, not $3.6K
-    const thousands = Math.floor((amount / 1000) * 10) / 10;
+    // Truncate to 1 decimal place instead of rounding for better accuracy
+    // This ensures $3,550 shows as $3.5K and $3,600 shows as $3.6K
+    const thousands = Math.trunc((amount / 1000) * 10) / 10;
     return `$${thousands.toFixed(1)}K`;
   }
-  return `$${(Math.floor(amount / 100000) * 10) / 100}.toFixed(1)}M`;
+  return `$${(Math.trunc(amount / 100000) * 10) / 100}.toFixed(1)}M`;
 };
 
 export const formatPercentagePrecise = (value) => {
