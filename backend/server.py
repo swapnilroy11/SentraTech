@@ -909,7 +909,7 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
                     json=demo_request.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
+                        "X-INGEST-KEY": expected_key
                     }
                 )
                 
@@ -989,7 +989,7 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
                     json=contact_request.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
+                        "X-INGEST-KEY": expected_key
                     }
                 )
                 
@@ -1069,7 +1069,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
                     json=roi_report.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
+                        "X-INGEST-KEY": expected_key
                     }
                 )
                 
@@ -1144,7 +1144,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
                     json=subscription.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "X-INGEST-KEY": "test-ingest-key-12345"
+                        "X-INGEST-KEY": expected_key
                     }
                 )
                 
