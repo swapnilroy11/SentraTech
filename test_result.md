@@ -67,6 +67,7 @@ test_plan:
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
     - "Customer Journey Modal Click Functionality - CRITICAL ISSUE"
+    - "Updated Dashboard Integration Endpoints Testing"
   test_all: false
   test_priority: "high_first"
 
