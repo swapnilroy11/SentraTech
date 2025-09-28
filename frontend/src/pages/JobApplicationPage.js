@@ -267,27 +267,28 @@ const JobApplicationPage = () => {
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData);
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (result.success) {
+        setSubmitStatus('success');
+        
+        console.log('✅ Job application submitted successfully:', result.data);
+        
+        if (window && window.dataLayer) {
+          window.dataLayer.push({
+            event: "job_application_submit",
+            position: applicationData.position_applied,
+            source: 'careers_page',
+            location: applicationData.location,
+            hasResume: !!applicationData.resume_file,
+            applicationId: result.data.application_id
+          });
+        }
+        
+        setTimeout(() => {
+          navigate('/careers', { state: { applicationSubmitted: true } });
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Job application submission failed');
       }
-
-      const result = await response.json();
-      setSubmitStatus('success');
-      
-      if (window && window.dataLayer) {
-        window.dataLayer.push({
-          event: "job_application_submit",
-          position: applicationData.position,
-          source: applicationData.source,
-          location: applicationData.location,
-          hasResume: !!applicationData.resumeFile,
-          hasLinkedin: !!applicationData.linkedinProfile
-        });
-      }
-      
-      setTimeout(() => {
-        navigate('/careers', { state: { applicationSubmitted: true } });
-      }, 3000);
       
       return result;
     } catch (error) {
