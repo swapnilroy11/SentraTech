@@ -434,52 +434,33 @@ const SupportCenterPage = () => {
   }, [navigate]);
 
   const handleCategoryChange = useCallback((categoryId) => {
-    if (isTransitioning) return; // Prevent rapid clicks
+    if (isTransitioning) return;
     
-    setIsTransitioning(true);
-    
-    // Store current FAQ section position
+    // Simple, reliable approach: maintain scroll position using the FAQ section as anchor
     const faqSection = faqSectionRef.current;
-    if (!faqSection) {
-      setSelectedCategory(categoryId);
-      setIsTransitioning(false);
-      return;
-    }
-    
-    // Get the FAQ section's position relative to viewport
-    const rect = faqSection.getBoundingClientRect();
-    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-    
-    if (isInView) {
-      // Store the scroll position relative to FAQ section
-      const scrollTop = window.pageYOffset;
-      const faqSectionTop = scrollTop + rect.top;
+    if (faqSection) {
+      // Get the FAQ section's current position on screen
+      const rect = faqSection.getBoundingClientRect();
+      const scrollY = window.pageYOffset;
+      const faqSectionY = scrollY + rect.top;
       
-      // Change the category
+      // Change category immediately
       setSelectedCategory(categoryId);
       
-      // Wait for React to re-render and maintain position
+      // After React renders, restore the FAQ section to its original position
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const newRect = faqSection.getBoundingClientRect();
-          const newFaqSectionTop = window.pageYOffset + newRect.top;
-          
-          // Only adjust if there's been a significant change
-          const positionDiff = newFaqSectionTop - faqSectionTop;
-          if (Math.abs(positionDiff) > 5) {
-            window.scrollTo({
-              top: window.pageYOffset - positionDiff,
-              behavior: 'instant'
-            });
-          }
-          
-          setTimeout(() => setIsTransitioning(false), 100);
-        });
+        const newScrollY = window.pageYOffset;
+        const newRect = faqSection.getBoundingClientRect();
+        const newFaqSectionY = newScrollY + newRect.top;
+        
+        // Calculate how much the FAQ section moved and compensate
+        const deltaY = newFaqSectionY - faqSectionY;
+        if (Math.abs(deltaY) > 2) { // Only adjust if there's a meaningful difference
+          window.scrollTo(0, newScrollY - deltaY);
+        }
       });
     } else {
-      // If FAQ section is not in view, just change category
       setSelectedCategory(categoryId);
-      setTimeout(() => setIsTransitioning(false), 100);
     }
   }, [isTransitioning]);
 
