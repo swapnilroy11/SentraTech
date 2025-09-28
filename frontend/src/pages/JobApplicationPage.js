@@ -575,7 +575,7 @@ const JobApplicationPage = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between">
                   <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
-                  <span className="text-white">{formData.relevant_experience || '0-1'}</span>
+                  <span className="text-white">{formData.relevant_experience || 'Not specified'}</span>
                 </div>
               </div>
             </div>
