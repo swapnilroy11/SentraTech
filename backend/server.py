@@ -235,7 +235,7 @@ class CalendarService:
         
         return creds
     
-    async def create_interview_event(self, interview_data: InterviewSchedule, candidate_name: str):
+    async def create_interview_event(self, interview_data: "InterviewSchedule", candidate_name: str):
         """Create interview event in Google Calendar"""
         try:
             creds = self.authenticate()
