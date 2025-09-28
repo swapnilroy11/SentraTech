@@ -28,13 +28,13 @@ import uuid
 BACKEND_URL = "http://localhost:8001/api"
 
 class ComprehensiveFormsTester:
-    """Comprehensive testing for all 5 SentraTech forms"""
+    """Comprehensive testing for all 5 SentraTech form endpoints"""
     
     def __init__(self):
         self.test_results = []
         self.failed_tests = []
         self.passed_tests = []
-        self.headers = {"X-INGEST-KEY": INGEST_KEY}
+        self.reference_ids = {}
         
     def log_test(self, test_name: str, passed: bool, details: str = ""):
         """Log test results"""
