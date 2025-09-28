@@ -211,7 +211,7 @@ const CTASection = () => {
       };
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST, dashboardData);
+      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.DEMO_REQUEST, dashboardData);
       
       if (result.success) {
         console.log('✅ Demo request submitted successfully:', result.data);
