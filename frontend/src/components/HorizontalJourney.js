@@ -20,12 +20,23 @@ const HorizontalJourney = () => {
   const [currentPanel, setCurrentPanel] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedPanel, setSelectedPanel] = useState(null);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
   const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
   const [hasThreeJSError, setHasThreeJSError] = useState(false);
   
   // Handle modal opening/closing with body scroll lock
-  const openModal = (stage) => {
+  const openModal = (stage, event) => {
+    // Get the clicked card's position
+    const cardElement = event.currentTarget;
+    const rect = cardElement.getBoundingClientRect();
+    
+    // Position modal above the card
+    setModalPosition({
+      x: rect.left + rect.width / 2, // Center horizontally on card
+      y: rect.top - 20 // Position above card with small margin
+    });
+    
     setSelectedPanel(stage);
     document.body.classList.add('modal-open');
   };
