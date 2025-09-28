@@ -1113,7 +1113,7 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = f"{external_dashboard_url}/api/ingest/roi_reports"
+                dashboard_url = DashboardConfig.get_dashboard_endpoint("/api/ingest/roi_reports")
                 
                 response = await client.post(
                     dashboard_url,
