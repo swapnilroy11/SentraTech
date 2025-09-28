@@ -21,6 +21,9 @@ const HorizontalJourney = () => {
   const [currentPanel, setCurrentPanel] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedPanel, setSelectedPanel] = useState(null);
+  const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
+  const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
+  const [hasThreeJSError, setHasThreeJSError] = useState(false);
   
   // Handle modal opening/closing with body scroll lock
   const openModal = (stage) => {
@@ -32,9 +35,6 @@ const HorizontalJourney = () => {
     setSelectedPanel(null);
     document.body.classList.remove('modal-open');
   };
-  const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
-  const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
-  const [hasThreeJSError, setHasThreeJSError] = useState(false);
   
   const { t } = useLanguage();
 
