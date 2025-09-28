@@ -372,14 +372,46 @@ const SupportCenterPage = () => {
       : frequentQuestions.filter(q => q.category === selectedCategory);
   }, [selectedCategory, frequentQuestions]);
 
-  // Optimized navigation handlers
-  const handleBackNavigation = useCallback(() => {
-    navigate('/', { replace: false });
-  }, [navigate]);
-
-  const handleCategoryChange = useCallback((categoryId) => {
-    setSelectedCategory(categoryId);
-  }, []);
+  // Support tiers data - memoized for performance
+  const supportTiers = useMemo(() => [
+    {
+      tier: 'Tier 1: Self-Service',
+      description: 'Comprehensive knowledge base, tutorials, and community support',
+      features: [
+        'Knowledge base with 500+ articles',
+        'Video tutorial library',
+        'Community forum access',
+        'Email ticket submission'
+      ],
+      availability: '24/7',
+      audience: 'All customers'
+    },
+    {
+      tier: 'Tier 2: Standard Support',
+      description: 'Live chat and email support with technical specialists',
+      features: [
+        'Live chat support (24/7)',
+        'Email support with 4-hour SLA',
+        'Phone support (business hours)',
+        'Integration assistance'
+      ],
+      availability: '24/7 chat, business hours phone',
+      audience: 'Growth & Enterprise customers'
+    },
+    {
+      tier: 'Tier 3: Premium Support',
+      description: 'Dedicated success manager and proactive support',
+      features: [
+        'Dedicated Customer Success Manager',
+        '1-hour email response SLA',
+        'Priority phone support',
+        'Custom training sessions',
+        'Quarterly business reviews'
+      ],
+      availability: 'Priority 24/7 access',
+      audience: 'Enterprise customers only'
+    }
+  ], []);
 
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
