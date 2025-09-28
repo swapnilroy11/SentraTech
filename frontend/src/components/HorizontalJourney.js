@@ -737,7 +737,17 @@ const HorizontalJourney = () => {
                 borderRadius: '6px',
                 fontSize: '16px',
                 fontWeight: 'bold',
-                lineHeight: '1'
+                lineHeight: '1',
+                transition: 'all 0.2s ease',
+                zIndex: 1
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = `${selectedPanel.color}20`;
+                e.target.style.borderColor = `${selectedPanel.color}60`;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.borderColor = `${selectedPanel.color}40`;
               }}
             >
               ✕
