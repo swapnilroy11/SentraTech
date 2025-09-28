@@ -436,7 +436,7 @@ const ROICalculatorRedesigned = () => {
                     </div>
                     <div className="text-white text-sm font-medium">SentraTech Bundles</div>
                     <div className="text-xs text-[rgb(161,161,170)] mt-1">
-                      Per 1,000 calls + interactions
+                      Proportional cost allocation
                     </div>
                   </div>
 
