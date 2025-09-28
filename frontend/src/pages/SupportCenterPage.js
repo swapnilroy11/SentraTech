@@ -421,8 +421,6 @@ const SupportCenterPage = () => {
   }, [navigate]);
 
   const handleCategoryChange = useCallback((categoryId) => {
-    if (isTransitioning) return;
-    
     // Simple, reliable approach: maintain scroll position using the FAQ section as anchor
     const faqSection = faqSectionRef.current;
     if (faqSection) {
@@ -449,7 +447,7 @@ const SupportCenterPage = () => {
     } else {
       setSelectedCategory(categoryId);
     }
-  }, [isTransitioning]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
