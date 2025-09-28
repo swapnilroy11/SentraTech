@@ -300,21 +300,7 @@ class CalendarService:
 email_service = EmailService()
 calendar_service = CalendarService()
 
-# Dashboard integration helper functions
-def should_forward_to_dashboard():
-    """Check if we should forward to external dashboard"""
-    external_dashboard_url = os.environ.get('EXTERNAL_DASHBOARD_URL')
-    return bool(external_dashboard_url)
-
-def get_dashboard_endpoint(endpoint):
-    """Get dashboard endpoint URL"""
-    external_dashboard_url = os.environ.get('EXTERNAL_DASHBOARD_URL', 'https://customer-dashboard-3.preview.emergentagent.com')
-    return f"{external_dashboard_url}{endpoint}"
-
-def get_dashboard_headers():
-    """Get headers for dashboard requests"""
-    ingest_key = os.environ.get("INGEST_KEY")
-    return {"X-INGEST-KEY": ingest_key} if ingest_key else {}
+# Dashboard helper functions removed - forms submit directly to dashboard
 
 # Configure logging first
 logging.basicConfig(
