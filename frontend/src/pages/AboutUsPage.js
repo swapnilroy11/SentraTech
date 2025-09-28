@@ -275,8 +275,8 @@ const AboutUsPage = () => {
         <div className="text-center bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8">
           <h2 className="text-2xl font-bold text-white mb-4">Ready to Transform Your Customer Support?</h2>
           <p className="text-[rgb(161,161,170)] mb-6 max-w-2xl mx-auto">
-            Join 500+ enterprise customers who trust SentraTech to deliver exceptional customer experiences. 
-            See how we can help your business reduce costs while improving satisfaction.
+            Join the forward-thinking businesses who are already exploring SentraTech's innovative approach 
+            to customer support. Discover how we can help your business prepare for the future of AI-powered customer experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
