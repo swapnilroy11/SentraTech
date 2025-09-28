@@ -748,7 +748,7 @@ const JobApplicationPage = () => {
                     {job.whatMakesUsSpecial?.map((item, index) => (
                       <div key={index} className="flex items-start space-x-3 p-4 bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-lg">
                         <CheckCircle size={20} className="text-[#00FF41] flex-shrink-0 mt-0.5" />
-                        <span className="text-[rgb(218,218,218)] text-sm leading-relaxed">{item}</span>
+                        <span className="text-[rgb(218,218,218)] leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
