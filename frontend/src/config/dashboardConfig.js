@@ -176,7 +176,7 @@ export const submitFormToDashboard = async (endpoint, data) => {
  * Get full dashboard endpoint URL
  */
 export const getDashboardEndpoint = (endpoint) => {
-  return `${DASHBOARD_CONFIG.API_BASE_URL}${endpoint}`;
+  return `${FORM_CONFIG.API_BASE_URL}${endpoint}`;
 };
 
 /**
