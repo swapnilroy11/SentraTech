@@ -636,30 +636,42 @@ const HorizontalJourney = () => {
       {/* Journey Stage Details Modal - Inline Modal (No Portal) */}
       {selectedPanel && (
         <div 
-          className="fixed inset-0 z-[99999] flex items-center justify-center p-5"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(12px)'
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(15px)',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%'
           }}
+          onClick={closeModal}
         >
           <AnimatePresence>
             <motion.div
-              initial={{ scale: 0.85, opacity: 0, y: 20 }}
+              initial={{ scale: 0.9, opacity: 0, y: -20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.85, opacity: 0, y: 20 }}
+              exit={{ scale: 0.9, opacity: 0, y: -20 }}
               transition={{ 
-                duration: 0.2, 
-                ease: "easeOut",
-                type: "spring",
-                stiffness: 300,
-                damping: 30
+                duration: 0.15,
+                ease: "easeOut"
               }}
-              className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto relative"
+              className="relative rounded-3xl p-6 max-w-lg w-full max-h-[85vh] overflow-hidden"
               style={{
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 65, 0.1)'
+                background: `linear-gradient(135deg, rgba(26, 28, 30, 0.95) 0%, rgba(38, 40, 42, 0.95) 100%)`,
+                border: `2px solid ${selectedPanel.color}`,
+                boxShadow: `0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px ${selectedPanel.color}20, 0 0 20px ${selectedPanel.color}30`
               }}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Custom Scrollable Content */}
+              <div 
+                className="overflow-y-auto pr-2 max-h-full"
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: `${selectedPanel.color}40 transparent`
+                }}
+              >
               {/* Close Button */}
               <Button
                 onClick={closeModal}
