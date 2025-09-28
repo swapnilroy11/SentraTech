@@ -462,7 +462,6 @@ const HorizontalJourney = () => {
         .smooth-modal-scroll {
           scroll-behavior: smooth;
           scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
           -webkit-overflow-scrolling: touch;
         }
         .smooth-modal-scroll::-webkit-scrollbar {
@@ -473,12 +472,8 @@ const HorizontalJourney = () => {
           border-radius: 3px;
         }
         .smooth-modal-scroll::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
           border-radius: 3px;
-          transition: all 0.2s ease;
-        }
-        .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
         }
         .smooth-modal-scroll::-webkit-scrollbar-corner {
           background: transparent;
