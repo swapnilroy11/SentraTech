@@ -829,7 +829,7 @@ const JobApplicationPage = () => {
                         <div className="flex items-center justify-center w-8 h-8 bg-[#00FF41] text-black rounded-full text-sm font-bold flex-shrink-0">
                           {index + 1}
                         </div>
-                        <span className="text-[rgb(218,218,218)] text-sm leading-relaxed">{stage}</span>
+                        <span className="text-[rgb(218,218,218)] leading-relaxed">{stage}</span>
                       </div>
                     ))}
                   </div>
