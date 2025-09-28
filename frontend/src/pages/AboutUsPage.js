@@ -81,45 +81,46 @@ const AboutUsPage = () => {
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
       <SEOManager 
-        title="About SentraTech | Leading AI Customer Support Platform"
-        description="Learn about SentraTech's mission to transform customer support with AI-powered automation, serving 500+ enterprise customers worldwide."
-        keywords="about SentraTech, AI customer support, enterprise software, company mission, customer success"
+        title="About SentraTech | Next-Generation AI Customer Support Platform"
+        description="Learn about SentraTech's mission to transform customer support with AI-powered automation. Founded in 2024, we're building the future of intelligent customer experiences."
+        keywords="about SentraTech, AI customer support, startup, Bangladesh tech, customer success, automation"
       />
       
       <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="mb-12">
           <button
-            onClick={() => navigate('/')}
-            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors mb-6"
+            onClick={handleBackNavigation}
+            className="flex items-center text-[#00FF41] hover:text-[#00DD38] transition-colors duration-200 mb-6 focus:outline-none focus:ring-2 focus:ring-[#00FF41]/50 rounded-lg p-2"
+            aria-label="Back to Home"
           >
             <ArrowLeft size={20} className="mr-2" />
             Back to Home
           </button>
           
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-white mb-6">
-              Transforming Customer Support with 
-              <span className="text-[#00FF41]"> AI Innovation</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              Building the Future of 
+              <span className="text-[#00FF41]"> AI Customer Support</span>
             </h1>
-            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto leading-relaxed">
-              SentraTech empowers enterprises to deliver exceptional customer experiences through 
-              intelligent automation, reducing costs by 40-60% while dramatically improving satisfaction scores.
+            <p className="text-lg md:text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto leading-relaxed">
+              SentraTech is pioneering intelligent automation that empowers businesses to deliver exceptional customer experiences. 
+              Founded in 2024, we're on a mission to become the next market leader in AI-powered support solutions.
             </p>
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+        {/* Stats Section - Optimized rendering */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-20">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-[#00FF41]/10 border-2 border-[#00FF41]/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Icon size={28} className="text-[#00FF41]" />
+              <div key={`stat-${index}`} className="text-center transform hover:scale-105 transition-transform duration-200">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00FF41]/10 border-2 border-[#00FF41]/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon size={24} className="text-[#00FF41] md:w-7 md:h-7" />
                 </div>
-                <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-                <div className="text-[rgb(161,161,170)] text-sm">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-[rgb(161,161,170)] text-xs md:text-sm">{stat.label}</div>
               </div>
             );
           })}
