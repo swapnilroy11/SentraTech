@@ -289,19 +289,30 @@ const HorizontalJourney = () => {
     }
   }, [isMobile, scrollXProgress]);
 
-  // Keyboard navigation
+  // Keyboard navigation and modal escape
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft' && currentPanel > 0) {
-        scrollToPanel(currentPanel - 1);
-      } else if (e.key === 'ArrowRight' && currentPanel < journeyStages.length - 1) {
-        scrollToPanel(currentPanel + 1);
+      if (e.key === 'Escape' && selectedPanel) {
+        closeModal();
+      } else if (!selectedPanel) {
+        if (e.key === 'ArrowLeft' && currentPanel > 0) {
+          scrollToPanel(currentPanel - 1);
+        } else if (e.key === 'ArrowRight' && currentPanel < journeyStages.length - 1) {
+          scrollToPanel(currentPanel + 1);
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentPanel, journeyStages.length]);
+  }, [currentPanel, journeyStages.length, selectedPanel]);
+  
+  // Cleanup body class on unmount
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
 
   const ChannelIcon = ({ type, delay }) => {
     const icons = {
