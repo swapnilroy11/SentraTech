@@ -273,7 +273,8 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
 
         const result = await submitFormToDashboard(
           DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES,
-          dashboardData
+          dashboardData,
+          { formType: 'contact_sales' }
         );
 
         if (result.success) {
