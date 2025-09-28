@@ -33,6 +33,7 @@ import InvestorRelationsPage from "./pages/InvestorRelationsPage";
 import SupportCenterPage from "./pages/SupportCenterPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 import CareersPage from "./pages/CareersPage";
+import JobApplicationPage from "./pages/JobApplicationPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Contexts
