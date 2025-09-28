@@ -11,27 +11,26 @@ const JobApplicationPage = () => {
   
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    // Personal Information
-    firstName: '',
-    lastName: '',
+    // Personal Information - Updated to match prompt schema
+    full_name: '',
     email: '',
     phone: '',
     location: '',
     
     // Professional Information
-    portfolioWebsite: '',
-    preferredShifts: '',
-    availabilityStartDate: '',
+    portfolio_website: '',
+    preferred_shifts: '',
+    availability_start_date: '',
+    relevant_experience: '',
     
-    // Experience & Motivation
-    relevantExperience: '',
-    whySentraTech: '',
-    coverLetter: '',
+    // Motivation
+    why_sentratech: '',
+    cover_letter: '',
     
     // Legal
-    workAuthorization: '',
-    consentForStorage: false,
-    consentForContact: false
+    work_authorization: '',
+    consent_for_storage: false,
+    consent_for_contact: false
   });
 
   const [resume, setResume] = useState(null);
