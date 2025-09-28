@@ -738,7 +738,7 @@ const JobApplicationPage = () => {
                 {/* About This Role */}
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-4">About This Role</h2>
-                  <p className="text-[rgb(161,161,170)] leading-relaxed">{job.aboutRole}</p>
+                  <p className="text-[rgb(218,218,218)] text-lg leading-relaxed">{job.aboutRole}</p>
                 </div>
                 
                 {/* What Makes Us Special */}
