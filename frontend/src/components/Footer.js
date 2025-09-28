@@ -121,42 +121,77 @@ const Footer = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-xl font-bold text-white mb-3">
+        <div className="py-10 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="max-w-4xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-white mb-4">
               Stay Updated with SentraTech
             </h3>
-            <p className="text-[rgb(218,218,218)] mb-6 max-w-xl mx-auto text-sm">
+            <p className="text-[rgb(218,218,218)] mb-8 max-w-2xl mx-auto leading-relaxed">
               Get the latest insights on AI-powered customer support, industry trends, 
               and platform updates delivered to your inbox.
             </p>
             
-            <NewsletterSubscribe />
+            <div className="max-w-md mx-auto mb-4">
+              <NewsletterSubscribe />
+            </div>
             
-            <p className="text-xs text-[rgb(161,161,170)] mt-3">
+            <p className="text-xs text-[rgb(161,161,170)]">
               No spam, unsubscribe anytime. We respect your privacy.
             </p>
           </div>
         </div>
 
         {/* Contact Information */}
-        <div className="py-6 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-8">
-            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
-              <Mail size={16} className="text-[#00FF41]" />
-              <a href="mailto:info@sentratech.net" className="hover:text-[#00FF41] transition-colors text-sm">
-                info@sentratech.net
-              </a>
-            </div>
-            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
-              <Phone size={16} className="text-[#00FF41]" />
-              <a href="tel:+447424293951" className="hover:text-[#00FF41] transition-colors text-sm">
-                +44 7424293951
-              </a>
-            </div>
-            <div className="flex items-center space-x-2 text-[rgb(218,218,218)]">
-              <MapPin size={16} className="text-[#00FF41]" />
-              <span className="text-sm">London, UK</span>
+        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+              <div className="flex flex-col items-center space-y-2 p-4">
+                <div className="w-10 h-10 bg-[#00FF41]/10 border border-[#00FF41]/20 rounded-xl flex items-center justify-center mb-2">
+                  <Mail size={18} className="text-[#00FF41]" />
+                </div>
+                <div>
+                  <p className="text-[rgb(161,161,170)] text-xs font-medium uppercase tracking-wide mb-1">
+                    Email Us
+                  </p>
+                  <a 
+                    href="mailto:info@sentratech.net" 
+                    className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors font-medium"
+                  >
+                    info@sentratech.net
+                  </a>
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-center space-y-2 p-4">
+                <div className="w-10 h-10 bg-[#00FF41]/10 border border-[#00FF41]/20 rounded-xl flex items-center justify-center mb-2">
+                  <Phone size={18} className="text-[#00FF41]" />
+                </div>
+                <div>
+                  <p className="text-[rgb(161,161,170)] text-xs font-medium uppercase tracking-wide mb-1">
+                    Call Us
+                  </p>
+                  <a 
+                    href="tel:+447424293951" 
+                    className="text-[rgb(218,218,218)] hover:text-[#00FF41] transition-colors font-medium"
+                  >
+                    +44 7424 293951
+                  </a>
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-center space-y-2 p-4">
+                <div className="w-10 h-10 bg-[#00FF41]/10 border border-[#00FF41]/20 rounded-xl flex items-center justify-center mb-2">
+                  <MapPin size={18} className="text-[#00FF41]" />
+                </div>
+                <div>
+                  <p className="text-[rgb(161,161,170)] text-xs font-medium uppercase tracking-wide mb-1">
+                    Location
+                  </p>
+                  <span className="text-[rgb(218,218,218)] font-medium">
+                    London, UK
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
