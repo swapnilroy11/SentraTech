@@ -25,36 +25,33 @@ export const DASHBOARD_CONFIG = {
   }
 };
 
-// Data format templates for /api/ingest/* endpoints (actual dashboard schema)
+// Data format templates for local backend API endpoints
 export const DATA_FORMATS = {
   DEMO_REQUEST: {
-    name: 'string (required)',           // NOT user_name
+    name: 'string (required)',
     email: 'string (required)', 
     company: 'string (required)',
     phone: 'string (optional)',
     message: 'string (optional)',
-    call_volume: 'number (optional)',
-    interaction_volume: 'number (optional)'
+    preferredDate: 'string (optional)'
   },
   
   CONTACT_SALES: {
-    full_name: 'string (required)',
-    work_email: 'string (required)',
-    company_name: 'string (required)',
+    fullName: 'string (required)',
+    workEmail: 'string (required)',
+    companyName: 'string (required)',
     message: 'string (required)',
     phone: 'string (optional)',
-    company_website: 'string (optional)',
-    call_volume: 'number (optional)',
-    interaction_volume: 'number (optional)',
-    preferred_contact_method: 'string (optional)'
+    companyWebsite: 'string (optional)',
+    monthlyVolume: 'number (optional)',
+    preferredContactMethod: 'string (optional)'
   },
   
   ROI_CALCULATOR: {
     country: 'string (required)',
-    email: 'string (required)',
-    monthly_volume: 'number (optional)',
-    current_cost: 'number (optional)',
-    company_name: 'string (optional)'
+    monthlyVolume: 'number (required)',
+    interactionVolume: 'number (required)',
+    email: 'string (optional)'
   },
   
   NEWSLETTER_SIGNUP: {
@@ -63,18 +60,17 @@ export const DATA_FORMATS = {
   },
   
   JOB_APPLICATION: {
-    full_name: 'string (required)',
+    fullName: 'string (required)',
     email: 'string (required)',
-    position_applied: 'string (required)',
+    position: 'string (required)',
     phone: 'string (optional)',
     location: 'string (optional)',
-    experience_level: 'string (optional)',
-    portfolio_website: 'string (optional)',
-    preferred_shifts: 'array (optional)',
-    availability_date: 'string (optional)',
-    motivation_text: 'string (optional)',
-    resume_file: 'object (optional)',
-    consent_for_storage: 'boolean (required)'
+    experience: 'string (optional)',
+    portfolio: 'string (optional)',
+    preferredShifts: 'array (optional)',
+    availabilityDate: 'string (optional)',
+    coverNote: 'string (optional)',
+    consentForStorage: 'boolean (required)'
   }
 };
 
