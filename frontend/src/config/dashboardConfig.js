@@ -25,16 +25,16 @@ export const DASHBOARD_CONFIG = {
   }
 };
 
-// Data format templates for new endpoints
+// Data format templates for /api/ingest/* endpoints (actual dashboard schema)
 export const DATA_FORMATS = {
   DEMO_REQUEST: {
-    name: 'string (required)',
-    email: 'string (required)',
+    name: 'string (required)',           // NOT user_name
+    email: 'string (required)', 
     company: 'string (required)',
     phone: 'string (optional)',
     message: 'string (optional)',
-    monthly_volume: 'string (optional)',
-    current_cost: 'string (optional)'
+    call_volume: 'number (optional)',
+    interaction_volume: 'number (optional)'
   },
   
   CONTACT_SALES: {
