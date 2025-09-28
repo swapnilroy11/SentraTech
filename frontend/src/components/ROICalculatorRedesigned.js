@@ -103,7 +103,38 @@ const ROICalculatorRedesigned = () => {
     validateInput(value, setInteractionVolumeError, 'interaction volume');
   };
 
-  // Real-time ROI calculation
+  // Protected calculation validation function
+  const validateCalculation = (calls, interactions, results) => {
+    const { traditionalMonthlyCost, sentraTechMonthlyCost, monthlySavings, roi, costReduction } = results;
+    
+    // Validate basic math
+    const expectedSavings = traditionalMonthlyCost - sentraTechMonthlyCost;
+    const expectedROI = sentraTechMonthlyCost > 0 ? (expectedSavings / sentraTechMonthlyCost) * 100 : 0;
+    const expectedCostReduction = traditionalMonthlyCost > 0 ? (expectedSavings / traditionalMonthlyCost) * 100 : 0;
+    
+    // Check for precision errors (tolerance of 0.01)
+    const tolerance = 0.01;
+    
+    if (Math.abs(monthlySavings - expectedSavings) > tolerance) {
+      console.error('❌ Savings calculation error:', { expected: expectedSavings, actual: monthlySavings });
+    }
+    
+    if (Math.abs(roi - expectedROI) > tolerance) {
+      console.error('❌ ROI calculation error:', { expected: expectedROI, actual: roi });
+    }
+    
+    if (Math.abs(costReduction - expectedCostReduction) > tolerance) {
+      console.error('❌ Cost reduction calculation error:', { expected: expectedCostReduction, actual: costReduction });
+    }
+    
+    return {
+      savingsValid: Math.abs(monthlySavings - expectedSavings) <= tolerance,
+      roiValid: Math.abs(roi - expectedROI) <= tolerance,
+      costReductionValid: Math.abs(costReduction - expectedCostReduction) <= tolerance
+    };
+  };
+
+  // Real-time ROI calculation with precision protection
   const calculateROI = () => {
     // Reset results if inputs are invalid or empty
     if (!callVolume || !interactionVolume || callVolumeError || interactionVolumeError) {
@@ -125,44 +156,36 @@ const ROICalculatorRedesigned = () => {
     const callAHT = 8; // minutes per call
     const interactionAHT = 5; // minutes per interaction
     
-    // Traditional BPO Cost Calculation with separate AHT
+    // Traditional BPO Cost Calculation with separate AHT (PRECISION: Use exact calculations)
     const callMinutes = calls * callAHT;
     const interactionMinutes = interactions * interactionAHT;
     const totalMinutes = callMinutes + interactionMinutes;
-    const traditionalMonthlyCost = totalMinutes * country.bpoPerMin;
+    const traditionalMonthlyCost = Math.round((totalMinutes * country.bpoPerMin) * 100) / 100; // Round to 2 decimals
     
-    // SentraTech Cost Calculation with proportional pricing
-    // Calculate costs based on volume proportions
-    const callCost = (calls / 1000) * CALL_COST_PER_1K; // 61.5% of cost
-    const interactionCost = (interactions / 1000) * INTERACTION_COST_PER_1K; // 38.5% of cost
-    const sentraTechPlatformCost = callCost + interactionCost;
+    // SentraTech Cost Calculation with proportional pricing (PRECISION: Exact proportions)
+    const callCost = Math.round(((calls / 1000) * CALL_COST_PER_1K) * 100) / 100;
+    const interactionCost = Math.round(((interactions / 1000) * INTERACTION_COST_PER_1K) * 100) / 100;
+    const sentraTechPlatformCost = Math.round((callCost + interactionCost) * 100) / 100;
     
     // Calculate equivalent bundles (for display purposes)
-    const bundlesNeeded = sentraTechPlatformCost / SENTRATECH_COST_PER_1K;
+    const bundlesNeeded = Math.round((sentraTechPlatformCost / SENTRATECH_COST_PER_1K) * 1000) / 1000; // 3 decimal precision
     
-    // Human agent cost (30% of volume handled by humans with 70% automation)
-    // Note: This is included for reference but not used in final cost since platform cost is all-inclusive
-    const humanHandledCalls = calls * (1 - AUTOMATION_PERCENTAGE / 100);
-    const humanHandledInteractions = interactions * (1 - AUTOMATION_PERCENTAGE / 100);
-    const humanCallMinutes = humanHandledCalls * callAHT;
-    const humanInteractionMinutes = humanHandledInteractions * interactionAHT;
-    const humanTotalMinutes = humanCallMinutes + humanInteractionMinutes;
-    const humanCost = humanTotalMinutes * (country.agentHourly / 60);
-    const sentraTechTotalCost = sentraTechPlatformCost; // Platform cost already includes all expenses
+    // Final costs (PRECISION: All calculations use exact math)
+    const sentraTechTotalCost = sentraTechPlatformCost;
     
-    // Calculate savings and ROI
-    const monthlySavings = traditionalMonthlyCost - sentraTechTotalCost;
-    const yearlySavings = monthlySavings * 12;
-    const yearlyTraditionalCost = traditionalMonthlyCost * 12;
-    const yearlySentraTechCost = sentraTechTotalCost * 12;
+    // Calculate savings and ROI (PRECISION: Exact calculations)
+    const monthlySavings = Math.round((traditionalMonthlyCost - sentraTechTotalCost) * 100) / 100;
+    const yearlySavings = Math.round((monthlySavings * 12) * 100) / 100;
+    const yearlyTraditionalCost = Math.round((traditionalMonthlyCost * 12) * 100) / 100;
+    const yearlySentraTechCost = Math.round((sentraTechTotalCost * 12) * 100) / 100;
     
-    // ROI Calculation: (Net Gain - Investment) / Investment * 100
-    const roi = sentraTechTotalCost > 0 ? (monthlySavings / sentraTechTotalCost) * 100 : 0;
+    // ROI Calculation: (Savings / Investment) * 100 (PRECISION: Exact formula)
+    const roi = sentraTechTotalCost > 0 ? Math.round(((monthlySavings / sentraTechTotalCost) * 100) * 10) / 10 : 0; // 1 decimal
     
-    // Cost reduction percentage
-    const costReduction = traditionalMonthlyCost > 0 ? (monthlySavings / traditionalMonthlyCost) * 100 : 0;
+    // Cost reduction percentage (PRECISION: Exact formula)
+    const costReduction = traditionalMonthlyCost > 0 ? Math.round(((monthlySavings / traditionalMonthlyCost) * 100) * 10) / 10 : 0; // 1 decimal
 
-    setResults({
+    const calculationResults = {
       traditionalMonthlyCost,
       sentraTechMonthlyCost: sentraTechTotalCost,
       monthlySavings,
@@ -173,7 +196,16 @@ const ROICalculatorRedesigned = () => {
       costReduction,
       bundlesNeeded,
       humanHandledPercentage: 100 - AUTOMATION_PERCENTAGE
-    });
+    };
+    
+    // Validate calculations for protection against future errors
+    const validation = validateCalculation(calls, interactions, calculationResults);
+    
+    if (!validation.savingsValid || !validation.roiValid || !validation.costReductionValid) {
+      console.warn('⚠️ Calculation validation failed - check precision');
+    }
+
+    setResults(calculationResults);
   };
 
   // Format currency
