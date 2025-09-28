@@ -312,9 +312,8 @@ const HorizontalJourney = () => {
     return () => {
       document.body.classList.remove('modal-open');
       const modalContainer = document.getElementById('customer-journey-modal-root');
-      if (modalContainer) {
-        document.body.removeChild(modalContainer);
-        console.log('🧹 Cleaned up modal container');
+      if (modalContainer && modalContainer.parentNode) {
+        modalContainer.parentNode.removeChild(modalContainer);
       }
     };
   }, []);
