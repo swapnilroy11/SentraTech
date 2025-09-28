@@ -582,26 +582,26 @@ const SupportCenterPage = () => {
             ))}
           </div>
           
-          {/* FAQ Items Container with Scroll Stability */}
-          <div className="faq-container">
-            <div className="space-y-4">
+          {/* FAQ Items Container - Fixed Height Scrollable */}
+          <div className="faq-container bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
+            <div className="faq-items space-y-4">
               {filteredQuestions.map((faq, index) => (
                 <div 
                   key={`faq-${selectedCategory}-${index}`} 
-                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300"
+                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4 md:p-5 hover:border-[#00FF41]/30 transition-colors duration-300"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-base md:text-lg font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
+                    <h3 className="text-sm md:text-base font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
                     <div className="flex items-center space-x-2 flex-shrink-0">
                       {faq.popularity === 'Very Popular' && (
                         <span className="bg-[#00FF41]/20 text-[#00FF41] px-2 py-1 rounded text-xs font-medium">
                           Popular
                         </span>
                       )}
-                      <HelpCircle size={18} className="text-[#00FF41] md:w-5 md:h-5" />
+                      <HelpCircle size={16} className="text-[#00FF41] md:w-4 md:h-4" />
                     </div>
                   </div>
-                  <p className="text-[rgb(218,218,218)] text-sm md:text-base leading-relaxed">
+                  <p className="text-[rgb(218,218,218)] text-xs md:text-sm leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>
