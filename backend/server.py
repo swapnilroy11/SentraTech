@@ -1955,7 +1955,7 @@ class AirtableService:
                 response = await client.post(url, headers=headers, json=data)
                 
                 if response.status_code == 200:
-                    logger.info(f"✅ Analytics event tracked in Airtable")
+                    logger.info("✅ Analytics event tracked in Airtable")
                     return {"success": True}
                 else:
                     logger.error(f"Airtable analytics error: {response.status_code}")
@@ -2754,7 +2754,6 @@ class MetricsService:
         
     def generate_realistic_variation(self, base_value: float, variation_percent: float = 0.05) -> float:
         """Generate realistic variations in metrics"""
-        import random
         variation = random.uniform(-variation_percent, variation_percent)
         return base_value * (1 + variation)
     
@@ -3720,7 +3719,7 @@ async def perform_data_deletion(email: str):
         }
         
         await db.audit_log.insert_one(audit_log)
-        logger.info(f"✅ Data deletion completed for user (anonymized audit trail created)")
+        logger.info("✅ Data deletion completed for user (anonymized audit trail created)")
         
     except Exception as e:
         logger.error(f"Error performing data deletion: {str(e)}")
