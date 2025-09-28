@@ -250,12 +250,7 @@ const ROICalculatorRedesigned = () => {
         
         console.log('ROI report submitted successfully:', result);
         
-        // Auto-close modal after 3 seconds
-        setTimeout(() => {
-          setShowEmailModal(false);
-          setReportSubmitted(false);
-          setEmail('');
-        }, 3000);
+        // Modal will now stay open until user clicks "Continue Exploring"
       } else {
         // Fallback to Supabase if ingest fails
         console.warn('Ingest endpoint failed, falling back to Supabase');
