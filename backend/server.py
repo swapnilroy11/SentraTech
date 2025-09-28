@@ -347,6 +347,20 @@ class SubscriptionIngestRequest(BaseModel):
     source: Optional[str] = "website"
     status: str = "subscribed"
 
+class JobApplicationIngestRequest(BaseModel):
+    fullName: str
+    email: str
+    phone: Optional[str] = None
+    location: str = "Bangladesh"
+    preferredShifts: Optional[str] = None
+    availabilityStartDate: Optional[str] = None
+    coverNote: Optional[str] = None
+    linkedinProfile: Optional[str] = None
+    position: str = "Customer Support Specialist"
+    source: str = "careers_page"
+    consentForStorage: bool = True
+    resumeFile: Optional[Dict] = None  # {data: base64, name: str, type: str, size: int}
+
 class HubSpotContact(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: str
