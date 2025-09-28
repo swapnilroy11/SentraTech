@@ -479,13 +479,13 @@ const JobApplicationPage = () => {
                 Why do you want to join SentraTech? *
               </label>
               <textarea
-                value={formData.whySentraTech}
-                onChange={(e) => handleInputChange('whySentraTech', e.target.value)}
+                value={formData.why_sentratech}
+                onChange={(e) => handleInputChange('why_sentratech', e.target.value)}
                 rows={4}
-                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.whySentraTech ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none`}
+                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.why_sentratech ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none`}
                 placeholder="Tell us what excites you about our mission, technology, or culture..."
               />
-              {errors.whySentraTech && <p className="text-red-400 text-xs mt-1">{errors.whySentraTech}</p>}
+              {errors.why_sentratech && <p className="text-red-400 text-xs mt-1">{errors.why_sentratech}</p>}
             </div>
             
             <div>
