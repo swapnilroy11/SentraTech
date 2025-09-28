@@ -38,29 +38,29 @@ const AboutUsPage = () => {
 
   const milestones = [
     {
-      year: '2022',
+      year: '2024',
       title: 'Company Founded',
-      description: 'SentraTech was born from a vision to revolutionize customer support with AI-powered automation.'
-    },
-    {
-      year: '2023',
-      title: 'First AI Model Launch',
-      description: 'Deployed our proprietary customer support AI achieving 70% automation rate in beta testing.'
-    },
-    {
-      year: '2023',
-      title: 'Enterprise Expansion',
-      description: 'Secured first 100 enterprise customers, processing over 1M customer interactions monthly.'
+      description: 'SentraTech was born in Bangladesh from a vision to revolutionize customer support with AI-powered automation, bridging the gap between human empathy and intelligent automation.'
     },
     {
       year: '2024',
-      title: 'Global Platform',
-      description: 'Launched multi-language support and 24/7 global coverage, serving customers across 50+ countries.'
+      title: 'MVP Development',
+      description: 'Built and launched our first AI customer support platform with initial beta testing, achieving promising early results in automation accuracy.'
     },
     {
       year: '2024',
-      title: 'Industry Recognition',
-      description: 'Named "Best AI Customer Support Platform" by leading industry analysts and achieved SOC 2 certification.'
+      title: 'Team Expansion',
+      description: 'Grew our founding team to include AI specialists, customer experience experts, and industry veterans committed to transforming support.'
+    },
+    {
+      year: '2024',
+      title: 'Market Entry',
+      description: 'Officially entered the competitive AI customer support market with a focus on delivering exceptional results for forward-thinking businesses.'
+    },
+    {
+      year: '2025',
+      title: 'Scaling Vision',
+      description: 'Positioned to become the next market leader in AI customer support, with plans to serve enterprises globally and establish industry benchmarks.'
     }
   ];
 
