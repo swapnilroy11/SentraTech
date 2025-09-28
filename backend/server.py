@@ -1092,12 +1092,12 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         await db.roi_reports.insert_one(roi_data)
         logger.info(f"ROI report saved locally: {roi_report.contact_email}")
         
-        # Forward to Admin Dashboard (skip if we're the dashboard to avoid loops)
-        external_dashboard_url = "https://dashboard-central-5.preview.emergentagent.com"
-        current_host = "customer-flow-5.preview.emergentagent.com"
+        # 🔒 PROTECTED - Use centralized dashboard config
+        # DO NOT MODIFY - Critical for dashboard integration
+        from dashboard_config import DashboardConfig
         
-        # Skip external forwarding if URL would create a loop
-        if current_host in external_dashboard_url:
+        # Skip external forwarding if it would create a loop
+        if not DashboardConfig.should_forward_to_dashboard():
             logger.info("Skipping external dashboard forwarding (same host or not configured)")
             # Update status to indicate local-only storage
             await db.roi_reports.update_one(
@@ -1184,12 +1184,12 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         await db.subscriptions.insert_one(subscription_data)
         logger.info(f"Subscription saved locally: {subscription.email}")
         
-        # Forward to Admin Dashboard (skip if we're the dashboard to avoid loops)
-        external_dashboard_url = "https://dashboard-central-5.preview.emergentagent.com"
-        current_host = "customer-flow-5.preview.emergentagent.com"
+        # 🔒 PROTECTED - Use centralized dashboard config
+        # DO NOT MODIFY - Critical for dashboard integration
+        from dashboard_config import DashboardConfig
         
-        # Skip external forwarding if URL would create a loop
-        if current_host in external_dashboard_url:
+        # Skip external forwarding if it would create a loop
+        if not DashboardConfig.should_forward_to_dashboard():
             logger.info("Skipping external dashboard forwarding (same host or not configured)")
             # Update status to indicate local-only storage
             await db.subscriptions.update_one(
