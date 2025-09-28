@@ -364,50 +364,53 @@ const ROICalculatorRedesigned = () => {
               </div>
             </div>
 
-            {/* Call Volume Input */}
-            <div>
-              <Label className="text-white text-lg font-semibold mb-3 block">Monthly Call Volume</Label>
-              <Input
-                type="number"
-                placeholder="e.g., 1000"
-                value={callVolume}
-                onChange={handleCallVolumeChange}
-                className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
-                  callVolumeError 
-                    ? 'border-red-500 focus:border-red-500' 
-                    : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
-                }`}
-                min="0"
-              />
-              {callVolumeError && (
-                <div className="flex items-center space-x-2 mt-2 text-red-400 text-sm">
-                  <AlertCircle size={16} />
-                  <span>{callVolumeError}</span>
-                </div>
-              )}
-            </div>
+            {/* Volume Inputs - Aligned Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+              {/* Call Volume Input */}
+              <div className="flex flex-col h-full">
+                <Label className="text-white text-lg font-semibold mb-3 block">Monthly Call Volume</Label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 1000"
+                  value={callVolume}
+                  onChange={handleCallVolumeChange}
+                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
+                    callVolumeError 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
+                  }`}
+                  min="0"
+                />
+                {callVolumeError && (
+                  <div className="flex items-center space-x-2 mt-2 text-red-400 text-sm">
+                    <AlertCircle size={16} />
+                    <span>{callVolumeError}</span>
+                  </div>
+                )}
+              </div>
 
-            {/* Interaction Volume Input */}
-            <div>
-              <Label className="text-white text-lg font-semibold mb-3 block">Monthly Interaction Volume</Label>
-              <Input
-                type="number"
-                placeholder="e.g., 1500"
-                value={interactionVolume}
-                onChange={handleInteractionVolumeChange}
-                className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
-                  interactionVolumeError 
-                    ? 'border-red-500 focus:border-red-500' 
-                    : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
-                }`}
-                min="0"
-              />
-              {interactionVolumeError && (
-                <div className="flex items-center space-x-2 mt-2 text-red-400 text-sm">
-                  <AlertCircle size={16} />
-                  <span>{interactionVolumeError}</span>
-                </div>
-              )}
+              {/* Interaction Volume Input */}
+              <div className="flex flex-col h-full">
+                <Label className="text-white text-lg font-semibold mb-3 block">Monthly Interaction Volume</Label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 1500"
+                  value={interactionVolume}
+                  onChange={handleInteractionVolumeChange}
+                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
+                    interactionVolumeError 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
+                  }`}
+                  min="0"
+                />
+                {interactionVolumeError && (
+                  <div className="flex items-center space-x-2 mt-2 text-red-400 text-sm">
+                    <AlertCircle size={16} />
+                    <span>{interactionVolumeError}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
           </div>
