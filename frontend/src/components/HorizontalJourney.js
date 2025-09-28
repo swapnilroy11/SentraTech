@@ -721,13 +721,24 @@ const HorizontalJourney = () => {
               </p>
             </div>
 
-                {/* Description */}
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white">Overview</h4>
-                  <p className="text-[rgb(218,218,218)] leading-relaxed">
-                    {selectedPanel.description}
-                  </p>
-                </div>
+            {/* Description */}
+            <div style={{ marginBottom: '20px' }}>
+              <h4 style={{ 
+                color: 'white', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginBottom: '8px' 
+              }}>
+                Overview
+              </h4>
+              <p style={{ 
+                color: 'rgb(218,218,218)', 
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }}>
+                {selectedPanel.description}
+              </p>
+            </div>
 
                   {/* Process Overview */}
                   <div className="space-y-3">
