@@ -311,7 +311,7 @@ const CareersPage = () => {
               connect with their customers while building your career with a innovative team.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <button 
                 onClick={() => setIsApplicationModalOpen(true)}
                 className="px-8 py-4 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-all duration-200 flex items-center justify-center space-x-2"
@@ -319,12 +319,6 @@ const CareersPage = () => {
                 <span>Apply for Open Position</span>
                 <ArrowRight size={18} />
               </button>
-              <a 
-                href="mailto:careers@sentratech.net"
-                className="px-8 py-4 bg-transparent border border-[#00FF41]/30 text-[#00FF41] rounded-lg hover:bg-[#00FF41]/10 transition-all duration-200 flex items-center justify-center space-x-2"
-              >
-                <span>General Inquiries</span>
-              </a>
             </div>
           </div>
         </section>
