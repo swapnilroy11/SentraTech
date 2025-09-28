@@ -191,19 +191,42 @@ const CTASection = () => {
     setError(null);
     
     try {
-      console.log('Submitting to Supabase...'); // Debug log
+      console.log('Submitting to ingest endpoint...'); // Debug log
       
-      // Submit to Supabase
-      const result = await insertDemoRequest(formData);
+      // Get backend URL from environment
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
       
-      console.log('Supabase response:', result); // Debug log
+      // Prepare data for ingest endpoint
+      const ingestData = {
+        user_name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        phone: formData.phone,
+        call_volume: formData.call_volume,
+        interaction_volume: formData.interaction_volume,
+        message: formData.message
+      };
       
-      if (result.success) {
-        // Track successful demo booking conversion in GA4
-        trackDemoBooking(formData, result.data.id);
+      // Submit to ingest endpoint
+      const response = await fetch(`${backendUrl}/api/ingest/demo_requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+        },
+        body: JSON.stringify(ingestData)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Ingest endpoint response:', result); // Debug log
         
-        setContactId(result.data.id);
+        // Track successful demo booking conversion in GA4
+        trackDemoBooking(formData, result.id || `demo_${Date.now()}`);
+        
+        setContactId(result.id || `demo_${Date.now()}`);
         setIsSubmitted(true);
+        
         // Clear form data after successful submission
         setFormData({
           name: '', email: '', company: '', phone: '', 
@@ -211,7 +234,22 @@ const CTASection = () => {
         });
         setFieldErrors({}); // Clear any field errors
       } else {
-        throw new Error(result.message || 'Submission failed');
+        // Fallback to old Supabase method if ingest fails
+        console.warn('Ingest endpoint failed, falling back to Supabase');
+        const result = await insertDemoRequest(formData);
+        
+        if (result.success) {
+          trackDemoBooking(formData, result.data.id);
+          setContactId(result.data.id);
+          setIsSubmitted(true);
+          setFormData({
+            name: '', email: '', company: '', phone: '', 
+            message: '', call_volume: '', interaction_volume: ''
+          });
+          setFieldErrors({});
+        } else {
+          throw new Error(result.message || 'Submission failed');
+        }
       }
       
     } catch (error) {
