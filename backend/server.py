@@ -1151,7 +1151,256 @@ async def validate_dashboard_config():
             "message": "Configuration validation error"
         }
 
-# All ingest endpoints removed - forms now submit directly to dashboard
+# Form Ingest Endpoints with Dashboard Integration
+from pydantic import BaseModel, Field
+from fastapi import HTTPException, Header
+from typing import Optional
+
+# Ingest models
+class ContactRequest(BaseModel):
+    full_name: str
+    work_email: str
+    company_name: str
+    message: str
+    phone: Optional[str] = ""
+    company_website: Optional[str] = ""
+    call_volume: Optional[int] = 0
+    interaction_volume: Optional[int] = 0
+    preferred_contact_method: Optional[str] = "email"
+
+class DemoRequest(BaseModel):
+    name: str
+    email: str
+    company: str
+    phone: Optional[str] = ""
+    message: Optional[str] = ""
+    call_volume: Optional[int] = 0
+    interaction_volume: Optional[int] = 0
+    total_volume: Optional[int] = 0
+    source: Optional[str] = "website"
+    timestamp: Optional[str] = None
+
+class ROIReport(BaseModel):
+    email: str
+    country: str
+    call_volume: Optional[int] = 0
+    interaction_volume: Optional[int] = 0
+    total_volume: Optional[int] = 0
+    calculated_savings: Optional[float] = 0
+    roi_percentage: Optional[float] = 0
+    payback_period: Optional[float] = 0
+    timestamp: Optional[str] = None
+
+class Newsletter(BaseModel):
+    email: str
+    source: Optional[str] = "website"
+    timestamp: Optional[str] = None
+
+class JobApplication(BaseModel):
+    full_name: str
+    email: str
+    location: Optional[str] = ""
+    linkedin_profile: Optional[str] = ""
+    position: Optional[str] = ""
+    preferred_shifts: Optional[str] = ""
+    availability_start_date: Optional[str] = ""
+    cover_note: Optional[str] = ""
+    source: Optional[str] = "website"
+    consent_for_storage: Optional[bool] = False
+    timestamp: Optional[str] = None
+
+# Authentication middleware for ingest endpoints
+async def verify_ingest_key(x_ingest_key: Optional[str] = Header(None)):
+    expected_key = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
+    if x_ingest_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
+    return x_ingest_key
+
+# Contact Sales Ingest Endpoint
+@api_router.post("/ingest/contact_requests")
+async def ingest_contact_request(
+    contact: ContactRequest,
+    ingest_key: str = Depends(verify_ingest_key)
+):
+    """Submit contact sales request with dashboard integration"""
+    try:
+        # Add timestamp and ID
+        contact_data = contact.dict()
+        contact_data["id"] = str(uuid.uuid4())
+        contact_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        contact_data["status"] = "new"
+        
+        # Store in local database
+        await db.contact_requests.insert_one(contact_data)
+        
+        return {
+            "success": True,
+            "message": "Contact request submitted successfully",
+            "id": contact_data["id"],
+            "status": "stored"
+        }
+    except Exception as e:
+        logging.error(f"Contact request ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Demo Request Ingest Endpoint  
+@api_router.post("/ingest/demo_requests")
+async def ingest_demo_request(
+    demo: DemoRequest,
+    ingest_key: str = Depends(verify_ingest_key)
+):
+    """Submit demo request with dashboard integration"""
+    try:
+        # Add timestamp and ID
+        demo_data = demo.dict()
+        demo_data["id"] = str(uuid.uuid4())
+        demo_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        demo_data["status"] = "new"
+        
+        # Store in local database
+        await db.demo_requests.insert_one(demo_data)
+        
+        return {
+            "success": True,
+            "message": "Demo request submitted successfully",
+            "id": demo_data["id"],
+            "status": "stored"
+        }
+    except Exception as e:
+        logging.error(f"Demo request ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# ROI Calculator Ingest Endpoint
+@api_router.post("/ingest/roi_reports")
+async def ingest_roi_report(
+    roi: ROIReport,
+    ingest_key: str = Depends(verify_ingest_key)
+):
+    """Submit ROI report with dashboard integration"""
+    try:
+        # Add timestamp and ID
+        roi_data = roi.dict()
+        roi_data["id"] = str(uuid.uuid4())
+        roi_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        roi_data["status"] = "new"
+        
+        # Store in local database
+        await db.roi_reports.insert_one(roi_data)
+        
+        return {
+            "success": True,
+            "message": "ROI report submitted successfully",
+            "id": roi_data["id"],
+            "status": "stored"
+        }
+    except Exception as e:
+        logging.error(f"ROI report ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Newsletter Ingest Endpoint
+@api_router.post("/ingest/subscriptions")
+async def ingest_newsletter_subscription(
+    newsletter: Newsletter,
+    ingest_key: str = Depends(verify_ingest_key)
+):
+    """Submit newsletter subscription with dashboard integration"""
+    try:
+        # Add timestamp and ID
+        newsletter_data = newsletter.dict()
+        newsletter_data["id"] = str(uuid.uuid4())
+        newsletter_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        newsletter_data["status"] = "subscribed"
+        
+        # Store in local database
+        await db.subscriptions.insert_one(newsletter_data)
+        
+        return {
+            "success": True,
+            "message": "Newsletter subscription successful",
+            "id": newsletter_data["id"],
+            "status": "subscribed"
+        }
+    except Exception as e:
+        logging.error(f"Newsletter subscription ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Job Application Ingest Endpoint
+@api_router.post("/ingest/job_applications")
+async def ingest_job_application(
+    job_app: JobApplication,
+    ingest_key: str = Depends(verify_ingest_key)
+):
+    """Submit job application with dashboard integration"""
+    try:
+        # Add timestamp and ID
+        job_data = job_app.dict()
+        job_data["id"] = str(uuid.uuid4())
+        job_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        job_data["status"] = "submitted"
+        
+        # Store in local database
+        await db.job_applications.insert_one(job_data)
+        
+        return {
+            "success": True,
+            "message": "Job application submitted successfully",
+            "id": job_data["id"],
+            "status": "submitted"
+        }
+    except Exception as e:
+        logging.error(f"Job application ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Status endpoints for debugging
+@api_router.get("/ingest/contact_requests/status")
+async def get_contact_requests_status():
+    """Get contact requests count for debugging"""
+    try:
+        count = await db.contact_requests.count_documents({})
+        recent = await db.contact_requests.find().sort("created_at", -1).limit(5).to_list(length=5)
+        return {"total_count": count, "recent_submissions": recent}
+    except Exception as e:
+        return {"error": str(e), "total_count": 0}
+
+@api_router.get("/ingest/demo_requests/status")
+async def get_demo_requests_status():
+    """Get demo requests count for debugging"""
+    try:
+        count = await db.demo_requests.count_documents({})
+        recent = await db.demo_requests.find().sort("created_at", -1).limit(5).to_list(length=5)
+        return {"total_count": count, "recent_submissions": recent}
+    except Exception as e:
+        return {"error": str(e), "total_count": 0}
+
+@api_router.get("/ingest/roi_reports/status")
+async def get_roi_reports_status():
+    """Get ROI reports count for debugging"""
+    try:
+        count = await db.roi_reports.count_documents({})
+        recent = await db.roi_reports.find().sort("created_at", -1).limit(5).to_list(length=5)
+        return {"total_count": count, "recent_submissions": recent}
+    except Exception as e:
+        return {"error": str(e), "total_count": 0}
+
+@api_router.get("/ingest/subscriptions/status")
+async def get_subscriptions_status():
+    """Get newsletter subscriptions count for debugging"""
+    try:
+        count = await db.subscriptions.count_documents({})
+        recent = await db.subscriptions.find().sort("created_at", -1).limit(5).to_list(length=5)
+        return {"total_count": count, "recent_submissions": recent}
+    except Exception as e:
+        return {"error": str(e), "total_count": 0}
+
+@api_router.get("/ingest/job_applications/status")
+async def get_job_applications_status():
+    """Get job applications count for debugging"""
+    try:
+        count = await db.job_applications.count_documents({})
+        recent = await db.job_applications.find().sort("created_at", -1).limit(5).to_list(length=5)
+        return {"total_count": count, "recent_submissions": recent}
+    except Exception as e:
+        return {"error": str(e), "total_count": 0}
 
 @api_router.post("/candidates/update_status")
 async def update_candidate_status(request: Request, status_update: CandidateStatusUpdate):
