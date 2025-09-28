@@ -197,18 +197,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Footer */}
-        <div className="py-6 border-t border-[rgba(255,255,255,0.1)]">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
-            {/* Copyright */}
-            <div className="text-[rgb(161,161,170)] text-sm text-center md:text-left">
-              © {currentYear} SentraTech. All rights reserved. 
-              <span className="block md:inline md:ml-2 text-[rgb(218,218,218)]">Built with AI + Human Intelligence.</span>
-            </div>
-
+        <div className="py-8 border-t border-[rgba(255,255,255,0.1)]">
+          <div className="flex flex-col items-center space-y-6">
             {/* Social Links */}
-            <div className="flex items-center space-x-4">
-              <span className="text-[rgb(161,161,170)] text-sm">Follow us:</span>
-              <div className="flex items-center space-x-2">
+            <div className="flex flex-col items-center space-y-4">
+              <p className="text-[rgb(161,161,170)] text-sm font-medium">Follow us</p>
+              <div className="flex items-center space-x-3">
                 {socialLinks.map((social, index) => {
                   const Icon = social.icon;
                   return (
@@ -218,13 +212,23 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="w-8 h-8 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg flex items-center justify-center text-[rgb(161,161,170)] hover:text-[#00FF41] hover:border-[#00FF41] hover:bg-[#00FF41]/10 transform hover:scale-110 transition-all duration-200"
+                      className="w-10 h-10 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl flex items-center justify-center text-[rgb(161,161,170)] hover:text-[#00FF41] hover:border-[#00FF41] hover:bg-[#00FF41]/10 transform hover:scale-105 transition-all duration-200"
                     >
-                      <Icon size={16} />
+                      <Icon size={18} />
                     </a>
                   );
                 })}
               </div>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-center space-y-2">
+              <p className="text-[rgb(161,161,170)] text-sm">
+                © {currentYear} SentraTech. All rights reserved.
+              </p>
+              <p className="text-[rgb(218,218,218)] text-sm font-medium">
+                Built with AI + Human Intelligence.
+              </p>
             </div>
           </div>
         </div>
