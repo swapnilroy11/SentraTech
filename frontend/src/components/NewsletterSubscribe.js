@@ -42,7 +42,7 @@ const NewsletterSubscribe = () => {
       };
       
       // Submit using enhanced helper function with authentication and error handling
-      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
+      const result = await submitFormToDashboard(FORM_CONFIG.ENDPOINTS.NEWSLETTER_SIGNUP, dashboardData);
       
       if (result.success) {
         setStatus('success');
