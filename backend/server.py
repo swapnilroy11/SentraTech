@@ -999,21 +999,39 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         await db.contact_requests.insert_one(contact_data)
         logger.info(f"Contact request saved locally: {contact_request.work_email}")
         
-        # Try to forward to admin dashboard
+        # Forward to external SentraTech API
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                dashboard_url = "https://support-platform-1.preview.emergentagent.com/v1/contact_requests"
-                
-                # Get service credentials
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # Step 1: Authenticate with external API to get service token
+                auth_url = "https://api.sentratech.net/v1/auth/login"
                 svc_email = os.environ.get("SVC_EMAIL")
                 svc_password = os.environ.get("SVC_PASSWORD")
                 
+                auth_response = await client.post(
+                    auth_url,
+                    json={"email": svc_email, "password": svc_password},
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                if auth_response.status_code != 200:
+                    logger.error(f"External API auth failed: {auth_response.status_code}")
+                    raise httpx.ConnectError("Authentication failed with external API")
+                
+                auth_data = auth_response.json()
+                service_token = auth_data.get("access_token")
+                
+                if not service_token:
+                    logger.error("No access token received from external API")
+                    raise httpx.ConnectError("No access token from external API")
+                
+                # Step 2: Forward contact request to external API
+                api_url = "https://api.sentratech.net/v1/contact_requests"
                 response = await client.post(
-                    dashboard_url,
+                    api_url,
                     json=contact_request.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                        "Authorization": f"Bearer {service_token}"
                     }
                 )
                 
@@ -1021,29 +1039,34 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
                     # Update status to synced
                     await db.contact_requests.update_one(
                         {"id": contact_data["id"]},
-                        {"$set": {"status": "synced_to_dashboard"}}
+                        {"$set": {"status": "synced_to_external_api"}}
                     )
-                    logger.info(f"Contact request successfully forwarded to dashboard: {contact_request.work_email}")
+                    logger.info(f"Contact request successfully forwarded to external API: {contact_request.work_email}")
+                    
+                    # Parse response from external API
+                    api_response = response.json() if response.content else {}
+                    
                     return {
                         "status": "success", 
-                        "message": "Contact request submitted and synced to dashboard",
-                        "id": contact_data["id"]
+                        "message": "Contact request submitted and processed by SentraTech API",
+                        "id": contact_data["id"],
+                        "external_response": api_response
                     }
                 else:
-                    logger.warning(f"Dashboard sync failed ({response.status_code}), keeping local copy")
+                    logger.warning(f"External API sync failed ({response.status_code}), keeping local copy")
                     return {
                         "status": "success", 
-                        "message": "Contact request saved locally, dashboard sync will retry",
+                        "message": "Contact request saved locally, external sync will retry",
                         "id": contact_data["id"],
-                        "dashboard_status": "pending_retry"
+                        "external_status": "pending_retry"
                     }
         except httpx.ConnectError:
-            logger.warning("Dashboard not reachable, keeping local copy for sync retry")
+            logger.warning("External API not reachable, keeping local copy for sync retry")
             return {
                 "status": "success", 
-                "message": "Contact request saved locally, dashboard sync will retry when available",
+                "message": "Contact request saved locally, external sync will retry when available",
                 "id": contact_data["id"],
-                "dashboard_status": "connection_failed"
+                "external_status": "connection_failed"
             }
                 
     except httpx.TimeoutException:
