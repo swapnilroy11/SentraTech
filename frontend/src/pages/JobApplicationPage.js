@@ -122,23 +122,40 @@ const JobApplicationPage = () => {
     }
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    if (!allowedTypes.includes(file.type)) {
-      setErrors(prev => ({ ...prev, resume: 'Please upload a PDF or Word document' }));
-      return;
-    }
-    
-    if (file.size > 8 * 1024 * 1024) {
-      setErrors(prev => ({ ...prev, resume: 'File size must be less than 8MB' }));
-      return;
-    }
-    
-    setResume(file);
-    setErrors(prev => ({ ...prev, resume: null }));
+  // File upload handling as per prompt specifications
+  const handleFileUpload = (file) => {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        resolve(null);
+        return;
+      }
+      
+      // Validate file type and size
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      
+      if (!allowedTypes.includes(file.type)) {
+        reject('Only PDF and Word documents are allowed');
+        return;
+      }
+      
+      if (file.size > maxSize) {
+        reject('File size must be less than 5MB');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve({
+          name: file.name,
+          data: reader.result.split(',')[1], // Remove data:mime;base64, prefix
+          type: file.type,
+          size: file.size
+        });
+      };
+      reader.onerror = () => reject('File read error');
+      reader.readAsDataURL(file);
+    });
   };
 
   const validateStep = (step) => {
