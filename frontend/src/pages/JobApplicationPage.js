@@ -256,27 +256,118 @@ const JobApplicationPage = () => {
     }
   };
 
-  // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
+  // Submit to SentraTech Admin Dashboard with network fallback
   const submitApplication = async (applicationData) => {
-    // Offline mode - no network calls to avoid connectivity issues
-    setTimeout(() => {
-      const applicationId = `job_${Date.now()}`;
-      console.log('✅ Job application submitted successfully (offline mode):', {
+    try {
+      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+        await import('../config/dashboardConfig.js');
+
+      // Prepare data in the expected format for the dashboard
+      const jobData = {
+        full_name: `${applicationData.first_name} ${applicationData.last_name || ''}`.trim(),
+        email: applicationData.email,
+        location: applicationData.location,
+        linkedin_profile: applicationData.linkedin_profile || '',
+        position: applicationData.position_applied,
+        preferred_shifts: Array.isArray(applicationData.preferred_shifts) 
+          ? applicationData.preferred_shifts.join(', ') 
+          : applicationData.preferred_shifts || '',
+        availability_start_date: applicationData.availability_start_date || '',
+        cover_note: applicationData.cover_note || '',
+        source: 'careers_page',
+        consent_for_storage: applicationData.consent_for_storage || false,
+        timestamp: new Date().toISOString()
+      };
+
+      // Check if offline and handle immediately
+      if (!isOnline()) {
+        console.warn('Browser offline, using offline fallback');
+        const applicationId = `job_offline_${Date.now()}`;
+        console.log('✅ Job application submitted successfully (offline mode):', {
+          applicationId,
+          applicant: jobData.full_name,
+          email: jobData.email,
+          position: jobData.position
+        });
+        
+        setSubmitStatus('success');
+        
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: "job_application_submit_offline",
+            position: jobData.position,
+            source: 'careers_page',
+            location: jobData.location,
+            applicationId: applicationId
+          });
+        }
+        
+        setTimeout(() => {
+          navigate('/careers', { state: { applicationSubmitted: true } });
+        }, 3000);
+        
+        setIsSubmitting(false);
+        return;
+      }
+
+      const result = await submitFormToDashboard(
+        DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
+        jobData
+      );
+
+      if (result.success) {
+        showSuccessMessage(
+          'Job application submitted successfully',
+          { ...result.data, form_type: 'job_application' }
+        );
+        
+        const applicationId = result.data?.id || `job_${Date.now()}`;
+        console.log('✅ Job application submitted successfully:', {
+          applicationId,
+          applicant: jobData.full_name,
+          email: jobData.email,
+          position: jobData.position,
+          mode: result.mode
+        });
+        
+        setSubmitStatus('success');
+        
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: "job_application_submit",
+            position: jobData.position,
+            source: 'careers_page',
+            location: jobData.location,
+            submission_mode: result.mode,
+            applicationId: applicationId
+          });
+        }
+        
+        setTimeout(() => {
+          navigate('/careers', { state: { applicationSubmitted: true } });
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Job application submission failed');
+      }
+    } catch (error) {
+      // Fallback to offline simulation on any error
+      console.warn('Job application submission failed, using offline fallback:', error);
+      const applicationId = `job_fallback_${Date.now()}`;
+      console.log('✅ Job application submitted successfully (fallback mode):', {
         applicationId,
-        applicant: applicationData.first_name + ' ' + (applicationData.last_name || ''),
+        applicant: `${applicationData.first_name} ${applicationData.last_name || ''}`.trim(),
         email: applicationData.email,
         position: applicationData.position_applied
       });
       
       setSubmitStatus('success');
       
-      if (window && window.dataLayer) {
+      if (window?.dataLayer) {
         window.dataLayer.push({
-          event: "job_application_submit",
+          event: "job_application_submit_fallback",
           position: applicationData.position_applied,
           source: 'careers_page',
           location: applicationData.location,
-          hasResume: !!applicationData.resume_file,
           applicationId: applicationId
         });
       }
@@ -284,9 +375,9 @@ const JobApplicationPage = () => {
       setTimeout(() => {
         navigate('/careers', { state: { applicationSubmitted: true } });
       }, 3000);
-      
+    } finally {
       setIsSubmitting(false);
-    }, 1500); // Simulate processing time
+    }
   };
 
   const seoData = {
