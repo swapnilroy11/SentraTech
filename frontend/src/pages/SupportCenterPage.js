@@ -597,8 +597,8 @@ const SupportCenterPage = () => {
           </div>
         </div>
 
-        {/* FAQ Section - Enhanced */}
-        <div className="mb-20">
+        {/* FAQ Section - Enhanced with Stable Layout */}
+        <div id="faq-section" className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
@@ -606,43 +606,60 @@ const SupportCenterPage = () => {
             </p>
           </div>
           
-          {/* FAQ Categories - Optimized */}
+          {/* FAQ Categories - Optimized with Scroll Position Management */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8">
             {faqCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.id)}
+                disabled={isTransitioning}
                 className={`px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors duration-200 will-change-transform ${
                   selectedCategory === category.id
                     ? 'bg-[#00FF41] text-black'
                     : 'bg-[rgb(38,40,42)] text-[rgb(218,218,218)] hover:bg-[rgb(63,63,63)]'
-                }`}
+                } ${isTransitioning ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {category.name} ({category.count})
               </button>
             ))}
           </div>
           
-          {/* FAQ Items - Performance optimized */}
-          <div className="space-y-4">
-            {filteredQuestions.map((faq, index) => (
-              <div key={`faq-${selectedCategory}-${index}`} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-base md:text-lg font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
-                  <div className="flex items-center space-x-2 flex-shrink-0">
-                    {faq.popularity === 'Very Popular' && (
-                      <span className="bg-[#00FF41]/20 text-[#00FF41] px-2 py-1 rounded text-xs font-medium">
-                        Popular
-                      </span>
-                    )}
-                    <HelpCircle size={18} className="text-[#00FF41] md:w-5 md:h-5" />
+          {/* FAQ Items - Stable Container with Minimum Height */}
+          <div 
+            id="faq-container" 
+            className={`transition-all duration-300 ease-in-out ${isTransitioning ? 'opacity-90' : 'opacity-100'}`}
+            style={{ 
+              minHeight: '800px', // Ensure consistent minimum height
+              transitionProperty: 'opacity'
+            }}
+          >
+            <div className="space-y-4">
+              {filteredQuestions.map((faq, index) => (
+                <div 
+                  key={`faq-${selectedCategory}-${index}`} 
+                  className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-4 md:p-6 hover:border-[#00FF41]/30 transition-colors duration-300 opacity-0 animate-fadeIn"
+                  style={{ 
+                    animationDelay: `${index * 50}ms`,
+                    animationFillMode: 'forwards'
+                  }}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-base md:text-lg font-semibold text-white pr-4 leading-tight">{faq.question}</h3>
+                    <div className="flex items-center space-x-2 flex-shrink-0">
+                      {faq.popularity === 'Very Popular' && (
+                        <span className="bg-[#00FF41]/20 text-[#00FF41] px-2 py-1 rounded text-xs font-medium">
+                          Popular
+                        </span>
+                      )}
+                      <HelpCircle size={18} className="text-[#00FF41] md:w-5 md:h-5" />
+                    </div>
                   </div>
+                  <p className="text-[rgb(218,218,218)] text-sm md:text-base leading-relaxed">
+                    {faq.answer}
+                  </p>
                 </div>
-                <p className="text-[rgb(218,218,218)] text-sm md:text-base leading-relaxed">
-                  {faq.answer}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
