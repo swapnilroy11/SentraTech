@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Upload, File, CheckCircle, AlertCircle, Linkedin, MapPin } from 'lucide-react';
-import { DASHBOARD_CONFIG, validateConfig } from '../config/dashboardConfig';
+import { FORM_CONFIG } from '../config/formConfig';
 
 const JobApplicationModal = ({ isOpen, onClose, job }) => {
   const [formData, setFormData] = useState({
