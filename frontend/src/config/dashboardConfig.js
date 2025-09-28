@@ -79,7 +79,7 @@ export const DATA_FORMATS = {
 };
 
 /**
- * Enhanced form submission helper function with proper authentication and error handling
+ * Form submission helper function for local backend
  */
 export const submitFormToDashboard = async (endpoint, data) => {
   const fullUrl = `${DASHBOARD_CONFIG.API_BASE_URL}${endpoint}`;
@@ -92,12 +92,18 @@ export const submitFormToDashboard = async (endpoint, data) => {
   });
   
   try {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    
+    // Only add authentication header if INGEST_KEY is provided
+    if (DASHBOARD_CONFIG.INGEST_KEY) {
+      headers['X-INGEST-KEY'] = DASHBOARD_CONFIG.INGEST_KEY;
+    }
+    
     const response = await fetch(fullUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
-      },
+      headers,
       credentials: 'omit', // No cookies required
       body: JSON.stringify(data)
     });
@@ -135,17 +141,14 @@ export const submitFormToDashboard = async (endpoint, data) => {
     const result = await response.json();
     
     console.log('✅ Form submission successful:', {
-      id: result.id || result.application_id,
-      created_at: result.created_at,
+      id: result.id || result.reference_id || result.application_id,
+      created_at: result.created_at || result.timestamp,
       data: result
     });
     
-    // /api/ingest/* endpoints return data directly, not wrapped in {success: true}
-    // Success is indicated by HTTP 200 status and presence of ID
-    if (result.id || result.application_id) {
-      return { success: true, data: result };
-    } else if (result.success) {
-      // Handle job applications which still return {success: true} format
+    // Local backend returns different response formats
+    // Success is indicated by HTTP 200 status and presence of success flag or ID
+    if (result.success || result.id || result.reference_id || result.application_id) {
       return { success: true, data: result };
     } else {
       throw new Error(result.detail || result.message || 'Form submission failed');
