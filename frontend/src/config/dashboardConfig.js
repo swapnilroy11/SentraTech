@@ -1,27 +1,27 @@
 /**
  * SentraTech Dashboard Integration Config
- * Updated to use direct dashboard submission endpoints
+ * Updated to use local backend endpoints
  * 
- * Base URL: https://unified-forms.preview.emergentagent.com
- * Authentication: X-INGEST-KEY required for all form submissions
- * All forms submit directly to dashboard with proper authentication
+ * Base URL: Uses REACT_APP_BACKEND_URL from environment
+ * Authentication: No authentication required for local backend
+ * All forms submit to local backend API endpoints
  */
 
 // Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
-  // API Base URL - confirmed correct endpoint
-  API_BASE_URL: 'https://unified-forms.preview.emergentagent.com',
+  // API Base URL - use environment variable
+  API_BASE_URL: process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001',
   
-  // Dashboard ingest key for authentication
-  INGEST_KEY: 'test-ingest-key-12345',
+  // No authentication required for local backend
+  INGEST_KEY: null,
   
-  // Form submission endpoints (actual dashboard endpoints with underscores)
+  // Form submission endpoints (local backend API endpoints)
   ENDPOINTS: {
-    DEMO_REQUEST: '/api/ingest/demo_requests',
-    CONTACT_SALES: '/api/ingest/contact_requests',
-    ROI_CALCULATOR: '/api/ingest/roi_reports',
-    NEWSLETTER_SIGNUP: '/api/ingest/subscriptions',
-    JOB_APPLICATION: '/api/ingest/job_applications'
+    DEMO_REQUEST: '/api/demo/request',
+    CONTACT_SALES: '/api/contact/sales',  // Will create this endpoint
+    ROI_CALCULATOR: '/api/roi/calculate',
+    NEWSLETTER_SIGNUP: '/api/newsletter/subscribe',  // Will create this endpoint
+    JOB_APPLICATION: '/api/job/application'  // Will create this endpoint
   }
 };
 
