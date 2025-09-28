@@ -48,22 +48,11 @@ const NewsletterSubscribe = () => {
         setStatus('success');
         setMessage('Successfully subscribed to our newsletter!');
         setEmail(''); // Clear the email field on success
-      } else {
-        // Fallback to old Supabase method if ingest fails
-        console.warn('Ingest endpoint failed, falling back to Supabase');
-        const result = await insertSubscription(email);
         
-        if (result.success) {
-          setStatus('success');
-          setMessage(result.message);
-          setEmail('');
-        } else if (result.error === 'duplicate') {
-          setStatus('duplicate');
-          setMessage(result.message);
-        } else {
-          setStatus('error');
-          setMessage(result.message);
-        }
+        console.log('✅ Newsletter subscription successful:', result.data);
+      } else {
+        setStatus('error');
+        setMessage(result.error || 'Newsletter subscription failed. Please try again.');
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
