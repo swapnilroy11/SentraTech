@@ -247,10 +247,10 @@ const CareersPage = () => {
                     {/* Action buttons with better spacing */}
                     <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[rgb(63,63,63)]">
                       <button 
-                        onClick={() => navigate(`/careers/apply/${job.id}`)}
+                        onClick={() => handleApplyClick(job)}
                         className="flex-1 px-6 py-3 bg-transparent border border-[#00FF41]/30 text-[#00FF41] rounded-lg hover:bg-[#00FF41]/10 transition-all duration-200 flex items-center justify-center space-x-2"
                       >
-                        <span>View Details</span>
+                        <span>View Details & Apply</span>
                       </button>
                       <button 
                         onClick={() => handleApplyClick(job)}
