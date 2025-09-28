@@ -47,57 +47,111 @@ const SentraTechLanding = () => {
     // Remove mock chat messages loading
   }, []);
 
-  // Enhanced custom cursor effect with synchronized particle trail
+  // Enhanced synchronized particle cursor trail with performance optimizations
   useEffect(() => {
+    // Check if device supports custom cursor effects (not mobile)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) return;
+
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
     document.body.appendChild(cursor);
 
     const particles = [];
     let lastParticleTime = 0;
-    const particleInterval = 50; // Create particle every 50ms for smoother trail
+    let animationFrame = null;
+    const particleInterval = 40; // Optimized for 60fps - create particle every 40ms
+    const maxParticles = 15; // Limit particles for performance
     
+    // Use RAF for smooth cursor movement
     const moveCursor = (e) => {
-      const now = Date.now();
-      cursor.style.left = (e.clientX - 8) + 'px'; // Center cursor
-      cursor.style.top = (e.clientY - 8) + 'px';
-      
-      // Create synchronized particle trail at regular intervals
-      if (now - lastParticleTime >= particleInterval) {
-        const particle = document.createElement('div');
-        particle.className = 'cursor-particle';
-        particle.style.left = (e.clientX - 2) + 'px'; // Center particle
-        particle.style.top = (e.clientY - 2) + 'px';
-        
-        // Add slight random offset for natural feel
-        const offsetX = (Math.random() - 0.5) * 6;
-        const offsetY = (Math.random() - 0.5) * 6;
-        particle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        
-        document.body.appendChild(particle);
-        particles.push({
-          element: particle,
-          birth: now
-        });
-        
-        lastParticleTime = now;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
       }
       
-      // Clean up old particles
-      particles.forEach((p, index) => {
-        if (now - p.birth > 800) { // Particle lifetime: 800ms
-          p.element.remove();
-          particles.splice(index, 1);
+      animationFrame = requestAnimationFrame(() => {
+        const now = Date.now();
+        
+        // Update cursor position with hardware acceleration
+        cursor.style.transform = `translate3d(${e.clientX - 8}px, ${e.clientY - 8}px, 0)`;
+        
+        // Create synchronized particle trail at optimized intervals
+        if (now - lastParticleTime >= particleInterval && particles.length < maxParticles) {
+          const particle = document.createElement('div');
+          particle.className = 'cursor-particle';
+          
+          // Enhanced particle positioning with velocity-based offset
+          const velocity = Math.sqrt(
+            Math.pow(e.movementX || 0, 2) + Math.pow(e.movementY || 0, 2)
+          );
+          const velocityFactor = Math.min(velocity / 10, 3); // Scale factor based on movement speed
+          
+          // Synchronized positioning with motion-based offset
+          const offsetX = (Math.random() - 0.5) * (4 + velocityFactor);
+          const offsetY = (Math.random() - 0.5) * (4 + velocityFactor);
+          
+          particle.style.transform = `translate3d(${e.clientX - 2 + offsetX}px, ${e.clientY - 2 + offsetY}px, 0) scale(${0.8 + velocityFactor * 0.2})`;
+          
+          // Add velocity-based color intensity
+          if (velocityFactor > 1) {
+            particle.style.background = `rgba(0, 255, 65, ${0.8 + Math.min(velocityFactor * 0.1, 0.2)})`;
+            particle.style.boxShadow = `0 0 ${2 + velocityFactor}px rgba(0, 255, 65, 0.5)`;
+          }
+          
+          document.body.appendChild(particle);
+          particles.push({
+            element: particle,
+            birth: now
+          });
+          
+          lastParticleTime = now;
+        }
+        
+        // Optimized particle cleanup using reverse iteration
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          const age = now - p.birth;
+          
+          if (age > 800) { // Particle lifetime: 800ms
+            p.element.remove();
+            particles.splice(i, 1);
+          } else {
+            // Smooth fade out animation
+            const opacity = 1 - (age / 800);
+            const scale = 1 - (age / 1600); // Shrink over time
+            p.element.style.opacity = opacity;
+            p.element.style.transform += ` scale(${Math.max(scale, 0.1)})`;
+          }
         }
       });
     };
 
-    document.addEventListener('mousemove', moveCursor);
+    // Optimized event listeners
+    document.addEventListener('mousemove', moveCursor, { passive: true });
+    
+    // Pause particles when mouse leaves window
+    const handleMouseLeave = () => {
+      cursor.style.opacity = '0';
+    };
+    
+    const handleMouseEnter = () => {
+      cursor.style.opacity = '1';
+    };
+    
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseenter', handleMouseEnter);
     
     return () => {
       document.removeEventListener('mousemove', moveCursor);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+      
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+      
       cursor.remove();
-      particles.forEach(p => p.element.remove());
+      particles.forEach(p => p.element && p.element.remove());
     };
   }, []);
 
