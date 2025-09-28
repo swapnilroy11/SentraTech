@@ -434,49 +434,54 @@ const SupportCenterPage = () => {
   }, [navigate]);
 
   const handleCategoryChange = useCallback((categoryId) => {
-    // Prevent scroll jumping by managing the transition smoothly
+    if (isTransitioning) return; // Prevent rapid clicks
+    
     setIsTransitioning(true);
     
-    // Get current FAQ container position to maintain scroll position
-    const faqContainer = document.getElementById('faq-container');
-    const faqSection = document.getElementById('faq-section');
-    
-    if (faqContainer && faqSection) {
-      const containerRect = faqContainer.getBoundingClientRect();
-      const currentScrollY = window.scrollY;
-      const containerTop = containerRect.top + currentScrollY;
-      
-      // If FAQ section is visible, scroll to maintain position
-      if (containerRect.top < window.innerHeight && containerRect.bottom > 0) {
-        // Store the current position relative to FAQ section
-        const relativePosition = currentScrollY - containerTop;
-        
-        // Change category
-        setSelectedCategory(categoryId);
-        
-        // Use requestAnimationFrame to ensure DOM has updated
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            // Maintain scroll position relative to FAQ section
-            const newContainerTop = faqSection.offsetTop;
-            window.scrollTo({
-              top: Math.max(0, newContainerTop + Math.min(relativePosition, 0)),
-              behavior: 'instant'
-            });
-            setIsTransitioning(false);
-          });
-        });
-      } else {
-        // If FAQ section is not in view, just change category normally
-        setSelectedCategory(categoryId);
-        setIsTransitioning(false);
-      }
-    } else {
-      // Fallback if elements not found
+    // Store current FAQ section position
+    const faqSection = faqSectionRef.current;
+    if (!faqSection) {
       setSelectedCategory(categoryId);
       setIsTransitioning(false);
+      return;
     }
-  }, []);
+    
+    // Get the FAQ section's position relative to viewport
+    const rect = faqSection.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (isInView) {
+      // Store the scroll position relative to FAQ section
+      const scrollTop = window.pageYOffset;
+      const faqSectionTop = scrollTop + rect.top;
+      
+      // Change the category
+      setSelectedCategory(categoryId);
+      
+      // Wait for React to re-render and maintain position
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const newRect = faqSection.getBoundingClientRect();
+          const newFaqSectionTop = window.pageYOffset + newRect.top;
+          
+          // Only adjust if there's been a significant change
+          const positionDiff = newFaqSectionTop - faqSectionTop;
+          if (Math.abs(positionDiff) > 5) {
+            window.scrollTo({
+              top: window.pageYOffset - positionDiff,
+              behavior: 'instant'
+            });
+          }
+          
+          setTimeout(() => setIsTransitioning(false), 100);
+        });
+      });
+    } else {
+      // If FAQ section is not in view, just change category
+      setSelectedCategory(categoryId);
+      setTimeout(() => setIsTransitioning(false), 100);
+    }
+  }, [isTransitioning]);
 
   return (
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white scroll-smooth">
