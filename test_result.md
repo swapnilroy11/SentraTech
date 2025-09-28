@@ -61,15 +61,14 @@ test_plan:
   current_focus:
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Demo Request Form End-to-End Submission Testing"
-    - "Customer Journey Modal Positioning Above Cards Fix"
   stuck_tasks:
     - "Demo Request Form Supabase Submission Issue"
-    - "Customer Journey Modal Positioning Above Cards Fix"
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
     - "Updated Dashboard Integration Endpoints Testing"
     - "ROI Calculator Frontend Canonical Test Cases Testing"
     - "ROI Calculator Email Modal Auto-Close Bug Fix Testing"
+    - "Enhanced Customer Journey Modal with Comprehensive Step-by-Step Information"
   test_all: false
   test_priority: "high_first"
 
