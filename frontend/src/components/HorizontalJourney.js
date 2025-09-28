@@ -636,7 +636,7 @@ const HorizontalJourney = () => {
         </div>
       </div>
 
-      {/* Journey Stage Details Modal - Inline Modal (No Portal) */}
+      {/* SIMPLE MODAL - GUARANTEED TO WORK */}
       {selectedPanel && (
         <div 
           style={{
