@@ -995,11 +995,28 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         await db.contact_requests.insert_one(contact_data)
         logger.info(f"Contact request saved locally: {contact_request.work_email}")
         
-        # Forward to external SentraTech API
+        # Forward to external SentraTech API (skip if we're the dashboard to avoid loops)
+        external_dashboard_url = os.environ.get("EXTERNAL_DASHBOARD_URL", "").strip()
+        current_host = "customer-flow-5.preview.emergentagent.com"
+        
+        # Skip external forwarding if no URL configured or if it would create a loop
+        if not external_dashboard_url or current_host in external_dashboard_url:
+            logger.info("Skipping external dashboard forwarding (same host or not configured)")
+            # Update status to indicate local-only storage
+            await db.contact_requests.update_one(
+                {"id": contact_data["id"]},
+                {"$set": {"status": "stored_locally"}}
+            )
+            return {
+                "status": "success", 
+                "message": "Contact request stored successfully in local database",
+                "id": contact_data["id"]
+            }
+        
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/contact_requests"
+                dashboard_url = f"{external_dashboard_url}/api/ingest/contact_requests"
                 
                 response = await client.post(
                     dashboard_url,
