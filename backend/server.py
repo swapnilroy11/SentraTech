@@ -898,11 +898,28 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         await db.demo_requests.insert_one(demo_data)
         logger.info(f"Demo request saved locally: {demo_request.email}")
         
-        # Forward to external SentraTech API
+        # Forward to external SentraTech API (skip if we're the dashboard to avoid loops)
+        external_dashboard_url = os.environ.get("EXTERNAL_DASHBOARD_URL", "").strip()
+        current_host = "customer-flow-5.preview.emergentagent.com"
+        
+        # Skip external forwarding if no URL configured or if it would create a loop
+        if not external_dashboard_url or current_host in external_dashboard_url:
+            logger.info("Skipping external dashboard forwarding (same host or not configured)")
+            # Update status to indicate local-only storage
+            await db.demo_requests.update_one(
+                {"id": demo_data["id"]},
+                {"$set": {"status": "stored_locally"}}
+            )
+            return {
+                "status": "success", 
+                "message": "Demo request stored successfully in local database",
+                "id": demo_data["id"]
+            }
+        
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 # Forward directly to Admin Dashboard
-                dashboard_url = "https://customer-flow-5.preview.emergentagent.com/api/ingest/demo_requests"
+                dashboard_url = f"{external_dashboard_url}/api/ingest/demo_requests"
                 
                 response = await client.post(
                     dashboard_url,
