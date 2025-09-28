@@ -690,34 +690,36 @@ const HorizontalJourney = () => {
               ✕
             </button>
 
-                {/* Stage Content */}
-                <div className="space-y-5 custom-scrollbar">
-                  {/* Header */}
-                  <div className="text-center space-y-3 pt-2">
-                    <div className="flex items-center justify-center space-x-3 mb-4">
-                      <div 
-                        className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{ 
-                          backgroundColor: `${selectedPanel.color}20`,
-                          border: `1px solid ${selectedPanel.color}40`
-                        }}
-                      >
-                        <selectedPanel.icon size={20} style={{ color: selectedPanel.color }} />
-                      </div>
-                      <Badge 
-                        variant="outline" 
-                        style={{ 
-                          borderColor: selectedPanel.color,
-                          color: selectedPanel.color,
-                          backgroundColor: `${selectedPanel.color}10`
-                        }}
-                      >
-                        Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1}
-                      </Badge>
-                    </div>
-                    <h3 className="text-2xl font-bold text-white">{selectedPanel.title}</h3>
-                    <p className="text-lg" style={{ color: selectedPanel.color }}>{selectedPanel.subtitle}</p>
-                  </div>
+            {/* Header */}
+            <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '12px' }}>
+              <div style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                backgroundColor: `${selectedPanel.color}20`,
+                border: `1px solid ${selectedPanel.color}60`,
+                borderRadius: '12px',
+                fontSize: '12px',
+                color: selectedPanel.color,
+                marginBottom: '12px'
+              }}>
+                Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1}
+              </div>
+              <h3 style={{ 
+                color: 'white', 
+                fontSize: '24px', 
+                fontWeight: 'bold', 
+                margin: '8px 0' 
+              }}>
+                {selectedPanel.title}
+              </h3>
+              <p style={{ 
+                color: selectedPanel.color, 
+                fontSize: '16px',
+                margin: '8px 0'
+              }}>
+                {selectedPanel.subtitle}
+              </p>
+            </div>
 
                 {/* Description */}
                 <div className="space-y-3">
