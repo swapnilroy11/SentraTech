@@ -218,13 +218,22 @@ const ROICalculatorRedesigned = () => {
     setIsSubmittingReport(true);
     
     try {
-      // Prepare data for new dashboard endpoint
+      // Prepare data for /api/ingest/roi_reports endpoint
       const dashboardData = {
         country: selectedCountry,
         email: email,
         monthly_volume: parseFloat(callVolume) + parseFloat(interactionVolume),
         current_cost: results.traditionalMonthlyCost,
-        company_name: '' // Optional field
+        company_name: '', // Optional field
+        // Additional fields for comprehensive ROI data
+        call_volume: parseFloat(callVolume) || 0,
+        interaction_volume: parseFloat(interactionVolume) || 0,
+        traditional_cost: results.traditionalMonthlyCost,
+        sentratech_cost: results.sentraTechMonthlyCost,
+        monthly_savings: results.monthlySavings,
+        annual_savings: results.yearlySavings,
+        roi_percent: results.roi,
+        cost_reduction: results.costReduction
       };
 
       // Use enhanced dashboard config with proper authentication
