@@ -719,11 +719,19 @@ const HorizontalJourney = () => {
             {/* Dynamic scrollbar styling */}
             <style dangerouslySetInnerHTML={{
               __html: `
+                .smooth-modal-scroll::-webkit-scrollbar-track {
+                  background: ${selectedPanel.color}08;
+                  border: 1px solid ${selectedPanel.color}15;
+                }
                 .smooth-modal-scroll::-webkit-scrollbar-thumb {
-                  background: ${selectedPanel.color}25;
+                  background: linear-gradient(180deg, ${selectedPanel.color}60 0%, ${selectedPanel.color}40 50%, ${selectedPanel.color}30 100%);
+                  border: 1px solid ${selectedPanel.color}20;
+                  box-shadow: inset 0 1px 0 ${selectedPanel.color}80, 0 0 2px ${selectedPanel.color}30;
                 }
                 .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
-                  background: ${selectedPanel.color}40;
+                  background: linear-gradient(180deg, ${selectedPanel.color}80 0%, ${selectedPanel.color}60 50%, ${selectedPanel.color}50 100%);
+                  border: 1px solid ${selectedPanel.color}40;
+                  box-shadow: inset 0 1px 0 ${selectedPanel.color}90, 0 0 4px ${selectedPanel.color}50;
                 }
               `
             }} />
