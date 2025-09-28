@@ -1020,6 +1020,12 @@ async def get_demo_requests_status():
     """Get status of demo requests for debugging"""
     try:
         requests = await db.demo_requests.find({}).sort("created_at", -1).limit(10).to_list(length=10)
+        
+        # Convert ObjectId to string for JSON serialization
+        for request in requests:
+            if '_id' in request:
+                request['_id'] = str(request['_id'])
+        
         return {
             "total_count": await db.demo_requests.count_documents({}),
             "recent_requests": requests
