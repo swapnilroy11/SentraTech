@@ -70,8 +70,8 @@ test_plan:
 
 metadata:
   created_by: "main_agent"
-  version: "1.1"
-  test_sequence: 4
+  version: "1.2"
+  test_sequence: 5
   run_ui: true
 
 backend:
