@@ -326,13 +326,16 @@ const CaseStudies = () => {
                   {/* Company Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-[#00FF41] text-black rounded-xl flex items-center justify-center font-bold">
+                      <div className="w-12 h-12 bg-[#00FF41] text-black rounded-xl flex items-center justify-center font-bold
+                                      group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-out">
                         {caseStudy.logo}
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-lg">{caseStudy.company}</h3>
-                        <div className="flex items-center space-x-2 text-sm text-[rgb(161,161,170)]">
-                          <MapPin size={14} />
+                        <h3 className="text-white font-bold text-lg group-hover:text-[#00FF41] transition-colors duration-300">
+                          {caseStudy.company}
+                        </h3>
+                        <div className="flex items-center space-x-2 text-sm text-[rgb(161,161,170)] group-hover:text-[rgb(200,200,200)] transition-colors duration-300">
+                          <MapPin size={14} className="group-hover:text-[#00FF41] transition-colors duration-300" />
                           <span>{caseStudy.location} {caseStudy.flag}</span>
                         </div>
                       </div>
@@ -341,40 +344,52 @@ const CaseStudies = () => {
 
                   {/* Industry & Size */}
                   <div className="flex items-center space-x-4 mb-4">
-                    <Badge className="bg-[#00FF41]/10 text-[#00FF41] border-[#00FF41]/30">
+                    <Badge className="bg-[#00FF41]/10 text-[#00FF41] border-[#00FF41]/30 
+                                     group-hover:bg-[#00FF41]/20 group-hover:border-[#00FF41]/50 
+                                     transition-all duration-300">
                       {caseStudy.industry}
                     </Badge>
-                    <div className="flex items-center space-x-1 text-sm text-[rgb(161,161,170)]">
-                      <Building2 size={14} />
+                    <div className="flex items-center space-x-1 text-sm text-[rgb(161,161,170)] group-hover:text-[rgb(200,200,200)] transition-colors duration-300">
+                      <Building2 size={14} className="group-hover:text-[#00FF41] transition-colors duration-300" />
                       <span>{caseStudy.companySize}</span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-[rgb(161,161,170)] text-sm leading-relaxed mb-6">
+                  <p className="text-[rgb(161,161,170)] text-sm leading-relaxed mb-6 group-hover:text-[rgb(200,200,200)] transition-colors duration-300">
                     {caseStudy.description}
                   </p>
 
                   {/* Key Metrics Preview */}
                   <div className="grid grid-cols-2 gap-3 mb-6">
-                    <div className="text-center p-3 bg-[rgba(0,255,65,0.1)] rounded-lg border border-[rgba(0,255,65,0.2)]">
-                      <div className="text-2xl font-bold text-[#00FF41]">
+                    <div className="text-center p-3 bg-[rgba(0,255,65,0.1)] rounded-lg border border-[rgba(0,255,65,0.2)]
+                                    group-hover:bg-[rgba(0,255,65,0.15)] group-hover:border-[rgba(0,255,65,0.4)]
+                                    group-hover:scale-105 transition-all duration-300">
+                      <div className="text-2xl font-bold text-[#00FF41] group-hover:scale-110 transition-transform duration-300">
                         {caseStudy.metrics.costReduction.improvement}
                       </div>
-                      <div className="text-xs text-[rgb(161,161,170)]">Cost Reduction</div>
+                      <div className="text-xs text-[rgb(161,161,170)] group-hover:text-[rgb(200,200,200)] transition-colors duration-300">
+                        Cost Reduction
+                      </div>
                     </div>
-                    <div className="text-center p-3 bg-[rgba(0,255,65,0.1)] rounded-lg border border-[rgba(0,255,65,0.2)]">
-                      <div className="text-2xl font-bold text-[#00FF41]">
+                    <div className="text-center p-3 bg-[rgba(0,255,65,0.1)] rounded-lg border border-[rgba(0,255,65,0.2)]
+                                    group-hover:bg-[rgba(0,255,65,0.15)] group-hover:border-[rgba(0,255,65,0.4)]
+                                    group-hover:scale-105 transition-all duration-300">
+                      <div className="text-2xl font-bold text-[#00FF41] group-hover:scale-110 transition-transform duration-300">
                         {caseStudy.metrics.satisfaction.improvement}
                       </div>
-                      <div className="text-xs text-[rgb(161,161,170)]">Satisfaction ↗</div>
+                      <div className="text-xs text-[rgb(161,161,170)] group-hover:text-[rgb(200,200,200)] transition-colors duration-300">
+                        Satisfaction ↗
+                      </div>
                     </div>
                   </div>
 
                   {/* CTA */}
                   <Button 
                     variant="outline" 
-                    className="w-full border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/10"
+                    className="w-full border-[#00FF41]/30 text-[#00FF41] hover:bg-[#00FF41]/20 
+                               group-hover:border-[#00FF41]/60 group-hover:bg-[#00FF41]/10 
+                               group-hover:scale-105 transition-all duration-300 font-semibold"
                   >
                     View Full Case Study
                   </Button>
