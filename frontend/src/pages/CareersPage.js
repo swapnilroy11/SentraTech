@@ -121,8 +121,10 @@ const CareersPage = () => {
   ];
 
   const handleApplyClick = (job) => {
-    setSelectedJob(job);
-    setIsApplicationModalOpen(true);
+    // Navigate to dedicated job application page instead of modal
+    navigate(`/careers/apply/${job.id}`, { 
+      state: { job } 
+    });
   };
 
   const seoData = {
