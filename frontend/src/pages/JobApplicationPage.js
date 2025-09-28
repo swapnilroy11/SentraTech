@@ -259,15 +259,13 @@ const JobApplicationPage = () => {
   // Submit to SentraTech Admin Dashboard - CORRECTED INTEGRATION
   const submitApplication = async (applicationData) => {
     try {
-      const { DASHBOARD_CONFIG } = await import('../config/dashboardConfig.js');
+      const { DASHBOARD_CONFIG, submitFormToDashboard, clearFormCache } = await import('../config/dashboardConfig.js');
       
-      const response = await fetch(`${DASHBOARD_CONFIG.DASHBOARD_URL}${DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(applicationData)
-      });
+      // Clear any cached data
+      clearFormCache();
+      
+      // Submit using enhanced helper function with authentication and error handling
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
