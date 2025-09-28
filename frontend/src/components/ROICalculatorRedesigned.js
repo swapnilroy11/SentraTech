@@ -217,17 +217,8 @@ const ROICalculatorRedesigned = () => {
     setResults(calculationResults);
   };
 
-  // Format currency with exact precision
-  const formatCurrency = (amount) => {
-    if (amount === 0) return '$0';
-    if (amount < 1000) return `$${Math.round(amount)}`;
-    if (amount < 1000000) {
-      // Exact formatting: divide by 1000 and round to 1 decimal
-      const thousands = Math.round((amount / 1000) * 10) / 10;
-      return `$${thousands.toFixed(1)}K`;
-    }
-    return `$${(Math.round(amount / 100000) / 10).toFixed(1)}M`;
-  };
+  // Use protected formatting functions
+  const formatCurrency = formatCurrencyPrecise;
   
   // Debug calculation logger (for development)
   const logCalculationDebug = (calls, interactions, results) => {
