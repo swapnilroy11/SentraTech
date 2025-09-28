@@ -493,8 +493,8 @@ const JobApplicationPage = () => {
                 Cover Letter / Additional Notes
               </label>
               <textarea
-                value={formData.coverLetter}
-                onChange={(e) => handleInputChange('coverLetter', e.target.value)}
+                value={formData.cover_letter}
+                onChange={(e) => handleInputChange('cover_letter', e.target.value)}
                 rows={6}
                 className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none"
                 placeholder="Share more about your English proficiency, relevant experience, achievements, or anything else you'd like us to know..."
