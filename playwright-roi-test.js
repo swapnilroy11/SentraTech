@@ -155,14 +155,14 @@ function parsePercentage(str) {
           }
         } catch (e) {}
         
-        // Try to find Sentra cost
+        // Try to find Sentra cost (focus on monthly, not yearly)
         try {
           const sentraSelectors = [
-            'text=/SentraTech/i ~ div:has-text("$")', 
-            'text=/AI.*Cost/i ~ div:has-text("$")',
-            'text=/SentraTech/i ~ * >> text=/\\$[\\d,\\.KM]+/',
-            '[class*="green"] >> text=/\\$[\\d,\\.KM]+/',
-            'text=/\\$[\\d,]+\\.?\\d*[KM]?/ >> nth=1'
+            'text="SentraTech AI" ~ div >> text=/\\$[\\d,\\.KM]+/ >> nth=0', // First price under SentraTech heading (monthly)
+            'text=/SentraTech AI/i ~ * >> text=/\\$[\\d,\\.KM]+/ >> nth=0',
+            'div:has-text("SentraTech AI") >> .. >> text=/\\$[\\d,\\.KM]+/ >> nth=0',
+            '[class*="green"]:has-text("$") >> nth=0', // First green price element (should be monthly)
+            'text=/per month/i ~ text=/\\$[\\d,\\.KM]+/' // Look for "per month" labels
           ];
           
           for (const selector of sentraSelectors) {
@@ -170,7 +170,10 @@ function parsePercentage(str) {
               const element = await page.locator(selector).first();
               if (await element.isVisible()) {
                 sentraUIValue = await element.textContent();
-                break;
+                // Skip if this looks like a yearly value
+                if (!sentraUIValue.includes('year') && !sentraUIValue.includes('/ year')) {
+                  break;
+                }
               }
             } catch (e) {}
           }
