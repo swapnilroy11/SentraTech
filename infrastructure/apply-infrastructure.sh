@@ -114,5 +114,5 @@ fi
 echo -e "\n🎉 Infrastructure setup completed!"
 echo -e "Next steps:"
 echo -e "1. Run the verification script: ./verify-infrastructure.sh"
-echo -e "2. Check admin proxy health: curl -s https://customer-dashboard-3.preview.emergentagent.com/api/health"
+echo -e "2. Check admin proxy health: curl -s https://unified-forms.preview.emergentagent.com/api/health"
 echo -e "3. Verify ingest configuration shows 'ingest_configured': true"

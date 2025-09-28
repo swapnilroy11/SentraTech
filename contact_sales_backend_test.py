@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
 
 class ContactSalesBackendTester:
     """Test Contact Sales Backend Integration and Notification Endpoint"""

@@ -2,7 +2,7 @@
  * SentraTech Dashboard Integration Config
  * Updated to use direct dashboard submission endpoints
  * 
- * Base URL: https://sentra-admin-dash.preview.emergentagent.com
+ * Base URL: https://unified-forms.preview.emergentagent.com
  * Authentication: X-INGEST-KEY required for all form submissions
  * All forms submit directly to dashboard with proper authentication
  */
@@ -10,7 +10,7 @@
 // Dashboard Integration Settings
 export const DASHBOARD_CONFIG = {
   // API Base URL - confirmed correct endpoint
-  API_BASE_URL: 'https://sentra-admin-dash.preview.emergentagent.com',
+  API_BASE_URL: 'https://unified-forms.preview.emergentagent.com',
   
   // Dashboard ingest key for authentication
   INGEST_KEY: 'test-ingest-key-12345',

@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
 WEBSOCKET_URL = "wss://ux-legal-revamp.preview.emergentagent.com/api/chat/ws"
 
 class ChatFunctionalityTester:

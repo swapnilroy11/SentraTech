@@ -30,7 +30,7 @@ const submitApplication = async (formData) => {
     console.log('🚀 Testing SentraTech Dashboard Integration...');
     console.log('📊 Sending application data:', JSON.stringify(formData, null, 2));
     
-    const response = await fetch('https://sentra-admin-dash.preview.emergentagent.com/api/forms/job-application', {
+    const response = await fetch('https://unified-forms.preview.emergentagent.com/api/forms/job-application', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ const verifyIntegration = async () => {
     console.log('✅ Career site successfully connected to SentraTech Admin Dashboard');
     
     console.log('\n📊 Next Steps:');
-    console.log('1. Verify data appears in dashboard: https://customer-dashboard-3.preview.emergentagent.com/candidates');
+    console.log('1. Verify data appears in dashboard: https://unified-forms.preview.emergentagent.com/candidates');
     console.log('2. Check AI analysis generates scores and insights');
     console.log('3. Test email notifications are sent');
     console.log('4. Verify resume file upload and download');

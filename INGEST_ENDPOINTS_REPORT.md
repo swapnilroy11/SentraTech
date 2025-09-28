@@ -129,10 +129,10 @@ All endpoints are configured to:
 3. **Retry on failure** with status tracking
 
 **Dashboard URLs:**
-- Demo Requests: `https://customer-dashboard-3.preview.emergentagent.com/v1/demo_requests`
-- Contact Requests: `https://customer-dashboard-3.preview.emergentagent.com/v1/contact_requests`
-- ROI Reports: `https://customer-dashboard-3.preview.emergentagent.com/v1/roi_reports`
-- Subscriptions: `https://customer-dashboard-3.preview.emergentagent.com/v1/subscriptions`
+- Demo Requests: `https://unified-forms.preview.emergentagent.com/v1/demo_requests`
+- Contact Requests: `https://unified-forms.preview.emergentagent.com/v1/contact_requests`
+- ROI Reports: `https://unified-forms.preview.emergentagent.com/v1/roi_reports`
+- Subscriptions: `https://unified-forms.preview.emergentagent.com/v1/subscriptions`
 
 ## 📋 INTEGRATION STATUS
 

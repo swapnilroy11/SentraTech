@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://customer-dashboard-3.preview.emergentagent.com/api"
+BACKEND_URL = "https://unified-forms.preview.emergentagent.com/api"
 
 class LiveChatTester:
     """Test Live Chat Integration functionality with WebSocket and AI"""
