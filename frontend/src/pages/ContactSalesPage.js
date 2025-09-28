@@ -342,13 +342,25 @@ const ContactSalesPage = () => {
                   variant={filterConfig.dateRange === 'today' ? 'default' : 'outline'}
                   className={
                     filterConfig.dateRange === 'today'
-                      ? "bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] px-4 py-2"
-                      : "border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)] px-4 py-2"
+                      ? "bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] px-4 py-2 shadow-md border-[#00FF41] font-medium"
+                      : "border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)] hover:border-[#00FF41] px-4 py-2 transition-colors"
                   }
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   Today
                 </Button>
+                
+                {/* Clear Filters Button - only show when filters are active */}
+                {(searchTerm || filterConfig.status !== 'all' || filterConfig.contactMethod !== 'all' || filterConfig.dateRange !== 'all') && (
+                  <Button
+                    onClick={resetFilters}
+                    variant="outline"
+                    className="border-[rgba(255,255,255,0.1)] text-[rgb(161,161,170)] hover:text-white hover:bg-[rgba(255,255,255,0.05)] px-4 py-2"
+                  >
+                    <Filter className="w-4 h-4 mr-2" />
+                    Clear All
+                  </Button>
+                )}
                 
                 <Button
                   onClick={exportToCSV}
