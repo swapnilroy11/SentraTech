@@ -244,7 +244,8 @@ const ROICalculatorRedesigned = () => {
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
-        roiData
+        roiData,
+        { formType: 'roi_calculator' }
       );
 
       if (result.success) {
