@@ -7,8 +7,6 @@ const SupportCenterPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const faqSectionRef = useRef(null);
-  const faqContainerRef = useRef(null);
 
   // Memoized support channels for performance
   const supportChannels = useMemo(() => [
