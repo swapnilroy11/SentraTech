@@ -213,14 +213,13 @@ const CTASection = () => {
       // Submit using enhanced helper function with authentication and error handling
       const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST, dashboardData);
       
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Ingest endpoint response:', result); // Debug log
+      if (result.success) {
+        console.log('✅ Demo request submitted successfully:', result.data);
         
         // Track successful demo booking conversion in GA4
-        trackDemoBooking(formData, result.id || `demo_${Date.now()}`);
+        trackDemoBooking(formData, result.data.id || `demo_${Date.now()}`);
         
-        setContactId(result.id || `demo_${Date.now()}`);
+        setContactId(result.data.id || `demo_${Date.now()}`);
         setIsSubmitted(true);
         
         // Clear form data after successful submission
@@ -230,22 +229,7 @@ const CTASection = () => {
         });
         setFieldErrors({}); // Clear any field errors
       } else {
-        // Fallback to old Supabase method if ingest fails
-        console.warn('Ingest endpoint failed, falling back to Supabase');
-        const result = await insertDemoRequest(formData);
-        
-        if (result.success) {
-          trackDemoBooking(formData, result.data.id);
-          setContactId(result.data.id);
-          setIsSubmitted(true);
-          setFormData({
-            name: '', email: '', company: '', phone: '', 
-            message: '', call_volume: '', interaction_volume: ''
-          });
-          setFieldErrors({});
-        } else {
-          throw new Error(result.message || 'Submission failed');
-        }
+        throw new Error(result.error || 'Form submission failed');
       }
       
     } catch (error) {
