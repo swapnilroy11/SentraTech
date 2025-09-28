@@ -129,16 +129,19 @@ const ROICalculatorRedesigned = () => {
     const totalMinutes = totalVolume * avgHandleTime;
     const traditionalMonthlyCost = totalMinutes * country.bpoPerMin;
     
-    // SentraTech Cost Calculation (70% automation)
-    const humanHandledVolume = totalVolume * (1 - AUTOMATION_PERCENTAGE / 100); // 30% human handled
-    const humanMinutes = humanHandledVolume * avgHandleTime;
-    const humanCost = humanMinutes * (country.agentHourly / 60); // Convert hourly to per minute
+    // SentraTech Cost Calculation with proportional pricing
+    // Calculate costs based on volume proportions
+    const callCost = (calls / 1000) * CALL_COST_PER_1K; // 61.5% of cost
+    const interactionCost = (interactions / 1000) * INTERACTION_COST_PER_1K; // 38.5% of cost
+    const sentraTechPlatformCost = callCost + interactionCost;
     
-    // Calculate bundles needed (each bundle covers 1000 calls AND 1000 interactions)
-    const callBundles = Math.ceil(calls / 1000);
-    const interactionBundles = Math.ceil(interactions / 1000);
-    const bundlesNeeded = Math.max(callBundles, interactionBundles);
-    const sentraTechPlatformCost = bundlesNeeded * SENTRATECH_COST_PER_1K;
+    // Calculate equivalent bundles (for display purposes)
+    const bundlesNeeded = sentraTechPlatformCost / SENTRATECH_COST_PER_1K;
+    
+    // Human agent cost (30% of volume handled by humans with 70% automation)
+    const humanHandledVolume = totalVolume * (1 - AUTOMATION_PERCENTAGE / 100);
+    const humanMinutes = humanHandledVolume * avgHandleTime;
+    const humanCost = humanMinutes * (country.agentHourly / 60);
     const sentraTechTotalCost = humanCost + sentraTechPlatformCost;
     
     // Calculate savings and ROI
