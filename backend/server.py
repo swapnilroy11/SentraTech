@@ -969,8 +969,8 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
             }
                 
     except httpx.TimeoutException:
-        logger.error("Dashboard request timeout")
-        raise HTTPException(status_code=504, detail="Request timeout")
+        logger.error("External API request timeout")
+        raise HTTPException(status_code=504, detail="External API timeout")
     except Exception as e:
         logger.error(f"Demo ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -1047,8 +1047,8 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
             }
                 
     except httpx.TimeoutException:
-        logger.error("Dashboard request timeout")
-        raise HTTPException(status_code=504, detail="Request timeout")
+        logger.error("External API request timeout")
+        raise HTTPException(status_code=504, detail="External API timeout")
     except Exception as e:
         logger.error(f"Contact ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -1125,8 +1125,8 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
             }
                 
     except httpx.TimeoutException:
-        logger.error("Dashboard request timeout")
-        raise HTTPException(status_code=504, detail="Request timeout")
+        logger.error("External API request timeout")
+        raise HTTPException(status_code=504, detail="External API timeout")
     except Exception as e:
         logger.error(f"ROI report ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -1203,8 +1203,8 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
             }
                 
     except httpx.TimeoutException:
-        logger.error("Dashboard request timeout")
-        raise HTTPException(status_code=504, detail="Request timeout")
+        logger.error("External API request timeout")
+        raise HTTPException(status_code=504, detail="External API timeout")
     except Exception as e:
         logger.error(f"Subscription ingest error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
