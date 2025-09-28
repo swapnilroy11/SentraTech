@@ -584,18 +584,19 @@ const JobApplicationPage = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Work Authorization *
+                  Work Authorization Status *
                 </label>
                 <select
                   value={formData.work_authorization}
                   onChange={(e) => handleInputChange('work_authorization', e.target.value)}
                   className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
+                  required
                 >
-                  <option value="">Select work authorization status</option>
-                  <option value="citizen">Bangladeshi Citizen</option>
-                  <option value="permanent_resident">Permanent Resident</option>
-                  <option value="work_permit">Work Permit Holder</option>
-                  <option value="other">Other (please specify in cover letter)</option>
+                  <option value="">Work Authorization Status</option>
+                  <option value="US Citizen">US Citizen</option>
+                  <option value="Green Card">Green Card Holder</option>
+                  <option value="H1B">H1B Visa</option>
+                  <option value="Need Sponsorship">Need Sponsorship</option>
                 </select>
                 {errors.work_authorization && <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>}
               </div>
@@ -608,11 +609,10 @@ const JobApplicationPage = () => {
                     checked={formData.consent_for_storage}
                     onChange={(e) => handleInputChange('consent_for_storage', e.target.checked)}
                     className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
+                    required
                   />
                   <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I consent to SentraTech storing and processing my personal information for 
-                    recruitment purposes. I understand my data will be handled according to the 
-                    privacy policy and I can request deletion at any time. *
+                    I consent to SentraTech storing and processing my application data *
                   </label>
                 </div>
                 {errors.consent_for_storage && <p className="text-red-400 text-xs ml-7">{errors.consent_for_storage}</p>}
@@ -626,8 +626,7 @@ const JobApplicationPage = () => {
                     className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
                   />
                   <label htmlFor="consent-contact" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I agree to be contacted by SentraTech regarding this application and future 
-                    opportunities that may be of interest.
+                    I consent to SentraTech contacting me about this application and future opportunities
                   </label>
                 </div>
               </div>
