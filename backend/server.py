@@ -903,7 +903,6 @@ async def ingest_demo_request(request: Request, demo_request: DemoIngestRequest)
         
         # 🔒 PROTECTED - Use centralized dashboard config
         # DO NOT MODIFY - Critical for dashboard integration
-        from dashboard_config import DashboardConfig
         
         # Skip external forwarding if it would create a loop
         if not DashboardConfig.should_forward_to_dashboard():
@@ -997,7 +996,6 @@ async def ingest_contact_request(request: Request, contact_request: ContactInges
         
         # 🔒 PROTECTED - Use centralized dashboard config
         # DO NOT MODIFY - Critical for dashboard integration
-        from dashboard_config import DashboardConfig
         
         # Skip external forwarding if it would create a loop
         if not DashboardConfig.should_forward_to_dashboard():
@@ -1091,7 +1089,6 @@ async def ingest_roi_report(request: Request, roi_report: ROIReportIngestRequest
         
         # 🔒 PROTECTED - Use centralized dashboard config
         # DO NOT MODIFY - Critical for dashboard integration
-        from dashboard_config import DashboardConfig
         
         # Skip external forwarding if it would create a loop
         if not DashboardConfig.should_forward_to_dashboard():
@@ -1180,7 +1177,6 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
         
         # 🔒 PROTECTED - Use centralized dashboard config
         # DO NOT MODIFY - Critical for dashboard integration
-        from dashboard_config import DashboardConfig
         
         # Skip external forwarding if it would create a loop
         if not DashboardConfig.should_forward_to_dashboard():
