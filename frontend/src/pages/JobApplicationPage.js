@@ -404,12 +404,12 @@ const JobApplicationPage = () => {
                 </label>
                 <input
                   type="url"
-                  value={formData.portfolioWebsite}
-                  onChange={(e) => handleInputChange('portfolioWebsite', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolioWebsite ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                  value={formData.portfolio_website}
+                  onChange={(e) => handleInputChange('portfolio_website', e.target.value)}
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolio_website ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
                   placeholder="https://yourwebsite.com"
                 />
-                {errors.portfolioWebsite && <p className="text-red-400 text-xs mt-1">{errors.portfolioWebsite}</p>}
+                {errors.portfolio_website && <p className="text-red-400 text-xs mt-1">{errors.portfolio_website}</p>}
                 <p className="text-xs text-[rgb(161,161,170)] mt-1">
                   Provide either resume or portfolio website (at least one required)
                 </p>
