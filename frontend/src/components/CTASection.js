@@ -193,8 +193,14 @@ const CTASection = () => {
     try {
       console.log('Submitting to ingest endpoint...'); // Debug log
       
-      // Get backend URL from environment
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      // 🔒 PROTECTED - Use centralized dashboard config
+      // DO NOT MODIFY - Critical for dashboard integration
+      const { DASHBOARD_CONFIG, validateConfig } = await import('../config/dashboardConfig.js');
+      
+      // Validate configuration before proceeding
+      if (!validateConfig()) {
+        throw new Error('Dashboard configuration validation failed');
+      }
       
       // Prepare data for ingest endpoint
       const ingestData = {
@@ -207,12 +213,12 @@ const CTASection = () => {
         message: formData.message
       };
       
-      // Submit to ingest endpoint
-      const response = await fetch(`${backendUrl}/api/ingest/demo_requests`, {
+      // Submit to ingest endpoint using protected config
+      const response = await fetch(`${DASHBOARD_CONFIG.BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUESTS}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
         },
         body: JSON.stringify(ingestData)
       });
