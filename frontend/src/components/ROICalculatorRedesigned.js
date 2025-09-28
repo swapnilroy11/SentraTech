@@ -200,41 +200,82 @@ const ROICalculatorRedesigned = () => {
 
   const formatPercentage = formatPercentageProtected;
 
-  // Handle email report submission
+  // Handle email report submission using ingest endpoint
   const handleEmailSubmission = async () => {
     if (!email || !results) return;
 
     setIsSubmittingReport(true);
     
     try {
-      // Save ROI report to database
+      // Prepare data for ingest endpoint
       const reportData = {
-        email,
         country: selectedCountry,
-        call_volume: parseFloat(callVolume),
-        interaction_volume: parseFloat(interactionVolume),
-        traditional_cost: results.traditionalMonthlyCost,
-        sentratech_cost: results.sentraTechMonthlyCost,
+        monthly_volume: parseFloat(callVolume) + parseFloat(interactionVolume),
+        bpo_spending: results.traditionalMonthlyCost,
+        sentratech_spending: results.sentraTechMonthlyCost,
+        sentratech_bundles: results.bundlesNeeded,
         monthly_savings: results.monthlySavings,
-        annual_savings: results.yearlySavings,
-        roi_percent: results.roi,
-        cost_reduction: results.costReduction
+        roi: results.roi / 100, // Convert percentage to decimal
+        cost_reduction: results.costReduction,
+        contact_email: email
       };
 
-      const { error } = await supabase
-        .from('roi_reports')
-        .insert([reportData]);
-
-      if (error) throw error;
-
-      setReportSubmitted(true);
+      // Get backend URL from environment
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
       
-      // Auto-close modal after 3 seconds
-      setTimeout(() => {
-        setShowEmailModal(false);
-        setReportSubmitted(false);
-        setEmail('');
-      }, 3000);
+      // Submit to ingest endpoint
+      const response = await fetch(`${backendUrl}/api/ingest/roi_reports`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-INGEST-KEY': 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
+        },
+        body: JSON.stringify(reportData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setReportSubmitted(true);
+        
+        console.log('ROI report submitted successfully:', result);
+        
+        // Auto-close modal after 3 seconds
+        setTimeout(() => {
+          setShowEmailModal(false);
+          setReportSubmitted(false);
+          setEmail('');
+        }, 3000);
+      } else {
+        // Fallback to Supabase if ingest fails
+        console.warn('Ingest endpoint failed, falling back to Supabase');
+        
+        const fallbackData = {
+          email,
+          country: selectedCountry,
+          call_volume: parseFloat(callVolume),
+          interaction_volume: parseFloat(interactionVolume),
+          traditional_cost: results.traditionalMonthlyCost,
+          sentratech_cost: results.sentraTechMonthlyCost,
+          monthly_savings: results.monthlySavings,
+          annual_savings: results.yearlySavings,
+          roi_percent: results.roi,
+          cost_reduction: results.costReduction
+        };
+
+        const { error } = await supabase
+          .from('roi_reports')
+          .insert([fallbackData]);
+
+        if (error) throw error;
+
+        setReportSubmitted(true);
+        
+        setTimeout(() => {
+          setShowEmailModal(false);
+          setReportSubmitted(false);
+          setEmail('');
+        }, 3000);
+      }
 
     } catch (error) {
       console.error('Error saving ROI report:', error);
