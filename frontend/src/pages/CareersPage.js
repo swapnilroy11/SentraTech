@@ -316,7 +316,7 @@ const CareersPage = () => {
             
             <div className="flex justify-center">
               <button 
-                onClick={() => setIsApplicationModalOpen(true)}
+                onClick={() => navigate('/careers/apply/customer-support-specialist')}
                 className="px-8 py-4 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <span>Apply for Open Position</span>
