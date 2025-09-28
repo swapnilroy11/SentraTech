@@ -687,186 +687,133 @@ const HorizontalJourney = () => {
               onClick={closeModal}
               style={{
                 position: 'absolute',
-                top: '12px',
-                right: '12px',
+                top: '8px',
+                right: '8px',
                 background: 'transparent',
                 border: 'none',
                 color: selectedPanel.color,
                 cursor: 'pointer',
-                padding: '8px',
-                borderRadius: '8px',
-                fontSize: '18px',
-                fontWeight: 'bold'
+                padding: '4px',
+                borderRadius: '4px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                lineHeight: '1'
               }}
             >
               ✕
             </button>
 
-            {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '12px' }}>
+            {/* Compact Header */}
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
               <div style={{
                 display: 'inline-block',
-                padding: '4px 12px',
+                padding: '2px 8px',
                 backgroundColor: `${selectedPanel.color}20`,
                 border: `1px solid ${selectedPanel.color}60`,
-                borderRadius: '12px',
-                fontSize: '12px',
+                borderRadius: '8px',
+                fontSize: '10px',
                 color: selectedPanel.color,
-                marginBottom: '12px'
+                marginBottom: '8px'
               }}>
                 Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1}
               </div>
               <h3 style={{ 
                 color: 'white', 
-                fontSize: '24px', 
+                fontSize: '20px', 
                 fontWeight: 'bold', 
-                margin: '8px 0' 
+                margin: '4px 0' 
               }}>
                 {selectedPanel.title}
               </h3>
               <p style={{ 
                 color: selectedPanel.color, 
-                fontSize: '16px',
-                margin: '8px 0'
+                fontSize: '14px',
+                margin: '4px 0'
               }}>
                 {selectedPanel.subtitle}
               </p>
             </div>
 
-            {/* Description */}
-            <div style={{ marginBottom: '20px' }}>
-              <h4 style={{ 
-                color: 'white', 
-                fontSize: '16px', 
-                fontWeight: 'bold', 
-                marginBottom: '8px' 
-              }}>
-                Overview
-              </h4>
+            {/* Compact Description */}
+            <div style={{ marginBottom: '16px' }}>
               <p style={{ 
                 color: 'rgb(218,218,218)', 
-                fontSize: '14px',
-                lineHeight: '1.5'
+                fontSize: '13px',
+                lineHeight: '1.4',
+                textAlign: 'center'
               }}>
                 {selectedPanel.description}
               </p>
             </div>
 
-            {/* Key Features */}
-            <div style={{ marginBottom: '20px' }}>
-              <h4 style={{ 
-                color: 'white', 
-                fontSize: '16px', 
-                fontWeight: 'bold', 
-                marginBottom: '12px' 
+            {/* Compact Key Metrics */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
+              <div style={{
+                backgroundColor: `${selectedPanel.color}10`,
+                border: `1px solid ${selectedPanel.color}30`,
+                borderRadius: '8px',
+                padding: '8px',
+                textAlign: 'center'
               }}>
-                Key Features
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ 
+                  color: selectedPanel.color, 
+                  fontSize: '16px', 
+                  fontWeight: 'bold' 
+                }}>
+                  {selectedPanel.metric}
+                </div>
+                <div style={{ 
+                  color: 'rgb(161,161,170)', 
+                  fontSize: '10px' 
+                }}>
+                  {selectedPanel.metricLabel}
+                </div>
+              </div>
+              <div style={{
+                backgroundColor: `${selectedPanel.color}10`,
+                border: `1px solid ${selectedPanel.color}30`,
+                borderRadius: '8px',
+                padding: '8px',
+                textAlign: 'center'
+              }}>
+                <div style={{ 
+                  color: selectedPanel.color, 
+                  fontSize: '16px', 
+                  fontWeight: 'bold' 
+                }}>
+                  {selectedPanel.automationRate}%
+                </div>
+                <div style={{ 
+                  color: 'rgb(161,161,170)', 
+                  fontSize: '10px' 
+                }}>
+                  Automation
+                </div>
+              </div>
+            </div>
+
+            {/* Compact Features */}
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {(selectedPanel.keyFeatures || [
-                  'Intelligent routing and processing',
-                  'AI-powered analysis and response',
-                  'Real-time quality monitoring'
+                  'Intelligent routing',
+                  'AI-powered analysis',
+                  'Quality monitoring'
                 ]).slice(0, 3).map((feature, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{
-                      width: '6px',
-                      height: '6px',
+                      width: '4px',
+                      height: '4px',
                       backgroundColor: selectedPanel.color,
                       borderRadius: '50%'
                     }}></div>
                     <span style={{ 
                       color: 'rgb(218,218,218)', 
-                      fontSize: '14px' 
+                      fontSize: '12px' 
                     }}>
                       {feature}
                     </span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Key Metrics */}
-            <div style={{ marginBottom: '20px' }}>
-              <h4 style={{ 
-                color: 'white', 
-                fontSize: '16px', 
-                fontWeight: 'bold', 
-                marginBottom: '12px' 
-              }}>
-                Key Metrics
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{
-                  backgroundColor: `${selectedPanel.color}10`,
-                  border: `1px solid ${selectedPanel.color}30`,
-                  borderRadius: '8px',
-                  padding: '12px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ 
-                    color: selectedPanel.color, 
-                    fontSize: '20px', 
-                    fontWeight: 'bold' 
-                  }}>
-                    {selectedPanel.metric}
-                  </div>
-                  <div style={{ 
-                    color: 'rgb(161,161,170)', 
-                    fontSize: '12px' 
-                  }}>
-                    {selectedPanel.metricLabel}
-                  </div>
-                </div>
-                <div style={{
-                  backgroundColor: `${selectedPanel.color}10`,
-                  border: `1px solid ${selectedPanel.color}30`,
-                  borderRadius: '8px',
-                  padding: '12px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ 
-                    color: selectedPanel.color, 
-                    fontSize: '20px', 
-                    fontWeight: 'bold' 
-                  }}>
-                    {selectedPanel.automationRate}%
-                  </div>
-                  <div style={{ 
-                    color: 'rgb(161,161,170)', 
-                    fontSize: '12px' 
-                  }}>
-                    Automation
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Integration Channels */}
-            <div>
-              <h4 style={{ 
-                color: 'white', 
-                fontSize: '16px', 
-                fontWeight: 'bold', 
-                marginBottom: '12px' 
-              }}>
-                Integration Channels
-              </h4>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {(selectedPanel.channels || ['Phone', 'Email', 'Chat', 'Social']).map((channel, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      padding: '4px 8px',
-                      backgroundColor: `${selectedPanel.color}10`,
-                      border: `1px solid ${selectedPanel.color}40`,
-                      borderRadius: '12px',
-                      color: selectedPanel.color,
-                      fontSize: '12px'
-                    }}
-                  >
-                    {channel}
-                  </span>
                 ))}
               </div>
             </div>
