@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { 
   Linkedin, Twitter, Youtube, Github, Mail, Phone, 
