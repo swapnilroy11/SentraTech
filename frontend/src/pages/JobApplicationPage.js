@@ -263,18 +263,18 @@ const JobApplicationPage = () => {
       const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage } = await import('../config/dashboardConfig.js');
       
       // Prepare application data for SentraTech Admin Dashboard
-      const applicationData = {
-        full_name: data.fullName,
-        email: data.email,
-        position_applied: data.position || 'Customer Support Specialist',
-        phone: data.phone || '',
-        experience_level: data.experience || '',
-        motivation_text: data.coverNote || '',
-        consent_for_storage: data.consentForStorage
+      const dashboardData = {
+        full_name: applicationData.first_name + ' ' + (applicationData.last_name || ''),
+        email: applicationData.email,
+        position_applied: applicationData.position_applied || 'Customer Support Specialist',
+        phone: applicationData.phone || '',
+        experience_level: applicationData.experience_years || '',
+        motivation_text: applicationData.motivation_text || '',
+        consent_for_storage: applicationData.consent_for_storage
       };
       
       // Submit to SentraTech Admin Dashboard with AI analysis
-      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, applicationData, (result) => {
+      const result = await submitFormToDashboard(DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION, dashboardData, (result) => {
         // Show AI score and recommendation for job applications
         if (result.overall_score && result.ai_recommendation) {
           console.log(`🤖 AI Analysis: ${result.overall_score}% score - ${result.ai_recommendation}`);
@@ -283,14 +283,34 @@ const JobApplicationPage = () => {
       
       if (result.success) {
         showSuccessMessage('Job application submitted successfully', result.data);
-        onSuccess(result.data.application_id || result.data.id || `job_${Date.now()}`);
+        const applicationId = result.data.application_id || result.data.id || `job_${Date.now()}`;
+        setSubmitStatus('success');
+        
+        if (window && window.dataLayer) {
+          window.dataLayer.push({
+            event: "job_application_submit",
+            position: applicationData.position_applied,
+            source: 'careers_page',
+            location: applicationData.location,
+            hasResume: !!applicationData.resume_file,
+            applicationId: applicationId
+          });
+        }
+        
+        setTimeout(() => {
+          navigate('/careers', { state: { applicationSubmitted: true } });
+        }, 3000);
+        
+        setIsSubmitting(false);
       } else {
         console.error('Job application failed:', result.error);
-        onError(result.error || 'Failed to submit job application. Please try again.');
+        setSubmitStatus('error');
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Job application error:', error);
-      onError('Something went wrong. Please try again.');
+      setSubmitStatus('error');
+      setIsSubmitting(false);
     }
   };
 
