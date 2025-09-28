@@ -8,6 +8,20 @@ const SupportCenterPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const faqSectionRef = useRef(null);
+  const faqContainerRef = useRef(null);
+
+  // Scroll position management for smooth category transitions
+  useEffect(() => {
+    if (isTransitioning && faqContainerRef.current) {
+      // Reset transition after animation completes
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isTransitioning]);
 
   // Memoized support channels for performance
   const supportChannels = useMemo(() => [
