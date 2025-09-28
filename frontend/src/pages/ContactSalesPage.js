@@ -326,7 +326,21 @@ const ContactSalesPage = () => {
               </div>
 
               {/* Actions */}
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
+                {/* Today Quick Filter Button */}
+                <Button
+                  onClick={() => setFilterConfig(prev => ({ ...prev, dateRange: 'today' }))}
+                  variant={filterConfig.dateRange === 'today' ? 'default' : 'outline'}
+                  className={
+                    filterConfig.dateRange === 'today'
+                      ? "bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] px-4 py-2"
+                      : "border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)] px-4 py-2"
+                  }
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Today
+                </Button>
+                
                 <Button
                   onClick={exportToCSV}
                   className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] px-4 py-2"
