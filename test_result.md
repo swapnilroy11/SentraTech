@@ -63,8 +63,9 @@ test_plan:
     - "Demo Request Form Volume Fields Integration Testing - PHASE 1 VERIFICATION"
     - "Demo Request Form End-to-End Submission Testing"
   stuck_tasks:
-    - "Customer Journey Interactive Cards Fix Verification"
     - "Demo Request Form Supabase Submission Issue"
+  completed_focus:
+    - "Customer Journey Interactive Cards Fix Verification"
   completed_focus:
     - "Comprehensive Ingest Proxy Integration Testing"
   test_all: false
