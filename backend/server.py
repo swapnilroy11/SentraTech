@@ -1653,7 +1653,6 @@ async def ingest_job_application(request: Request, job_application: JobApplicati
         
         # Send welcome email notification
         try:
-            from datetime import datetime, timedelta
             expected_response = (datetime.now() + timedelta(days=7)).strftime("%B %d, %Y")
             
             email_notification = EmailNotification(
