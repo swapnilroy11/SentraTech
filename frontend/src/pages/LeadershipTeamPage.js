@@ -65,27 +65,6 @@ const LeadershipTeamPage = () => {
     }
   ];
 
-  const advisors = [
-    {
-      name: 'Alex Johnson',
-      title: 'Strategic Advisor & Former VP Engineering at Twilio',
-      expertise: 'Scaling engineering teams, API infrastructure, developer experience',
-      contribution: 'Advises on technical architecture and engineering scaling strategies'
-    },
-    {
-      name: 'Rachel Kim',
-      title: 'Go-to-Market Advisor & Former CMO at Segment',
-      expertise: 'B2B SaaS marketing, product-led growth, enterprise sales enablement',
-      contribution: 'Guides marketing strategy and enterprise customer acquisition'
-    },
-    {
-      name: 'Dr. James Wilson',
-      title: 'AI Research Advisor & Professor at Stanford AI Lab',
-      expertise: 'Natural language processing, conversational AI, machine learning ethics',
-      contribution: 'Provides guidance on AI research direction and ethical AI development'
-    }
-  ];
-
   const organizationalPrinciples = [
     {
       icon: Users,
