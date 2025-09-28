@@ -1144,7 +1144,7 @@ async def ingest_subscription(request: Request, subscription: SubscriptionIngest
                     json=subscription.dict(),
                     headers={
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {svc_email}:{svc_password}"
+                        "X-INGEST-KEY": "test-ingest-key-12345"
                     }
                 )
                 
