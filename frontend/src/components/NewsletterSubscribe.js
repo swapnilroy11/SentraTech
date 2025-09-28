@@ -60,12 +60,10 @@ const NewsletterSubscribe = () => {
       setMessage('Something went wrong. Please try again.');
     }
 
-    // Clear status after 5 seconds
+    // Clear status after 5 seconds for all states
     setTimeout(() => {
-      if (status !== 'success') {
-        setStatus(null);
-        setMessage('');
-      }
+      setStatus(null);
+      setMessage('');
     }, 5000);
   };
 
