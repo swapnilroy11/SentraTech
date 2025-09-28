@@ -306,9 +306,9 @@ frontend:
 
   - task: "Customer Journey Modal Click Functionality"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/components/HorizontalJourney.js"
-    stuck_count: 1
+    stuck_count: 0
     priority: "critical"
     needs_retesting: false
     status_history:
