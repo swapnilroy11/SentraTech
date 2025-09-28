@@ -1,14 +1,14 @@
 /**
- * SentraTech Dashboard Integration Config
- * Updated to use local backend endpoints
+ * SentraTech Form Submission Config
+ * Configuration for local backend API endpoints
  * 
  * Base URL: Uses REACT_APP_BACKEND_URL from environment
  * Authentication: No authentication required for local backend
  * All forms submit to local backend API endpoints
  */
 
-// Dashboard Integration Settings
-export const DASHBOARD_CONFIG = {
+// Form Submission Settings
+export const FORM_CONFIG = {
   // API Base URL - use environment variable
   API_BASE_URL: process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001',
   
