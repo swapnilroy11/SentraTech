@@ -244,15 +244,17 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       
-      // Use the direct endpoint (no proxy needed)
-      const fullUrl = endpoint; // endpoint is now the full URL
+      // Use backend proxy endpoints with API key authentication
+      const fullUrl = `${BACKEND_URL}${endpoint}`;
       const actualOrigin = window.location.origin;
       
-      console.log(`🌐 DIRECT DASHBOARD SUBMISSION (attempt ${attempt}/${retries}):`, {
+      console.log(`🌐 BACKEND PROXY SUBMISSION (attempt ${attempt}/${retries}):`, {
         url: fullUrl,
         method: 'POST',
         data: JSON.stringify(data, null, 2),
         browserOrigin: actualOrigin,
+        backendUrl: BACKEND_URL,
+        proxyEndpoint: endpoint,
         timestamp: new Date().toISOString()
       });
       
@@ -262,6 +264,7 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const response = await fetch(fullUrl, {
         method: 'POST',
         mode: 'cors',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
