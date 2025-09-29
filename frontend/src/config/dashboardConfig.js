@@ -39,26 +39,126 @@ export const DASHBOARD_CONFIG = {
 };
 
 // Real network connectivity probe - more reliable than navigator.onLine
+// Comprehensive network debugging function
+export const debugNetworkEnvironment = async () => {
+  console.log('🔬 COMPREHENSIVE NETWORK ENVIRONMENT DEBUGGING');
+  console.log('='.repeat(60));
+  
+  // 1. Environment Information
+  console.log('📊 Environment Info:', {
+    userAgent: navigator.userAgent,
+    origin: window.location.origin,
+    href: window.location.href,
+    cookieEnabled: navigator.cookieEnabled,
+    onLine: navigator.onLine,
+    language: navigator.language
+  });
+  
+  // 2. CORS Origin Detection
+  const possibleOrigins = [
+    window.location.origin,
+    'https://unified-forms.preview.emergentagent.com',
+    'http://localhost:3000',
+    'http://localhost',
+    null // No Origin header
+  ];
+  
+  console.log('🌐 Testing different Origin headers...');
+  
+  for (const origin of possibleOrigins) {
+    try {
+      const headers = {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      };
+      if (origin) headers['Origin'] = origin;
+      
+      const response = await fetch(`${BACKEND_URL}/health`, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers
+      });
+      
+      console.log(`✅ Origin "${origin}": ${response.status} ${response.statusText}`, {
+        corsHeaders: {
+          allowOrigin: response.headers.get('access-control-allow-origin'),
+          allowMethods: response.headers.get('access-control-allow-methods'),
+          allowHeaders: response.headers.get('access-control-allow-headers'),
+          allowCredentials: response.headers.get('access-control-allow-credentials')
+        }
+      });
+    } catch (error) {
+      console.error(`❌ Origin "${origin}": ${error.message}`);
+    }
+  }
+  
+  // 3. Test CORS Preflight (OPTIONS)
+  console.log('🔍 Testing CORS preflight (OPTIONS)...');
+  try {
+    const preflightResponse = await fetch(`${BACKEND_URL}/forms/newsletter-signup`, {
+      method: 'OPTIONS',
+      headers: {
+        'Origin': window.location.origin,
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'content-type,origin'
+      }
+    });
+    
+    console.log('✅ CORS Preflight:', {
+      status: preflightResponse.status,
+      statusText: preflightResponse.statusText,
+      headers: Object.fromEntries(preflightResponse.headers.entries())
+    });
+  } catch (error) {
+    console.error('❌ CORS Preflight failed:', error.message);
+  }
+  
+  // 4. Service Worker Detection
+  if ('serviceWorker' in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    console.log('🔧 Service Worker status:', {
+      supported: true,
+      registrations: registrations.length,
+      active: registrations.map(reg => ({
+        scope: reg.scope,
+        state: reg.active?.state,
+        updateViaCache: reg.updateViaCache
+      }))
+    });
+  } else {
+    console.log('🔧 Service Worker: Not supported');
+  }
+  
+  console.log('='.repeat(60));
+  return true;
+};
+
 export const hasNetwork = async () => {
   try {
     console.log('🔍 Probing network connectivity...');
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
     
-    // Use GET request to test connectivity - more universally supported than HEAD/OPTIONS
-    const response = await fetch(`${BACKEND_URL}${DASHBOARD_CONFIG.HEALTHCHECK_URL}`, {
+    // Run comprehensive debugging first
+    await debugNetworkEnvironment();
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    // Test with actual window origin instead of hardcoded
+    const actualOrigin = window.location.origin;
+    console.log(`🎯 Using actual browser origin: ${actualOrigin}`);
+    
+    const response = await fetch(`${BACKEND_URL}/health`, {
       method: 'GET',
       cache: 'no-cache',
       signal: controller.signal,
       headers: {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
-        'Origin': 'https://unified-forms.preview.emergentagent.com'
+        'Origin': actualOrigin
       }
     });
     
     clearTimeout(timeoutId);
-    // Accept 200 (OK) as online, and even some error codes that indicate the endpoint exists
     const hasConnectivity = response.ok || (response.status >= 400 && response.status < 500);
     console.log(`🌐 Network connectivity probe result: ${hasConnectivity ? '✅ ONLINE' : '❌ OFFLINE'} (${response.status})`);
     return hasConnectivity;
