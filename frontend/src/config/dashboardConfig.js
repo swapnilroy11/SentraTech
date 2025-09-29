@@ -91,7 +91,7 @@ export const DASHBOARD_CONFIG = {
   // Healthcheck endpoint for connectivity testing
   HEALTHCHECK_URL: '/api/health',
   
-  // Dashboard API configuration
+  // Dashboard API configuration (for reference only - all requests now go through proxy)
   DASHBOARD_API: {
     BASE_URL: 'https://sentradash.preview.emergentagent.com/api',
     ENDPOINTS: {
