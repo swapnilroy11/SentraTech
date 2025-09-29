@@ -31,17 +31,17 @@ export const logPayload = (formType, payload) => {
   });
 };
 
-// Dashboard configuration - PRODUCTION ENDPOINTS
+// Dashboard configuration - PROXY ENDPOINTS WITH API KEY AUTHENTICATION
 export const DASHBOARD_CONFIG = {
-  // Direct production API endpoints (no proxy needed)
+  // Proxy endpoints that include API key authentication
   ENDPOINTS: {
-    CONTACT_SALES: 'https://sentradash.preview.emergentagent.com/api/forms/contact-sales',
-    DEMO_REQUEST: 'https://sentradash.preview.emergentagent.com/api/forms/demo-request', 
-    ROI_CALCULATOR: 'https://sentradash.preview.emergentagent.com/api/forms/roi-calculator',
-    NEWSLETTER: 'https://sentradash.preview.emergentagent.com/api/forms/newsletter-signup',
-    JOB_APPLICATION: 'https://sentradash.preview.emergentagent.com/api/forms/job-application',
-    PILOT_REQUEST: 'https://sentradash.preview.emergentagent.com/api/forms/pilot-request',
-    CHAT_MESSAGE: 'https://sentradash.preview.emergentagent.com/api/chat/message'
+    CONTACT_SALES: '/api/proxy/contact-sales',
+    DEMO_REQUEST: '/api/proxy/demo-request', 
+    ROI_CALCULATOR: '/api/proxy/roi-calculator',
+    NEWSLETTER: '/api/proxy/newsletter-signup',
+    JOB_APPLICATION: '/api/proxy/job-application',
+    PILOT_REQUEST: '/api/proxy/pilot-request',
+    CHAT_MESSAGE: '/api/proxy/chat-message'
   },
   
   // Healthcheck endpoint for connectivity testing
