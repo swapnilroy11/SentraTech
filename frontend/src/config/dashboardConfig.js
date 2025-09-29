@@ -8,19 +8,19 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_A
 
 // Dashboard configuration
 export const DASHBOARD_CONFIG = {
-  // API endpoints for form submissions
+  // API endpoints for form submissions (no /api prefix as it's in BACKEND_URL)
   ENDPOINTS: {
-    CONTACT_SALES: '/api/forms/contact-sales',
-    DEMO_REQUEST: '/api/forms/demo-request', 
-    ROI_CALCULATOR: '/api/forms/roi-calculator',
-    NEWSLETTER: '/api/forms/newsletter-signup',
-    JOB_APPLICATION: '/api/forms/job-application',
-    PILOT_REQUEST: '/api/forms/pilot-request',
-    CHAT_MESSAGE: '/api/chat/message'
+    CONTACT_SALES: '/forms/contact-sales',
+    DEMO_REQUEST: '/forms/demo-request', 
+    ROI_CALCULATOR: '/forms/roi-calculator',
+    NEWSLETTER: '/forms/newsletter-signup',
+    JOB_APPLICATION: '/forms/job-application',
+    PILOT_REQUEST: '/forms/pilot-request',
+    CHAT_MESSAGE: '/chat/message'
   },
   
   // Healthcheck endpoint for real connectivity testing
-  HEALTHCHECK_URL: '/api/health',
+  HEALTHCHECK_URL: '/health',
   
   // Authentication key for dashboard submissions
   INGEST_KEY: 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6',
