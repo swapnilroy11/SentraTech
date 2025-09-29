@@ -1668,6 +1668,11 @@ async def proxy_job_application(request: Request):
         logging.error(f"Job application proxy error: {str(e)}")
         return {"success": False, "error": "Internal server error"}
 
+@api_router.options("/proxy/chat-message")
+async def options_chat_message():
+    """Handle preflight OPTIONS request for chat message"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/chat-message")
 async def proxy_chat_message(request: Request):
     """Proxy chat message to dashboard"""
