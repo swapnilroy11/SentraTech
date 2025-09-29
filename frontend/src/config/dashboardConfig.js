@@ -143,9 +143,15 @@ export const hasNetwork = async () => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
     
-    // Test with actual window origin instead of hardcoded
+    // Determine correct origin for network requests
     const actualOrigin = window.location.origin;
-    console.log(`🎯 Using actual browser origin: ${actualOrigin}`);
+    const isLocalDevelopment = actualOrigin.includes('localhost');
+    const networkOrigin = isLocalDevelopment 
+      ? 'https://unified-forms.preview.emergentagent.com' // Use production origin for localhost testing
+      : actualOrigin;
+    
+    console.log(`🎯 Browser origin: ${actualOrigin}`);
+    console.log(`🌐 Network origin: ${networkOrigin} ${isLocalDevelopment ? '(localhost→preview mapping)' : '(production)'}`);
     
     const response = await fetch(`${BACKEND_URL}/health`, {
       method: 'GET',
