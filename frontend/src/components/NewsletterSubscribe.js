@@ -52,9 +52,9 @@ const NewsletterSubscribe = () => {
     setStatus('loading');
     setMessage('');
 
-    // Network submission with robust fallback
+    // Network submission with robust fallback and rate limiting
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+      const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
       const subscriptionData = {
@@ -63,13 +63,8 @@ const NewsletterSubscribe = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Always attempt network submission - let error handling determine fallback
-
-      const result = await submitFormToDashboard(
-        DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER,
-        subscriptionData,
-        { formType: 'newsletter' }
-      );
+      // Use rate-limited submission function
+      const result = await submitFormWithRateLimit('newsletter', subscriptionData);
 
       if (result.success) {
         showSuccessMessage(
