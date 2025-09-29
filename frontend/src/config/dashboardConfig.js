@@ -409,6 +409,43 @@ export const submitFormWithRateLimit = async (formType, formData, options = {}) 
   }
 };
 
+// Rate-limited chat message submission
+export const submitChatMessageWithRateLimit = async (message, conversationId = null) => {
+  const now = Date.now();
+  const key = `chat-message_${conversationId || 'anon'}`;
+  const limit = RATE_LIMITS['chat-message'] ?? 3000;
+
+  // Check if we're submitting too fast
+  if (lastSubmissionTimestamps[key] && (now - lastSubmissionTimestamps[key]) < limit) {
+    const remainingTime = Math.ceil((limit - (now - lastSubmissionTimestamps[key]))/1000);
+    console.warn(`⚠️ Chat rate limited: please wait ${remainingTime}s before sending another message`);
+    
+    return { 
+      success: false, 
+      reason: 'rate_limited',
+      remainingTime,
+      message: `Please wait ${remainingTime} seconds before sending another message`
+    };
+  }
+
+  // Update timestamp before submission to prevent race conditions
+  lastSubmissionTimestamps[key] = now;
+  
+  try {
+    const result = await submitChatMessage(message, conversationId);
+    console.log(`✅ Rate-limited chat message successful:`, {
+      conversationId,
+      mode: result.mode,
+      rateLimit: `${limit}ms`
+    });
+    return result;
+  } catch (error) {
+    // Reset timestamp on error so user can retry immediately
+    delete lastSubmissionTimestamps[key];
+    throw error;
+  }
+};
+
 // Submit chat message with robust connectivity testing
 export const submitChatMessage = async (message, conversationId = null) => {
   // Real connectivity test before attempting chat submission
