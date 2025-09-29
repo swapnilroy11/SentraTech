@@ -258,7 +258,7 @@ const ROICalculatorRedesigned = () => {
 
       // Enhanced payload capturing ALL calculated values from results state
       const roiData = {
-        id: generateUUID(),
+        id: generateStableID(),
         email: email,
         country: selectedCountry,
         
