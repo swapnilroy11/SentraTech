@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend Testing for Form Ingest Endpoints with Network Restoration
-Testing Focus: All ingest endpoints, authentication, data validation, status endpoints, database storage
+Comprehensive Backend Testing for SentraTech Application
+Testing Focus: Health check, proxy endpoints, ingest endpoints, authentication, data validation, status endpoints, database storage
 """
 
 import asyncio
@@ -12,10 +12,11 @@ from datetime import datetime, timezone
 from typing import Dict, Any, List
 import uuid
 
-# Test Configuration
-BACKEND_URL = "http://localhost:8001"
+# Test Configuration - Using production URL from frontend .env
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com"
 VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 INVALID_INGEST_KEY = "invalid-key-12345"
+EMERGENT_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
 class FormIngestTester:
     def __init__(self):
