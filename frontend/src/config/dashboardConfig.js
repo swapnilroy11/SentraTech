@@ -208,34 +208,18 @@ export const isOnline = () => {
   return navigator.onLine;
 };
 
-// Network-aware form submission with robust connectivity testing
+// Direct dashboard form submission (no proxy)
 export const submitFormToDashboard = async (endpoint, data, options = {}) => {
   const {
     timeout = DASHBOARD_CONFIG.TIMEOUT.DEFAULT,
     retries = DASHBOARD_CONFIG.RETRY.MAX_ATTEMPTS
   } = options;
 
-  // Real connectivity test before attempting submission
-  try {
-    const networkAvailable = await hasNetwork();
-    if (!networkAvailable) {
-      console.warn('🌐 Network connectivity probe failed - using offline fallback immediately');
-      return {
-        success: true,
-        data: { ...data, id: `offline_${Date.now()}` },
-        mode: 'offline',
-        error: 'Network connectivity probe failed'
-      };
-    }
-  } catch (probeError) {
-    console.warn('🌐 Network probe error - falling back to offline mode:', probeError.message);
-    return {
-      success: true,
-      data: { ...data, id: `offline_${Date.now()}` },
-      mode: 'offline',
-      error: `Network probe failed: ${probeError.message}`
-    };
-  }
+  console.log(`🎯 DIRECT DASHBOARD SUBMISSION:`, {
+    endpoint,
+    data,
+    timestamp: new Date().toISOString()
+  });
 
   let lastError = null;
   
