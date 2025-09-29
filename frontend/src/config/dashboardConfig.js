@@ -45,7 +45,7 @@ export const DASHBOARD_CONFIG = {
   },
   
   // Healthcheck endpoint for connectivity testing
-  HEALTHCHECK_URL: 'https://sentradash.preview.emergentagent.com/api/health',
+  HEALTHCHECK_URL: '/api/health',
   
   // Dashboard API configuration
   DASHBOARD_API: {
