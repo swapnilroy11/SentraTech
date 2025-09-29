@@ -1507,6 +1507,11 @@ async def proxy_newsletter_signup(request: Request):
         logging.error(f"Newsletter proxy endpoint error: {str(e)}")
         return {"success": False, "error": "Internal server error"}
 
+@api_router.options("/proxy/contact-sales")
+async def options_contact_sales():
+    """Handle preflight OPTIONS request for contact sales"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/contact-sales")
 async def proxy_contact_sales(request: Request):
     """Proxy contact sales to dashboard"""
