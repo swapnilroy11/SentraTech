@@ -60,11 +60,19 @@ const NewsletterSubscribe = () => {
 
     // Network submission with robust fallback and rate limiting
     try {
-      const { submitFormWithRateLimit, showSuccessMessage } =
+      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
       const generateUUID = () => 'newsletter_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Log raw input for debugging
+      console.log(`🔍 [NEWSLETTER] Raw input:`, {
+        email: `"${email}" (type: ${typeof email})`,
+        trimmedEmail: `"${email.trim()}" (type: ${typeof email.trim()})`,
+        emailLength: email.trim().length,
+        emailValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+      });
 
       // Enhanced payload with proper field mapping
       const subscriptionData = {
@@ -75,6 +83,9 @@ const NewsletterSubscribe = () => {
         created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
+
+      // Log the complete payload before submission
+      logPayload('newsletter', subscriptionData);
 
       // Use rate-limited submission function
       const result = await submitFormWithRateLimit('newsletter', subscriptionData);
