@@ -201,29 +201,60 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         consentForStorage: data.consentForStorage
       });
 
-      // Enhanced payload with proper field mapping for talent acquisition
+      // Comprehensive payload matching multi-step job application specification
       const jobData = {
         id: generateUUID(),
-        full_name: data.fullName,
-        email: data.email,
-        phone: data.phone || '', // Additional field mapping
-        phone_number: data.phone || '', // Alternative field mapping
+        
+        // Personal Information 
+        full_name: data.fullName || data.name || '',
+        name: data.fullName || data.name || '', // Alternative mapping
+        email: data.email || data.email_address || '',
+        email_address: data.email || data.email_address || '', // Alternative mapping
+        phone: data.phone || data.phone_number || '',
+        phone_number: data.phone || data.phone_number || '', // Alternative mapping
         location: data.location || '',
-        linkedin_profile: data.linkedinProfile || '',
-        position: data.position || 'Customer Support Specialist',
-        position_applied: data.position || 'Customer Support Specialist', // Additional field mapping
-        preferred_shifts: Array.isArray(data.preferredShifts) 
+        
+        // Professional Information
+        position_applied: 'Customer Support Specialist', // Fixed as per spec
+        position: data.position || 'Customer Support Specialist', // Alternative mapping
+        resume_url: data.resumeUrl || data.portfolio_website || '',
+        portfolio_website: data.resumeUrl || data.portfolio_website || '', // Alternative mapping
+        experience_level: data.experience_level || data.relevant_experience || '',
+        relevant_experience: data.experience_level || data.relevant_experience || '', // Alternative mapping
+        work_shifts: Array.isArray(data.preferredShifts) 
           ? data.preferredShifts.join(', ') 
           : data.preferredShifts || '',
-        availability_start_date: data.availabilityStartDate || '',
-        cover_note: data.coverNote || '',
-        motivation_text: data.coverNote || '', // Additional field mapping
-        resume_url: data.resumeUrl || '', // Additional field mapping
-        source: 'careers_modal',
+        preferred_shifts: Array.isArray(data.preferredShifts) 
+          ? data.preferredShifts.join(', ') 
+          : data.preferredShifts || '', // Alternative mapping
+        start_date: data.availabilityStartDate || data.availability_start_date || '',
+        availability_start_date: data.availabilityStartDate || data.availability_start_date || '', // Alternative mapping
+        
+        // Motivation & Cover Letter
+        motivation: data.motivation || data.coverNote || '',
+        why_sentratech: data.motivation || data.coverNote || '', // Alternative mapping  
+        cover_letter: data.coverNote || data.cover_letter || '',
+        cover_note: data.coverNote || data.cover_letter || '', // Alternative mapping
+        motivation_text: data.motivation || data.coverNote || data.cover_letter || '', // Combined motivation
+        
+        // LinkedIn & Professional Links
+        linkedin_profile: data.linkedinProfile || '',
+        
+        // Legal & Authorization (Modal may not have these, but include for consistency)
+        work_authorization: data.work_authorization || '',
+        bangladesh_work_authorization_status: data.work_authorization || '', // Alternative mapping
         consent_for_storage: data.consentForStorage || false,
+        consent_for_contact: data.consentForContact || false,
+        
+        // Metadata
+        source: 'careers_modal_quick_apply',
         status: 'new',
         created: new Date().toISOString(),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        
+        // Additional tracking
+        application_type: 'modal_quick_apply',
+        form_version: 'modal_v2'
       };
 
       // Log the complete payload before submission
