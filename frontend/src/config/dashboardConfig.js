@@ -240,9 +240,8 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
         timestamp: new Date().toISOString()
       });
       
-      // Log multiple curl equivalents for comparison
-      console.log(`🐛 CURL EQUIVALENT (Browser Origin):`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${actualOrigin}" -d '${JSON.stringify(data)}'`);
-      console.log(`🐛 CURL EQUIVALENT (No Origin):`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -d '${JSON.stringify(data)}'`);
+      // Log curl equivalent with correct origin
+      console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${networkOrigin}" -d '${JSON.stringify(data)}'`);
       
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
