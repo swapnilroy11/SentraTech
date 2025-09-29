@@ -107,36 +107,42 @@ const InvestorRelationsPage = () => {
     }
   ];
 
-  const boardMembers = [
+  const teamHighlights = [
     {
-      name: 'Sarah Chen',
+      name: 'Swapnil Roy',
       title: 'CEO & Co-Founder',
       company: 'SentraTech',
-      expertise: 'Enterprise Software, Customer Success'
+      expertise: 'AI Product Strategy, Enterprise Software, Team Leadership'
     },
     {
-      name: 'Marc Andreessen',
-      title: 'Co-Founder & General Partner',
-      company: 'Andreessen Horowitz',
-      expertise: 'Enterprise Software, AI/ML Investments'
+      name: 'Lead AI Engineer',
+      title: 'Co-Founder & CTO',
+      company: 'SentraTech',
+      expertise: 'Machine Learning, NLP, Distributed Systems Architecture'
     },
     {
-      name: 'Roelof Botha',
-      title: 'Partner',
-      company: 'Sequoia Capital',
-      expertise: 'SaaS Scaling, Financial Strategy'
+      name: 'Senior Full-Stack Engineer',
+      title: 'Head of Engineering',
+      company: 'SentraTech',
+      expertise: 'Scalable Backend Systems, Frontend Architecture, DevOps'
+    }
+  ];
+
+  const advisors = [
+    {
+      role: 'AI/ML Strategy',
+      expertise: 'Former Head of AI at enterprise customer support company',
+      value: 'Product roadmap & technical architecture guidance'
     },
     {
-      name: 'Sarah Guo',
-      title: 'Partner',
-      company: 'Greylock Partners',
-      expertise: 'AI Technology, Product Strategy'
+      role: 'Go-to-Market',
+      expertise: 'VP Sales at leading SaaS customer support platform',
+      value: 'Enterprise sales strategy & customer acquisition'
     },
     {
-      name: 'Dr. Jennifer Thompson',
-      title: 'Independent Director',
-      company: 'Former CTO, Slack',
-      expertise: 'Enterprise Technology, Public Company Experience'
+      role: 'Industry Expert',
+      expertise: 'Former CXO at Fortune 500 company with large support operations',
+      value: 'Customer validation & market requirements'
     }
   ];
 
