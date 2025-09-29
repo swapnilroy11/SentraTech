@@ -259,7 +259,7 @@ const JobApplicationPage = () => {
   // Submit to SentraTech Admin Dashboard with network fallback
   const submitApplication = async (applicationData) => {
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+      const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
       // Prepare data in the expected format for the dashboard
@@ -279,13 +279,8 @@ const JobApplicationPage = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Always attempt network submission - let error handling determine fallback
-
-      const result = await submitFormToDashboard(
-        DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
-        jobData,
-        { formType: 'job_application' }
-      );
+      // Use rate-limited submission function
+      const result = await submitFormWithRateLimit('job-application', jobData);
 
       if (result.success) {
         showSuccessMessage(
