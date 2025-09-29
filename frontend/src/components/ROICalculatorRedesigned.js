@@ -311,8 +311,15 @@ const ROICalculatorRedesigned = () => {
       // Log the complete payload before submission
       logPayload('roi-calculator', roiData);
 
-      // Use rate-limited submission function
-      const result = await submitFormWithRateLimit('roi-calculator', roiData);
+      // Use safe submission wrapper with duplicate prevention
+      const result = await safeSubmit('roi-calculator', roiData, {
+        disableDuration: 10000, // 10 seconds for ROI Calculator
+        onSubmitStart: () => setIsSubmittingReport(true),
+        onSubmitEnd: () => setIsSubmittingReport(false),
+        onDuplicate: () => {
+          console.warn('ROI Calculator submission blocked - already in progress');
+        }
+      });
 
       if (result.success) {
         showSuccessMessage(
