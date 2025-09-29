@@ -260,8 +260,16 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
       // Log the complete payload before submission
       logPayload('job-application', jobData);
 
-      // Use rate-limited submission function
-      const result = await submitFormWithRateLimit('job-application', jobData);
+      // Use safe submission wrapper with duplicate prevention
+      const result = await safeSubmit('job-application', jobData, {
+        disableDuration: 7000, // 7 seconds for Job Application
+        onSubmitStart: () => setSubmitStatus('submitting'),
+        onSubmitEnd: () => setSubmitStatus(null),
+        onDuplicate: () => {
+          setSubmitStatus('error');
+          setErrors({ general: 'Job application already being submitted' });
+        }
+      });
 
       if (result.success) {
         showSuccessMessage(
