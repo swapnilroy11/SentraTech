@@ -38,8 +38,36 @@ export const DASHBOARD_CONFIG = {
   }
 };
 
-// Check if browser is online
+// Real network connectivity probe - more reliable than navigator.onLine
+export const hasNetwork = async () => {
+  try {
+    console.log('🔍 Probing network connectivity...');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
+    const response = await fetch(`${BACKEND_URL}${DASHBOARD_CONFIG.HEALTHCHECK_URL}`, {
+      method: 'HEAD',
+      cache: 'no-cache',
+      signal: controller.signal,
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    });
+    
+    clearTimeout(timeoutId);
+    const hasConnectivity = response.ok;
+    console.log(`🌐 Network connectivity probe result: ${hasConnectivity ? '✅ ONLINE' : '❌ OFFLINE'} (${response.status})`);
+    return hasConnectivity;
+  } catch (error) {
+    console.log(`🌐 Network connectivity probe failed: ❌ OFFLINE (${error.message})`);
+    return false;
+  }
+};
+
+// Legacy function for backward compatibility - but use hasNetwork() instead
 export const isOnline = () => {
+  console.warn('⚠️ isOnline() is deprecated - use hasNetwork() for reliable connectivity detection');
   return navigator.onLine;
 };
 
