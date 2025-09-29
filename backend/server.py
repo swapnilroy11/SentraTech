@@ -1483,9 +1483,21 @@ async def options_newsletter_signup():
 
 @api_router.post("/proxy/newsletter-signup")
 async def proxy_newsletter_signup(request: Request):
-    """Proxy newsletter signup to dashboard"""
+    """Proxy newsletter signup to dashboard with detailed logging"""
     try:
         data = await request.json()
+        
+        # Comprehensive payload logging
+        proxy_logger.info(f"🔎 PROXY RECEIVED NEWSLETTER SIGNUP PAYLOAD:")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info(f"  - Total fields: {len(data)}")
+        proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
+        proxy_logger.info(f"  - Status: '{data.get('status', 'MISSING')}' (type: {type(data.get('status'))})")
+        proxy_logger.info(f"  - Source: '{data.get('source', 'MISSING')}' (type: {type(data.get('source'))})")
+        proxy_logger.info(f"  - ID: '{data.get('id', 'MISSING')}' (type: {type(data.get('id'))})")
+        proxy_logger.info(f"  - Created: '{data.get('created', 'MISSING')}' (type: {type(data.get('created'))})")
+        proxy_logger.info(f"  - Timestamp: '{data.get('timestamp', 'MISSING')}' (type: {type(data.get('timestamp'))})")
         
         # Add timestamp if not present
         if 'timestamp' not in data:
