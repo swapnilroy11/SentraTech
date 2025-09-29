@@ -243,9 +243,17 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       // Log curl equivalent with correct origin
       console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${networkOrigin}" -d '${JSON.stringify(data)}'`);
       
+      // Temporary workaround: Modify headers to match working server requests
+      const workaroundHeaders = {
+        ...requestHeaders,
+        'User-Agent': 'SentraFormSubmission/1.0', // Custom User-Agent to bypass routing
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json, text/plain, */*'
+      };
+      
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
-        headers: requestHeaders,
+        headers: workaroundHeaders,
         body: JSON.stringify(data),
         signal: controller.signal
       });
