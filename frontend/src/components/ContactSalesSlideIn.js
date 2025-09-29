@@ -249,18 +249,13 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
         preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
       };
 
-      // Network submission with robust fallback
+      // Network submission with robust fallback and rate limiting
       try {
-        const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+        const { submitFormWithRateLimit, showSuccessMessage } =
           await import('../config/dashboardConfig.js');
 
-        // Always attempt network submission - let error handling determine fallback
-
-        const result = await submitFormToDashboard(
-          DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES,
-          dashboardData,
-          { formType: 'contact_sales' }
-        );
+        // Use rate-limited submission function
+        const result = await submitFormWithRateLimit('contact-sales', dashboardData);
 
         if (result.success) {
           showSuccessMessage(
