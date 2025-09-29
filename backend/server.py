@@ -1666,9 +1666,26 @@ async def options_job_application():
 
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
-    """Proxy job application to dashboard"""
+    """Proxy job application to dashboard with detailed logging"""
     try:
         data = await request.json()
+        
+        # Comprehensive payload logging
+        proxy_logger.info(f"🔎 PROXY RECEIVED JOB APPLICATION PAYLOAD:")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info(f"  - Total fields: {len(data)}")
+        proxy_logger.info(f"  - Full Name: '{data.get('full_name', 'MISSING')}' (type: {type(data.get('full_name'))})")
+        proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
+        proxy_logger.info(f"  - Phone: '{data.get('phone', 'MISSING')}' (type: {type(data.get('phone'))})")
+        proxy_logger.info(f"  - Position: '{data.get('position', 'MISSING')}' (type: {type(data.get('position'))})")
+        proxy_logger.info(f"  - Position Applied: '{data.get('position_applied', 'MISSING')}' (type: {type(data.get('position_applied'))})")
+        proxy_logger.info(f"  - Location: '{data.get('location', 'MISSING')}' (type: {type(data.get('location'))})")
+        proxy_logger.info(f"  - LinkedIn: '{data.get('linkedin_profile', 'MISSING')}' (type: {type(data.get('linkedin_profile'))})")
+        proxy_logger.info(f"  - Resume URL: '{data.get('resume_url', 'MISSING')}' (type: {type(data.get('resume_url'))})")
+        proxy_logger.info(f"  - Motivation Text: '{data.get('motivation_text', 'MISSING')}' (type: {type(data.get('motivation_text'))})")
+        proxy_logger.info(f"  - Preferred Shifts: '{data.get('preferred_shifts', 'MISSING')}' (type: {type(data.get('preferred_shifts'))})")
+        proxy_logger.info(f"  - Availability: '{data.get('availability_start_date', 'MISSING')}' (type: {type(data.get('availability_start_date'))})")
         
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
