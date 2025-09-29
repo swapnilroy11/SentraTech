@@ -365,6 +365,9 @@ const ROICalculatorRedesigned = () => {
       // Fallback to offline simulation on any error
       console.warn('ROI report submission failed, using offline fallback:', error);
       setReportSubmitted(true);
+      
+      // Reset submission ID on failure to allow retry
+      setSubmissionID(null);
     } finally {
       setIsSubmittingReport(false);
     }
