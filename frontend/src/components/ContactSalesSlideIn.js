@@ -276,8 +276,13 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
               ingestId: result.data?.id || `contact_${Date.now()}`
             });
           }
+        } else if (result.reason === 'rate_limited') {
+          // Handle rate limiting specifically
+          console.warn('Contact sales rate limited:', result.message);
+          setSubmitStatus('error');
+          setErrors({ submit: result.message || 'Please wait before submitting another contact request' });
         } else {
-          throw new Error(result.error || 'Submission failed');
+          throw new Error(result.error || result.message || 'Submission failed');
         }
       } catch (error) {
         // Fallback to offline simulation on any error
