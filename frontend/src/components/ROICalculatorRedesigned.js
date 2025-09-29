@@ -336,6 +336,9 @@ const ROICalculatorRedesigned = () => {
         );
         setReportSubmitted(true);
         
+        // Mark this submission as complete to prevent duplicates
+        console.log(`✅ ROI Report submitted successfully with ID: ${currentSubmissionID}`);
+        
         // Analytics event
         if (window?.dataLayer) {
           window.dataLayer.push({
@@ -343,13 +346,18 @@ const ROICalculatorRedesigned = () => {
             country: selectedCountry,
             total_volume: roiData.total_volume,
             submission_mode: result.mode,
-            ingestId: result.data?.id || `roi_${Date.now()}`
+            submissionId: currentSubmissionID,
+            ingestId: result.data?.id || currentSubmissionID
           });
         }
       } else if (result.reason === 'rate_limited') {
         // Handle rate limiting specifically
         console.warn('ROI Calculator rate limited:', result.message);
         alert(result.message || 'Please wait before submitting another ROI report');
+      } else if (result.reason === 'duplicate_submission') {
+        // Handle duplicate submission
+        console.warn('Duplicate ROI submission blocked:', result.message);
+        alert('This ROI report has already been submitted. Please refresh to calculate a new report.');
       } else {
         throw new Error(result.error || result.message || 'ROI report submission failed');
       }
