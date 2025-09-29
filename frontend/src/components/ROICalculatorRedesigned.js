@@ -225,11 +225,26 @@ const ROICalculatorRedesigned = () => {
     
     // Network submission with robust fallback and rate limiting
     try {
-      const { submitFormWithRateLimit, showSuccessMessage } =
+      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
       const generateUUID = () => 'roi_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Log raw input values for debugging
+      console.log(`🔍 [ROI-CALCULATOR] Raw input values:`, {
+        email,
+        selectedCountry,
+        callVolume: `"${callVolume}" (type: ${typeof callVolume})`,
+        interactionVolume: `"${interactionVolume}" (type: ${typeof interactionVolume})`,
+        results: results ? {
+          monthlySavings: results.monthlySavings,
+          roi: results.roi,
+          paybackPeriod: results.paybackPeriod,
+          costReduction: results.costReduction,
+          totalSavings: results.totalSavings
+        } : 'null'
+      });
 
       // Enhanced payload with proper field mapping
       const roiData = {
@@ -242,6 +257,9 @@ const ROICalculatorRedesigned = () => {
         monthly_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0), // Additional field mapping
         calculated_savings: results?.monthlySavings || 0,
         monthly_savings: results?.monthlySavings || 0, // Additional field mapping
+        bpo_spending: results?.currentCost || 0, // Map current cost as BPO spending
+        sentratech_spending: results?.newCost || 0, // Map new cost as SentraTech spending
+        bundles: 1, // Default to 1 bundle
         roi_percentage: results?.roi || 0,
         payback_period: results?.paybackPeriod || 0,
         cost_reduction: results?.costReduction || 0, // Additional field mapping
@@ -250,6 +268,9 @@ const ROICalculatorRedesigned = () => {
         created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
+
+      // Log the complete payload before submission
+      logPayload('roi-calculator', roiData);
 
       // Use rate-limited submission function
       const result = await submitFormWithRateLimit('roi-calculator', roiData);
