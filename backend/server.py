@@ -1754,12 +1754,26 @@ async def options_job_application():
 
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
-    """Proxy job application to dashboard with API key authentication and detailed logging"""
+    """Proxy job application to dashboard with API key authentication, idempotency, and detailed logging"""
     try:
         body = await request.json()
         
+        # Check for duplicate requests using idempotency
+        request_id = body.get("id")
+        if is_duplicate_request(request_id):
+            proxy_logger.warning(f"🚫 Duplicate job application request blocked: {request_id}")
+            return JSONResponse(
+                content={
+                    "success": False, 
+                    "error": "Duplicate request", 
+                    "message": "This request was already submitted recently"
+                }, 
+                status_code=429
+            )
+        
         # Enhanced logging for debugging (as requested)
         print("🔎 Job Application payload:", body)
+        proxy_logger.info(f"🆔 Processing unique job application request: {request_id}")
         
         # Comprehensive payload logging for detailed analysis
         proxy_logger.info(f"🔎 PROXY RECEIVED JOB APPLICATION PAYLOAD:")
