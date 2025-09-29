@@ -233,10 +233,7 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Origin': 'https://unified-forms.preview.emergentagent.com'
-        },
+        headers: requestHeaders,
         body: JSON.stringify(data),
         signal: controller.signal
       });
