@@ -234,13 +234,7 @@ const ROICalculatorRedesigned = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Check if offline and handle immediately
-      if (!isOnline()) {
-        console.warn('Browser offline, using offline fallback');
-        setReportSubmitted(true);
-        setIsSubmittingReport(false);
-        return;
-      }
+      // Always attempt network submission - let error handling determine fallback
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
