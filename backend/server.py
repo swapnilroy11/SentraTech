@@ -4459,6 +4459,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=[
+        "https://www.sentratech.net",
+        "https://sentratech.net",
         "https://netproxy-forms.preview.emergentagent.com",
         "https://form-simulator.preview.emergentagent.com",
         "http://localhost:3000",
