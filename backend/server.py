@@ -1691,7 +1691,7 @@ async def proxy_chat_message(request: Request):
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
             
-        result = await proxy_to_dashboard('/chat/message', data)
+        result = await proxy_to_dashboard('/chat/message', data, dict(request.headers))
         
         if result['success']:
             return result['data']
