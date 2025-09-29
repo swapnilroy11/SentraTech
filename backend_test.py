@@ -791,7 +791,7 @@ class SentraTechBackendTester:
 
 async def main():
     """Main test runner"""
-    tester = FormIngestTester()
+    tester = SentraTechBackendTester()
     results = await tester.run_all_tests()
     return results
 
