@@ -463,8 +463,215 @@ class FormIngestTester:
         except Exception as e:
             self.log_test("Data Validation - Empty Payload", "FAIL", f"Exception: {str(e)}")
 
+    async def test_proxy_demo_request(self):
+        """Test 10: Proxy Demo Request Endpoint"""
+        print("\n🎯 Testing Proxy Demo Request Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/proxy/demo-request"
+        headers = {
+            "Content-Type": "application/json",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "User-Agent": "SentraTech-Test/1.0"
+        }
+        
+        # Valid data test
+        valid_data = {
+            "name": "John Smith",
+            "email": "john.smith@testcompany.com",
+            "company": "Test Company Inc",
+            "phone": "+1-555-0123",
+            "message": "Interested in AI customer support demo",
+            "call_volume": 2500,
+            "interaction_volume": 3500,
+            "source": "website"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("id"):
+                        self.log_test("Proxy Demo Request - Valid Data", "PASS", 
+                                    f"Dashboard ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Proxy Demo Request - Valid Data", "FAIL", 
+                                    f"No ID returned: {data}", response_time)
+                else:
+                    self.log_test("Proxy Demo Request - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Proxy Demo Request - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_proxy_contact_sales(self):
+        """Test 11: Proxy Contact Sales Endpoint"""
+        print("\n📞 Testing Proxy Contact Sales Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/proxy/contact-sales"
+        headers = {
+            "Content-Type": "application/json",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "User-Agent": "SentraTech-Test/1.0"
+        }
+        
+        # Valid data test
+        valid_data = {
+            "full_name": "Sarah Johnson",
+            "work_email": "sarah.johnson@enterprise.com",
+            "company_name": "Enterprise Solutions Ltd",
+            "message": "Need enterprise AI support solution",
+            "phone": "+1-555-0456",
+            "company_website": "https://enterprise.com",
+            "call_volume": 8000,
+            "interaction_volume": 12000,
+            "preferred_contact_method": "email"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("id"):
+                        self.log_test("Proxy Contact Sales - Valid Data", "PASS", 
+                                    f"Dashboard ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Proxy Contact Sales - Valid Data", "FAIL", 
+                                    f"No ID returned: {data}", response_time)
+                else:
+                    self.log_test("Proxy Contact Sales - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Proxy Contact Sales - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_proxy_newsletter_signup(self):
+        """Test 12: Proxy Newsletter Signup Endpoint"""
+        print("\n📧 Testing Proxy Newsletter Signup Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/proxy/newsletter-signup"
+        headers = {
+            "Content-Type": "application/json",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "User-Agent": "SentraTech-Test/1.0"
+        }
+        
+        # Valid data test
+        valid_data = {
+            "email": f"newsletter-test-{uuid.uuid4().hex[:8]}@testdomain.com",
+            "source": "website",
+            "id": str(uuid.uuid4())
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("id"):
+                        self.log_test("Proxy Newsletter Signup - Valid Data", "PASS", 
+                                    f"Dashboard ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Proxy Newsletter Signup - Valid Data", "FAIL", 
+                                    f"No ID returned: {data}", response_time)
+                else:
+                    self.log_test("Proxy Newsletter Signup - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Proxy Newsletter Signup - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_proxy_roi_calculator(self):
+        """Test 13: Proxy ROI Calculator Endpoint"""
+        print("\n💰 Testing Proxy ROI Calculator Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/proxy/roi-calculator"
+        headers = {
+            "Content-Type": "application/json",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "User-Agent": "SentraTech-Test/1.0"
+        }
+        
+        # Valid data test
+        valid_data = {
+            "email": f"roi-test-{uuid.uuid4().hex[:8]}@testcompany.com",
+            "country": "United States",
+            "call_volume": 5000,
+            "interaction_volume": 7500,
+            "calculated_savings": 85000.75,
+            "roi_percentage": 180.5,
+            "payback_period": 2.8
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("id"):
+                        self.log_test("Proxy ROI Calculator - Valid Data", "PASS", 
+                                    f"Dashboard ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Proxy ROI Calculator - Valid Data", "FAIL", 
+                                    f"No ID returned: {data}", response_time)
+                else:
+                    self.log_test("Proxy ROI Calculator - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Proxy ROI Calculator - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_proxy_job_application(self):
+        """Test 14: Proxy Job Application Endpoint"""
+        print("\n💼 Testing Proxy Job Application Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/proxy/job-application"
+        headers = {
+            "Content-Type": "application/json",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "User-Agent": "SentraTech-Test/1.0"
+        }
+        
+        # Valid data test
+        valid_data = {
+            "full_name": "Maria Garcia",
+            "email": f"job-test-{uuid.uuid4().hex[:8]}@testmail.com",
+            "location": "Madrid, Spain",
+            "linkedin_profile": "https://linkedin.com/in/maria-garcia-test",
+            "position": "Customer Support Specialist - Spanish Fluent",
+            "preferred_shifts": "Afternoon (2 PM - 10 PM CET)",
+            "availability_start_date": "2024-03-01",
+            "cover_note": "Experienced customer support professional seeking AI-powered customer experience role.",
+            "source": "careers_page",
+            "consent_for_storage": True
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("id"):
+                        self.log_test("Proxy Job Application - Valid Data", "PASS", 
+                                    f"Dashboard ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Proxy Job Application - Valid Data", "FAIL", 
+                                    f"No ID returned: {data}", response_time)
+                else:
+                    self.log_test("Proxy Job Application - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Proxy Job Application - Valid Data", "FAIL", f"Exception: {str(e)}")
+
     async def test_database_storage(self):
-        """Test 10: Database Storage Verification"""
+        """Test 15: Database Storage Verification"""
         print("\n💾 Testing Database Storage...")
         
         # Submit a test record and verify it's stored
