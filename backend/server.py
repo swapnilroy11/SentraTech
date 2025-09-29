@@ -1652,7 +1652,7 @@ async def proxy_job_application(request: Request):
         if 'source' not in data:
             data['source'] = 'careers_page'
             
-        result = await proxy_to_dashboard('/forms/job-application', data)
+        result = await proxy_to_dashboard('/forms/job-application', data, dict(request.headers))
         
         if result['success']:
             return result['data']
