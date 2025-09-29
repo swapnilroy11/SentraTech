@@ -238,8 +238,12 @@ const CTASection = () => {
             ingestId: contactId
           });
         }
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        console.warn('Demo request rate limited:', result.message);
+        setError(result.message || 'Please wait before submitting another demo request');
       } else {
-        throw new Error(result.error || 'Demo request submission failed');
+        throw new Error(result.error || result.message || 'Demo request submission failed');
       }
     } catch (error) {
       // Fallback to offline simulation on any error
