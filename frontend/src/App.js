@@ -33,6 +33,7 @@ const CookiePolicyPage = lazy(() => import("./pages/CookiePolicyPage"));
 const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
 const LeadershipTeamPage = lazy(() => import("./pages/LeadershipTeamPage"));
 const InvestorRelationsPage = lazy(() => import("./pages/InvestorRelationsPage"));
+const PitchDeckPage = lazy(() => import("./pages/PitchDeckPage"));
 const SupportCenterPage = lazy(() => import("./pages/SupportCenterPage"));
 const ContactSalesPage = lazy(() => import("./pages/ContactSalesPage"));
 const CareersPage = lazy(() => import("./pages/CareersPage"));
