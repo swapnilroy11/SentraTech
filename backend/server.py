@@ -1488,7 +1488,7 @@ async def proxy_newsletter_signup(request: Request):
         if 'source' not in data:
             data['source'] = 'website_newsletter'
             
-        result = await proxy_to_dashboard('/forms/newsletter-signup', data)
+        result = await proxy_to_dashboard('/forms/newsletter-signup', data, dict(request.headers))
         
         if result['success']:
             return result['data']
