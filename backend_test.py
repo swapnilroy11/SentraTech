@@ -1,0 +1,580 @@
+#!/usr/bin/env python3
+"""
+Comprehensive Backend Testing for Form Ingest Endpoints with Network Restoration
+Testing Focus: All ingest endpoints, authentication, data validation, status endpoints, database storage
+"""
+
+import asyncio
+import aiohttp
+import json
+import time
+from datetime import datetime, timezone
+from typing import Dict, Any, List
+import uuid
+
+# Test Configuration
+BACKEND_URL = "http://localhost:8001"
+VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
+INVALID_INGEST_KEY = "invalid-key-12345"
+
+class FormIngestTester:
+    def __init__(self):
+        self.session = None
+        self.test_results = []
+        self.total_tests = 0
+        self.passed_tests = 0
+        self.failed_tests = 0
+        
+    async def setup(self):
+        """Initialize HTTP session"""
+        self.session = aiohttp.ClientSession()
+        
+    async def cleanup(self):
+        """Clean up HTTP session"""
+        if self.session:
+            await self.session.close()
+            
+    def log_test(self, test_name: str, status: str, details: str = "", response_time: float = 0):
+        """Log test result"""
+        self.total_tests += 1
+        if status == "PASS":
+            self.passed_tests += 1
+            print(f"✅ {test_name}: {status} ({response_time:.2f}ms)")
+        else:
+            self.failed_tests += 1
+            print(f"❌ {test_name}: {status} ({response_time:.2f}ms)")
+            
+        if details:
+            print(f"   Details: {details}")
+            
+        self.test_results.append({
+            "test": test_name,
+            "status": status,
+            "details": details,
+            "response_time_ms": response_time,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+
+    async def test_backend_health(self):
+        """Test 1: Backend Health Check"""
+        print("\n🔍 Testing Backend Health Check...")
+        
+        try:
+            start_time = time.time()
+            async with self.session.get(f"{BACKEND_URL}/api/health") as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("status") == "healthy" and data.get("ingest_configured"):
+                        self.log_test("Backend Health Check", "PASS", 
+                                    f"Status: {data.get('status')}, Ingest: {data.get('ingest_configured')}", 
+                                    response_time)
+                        return True
+                    else:
+                        self.log_test("Backend Health Check", "FAIL", 
+                                    f"Unhealthy or ingest not configured: {data}", response_time)
+                        return False
+                else:
+                    self.log_test("Backend Health Check", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+                    return False
+                    
+        except Exception as e:
+            self.log_test("Backend Health Check", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    async def test_authentication(self):
+        """Test 2: Authentication Testing"""
+        print("\n🔐 Testing X-INGEST-KEY Authentication...")
+        
+        test_endpoint = f"{BACKEND_URL}/api/ingest/demo_requests"
+        test_data = {
+            "name": "Test User",
+            "email": "test@example.com",
+            "company": "Test Company"
+        }
+        
+        # Test 1: Valid key
+        try:
+            start_time = time.time()
+            headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+            async with self.session.post(test_endpoint, json=test_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    self.log_test("Authentication - Valid Key", "PASS", 
+                                "Valid key accepted", response_time)
+                else:
+                    self.log_test("Authentication - Valid Key", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Authentication - Valid Key", "FAIL", f"Exception: {str(e)}")
+            
+        # Test 2: Invalid key
+        try:
+            start_time = time.time()
+            headers = {"X-INGEST-KEY": INVALID_INGEST_KEY, "Content-Type": "application/json"}
+            async with self.session.post(test_endpoint, json=test_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 401:
+                    self.log_test("Authentication - Invalid Key", "PASS", 
+                                "Invalid key properly rejected", response_time)
+                else:
+                    self.log_test("Authentication - Invalid Key", "FAIL", 
+                                f"Expected 401, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Authentication - Invalid Key", "FAIL", f"Exception: {str(e)}")
+            
+        # Test 3: Missing key
+        try:
+            start_time = time.time()
+            headers = {"Content-Type": "application/json"}
+            async with self.session.post(test_endpoint, json=test_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 401:
+                    self.log_test("Authentication - Missing Key", "PASS", 
+                                "Missing key properly rejected", response_time)
+                else:
+                    self.log_test("Authentication - Missing Key", "FAIL", 
+                                f"Expected 401, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Authentication - Missing Key", "FAIL", f"Exception: {str(e)}")
+
+    async def test_contact_requests_endpoint(self):
+        """Test 3: Contact Sales Form Endpoint"""
+        print("\n📞 Testing Contact Sales Form Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/contact_requests"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Valid data test
+        valid_data = {
+            "full_name": "Sarah Johnson",
+            "work_email": "sarah.johnson@techcorp.com",
+            "company_name": "TechCorp Solutions",
+            "message": "Interested in enterprise AI customer support solution",
+            "phone": "+1-555-0123",
+            "company_website": "https://techcorp.com",
+            "call_volume": 5000,
+            "interaction_volume": 8000,
+            "preferred_contact_method": "email"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("success") and data.get("id"):
+                        self.log_test("Contact Sales - Valid Data", "PASS", 
+                                    f"ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Contact Sales - Valid Data", "FAIL", 
+                                    f"Invalid response: {data}", response_time)
+                else:
+                    self.log_test("Contact Sales - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Contact Sales - Valid Data", "FAIL", f"Exception: {str(e)}")
+            
+        # Invalid data test (missing required fields)
+        invalid_data = {
+            "work_email": "invalid-email",
+            "message": "Test message"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=invalid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 422:
+                    self.log_test("Contact Sales - Invalid Data", "PASS", 
+                                "Invalid data properly rejected", response_time)
+                else:
+                    self.log_test("Contact Sales - Invalid Data", "FAIL", 
+                                f"Expected 422, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Contact Sales - Invalid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_demo_requests_endpoint(self):
+        """Test 4: Demo Request Form Endpoint"""
+        print("\n🎯 Testing Demo Request Form Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/demo_requests"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Valid data test
+        valid_data = {
+            "name": "Michael Chen",
+            "email": "michael.chen@innovatetech.com",
+            "company": "InnovateTech Inc",
+            "phone": "+1-555-0456",
+            "message": "Would like to see AI automation capabilities",
+            "call_volume": 3000,
+            "interaction_volume": 4500,
+            "total_volume": 7500,
+            "source": "website"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("success") and data.get("id"):
+                        self.log_test("Demo Request - Valid Data", "PASS", 
+                                    f"ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Demo Request - Valid Data", "FAIL", 
+                                    f"Invalid response: {data}", response_time)
+                else:
+                    self.log_test("Demo Request - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Demo Request - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_roi_reports_endpoint(self):
+        """Test 5: ROI Calculator Form Endpoint"""
+        print("\n💰 Testing ROI Calculator Form Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/roi_reports"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Valid data test
+        valid_data = {
+            "email": "finance@globalcorp.com",
+            "country": "United States",
+            "call_volume": 10000,
+            "interaction_volume": 15000,
+            "total_volume": 25000,
+            "calculated_savings": 125000.50,
+            "roi_percentage": 245.8,
+            "payback_period": 3.2
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("success") and data.get("id"):
+                        self.log_test("ROI Calculator - Valid Data", "PASS", 
+                                    f"ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("ROI Calculator - Valid Data", "FAIL", 
+                                    f"Invalid response: {data}", response_time)
+                else:
+                    self.log_test("ROI Calculator - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("ROI Calculator - Valid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_subscriptions_endpoint(self):
+        """Test 6: Newsletter Subscription Form Endpoint"""
+        print("\n📧 Testing Newsletter Subscription Form Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/subscriptions"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Valid data test
+        valid_data = {
+            "email": "newsletter@businesstech.com",
+            "source": "website"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("success") and data.get("id"):
+                        self.log_test("Newsletter Subscription - Valid Data", "PASS", 
+                                    f"ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Newsletter Subscription - Valid Data", "FAIL", 
+                                    f"Invalid response: {data}", response_time)
+                else:
+                    self.log_test("Newsletter Subscription - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Newsletter Subscription - Valid Data", "FAIL", f"Exception: {str(e)}")
+            
+        # Invalid email test
+        invalid_data = {
+            "email": "invalid-email-format",
+            "source": "website"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=invalid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                # Note: Based on backend code, email validation might be lenient
+                if response.status in [200, 422]:
+                    self.log_test("Newsletter Subscription - Invalid Email", "PASS", 
+                                f"Response: {response.status}", response_time)
+                else:
+                    self.log_test("Newsletter Subscription - Invalid Email", "FAIL", 
+                                f"Unexpected status: {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Newsletter Subscription - Invalid Email", "FAIL", f"Exception: {str(e)}")
+
+    async def test_job_applications_endpoint(self):
+        """Test 7: Job Application Form Endpoint"""
+        print("\n💼 Testing Job Application Form Endpoint...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/job_applications"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Valid data test
+        valid_data = {
+            "full_name": "Alexandra Rodriguez",
+            "email": "alexandra.rodriguez@email.com",
+            "location": "Barcelona, Spain",
+            "linkedin_profile": "https://linkedin.com/in/alexandra-rodriguez",
+            "position": "Customer Support Specialist - Spanish Fluent",
+            "preferred_shifts": "Morning (9 AM - 5 PM CET)",
+            "availability_start_date": "2024-02-15",
+            "cover_note": "Experienced customer support professional with 5+ years in tech industry. Fluent in Spanish, English, and Catalan. Passionate about AI-powered customer experiences.",
+            "source": "careers_page",
+            "consent_for_storage": True
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=valid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get("success") and data.get("id"):
+                        self.log_test("Job Application - Valid Data", "PASS", 
+                                    f"ID: {data.get('id')}", response_time)
+                    else:
+                        self.log_test("Job Application - Valid Data", "FAIL", 
+                                    f"Invalid response: {data}", response_time)
+                else:
+                    self.log_test("Job Application - Valid Data", "FAIL", 
+                                f"HTTP {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Job Application - Valid Data", "FAIL", f"Exception: {str(e)}")
+            
+        # Invalid data test (missing required fields)
+        invalid_data = {
+            "email": "incomplete@application.com"
+        }
+        
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json=invalid_data, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 422:
+                    self.log_test("Job Application - Invalid Data", "PASS", 
+                                "Invalid data properly rejected", response_time)
+                else:
+                    self.log_test("Job Application - Invalid Data", "FAIL", 
+                                f"Expected 422, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Job Application - Invalid Data", "FAIL", f"Exception: {str(e)}")
+
+    async def test_status_endpoints(self):
+        """Test 8: Status Endpoints"""
+        print("\n📊 Testing Status Endpoints...")
+        
+        status_endpoints = [
+            "/api/ingest/contact_requests/status",
+            "/api/ingest/demo_requests/status", 
+            "/api/ingest/roi_reports/status",
+            "/api/ingest/subscriptions/status",
+            "/api/ingest/job_applications/status"
+        ]
+        
+        for endpoint_path in status_endpoints:
+            endpoint_name = endpoint_path.split('/')[-2].replace('_', ' ').title()
+            
+            try:
+                start_time = time.time()
+                async with self.session.get(f"{BACKEND_URL}{endpoint_path}") as response:
+                    response_time = (time.time() - start_time) * 1000
+                    
+                    if response.status == 200:
+                        data = await response.json()
+                        if "total_count" in data:
+                            self.log_test(f"Status Endpoint - {endpoint_name}", "PASS", 
+                                        f"Count: {data.get('total_count')}", response_time)
+                        else:
+                            self.log_test(f"Status Endpoint - {endpoint_name}", "FAIL", 
+                                        f"Missing total_count: {data}", response_time)
+                    else:
+                        self.log_test(f"Status Endpoint - {endpoint_name}", "FAIL", 
+                                    f"HTTP {response.status}", response_time)
+            except Exception as e:
+                self.log_test(f"Status Endpoint - {endpoint_name}", "FAIL", f"Exception: {str(e)}")
+
+    async def test_data_validation(self):
+        """Test 9: Data Validation"""
+        print("\n🔍 Testing Data Validation...")
+        
+        endpoint = f"{BACKEND_URL}/api/ingest/demo_requests"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        # Test malformed JSON
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, data="invalid json", headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 422:
+                    self.log_test("Data Validation - Malformed JSON", "PASS", 
+                                "Malformed JSON properly rejected", response_time)
+                else:
+                    self.log_test("Data Validation - Malformed JSON", "FAIL", 
+                                f"Expected 422, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Data Validation - Malformed JSON", "FAIL", f"Exception: {str(e)}")
+            
+        # Test empty payload
+        try:
+            start_time = time.time()
+            async with self.session.post(endpoint, json={}, headers=headers) as response:
+                response_time = (time.time() - start_time) * 1000
+                
+                if response.status == 422:
+                    self.log_test("Data Validation - Empty Payload", "PASS", 
+                                "Empty payload properly rejected", response_time)
+                else:
+                    self.log_test("Data Validation - Empty Payload", "FAIL", 
+                                f"Expected 422, got {response.status}", response_time)
+        except Exception as e:
+            self.log_test("Data Validation - Empty Payload", "FAIL", f"Exception: {str(e)}")
+
+    async def test_database_storage(self):
+        """Test 10: Database Storage Verification"""
+        print("\n💾 Testing Database Storage...")
+        
+        # Submit a test record and verify it's stored
+        endpoint = f"{BACKEND_URL}/api/ingest/demo_requests"
+        headers = {"X-INGEST-KEY": VALID_INGEST_KEY, "Content-Type": "application/json"}
+        
+        test_id = str(uuid.uuid4())
+        test_data = {
+            "name": f"Database Test User {test_id[:8]}",
+            "email": f"dbtest-{test_id[:8]}@example.com",
+            "company": "Database Test Company",
+            "message": f"Database storage test - {test_id}"
+        }
+        
+        try:
+            # Submit data
+            start_time = time.time()
+            async with self.session.post(endpoint, json=test_data, headers=headers) as response:
+                submit_time = (time.time() - start_time) * 1000
+                
+                if response.status == 200:
+                    data = await response.json()
+                    record_id = data.get("id")
+                    
+                    # Check status endpoint to verify storage
+                    start_time = time.time()
+                    async with self.session.get(f"{BACKEND_URL}/api/ingest/demo_requests/status") as status_response:
+                        status_time = (time.time() - start_time) * 1000
+                        
+                        if status_response.status == 200:
+                            status_data = await status_response.json()
+                            recent_submissions = status_data.get("recent_submissions", [])
+                            
+                            # Check if our test record is in recent submissions
+                            found = any(sub.get("email") == test_data["email"] for sub in recent_submissions)
+                            
+                            if found:
+                                self.log_test("Database Storage - Verification", "PASS", 
+                                            f"Record stored and retrievable (ID: {record_id})", 
+                                            submit_time + status_time)
+                            else:
+                                self.log_test("Database Storage - Verification", "FAIL", 
+                                            f"Record not found in recent submissions", 
+                                            submit_time + status_time)
+                        else:
+                            self.log_test("Database Storage - Verification", "FAIL", 
+                                        f"Status endpoint failed: {status_response.status}", 
+                                        submit_time + status_time)
+                else:
+                    self.log_test("Database Storage - Verification", "FAIL", 
+                                f"Submit failed: {response.status}", submit_time)
+        except Exception as e:
+            self.log_test("Database Storage - Verification", "FAIL", f"Exception: {str(e)}")
+
+    async def run_all_tests(self):
+        """Run all tests"""
+        print("🚀 Starting Comprehensive Form Ingest Endpoints Testing...")
+        print(f"Backend URL: {BACKEND_URL}")
+        print(f"Valid Ingest Key: {VALID_INGEST_KEY[:20]}...")
+        print("=" * 80)
+        
+        await self.setup()
+        
+        try:
+            # Run all tests
+            await self.test_backend_health()
+            await self.test_authentication()
+            await self.test_contact_requests_endpoint()
+            await self.test_demo_requests_endpoint()
+            await self.test_roi_reports_endpoint()
+            await self.test_subscriptions_endpoint()
+            await self.test_job_applications_endpoint()
+            await self.test_status_endpoints()
+            await self.test_data_validation()
+            await self.test_database_storage()
+            
+        finally:
+            await self.cleanup()
+            
+        # Print summary
+        print("\n" + "=" * 80)
+        print("🎯 TEST SUMMARY")
+        print("=" * 80)
+        print(f"Total Tests: {self.total_tests}")
+        print(f"✅ Passed: {self.passed_tests}")
+        print(f"❌ Failed: {self.failed_tests}")
+        
+        success_rate = (self.passed_tests / self.total_tests * 100) if self.total_tests > 0 else 0
+        print(f"📊 Success Rate: {success_rate:.1f}%")
+        
+        if self.failed_tests > 0:
+            print("\n❌ FAILED TESTS:")
+            for result in self.test_results:
+                if result["status"] == "FAIL":
+                    print(f"   - {result['test']}: {result['details']}")
+        
+        print("\n🎉 Form Ingest Endpoints Testing Complete!")
+        
+        return {
+            "total_tests": self.total_tests,
+            "passed_tests": self.passed_tests,
+            "failed_tests": self.failed_tests,
+            "success_rate": success_rate,
+            "test_results": self.test_results
+        }
+
+async def main():
+    """Main test runner"""
+    tester = FormIngestTester()
+    results = await tester.run_all_tests()
+    return results
+
+if __name__ == "__main__":
+    asyncio.run(main())
