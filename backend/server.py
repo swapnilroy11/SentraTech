@@ -4215,9 +4215,15 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://netproxy-forms.preview.emergentagent.com",
+        "https://form-simulator.preview.emergentagent.com",
+        "http://localhost:3000",
+        "http://localhost",
+        "*"  # Fallback for development
+    ],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
 )
 
 @app.on_event("startup")
