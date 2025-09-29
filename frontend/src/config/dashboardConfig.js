@@ -10,11 +10,12 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_A
 export const DASHBOARD_CONFIG = {
   // API endpoints for form submissions
   ENDPOINTS: {
-    CONTACT_SALES: '/api/ingest/contact_requests',
-    DEMO_REQUEST: '/api/ingest/demo_requests', 
-    ROI_CALCULATOR: '/api/ingest/roi_reports',
-    NEWSLETTER: '/api/ingest/subscriptions',
-    JOB_APPLICATION: '/api/ingest/job_applications',
+    CONTACT_SALES: '/api/forms/contact-sales',
+    DEMO_REQUEST: '/api/forms/demo-request', 
+    ROI_CALCULATOR: '/api/forms/roi-calculator',
+    NEWSLETTER: '/api/forms/newsletter-signup',
+    JOB_APPLICATION: '/api/forms/job-application',
+    PILOT_REQUEST: '/api/forms/pilot-request',
     CHAT_MESSAGE: '/api/chat/message'
   },
   
