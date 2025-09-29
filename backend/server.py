@@ -1570,9 +1570,26 @@ async def options_demo_request():
 
 @api_router.post("/proxy/demo-request")
 async def proxy_demo_request(request: Request):
-    """Proxy demo request to dashboard"""
+    """Proxy demo request to dashboard with detailed logging"""
     try:
         data = await request.json()
+        
+        # Comprehensive payload logging
+        proxy_logger.info(f"🔎 PROXY RECEIVED DEMO REQUEST PAYLOAD:")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info(f"  - Total fields: {len(data)}")
+        proxy_logger.info(f"  - Name/Full Name: '{data.get('name', 'MISSING')}' / '{data.get('full_name', 'MISSING')}'")
+        proxy_logger.info(f"  - Email/Work Email: '{data.get('email', 'MISSING')}' / '{data.get('work_email', 'MISSING')}'")
+        proxy_logger.info(f"  - Company/Company Name: '{data.get('company', 'MISSING')}' / '{data.get('company_name', 'MISSING')}'")
+        proxy_logger.info(f"  - Phone: '{data.get('phone', 'MISSING')}' (type: {type(data.get('phone'))})")
+        proxy_logger.info(f"  - Website: '{data.get('website', 'MISSING')}' (type: {type(data.get('website'))})")
+        proxy_logger.info(f"  - Message: '{data.get('message', 'MISSING')}' (type: {type(data.get('message'))})")
+        proxy_logger.info(f"  - Call Volume: {data.get('call_volume', 'MISSING')} (type: {type(data.get('call_volume'))})")
+        proxy_logger.info(f"  - Interaction Volume: {data.get('interaction_volume', 'MISSING')} (type: {type(data.get('interaction_volume'))})")
+        proxy_logger.info(f"  - Total Volume: {data.get('total_volume', 'MISSING')} (type: {type(data.get('total_volume'))})")
+        proxy_logger.info(f"  - Typical Range: '{data.get('typical_range', 'MISSING')}' (type: {type(data.get('typical_range'))})")
+        proxy_logger.info(f"  - Preferred Method: '{data.get('preferred_method', 'MISSING')}' (type: {type(data.get('preferred_method'))})")
         
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
