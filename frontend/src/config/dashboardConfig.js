@@ -160,7 +160,7 @@ export const hasNetwork = async () => {
       headers: {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
-        'Origin': actualOrigin
+        'Origin': networkOrigin
       }
     });
     
