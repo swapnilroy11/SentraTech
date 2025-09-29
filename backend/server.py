@@ -1530,9 +1530,27 @@ async def options_contact_sales():
 
 @api_router.post("/proxy/contact-sales")
 async def proxy_contact_sales(request: Request):
-    """Proxy contact sales to dashboard"""
+    """Proxy contact sales to dashboard with detailed logging"""
     try:
         data = await request.json()
+        
+        # Comprehensive payload logging
+        proxy_logger.info(f"🔎 PROXY RECEIVED CONTACT SALES PAYLOAD:")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info(f"  - Total fields: {len(data)}")
+        proxy_logger.info(f"  - Full Name: '{data.get('full_name', 'MISSING')}' (type: {type(data.get('full_name'))})")
+        proxy_logger.info(f"  - Work Email: '{data.get('work_email', 'MISSING')}' (type: {type(data.get('work_email'))})")
+        proxy_logger.info(f"  - Company Name: '{data.get('company_name', 'MISSING')}' (type: {type(data.get('company_name'))})")
+        proxy_logger.info(f"  - Phone: '{data.get('phone', 'MISSING')}' (type: {type(data.get('phone'))})")
+        proxy_logger.info(f"  - Company Website: '{data.get('company_website', 'MISSING')}' (type: {type(data.get('company_website'))})")
+        proxy_logger.info(f"  - Call Volume: {data.get('call_volume', 'MISSING')} (type: {type(data.get('call_volume'))})")
+        proxy_logger.info(f"  - Interaction Volume: {data.get('interaction_volume', 'MISSING')} (type: {type(data.get('interaction_volume'))})")
+        proxy_logger.info(f"  - Total Volume: {data.get('total_volume', 'MISSING')} (type: {type(data.get('total_volume'))})")
+        proxy_logger.info(f"  - Preferred Contact Method: '{data.get('preferred_contact_method', 'MISSING')}' (type: {type(data.get('preferred_contact_method'))})")
+        proxy_logger.info(f"  - Plan Selected: '{data.get('plan_selected', 'MISSING')}' (type: {type(data.get('plan_selected'))})")
+        proxy_logger.info(f"  - Billing Term: '{data.get('billing_term', 'MISSING')}' (type: {type(data.get('billing_term'))})")
+        proxy_logger.info(f"  - Message: '{data.get('message', 'MISSING')}' (type: {type(data.get('message'))})")
         
         # Add timestamp if not present
         if 'timestamp' not in data:
