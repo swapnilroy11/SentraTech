@@ -472,8 +472,11 @@ export const submitChatMessage = async (message, conversationId = null) => {
     
     const response = await fetch(`${BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE}`, {
       method: 'POST',
+      mode: 'cors',                     // Enable CORS
+      credentials: 'include',           // If auth cookies/tokens needed
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         'Origin': 'https://netproxy-forms.preview.emergentagent.com'
       },
       body: JSON.stringify({
