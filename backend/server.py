@@ -1547,6 +1547,11 @@ async def proxy_contact_sales(request: Request):
         logging.error(f"Contact sales proxy error: {str(e)}")
         return {"success": False, "error": "Internal server error"}
 
+@api_router.options("/proxy/demo-request")
+async def options_demo_request():
+    """Handle preflight OPTIONS request for demo request"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/demo-request")
 async def proxy_demo_request(request: Request):
     """Proxy demo request to dashboard"""
