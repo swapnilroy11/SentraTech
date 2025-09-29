@@ -191,6 +191,7 @@ function App() {
                   <Route path="/about-us" element={<AboutUsPage />} />
                   <Route path="/leadership-team" element={<LeadershipTeamPage />} />
                   <Route path="/investor-relations" element={<InvestorRelationsPage />} />
+                  <Route path="/pitch-deck" element={<PitchDeckPage />} />
                   <Route path="/support-center" element={<SupportCenterPage />} />
                   <Route path="/contact-sales-management" element={<ContactSalesPage />} />
                   <Route path="/careers" element={<CareersPage />} />
