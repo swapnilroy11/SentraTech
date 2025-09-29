@@ -198,11 +198,25 @@ const CTASection = () => {
 
     // Network submission with robust fallback and rate limiting
     try {
-      const { submitFormWithRateLimit, showSuccessMessage } =
+      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
       const generateUUID = () => 'demo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Log raw form data for debugging
+      console.log(`🔍 [DEMO-REQUEST] Raw form data:`, {
+        name: `"${formData.name}" (type: ${typeof formData.name})`,
+        email: `"${formData.email}" (type: ${typeof formData.email})`,
+        company: `"${formData.company}" (type: ${typeof formData.company})`,
+        phone: `"${formData.phone}" (type: ${typeof formData.phone})`,
+        message: `"${formData.message}" (type: ${typeof formData.message})`,
+        call_volume: `"${formData.call_volume}" (type: ${typeof formData.call_volume})`,
+        interaction_volume: `"${formData.interaction_volume}" (type: ${typeof formData.interaction_volume})`,
+        website: `"${formData.website}" (type: ${typeof formData.website})`,
+        typical_range: `"${formData.typical_range}" (type: ${typeof formData.typical_range})`,
+        preferred_method: `"${formData.preferred_method}" (type: ${typeof formData.preferred_method})`
+      });
 
       // Enhanced payload with proper field mapping including typical_range
       const demoData = {
@@ -227,6 +241,9 @@ const CTASection = () => {
         created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
+
+      // Log the complete payload before submission
+      logPayload('demo-request', demoData);
 
       // Use rate-limited submission function
       const result = await submitFormWithRateLimit('demo-request', demoData);
