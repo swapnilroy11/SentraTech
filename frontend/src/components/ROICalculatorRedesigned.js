@@ -484,7 +484,7 @@ const ROICalculatorRedesigned = () => {
                 <Card className="bg-gradient-to-br from-[rgba(0,255,65,0.2)] to-[rgba(0,204,51,0.1)] border border-[#00FF41]/30 rounded-xl">
                   <CardContent className="p-6 text-center">
                     <div className="text-[#00FF41] text-sm font-medium mb-2">SentraTech AI</div>
-                    <div className="text-3xl font-bold text-[#00FF41] mb-1">
+                    <div className="text-3xl font-bold text-[#00FF41] mb-1" data-sentra-cost={results.sentraTechMonthlyCost}>
                       {formatCurrency(results.sentraTechMonthlyCost)}
                     </div>
                     <div className="text-xs text-green-300">per month</div>
