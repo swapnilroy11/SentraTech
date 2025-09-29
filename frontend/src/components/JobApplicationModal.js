@@ -173,24 +173,41 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
   };
 
   const submitApplication = async (data) => {
+    // Prevent duplicate submissions
+    if (submitStatus === 'submitting') {
+      console.warn('⚠️ Job application submission already in progress');
+      return;
+    }
+
     try {
       const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
-      // Prepare data in the expected format for the dashboard
+      // Generate unique ID for this submission
+      const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Enhanced payload with proper field mapping for talent acquisition
       const jobData = {
+        id: generateUUID(),
         full_name: data.fullName,
         email: data.email,
+        phone: data.phone || '', // Additional field mapping
+        phone_number: data.phone || '', // Alternative field mapping
         location: data.location || '',
         linkedin_profile: data.linkedinProfile || '',
         position: data.position || 'Customer Support Specialist',
+        position_applied: data.position || 'Customer Support Specialist', // Additional field mapping
         preferred_shifts: Array.isArray(data.preferredShifts) 
           ? data.preferredShifts.join(', ') 
           : data.preferredShifts || '',
         availability_start_date: data.availabilityStartDate || '',
         cover_note: data.coverNote || '',
+        motivation_text: data.coverNote || '', // Additional field mapping
+        resume_url: data.resumeUrl || '', // Additional field mapping
         source: 'careers_modal',
         consent_for_storage: data.consentForStorage || false,
+        status: 'new',
+        created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
 
