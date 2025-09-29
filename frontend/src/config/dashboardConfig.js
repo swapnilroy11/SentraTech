@@ -739,7 +739,33 @@ export const testProxyInterference = async () => {
   }
 };
 
-// Initialize queue flushing on import
+// Ensure dashboard is in live mode (disable any mock/local data modes)
+export const ensureLiveMode = () => {
+  // Disable any potential mock configurations
+  if (typeof window !== 'undefined') {
+    window.dashboardConfig = {
+      ...window.dashboardConfig,
+      mock: false,
+      localDataMode: false,
+      fallback: false,
+      testMode: false
+    };
+    
+    // Clear any test flags from localStorage
+    try {
+      localStorage.removeItem('dashboard_mock_mode');
+      localStorage.removeItem('dashboard_test_mode');
+      localStorage.removeItem('local_data_mode');
+    } catch (error) {
+      console.warn('Could not clear localStorage flags:', error);
+    }
+  }
+  
+  console.log('🎯 Dashboard configured for LIVE mode - all submissions will go to production');
+};
+
+// Initialize queue flushing and ensure live mode on import
 setupQueueFlushing();
+ensureLiveMode();
 
 export default DASHBOARD_CONFIG;
