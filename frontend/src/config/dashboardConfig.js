@@ -140,7 +140,8 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       console.log(`📡 Network response received:`, {
         status: response.status,
         statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
+        headers: Object.fromEntries(response.headers.entries()),
+        url: response.url // Show the actual URL that responded
       });
       
       if (!response.ok) {
