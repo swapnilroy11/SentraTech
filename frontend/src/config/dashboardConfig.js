@@ -45,9 +45,9 @@ export const hasNetwork = async () => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
     
-    // Try a simple GET to a form endpoint since health might not support HEAD
-    const response = await fetch(`${BACKEND_URL}/api/forms/newsletter-signup`, {
-      method: 'OPTIONS', // CORS preflight - lightweight test
+    // Use GET request to test connectivity - more universally supported than HEAD/OPTIONS
+    const response = await fetch(`${BACKEND_URL}${DASHBOARD_CONFIG.HEALTHCHECK_URL}`, {
+      method: 'GET',
       cache: 'no-cache',
       signal: controller.signal,
       headers: {
@@ -58,9 +58,8 @@ export const hasNetwork = async () => {
     });
     
     clearTimeout(timeoutId);
-    // Accept both 200 (OK) and 405 (Method not allowed) as "online"
-    // 405 means the endpoint exists but doesn't support OPTIONS
-    const hasConnectivity = response.ok || response.status === 405;
+    // Accept 200 (OK) as online, and even some error codes that indicate the endpoint exists
+    const hasConnectivity = response.ok || (response.status >= 400 && response.status < 500);
     console.log(`🌐 Network connectivity probe result: ${hasConnectivity ? '✅ ONLINE' : '❌ OFFLINE'} (${response.status})`);
     return hasConnectivity;
   } catch (error) {
