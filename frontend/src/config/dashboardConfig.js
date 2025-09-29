@@ -212,18 +212,24 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       
       const fullUrl = `${BACKEND_URL}${endpoint}`;
+      const actualOrigin = window.location.origin;
+      const requestHeaders = {
+        'Content-Type': 'application/json',
+        'Origin': actualOrigin
+      };
+      
       console.log(`🌐 Attempting network submission (attempt ${attempt}/${retries}):`, {
         url: fullUrl,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Origin': 'https://unified-forms.preview.emergentagent.com'
-        },
-        data: JSON.stringify(data, null, 2)
+        headers: requestHeaders,
+        data: JSON.stringify(data, null, 2),
+        browserOrigin: actualOrigin,
+        timestamp: new Date().toISOString()
       });
       
-      // Log the exact curl equivalent for debugging
-      console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: https://unified-forms.preview.emergentagent.com" -d '${JSON.stringify(data)}'`);
+      // Log multiple curl equivalents for comparison
+      console.log(`🐛 CURL EQUIVALENT (Browser Origin):`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${actualOrigin}" -d '${JSON.stringify(data)}'`);
+      console.log(`🐛 CURL EQUIVALENT (No Origin):`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -d '${JSON.stringify(data)}'`);
       
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
