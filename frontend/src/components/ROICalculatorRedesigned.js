@@ -79,6 +79,7 @@ const ROICalculatorRedesigned = () => {
   const [email, setEmail] = useState('');
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [submissionID, setSubmissionID] = useState(null); // Track submission ID
 
   // Validation states
   const [callVolumeError, setCallVolumeError] = useState('');
