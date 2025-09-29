@@ -180,7 +180,7 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     }
 
     try {
-      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
+      const { safeSubmit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
