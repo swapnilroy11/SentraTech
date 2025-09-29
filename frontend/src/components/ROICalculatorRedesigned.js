@@ -216,10 +216,17 @@ const ROICalculatorRedesigned = () => {
   const handleEmailSubmission = async () => {
     if (!email || !results) return;
 
-    // Prevent duplicate submissions using safe submit wrapper
-    if (isSubmittingReport) {
-      console.warn('⚠️ ROI Report submission already in progress');
+    // Prevent duplicate submissions - check if already submitted for this data
+    if (isSubmittingReport || reportSubmitted) {
+      console.warn('⚠️ ROI Report already submitted or submission in progress');
       return;
+    }
+
+    // Generate a consistent ID for this submission
+    if (!submissionID) {
+      const newID = `roi_${email.replace(/[^a-zA-Z0-9]/g, '')}_${selectedCountry.replace(/[^a-zA-Z0-9]/g, '')}_${Date.now()}`;
+      setSubmissionID(newID);
+      console.log(`🆔 Generated ROI submission ID: ${newID}`);
     }
 
     setIsSubmittingReport(true);
