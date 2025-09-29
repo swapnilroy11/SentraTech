@@ -17,6 +17,50 @@ export const RATE_LIMITS = {
 // Track last submission timestamps for rate limiting
 const lastSubmissionTimestamps = {};
 
+// Track pending submissions per form type to prevent duplicates
+const submittingForms = {};
+
+// Generic safe submission wrapper with duplicate prevention
+export const safeSubmit = async (formType, payload, options = {}) => {
+  const {
+    disableDuration = 5000, // 5 seconds default
+    onSubmitStart = null,
+    onSubmitEnd = null,
+    onDuplicate = null
+  } = options;
+
+  // Check if this form type is already submitting
+  if (submittingForms[formType]) {
+    console.warn(`⚠️ ${formType} is already submitting. Blocking duplicate submission.`);
+    if (onDuplicate) onDuplicate();
+    return { success: false, reason: 'duplicate_submission', message: 'Form is already being submitted' };
+  }
+
+  // Mark as submitting
+  submittingForms[formType] = true;
+  console.log(`🔒 ${formType} submission started - blocking duplicates`);
+
+  // Trigger submit start callback (for UI updates)
+  if (onSubmitStart) onSubmitStart();
+
+  try {
+    // Call the rate-limited submission function
+    const result = await submitFormWithRateLimit(formType, payload);
+    console.log(`✅ ${formType} submitted successfully via safe submit`);
+    return result;
+  } catch (error) {
+    console.error(`❌ ${formType} submission error:`, error);
+    throw error;
+  } finally {
+    // Re-enable after specified duration to prevent immediate re-submit
+    setTimeout(() => {
+      submittingForms[formType] = false;
+      console.log(`🔓 ${formType} submission re-enabled after ${disableDuration}ms`);
+      if (onSubmitEnd) onSubmitEnd();
+    }, disableDuration);
+  }
+};
+
 // Get backend URL from environment - using local backend for proxy
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
