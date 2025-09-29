@@ -207,12 +207,12 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
-        {/* Key Business Metrics */}
+        {/* Key Validation Metrics */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Key Business Metrics</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Early Validation & Market Traction</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Strong financial performance driven by enterprise customer adoption and AI technology leadership.
+              Strong early indicators from pilot implementations demonstrate product-market fit and competitive advantages.
             </p>
           </div>
           
