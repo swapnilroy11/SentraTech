@@ -71,38 +71,38 @@ const InvestorRelationsPage = () => {
     }
   ];
 
-  const investorUpdates = [
+  const milestones = [
     {
-      title: 'Q3 2024 Investor Update',
+      title: 'Product Development Milestone',
+      date: 'November 2024',
+      type: 'Technical Achievement',
+      highlights: [
+        'Core AI automation engine reaching 70% accuracy',
+        'Integration framework supporting 15+ CRM platforms',
+        'Real-time analytics dashboard completed',
+        'Multi-language support for 8 languages implemented'
+      ]
+    },
+    {
+      title: 'Pilot Customer Validation',
       date: 'October 2024',
-      type: 'Quarterly Report',
+      type: 'Market Validation',
       highlights: [
-        '40% quarter-over-quarter ARR growth',
-        'Expanded to European market with 3 new offices',
-        'Launched enterprise AI analytics suite',
-        'Achieved SOC 2 Type II certification'
+        '3 enterprise pilot customers onboarded',
+        '65% average ticket automation rate achieved',
+        '40% reduction in response time documented',
+        'Customer satisfaction scores improved by 25%'
       ]
     },
     {
-      title: 'Series B Funding Announcement',
-      date: 'August 2024',
-      type: 'Press Release',
+      title: 'Team & Infrastructure',
+      date: 'September 2024',
+      type: 'Company Development',
       highlights: [
-        '$50M Series B led by Andreessen Horowitz',
-        'Plans for global expansion and AI research investment',
-        'New board member appointment',
-        'Strategic partnership with Microsoft announced'
-      ]
-    },
-    {
-      title: 'Q2 2024 Financial Results',
-      date: 'July 2024',
-      type: 'Quarterly Report',
-      highlights: [
-        'Record revenue of $8.2M in Q2',
-        'Net Revenue Retention reached 135%',
-        'Customer base grew to 500+ enterprises',
-        'Gross margin improved to 88%'
+        'AI/ML team expanded to 4 engineers',
+        'Production infrastructure architecture finalized',
+        'Security compliance framework established',
+        'Advisory board formed with industry experts'
       ]
     }
   ];
