@@ -18,7 +18,7 @@ VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4
 INVALID_INGEST_KEY = "invalid-key-12345"
 EMERGENT_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
-class FormIngestTester:
+class SentraTechBackendTester:
     def __init__(self):
         self.session = None
         self.test_results = []
