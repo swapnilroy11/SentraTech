@@ -728,7 +728,7 @@ class FormIngestTester:
 
     async def run_all_tests(self):
         """Run all tests"""
-        print("🚀 Starting Comprehensive Form Ingest Endpoints Testing...")
+        print("🚀 Starting Comprehensive SentraTech Backend Testing...")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Valid Ingest Key: {VALID_INGEST_KEY[:20]}...")
         print("=" * 80)
@@ -739,11 +739,22 @@ class FormIngestTester:
             # Run all tests
             await self.test_backend_health()
             await self.test_authentication()
+            
+            # Test ingest endpoints
             await self.test_contact_requests_endpoint()
             await self.test_demo_requests_endpoint()
             await self.test_roi_reports_endpoint()
             await self.test_subscriptions_endpoint()
             await self.test_job_applications_endpoint()
+            
+            # Test proxy endpoints
+            await self.test_proxy_demo_request()
+            await self.test_proxy_contact_sales()
+            await self.test_proxy_newsletter_signup()
+            await self.test_proxy_roi_calculator()
+            await self.test_proxy_job_application()
+            
+            # Test status and validation
             await self.test_status_endpoints()
             await self.test_data_validation()
             await self.test_database_storage()
@@ -768,7 +779,7 @@ class FormIngestTester:
                 if result["status"] == "FAIL":
                     print(f"   - {result['test']}: {result['details']}")
         
-        print("\n🎉 Form Ingest Endpoints Testing Complete!")
+        print("\n🎉 SentraTech Backend Testing Complete!")
         
         return {
             "total_tests": self.total_tests,
