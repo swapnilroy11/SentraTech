@@ -434,14 +434,13 @@ export const submitChatMessage = async (message, conversationId = null) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), DASHBOARD_CONFIG.TIMEOUT.CHAT);
     
-    const response = await fetch(`${BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE}`, {
+    const response = await fetch(DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE, {
       method: 'POST',
-      mode: 'cors',                     // Enable CORS
-      credentials: 'include',           // If auth cookies/tokens needed
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Origin': 'https://netproxy-forms.preview.emergentagent.com'
+        'Origin': window.location.origin
       },
       body: JSON.stringify({
         message,
