@@ -21,20 +21,7 @@ const ChatWidget = () => {
     try {
       const { isOnline } = await import('../config/dashboardConfig.js');
       
-      // Check if offline and handle immediately
-      if (!isOnline()) {
-        console.warn('Browser offline, starting chat in offline mode');
-        setChatSessionId(`offline_${Date.now()}`);
-        setChatMessages([{
-          id: Date.now(),
-          content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Currently offline)",
-          sender: 'assistant',
-          timestamp: new Date()
-        }]);
-        setIsConnecting(false);
-        setConnectionError(null);
-        return;
-      }
+      // Always attempt network session creation - let error handling determine fallback
 
       // Try to create network session
       try {
