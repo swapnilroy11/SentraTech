@@ -8,15 +8,15 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_A
 
 // Dashboard configuration
 export const DASHBOARD_CONFIG = {
-  // API endpoints for form submissions (no /api prefix as it's in BACKEND_URL)
+  // API endpoints for form submissions - using local backend proxy to avoid CORS
   ENDPOINTS: {
-    CONTACT_SALES: '/forms/contact-sales',
-    DEMO_REQUEST: '/forms/demo-request', 
-    ROI_CALCULATOR: '/forms/roi-calculator',
-    NEWSLETTER: '/forms/newsletter-signup',
-    JOB_APPLICATION: '/forms/job-application',
-    PILOT_REQUEST: '/forms/pilot-request',
-    CHAT_MESSAGE: '/chat/message'
+    CONTACT_SALES: '/api/proxy/contact-sales',
+    DEMO_REQUEST: '/api/proxy/demo-request', 
+    ROI_CALCULATOR: '/api/proxy/roi-calculator',
+    NEWSLETTER: '/api/proxy/newsletter-signup',
+    JOB_APPLICATION: '/api/proxy/job-application',
+    PILOT_REQUEST: '/api/proxy/pilot-request',
+    CHAT_MESSAGE: '/api/proxy/chat-message'
   },
   
   // Healthcheck endpoint for real connectivity testing
