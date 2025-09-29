@@ -109,10 +109,7 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
 
 // Submit chat message with AI response simulation fallback
 export const submitChatMessage = async (message, conversationId = null) => {
-  // Immediate offline fallback if no network
-  if (!isOnline()) {
-    return generateOfflineResponse(message);
-  }
+  // Always attempt network call first - let error handling determine fallback
 
   try {
     const controller = new AbortController();
