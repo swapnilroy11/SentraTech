@@ -120,7 +120,7 @@ export const submitChatMessage = async (message, conversationId = null) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+        'Origin': 'https://unified-forms.preview.emergentagent.com'
       },
       body: JSON.stringify({
         message,
