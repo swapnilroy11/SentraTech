@@ -98,14 +98,21 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests and chrome-extension requests
+  // Critical API routes: Always bypass cache for form submissions, health checks, etc.
+  if (shouldBypassCache(url.pathname)) {
+    console.log('🌐 SW: Bypassing cache for critical API route:', url.pathname);
+    event.respondWith(fetch(request)); // Direct network request, no caching
+    return;
+  }
+
+  // Skip non-GET requests and chrome-extension requests for caching strategies
   if (request.method !== 'GET' || url.protocol === 'chrome-extension:') {
     return;
   }
 
   // Handle different request types with appropriate strategies
   if (url.pathname.startsWith('/api/')) {
-    // API requests
+    // API requests (non-critical ones)
     event.respondWith(handleApiRequest(request));
   } else if (isStaticAsset(request)) {
     // Static assets (JS, CSS, images, fonts)
