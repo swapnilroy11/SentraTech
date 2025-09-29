@@ -405,31 +405,31 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
-        {/* Recent Investor Updates */}
+        {/* Recent Milestones */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Recent Updates</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Recent Milestones</h2>
             <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Stay informed with our latest financial results, strategic announcements, and business developments.
+              Key achievements demonstrating progress toward product-market fit and readiness for scaling.
             </p>
           </div>
           
           <div className="grid md:grid-cols-1 gap-6">
-            {investorUpdates.map((update, index) => (
+            {milestones.map((milestone, index) => (
               <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">{update.title}</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">{milestone.title}</h3>
                     <div className="flex items-center space-x-4 text-sm">
-                      <span className="text-[#00FF41] font-medium">{update.type}</span>
-                      <span className="text-[rgb(161,161,170)]">{update.date}</span>
+                      <span className="text-[#00FF41] font-medium">{milestone.type}</span>
+                      <span className="text-[rgb(161,161,170)]">{milestone.date}</span>
                     </div>
                   </div>
                   <FileText size={24} className="text-[#00FF41]" />
                 </div>
                 
                 <div className="grid md:grid-cols-2 gap-4">
-                  {update.highlights.map((highlight, hIndex) => (
+                  {milestone.highlights.map((highlight, hIndex) => (
                     <div key={hIndex} className="flex items-start space-x-2">
                       <span className="text-[#00FF41] mt-1">•</span>
                       <span className="text-[rgb(218,218,218)] text-sm">{highlight}</span>
