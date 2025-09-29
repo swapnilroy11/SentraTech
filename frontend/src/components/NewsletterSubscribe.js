@@ -87,8 +87,16 @@ const NewsletterSubscribe = () => {
       // Log the complete payload before submission
       logPayload('newsletter', subscriptionData);
 
-      // Use rate-limited submission function
-      const result = await submitFormWithRateLimit('newsletter', subscriptionData);
+      // Use safe submission wrapper with duplicate prevention
+      const result = await safeSubmit('newsletter', subscriptionData, {
+        disableDuration: 3000, // 3 seconds for Newsletter
+        onSubmitStart: () => setStatus('loading'),
+        onSubmitEnd: () => setStatus(null),
+        onDuplicate: () => {
+          setStatus('error');
+          setMessage('Newsletter subscription already in progress');
+        }
+      });
 
       if (result.success) {
         showSuccessMessage(
