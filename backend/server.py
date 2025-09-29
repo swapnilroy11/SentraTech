@@ -1445,7 +1445,7 @@ from fastapi import Request
 
 # Dashboard API configuration
 DASHBOARD_BASE_URL = "https://netproxy-forms.preview.emergentagent.com/api"
-DASHBOARD_ORIGIN = "https://netproxy-forms.preview.emergentagent.com"
+DASHBOARD_ORIGIN = "https://www.sentratech.net"
 
 async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
     """Proxy form submission to dashboard API with API key authentication"""
