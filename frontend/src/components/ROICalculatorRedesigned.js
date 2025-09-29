@@ -528,7 +528,7 @@ const ROICalculatorRedesigned = () => {
                 <Card className="bg-gradient-to-r from-[rgba(0,221,255,0.1)] to-[rgba(0,153,204,0.05)] border border-blue-400/20 rounded-xl">
                   <CardContent className="p-6 text-center">
                     <div className="text-white text-lg font-semibold mb-2">Cost Reduction</div>
-                    <div className="text-5xl font-bold text-blue-400 mb-2">
+                    <div className="text-5xl font-bold text-blue-400 mb-2" data-cost-reduction={results.costReduction}>
                       {formatPercentage(results.costReduction)}
                     </div>
                     <div className="text-sm text-[rgb(161,161,170)]">
