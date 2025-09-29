@@ -1420,21 +1420,34 @@ DASHBOARD_BASE_URL = "https://netproxy-forms.preview.emergentagent.com/api"
 DASHBOARD_ORIGIN = "https://netproxy-forms.preview.emergentagent.com"
 
 async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
-    """Proxy form submission to dashboard API with header forwarding"""
+    """Proxy form submission to dashboard API with API key authentication"""
     try:
-        # Prepare headers - preserve auth headers from original request
+        # Get API key from environment
+        api_key = os.environ.get('EMERGENT_API_KEY')
+        if not api_key:
+            logging.error("EMERGENT_API_KEY not found in environment")
+            return {
+                "success": False,
+                "error": "API key not configured"
+            }
+        
+        # Prepare headers with API key authentication
         forward_headers = {
             "Content-Type": "application/json",
+            "Accept": "application/json",
             "Origin": DASHBOARD_ORIGIN,
             "User-Agent": "SentraTech-Backend/1.0",
-            "Accept": "application/json"
+            "X-API-Key": api_key  # Add API key for authentication
         }
         
-        # Forward authentication and authorization headers if present
+        # Forward additional authentication headers if present
         if original_headers:
-            for header_name in ["cookie", "authorization", "x-api-key", "x-auth-token"]:
+            for header_name in ["cookie", "authorization", "x-auth-token"]:
                 if header_name in original_headers:
                     forward_headers[header_name] = original_headers[header_name]
+        
+        logging.info(f"🔑 Dashboard proxy request with API key: {endpoint}")
+        logging.info(f"📋 Headers: {dict(forward_headers)}")  # Log headers (API key will be logged for debugging)
         
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
