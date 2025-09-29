@@ -238,36 +238,75 @@ const ROICalculatorRedesigned = () => {
         callVolume: `"${callVolume}" (type: ${typeof callVolume})`,
         interactionVolume: `"${interactionVolume}" (type: ${typeof interactionVolume})`,
         results: results ? {
+          traditionalMonthlyCost: results.traditionalMonthlyCost,
+          sentraTechMonthlyCost: results.sentraTechMonthlyCost,
           monthlySavings: results.monthlySavings,
+          yearlySavings: results.yearlySavings,
           roi: results.roi,
-          paybackPeriod: results.paybackPeriod,
           costReduction: results.costReduction,
-          totalSavings: results.totalSavings
+          bundlesNeeded: results.bundlesNeeded,
+          humanHandledPercentage: results.humanHandledPercentage
         } : 'null'
       });
 
-      // Enhanced payload with proper field mapping
+      // Enhanced payload capturing ALL calculated values from results state
       const roiData = {
         id: generateUUID(),
         email: email,
         country: selectedCountry,
+        
+        // Input volumes
         call_volume: parseInt(callVolume) || 0,
         interaction_volume: parseInt(interactionVolume) || 0,
         total_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0),
-        monthly_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0), // Additional field mapping
-        calculated_savings: results?.monthlySavings || 0,
-        monthly_savings: results?.monthlySavings || 0, // Additional field mapping
-        bpo_spending: results?.currentCost || 0, // Map current cost as BPO spending
-        sentratech_spending: results?.newCost || 0, // Map new cost as SentraTech spending
-        bundles: 1, // Default to 1 bundle
+        monthly_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0),
+        
+        // Calculated costs (captured from results state)
+        bpo_spending: results?.traditionalMonthlyCost || 0,
+        sentratech_spending: results?.sentraTechMonthlyCost || 0,
+        yearly_traditional_cost: results?.yearlyTraditionalCost || 0,
+        yearly_sentratech_cost: results?.yearlySentraTechCost || 0,
+        
+        // Calculated savings
+        monthly_savings: results?.monthlySavings || 0,
+        yearly_savings: results?.yearlySavings || 0,
+        calculated_savings: results?.monthlySavings || 0, // Alternative field mapping
+        
+        // Performance metrics
         roi_percentage: results?.roi || 0,
-        payback_period: results?.paybackPeriod || 0,
-        cost_reduction: results?.costReduction || 0, // Additional field mapping
+        cost_reduction: results?.costReduction || 0,
+        bundles: results?.bundlesNeeded || 1,
+        human_handled_percentage: results?.humanHandledPercentage || 0,
+        
+        // Metadata
         status: 'new',
         source: 'website_roi_calculator',
         created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
+
+      // Additional DOM capture as fallback (adapting your concept to React)
+      try {
+        // Try to capture any additional values from DOM if available
+        const domValues = {
+          displayed_roi: document.querySelector('[data-roi-percentage]')?.textContent?.replace(/[%,\s]/g, '') || null,
+          displayed_savings: document.querySelector('[data-monthly-savings]')?.textContent?.replace(/[\$,K\s]/g, '') || null,
+          displayed_bpo_cost: document.querySelector('[data-bpo-cost]')?.textContent?.replace(/[\$,K\s]/g, '') || null,
+          displayed_sentra_cost: document.querySelector('[data-sentra-cost]')?.textContent?.replace(/[\$,K\s]/g, '') || null
+        };
+        
+        console.log(`🎯 [ROI-CALCULATOR] DOM fallback values:`, domValues);
+        
+        // Use DOM values as fallback if results state is missing
+        if (!results && (domValues.displayed_roi || domValues.displayed_savings)) {
+          roiData.roi_percentage = parseFloat(domValues.displayed_roi) || roiData.roi_percentage;
+          roiData.monthly_savings = parseFloat(domValues.displayed_savings) * 1000 || roiData.monthly_savings;
+          roiData.bpo_spending = parseFloat(domValues.displayed_bpo_cost) * 1000 || roiData.bpo_spending;
+          roiData.sentratech_spending = parseFloat(domValues.displayed_sentra_cost) * 1000 || roiData.sentratech_spending;
+        }
+      } catch (domError) {
+        console.warn('🔍 [ROI-CALCULATOR] DOM capture failed (using results state only):', domError.message);
+      }
 
       // Log the complete payload before submission
       logPayload('roi-calculator', roiData);
