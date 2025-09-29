@@ -18,6 +18,32 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 proxy_logger = logging.getLogger("proxy_debug")
+
+# In-memory store for recent request IDs (use Redis for production scaling)
+recent_requests = {}
+IDEMPOTENCY_WINDOW = 60  # 60 seconds window for duplicate detection
+
+def is_duplicate_request(request_id: str) -> bool:
+    """Check if request ID has been seen recently within the idempotency window"""
+    if not request_id:
+        return False
+    
+    now = time.time()
+    last_seen = recent_requests.get(request_id)
+    
+    if last_seen and (now - last_seen) < IDEMPOTENCY_WINDOW:
+        return True
+    
+    # Store current request
+    recent_requests[request_id] = now
+    
+    # Clean up old entries to prevent memory bloat
+    cutoff = now - IDEMPOTENCY_WINDOW
+    keys_to_remove = [k for k, v in recent_requests.items() if v < cutoff]
+    for key in keys_to_remove:
+        del recent_requests[key]
+    
+    return False
 from pydantic import BaseModel, Field, EmailStr, validator
 from typing import List, Optional, Dict, Any
 import uuid
