@@ -89,8 +89,18 @@ const NewsletterSubscribe = () => {
           setStatus(null);
           setMessage('');
         }, 5000);
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        setStatus('error');
+        setMessage(result.message || 'Please wait before subscribing again');
+        
+        // Clear rate limit message after the remaining time
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, (result.remainingTime || 3) * 1000);
       } else {
-        throw new Error(result.error || 'Subscription failed');
+        throw new Error(result.error || result.message || 'Subscription failed');
       }
     } catch (error) {
       // Fallback to offline simulation on any error
