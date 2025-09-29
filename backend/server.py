@@ -1658,8 +1658,12 @@ async def proxy_chat_message(request: Request):
             return result['data']
         else:
             # Return offline chat response as fallback
-            from config.dashboardConfig import generateOfflineResponse
-            offline_response = generateOfflineResponse(data.get('message', ''))
+            offline_response = {
+                "success": True,
+                "response": "Thank you for your message! Our AI system will help you find the right solution. Our team will follow up with you soon.",
+                "conversation_id": f"offline_{int(time.time() * 1000)}",
+                "mode": "offline"
+            }
             return offline_response
             
     except Exception as e:
