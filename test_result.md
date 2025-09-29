@@ -75,6 +75,7 @@ test_plan:
     - "Comprehensive SentraTech Forms Dashboard Synchronization Testing"
     - "Support Center Page FAQ Category Scroll Jumping Fix Testing"
     - "Comprehensive SentraTech Forms Backend Testing"
+    - "Form Ingest Endpoints with Network Restoration Functionality Testing"
   test_all: false
   test_priority: "high_first"
 
