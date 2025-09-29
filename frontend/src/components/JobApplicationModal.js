@@ -229,8 +229,13 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         setTimeout(() => {
           resetForm();
         }, 3000);
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        console.warn('Job application rate limited:', result.message);
+        setErrors({ general: result.message || 'Please wait before submitting another application' });
+        setSubmitStatus('error');
       } else {
-        throw new Error(result.error || 'Job application submission failed');
+        throw new Error(result.error || result.message || 'Job application submission failed');
       }
     } catch (error) {
       // Fallback to offline simulation on any error
