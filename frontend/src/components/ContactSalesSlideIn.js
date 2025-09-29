@@ -236,17 +236,34 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
     setSubmitStatus(null);
 
     try {
-      // Prepare data for new dashboard endpoint
+      // Generate unique ID for this submission
+      const generateUUID = () => 'contact_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Enhanced payload with proper field mapping for contact sales
       const dashboardData = {
+        id: generateUUID(),
         full_name: formData.fullName,
+        name: formData.fullName, // Additional field mapping
         work_email: formData.workEmail,
+        email: formData.workEmail, // Additional field mapping
         company_name: formData.companyName,
+        company: formData.companyName, // Additional field mapping
         message: formData.message || `Interested in ${formData.planSelected || 'SentraTech'} plan`,
         phone: formData.phone || '',
+        phone_number: formData.phone || '', // Additional field mapping
         company_website: formData.companyWebsite || '',
+        website: formData.companyWebsite || '', // Additional field mapping
         call_volume: parseInt(formData.callVolume) || 0,
         interaction_volume: parseInt(formData.interactionVolume) || 0,
-        preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone'
+        total_volume: (parseInt(formData.callVolume) || 0) + (parseInt(formData.interactionVolume) || 0),
+        preferred_contact_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone',
+        preferred_method: formData.preferredContactMethod === 'email' ? 'email' : 'phone', // Additional field mapping
+        plan_selected: formData.planSelected || 'SentraTech',
+        billing_term: formData.billingTerm || 'monthly',
+        status: 'new',
+        source: 'website_contact_sales',
+        created: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       // Network submission with robust fallback and rate limiting
