@@ -217,9 +217,9 @@ const ROICalculatorRedesigned = () => {
 
     setIsSubmittingReport(true);
     
-    // Network submission with robust fallback
+    // Network submission with robust fallback and rate limiting
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+      const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
       const roiData = {
@@ -234,13 +234,8 @@ const ROICalculatorRedesigned = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Always attempt network submission - let error handling determine fallback
-
-      const result = await submitFormToDashboard(
-        DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
-        roiData,
-        { formType: 'roi_calculator' }
-      );
+      // Use rate-limited submission function
+      const result = await submitFormWithRateLimit('roi-calculator', roiData);
 
       if (result.success) {
         showSuccessMessage(
