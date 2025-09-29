@@ -510,6 +510,78 @@ export const setupQueueFlushing = () => {
   }, 5 * 60 * 1000);
 };
 
+// Test for proxy/caching interference
+export const testProxyInterference = async () => {
+  console.log('🔍 Testing for proxy/cache interference...');
+  
+  const testUrl = `${BACKEND_URL}/forms/newsletter-signup`;
+  const uniqueId = Date.now();
+  const testData = { email: `proxy-test-${uniqueId}@example.com`, test: true };
+  
+  // Test 1: Direct fetch without any special headers
+  try {
+    const response1 = await fetch(testUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testData)
+    });
+    console.log('✅ Direct POST (no Origin):', {
+      status: response1.status,
+      headers: Object.fromEntries(response1.headers.entries()),
+      url: response1.url
+    });
+    const result1 = await response1.json();
+    console.log('📝 Response body:', result1);
+  } catch (error) {
+    console.error('❌ Direct POST failed:', error.message);
+  }
+  
+  // Test 2: With Origin header
+  try {
+    const response2 = await fetch(testUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': window.location.origin
+      },
+      body: JSON.stringify({ ...testData, withOrigin: true })
+    });
+    console.log('✅ POST with Origin:', {
+      status: response2.status,
+      headers: Object.fromEntries(response2.headers.entries()),
+      url: response2.url
+    });
+    const result2 = await response2.json();
+    console.log('📝 Response body:', result2);
+  } catch (error) {
+    console.error('❌ POST with Origin failed:', error.message);
+  }
+  
+  // Test 3: Force bypass cache
+  try {
+    const response3 = await fetch(`${testUrl}?t=${uniqueId}`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': window.location.origin,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
+      },
+      body: JSON.stringify({ ...testData, cacheBypass: true })
+    });
+    console.log('✅ POST with cache bypass:', {
+      status: response3.status,
+      headers: Object.fromEntries(response3.headers.entries()),
+      url: response3.url
+    });
+    const result3 = await response3.json();
+    console.log('📝 Response body:', result3);
+  } catch (error) {
+    console.error('❌ POST with cache bypass failed:', error.message);
+  }
+};
+
 // Initialize queue flushing on import
 setupQueueFlushing();
 
