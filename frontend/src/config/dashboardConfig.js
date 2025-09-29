@@ -452,9 +452,13 @@ export const submitChatMessage = async (message, conversationId = null) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), DASHBOARD_CONFIG.TIMEOUT.CHAT);
     
-    const response = await fetch(DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE, {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+    const chatEndpoint = `${BACKEND_URL}${DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE}`;
+    
+    const response = await fetch(chatEndpoint, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
