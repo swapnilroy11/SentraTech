@@ -20,25 +20,25 @@ const lastSubmissionTimestamps = {};
 // Get backend URL from environment - using local backend for proxy
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
-// Dashboard configuration
+// Dashboard configuration - PRODUCTION ENDPOINTS
 export const DASHBOARD_CONFIG = {
-  // API endpoints for form submissions - using local backend proxy to avoid CORS
+  // Direct production API endpoints (no proxy needed)
   ENDPOINTS: {
-    CONTACT_SALES: '/api/proxy/contact-sales',
-    DEMO_REQUEST: '/api/proxy/demo-request', 
-    ROI_CALCULATOR: '/api/proxy/roi-calculator',
-    NEWSLETTER: '/api/proxy/newsletter-signup',
-    JOB_APPLICATION: '/api/proxy/job-application',
-    PILOT_REQUEST: '/api/proxy/pilot-request',
-    CHAT_MESSAGE: '/api/proxy/chat-message'
+    CONTACT_SALES: 'https://sentradash.preview.emergentagent.com/api/forms/contact-sales',
+    DEMO_REQUEST: 'https://sentradash.preview.emergentagent.com/api/forms/demo-request', 
+    ROI_CALCULATOR: 'https://sentradash.preview.emergentagent.com/api/forms/roi-calculator',
+    NEWSLETTER: 'https://sentradash.preview.emergentagent.com/api/forms/newsletter-signup',
+    JOB_APPLICATION: 'https://sentradash.preview.emergentagent.com/api/forms/job-application',
+    PILOT_REQUEST: 'https://sentradash.preview.emergentagent.com/api/forms/pilot-request',
+    CHAT_MESSAGE: 'https://sentradash.preview.emergentagent.com/api/chat/message'
   },
   
-  // Healthcheck endpoint for real connectivity testing
-  HEALTHCHECK_URL: '/api/health',
+  // Healthcheck endpoint for connectivity testing
+  HEALTHCHECK_URL: 'https://sentradash.preview.emergentagent.com/api/health',
   
   // Dashboard API configuration
   DASHBOARD_API: {
-    BASE_URL: 'https://netproxy-forms.preview.emergentagent.com/api',
+    BASE_URL: 'https://sentradash.preview.emergentagent.com/api',
     ENDPOINTS: {
       CONTACT_SALES: '/forms/contact-sales',
       DEMO_REQUEST: '/forms/demo-request',
