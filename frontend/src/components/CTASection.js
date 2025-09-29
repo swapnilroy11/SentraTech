@@ -190,9 +190,9 @@ const CTASection = () => {
     setIsSubmitting(true);
     setError(null);
     
-    // Network submission with robust fallback
+    // Network submission with robust fallback and rate limiting
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+      const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
       const demoData = {
@@ -208,13 +208,8 @@ const CTASection = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Always attempt network submission - let error handling determine fallback
-
-      const result = await submitFormToDashboard(
-        DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST,
-        demoData,
-        { formType: 'demo_request' }
-      );
+      // Use rate-limited submission function
+      const result = await submitFormWithRateLimit('demo-request', demoData);
 
       if (result.success) {
         showSuccessMessage(
