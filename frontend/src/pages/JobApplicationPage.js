@@ -313,8 +313,14 @@ const JobApplicationPage = () => {
         setTimeout(() => {
           navigate('/careers', { state: { applicationSubmitted: true } });
         }, 3000);
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        console.warn('Job application rate limited:', result.message);
+        setSubmitStatus('error');
+        // Show rate limit message (you might want to add a state for this)
+        alert(result.message || 'Please wait before submitting another application');
       } else {
-        throw new Error(result.error || 'Job application submission failed');
+        throw new Error(result.error || result.message || 'Job application submission failed');
       }
     } catch (error) {
       // Fallback to offline simulation on any error
