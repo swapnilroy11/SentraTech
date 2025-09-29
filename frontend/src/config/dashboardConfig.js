@@ -192,7 +192,10 @@ export const hasNetwork = async () => {
     console.log(`🎯 Browser origin: ${actualOrigin}`);
     console.log(`🌐 Network origin: ${networkOrigin} ${isLocalDevelopment ? '(localhost→preview mapping)' : '(production)'}`);
     
-    const response = await fetch(DASHBOARD_CONFIG.HEALTHCHECK_URL, {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+    const healthUrl = `${BACKEND_URL}${DASHBOARD_CONFIG.HEALTHCHECK_URL}`;
+    
+    const response = await fetch(healthUrl, {
       method: 'GET',
       cache: 'no-cache',
       signal: controller.signal,
