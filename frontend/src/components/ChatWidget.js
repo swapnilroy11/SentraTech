@@ -105,8 +105,8 @@ const ChatWidget = () => {
         return;
       }
 
-      // Try network submission
-      const result = await submitChatMessage(message, sessionId);
+      // Try network submission with rate limiting
+      const result = await submitChatMessageWithRateLimit(message, sessionId);
       
       if (result.success) {
         const aiMessage = {
@@ -123,8 +123,20 @@ const ChatWidget = () => {
         if (result.conversationId && result.conversationId !== sessionId) {
           setChatSessionId(result.conversationId);
         }
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        console.warn('Chat rate limited:', result.message);
+        const rateLimitMessage = {
+          id: Date.now(),
+          content: `⚠️ ${result.message}`,
+          sender: 'assistant',
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, rateLimitMessage]);
+        setIsTyping(false);
+        setConnectionError(null);
       } else {
-        throw new Error(result.error || 'Chat response failed');
+        throw new Error(result.error || result.message || 'Chat response failed');
       }
     } catch (error) {
       console.warn('Network chat failed, using offline response:', error.message);
