@@ -268,8 +268,26 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
 
       // Network submission with robust fallback and rate limiting
       try {
-        const { submitFormWithRateLimit, showSuccessMessage } =
+        const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
           await import('../config/dashboardConfig.js');
+
+        // Log raw form data for debugging
+        console.log(`🔍 [CONTACT-SALES] Raw form data:`, {
+          fullName: `"${formData.fullName}" (type: ${typeof formData.fullName})`,
+          workEmail: `"${formData.workEmail}" (type: ${typeof formData.workEmail})`,
+          companyName: `"${formData.companyName}" (type: ${typeof formData.companyName})`,
+          phone: `"${formData.phone}" (type: ${typeof formData.phone})`,
+          companyWebsite: `"${formData.companyWebsite}" (type: ${typeof formData.companyWebsite})`,
+          callVolume: `"${formData.callVolume}" (type: ${typeof formData.callVolume})`,
+          interactionVolume: `"${formData.interactionVolume}" (type: ${typeof formData.interactionVolume})`,
+          preferredContactMethod: `"${formData.preferredContactMethod}" (type: ${typeof formData.preferredContactMethod})`,
+          planSelected: `"${formData.planSelected}" (type: ${typeof formData.planSelected})`,
+          billingTerm: `"${formData.billingTerm}" (type: ${typeof formData.billingTerm})`,
+          message: `"${formData.message}" (type: ${typeof formData.message})`
+        });
+
+        // Log the complete payload before submission
+        logPayload('contact-sales', dashboardData);
 
         // Use rate-limited submission function
         const result = await submitFormWithRateLimit('contact-sales', dashboardData);
