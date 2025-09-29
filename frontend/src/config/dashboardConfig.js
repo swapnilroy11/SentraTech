@@ -20,6 +20,17 @@ const lastSubmissionTimestamps = {};
 // Get backend URL from environment - using local backend for proxy
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
+// Payload logging helper for debugging
+export const logPayload = (formType, payload) => {
+  console.log(`📤 [${formType.toUpperCase()}] Sending payload:`, JSON.stringify(payload, null, 2));
+  console.log(`🔍 [${formType.toUpperCase()}] Payload summary:`, {
+    totalFields: Object.keys(payload).length,
+    requiredFields: Object.entries(payload).filter(([key, value]) => value && value !== '').length,
+    emptyFields: Object.entries(payload).filter(([key, value]) => !value || value === '').map(([key]) => key),
+    timestamp: new Date().toLocaleString()
+  });
+};
+
 // Dashboard configuration - PRODUCTION ENDPOINTS
 export const DASHBOARD_CONFIG = {
   // Direct production API endpoints (no proxy needed)
