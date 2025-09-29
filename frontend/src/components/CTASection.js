@@ -190,21 +190,41 @@ const CTASection = () => {
     setIsSubmitting(true);
     setError(null);
     
+    // Prevent duplicate submissions
+    if (isSubmitting) {
+      console.warn('⚠️ Demo request submission already in progress');
+      return;
+    }
+
     // Network submission with robust fallback and rate limiting
     try {
       const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
+      // Generate unique ID for this submission
+      const generateUUID = () => 'demo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Enhanced payload with proper field mapping including typical_range
       const demoData = {
+        id: generateUUID(),
         name: formData.name,
+        full_name: formData.name, // Additional field mapping
         email: formData.email,
+        work_email: formData.email, // Additional field mapping
         company: formData.company,
+        company_name: formData.company, // Additional field mapping
+        website: formData.website || '',
         phone: formData.phone || '',
+        phone_number: formData.phone || '', // Additional field mapping
         message: formData.message || '',
         call_volume: parseInt(formData.call_volume) || 0,
         interaction_volume: parseInt(formData.interaction_volume) || 0,
         total_volume: (parseInt(formData.call_volume) || 0) + (parseInt(formData.interaction_volume) || 0),
+        typical_range: formData.typical_range || 'Not specified', // Field mapping as requested
+        preferred_method: formData.preferred_method || 'email', // Field mapping as requested
+        status: 'new',
         source: 'website_cta',
+        created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
 
