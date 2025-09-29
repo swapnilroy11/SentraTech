@@ -10,6 +10,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
+
+# Configure detailed logging for proxy debugging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+proxy_logger = logging.getLogger("proxy_debug")
 from pydantic import BaseModel, Field, EmailStr, validator
 from typing import List, Optional, Dict, Any
 import uuid
