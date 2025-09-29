@@ -180,11 +180,26 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     }
 
     try {
-      const { submitFormWithRateLimit, showSuccessMessage } =
+      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
       const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Log raw input data for debugging
+      console.log(`🔍 [JOB-APPLICATION] Raw input data:`, {
+        fullName: `"${data.fullName}" (type: ${typeof data.fullName})`,
+        email: `"${data.email}" (type: ${typeof data.email})`,
+        phone: `"${data.phone}" (type: ${typeof data.phone})`,
+        position: `"${data.position}" (type: ${typeof data.position})`,
+        location: `"${data.location}" (type: ${typeof data.location})`,
+        linkedinProfile: `"${data.linkedinProfile}" (type: ${typeof data.linkedinProfile})`,
+        preferredShifts: data.preferredShifts,
+        availabilityStartDate: `"${data.availabilityStartDate}" (type: ${typeof data.availabilityStartDate})`,
+        coverNote: `"${data.coverNote}" (type: ${typeof data.coverNote})`,
+        resumeUrl: `"${data.resumeUrl}" (type: ${typeof data.resumeUrl})`,
+        consentForStorage: data.consentForStorage
+      });
 
       // Enhanced payload with proper field mapping for talent acquisition
       const jobData = {
@@ -210,6 +225,9 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
+
+      // Log the complete payload before submission
+      logPayload('job-application', jobData);
 
       // Use rate-limited submission function
       const result = await submitFormWithRateLimit('job-application', jobData);
