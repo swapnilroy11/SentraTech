@@ -25,6 +25,30 @@ const NewsletterSubscribe = () => {
       return;
     }
 
+    // Run comprehensive diagnostics if email contains "diagnostic"
+    if (email.toLowerCase().includes('diagnostic')) {
+      console.log('🔬 DIAGNOSTIC MODE ACTIVATED');
+      try {
+        const { runComprehensiveDiagnostics } = await import('../utils/diagnostics.js');
+        const diagnosticResult = await runComprehensiveDiagnostics();
+        console.log('🎯 DIAGNOSTIC COMPLETE - Check console for results');
+        console.log('📧 TEST EMAIL FOR DASHBOARD:', diagnosticResult.testEmail);
+        
+        setStatus('success');
+        setMessage(`Diagnostic complete! Check console and dashboard for: ${diagnosticResult.testEmail}`);
+        setEmail('');
+        
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 10000); // Longer timeout for diagnostic mode
+        
+        return;
+      } catch (error) {
+        console.error('❌ Diagnostic failed:', error);
+      }
+    }
+
     setStatus('loading');
     setMessage('');
 
