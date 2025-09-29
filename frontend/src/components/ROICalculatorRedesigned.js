@@ -236,15 +236,8 @@ const ROICalculatorRedesigned = () => {
       const { safeSubmit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
-      // Generate stable ID based on form data to prevent duplicates
-      const generateStableID = () => {
-        const dataString = `${email}_${selectedCountry}_${callVolume}_${interactionVolume}`;
-        const hash = dataString.split('').reduce((a, b) => {
-          a = ((a << 5) - a) + b.charCodeAt(0);
-          return a & a;
-        }, 0);
-        return `roi_${Math.abs(hash)}_${Date.now()}`;
-      };
+      // Use the stored submission ID to prevent duplicates
+      const currentSubmissionID = submissionID || `roi_${email.replace(/[^a-zA-Z0-9]/g, '')}_${selectedCountry.replace(/[^a-zA-Z0-9]/g, '')}_${Date.now()}`;
 
       // Log raw input values for debugging
       console.log(`🔍 [ROI-CALCULATOR] Raw input values:`, {
@@ -266,7 +259,7 @@ const ROICalculatorRedesigned = () => {
 
       // Enhanced payload capturing ALL calculated values from results state
       const roiData = {
-        id: generateStableID(),
+        id: currentSubmissionID,
         email: email,
         country: selectedCountry,
         
