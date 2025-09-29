@@ -1460,6 +1460,11 @@ async def proxy_to_dashboard(endpoint: str, data: dict):
             "mode": "dashboard_proxy_error"
         }
 
+@api_router.options("/proxy/newsletter-signup")
+async def options_newsletter_signup():
+    """Handle preflight OPTIONS request for newsletter signup"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/newsletter-signup")
 async def proxy_newsletter_signup(request: Request):
     """Proxy newsletter signup to dashboard"""
