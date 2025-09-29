@@ -41,15 +41,8 @@ export const isOnline = () => {
 
 // Network-aware form submission with fallback
 export const submitFormToDashboard = async (endpoint, data, options = {}) => {
-  // Immediate offline fallback if no network
-  if (!isOnline()) {
-    console.warn('Browser is offline, using fallback mode');
-    return {
-      success: true,
-      data: { ...data, id: `offline_${Date.now()}` },
-      mode: 'offline'
-    };
-  }
+  // Always attempt network call - don't rely on navigator.onLine which can be unreliable
+  // Let the actual network error handling determine if fallback is needed
 
   const {
     timeout = DASHBOARD_CONFIG.TIMEOUT.DEFAULT,
