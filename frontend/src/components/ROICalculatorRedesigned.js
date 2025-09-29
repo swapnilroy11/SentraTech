@@ -498,7 +498,7 @@ const ROICalculatorRedesigned = () => {
                 <Card className="bg-gradient-to-br from-[rgba(0,221,255,0.2)] to-[rgba(0,153,204,0.1)] border border-blue-400/30 rounded-xl">
                   <CardContent className="p-6 text-center">
                     <div className="text-blue-400 text-sm font-medium mb-2">Your Savings</div>
-                    <div className="text-3xl font-bold text-blue-400 mb-1">
+                    <div className="text-3xl font-bold text-blue-400 mb-1" data-monthly-savings={results.monthlySavings}>
                       {formatCurrency(results.monthlySavings)}
                     </div>
                     <div className="text-xs text-blue-300">per month</div>
