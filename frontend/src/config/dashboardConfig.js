@@ -111,8 +111,9 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       
+      const fullUrl = `${BACKEND_URL}${endpoint}`;
       console.log(`🌐 Attempting network submission (attempt ${attempt}/${retries}):`, {
-        url: `${BACKEND_URL}${endpoint}`,
+        url: fullUrl,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -120,6 +121,9 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
         },
         data: JSON.stringify(data, null, 2)
       });
+      
+      // Log the exact curl equivalent for debugging
+      console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: https://unified-forms.preview.emergentagent.com" -d '${JSON.stringify(data)}'`);
       
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
