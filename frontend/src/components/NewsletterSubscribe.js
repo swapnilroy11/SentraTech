@@ -52,14 +52,27 @@ const NewsletterSubscribe = () => {
     setStatus('loading');
     setMessage('');
 
+    // Prevent duplicate submissions
+    if (status === 'loading') {
+      console.warn('⚠️ Newsletter subscription already in progress');
+      return;
+    }
+
     // Network submission with robust fallback and rate limiting
     try {
       const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
+      // Generate unique ID for this submission
+      const generateUUID = () => 'newsletter_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Enhanced payload with proper field mapping
       const subscriptionData = {
+        id: generateUUID(),
         email: email.trim(),
+        status: 'new',
         source: 'website_newsletter',
+        created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
 
