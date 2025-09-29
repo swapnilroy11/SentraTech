@@ -1531,7 +1531,7 @@ async def proxy_contact_sales(request: Request):
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
             
-        result = await proxy_to_dashboard('/forms/contact-sales', data)
+        result = await proxy_to_dashboard('/forms/contact-sales', data, dict(request.headers))
         
         if result['success']:
             return result['data']
