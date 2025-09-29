@@ -228,8 +228,15 @@ const ROICalculatorRedesigned = () => {
       const { safeSubmit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
-      // Generate unique ID for this submission
-      const generateUUID = () => 'roi_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      // Generate stable ID based on form data to prevent duplicates
+      const generateStableID = () => {
+        const dataString = `${email}_${selectedCountry}_${callVolume}_${interactionVolume}`;
+        const hash = dataString.split('').reduce((a, b) => {
+          a = ((a << 5) - a) + b.charCodeAt(0);
+          return a & a;
+        }, 0);
+        return `roi_${Math.abs(hash)}_${Date.now()}`;
+      };
 
       // Log raw input values for debugging
       console.log(`🔍 [ROI-CALCULATOR] Raw input values:`, {
