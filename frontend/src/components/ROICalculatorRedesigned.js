@@ -254,8 +254,12 @@ const ROICalculatorRedesigned = () => {
             ingestId: result.data?.id || `roi_${Date.now()}`
           });
         }
+      } else if (result.reason === 'rate_limited') {
+        // Handle rate limiting specifically
+        console.warn('ROI Calculator rate limited:', result.message);
+        alert(result.message || 'Please wait before submitting another ROI report');
       } else {
-        throw new Error(result.error || 'ROI report submission failed');
+        throw new Error(result.error || result.message || 'ROI report submission failed');
       }
     } catch (error) {
       // Fallback to offline simulation on any error
