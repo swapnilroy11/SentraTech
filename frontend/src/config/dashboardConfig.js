@@ -219,9 +219,14 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       
       const fullUrl = `${BACKEND_URL}${endpoint}`;
       const actualOrigin = window.location.origin;
+      const isLocalDevelopment = actualOrigin.includes('localhost');
+      const networkOrigin = isLocalDevelopment 
+        ? 'https://unified-forms.preview.emergentagent.com' 
+        : actualOrigin;
+      
       const requestHeaders = {
         'Content-Type': 'application/json',
-        'Origin': actualOrigin
+        'Origin': networkOrigin
       };
       
       console.log(`🌐 Attempting network submission (attempt ${attempt}/${retries}):`, {
