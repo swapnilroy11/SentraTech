@@ -1611,9 +1611,25 @@ async def options_roi_calculator():
 
 @api_router.post("/proxy/roi-calculator")
 async def proxy_roi_calculator(request: Request):
-    """Proxy ROI calculator to dashboard"""
+    """Proxy ROI calculator to dashboard with detailed logging"""
     try:
         data = await request.json()
+        
+        # Comprehensive payload logging
+        proxy_logger.info(f"🔎 PROXY RECEIVED ROI CALCULATOR PAYLOAD:")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info(f"  - Total fields: {len(data)}")
+        proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
+        proxy_logger.info(f"  - Country: '{data.get('country', 'MISSING')}' (type: {type(data.get('country'))})")
+        proxy_logger.info(f"  - Call Volume: {data.get('call_volume', 'MISSING')} (type: {type(data.get('call_volume'))})")
+        proxy_logger.info(f"  - Interaction Volume: {data.get('interaction_volume', 'MISSING')} (type: {type(data.get('interaction_volume'))})")
+        proxy_logger.info(f"  - Monthly Volume: {data.get('monthly_volume', 'MISSING')} (type: {type(data.get('monthly_volume'))})")
+        proxy_logger.info(f"  - BPO Spending: {data.get('bpo_spending', 'MISSING')} (type: {type(data.get('bpo_spending'))})")
+        proxy_logger.info(f"  - SentraTech Spending: {data.get('sentratech_spending', 'MISSING')} (type: {type(data.get('sentratech_spending'))})")
+        proxy_logger.info(f"  - Monthly Savings: {data.get('monthly_savings', 'MISSING')} (type: {type(data.get('monthly_savings'))})")
+        proxy_logger.info(f"  - ROI Percentage: {data.get('roi_percentage', 'MISSING')} (type: {type(data.get('roi_percentage'))})")
+        proxy_logger.info(f"  - Cost Reduction: {data.get('cost_reduction', 'MISSING')} (type: {type(data.get('cost_reduction'))})")
         
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
