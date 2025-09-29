@@ -338,7 +338,7 @@ export const submitFormWithRateLimit = async (formType, formData, options = {}) 
   // Update timestamp before submission to prevent race conditions
   lastSubmissionTimestamps[key] = now;
   
-  // Get the correct endpoint based on form type
+  // Get the correct direct dashboard endpoint based on form type
   const endpointMap = {
     'demo-request': DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST,
     'roi-calculator': DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
