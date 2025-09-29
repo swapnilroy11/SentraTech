@@ -1611,7 +1611,7 @@ async def proxy_roi_calculator(request: Request):
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
             
-        result = await proxy_to_dashboard('/forms/roi-calculator', data)
+        result = await proxy_to_dashboard('/forms/roi-calculator', data, dict(request.headers))
         
         if result['success']:
             return result['data']
