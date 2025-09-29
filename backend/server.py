@@ -1409,8 +1409,8 @@ import httpx
 from fastapi import Request
 
 # Dashboard API configuration
-DASHBOARD_BASE_URL = "https://sentradash.preview.emergentagent.com/api"
-DASHBOARD_ORIGIN = "https://unified-forms.preview.emergentagent.com"
+DASHBOARD_BASE_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+DASHBOARD_ORIGIN = "https://netproxy-forms.preview.emergentagent.com"
 
 async def proxy_to_dashboard(endpoint: str, data: dict):
     """Proxy form submission to dashboard API"""
@@ -4036,7 +4036,7 @@ async def proxy_newsletter_signup(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://form-simulator.preview.emergentagent.com/api/forms/newsletter-signup",
+                "https://netproxy-forms.preview.emergentagent.com/api/forms/newsletter-signup",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4058,7 +4058,7 @@ async def proxy_demo_request(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://form-simulator.preview.emergentagent.com/api/forms/demo-request",
+                "https://netproxy-forms.preview.emergentagent.com/api/forms/demo-request",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4080,7 +4080,7 @@ async def proxy_roi_calculator(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://form-simulator.preview.emergentagent.com/api/forms/roi-calculator",
+                "https://netproxy-forms.preview.emergentagent.com/api/forms/roi-calculator",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4102,7 +4102,7 @@ async def proxy_contact_sales(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://form-simulator.preview.emergentagent.com/api/forms/contact-sales",
+                "https://netproxy-forms.preview.emergentagent.com/api/forms/contact-sales",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4124,7 +4124,7 @@ async def proxy_job_application(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://form-simulator.preview.emergentagent.com/api/forms/job-application",
+                "https://netproxy-forms.preview.emergentagent.com/api/forms/job-application",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )

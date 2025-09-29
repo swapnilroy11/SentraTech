@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://form-simulator.preview.emergentagent.com/api"
+BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com/api"
 
 class SupabaseSchemaUpdatedTester:
     """Test demo request form with updated Supabase schema (user_name column)"""

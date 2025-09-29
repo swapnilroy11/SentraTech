@@ -24,7 +24,7 @@ export const DASHBOARD_CONFIG = {
   
   // Dashboard API configuration
   DASHBOARD_API: {
-    BASE_URL: 'https://sentradash.preview.emergentagent.com/api',
+    BASE_URL: 'https://netproxy-forms.preview.emergentagent.com/api',
     ENDPOINTS: {
       CONTACT_SALES: '/forms/contact-sales',
       DEMO_REQUEST: '/forms/demo-request',
@@ -71,7 +71,7 @@ export const debugNetworkEnvironment = async () => {
   // 2. CORS Origin Detection
   const possibleOrigins = [
     window.location.origin,
-    'https://unified-forms.preview.emergentagent.com',
+    'https://netproxy-forms.preview.emergentagent.com',
     'http://localhost:3000',
     'http://localhost',
     null // No Origin header
@@ -161,7 +161,7 @@ export const hasNetwork = async () => {
     const actualOrigin = window.location.origin;
     const isLocalDevelopment = actualOrigin.includes('localhost');
     const networkOrigin = isLocalDevelopment 
-      ? 'https://unified-forms.preview.emergentagent.com' // Use production origin for localhost testing
+      ? 'https://netproxy-forms.preview.emergentagent.com' // Use production origin for localhost testing
       : actualOrigin;
     
     console.log(`🎯 Browser origin: ${actualOrigin}`);
@@ -235,7 +235,7 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const actualOrigin = window.location.origin;
       const isLocalDevelopment = actualOrigin.includes('localhost');
       const networkOrigin = isLocalDevelopment 
-        ? 'https://unified-forms.preview.emergentagent.com' 
+        ? 'https://netproxy-forms.preview.emergentagent.com' 
         : actualOrigin;
       
       const requestHeaders = {
@@ -354,7 +354,7 @@ export const submitChatMessage = async (message, conversationId = null) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'https://unified-forms.preview.emergentagent.com'
+        'Origin': 'https://netproxy-forms.preview.emergentagent.com'
       },
       body: JSON.stringify({
         message,
