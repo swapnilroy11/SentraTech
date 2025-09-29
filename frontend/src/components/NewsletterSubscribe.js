@@ -39,19 +39,7 @@ const NewsletterSubscribe = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Check if offline and handle immediately
-      if (!isOnline()) {
-        console.warn('Browser offline, using offline fallback');
-        setStatus('success');
-        setMessage('Successfully subscribed to our newsletter!');
-        setEmail('');
-        
-        setTimeout(() => {
-          setStatus(null);
-          setMessage('');
-        }, 5000);
-        return;
-      }
+      // Always attempt network submission - let error handling determine fallback
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER,
