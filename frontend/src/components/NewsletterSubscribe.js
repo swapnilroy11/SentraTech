@@ -58,9 +58,9 @@ const NewsletterSubscribe = () => {
       return;
     }
 
-    // Network submission with robust fallback and rate limiting
+    // Network submission with duplicate prevention and rate limiting
     try {
-      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
+      const { safeSubmit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
       // Generate unique ID for this submission
