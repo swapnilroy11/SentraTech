@@ -37,35 +37,18 @@ const InvestorRelationsPage = () => {
     }
   ];
 
-  const fundingHistory = [
-    {
-      round: 'Series B',
-      amount: '$50M',
-      date: 'Q2 2024',
-      lead: 'Andreessen Horowitz',
-      participants: 'Sequoia Capital, Index Ventures, existing investors',
-      valuation: '$400M',
-      use: 'Global expansion, AI research, enterprise sales scaling'
-    },
-    {
-      round: 'Series A',
-      amount: '$18M',
-      date: 'Q1 2023',
-      lead: 'Sequoia Capital',
-      participants: 'Index Ventures, Bessemer Venture Partners',
-      valuation: '$120M',
-      use: 'Product development, team expansion, market penetration'
-    },
-    {
-      round: 'Seed',
-      amount: '$5M',
-      date: 'Q3 2022',
-      lead: 'Index Ventures',
-      participants: 'Angel investors, founding team',
-      valuation: '$25M',
-      use: 'Initial product build, founding team, market validation'
-    }
-  ];
+  const fundingStatus = {
+    currentStage: 'Pre-Seed',
+    seeking: '$2.5M',
+    timeline: 'Q1 2025',
+    purpose: 'Production infrastructure & pilot customer scaling',
+    useOfFunds: [
+      'Production-grade AI infrastructure development - 40%',
+      'Enterprise pilot customer onboarding - 25%',
+      'Technical team expansion (AI/ML, DevOps) - 20%',
+      'Go-to-market strategy & customer validation - 15%'
+    ]
+  };
 
   const marketOpportunity = [
     {
