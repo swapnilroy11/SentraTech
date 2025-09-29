@@ -346,6 +346,69 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
   };
 };
 
+// Rate-limited form submission wrapper
+export const submitFormWithRateLimit = async (formType, formData, options = {}) => {
+  const now = Date.now();
+  const key = `${formType}_${formData.email || 'anon'}`;
+  const limit = RATE_LIMITS[formType] ?? 5000;
+
+  // Check if we're submitting too fast
+  if (lastSubmissionTimestamps[key] && (now - lastSubmissionTimestamps[key]) < limit) {
+    const remainingTime = Math.ceil((limit - (now - lastSubmissionTimestamps[key]))/1000);
+    console.warn(`⚠️ ${formType} rate limited: please wait ${remainingTime}s before submitting again`);
+    
+    return { 
+      success: false, 
+      reason: 'rate_limited',
+      remainingTime,
+      message: `Please wait ${remainingTime} seconds before submitting again`
+    };
+  }
+
+  // Update timestamp before submission to prevent race conditions
+  lastSubmissionTimestamps[key] = now;
+  
+  // Get the correct endpoint based on form type
+  const endpointMap = {
+    'demo-request': DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST,
+    'roi-calculator': DASHBOARD_CONFIG.ENDPOINTS.ROI_CALCULATOR,
+    'newsletter': DASHBOARD_CONFIG.ENDPOINTS.NEWSLETTER,
+    'contact-sales': DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES,
+    'job-application': DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
+    'pilot-request': DASHBOARD_CONFIG.ENDPOINTS.PILOT_REQUEST,
+    'chat-message': DASHBOARD_CONFIG.ENDPOINTS.CHAT_MESSAGE
+  };
+  
+  const endpoint = endpointMap[formType];
+  if (!endpoint) {
+    console.error(`❌ Unknown form type: ${formType}`);
+    return {
+      success: false,
+      reason: 'invalid_form_type',
+      message: `Unknown form type: ${formType}`
+    };
+  }
+  
+  // Call the original function that sends to the proxy
+  try {
+    const result = await submitFormToDashboard(endpoint, formData, { ...options, formType });
+    
+    // Track successful rate-limited submission
+    console.log(`✅ Rate-limited ${formType} submission successful:`, {
+      formType,
+      email: formData.email,
+      mode: result.mode,
+      rateLimit: `${limit}ms`
+    });
+    
+    return result;
+  } catch (error) {
+    // Reset timestamp on error so user can retry immediately
+    delete lastSubmissionTimestamps[key];
+    throw error;
+  }
+};
+
 // Submit chat message with robust connectivity testing
 export const submitChatMessage = async (message, conversationId = null) => {
   // Real connectivity test before attempting chat submission
