@@ -8,32 +8,32 @@ const InvestorRelationsPage = () => {
 
   const keyMetrics = [
     {
-      metric: 'Annual Recurring Revenue (ARR)',
-      value: '$25M+',
-      growth: '+180% YoY',
+      metric: 'Customer Support Cost Reduction',
+      value: '70%',
+      growth: 'Proven in Pilots',
       icon: TrendingUp,
-      description: 'Strong revenue growth driven by enterprise customer expansion'
+      description: 'Average cost reduction achieved across pilot implementations'
     },
     {
-      metric: 'Enterprise Customers',
-      value: '500+',
-      growth: '+220% YoY',
-      icon: Users,
-      description: 'Fortune 500 and mid-market companies across 50+ countries'
-    },
-    {
-      metric: 'Net Revenue Retention',
-      value: '135%',
+      metric: 'AI Automation Rate',
+      value: '65%+',
       growth: 'Industry Leading',
-      icon: Target,
-      description: 'Exceptional customer expansion and minimal churn rates'
+      icon: Zap,
+      description: 'Ticket automation rate in production environments'
     },
     {
-      metric: 'Gross Revenue Margin',
-      value: '88%',
-      growth: '+5pp YoY',
-      icon: Award,
-      description: 'Best-in-class SaaS margins with scalable AI infrastructure'
+      metric: 'Implementation Time',
+      value: '2 weeks',
+      growth: 'vs 6 months',
+      icon: Target,
+      description: 'Time to deployment compared to traditional solutions'
+    },
+    {
+      metric: 'Market Opportunity',
+      value: '$95B',
+      growth: 'Growing 15% YoY',
+      icon: Globe,
+      description: 'Global customer service software market size'
     }
   ];
 
