@@ -358,29 +358,50 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
-        {/* Board of Directors */}
+        {/* Founding Team & Advisors */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Board of Directors</h2>
-            <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Strategic guidance from experienced technology leaders and top-tier venture capital partners.
+            <h2 className="text-3xl font-bold text-white mb-4">Team & Advisory Network</h2>
+            <p className="text-[rgb(161,161,170)] max-w-3xl mx-auto">
+              Strong founding team with deep technical expertise and industry experience, 
+              supported by strategic advisors from leading customer support and AI companies.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {boardMembers.map((member, index) => (
-              <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users size={24} className="text-[#00FF41]" />
+          <div className="mb-12">
+            <h3 className="text-xl font-semibold text-white mb-6 text-center">Founding Team</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {teamHighlights.map((member, index) => (
+                <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <Users size={24} className="text-[#00FF41]" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-1">{member.name}</h4>
+                    <p className="text-[#00FF41] font-medium text-sm mb-1">{member.title}</p>
+                    <p className="text-[rgb(218,218,218)] text-xs leading-relaxed">{member.expertise}</p>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-1">{member.name}</h3>
-                  <p className="text-[#00FF41] font-medium text-sm mb-1">{member.title}</p>
-                  <p className="text-[rgb(161,161,170)] text-xs mb-3">{member.company}</p>
-                  <p className="text-[rgb(218,218,218)] text-xs">{member.expertise}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-6 text-center">Strategic Advisors</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {advisors.map((advisor, index) => (
+                <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                      <Award size={20} className="text-[#00FF41]" />
+                    </div>
+                    <h4 className="text-lg font-semibold text-white mb-2">{advisor.role}</h4>
+                    <p className="text-[rgb(161,161,170)] text-sm mb-2">{advisor.expertise}</p>
+                    <p className="text-[rgb(218,218,218)] text-xs">{advisor.value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
