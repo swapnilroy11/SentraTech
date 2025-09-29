@@ -259,8 +259,22 @@ const JobApplicationPage = () => {
   // Submit to SentraTech Admin Dashboard with network fallback
   const submitApplication = async (applicationData) => {
     try {
-      const { submitFormWithRateLimit, showSuccessMessage } =
+      const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
+
+      // Log raw application data for debugging
+      console.log(`🔍 [JOB-APPLICATION-PAGE] Raw application data:`, {
+        first_name: `"${applicationData.first_name}" (type: ${typeof applicationData.first_name})`,
+        last_name: `"${applicationData.last_name}" (type: ${typeof applicationData.last_name})`,
+        email: `"${applicationData.email}" (type: ${typeof applicationData.email})`,
+        location: `"${applicationData.location}" (type: ${typeof applicationData.location})`,
+        linkedin_profile: `"${applicationData.linkedin_profile}" (type: ${typeof applicationData.linkedin_profile})`,
+        position_applied: `"${applicationData.position_applied}" (type: ${typeof applicationData.position_applied})`,
+        preferred_shifts: applicationData.preferred_shifts,
+        availability_start_date: `"${applicationData.availability_start_date}" (type: ${typeof applicationData.availability_start_date})`,
+        cover_note: `"${applicationData.cover_note}" (type: ${typeof applicationData.cover_note})`,
+        consent_for_storage: applicationData.consent_for_storage
+      });
 
       // Prepare data in the expected format for the dashboard
       const jobData = {
@@ -278,6 +292,9 @@ const JobApplicationPage = () => {
         consent_for_storage: applicationData.consent_for_storage || false,
         timestamp: new Date().toISOString()
       };
+
+      // Log the complete payload before submission
+      logPayload('job-application-page', jobData);
 
       // Use rate-limited submission function
       const result = await submitFormWithRateLimit('job-application', jobData);
