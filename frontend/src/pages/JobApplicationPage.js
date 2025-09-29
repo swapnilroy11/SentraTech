@@ -279,36 +279,7 @@ const JobApplicationPage = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Check if offline and handle immediately
-      if (!isOnline()) {
-        console.warn('Browser offline, using offline fallback');
-        const applicationId = `job_offline_${Date.now()}`;
-        console.log('✅ Job application submitted successfully (offline mode):', {
-          applicationId,
-          applicant: jobData.full_name,
-          email: jobData.email,
-          position: jobData.position
-        });
-        
-        setSubmitStatus('success');
-        
-        if (window?.dataLayer) {
-          window.dataLayer.push({
-            event: "job_application_submit_offline",
-            position: jobData.position,
-            source: 'careers_page',
-            location: jobData.location,
-            applicationId: applicationId
-          });
-        }
-        
-        setTimeout(() => {
-          navigate('/careers', { state: { applicationSubmitted: true } });
-        }, 3000);
-        
-        setIsSubmitting(false);
-        return;
-      }
+      // Always attempt network submission - let error handling determine fallback
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
