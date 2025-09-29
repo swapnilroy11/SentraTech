@@ -516,7 +516,7 @@ const ROICalculatorRedesigned = () => {
                 <Card className="bg-gradient-to-r from-[rgba(0,255,65,0.1)] to-[rgba(0,204,51,0.05)] border border-[#00FF41]/20 rounded-xl">
                   <CardContent className="p-6 text-center">
                     <div className="text-white text-lg font-semibold mb-2">Return on Investment</div>
-                    <div className="text-5xl font-bold text-[#00FF41] mb-2">
+                    <div className="text-5xl font-bold text-[#00FF41] mb-2" data-roi-percentage={results.roi}>
                       {formatPercentage(results.roi)}
                     </div>
                     <div className="text-sm text-[rgb(161,161,170)]">
