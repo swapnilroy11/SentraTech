@@ -273,8 +273,10 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
     retries = DASHBOARD_CONFIG.RETRY.MAX_ATTEMPTS
   } = options;
 
-  // Get backend URL from environment
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+  // Get backend URL - handle both development and production environments
+  const BACKEND_URL = (typeof process !== 'undefined' && process.env?.REACT_APP_BACKEND_URL) 
+    ? process.env.REACT_APP_BACKEND_URL 
+    : window.location.origin;
 
   console.log(`🎯 BACKEND PROXY SUBMISSION:`, {
     endpoint,
