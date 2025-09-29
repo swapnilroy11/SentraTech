@@ -1412,19 +1412,28 @@ from fastapi import Request
 DASHBOARD_BASE_URL = "https://netproxy-forms.preview.emergentagent.com/api"
 DASHBOARD_ORIGIN = "https://netproxy-forms.preview.emergentagent.com"
 
-async def proxy_to_dashboard(endpoint: str, data: dict):
-    """Proxy form submission to dashboard API"""
+async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
+    """Proxy form submission to dashboard API with header forwarding"""
     try:
+        # Prepare headers - preserve auth headers from original request
+        forward_headers = {
+            "Content-Type": "application/json",
+            "Origin": DASHBOARD_ORIGIN,
+            "User-Agent": "SentraTech-Backend/1.0",
+            "Accept": "application/json"
+        }
+        
+        # Forward authentication and authorization headers if present
+        if original_headers:
+            for header_name in ["cookie", "authorization", "x-api-key", "x-auth-token"]:
+                if header_name in original_headers:
+                    forward_headers[header_name] = original_headers[header_name]
+        
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
                 f"{DASHBOARD_BASE_URL}{endpoint}",
                 json=data,
-                headers={
-                    "Content-Type": "application/json",
-                    "Origin": DASHBOARD_ORIGIN,
-                    "User-Agent": "SentraTech-Backend/1.0",
-                    "Accept": "application/json"
-                }
+                headers=forward_headers
             )
             
             if response.status_code == 200:
