@@ -62,7 +62,7 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASHBOARD_CONFIG.INGEST_KEY
+          'Origin': 'https://unified-forms.preview.emergentagent.com'
         },
         body: JSON.stringify(data),
         signal: controller.signal
