@@ -268,41 +268,35 @@ class CORSBrowserTester:
         
         endpoint = f"{BACKEND_URL}/api/proxy/newsletter-signup"
         
-        # Submit multiple requests rapidly
-        rapid_requests = []
-        for i in range(5):
-            test_data = {
-                "email": f"rate-test-{i}-{uuid.uuid4().hex[:6]}@example.com",
-                "source": "rate_limit_test",
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            }
-            
-            headers = {
-                "Content-Type": "application/json",
-                "Origin": BROWSER_ORIGIN,
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            }
-            
-            rapid_requests.append(self.session.post(endpoint, json=test_data, headers=headers))
-        
         try:
             start_time = time.time()
-            responses = await asyncio.gather(*rapid_requests, return_exceptions=True)
-            response_time = (time.time() - start_time) * 1000
-            
             success_count = 0
             rate_limited_count = 0
             
-            for i, response in enumerate(responses):
-                if isinstance(response, Exception):
+            # Submit multiple requests rapidly
+            for i in range(5):
+                test_data = {
+                    "email": f"rate-test-{i}-{uuid.uuid4().hex[:6]}@example.com",
+                    "source": "rate_limit_test",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+                
+                headers = {
+                    "Content-Type": "application/json",
+                    "Origin": BROWSER_ORIGIN,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                }
+                
+                try:
+                    async with self.session.post(endpoint, json=test_data, headers=headers) as response:
+                        if response.status == 200:
+                            success_count += 1
+                        elif response.status == 429:  # Rate limited
+                            rate_limited_count += 1
+                except Exception:
                     continue
-                    
-                if response.status == 200:
-                    success_count += 1
-                elif response.status == 429:  # Rate limited
-                    rate_limited_count += 1
-                    
-                await response.close()
+            
+            response_time = (time.time() - start_time) * 1000
             
             if success_count >= 3:  # At least some should succeed
                 self.log_test("Rate Limiting - Rapid Submissions", "PASS", 
