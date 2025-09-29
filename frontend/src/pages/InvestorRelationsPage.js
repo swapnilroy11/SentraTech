@@ -267,45 +267,65 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
-        {/* Funding History */}
+        {/* Pre-Seed Funding Strategy */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Funding History</h2>
-            <p className="text-[rgb(161,161,170)] max-w-2xl mx-auto">
-              Backed by tier-one venture capital firms with a proven track record of scaling enterprise software companies.
+            <h2 className="text-3xl font-bold text-white mb-4">Pre-Seed Funding Strategy</h2>
+            <p className="text-[rgb(161,161,170)] max-w-3xl mx-auto">
+              We're raising $2.5M to transition from validated prototype to production-ready platform, 
+              focusing on infrastructure scaling and enterprise customer acquisition.
             </p>
           </div>
           
-          <div className="space-y-6">
-            {fundingHistory.map((round, index) => (
-              <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8">
-                <div className="grid md:grid-cols-4 gap-6">
-                  <div className="md:col-span-1">
-                    <div className="text-2xl font-bold text-[#00FF41] mb-2">{round.round}</div>
-                    <div className="text-xl font-semibold text-white mb-1">{round.amount}</div>
-                    <div className="text-[rgb(161,161,170)] text-sm">{round.date}</div>
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="mb-3">
-                      <span className="text-white font-semibold">Lead Investor: </span>
-                      <span className="text-[rgb(218,218,218)]">{round.lead}</span>
+          <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-8">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-[#00FF41] mb-2">{fundingStatus.seeking}</div>
+                <div className="text-lg font-semibold text-white mb-1">{fundingStatus.currentStage}</div>
+                <div className="text-[rgb(161,161,170)] text-sm">{fundingStatus.timeline}</div>
+              </div>
+              <div className="md:col-span-2">
+                <h3 className="text-lg font-semibold text-white mb-4">Use of Funds</h3>
+                <div className="space-y-2">
+                  {fundingStatus.useOfFunds.map((use, index) => (
+                    <div key={index} className="flex items-start space-x-2">
+                      <span className="text-[#00FF41] mt-1">•</span>
+                      <span className="text-[rgb(218,218,218)] text-sm">{use}</span>
                     </div>
-                    <div className="mb-3">
-                      <span className="text-white font-semibold">Participants: </span>
-                      <span className="text-[rgb(218,218,218)]">{round.participants}</span>
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold">Valuation: </span>
-                      <span className="text-[#00FF41] font-semibold">{round.valuation}</span>
-                    </div>
-                  </div>
-                  <div className="md:col-span-1">
-                    <div className="text-white font-semibold text-sm mb-2">Use of Funds:</div>
-                    <p className="text-[rgb(218,218,218)] text-sm leading-relaxed">{round.use}</p>
-                  </div>
+                  ))}
                 </div>
               </div>
-            ))}
+            </div>
+            
+            <div className="border-t border-[rgb(63,63,63)] pt-6">
+              <h3 className="text-lg font-semibold text-white mb-4">18-Month Milestones with Funding</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1-Q2 2025</div>
+                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+                    <li>• Production infrastructure deployment</li>
+                    <li>• 10 enterprise pilot customers</li>
+                    <li>• Team expansion to 12 members</li>
+                  </ul>
+                </div>
+                <div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2025</div>
+                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+                    <li>• First paying customers</li>
+                    <li>• $500K ARR target</li>
+                    <li>• Series A fundraising prep</li>
+                  </ul>
+                </div>
+                <div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1 2026</div>
+                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+                    <li>• Series A funding round</li>
+                    <li>• Market expansion strategy</li>
+                    <li>• Advanced AI capabilities</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
