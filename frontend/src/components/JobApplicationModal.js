@@ -174,7 +174,7 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
   const submitApplication = async (data) => {
     try {
-      const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
+      const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
       // Prepare data in the expected format for the dashboard
@@ -194,13 +194,8 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         timestamp: new Date().toISOString()
       };
 
-      // Always attempt network submission - let error handling determine fallback
-
-      const result = await submitFormToDashboard(
-        DASHBOARD_CONFIG.ENDPOINTS.JOB_APPLICATION,
-        jobData,
-        { formType: 'job_application_modal' }
-      );
+      // Use rate-limited submission function
+      const result = await submitFormWithRateLimit('job-application', jobData);
 
       if (result.success) {
         showSuccessMessage(
