@@ -207,6 +207,37 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
+        {/* Problem & Solution */}
+        <div className="mb-20">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <span className="text-red-400 mr-3">⚠️</span>
+                The Problem
+              </h3>
+              <div className="space-y-4 text-[rgb(218,218,218)]">
+                <p><strong className="text-white">$75B annually wasted</strong> on inefficient customer support operations</p>
+                <p><strong className="text-white">65% of support tickets</strong> are repetitive and could be automated</p>
+                <p><strong className="text-white">6-18 months</strong> typical implementation time for legacy solutions</p>
+                <p><strong className="text-white">Poor customer experience</strong> due to slow response times and inconsistent quality</p>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-[#00FF41]/5 to-[#00DD38]/5 border border-[#00FF41]/20 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <span className="text-[#00FF41] mr-3">✅</span>
+                Our Solution
+              </h3>
+              <div className="space-y-4 text-[rgb(218,218,218)]">
+                <p><strong className="text-[#00FF41]">AI-first architecture</strong> built specifically for customer support automation</p>
+                <p><strong className="text-[#00FF41]">2-week deployment</strong> vs 6-month traditional implementations</p>
+                <p><strong className="text-[#00FF41]">70% cost reduction</strong> through intelligent ticket routing and automation</p>
+                <p><strong className="text-[#00FF41]">Real-time insights</strong> with advanced analytics and performance tracking</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Key Validation Metrics */}
         <div className="mb-20">
           <div className="text-center mb-12">
