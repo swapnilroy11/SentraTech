@@ -215,7 +215,7 @@ const ROICalculatorRedesigned = () => {
   const handleEmailSubmission = async () => {
     if (!email || !results) return;
 
-    // Prevent duplicate submissions
+    // Prevent duplicate submissions using safe submit wrapper
     if (isSubmittingReport) {
       console.warn('⚠️ ROI Report submission already in progress');
       return;
