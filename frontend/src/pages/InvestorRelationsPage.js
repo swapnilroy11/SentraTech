@@ -441,42 +441,55 @@ const InvestorRelationsPage = () => {
           </div>
         </div>
 
-        {/* Investor Contact */}
+        {/* Investment Contact */}
         <div className="text-center bg-gradient-to-r from-[#00FF41]/5 to-[#00DD38]/5 border border-[#00FF41]/20 rounded-2xl p-8">
           <Calendar size={48} className="text-[#00FF41] mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-4">Investor Information</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Investment Opportunity</h2>
           <p className="text-[rgb(161,161,170)] mb-6 max-w-3xl mx-auto">
-            For current investors, prospective investors, or financial analysts seeking additional information 
-            about SentraTech's financial performance, strategy, or investment opportunities.
+            We're actively seeking strategic investors who understand the customer support automation market 
+            and can provide both capital and industry expertise to accelerate our growth.
           </p>
           
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold text-white mb-4">Investor Relations Contacts</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">Investor Inquiries</h3>
                 <ul className="space-y-3">
                   <li>
-                    <span className="text-white font-medium">CEO & Co-Founder: </span>
-                    <a href="mailto:sarah@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">sarah@sentratech.net</a>
-                  </li>
-                  <li>
-                    <span className="text-white font-medium">CFO: </span>
-                    <a href="mailto:jennifer@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">jennifer@sentratech.net</a>
-                  </li>
-                  <li>
-                    <span className="text-white font-medium">Investor Relations: </span>
-                    <a href="mailto:investors@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">investors@sentratech.net</a>
+                    <span className="text-white font-medium">CEO & Founder: </span>
+                    <a href="mailto:swapnil.roy@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">swapnil.roy@sentratech.net</a>
                   </li>
                 </ul>
+                
+                <div className="mt-6 p-4 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl">
+                  <h4 className="text-white font-semibold mb-2">What We Provide Investors</h4>
+                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1 text-left">
+                    <li>• Detailed pitch deck and financial projections</li>
+                    <li>• Product demonstration and technical deep-dive</li>
+                    <li>• Customer validation calls and pilot results</li>
+                    <li>• Market analysis and competitive positioning</li>
+                    <li>• Team backgrounds and advisory network</li>
+                  </ul>
+                </div>
               </div>
               
               <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold text-white mb-4">Reporting Schedule</h3>
-                <ul className="space-y-2 text-[rgb(218,218,218)] text-sm">
-                  <li>• Quarterly investor updates</li>
-                  <li>• Annual financial reporting</li>
-                  <li>• Monthly operational metrics (board)</li>
-                  <li>• Ad-hoc strategic announcements</li>
+                <h3 className="text-lg font-semibold text-white mb-4">Investment Terms</h3>
+                <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4 mb-4">
+                  <ul className="space-y-2 text-[rgb(218,218,218)] text-sm text-left">
+                    <li><span className="text-white font-medium">Stage:</span> Pre-Seed</li>
+                    <li><span className="text-white font-medium">Target:</span> $2.5M</li>
+                    <li><span className="text-white font-medium">Security:</span> SAFE/Convertible</li>
+                    <li><span className="text-white font-medium">Timeline:</span> Q1 2025 Close</li>
+                  </ul>
+                </div>
+                
+                <h4 className="text-white font-semibold mb-2">Ideal Investor Profile</h4>
+                <ul className="text-[rgb(218,218,218)] text-sm space-y-1 text-left">
+                  <li>• Experience with B2B SaaS and AI startups</li>
+                  <li>• Network in enterprise customer support market</li>
+                  <li>• Hands-on approach to supporting portfolio companies</li>
+                  <li>• Understanding of pre-seed to Series A scaling</li>
                 </ul>
               </div>
             </div>
@@ -484,16 +497,16 @@ const InvestorRelationsPage = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => window.location.href = 'mailto:investors@sentratech.net'}
+              onClick={() => window.location.href = 'mailto:swapnil.roy@sentratech.net?subject=Investment Inquiry - SentraTech Pre-Seed&body=Hi Swapnil,%0A%0AI am interested in learning more about SentraTech\'s pre-seed investment opportunity. Please send me the pitch deck and let me know when we can schedule a call.%0A%0AThank you,%0A[Your Name]'}
               className="px-8 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200"
             >
-              Contact Investor Relations
+              Request Pitch Deck
             </button>
             <button
               onClick={() => navigate('/demo-request')}
               className="px-8 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] font-semibold rounded-xl hover:bg-[#00FF41]/10 transition-colors duration-200"
             >
-              Request Product Demo
+              Schedule Product Demo
             </button>
           </div>
         </div>
