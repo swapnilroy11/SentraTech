@@ -14,14 +14,28 @@ const ChatWidget = () => {
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Create chat session with network fallback
+  // Create chat session with robust connectivity testing
   const createChatSession = async () => {
     setIsConnecting(true);
     
     try {
-      const { isOnline } = await import('../config/dashboardConfig.js');
+      const { hasNetwork } = await import('../config/dashboardConfig.js');
       
-      // Always attempt network session creation - let error handling determine fallback
+      // Real connectivity test before attempting session creation
+      const networkAvailable = await hasNetwork();
+      if (!networkAvailable) {
+        console.warn('🌐 Chat: Network probe failed - starting in offline mode');
+        setChatSessionId(`offline_${Date.now()}`);
+        setChatMessages([{
+          id: Date.now(),
+          content: "Hello! I'm Sentra AI, your intelligent customer support assistant. I can help you with pricing questions, feature details, ROI calculations, demo requests, or connect you with our sales team. What would you like to know about SentraTech? (Network unavailable - offline mode)",
+          sender: 'assistant',
+          timestamp: new Date()
+        }]);
+        setIsConnecting(false);
+        setConnectionError(null);
+        return;
+      }
 
       // Try to create network session
       try {
