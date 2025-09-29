@@ -49,12 +49,11 @@ def is_duplicate_request(request_id: str) -> bool:
 from pydantic import BaseModel, Field, EmailStr, validator
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime, timezone, timedelta
+from datetime import timedelta
 import asyncio
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
-import time
 import re
 import random
 import string
