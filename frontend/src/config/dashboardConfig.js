@@ -187,9 +187,19 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
   };
 };
 
-// Submit chat message with AI response simulation fallback
+// Submit chat message with robust connectivity testing
 export const submitChatMessage = async (message, conversationId = null) => {
-  // Always attempt network call first - let error handling determine fallback
+  // Real connectivity test before attempting chat submission
+  try {
+    const networkAvailable = await hasNetwork();
+    if (!networkAvailable) {
+      console.warn('🌐 Chat: Network connectivity probe failed - using offline response');
+      return generateOfflineResponse(message);
+    }
+  } catch (probeError) {
+    console.warn('🌐 Chat: Network probe error - using offline response:', probeError.message);
+    return generateOfflineResponse(message);
+  }
 
   try {
     const controller = new AbortController();
