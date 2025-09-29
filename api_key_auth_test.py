@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Use production URL from frontend/.env
-BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com"
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com"
 API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"  # From backend/.env EMERGENT_API_KEY
 
 class APIKeyAuthTester:
@@ -100,7 +100,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
             "User-Agent": "SentraTech-Testing/1.0"
         }
         
@@ -151,7 +151,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
             "User-Agent": "SentraTech-Testing/1.0"
         }
         
@@ -201,7 +201,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
             "User-Agent": "SentraTech-Testing/1.0"
         }
         
@@ -252,7 +252,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
             "User-Agent": "SentraTech-Testing/1.0"
         }
         
@@ -303,7 +303,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com",
+            "Origin": "https://secure-form-relay.preview.emergentagent.com",
             "User-Agent": "SentraTech-Testing/1.0"
         }
         
@@ -345,7 +345,7 @@ class APIKeyAuthTester:
             endpoint_name = endpoint_path.split('/')[-1].replace('-', ' ').title()
             
             headers = {
-                "Origin": "https://netproxy-forms.preview.emergentagent.com",
+                "Origin": "https://secure-form-relay.preview.emergentagent.com",
                 "Access-Control-Request-Method": "POST",
                 "Access-Control-Request-Headers": "Content-Type"
             }
@@ -380,7 +380,7 @@ class APIKeyAuthTester:
         # Test malformed JSON
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com"
+            "Origin": "https://secure-form-relay.preview.emergentagent.com"
         }
         
         try:
@@ -428,7 +428,7 @@ class APIKeyAuthTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://netproxy-forms.preview.emergentagent.com"
+            "Origin": "https://secure-form-relay.preview.emergentagent.com"
         }
         
         try:
@@ -475,7 +475,7 @@ class APIKeyAuthTester:
             
             headers = {
                 "Content-Type": "application/json",
-                "Origin": "https://netproxy-forms.preview.emergentagent.com"
+                "Origin": "https://secure-form-relay.preview.emergentagent.com"
             }
             
             try:

@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import urllib.parse
 
 # Backend URL from environment
-BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
 
 # Supabase configuration from frontend/.env
 SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"

@@ -16,7 +16,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
 
 class PricingBackendTester:
     """Comprehensive testing for NEW SentraTech pricing backend integration"""

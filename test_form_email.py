@@ -5,7 +5,7 @@ Test form endpoint with different email formats
 
 import requests
 
-BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
 
 def test_form_with_email(email, description):
     """Test form endpoint with specific email"""

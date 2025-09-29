@@ -1444,7 +1444,7 @@ import httpx
 from fastapi import Request
 
 # Dashboard API configuration
-DASHBOARD_BASE_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+DASHBOARD_BASE_URL = "https://secure-form-relay.preview.emergentagent.com/api"
 DASHBOARD_ORIGIN = "https://www.sentratech.net"
 
 async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
@@ -1839,13 +1839,13 @@ async def proxy_job_application(request: Request):
         # Forward to dashboard with API key authentication
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
-                "https://sentradash.preview.emergentagent.com/api/forms/job-application",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/job-application",
                 json=body,
                 headers={
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "X-API-Key": api_key,  # Forward the API key for authentication
-                    "Origin": "https://netproxy-forms.preview.emergentagent.com",
+                    "Origin": "https://secure-form-relay.preview.emergentagent.com",
                     "User-Agent": "SentraTech-JobApplication-Proxy/1.0"
                 }
             )
@@ -4283,7 +4283,7 @@ async def proxy_newsletter_signup(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://netproxy-forms.preview.emergentagent.com/api/forms/newsletter-signup",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/newsletter-signup",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4305,7 +4305,7 @@ async def proxy_demo_request(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://netproxy-forms.preview.emergentagent.com/api/forms/demo-request",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/demo-request",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4327,7 +4327,7 @@ async def proxy_roi_calculator(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://netproxy-forms.preview.emergentagent.com/api/forms/roi-calculator",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/roi-calculator",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4349,7 +4349,7 @@ async def proxy_contact_sales(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://netproxy-forms.preview.emergentagent.com/api/forms/contact-sales",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/contact-sales",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4371,7 +4371,7 @@ async def proxy_job_application(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://netproxy-forms.preview.emergentagent.com/api/forms/job-application",
+                "https://secure-form-relay.preview.emergentagent.com/api/forms/job-application",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4461,8 +4461,8 @@ app.add_middleware(
     allow_origins=[
         "https://www.sentratech.net",
         "https://sentratech.net",
-        "https://netproxy-forms.preview.emergentagent.com",
-        "https://form-simulator.preview.emergentagent.com",
+        "https://secure-form-relay.preview.emergentagent.com",
+        "https://secure-form-relay.preview.emergentagent.com",
         "http://localhost:3000",
         "http://localhost:8080"
     ],

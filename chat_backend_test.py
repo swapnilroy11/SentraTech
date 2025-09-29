@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://netproxy-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
 WEBSOCKET_URL = "wss://ux-legal-revamp.preview.emergentagent.com/api/chat/ws"
 
 class ChatFunctionalityTester:

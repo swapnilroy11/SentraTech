@@ -1,85 +1,62 @@
 <analysis>
-The AI engineer's work primarily focused on enabling robust form submissions and AI chat functionality, initially tackling UI/UX, then persistent network issues. The core problem evolved from Failed to Fetch errors to unreliable  checks, and finally to a subtle environment-specific routing discrepancy. The engineer iteratively implemented local backend endpoints, external dashboard integrations, offline fallbacks, retry queues, and advanced network probes. A significant breakthrough came when it was identified that browser requests were hitting a different backend service (mock/staging) than server-side requests (real dashboard), despite appearing successful. After attempts to modify browser headers failed, the AI engineer shifted to a server-to-server proxy solution to bypass CORS and routing complexities. Concurrently, the engineer also completely rewrote the Investor Relations page and created a comprehensive 10-page pitch deck based on pre-seed startup best practices. The latest focus is on confirming the efficacy of the proxy solution with the user and clarifying the correct production API endpoint.
+The previous AI engineer spent significant effort resolving persistent routing, CORS, and authentication issues to ensure all 6 website forms reliably submit data to the external SentraTech Admin Dashboard. The work trajectory shows a shift from direct API calls (which failed due to routing) to a robust **server-to-server proxy** solution implemented in FastAPI. Key fixes involved hardening this proxy by: 1) implementing client-side rate limiting and server-side idempotency (using unique IDs and a 60-second window) to prevent duplicate submissions, 2) refining CORS middleware and adding  handlers in the backend, and 3) securely forwarding the  via the proxy. The final challenge was addressing the instability caused by dynamic session URLs, which led to configuring the entire application—frontend environment, backend CORS, and proxy origin—to use the user's permanent custom domain, . The current state is blocked awaiting SSL certificate provisioning for the new domain.
 </analysis>
 
 <product_requirements>
-The SentraTech application, a dark-themed AI + BI customer support platform, aims for high conversion. Initial requirements included UI refinements (AI button, ROI Calculator, Contact Sales form) and secure data ingestion to a local backend, then forwarding to an external Admin Dashboard. The Careers page required a multi-step job application form.
+The SentraTech application requires robust, high-conversion functionality for multiple forms (Demo Request, ROI Calculator, Contact Sales, Newsletter, Job Application) and the Sentra AI chat widget. The primary goal is reliable, authenticated data ingestion into the external SentraTech Admin Dashboard.
 
-Later, the core requirement shifted to integrating *all* website forms (Demo Request, ROI Calculator, Contact Sales, Newsletter, Job Application) directly with the external SentraTech Admin Dashboard for unified management. This involved specific data schemas and direct submission. Due to persistent deployment network issues, a temporary requirement emerged to make all forms and Sentra AI work without actual network calls, simulating success states. This was followed by reinstating network calls with robust fallback. A significant new request was to completely rewrite the Investor Relations page to reflect a genuine pre-seed startup seeking investment, including a CEO email. Subsequently, a 10-page downloadable pitch deck was requested, aligning with industry standards for pre-seed startups. The ongoing challenge is ensuring that all form submissions from the user's browser environment reliably reach the SentraTech Admin Dashboard.
+Initial failures led to the implementation of a server-to-server proxy architecture to bypass browser-side CORS and routing complexities. Recent requirements focused on ensuring data integrity and stability:
+1. Implement client-side rate limiting and server-side idempotency to prevent form submission flooding.
+2. Securely authenticate all proxy traffic using an API key ().
+3. Correctly map and capture complex form data, especially calculated values (ROI) and multi-step inputs (Job Application).
+4. Resolve the critical issue of connection breakage due to dynamic session URLs by transitioning the entire application configuration (frontend URL, backend CORS, proxy origin) to the user's custom domain, .
 </product_requirements>
 
 <key_technical_concepts>
-- **Full-stack Development**: React (frontend), FastAPI (backend), MongoDB.
-- **API Integration**:  API, HTTPX (backend proxy), JSON serialization, CORS, .
-- **Frontend UI/UX**: React Hooks, ,  (retry queue), service workers, client-side routing.
-- **Network Troubleshooting**: Origin headers,  reliability, proxy routing, health checks, error logging.
-- **Architectural Patterns**: Server-to-server proxy, offline fallback, retry mechanisms.
+- **Proxy Architecture**: FastAPI backend acting as an authenticated server-to-server relay using .
+- **API Security**: Secure forwarding of  via  header.
+- **Data Integrity**: Client-side rate limiting and server-side idempotency (using unique request IDs, HTTP 429) to prevent duplicate form submissions.
+- **CORS Management**: Explicit origin whitelisting and  preflight handling in FastAPI middleware.
+- **React State Management**: Capturing complex, calculated form data from React state/components.
 </key_technical_concepts>
 
 <code_architecture>
 
 -   ****:
-    -   **Summary**: FastAPI backend, handles API routes.
-    -   **Changes**:  endpoints were removed, then re-added. New proxy endpoints (, , etc.) were added to forward requests to the external dashboard, replacing direct frontend calls. Includes error handling and  for forwarding.
+    -   **Importance**: Stores backend configuration and secure API keys.
+    -   **Changes**: Added  (securely storing the key provided by the user) and updated  to  for the final domain transition.
 -   ****:
-    -   **Summary**: Stores backend environment variables.
-    -   **Changes**:  set to .
--   ** (NEW)**:
-    -   **Summary**: Contains core logic for proxying requests from the local backend to the external dashboard API using . Manages headers, payloads, and error handling for the proxy.
+    -   **Importance**: Contains the core FastAPI logic, API routes, and the critical server-to-server proxy.
+    -   **Changes**: Refined  to whitelist  and enabled . Explicit  handlers were added for all  endpoints. The  function was updated to read  from the environment and securely forward it as the  header. Server-side idempotency was implemented using an in-memory dictionary to reject duplicate requests within a 60-second window (HTTP 429).
 -   ****:
-    -   **Summary**: Stores frontend environment variables.
-    -   **Changes**:  was changed multiple times, eventually pointing to  to direct requests to the local backend proxy.
--   ** (NEW)**:
-    -   **Summary**: Central configuration for form submissions.
-    -   **Changes**: Re-created (after previous deletion) to include , ,  (originally for direct external, then local backend, then proxy), ,  probe,  for retry queue, and . Now uses local backend proxy endpoints.
+    -   **Importance**: Defines the target URL for all frontend API calls.
+    -   **Changes**: Updated  to the new custom domain .
+-   ****:
+    -   **Importance**: Centralizes form submission logic, network configuration, and retry mechanics.
+    -   **Changes**: Implemented  with configurable . The  function was updated to correctly construct proxy URLs using  and ensures  for browser requests. A logging helper () was added for debugging. Submission logic was updated to use a persistent  for idempotency checks.
 -   ** (Form Components)**:
-    -   **Summary**: , , , , , .
-    -   **Changes**: All updated to use the  function from . Initially, they used  for offline simulation, then were updated for direct network calls with  fallbacks, removed  checks, integrated  probe, and finally adapted to call the local backend proxy endpoints.
--   ****:
-    -   **Summary**: Sentra AI chat functionality.
-    -   **Changes**: Network calls were initially disabled. Restored with network capabilities and fallback, adapted for the  probe, and now uses the local backend proxy for chat messages.
--   ****:
-    -   **Summary**: Service Worker for caching and offline capabilities.
-    -   **Changes**: Updated to implement a network-first strategy for critical API routes and health checks, bypassing caching for  paths to ensure real network calls.
--   ****:
-    -   **Summary**: Investor relations page content.
-    -   **Changes**: Completely rewritten to reflect a pre-seed startup seeking investment, including problem/solution, market opportunity, funding strategy, roadmap, and CEO contact.
--   ** (NEW)**:
-    -   **Summary**: React component rendering the 10-page interactive pitch deck.
-    -   **Changes**: Created to display company intro, problem/solution, market, competitive advantage, tech/business/financial strategy, team, investment ask, and vision.
--   ** (NEW)**:
-    -   **Summary**: Dedicated page for the Pitch Deck component.
-    -   **Changes**: Created to host the  component and added to frontend routing.
--   ** (NEW)**:
-    -   **Summary**: Utility for comprehensive network debugging and logging.
-    -   **Changes**: Created to capture detailed request/response info, environment data, and error messages for troubleshooting routing issues.
--   ****:
-    -   **Summary**: Main routing component.
-    -   **Changes**: Updated to include the new  route.
+    -   **Importance**: Handle user input and trigger data submission.
+    -   **Changes**: All components were switched to use . ROI Calculator was significantly updated to capture calculated results from React state. Job Application components were enhanced for multi-step data aggregation and precise field mapping according to dashboard schema. Client-side state management was added to prevent multiple submissions (disabling buttons/showing loading state).
 </code_architecture>
 
 <pending_tasks>
-- Complete synchronized-style particle cursor trail (further refinement).
-- Lazy-loading and critical CSS inlining (further optimization/monitoring).
-- Debug service worker registration (re-enabling/full debugging for production context).
+- Complete synchronized-style particle cursor trail.
+- Lazy-loading and critical CSS inlining.
+- Debug service worker registration.
 - UI Enhancements: Newsletter Subscribers management, Active Contracts page, and update routing/navigation for new admin pages.
-- Testing Suite: Add unit tests for ingest helpers and E2E tests covering form submits, lists, detail modals, exports, and real-time highlights on the Admin Dashboard side.
-- Implement Part 2: Video Pitch guidelines (the video component for the pitch deck).
+- Implement Part 2: Video Pitch guidelines.
+- **Critical Task**: Await SSL certificate provisioning for  and verify end-to-end functionality across all 6 forms using the custom domain.
 </pending_tasks>
 
 <current_work>
-Immediately before this summary request, the AI engineer identified a critical environment/routing discrepancy: while server-side requests successfully reached the external SentraTech Admin Dashboard, browser-initiated requests were being routed to a different, non-persistent service (mock/staging backend). This explained why users were not seeing their data appear in the dashboard despite receiving success responses in the browser.
+The immediate work focused on permanently solving the dashboard connectivity issue caused by dynamic session URLs. The AI engineer successfully gathered the user's custom domain () and updated all configurations across the stack:
+1.  **Backend Configuration (, )**: Updated CORS origins and proxy configuration to reference .
+2.  **Frontend Configuration (, )**: Updated  and submission logic to point to the new domain.
+3.  **DNS Records**: The user successfully added A and CNAME records pointing  to the application's external IP/host.
 
-To resolve this fundamental routing issue and bypass CORS complexities, the AI engineer implemented a **server-to-server proxy solution**. This involved:
-1.  **Creating **: A new Python module to handle forwarding requests.
-2.  **Adding proxy endpoints to **: New  endpoints (e.g., ) were added to the local backend. These endpoints receive requests from the frontend and use  to forward them to the actual external dashboard API, ensuring the correct Origin header is sent from the server-side.
-3.  **Updating **: The  was configured to point to the local backend's proxy endpoints.
-4.  **Modifying all frontend form components and **: These components were updated to send their submissions to the newly created local backend proxy endpoints instead of directly to the external dashboard.
-5.  **Setting  in **: Pointed to the local backend ().
-
-The AI engineer has successfully tested this proxy solution internally, confirming that the local backend proxy forwards requests to the external dashboard and receives successful responses with unique IDs. Two test entries were provided ( and ) for the user to verify in their dashboard. The current state is that the AI agent is awaiting confirmation from the user regarding the presence of these test entries in their dashboard and clarification on the final production API base URL ( vs ).
+The last few messages confirm that the custom domain is resolving via DNS, but connection attempts (using  and screenshot tools) are failing due to SSL handshake errors. This is a typical temporary state while the SSL certificate is provisioning. The engineer is currently waiting for the infrastructure to stabilize before performing final functional tests. All critical application logic (rate limiting, idempotency, API key forwarding, and form data mapping) is implemented and internally tested as functional.
 </current_work>
 
 <optional_next_step>
-Verify the submitted test entries (, ) in the dashboard and confirm the correct production API base URL.
+Wait a few minutes for the SSL certificate to provision and then re-test  connectivity via  and frontend screenshot.
 </optional_next_step>

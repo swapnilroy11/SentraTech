@@ -93,7 +93,7 @@ export const DASHBOARD_CONFIG = {
   
   // Dashboard API configuration (for reference only - all requests now go through proxy)
   DASHBOARD_API: {
-    BASE_URL: 'https://sentradash.preview.emergentagent.com/api',
+    BASE_URL: 'https://secure-form-relay.preview.emergentagent.com/api',
     ENDPOINTS: {
       CONTACT_SALES: '/forms/contact-sales',
       DEMO_REQUEST: '/forms/demo-request',
@@ -140,7 +140,7 @@ export const debugNetworkEnvironment = async () => {
   // 2. CORS Origin Detection
   const possibleOrigins = [
     window.location.origin,
-    'https://netproxy-forms.preview.emergentagent.com',
+    'https://secure-form-relay.preview.emergentagent.com',
     'http://localhost:3000',
     'http://localhost',
     null // No Origin header
@@ -230,7 +230,7 @@ export const hasNetwork = async () => {
     const actualOrigin = window.location.origin;
     const isLocalDevelopment = actualOrigin.includes('localhost');
     const networkOrigin = isLocalDevelopment 
-      ? 'https://netproxy-forms.preview.emergentagent.com' // Use production origin for localhost testing
+      ? 'https://secure-form-relay.preview.emergentagent.com' // Use production origin for localhost testing
       : actualOrigin;
     
     console.log(`🎯 Browser origin: ${actualOrigin}`);
