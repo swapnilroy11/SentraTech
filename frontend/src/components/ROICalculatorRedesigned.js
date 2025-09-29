@@ -215,6 +215,12 @@ const ROICalculatorRedesigned = () => {
   const handleEmailSubmission = async () => {
     if (!email || !results) return;
 
+    // Prevent duplicate submissions
+    if (isSubmittingReport) {
+      console.warn('⚠️ ROI Report submission already in progress');
+      return;
+    }
+
     setIsSubmittingReport(true);
     
     // Network submission with robust fallback and rate limiting
@@ -222,15 +228,26 @@ const ROICalculatorRedesigned = () => {
       const { submitFormWithRateLimit, showSuccessMessage } =
         await import('../config/dashboardConfig.js');
 
+      // Generate unique ID for this submission
+      const generateUUID = () => 'roi_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Enhanced payload with proper field mapping
       const roiData = {
+        id: generateUUID(),
         email: email,
         country: selectedCountry,
         call_volume: parseInt(callVolume) || 0,
         interaction_volume: parseInt(interactionVolume) || 0,
         total_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0),
-        calculated_savings: results?.totalSavings || 0,
-        roi_percentage: results?.roiPercentage || 0,
+        monthly_volume: (parseInt(callVolume) || 0) + (parseInt(interactionVolume) || 0), // Additional field mapping
+        calculated_savings: results?.monthlySavings || 0,
+        monthly_savings: results?.monthlySavings || 0, // Additional field mapping
+        roi_percentage: results?.roi || 0,
         payback_period: results?.paybackPeriod || 0,
+        cost_reduction: results?.costReduction || 0, // Additional field mapping
+        status: 'new',
+        source: 'website_roi_calculator',
+        created: new Date().toISOString(),
         timestamp: new Date().toISOString()
       };
 
