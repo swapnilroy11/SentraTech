@@ -1402,6 +1402,293 @@ async def get_job_applications_status():
     except Exception as e:
         return {"error": str(e), "total_count": 0}
 
+# Server-to-Server Dashboard Proxy Endpoints
+# This eliminates CORS issues by proxying requests through our backend
+
+import httpx
+from fastapi import Request
+
+# Dashboard API configuration
+DASHBOARD_BASE_URL = "https://sentradash.preview.emergentagent.com/api"
+DASHBOARD_ORIGIN = "https://unified-forms.preview.emergentagent.com"
+
+async def proxy_to_dashboard(endpoint: str, data: dict):
+    """Proxy form submission to dashboard API"""
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(
+                f"{DASHBOARD_BASE_URL}{endpoint}",
+                json=data,
+                headers={
+                    "Content-Type": "application/json",
+                    "Origin": DASHBOARD_ORIGIN,
+                    "User-Agent": "SentraTech-Backend/1.0",
+                    "Accept": "application/json"
+                }
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                logging.info(f"Dashboard proxy success: {endpoint}, ID: {result.get('id', 'unknown')}")
+                return {
+                    "success": True,
+                    "data": result,
+                    "mode": "dashboard_proxy",
+                    "status_code": response.status_code
+                }
+            else:
+                logging.error(f"Dashboard proxy failed: {endpoint}, Status: {response.status_code}, Response: {response.text}")
+                return {
+                    "success": False,
+                    "error": f"Dashboard API returned {response.status_code}: {response.text}",
+                    "mode": "dashboard_proxy_error",
+                    "status_code": response.status_code
+                }
+                
+    except httpx.TimeoutException:
+        logging.error(f"Dashboard proxy timeout: {endpoint}")
+        return {
+            "success": False,
+            "error": "Dashboard API timeout",
+            "mode": "dashboard_proxy_timeout"
+        }
+    except Exception as e:
+        logging.error(f"Dashboard proxy error: {endpoint}, Error: {str(e)}")
+        return {
+            "success": False,
+            "error": f"Proxy error: {str(e)}",
+            "mode": "dashboard_proxy_error"
+        }
+
+@api_router.post("/proxy/newsletter-signup")
+async def proxy_newsletter_signup(request: Request):
+    """Proxy newsletter signup to dashboard"""
+    try:
+        data = await request.json()
+        
+        # Add timestamp if not present
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+        
+        # Add source if not present
+        if 'source' not in data:
+            data['source'] = 'website_newsletter'
+            
+        result = await proxy_to_dashboard('/forms/newsletter-signup', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Log error but return success to user (graceful degradation)
+            logging.warning(f"Newsletter proxy failed, storing locally: {result['error']}")
+            
+            # Store locally as backup
+            newsletter_data = {
+                **data,
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "status": "proxy_failed",
+                "proxy_error": result['error']
+            }
+            await db.newsletter_fallback.insert_one(newsletter_data)
+            
+            return {
+                "success": True,
+                "message": "Newsletter subscription confirmed",
+                "id": newsletter_data["id"]
+            }
+            
+    except Exception as e:
+        logging.error(f"Newsletter proxy endpoint error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+@api_router.post("/proxy/contact-sales")
+async def proxy_contact_sales(request: Request):
+    """Proxy contact sales to dashboard"""
+    try:
+        data = await request.json()
+        
+        # Add timestamp if not present
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+            
+        result = await proxy_to_dashboard('/forms/contact-sales', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Store locally as backup
+            contact_data = {
+                **data,
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "status": "proxy_failed",
+                "proxy_error": result['error']
+            }
+            await db.contact_fallback.insert_one(contact_data)
+            
+            return {
+                "success": True,
+                "message": "Contact sales request received successfully",
+                "id": contact_data["id"]
+            }
+            
+    except Exception as e:
+        logging.error(f"Contact sales proxy error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+@api_router.post("/proxy/demo-request")
+async def proxy_demo_request(request: Request):
+    """Proxy demo request to dashboard"""
+    try:
+        data = await request.json()
+        
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+        if 'source' not in data:
+            data['source'] = 'website_cta'
+            
+        result = await proxy_to_dashboard('/forms/demo-request', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Store locally as backup
+            demo_data = {
+                **data,
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "status": "proxy_failed",
+                "proxy_error": result['error']
+            }
+            await db.demo_fallback.insert_one(demo_data)
+            
+            return {
+                "success": True,
+                "message": "Demo request submitted successfully",
+                "id": demo_data["id"]
+            }
+            
+    except Exception as e:
+        logging.error(f"Demo request proxy error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+@api_router.post("/proxy/roi-calculator")
+async def proxy_roi_calculator(request: Request):
+    """Proxy ROI calculator to dashboard"""
+    try:
+        data = await request.json()
+        
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+            
+        result = await proxy_to_dashboard('/forms/roi-calculator', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Store locally as backup
+            roi_data = {
+                **data,
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "status": "proxy_failed",
+                "proxy_error": result['error']
+            }
+            await db.roi_fallback.insert_one(roi_data)
+            
+            return {
+                "success": True,
+                "message": "ROI report submitted successfully",
+                "id": roi_data["id"]
+            }
+            
+    except Exception as e:
+        logging.error(f"ROI calculator proxy error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+@api_router.post("/proxy/job-application")
+async def proxy_job_application(request: Request):
+    """Proxy job application to dashboard"""
+    try:
+        data = await request.json()
+        
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+        if 'source' not in data:
+            data['source'] = 'careers_page'
+            
+        result = await proxy_to_dashboard('/forms/job-application', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Store locally as backup
+            job_data = {
+                **data,
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "status": "proxy_failed", 
+                "proxy_error": result['error']
+            }
+            await db.job_application_fallback.insert_one(job_data)
+            
+            return {
+                "success": True,
+                "message": "Job application submitted successfully",
+                "id": job_data["id"]
+            }
+            
+    except Exception as e:
+        logging.error(f"Job application proxy error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+@api_router.post("/proxy/chat-message")
+async def proxy_chat_message(request: Request):
+    """Proxy chat message to dashboard"""
+    try:
+        data = await request.json()
+        
+        if 'timestamp' not in data:
+            data['timestamp'] = datetime.now(timezone.utc).isoformat()
+            
+        result = await proxy_to_dashboard('/chat/message', data)
+        
+        if result['success']:
+            return result['data']
+        else:
+            # Return offline chat response as fallback
+            from config.dashboardConfig import generateOfflineResponse
+            offline_response = generateOfflineResponse(data.get('message', ''))
+            return offline_response
+            
+    except Exception as e:
+        logging.error(f"Chat message proxy error: {str(e)}")
+        return {"success": False, "error": "Internal server error"}
+
+# Status endpoint for proxy monitoring
+@api_router.get("/proxy/status")
+async def get_proxy_status():
+    """Get proxy status and health"""
+    try:
+        # Test dashboard connectivity
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(f"{DASHBOARD_BASE_URL}/health", headers={
+                "Origin": DASHBOARD_ORIGIN,
+                "User-Agent": "SentraTech-Backend/1.0"
+            })
+            dashboard_healthy = response.status_code == 200
+    except:
+        dashboard_healthy = False
+        
+    return {
+        "proxy_service": "operational",
+        "dashboard_connectivity": "healthy" if dashboard_healthy else "unavailable",
+        "dashboard_url": DASHBOARD_BASE_URL,
+        "fallback_mode": "local_storage" if not dashboard_healthy else "none",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 @api_router.post("/candidates/update_status")
 async def update_candidate_status(request: Request, status_update: CandidateStatusUpdate):
     """
