@@ -235,6 +235,8 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
         headers: requestHeaders,
         data: JSON.stringify(data, null, 2),
         browserOrigin: actualOrigin,
+        networkOrigin: networkOrigin,
+        developmentMode: isLocalDevelopment,
         timestamp: new Date().toISOString()
       });
       
