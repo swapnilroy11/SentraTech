@@ -190,13 +190,20 @@ const InvestorRelationsPage = () => {
           
           <div className="text-center">
             <h1 className="text-5xl font-bold text-white mb-6">
-              Investor Relations
+              Investment Opportunity
             </h1>
             <p className="text-xl text-[rgb(161,161,170)] max-w-4xl mx-auto leading-relaxed">
-              SentraTech is building the future of AI-powered customer support. We're backed by leading 
-              venture capital firms and are experiencing rapid growth across key business metrics. 
-              Learn more about our financial performance and investment opportunity.
+              SentraTech is pioneering the next generation of AI-powered customer support automation. 
+              We're seeking $2.5M in pre-seed funding to scale our production infrastructure and 
+              accelerate enterprise pilot customer adoption in the rapidly growing $95B customer service market.
             </p>
+            <div className="mt-8 inline-flex items-center px-6 py-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-xl">
+              <span className="text-[#00FF41] font-semibold text-lg">Pre-Seed Stage</span>
+              <span className="text-white ml-3">•</span>
+              <span className="text-white ml-3">Seeking $2.5M</span>
+              <span className="text-white ml-3">•</span>
+              <span className="text-white ml-3">Q1 2025 Timeline</span>
+            </div>
           </div>
         </div>
 
