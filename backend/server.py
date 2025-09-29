@@ -1726,33 +1726,67 @@ async def options_job_application():
 
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
-    """Proxy job application to dashboard with detailed logging"""
+    """Proxy job application to dashboard with API key authentication and detailed logging"""
     try:
-        data = await request.json()
+        body = await request.json()
         
-        # Comprehensive payload logging
+        # Enhanced logging for debugging (as requested)
+        print("🔎 Job Application payload:", body)
+        
+        # Comprehensive payload logging for detailed analysis
         proxy_logger.info(f"🔎 PROXY RECEIVED JOB APPLICATION PAYLOAD:")
-        proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
+        proxy_logger.info(f"📊 Complete payload: {json.dumps(body, indent=2, default=str)}")
         proxy_logger.info(f"📋 Field analysis:")
-        proxy_logger.info(f"  - Total fields: {len(data)}")
-        proxy_logger.info(f"  - Full Name: '{data.get('full_name', 'MISSING')}' (type: {type(data.get('full_name'))})")
-        proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
-        proxy_logger.info(f"  - Phone: '{data.get('phone', 'MISSING')}' (type: {type(data.get('phone'))})")
-        proxy_logger.info(f"  - Position: '{data.get('position', 'MISSING')}' (type: {type(data.get('position'))})")
-        proxy_logger.info(f"  - Position Applied: '{data.get('position_applied', 'MISSING')}' (type: {type(data.get('position_applied'))})")
-        proxy_logger.info(f"  - Location: '{data.get('location', 'MISSING')}' (type: {type(data.get('location'))})")
-        proxy_logger.info(f"  - LinkedIn: '{data.get('linkedin_profile', 'MISSING')}' (type: {type(data.get('linkedin_profile'))})")
-        proxy_logger.info(f"  - Resume URL: '{data.get('resume_url', 'MISSING')}' (type: {type(data.get('resume_url'))})")
-        proxy_logger.info(f"  - Motivation Text: '{data.get('motivation_text', 'MISSING')}' (type: {type(data.get('motivation_text'))})")
-        proxy_logger.info(f"  - Preferred Shifts: '{data.get('preferred_shifts', 'MISSING')}' (type: {type(data.get('preferred_shifts'))})")
-        proxy_logger.info(f"  - Availability: '{data.get('availability_start_date', 'MISSING')}' (type: {type(data.get('availability_start_date'))})")
+        proxy_logger.info(f"  - Total fields: {len(body)}")
+        proxy_logger.info(f"  - Full Name: '{body.get('full_name', 'MISSING')}' (type: {type(body.get('full_name'))})")
+        proxy_logger.info(f"  - Email: '{body.get('email', 'MISSING')}' (type: {type(body.get('email'))})")
+        proxy_logger.info(f"  - Phone: '{body.get('phone', 'MISSING')}' (type: {type(body.get('phone'))})")
+        proxy_logger.info(f"  - Position Applied: '{body.get('position_applied', 'MISSING')}' (type: {type(body.get('position_applied'))})")
+        proxy_logger.info(f"  - Location: '{body.get('location', 'MISSING')}' (type: {type(body.get('location'))})")
+        proxy_logger.info(f"  - LinkedIn: '{body.get('linkedin_profile', 'MISSING')}' (type: {type(body.get('linkedin_profile'))})")
+        proxy_logger.info(f"  - Resume URL: '{body.get('resume_url', 'MISSING')}' (type: {type(body.get('resume_url'))})")
+        proxy_logger.info(f"  - Motivation: '{body.get('motivation', 'MISSING')}' (type: {type(body.get('motivation'))})")
+        proxy_logger.info(f"  - Cover Letter: '{body.get('cover_letter', 'MISSING')}' (type: {type(body.get('cover_letter'))})")
+        proxy_logger.info(f"  - Work Authorization: '{body.get('work_authorization', 'MISSING')}' (type: {type(body.get('work_authorization'))})")
+        proxy_logger.info(f"  - Preferred Shifts: '{body.get('preferred_shifts', 'MISSING')}' (type: {type(body.get('preferred_shifts'))})")
+        proxy_logger.info(f"  - Start Date: '{body.get('availability_start_date', 'MISSING')}' (type: {type(body.get('availability_start_date'))})")
         
-        if 'timestamp' not in data:
-            data['timestamp'] = datetime.now(timezone.utc).isoformat()
-        if 'source' not in data:
-            data['source'] = 'careers_page'
+        # Ensure required fields
+        if 'timestamp' not in body:
+            body['timestamp'] = datetime.now(timezone.utc).isoformat()
+        if 'source' not in body:
+            body['source'] = 'careers_page'
+        
+        # Get API key from environment
+        api_key = os.environ.get('EMERGENT_API_KEY')
+        if not api_key:
+            logging.error("EMERGENT_API_KEY not found in environment for job application")
+            return JSONResponse(
+                content={"success": False, "error": "API key not configured"}, 
+                status_code=500
+            )
+        
+        # Forward to dashboard with API key authentication
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(
+                "https://sentradash.preview.emergentagent.com/api/forms/job-application",
+                json=body,
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-API-Key": api_key,  # Forward the API key for authentication
+                    "Origin": "https://netproxy-forms.preview.emergentagent.com",
+                    "User-Agent": "SentraTech-JobApplication-Proxy/1.0"
+                }
+            )
             
-        result = await proxy_to_dashboard('/forms/job-application', data, dict(request.headers))
+            if resp.status_code == 200:
+                response_data = resp.json()
+                logging.info(f"✅ Job application successfully forwarded to dashboard: {response_data.get('id', 'unknown')}")
+                return JSONResponse(content=response_data, status_code=200)
+            else:
+                logging.error(f"❌ Dashboard returned {resp.status_code}: {resp.text}")
+                return JSONResponse(content=resp.json(), status_code=resp.status_code)
         
         if result['success']:
             return result['data']
