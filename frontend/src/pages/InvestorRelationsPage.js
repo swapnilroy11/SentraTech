@@ -54,19 +54,19 @@ const InvestorRelationsPage = () => {
     {
       title: 'Total Addressable Market (TAM)',
       value: '$95B',
-      description: 'Global customer service software and AI automation market',
+      description: 'Global customer service software and AI automation market growing at 15% CAGR',
       icon: Globe
     },
     {
-      title: 'Serviceable Addressable Market (SAM)',
-      value: '$28B',
-      description: 'Enterprise customer support automation and AI solutions',
+      title: 'Immediate Addressable Market',
+      value: '$12B',
+      description: 'Mid-market companies with 100+ support agents seeking AI automation',
       icon: Target
     },
     {
-      title: 'Serviceable Obtainable Market (SOM)',
-      value: '$2.8B',
-      description: 'Mid-market and enterprise companies with 1000+ support tickets/month',
+      title: 'Early Adoption Opportunity',
+      value: '$850M',
+      description: 'Companies currently evaluating AI customer support solutions',
       icon: Zap
     }
   ];
