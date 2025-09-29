@@ -1588,6 +1588,11 @@ async def proxy_demo_request(request: Request):
         logging.error(f"Demo request proxy error: {str(e)}")
         return {"success": False, "error": "Internal server error"}
 
+@api_router.options("/proxy/roi-calculator")
+async def options_roi_calculator():
+    """Handle preflight OPTIONS request for ROI calculator"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/roi-calculator")
 async def proxy_roi_calculator(request: Request):
     """Proxy ROI calculator to dashboard"""
