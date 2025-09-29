@@ -254,22 +254,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
         const { DASHBOARD_CONFIG, submitFormToDashboard, showSuccessMessage, isOnline } =
           await import('../config/dashboardConfig.js');
 
-        // Check if offline and handle immediately
-        if (!isOnline()) {
-          console.warn('Browser offline, using offline fallback');
-          setSubmitStatus('success');
-          if (window?.dataLayer) {
-            window.dataLayer.push({
-              event: 'contact_form_submit_offline',
-              planId: formData.planId,
-              planSelected: formData.planSelected,
-              billingTerm: formData.billingTerm,
-              priceDisplay: formData.priceDisplay,
-              ingestId: `contact_offline_${Date.now()}`
-            });
-          }
-          return;
-        }
+        // Always attempt network submission - let error handling determine fallback
 
         const result = await submitFormToDashboard(
           DASHBOARD_CONFIG.ENDPOINTS.CONTACT_SALES,
