@@ -42,6 +42,19 @@ const API_CACHE_PATTERNS = [
   { pattern: /\/api\/roi\/calculate/, strategy: 'networkFirst', ttl: 300000 }, // 5min
 ];
 
+// Critical API routes that should NEVER be cached and always use network-first
+const NETWORK_ONLY_PATTERNS = [
+  /\/api\/health/,              // Health check endpoint
+  /\/api\/forms\//,             // Form submission endpoints
+  /\/api\/chat\//,              // Chat endpoints
+  /\/api\/ingest\//,            // Ingest endpoints
+];
+
+// Check if request should bypass cache completely
+const shouldBypassCache = (url) => {
+  return NETWORK_ONLY_PATTERNS.some(pattern => pattern.test(url));
+};
+
 // Install event - precache critical assets
 self.addEventListener('install', (event) => {
   console.log('🚀 SentraTech Service Worker installing...');
