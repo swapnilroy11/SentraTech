@@ -73,9 +73,9 @@ const ChatWidget = () => {
     try {
       const { submitChatMessage, isOnline } = await import('../config/dashboardConfig.js');
       
-      // Check if offline or using offline session
-      if (!isOnline() || sessionId.startsWith('offline_') || sessionId.startsWith('fallback_') || sessionId.startsWith('error_')) {
-        console.warn('Using offline chat response');
+      // Check if using offline session (but don't check navigator.onLine)
+      if (sessionId.startsWith('offline_') || sessionId.startsWith('fallback_') || sessionId.startsWith('error_')) {
+        console.warn('Using offline chat response (offline session)');
         const { generateOfflineResponse } = await import('../config/dashboardConfig.js');
         const result = generateOfflineResponse(message);
         
