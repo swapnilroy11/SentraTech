@@ -257,40 +257,93 @@ const JobApplicationPage = () => {
   };
 
   // Submit to SentraTech Admin Dashboard with network fallback
-  const submitApplication = async (applicationData) => {
+  // Multi-step job application handler - aggregate all step data
+  const submitApplication = async (formData) => {
+    // Prevent duplicate submissions
+    if (isSubmitting) {
+      console.warn('⚠️ Job application submission already in progress');
+      return;
+    }
+
     try {
       const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 
-      // Log raw application data for debugging
-      console.log(`🔍 [JOB-APPLICATION-PAGE] Raw application data:`, {
-        first_name: `"${applicationData.first_name}" (type: ${typeof applicationData.first_name})`,
-        last_name: `"${applicationData.last_name}" (type: ${typeof applicationData.last_name})`,
-        email: `"${applicationData.email}" (type: ${typeof applicationData.email})`,
-        location: `"${applicationData.location}" (type: ${typeof applicationData.location})`,
-        linkedin_profile: `"${applicationData.linkedin_profile}" (type: ${typeof applicationData.linkedin_profile})`,
-        position_applied: `"${applicationData.position_applied}" (type: ${typeof applicationData.position_applied})`,
-        preferred_shifts: applicationData.preferred_shifts,
-        availability_start_date: `"${applicationData.availability_start_date}" (type: ${typeof applicationData.availability_start_date})`,
-        cover_note: `"${applicationData.cover_note}" (type: ${typeof applicationData.cover_note})`,
-        consent_for_storage: applicationData.consent_for_storage
+      // Generate unique ID for submission
+      const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Log aggregated form data from all steps
+      console.log(`🔍 [MULTI-STEP-JOB-APPLICATION] Aggregated data from all steps:`, {
+        step1_personal: {
+          full_name: `"${formData.full_name}" (type: ${typeof formData.full_name})`,
+          email: `"${formData.email}" (type: ${typeof formData.email})`,
+          phone: `"${formData.phone}" (type: ${typeof formData.phone})`,
+          location: `"${formData.location}" (type: ${typeof formData.location})`
+        },
+        step2_professional: {
+          portfolio_website: `"${formData.portfolio_website}" (type: ${typeof formData.portfolio_website})`,
+          preferred_shifts: `"${formData.preferred_shifts}" (type: ${typeof formData.preferred_shifts})`,
+          availability_start_date: `"${formData.availability_start_date}" (type: ${typeof formData.availability_start_date})`,
+          relevant_experience: `"${formData.relevant_experience}" (type: ${typeof formData.relevant_experience})`
+        },
+        step3_motivation: {
+          why_sentratech: `"${formData.why_sentratech}" (type: ${typeof formData.why_sentratech})`,
+          cover_letter: `"${formData.cover_letter}" (type: ${typeof formData.cover_letter})`
+        },
+        step4_legal: {
+          work_authorization: `"${formData.work_authorization}" (type: ${typeof formData.work_authorization})`,
+          consent_for_storage: formData.consent_for_storage,
+          consent_for_contact: formData.consent_for_contact
+        }
       });
 
-      // Prepare data in the expected format for the dashboard
+      // Comprehensive payload with field mappings matching your specification
       const jobData = {
-        full_name: `${applicationData.first_name} ${applicationData.last_name || ''}`.trim(),
-        email: applicationData.email,
-        location: applicationData.location,
-        linkedin_profile: applicationData.linkedin_profile || '',
-        position: applicationData.position_applied,
-        preferred_shifts: Array.isArray(applicationData.preferred_shifts) 
-          ? applicationData.preferred_shifts.join(', ') 
-          : applicationData.preferred_shifts || '',
-        availability_start_date: applicationData.availability_start_date || '',
-        cover_note: applicationData.cover_note || '',
-        source: 'careers_page',
-        consent_for_storage: applicationData.consent_for_storage || false,
-        timestamp: new Date().toISOString()
+        id: generateUUID(),
+        
+        // Personal Information (Step 1)
+        full_name: formData.full_name || formData.name || '', // Support multiple field names
+        name: formData.full_name || formData.name || '', // Alternative mapping
+        email: formData.email || formData.email_address || '',
+        email_address: formData.email || formData.email_address || '', // Alternative mapping  
+        phone: formData.phone || formData.phone_number || '',
+        phone_number: formData.phone || formData.phone_number || '', // Alternative mapping
+        location: formData.location || '',
+        
+        // Professional Information (Step 2)
+        position_applied: 'Customer Support Specialist', // Fixed as per your spec
+        position: 'Customer Support Specialist', // Alternative mapping
+        resume_url: formData.portfolio_website || '',
+        portfolio_website: formData.portfolio_website || '', // Alternative mapping
+        experience_level: formData.relevant_experience || '',
+        relevant_experience: formData.relevant_experience || '', // Alternative mapping
+        work_shifts: formData.preferred_shifts || '',
+        preferred_shifts: formData.preferred_shifts || '', // Alternative mapping
+        start_date: formData.availability_start_date || '',
+        availability_start_date: formData.availability_start_date || '', // Alternative mapping
+        
+        // Motivation & Cover Letter (Step 3)
+        motivation: formData.why_sentratech || '',
+        why_sentratech: formData.why_sentratech || '', // Alternative mapping
+        cover_letter: formData.cover_letter || '',
+        cover_note: formData.cover_letter || '', // Alternative mapping
+        motivation_text: formData.why_sentratech || formData.cover_letter || '', // Combined motivation text
+        
+        // Legal & Authorization (Step 4) 
+        work_authorization: formData.work_authorization || '',
+        bangladesh_work_authorization_status: formData.work_authorization || '', // Alternative mapping
+        consent_for_storage: formData.consent_for_storage || false,
+        consent_for_contact: formData.consent_for_contact || false,
+        
+        // Metadata
+        source: 'careers_page_multi_step',
+        status: 'new',
+        created: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
+        
+        // Additional tracking
+        application_step_completed: 4,
+        form_version: 'multi_step_v2'
       };
 
       // Log the complete payload before submission
