@@ -4249,11 +4249,10 @@ app.add_middleware(
         "https://netproxy-forms.preview.emergentagent.com",
         "https://form-simulator.preview.emergentagent.com",
         "http://localhost:3000",
-        "http://localhost",
-        "*"  # Fallback for development
+        "http://localhost:8080"
     ],
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+    allow_headers=["*"],  # Allow all headers for maximum compatibility
 )
 
 @app.on_event("startup")
