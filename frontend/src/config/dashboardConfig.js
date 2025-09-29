@@ -58,6 +58,16 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       
+      console.log(`🌐 Attempting network submission (attempt ${attempt}/${retries}):`, {
+        url: `${BACKEND_URL}${endpoint}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': 'https://unified-forms.preview.emergentagent.com'
+        },
+        data: JSON.stringify(data, null, 2)
+      });
+      
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -70,11 +80,20 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       
       clearTimeout(timeoutId);
       
+      console.log(`📡 Network response received:`, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+      
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error(`❌ HTTP Error ${response.status}:`, errorText);
+        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
       }
       
       const result = await response.json();
+      console.log(`✅ Network submission successful:`, result);
       
       return {
         success: true,
@@ -85,7 +104,11 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       
     } catch (error) {
       lastError = error;
-      console.warn(`Network submission attempt ${attempt}/${retries} failed:`, error.message);
+      console.error(`❌ Network submission attempt ${attempt}/${retries} failed:`, {
+        error: error.message,
+        name: error.name,
+        stack: error.stack
+      });
       
       // Wait before retry (except on last attempt)
       if (attempt < retries) {
