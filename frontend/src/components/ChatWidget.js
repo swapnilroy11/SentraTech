@@ -82,10 +82,10 @@ const ChatWidget = () => {
     }
   };
 
-  // Send message with network fallback
+  // Send message with robust connectivity testing
   const sendMessageREST = async (sessionId, message) => {
     try {
-      const { submitChatMessage, isOnline } = await import('../config/dashboardConfig.js');
+      const { submitChatMessage } = await import('../config/dashboardConfig.js');
       
       // Check if using offline session (but don't check navigator.onLine)
       if (sessionId.startsWith('offline_') || sessionId.startsWith('fallback_') || sessionId.startsWith('error_')) {
