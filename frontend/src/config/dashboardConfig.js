@@ -229,48 +229,28 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       
-      const fullUrl = `${BACKEND_URL}${endpoint}`;
+      // Use the direct endpoint (no proxy needed)
+      const fullUrl = endpoint; // endpoint is now the full URL
       const actualOrigin = window.location.origin;
-      const isLocalDevelopment = actualOrigin.includes('localhost');
-      const networkOrigin = isLocalDevelopment 
-        ? 'https://netproxy-forms.preview.emergentagent.com' 
-        : actualOrigin;
       
-      const requestHeaders = {
-        'Content-Type': 'application/json',
-        'Origin': networkOrigin
-      };
-      
-      console.log(`🌐 Attempting network submission (attempt ${attempt}/${retries}):`, {
+      console.log(`🌐 DIRECT DASHBOARD SUBMISSION (attempt ${attempt}/${retries}):`, {
         url: fullUrl,
         method: 'POST',
-        headers: requestHeaders,
         data: JSON.stringify(data, null, 2),
         browserOrigin: actualOrigin,
-        networkOrigin: networkOrigin,
-        developmentMode: isLocalDevelopment,
         timestamp: new Date().toISOString()
       });
       
-      // Log curl equivalent with correct origin
-      console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${networkOrigin}" -d '${JSON.stringify(data)}'`);
+      // Log curl equivalent
+      console.log(`🐛 CURL EQUIVALENT:`, `curl -X POST "${fullUrl}" -H "Content-Type: application/json" -H "Origin: ${actualOrigin}" -d '${JSON.stringify(data)}'`);
       
-      // Temporary workaround: Modify headers to match working server requests
-      const workaroundHeaders = {
-        ...requestHeaders,
-        'User-Agent': 'SentraFormSubmission/1.0', // Custom User-Agent to bypass routing
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json, text/plain, */*'
-      };
-      
-      const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+      const response = await fetch(fullUrl, {
         method: 'POST',
-        mode: 'cors',                     // Enable CORS
-        credentials: 'include',           // If auth cookies/tokens needed
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Origin': networkOrigin
+          'Origin': actualOrigin
         },
         body: JSON.stringify(data),
         signal: controller.signal
