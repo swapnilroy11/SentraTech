@@ -219,15 +219,19 @@ export const isOnline = () => {
   return navigator.onLine;
 };
 
-// Direct dashboard form submission (no proxy)
+// Backend proxy form submission with API key authentication
 export const submitFormToDashboard = async (endpoint, data, options = {}) => {
   const {
     timeout = DASHBOARD_CONFIG.TIMEOUT.DEFAULT,
     retries = DASHBOARD_CONFIG.RETRY.MAX_ATTEMPTS
   } = options;
 
-  console.log(`🎯 DIRECT DASHBOARD SUBMISSION:`, {
+  // Get backend URL from environment
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+
+  console.log(`🎯 BACKEND PROXY SUBMISSION:`, {
     endpoint,
+    backendUrl: BACKEND_URL,
     data,
     timestamp: new Date().toISOString()
   });
