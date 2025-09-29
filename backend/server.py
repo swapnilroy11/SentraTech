@@ -1572,7 +1572,7 @@ async def proxy_demo_request(request: Request):
         if 'source' not in data:
             data['source'] = 'website_cta'
             
-        result = await proxy_to_dashboard('/forms/demo-request', data)
+        result = await proxy_to_dashboard('/forms/demo-request', data, dict(request.headers))
         
         if result['success']:
             return result['data']
