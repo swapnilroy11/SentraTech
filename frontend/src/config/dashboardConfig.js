@@ -281,7 +281,13 @@ export const submitFormToDashboard = async (endpoint, data, options = {}) => {
       
       const response = await fetch(`${BACKEND_URL}${endpoint}`, {
         method: 'POST',
-        headers: workaroundHeaders,
+        mode: 'cors',                     // Enable CORS
+        credentials: 'include',           // If auth cookies/tokens needed
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': networkOrigin
+        },
         body: JSON.stringify(data),
         signal: controller.signal
       });
