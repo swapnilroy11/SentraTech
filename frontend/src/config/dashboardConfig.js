@@ -3,6 +3,20 @@
 
 import { set, get, keys, del } from 'idb-keyval';
 
+// Default rate limits per form type (in milliseconds)
+export const RATE_LIMITS = {
+  'demo-request': 5000,
+  'roi-calculator': 10000,
+  'newsletter': 3000,
+  'contact-sales': 5000,
+  'job-application': 7000,
+  'pilot-request': 5000,
+  'chat-message': 3000
+};
+
+// Track last submission timestamps for rate limiting
+const lastSubmissionTimestamps = {};
+
 // Get backend URL from environment - using local backend for proxy
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
