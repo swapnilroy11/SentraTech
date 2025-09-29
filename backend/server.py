@@ -1627,6 +1627,11 @@ async def proxy_roi_calculator(request: Request):
         logging.error(f"ROI calculator proxy error: {str(e)}")
         return {"success": False, "error": "Internal server error"}
 
+@api_router.options("/proxy/job-application")
+async def options_job_application():
+    """Handle preflight OPTIONS request for job application"""
+    return {"status": "ok"}
+
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
     """Proxy job application to dashboard"""
