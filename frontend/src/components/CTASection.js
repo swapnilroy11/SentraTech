@@ -208,21 +208,7 @@ const CTASection = () => {
         timestamp: new Date().toISOString()
       };
 
-      // Check if offline and handle immediately
-      if (!isOnline()) {
-        console.warn('Browser offline, using offline fallback');
-        const contactId = `demo_offline_${Date.now()}`;
-        trackDemoBooking(formData, contactId);
-        setContactId(contactId);
-        setIsSubmitted(true);
-        setFormData({
-          name: '', email: '', company: '', phone: '', 
-          message: '', call_volume: '', interaction_volume: ''
-        });
-        setFieldErrors({});
-        setIsSubmitting(false);
-        return;
-      }
+      // Always attempt network submission - let error handling determine fallback
 
       const result = await submitFormToDashboard(
         DASHBOARD_CONFIG.ENDPOINTS.DEMO_REQUEST,
