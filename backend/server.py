@@ -1699,12 +1699,26 @@ async def options_roi_calculator():
 
 @api_router.post("/proxy/roi-calculator")
 async def proxy_roi_calculator(request: Request):
-    """Proxy ROI calculator to dashboard with detailed logging"""
+    """Proxy ROI calculator to dashboard with idempotency and detailed logging"""
     try:
         data = await request.json()
         
+        # Check for duplicate requests using idempotency
+        request_id = data.get("id")
+        if is_duplicate_request(request_id):
+            proxy_logger.warning(f"🚫 Duplicate ROI calculator request blocked: {request_id}")
+            return JSONResponse(
+                content={
+                    "success": False, 
+                    "error": "Duplicate request", 
+                    "message": "This ROI calculation was already submitted recently"
+                }, 
+                status_code=429
+            )
+        
         # Comprehensive payload logging
         proxy_logger.info(f"🔎 PROXY RECEIVED ROI CALCULATOR PAYLOAD:")
+        proxy_logger.info(f"🆔 Processing unique ROI request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
         proxy_logger.info(f"📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
