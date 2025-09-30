@@ -4608,6 +4608,42 @@ app.include_router(proxy_router)
 # Include WebSocket service
 from websocket_service import ws_manager
 
+# WebSocket endpoint for real-time updates
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket, last_received_id: str = None):
+    """
+    Enterprise WebSocket endpoint: wss://admin.sentratech.net/ws
+    Handles real-time form submission notifications with replay capability
+    """
+    connection_id = None
+    try:
+        connection_id = await ws_manager.connect(websocket, last_received_id)
+        
+        while True:
+            # Listen for messages from client (ACKs, pings, etc.)
+            try:
+                message = await websocket.receive_text()
+                data = json.loads(message)
+                
+                if data.get('type') == 'ack':
+                    await ws_manager.handle_acknowledgment(connection_id, data.get('messageId'))
+                elif data.get('type') == 'pong':
+                    # Heartbeat response - connection is alive
+                    pass
+                    
+            except WebSocketDisconnect:
+                break
+            except Exception as e:
+                logger.error(f"WebSocket message handling error: {e}")
+                
+    except WebSocketDisconnect:
+        pass
+    except Exception as e:
+        logger.error(f"WebSocket connection error: {e}")
+    finally:
+        if connection_id:
+            await ws_manager.disconnect(connection_id)
+
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
