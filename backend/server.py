@@ -1519,9 +1519,17 @@ async def options_newsletter_signup():
     """Handle preflight OPTIONS request for newsletter signup"""
     return {"status": "ok"}
 
-@api_router.post("/proxy/newsletter-signup")
-async def proxy_newsletter_signup(request: Request):
-    """Proxy newsletter signup to dashboard with idempotency and detailed logging"""
+# @api_router.post("/proxy/newsletter-signup")
+async def proxy_newsletter_signup_disabled(request: Request):
+    """DISABLED - Legacy dashboard proxy endpoint - returning 410 Gone"""
+    return JSONResponse(
+        content={
+            "success": False,
+            "error": "Legacy dashboard integration disabled",
+            "message": "Old dashboard proxy has been removed. New CRM dashboard integration pending."
+        },
+        status_code=410  # 410 Gone - resource no longer available
+    )
     try:
         data = await request.json()
         
