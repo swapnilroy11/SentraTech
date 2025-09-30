@@ -1,0 +1,270 @@
+{
+  "timestamp": "2025-09-30T11:11:49.050324",
+  "total_issues": 27,
+  "total_optimizations": 10,
+  "severity_breakdown": {
+    "high": 1,
+    "medium": 23,
+    "low": 3
+  },
+  "optimizations_made": [
+    {
+      "page": "Navigation",
+      "optimization": "\u2705 Hamburger menu now full screen (fixed inset-0 w-full h-full)",
+      "timestamp": "2025-09-30T11:11:49.050252"
+    },
+    {
+      "page": "Navigation",
+      "optimization": "\u2705 Floating left menu removed completely",
+      "timestamp": "2025-09-30T11:11:49.050259"
+    },
+    {
+      "page": "HomePage",
+      "optimization": "\u2705 Instant CSS animations added for immediate load",
+      "timestamp": "2025-09-30T11:11:49.050265"
+    },
+    {
+      "page": "HomePage",
+      "optimization": "\u2705 Hardware acceleration with translateZ(0)",
+      "timestamp": "2025-09-30T11:11:49.050266"
+    },
+    {
+      "page": "ROI Calculator",
+      "optimization": "\u2705 Mobile-optimized animation variants added",
+      "timestamp": "2025-09-30T11:11:49.050267"
+    },
+    {
+      "page": "ROI Calculator",
+      "optimization": "\u2705 Reduced motion support implemented",
+      "timestamp": "2025-09-30T11:11:49.050268"
+    },
+    {
+      "page": "ROI Calculator",
+      "optimization": "\u2705 Added 16px minimum font size for inputs",
+      "timestamp": "2025-09-30T11:11:49.050282"
+    },
+    {
+      "page": "ROI Calculator",
+      "optimization": "\u2705 Added 44px minimum touch targets",
+      "timestamp": "2025-09-30T11:11:49.050284"
+    },
+    {
+      "page": "HomePage",
+      "optimization": "\u2705 CSS animations with hardware acceleration",
+      "timestamp": "2025-09-30T11:11:49.050293"
+    },
+    {
+      "page": "Cookie Banner",
+      "optimization": "\u2705 Instant appearance without JS delay",
+      "timestamp": "2025-09-30T11:11:49.050294"
+    }
+  ],
+  "issues_by_severity": {
+    "high": [
+      {
+        "page": "All Pages",
+        "category": "Bundle Size",
+        "issue": "JavaScript bundle may be large for mobile",
+        "severity": "high",
+        "timestamp": "2025-09-30T11:11:49.050287"
+      }
+    ],
+    "medium": [
+      {
+        "page": "ROI Calculator",
+        "category": "Performance",
+        "issue": "ROICalculatorRedesigned component may have complex form animations",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050269"
+      },
+      {
+        "page": "All Pages",
+        "category": "Performance",
+        "issue": "Framer-motion bundle size could impact mobile loading",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050271"
+      },
+      {
+        "page": "All Pages",
+        "category": "Responsive",
+        "issue": "Font sizes too small on mobile (< 16px can cause zoom)",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050276"
+      },
+      {
+        "page": "All Pages",
+        "category": "Responsive",
+        "issue": "Touch targets smaller than 44px x 44px",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050277"
+      },
+      {
+        "page": "All Pages",
+        "category": "Responsive",
+        "issue": "Horizontal scrolling on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050278"
+      },
+      {
+        "page": "All Pages",
+        "category": "Responsive",
+        "issue": "Images not optimized for mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050280"
+      },
+      {
+        "page": "All Pages",
+        "category": "Responsive",
+        "issue": "Form inputs causing viewport zoom",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050281"
+      },
+      {
+        "page": "All Pages",
+        "category": "Image Optimization",
+        "issue": "Images may not be responsive/optimized",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050289"
+      },
+      {
+        "page": "All Pages",
+        "category": "CSS Animations",
+        "issue": "Complex CSS transitions may lag on older mobile devices",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050290"
+      },
+      {
+        "page": "All Pages",
+        "category": "Third-party Scripts",
+        "issue": "External scripts (Supabase, analytics) impact load time",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050291"
+      },
+      {
+        "page": "All Pages",
+        "category": "Accessibility",
+        "issue": "Color contrast may be insufficient in dark theme",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050299"
+      },
+      {
+        "page": "All Pages",
+        "category": "Accessibility",
+        "issue": "Focus indicators may not be visible on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050300"
+      },
+      {
+        "page": "All Pages",
+        "category": "Accessibility",
+        "issue": "Screen reader navigation on mobile may be unclear",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050301"
+      },
+      {
+        "page": "All Pages",
+        "category": "Accessibility",
+        "issue": "Touch gestures not properly announced",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050302"
+      },
+      {
+        "page": "HomePage",
+        "category": "Mobile UX",
+        "issue": "Hero section may be too tall on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050309"
+      },
+      {
+        "page": "HomePage",
+        "category": "Mobile UX",
+        "issue": "Stats cards grid may be cramped on small screens",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050310"
+      },
+      {
+        "page": "HomePage",
+        "category": "Mobile UX",
+        "issue": "CTA buttons may be too close together",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050311"
+      },
+      {
+        "page": "ROI Calculator",
+        "category": "Mobile UX",
+        "issue": "Form may be too long for mobile viewport",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050312"
+      },
+      {
+        "page": "ROI Calculator",
+        "category": "Mobile UX",
+        "issue": "Country dropdown may be hard to use on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050312"
+      },
+      {
+        "page": "ROI Calculator",
+        "category": "Mobile UX",
+        "issue": "Results display may overflow on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050313"
+      },
+      {
+        "page": "Demo Request",
+        "category": "Mobile UX",
+        "issue": "Form fields may be too narrow",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050315"
+      },
+      {
+        "page": "Demo Request",
+        "category": "Mobile UX",
+        "issue": "Date picker may not work well on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050316"
+      },
+      {
+        "page": "Contact Pages",
+        "category": "Mobile UX",
+        "issue": "Contact forms may have validation issues on mobile",
+        "severity": "medium",
+        "timestamp": "2025-09-30T11:11:49.050317"
+      }
+    ],
+    "low": [
+      {
+        "page": "Navigation",
+        "category": "UX",
+        "issue": "Need to test hamburger menu close on outside tap",
+        "severity": "low",
+        "timestamp": "2025-09-30T11:11:49.050260"
+      },
+      {
+        "page": "Navigation",
+        "category": "Performance",
+        "issue": "Admin dashboard button logic could be simplified",
+        "severity": "low",
+        "timestamp": "2025-09-30T11:11:49.050262"
+      },
+      {
+        "page": "All Pages",
+        "category": "Font Loading",
+        "issue": "Google Fonts may block render on mobile",
+        "severity": "low",
+        "timestamp": "2025-09-30T11:11:49.050292"
+      }
+    ]
+  },
+  "mobile_css_fixes": "\n/* COMPREHENSIVE MOBILE OPTIMIZATION CSS */\n\n/* Base mobile optimizations */\n@media (max-width: 768px) {\n  /* Prevent horizontal scroll */\n  body {\n    overflow-x: hidden;\n  }\n  \n  /* Optimize touch targets */\n  button, a, input, select, textarea {\n    min-height: 44px;\n    min-width: 44px;\n  }\n  \n  /* Prevent zoom on input focus */\n  input, select, textarea {\n    font-size: 16px !important;\n  }\n  \n  /* Optimize typography */\n  h1 { font-size: 2rem !important; }\n  h2 { font-size: 1.5rem !important; }\n  h3 { font-size: 1.25rem !important; }\n  \n  /* Optimize spacing */\n  .container {\n    padding-left: 1rem !important;\n    padding-right: 1rem !important;\n  }\n  \n  /* Optimize cards */\n  .card, [class*=\"card\"] {\n    margin-bottom: 1rem;\n    padding: 1rem !important;\n  }\n  \n  /* Optimize forms */\n  .form-group {\n    margin-bottom: 1.5rem;\n  }\n  \n  /* Optimize animations - reduce complexity */\n  * {\n    animation-duration: 0.2s !important;\n    transition-duration: 0.2s !important;\n  }\n  \n  /* Hardware acceleration */\n  .mobile-optimized {\n    transform: translateZ(0);\n    backface-visibility: hidden;\n    perspective: 1000px;\n  }\n}\n\n/* Extra small devices */\n@media (max-width: 480px) {\n  /* Further optimizations for very small screens */\n  .grid {\n    grid-template-columns: 1fr !important;\n  }\n  \n  .flex {\n    flex-direction: column !important;\n  }\n  \n  .text-lg { font-size: 1rem !important; }\n  .text-xl { font-size: 1.125rem !important; }\n}\n\n/* Landscape mobile optimizations */\n@media (max-height: 500px) and (orientation: landscape) {\n  /* Optimize for landscape mobile */\n  .hero-section {\n    padding-top: 2rem !important;\n    padding-bottom: 2rem !important;\n  }\n}\n\n/* High DPI mobile screens */\n@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {\n  /* Optimize for retina mobile displays */\n  img {\n    image-rendering: -webkit-optimize-contrast;\n  }\n}\n\n/* Reduce motion for better performance */\n@media (prefers-reduced-motion: reduce) {\n  * {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n}\n\n/* Dark mode mobile optimizations */\n@media (prefers-color-scheme: dark) {\n  /* Ensure proper contrast on mobile */\n  .text-gray-400 { color: #a0a0a0 !important; }\n  .text-gray-500 { color: #909090 !important; }\n}\n\n/* Optimize for touch */\n@media (pointer: coarse) {\n  /* Larger touch targets for touch devices */\n  button, a {\n    padding: 0.75rem 1rem !important;\n  }\n  \n  /* Remove hover effects on touch devices */\n  .hover\\:scale-105 {\n    transform: none !important;\n  }\n}\n",
+  "recommendations": [
+    "\u2705 Already fixed: Hamburger menu is now full screen",
+    "\u2705 Already fixed: Floating menu removed",
+    "\u2705 Already fixed: Animation performance improved",
+    "\ud83d\udd27 TODO: Test on actual mobile devices",
+    "\ud83d\udd27 TODO: Add mobile-specific image optimization",
+    "\ud83d\udd27 TODO: Consider lazy loading for better performance",
+    "\ud83d\udd27 TODO: Add service worker for offline functionality",
+    "\ud83d\udd27 TODO: Optimize bundle size with code splitting"
+  ]
+}
