@@ -48,7 +48,7 @@ async function forwardToDashboard(payload) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DASH_TOKEN}`
+          'X-INGEST-KEY': DASH_TOKEN
         },
         body: JSON.stringify(payload),
         // no built-in timeout in fetch; environment should enforce or wrap with AbortController if desired
