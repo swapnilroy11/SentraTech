@@ -161,7 +161,7 @@ function App() {
             <ScrollToTop />
             
             {/* Floating Left Navigation - moved inside BrowserRouter */}
-            <FloatingNavScrollable />
+            {/* FloatingNavScrollable removed - not needed per user request */}
             
             {/* Cookie Consent Banner */}
             <CookieBanner />
