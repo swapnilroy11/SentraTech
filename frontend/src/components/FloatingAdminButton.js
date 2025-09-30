@@ -4,23 +4,22 @@ import { Button } from './ui/button';
 
 const FloatingAdminButton = () => {
   const handleAdminClick = () => {
-    // Determine admin URL based on current environment
+    // For now, open dashboard in a new window using localhost URL
+    // This will work for development and can be updated for production
     const currentHost = window.location.hostname;
     let adminUrl;
     
     if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-      // Development environment - use current domain with different port
-      adminUrl = `${window.location.protocol}//${currentHost}:3001`;
+      // Development environment - open internal dashboard route
+      window.open('/admin-dashboard', '_blank');
     } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
       // Production environment
       adminUrl = 'https://admin.sentratech.net';
+      window.open(adminUrl, '_blank');
     } else {
-      // Fallback
-      adminUrl = 'https://admin.sentratech.net';
+      // Fallback - try to access dashboard route
+      window.open('/admin-dashboard', '_blank');
     }
-    
-    // Open dashboard in new tab
-    window.open(adminUrl, '_blank');
   };
 
   return (
