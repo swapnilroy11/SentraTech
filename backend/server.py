@@ -4493,7 +4493,7 @@ async def get_dashboard_demo_requests():
         return {"success": False, "error": "Failed to fetch demo requests"}
 
 @api_router.get("/forms/roi-reports")
-async def get_roi_reports():
+async def get_dashboard_roi_reports():
     """Get all ROI reports for dashboard"""
     try:
         roi_reports = await db.roi_reports.find().sort("created_at", -1).to_list(length=100)
