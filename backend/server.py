@@ -1865,13 +1865,13 @@ async def proxy_job_application(request: Request):
         # Forward to dashboard with API key authentication
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/job-application",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/job-application",
                 json=body,
                 headers={
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "X-API-Key": api_key,  # Forward the API key for authentication
-                    "Origin": "https://sentra-forms.preview.emergentagent.com",
+                    "Origin": "https://real-time-dash.preview.emergentagent.com",
                     "User-Agent": "SentraTech-JobApplication-Proxy/1.0"
                 }
             )
@@ -4308,7 +4308,7 @@ async def proxy_newsletter_signup(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/newsletter-signup",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/newsletter-signup",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4330,7 +4330,7 @@ async def proxy_demo_request(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/demo-request",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/demo-request",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4352,7 +4352,7 @@ async def proxy_roi_calculator(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/roi-calculator",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/roi-calculator",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4374,7 +4374,7 @@ async def proxy_contact_sales(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/contact-sales",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/contact-sales",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4396,7 +4396,7 @@ async def proxy_job_application(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://sentra-forms.preview.emergentagent.com/api/forms/job-application",
+                "https://real-time-dash.preview.emergentagent.com/api/forms/job-application",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
@@ -4782,8 +4782,8 @@ app.add_middleware(
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://sentra-forms.preview.emergentagent.com",
-        "https://sentra-forms.preview.emergentagent.com",
+        "https://real-time-dash.preview.emergentagent.com",
+        "https://real-time-dash.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:3001",

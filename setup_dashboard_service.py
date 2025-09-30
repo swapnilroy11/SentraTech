@@ -13,7 +13,7 @@ command=/root/.venv/bin/uvicorn server:app --host 0.0.0.0 --port 8001 --workers 
 directory=/app/backend
 autostart=true
 autorestart=true
-environment=APP_URL="https://7acb7487-b110-47e2-81de-4373193e29c0.preview.emergentagent.com",INTEGRATION_PROXY_URL="https://integrations.emergentagent.com"
+environment=APP_URL="https://real-time-dash.preview.emergentagent.com",INTEGRATION_PROXY_URL="https://integrations.emergentagent.com"
 stderr_logfile=/var/log/supervisor/backend.err.log
 stdout_logfile=/var/log/supervisor/backend.out.log
 stopsignal=TERM

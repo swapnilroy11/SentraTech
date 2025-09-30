@@ -21,7 +21,7 @@ import string
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
 
 class ComprehensiveBackendTester:
     """Comprehensive Backend API Testing Framework"""

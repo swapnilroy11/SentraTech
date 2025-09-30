@@ -6,7 +6,7 @@ Quick test for Demo Request endpoints after fixes
 import requests
 import json
 
-BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
 
 def test_demo_request_json():
     """Test JSON endpoint"""

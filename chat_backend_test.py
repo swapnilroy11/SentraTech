@@ -14,7 +14,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
 WEBSOCKET_URL = "wss://ux-legal-revamp.preview.emergentagent.com/api/chat/ws"
 
 class ChatFunctionalityTester:

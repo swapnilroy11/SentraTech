@@ -13,7 +13,7 @@ import uuid
 import os
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
 
 class IngestProxyTester:
     """Comprehensive Ingest Proxy Integration Tester"""

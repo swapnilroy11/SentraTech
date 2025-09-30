@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
+BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
 
 class SupabaseROIIntegrationTester:
     """Test the Supabase ROI Report integration functionality"""

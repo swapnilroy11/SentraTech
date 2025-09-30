@@ -1,62 +1,70 @@
 <analysis>
-The previous AI engineer spent significant effort resolving persistent routing, CORS, and authentication issues to ensure all 6 website forms reliably submit data to the external SentraTech Admin Dashboard. The work trajectory shows a shift from direct API calls (which failed due to routing) to a robust **server-to-server proxy** solution implemented in FastAPI. Key fixes involved hardening this proxy by: 1) implementing client-side rate limiting and server-side idempotency (using unique IDs and a 60-second window) to prevent duplicate submissions, 2) refining CORS middleware and adding  handlers in the backend, and 3) securely forwarding the  via the proxy. The final challenge was addressing the instability caused by dynamic session URLs, which led to configuring the entire application—frontend environment, backend CORS, and proxy origin—to use the user's permanent custom domain, . The current state is blocked awaiting SSL certificate provisioning for the new domain.
+The trajectory chronicles a comprehensive development cycle, evolving from bug fixing to feature implementation and deep system optimization. The initial task was to repair a non-functional admin dashboard login, a process that uncovered and resolved fundamental configuration issues with Supervisor, which was pointing to an outdated directory structure. Following this, the project pivoted to a major UI/UX overhaul based on user-provided visual specifications, implementing a dark theme with vibrant neon green accents across the dashboard.
+
+A significant portion of the work involved preparing for an enterprise-grade production deployment. This included restructuring the monorepo, creating a robust backend proxy with idempotency, implementing a WebSocket service for real-time data synchronization, and configuring production URLs. However, this led to a critical phase of debugging platform-specific deployment issues, revealing a misunderstanding of the deployment process and forcing a refactor to make the application environment-aware.
+
+The final phase focused on fine-grained user experience enhancements. The AI engineer addressed and fixed issues with delayed landing page animations by implementing instant CSS fallbacks, resolved a lagging cookie modal, and performed extensive mobile optimization. This included making the navigation menu full-screen, removing an unwanted floating menu, and optimizing performance on the ROI calculator page. The work concludes with the AI poised to refactor the multi-step job application form into a single, streamlined page, per the user's latest request.
 </analysis>
 
 <product_requirements>
-The SentraTech application requires robust, high-conversion functionality for multiple forms (Demo Request, ROI Calculator, Contact Sales, Newsletter, Job Application) and the Sentra AI chat widget. The primary goal is reliable, authenticated data ingestion into the external SentraTech Admin Dashboard.
+The primary goal is to build, deploy, and maintain the SentraTech application, which consists of a public-facing website and a secure, enterprise-grade administrative dashboard.
 
-Initial failures led to the implementation of a server-to-server proxy architecture to bypass browser-side CORS and routing complexities. Recent requirements focused on ensuring data integrity and stability:
-1. Implement client-side rate limiting and server-side idempotency to prevent form submission flooding.
-2. Securely authenticate all proxy traffic using an API key ().
-3. Correctly map and capture complex form data, especially calculated values (ROI) and multi-step inputs (Job Application).
-4. Resolve the critical issue of connection breakage due to dynamic session URLs by transitioning the entire application configuration (frontend URL, backend CORS, proxy origin) to the user's custom domain, .
+**Core Features:**
+1.  **Unified Monorepo:** The website and dashboard applications are consolidated into a single  directory for streamlined development and deployment.
+2.  **Secure Data Proxy:** All form submissions from the website are routed through a secure, idempotent FastAPI backend proxy to prevent data loss and duplication.
+3.  **Enterprise Admin Dashboard:** A feature-rich dashboard built with React, providing administrators with real-time data visualization. Key features include KPI cards, data charts, and detailed submission tables. It is designed with a specific dark theme complemented by neon green accents (#00FF41).
+4.  **Real-Time Functionality:** The dashboard must display new form submissions in real-time, achieved through a WebSocket connection.
+5.  **Optimized User Experience:** The public website must be highly performant, with instant-loading animations and a fully responsive, mobile-first design. All interactive elements, including modals and navigation, must be optimized for all devices.
+6.  **Production Deployment:** The final application will be deployed to custom domains, with the website at  and the dashboard at .
 </product_requirements>
 
 <key_technical_concepts>
-- **Proxy Architecture**: FastAPI backend acting as an authenticated server-to-server relay using .
-- **API Security**: Secure forwarding of  via  header.
-- **Data Integrity**: Client-side rate limiting and server-side idempotency (using unique request IDs, HTTP 429) to prevent duplicate form submissions.
-- **CORS Management**: Explicit origin whitelisting and  preflight handling in FastAPI middleware.
-- **React State Management**: Capturing complex, calculated form data from React state/components.
+- **Monorepo Architecture**: Manages the , , and  projects within a unified  directory, now structured under .
+- **FastAPI Backend**: Serves as a secure API gateway, a proxy for form submissions, and hosts the WebSocket server for real-time communication.
+- **React & Tailwind CSS**: Used for building modern, responsive, and visually consistent user interfaces for both the website and the dashboard.
+- **Framer Motion**: The primary library for implementing complex animations, enhanced with custom hooks and CSS fallbacks for optimal performance.
+- **Supervisor**: Manages background processes, ensuring the backend, website, and dashboard services are always running.
 </key_technical_concepts>
 
 <code_architecture>
+The application follows a monorepo architecture, recently restructured to place frontend applications inside a  directory to align with modern deployment configurations.
 
--   ****:
-    -   **Importance**: Stores backend configuration and secure API keys.
-    -   **Changes**: Added  (securely storing the key provided by the user) and updated  to  for the final domain transition.
--   ****:
-    -   **Importance**: Contains the core FastAPI logic, API routes, and the critical server-to-server proxy.
-    -   **Changes**: Refined  to whitelist  and enabled . Explicit  handlers were added for all  endpoints. The  function was updated to read  from the environment and securely forward it as the  header. Server-side idempotency was implemented using an in-memory dictionary to reject duplicate requests within a 60-second window (HTTP 429).
--   ****:
-    -   **Importance**: Defines the target URL for all frontend API calls.
-    -   **Changes**: Updated  to the new custom domain .
--   ****:
-    -   **Importance**: Centralizes form submission logic, network configuration, and retry mechanics.
-    -   **Changes**: Implemented  with configurable . The  function was updated to correctly construct proxy URLs using  and ensures  for browser requests. A logging helper () was added for debugging. Submission logic was updated to use a persistent  for idempotency checks.
--   ** (Form Components)**:
-    -   **Importance**: Handle user input and trigger data submission.
-    -   **Changes**: All components were switched to use . ROI Calculator was significantly updated to capture calculated results from React state. Job Application components were enhanced for multi-step data aggregation and precise field mapping according to dashboard schema. Client-side state management was added to prevent multiple submissions (disabling buttons/showing loading state).
+
+
+-   ****
+    -   **Importance**: This file contains the multi-step job application form. It is the focus of the current development task.
+    -   **Changes**: The immediate next step is to refactor this component to remove the four-step journey and consolidate all form fields into a single, scrollable page.
+
+-   ****
+    -   **Importance**: The main landing page of the website, featuring several animated sections.
+    -   **Changes**: This file was heavily modified to fix animation loading delays. Instant CSS animations were added to run immediately on page load while the  library initializes, ensuring a smooth user experience.
+
+-   ****
+    -   **Importance**: Handles the website's main navigation, including the mobile hamburger menu.
+    -   **Changes**: The mobile menu styling was updated to be full-screen () to improve the user experience on smaller devices.
+
+-   ****
+    -   **Importance**: The core FastAPI application. It handles all API routes, database interactions, and service initializations.
+    -   **Changes**: It was significantly enhanced to integrate the new enterprise proxy () and the WebSocket service (), preparing it for production deployment with real-time capabilities.
+
+-   ****
+    -   **Importance**: Manages the lifecycle of all application services (backend, website, dashboard).
+    -   **Changes**: This file was debugged and corrected multiple times to fix port conflicts, point to the correct application directories ( and ), and ensure stable service operation.
 </code_architecture>
 
 <pending_tasks>
-- Complete synchronized-style particle cursor trail.
-- Lazy-loading and critical CSS inlining.
-- Debug service worker registration.
-- UI Enhancements: Newsletter Subscribers management, Active Contracts page, and update routing/navigation for new admin pages.
-- Implement Part 2: Video Pitch guidelines.
-- **Critical Task**: Await SSL certificate provisioning for  and verify end-to-end functionality across all 6 forms using the custom domain.
+- **Implement Advanced Table Features**: Add filtering, sorting, bulk status updates, and CSV export functionality to the dashboard's data tables as per the original enterprise specification.
+- **Finalize UI/UX**: Implement the dark/light theme toggle for the dashboard.
+- **Complete Real-Time Integration**: Ensure the WebSocket connection is robust and seamlessly updates the dashboard with live data in the production environment.
+- **Final Deployment and Domain Configuration**: Guide the user through the final steps of deploying on the platform and configuring the  and  domains.
 </pending_tasks>
 
 <current_work>
-The immediate work focused on permanently solving the dashboard connectivity issue caused by dynamic session URLs. The AI engineer successfully gathered the user's custom domain () and updated all configurations across the stack:
-1.  **Backend Configuration (, )**: Updated CORS origins and proxy configuration to reference .
-2.  **Frontend Configuration (, )**: Updated  and submission logic to point to the new domain.
-3.  **DNS Records**: The user successfully added A and CNAME records pointing  to the application's external IP/host.
+The immediate task is to refactor the job application process on the SentraTech website. The user has requested to eliminate the existing four-step form journey within the  component. The goal is to create a more streamlined user experience by consolidating all required input fields into a single, continuous form. This new form will appear on the same page directly below the job description.
 
-The last few messages confirm that the custom domain is resolving via DNS, but connection attempts (using  and screenshot tools) are failing due to SSL handshake errors. This is a typical temporary state while the SSL certificate is provisioning. The engineer is currently waiting for the infrastructure to stabilize before performing final functional tests. All critical application logic (rate limiting, idempotency, API key forwarding, and form data mapping) is implemented and internally tested as functional.
+The AI engineer has successfully identified the target file for this modification: . The last action taken was locating this file and analyzing its current structure, which uses a state machine and conditional rendering to display different steps. The next action will be to modify the JSX and state management logic within this component to render all form sections sequentially on one page, removing the Next Step and Previous Step buttons and associated logic. This change aims to simplify the application process and improve usability, particularly on mobile devices.
 </current_work>
 
 <optional_next_step>
-Wait a few minutes for the SSL certificate to provision and then re-test  connectivity via  and frontend screenshot.
+I will now modify  to consolidate the four-step application process into a single, unified form.
 </optional_next_step>
