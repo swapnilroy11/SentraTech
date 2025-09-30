@@ -75,17 +75,17 @@ export const logPayload = (formType, payload) => {
   });
 };
 
-// LEGACY Dashboard configuration - DISABLED FOR NEW CRM INTEGRATION
+// NEW CRM Dashboard configuration - Cross-domain integration
 export const DASHBOARD_CONFIG = {
-  // LEGACY proxy endpoints - ALL DISABLED (will return 410 Gone)
+  // Cross-domain proxy endpoints to admin.sentratech.net
   ENDPOINTS: {
-    CONTACT_SALES: '/api/proxy/contact-sales',      // DISABLED - returns 410
-    DEMO_REQUEST: '/api/proxy/demo-request',        // DISABLED - returns 410
-    ROI_CALCULATOR: '/api/proxy/roi-calculator',    // DISABLED - returns 410
-    NEWSLETTER: '/api/proxy/newsletter-signup',     // DISABLED - returns 410
-    JOB_APPLICATION: '/api/proxy/job-application',  // DISABLED - returns 410
-    PILOT_REQUEST: '/api/proxy/pilot-request',      // DISABLED - returns 410
-    CHAT_MESSAGE: '/api/proxy/chat-message'         // DISABLED - returns 410
+    CONTACT_SALES: '/api/proxy/contact-sales',
+    DEMO_REQUEST: '/api/proxy/demo-request',
+    ROI_CALCULATOR: '/api/proxy/roi-calculator',
+    NEWSLETTER: '/api/proxy/newsletter-signup',
+    JOB_APPLICATION: '/api/proxy/job-application',
+    PILOT_REQUEST: '/api/proxy/pilot-request',
+    CHAT_MESSAGE: '/api/proxy/chat-message'
   },
   
   // Healthcheck endpoint for connectivity testing
