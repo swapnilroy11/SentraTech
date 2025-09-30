@@ -93,14 +93,17 @@ const ROICalculatorPage = () => {
             </p>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+            <motion.div 
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto mb-12"
+              variants={mobileOptimizedVariants.staggerContainer}
+              initial="initial"
+              animate="animate"
+            >
               {statistics.map((stat, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-4"
+                  variants={mobileOptimizedVariants.fadeIn}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-3 md:p-4 mobile-stat-card"
                 >
                   <stat.icon size={24} className="text-[#00FF41] mx-auto mb-2" />
                   <div className="text-2xl font-bold text-[#00FF41] mb-1 font-rajdhani">{stat.value}</div>
