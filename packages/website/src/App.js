@@ -199,6 +199,7 @@ function App() {
                   <Route path="/careers" element={<CareersPage />} />
                   <Route path="/careers/apply/:jobId" element={<JobApplicationPage />} />
                   <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+                  <Route path="/dashboard" element={<AdminDashboardPage />} />
                 </Routes>
               </Suspense>
             </PageTransition>
