@@ -17,11 +17,9 @@ const CookieBanner = () => {
     console.log('Cookie consent status:', consentData ? 'Already given' : 'Not given');
     
     if (!consentData) {
-      // Show modal quickly for better UX
-      setTimeout(() => {
-        setShowBanner(true);
-        console.log('Showing cookie consent modal in viewport');
-      }, 300); // Faster appearance for immediate visibility
+      // Show banner IMMEDIATELY - no delay for better UX
+      setShowBanner(true);
+      console.log('Showing cookie consent modal immediately');
     } else {
       // Initialize analytics based on existing consent
       try {
@@ -31,7 +29,7 @@ const CookieBanner = () => {
       } catch (error) {
         console.warn('Error parsing cookie consent data:', error);
         // If parsing fails, show banner again
-        setTimeout(() => setShowBanner(true), 2000);
+        setShowBanner(true);
       }
     }
   }, []);
