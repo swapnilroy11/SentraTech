@@ -60,8 +60,10 @@
 test_plan:
   current_focus:
     - "Job Application Single-Page Form Conversion Testing"
+    - "Comprehensive Form Submission Proxy Endpoints Integration Testing"
   stuck_tasks: 
     - "Job Application Single-Page Form Conversion - CRITICAL: NOT IMPLEMENTED + ROUTING BROKEN"
+    - "Job Application Proxy Endpoint - Dashboard Integration Issue"
   completed_focus:
     - "Enhanced CORS Configuration and Browser-Originated Form Submissions Testing"
     - "Demo Request Form End-to-End Submission Testing"
