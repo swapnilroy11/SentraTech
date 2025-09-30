@@ -65,7 +65,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "craco build && mv build dist",
     "test": "craco test",
     "smoke-tests": "python ../../enterprise_smoke_tests.py"
   },
