@@ -420,7 +420,22 @@ const SentraTechLanding = () => {
                 {/* Mobile Admin Login Button */}
                 <Button 
                   onClick={() => {
-                    window.open('https://admin.sentratech.net', '_blank');
+                    // Determine admin URL based on current environment
+                    const currentHost = window.location.hostname;
+                    let adminUrl;
+                    
+                    if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
+                      // Development environment - use current domain with different port
+                      adminUrl = `${window.location.protocol}//${currentHost}:3001`;
+                    } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
+                      // Production environment
+                      adminUrl = 'https://admin.sentratech.net';
+                    } else {
+                      // Fallback
+                      adminUrl = 'https://admin.sentratech.net';
+                    }
+                    
+                    window.open(adminUrl, '_blank');
                     setIsMenuOpen(false); // Close mobile menu
                   }}
                   className="bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 text-sm py-2 rounded-md transition-all duration-200"
