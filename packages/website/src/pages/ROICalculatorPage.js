@@ -162,7 +162,7 @@ const ROICalculatorPage = () => {
                   <div className="text-sm text-[rgb(161,161,170)]">{stat.label}</div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
