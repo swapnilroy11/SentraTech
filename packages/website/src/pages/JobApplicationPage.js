@@ -198,7 +198,7 @@ const JobApplicationPage = () => {
   // No step navigation needed for single-page form
 
   const handleSubmit = async () => {
-    if (!validateStep(4)) return;
+    if (!validateForm()) return;
     
     setIsSubmitting(true);
     setSubmitStatus(null);
