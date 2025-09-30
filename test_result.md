@@ -63,6 +63,7 @@ test_plan:
   stuck_tasks: 
     - "Job Application Single-Page Form Conversion - CRITICAL: NOT IMPLEMENTED + ROUTING BROKEN"
   completed_focus:
+    - "Backend Proxy Endpoints Testing After ADMIN_DASHBOARD_URL Configuration Fix"
     - "Final Comprehensive Backend Proxy Endpoints Testing for Dashboard Deployment"
     - "Final Proxy Endpoints Integration Testing After Job Application Fix"
     - "Enhanced CORS Configuration and Browser-Originated Form Submissions Testing"
