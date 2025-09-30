@@ -127,7 +127,7 @@ const Navigation = () => {
           {/* CTA Section */}
           <div className="hidden md:flex items-center space-x-3">
             {/* Admin Login Button - Discrete */}
-            <Button 
+            <button 
               onClick={() => {
                 // Determine admin URL based on current environment
                 const currentHost = window.location.hostname;
@@ -151,7 +151,7 @@ const Navigation = () => {
               title="Admin Dashboard Login"
             >
               Admin
-            </Button>
+            </button>
             
             <Link to="/demo-request">
               <Button 
