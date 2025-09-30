@@ -4,6 +4,7 @@ Handles real-time notifications, reconnection, and message acknowledgments
 """
 import asyncio
 import json
+import os
 import time
 import uuid
 from datetime import datetime, timezone
