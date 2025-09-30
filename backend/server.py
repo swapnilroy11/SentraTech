@@ -4459,8 +4459,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=[
-        "https://www.sentratech.net",
-        "https://sentratech.net", 
+        "https://sentratech.net",
+        "https://www.sentratech.net", 
+        "https://admin.sentratech.net",
         "https://secure-form-relay.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
