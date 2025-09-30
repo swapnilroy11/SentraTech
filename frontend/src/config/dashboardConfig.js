@@ -229,8 +229,9 @@ export const hasNetwork = async () => {
     // Determine correct origin for network requests
     const actualOrigin = window.location.origin;
     const isLocalDevelopment = actualOrigin.includes('localhost');
+    const fallbackOrigin = process.env.REACT_APP_BACKEND_URL?.replace('/api', '') || 'https://secure-form-relay.preview.emergentagent.com';
     const networkOrigin = isLocalDevelopment 
-      ? 'https://secure-form-relay.preview.emergentagent.com' // Use production origin for localhost testing
+      ? fallbackOrigin // Use environment variable fallback for localhost testing
       : actualOrigin;
     
     console.log(`🎯 Browser origin: ${actualOrigin}`);
