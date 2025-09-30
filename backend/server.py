@@ -1826,7 +1826,8 @@ async def options_job_application():
 
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
-    """Proxy job application to dashboard with API key authentication, idempotency, and detailed logging"""
+    """DISABLED - Legacy dashboard proxy endpoint"""
+    return legacy_dashboard_disabled_response("job-application")
     try:
         body = await request.json()
         
