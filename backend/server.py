@@ -4393,27 +4393,7 @@ async def proxy_contact_sales(request: dict):
         logger.error(f"Dashboard proxy error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to process request")
 
-@api_router.post("/forms/job-application")
-async def proxy_job_application(request: dict):
-    """
-    Proxy job application to dashboard to handle CORS issues
-    """
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                "https://real-time-dash.preview.emergentagent.com/api/forms/job-application",
-                json=request,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 200:
-                return response.json()
-            else:
-                raise HTTPException(status_code=response.status_code, detail=response.text)
-                
-    except Exception as e:
-        logger.error(f"Dashboard proxy error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to process request")
+# REMOVED: Duplicate job application endpoint with hardcoded preview URL
 
 # ============================================================================
 # End Dashboard Proxy Endpoints
