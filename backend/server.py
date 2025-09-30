@@ -1442,7 +1442,7 @@ async def get_job_applications_status():
 
 # NEW CRM Dashboard Integration - Cross-domain proxy to admin.sentratech.net
 DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
-DASHBOARD_ORIGIN = "https://sentratech.net"
+DASHBOARD_ORIGIN = "https://secure-form-relay.emergent.host"
 
 async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
     """Proxy form submission to new CRM dashboard API with cross-domain support"""
