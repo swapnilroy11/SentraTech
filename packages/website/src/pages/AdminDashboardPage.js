@@ -208,9 +208,8 @@ const AdminDashboardPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button 
               onClick={() => {
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
-                window.open(`${dashboardUrl}/demo-requests`, '_blank');
+                // Navigate to dashboard sections within the same app
+                window.location.href = '/dashboard#demo-requests';
               }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
@@ -223,9 +222,8 @@ const AdminDashboardPage = () => {
             
             <Button 
               onClick={() => {
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
-                window.open(`${dashboardUrl}/sales-leads`, '_blank');
+                // Navigate to dashboard sections within the same app
+                window.location.href = '/dashboard#contact-sales';
               }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
@@ -238,9 +236,8 @@ const AdminDashboardPage = () => {
             
             <Button 
               onClick={() => {
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
-                window.open(`${dashboardUrl}/newsletter-signups`, '_blank');
+                // Navigate to dashboard sections within the same app
+                window.location.href = '/dashboard#newsletter-signups';
               }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
