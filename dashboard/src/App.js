@@ -20,12 +20,14 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-// API Configuration - Detect environment
+// API Configuration - Production URLs
 const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const BACKEND_URL = isDevelopment 
-  ? 'http://localhost:8001' 
-  : (process.env.REACT_APP_BACKEND_URL || 'https://admin.sentratech.net');
-const API_BASE = `${BACKEND_URL}/api`;
+const API_BASE = isDevelopment 
+  ? 'http://localhost:8001/api' 
+  : (process.env.REACT_APP_API_BASE || 'https://admin.sentratech.net/api/forms');
+const WS_URL = isDevelopment
+  ? 'ws://localhost:8001/ws'
+  : (process.env.REACT_APP_WS_URL || 'wss://admin.sentratech.net/ws');
 
 export const api = axios.create({
   baseURL: API_BASE,
