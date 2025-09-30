@@ -352,8 +352,23 @@ const SentraTechLanding = () => {
               {/* Admin Login Button - Discrete */}
               <Button 
                 onClick={() => {
+                  // Determine admin URL based on current environment
+                  const currentHost = window.location.hostname;
+                  let adminUrl;
+                  
+                  if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
+                    // Development environment - use current domain with different port
+                    adminUrl = `${window.location.protocol}//${currentHost}:3001`;
+                  } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
+                    // Production environment
+                    adminUrl = 'https://admin.sentratech.net';
+                  } else {
+                    // Fallback
+                    adminUrl = 'https://admin.sentratech.net';
+                  }
+                  
                   // Open dashboard in new tab to avoid disrupting user experience
-                  window.open('https://admin.sentratech.net', '_blank');
+                  window.open(adminUrl, '_blank');
                 }}
                 className="bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 text-xs px-3 py-1 rounded-md transition-all duration-200 opacity-60 hover:opacity-100"
                 title="Admin Dashboard Login"
