@@ -253,7 +253,7 @@ const HomePage = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center max-w-4xl mx-auto hero-content"
           >
-            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight">
+            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight hero-title">
               <span className="text-[#FFFFFF]">Customer Support as a</span><br/>
               <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by AI&nbsp;+&nbsp;BI</span>
             </h1>
