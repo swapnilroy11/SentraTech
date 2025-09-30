@@ -8,7 +8,8 @@ const JobApplicationPage = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   
-  const [currentStep, setCurrentStep] = useState(1);
+  // Removed step navigation - now using single form
+  // const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Personal Information - Updated to match prompt schema
     full_name: '',
