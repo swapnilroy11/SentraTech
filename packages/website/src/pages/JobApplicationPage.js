@@ -195,57 +195,7 @@ const JobApplicationPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Multi-step data collection - collect and log data at each step transition
-  const collectStepData = (stepNumber) => {
-    const stepData = {};
-    
-    switch(stepNumber) {
-      case 1: // Personal Information
-        stepData.step1_personal = {
-          full_name: formData.full_name,
-          email: formData.email,
-          phone: formData.phone,
-          location: formData.location
-        };
-        break;
-      case 2: // Professional Background
-        stepData.step2_professional = {
-          portfolio_website: formData.portfolio_website,
-          preferred_shifts: formData.preferred_shifts,
-          availability_start_date: formData.availability_start_date,
-          relevant_experience: formData.relevant_experience
-        };
-        break;
-      case 3: // Motivation & Fit
-        stepData.step3_motivation = {
-          why_sentratech: formData.why_sentratech,
-          cover_letter: formData.cover_letter
-        };
-        break;
-      case 4: // Review & Submit
-        stepData.step4_legal = {
-          work_authorization: formData.work_authorization,
-          consent_for_storage: formData.consent_for_storage,
-          consent_for_contact: formData.consent_for_contact
-        };
-        break;
-    }
-    
-    console.log(`📊 [JOB-APPLICATION] Step ${stepNumber} data collected:`, stepData);
-    return stepData;
-  };
-
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      // Collect current step data before moving forward
-      collectStepData(currentStep);
-      setCurrentStep(prev => Math.min(prev + 1, steps.length));
-    }
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
+  // No step navigation needed for single-page form
 
   const handleSubmit = async () => {
     if (!validateStep(4)) return;
