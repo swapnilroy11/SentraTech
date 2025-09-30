@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend Testing for SentraTech Application
-Testing Focus: Health check, proxy endpoints, ingest endpoints, authentication, data validation, status endpoints, database storage
+Final Comprehensive Backend Testing for SentraTech Form Proxy Endpoints
+Testing all 5 form submission endpoints for dashboard deployment readiness
+Focus: Newsletter Signup, ROI Calculator, Demo Request, Contact Sales, Job Application
 """
 
-import asyncio
-import aiohttp
+import requests
 import json
 import time
-from datetime import datetime, timezone
-from typing import Dict, Any, List
 import uuid
+from datetime import datetime, timezone
+import os
+import sys
 
-# Test Configuration - Using production URL from frontend .env
+# Backend URL from frontend environment
 BACKEND_URL = "https://real-time-dash.preview.emergentagent.com"
-VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
-INVALID_INGEST_KEY = "invalid-key-12345"
-EMERGENT_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
 class SentraTechBackendTester:
     def __init__(self):
