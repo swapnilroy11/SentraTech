@@ -236,10 +236,23 @@ const HomePage = () => {
               ].map((stat, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: index * 0.15,
+                    ease: "easeOut"
+                  }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    y: -5,
+                    transition: { duration: 0.2 }
+                  }}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 animate-scale-in hover-glow cursor-pointer"
+                  style={{
+                    animationDelay: `${index * 150}ms`,
+                    transform: 'translateZ(0)' // Hardware acceleration
+                  }}
                 >
                   <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
                     {stat.value}
