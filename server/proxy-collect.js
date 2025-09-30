@@ -39,24 +39,27 @@ function generateTraceId() {
 }
 
 // Forward function with retries
-async function forwardToDashboard(payload) {
+async function forwardToDashboard(payload, endpoint = '/forms/newsletter-signup') {
   const maxRetries = 3;
   let backoff = 500;
+  const fullUrl = `${DASH_URL.replace('/api/forms', '/api')}${endpoint}`;
+  
   for (let attempt=0; attempt<maxRetries; attempt++) {
     try {
-      const res = await fetch(DASH_URL, {
+      const res = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-INGEST-KEY': DASH_TOKEN
+          'X-INGEST-KEY': DASH_TOKEN,
+          'Origin': 'https://sentratech.net'
         },
         body: JSON.stringify(payload),
         // no built-in timeout in fetch; environment should enforce or wrap with AbortController if desired
       });
       const text = await res.text();
-      return { ok: res.ok, status: res.status, body: text };
+      return { ok: res.ok, status: res.status, body: text, endpoint: fullUrl };
     } catch (err) {
-      if (attempt === maxRetries - 1) return { ok: false, status: 0, body: String(err) };
+      if (attempt === maxRetries - 1) return { ok: false, status: 0, body: String(err), endpoint: fullUrl };
       await new Promise(r => setTimeout(r, backoff));
       backoff *= 3;
     }
