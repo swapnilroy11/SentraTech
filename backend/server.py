@@ -4734,6 +4734,39 @@ async def websocket_health():
         'timestamp': datetime.now(timezone.utc).isoformat()
     }
 
+# Collect Proxy Route - Forward to local collect service
+@api_router.post("/collect")
+async def collect_proxy(request: Request):
+    """Proxy form submissions to local collect service"""
+    try:
+        # Get raw request body
+        body = await request.body()
+        
+        # Forward to local collect service
+        import httpx
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "http://127.0.0.1:3002/api/collect",
+                headers={
+                    "Content-Type": "application/json",
+                    "X-Forwarded-For": request.headers.get("x-forwarded-for", str(request.client.host))
+                },
+                content=body
+            )
+            
+            # Return the same response from collect service
+            return JSONResponse(
+                status_code=response.status_code,
+                content=response.json()
+            )
+    
+    except Exception as e:
+        logging.error(f"Collect proxy error: {str(e)}")
+        return JSONResponse(
+            status_code=502,
+            content={"ok": False, "error": "proxy_error", "trace_id": "unknown"}
+        )
+
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
