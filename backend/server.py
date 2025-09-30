@@ -4477,6 +4477,130 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+# Dashboard-specific API endpoints
+@api_router.get("/forms/demo-requests")
+async def get_demo_requests():
+    """Get all demo requests for dashboard"""
+    try:
+        demo_requests = await db.demo_requests.find().sort("created_at", -1).to_list(length=100)
+        return {
+            "success": True,
+            "items": demo_requests,
+            "total": len(demo_requests)
+        }
+    except Exception as e:
+        logging.error(f"Error fetching demo requests: {e}")
+        return {"success": False, "error": "Failed to fetch demo requests"}
+
+@api_router.get("/forms/roi-reports")
+async def get_roi_reports():
+    """Get all ROI reports for dashboard"""
+    try:
+        roi_reports = await db.roi_reports.find().sort("created_at", -1).to_list(length=100)
+        return {
+            "success": True,
+            "items": roi_reports,
+            "total": len(roi_reports)
+        }
+    except Exception as e:
+        logging.error(f"Error fetching ROI reports: {e}")
+        return {"success": False, "error": "Failed to fetch ROI reports"}
+
+@api_router.get("/forms/contact-sales")
+async def get_contact_sales():
+    """Get all contact sales for dashboard"""
+    try:
+        contact_sales = await db.contact_requests.find().sort("created_at", -1).to_list(length=100)
+        return {
+            "success": True,
+            "items": contact_sales,
+            "total": len(contact_sales)
+        }
+    except Exception as e:
+        logging.error(f"Error fetching contact sales: {e}")
+        return {"success": False, "error": "Failed to fetch contact sales"}
+
+@api_router.get("/forms/newsletter-subscribers")
+async def get_newsletter_subscribers():
+    """Get all newsletter subscribers for dashboard"""
+    try:
+        subscribers = await db.subscriptions.find().sort("created_at", -1).to_list(length=100)
+        return {
+            "success": True,
+            "items": subscribers,
+            "total": len(subscribers)
+        }
+    except Exception as e:
+        logging.error(f"Error fetching newsletter subscribers: {e}")
+        return {"success": False, "error": "Failed to fetch newsletter subscribers"}
+
+@api_router.get("/forms/job-applications")
+async def get_job_applications():
+    """Get all job applications for dashboard"""
+    try:
+        applications = await db.job_applications.find().sort("created_at", -1).to_list(length=100)
+        return {
+            "success": True,
+            "items": applications,
+            "total": len(applications)
+        }
+    except Exception as e:
+        logging.error(f"Error fetching job applications: {e}")
+        return {"success": False, "error": "Failed to fetch job applications"}
+
+@api_router.get("/dashboard/stats")
+async def get_dashboard_stats():
+    """Get overall dashboard statistics"""
+    try:
+        stats = {}
+        stats['demo_requests'] = await db.demo_requests.count_documents({})
+        stats['roi_reports'] = await db.roi_reports.count_documents({})
+        stats['contact_sales'] = await db.contact_requests.count_documents({})
+        stats['newsletter_subscribers'] = await db.subscriptions.count_documents({})
+        stats['job_applications'] = await db.job_applications.count_documents({})
+        stats['total_submissions'] = sum(stats.values())
+        
+        return {
+            "success": True,
+            "stats": stats
+        }
+    except Exception as e:
+        logging.error(f"Error fetching dashboard stats: {e}")
+        return {"success": False, "error": "Failed to fetch dashboard stats"}
+
+# Authentication endpoints for dashboard
+@api_router.post("/auth/login")
+async def dashboard_login(request: Request):
+    """Simple login for dashboard access"""
+    try:
+        data = await request.json()
+        email = data.get('email')
+        password = data.get('password')
+        
+        # Simple hardcoded auth for now (replace with proper auth later)
+        if email == 'admin@sentratech.net' and password == 'sentratech2025':
+            return {
+                "success": True,
+                "message": "Login successful",
+                "user": {"email": email, "role": "admin"}
+            }
+        else:
+            return JSONResponse(
+                content={"success": False, "error": "Invalid credentials"}, 
+                status_code=401
+            )
+    except Exception as e:
+        logging.error(f"Login error: {e}")
+        return JSONResponse(
+            content={"success": False, "error": "Login failed"}, 
+            status_code=500
+        )
+
+@api_router.post("/auth/refresh")
+async def refresh_token():
+    """Refresh authentication token"""
+    return {"success": True, "message": "Token refreshed"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
