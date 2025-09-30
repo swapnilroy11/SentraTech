@@ -389,9 +389,9 @@ const JobApplicationPage = () => {
       if (window?.dataLayer) {
         window.dataLayer.push({
           event: "job_application_submit_fallback",
-          position: applicationData.position_applied,
+          position: 'Customer Support Specialist',
           source: 'careers_page_single_form',
-          location: applicationData.location,
+          location: formData.location,
           applicationId: applicationId,
           form_type: 'single_page'
         });
