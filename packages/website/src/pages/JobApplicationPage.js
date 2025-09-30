@@ -238,7 +238,7 @@ const JobApplicationPage = () => {
   };
 
   // Submit to SentraTech Admin Dashboard with network fallback
-  // Multi-step job application handler - aggregate all step data
+  // Single-page job application handler
   const submitApplication = async (formData) => {
     // Prevent duplicate submissions
     if (isSubmitting) {
@@ -253,78 +253,77 @@ const JobApplicationPage = () => {
       // Generate unique ID for submission
       const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-      // Log aggregated form data from all steps
-      console.log(`🔍 [MULTI-STEP-JOB-APPLICATION] Aggregated data from all steps:`, {
-        step1_personal: {
+      // Log single-page form data
+      console.log(`🔍 [SINGLE-PAGE-JOB-APPLICATION] Form data:`, {
+        personal: {
           full_name: `"${formData.full_name}" (type: ${typeof formData.full_name})`,
           email: `"${formData.email}" (type: ${typeof formData.email})`,
           phone: `"${formData.phone}" (type: ${typeof formData.phone})`,
           location: `"${formData.location}" (type: ${typeof formData.location})`
         },
-        step2_professional: {
+        professional: {
           portfolio_website: `"${formData.portfolio_website}" (type: ${typeof formData.portfolio_website})`,
           preferred_shifts: `"${formData.preferred_shifts}" (type: ${typeof formData.preferred_shifts})`,
           availability_start_date: `"${formData.availability_start_date}" (type: ${typeof formData.availability_start_date})`,
           relevant_experience: `"${formData.relevant_experience}" (type: ${typeof formData.relevant_experience})`
         },
-        step3_motivation: {
+        motivation: {
           why_sentratech: `"${formData.why_sentratech}" (type: ${typeof formData.why_sentratech})`,
           cover_letter: `"${formData.cover_letter}" (type: ${typeof formData.cover_letter})`
         },
-        step4_legal: {
+        legal: {
           work_authorization: `"${formData.work_authorization}" (type: ${typeof formData.work_authorization})`,
           consent_for_storage: formData.consent_for_storage,
           consent_for_contact: formData.consent_for_contact
         }
       });
 
-      // Comprehensive payload with field mappings matching your specification
+      // Comprehensive payload with field mappings
       const jobData = {
         id: generateUUID(),
         
-        // Personal Information (Step 1)
-        full_name: formData.full_name || formData.name || '', // Support multiple field names
-        name: formData.full_name || formData.name || '', // Alternative mapping
+        // Personal Information
+        full_name: formData.full_name || formData.name || '',
+        name: formData.full_name || formData.name || '',
         email: formData.email || formData.email_address || '',
-        email_address: formData.email || formData.email_address || '', // Alternative mapping  
+        email_address: formData.email || formData.email_address || '',
         phone: formData.phone || formData.phone_number || '',
-        phone_number: formData.phone || formData.phone_number || '', // Alternative mapping
+        phone_number: formData.phone || formData.phone_number || '',
         location: formData.location || '',
         
-        // Professional Information (Step 2)
-        position_applied: 'Customer Support Specialist', // Fixed as per your spec
-        position: 'Customer Support Specialist', // Alternative mapping
+        // Professional Information
+        position_applied: 'Customer Support Specialist',
+        position: 'Customer Support Specialist',
         resume_url: formData.portfolio_website || '',
-        portfolio_website: formData.portfolio_website || '', // Alternative mapping
+        portfolio_website: formData.portfolio_website || '',
         experience_level: formData.relevant_experience || '',
-        relevant_experience: formData.relevant_experience || '', // Alternative mapping
+        relevant_experience: formData.relevant_experience || '',
         work_shifts: formData.preferred_shifts || '',
-        preferred_shifts: formData.preferred_shifts || '', // Alternative mapping
+        preferred_shifts: formData.preferred_shifts || '',
         start_date: formData.availability_start_date || '',
-        availability_start_date: formData.availability_start_date || '', // Alternative mapping
+        availability_start_date: formData.availability_start_date || '',
         
-        // Motivation & Cover Letter (Step 3)
+        // Motivation & Cover Letter
         motivation: formData.why_sentratech || '',
-        why_sentratech: formData.why_sentratech || '', // Alternative mapping
+        why_sentratech: formData.why_sentratech || '',
         cover_letter: formData.cover_letter || '',
-        cover_note: formData.cover_letter || '', // Alternative mapping
-        motivation_text: formData.why_sentratech || formData.cover_letter || '', // Combined motivation text
+        cover_note: formData.cover_letter || '',
+        motivation_text: formData.why_sentratech || formData.cover_letter || '',
         
-        // Legal & Authorization (Step 4) 
+        // Legal & Authorization
         work_authorization: formData.work_authorization || '',
-        bangladesh_work_authorization_status: formData.work_authorization || '', // Alternative mapping
+        bangladesh_work_authorization_status: formData.work_authorization || '',
         consent_for_storage: formData.consent_for_storage || false,
         consent_for_contact: formData.consent_for_contact || false,
         
         // Metadata
-        source: 'careers_page_multi_step',
+        source: 'careers_page_single_form',
         status: 'new',
         created: new Date().toISOString(),
         timestamp: new Date().toISOString(),
         
-        // Additional tracking
-        application_step_completed: 4,
-        form_version: 'multi_step_v2'
+        // Single-page form tracking
+        form_version: 'single_page_v1'
       };
 
       // Log the complete payload before submission
