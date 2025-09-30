@@ -70,6 +70,15 @@ export const insertSubscription = async (email) => {
 
 // Helper function to insert a demo request
 export const insertDemoRequest = async (formData) => {
+  if (!supabase) {
+    console.warn('Supabase not available. Demo request will be skipped.');
+    return {
+      success: false,
+      error: 'database_unavailable',
+      message: 'Database service is currently unavailable. Please try again later.'
+    };
+  }
+  
   try {
     console.log('Submitting demo request to Supabase...', formData);
     
