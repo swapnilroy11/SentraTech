@@ -1915,8 +1915,7 @@ async def options_chat_message():
 
 @api_router.post("/proxy/chat-message")
 async def proxy_chat_message(request: Request):
-    """DISABLED - Legacy dashboard proxy endpoint"""
-    return legacy_dashboard_disabled_response("chat-message")
+    """Proxy chat message to new CRM dashboard with cross-domain support"""
     try:
         data = await request.json()
         
