@@ -305,11 +305,7 @@ const HomePage = () => {
                     y: -5,
                     transition: { duration: 0.2 }
                   }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 animate-scale-in hover-glow cursor-pointer"
-                  style={{
-                    animationDelay: `${index * 150}ms`,
-                    transform: 'translateZ(0)' // Hardware acceleration
-                  }}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 stats-card instant-hover-scale instant-hover-glow cursor-pointer"
                 >
                   <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
                     {stat.value}
