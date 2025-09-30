@@ -121,6 +121,8 @@ const ROICalculatorPage = () => {
   return (
     <main role="main" aria-label="SentraTech ROI Calculator - Calculate AI Support Savings">
       <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA]" id="roi-calculator-page">
+      {/* Mobile optimization styles */}
+      <style>{mobileOptimizationStyles}</style>
       {/* Hero Section */}
       <section className="pt-24 pb-12 relative overflow-hidden" id="roi-hero">
         <div className="container mx-auto px-6">
