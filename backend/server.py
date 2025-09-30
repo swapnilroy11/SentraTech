@@ -4596,7 +4596,7 @@ async def dashboard_login(request: Request):
             status_code=500
         )
 
-@api_router.post("/auth/refresh")
+@api_router.post("/dashboard/auth/refresh")
 async def refresh_token():
     """Refresh authentication token"""
     return {"success": True, "message": "Token refreshed"}
