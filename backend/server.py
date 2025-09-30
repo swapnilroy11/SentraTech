@@ -1440,12 +1440,12 @@ async def get_job_applications_status():
 # Legacy Dashboard Proxy Configuration - DISABLED
 # Old dashboard integration removed to prevent conflicts with new CRM dashboard
 
-# DASHBOARD INTEGRATION DISABLED - All proxy routes commented out
-# DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
-# DASHBOARD_ORIGIN = "https://sentratech.net"
+# NEW CRM Dashboard Integration - Cross-domain proxy to admin.sentratech.net
+DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
+DASHBOARD_ORIGIN = "https://sentratech.net"
 
-async def proxy_to_dashboard_disabled(endpoint: str, data: dict, original_headers: dict = None):
-    """Legacy dashboard proxy - DISABLED to prevent conflicts with new CRM dashboard"""
+async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
+    """Proxy form submission to new CRM dashboard API with cross-domain support"""
     try:
         # Get API key from environment
         api_key = os.environ.get('EMERGENT_API_KEY')
