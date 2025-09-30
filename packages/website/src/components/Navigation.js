@@ -126,34 +126,13 @@ const Navigation = () => {
 
           {/* CTA Section */}
           <div className="hidden md:flex items-center space-x-3">
-            {/* Admin Login Button - Discrete */}
-            <a 
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                // Determine admin URL based on current environment
-                const currentHost = window.location.hostname;
-                let adminUrl;
-                
-                if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-                  // Development environment - use current domain with different port
-                  adminUrl = `${window.location.protocol}//${currentHost}:3001`;
-                } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-                  // Production environment
-                  adminUrl = 'https://admin.sentratech.net';
-                } else {
-                  // Fallback
-                  adminUrl = 'https://admin.sentratech.net';
-                }
-                
-                // Open dashboard in new tab to avoid disrupting user experience
-                window.open(adminUrl, '_blank');
-              }}
-              className="text-gray-400 hover:text-gray-300 text-xs px-3 py-1 border border-gray-600 rounded-md transition-all duration-200 opacity-70 hover:opacity-100"
-              title="Admin Dashboard Login"
+            {/* Admin Button - DISABLED for new CRM integration */}
+            <span 
+              className="text-gray-500 text-xs px-3 py-1 border border-gray-700 rounded-md opacity-50 cursor-not-allowed"
+              title="Admin Dashboard - Temporarily disabled during CRM integration"
             >
-              Admin
-            </a>
+              Admin (Soon)
+            </span>
             
             <Link to="/demo-request">
               <Button 
