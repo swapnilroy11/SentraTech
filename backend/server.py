@@ -4507,7 +4507,7 @@ async def get_dashboard_roi_reports():
         return {"success": False, "error": "Failed to fetch ROI reports"}
 
 @api_router.get("/forms/contact-sales")
-async def get_contact_sales():
+async def get_dashboard_contact_sales():
     """Get all contact sales for dashboard"""
     try:
         contact_sales = await db.contact_requests.find().sort("created_at", -1).to_list(length=100)
