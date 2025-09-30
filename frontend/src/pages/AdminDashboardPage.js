@@ -209,7 +209,7 @@ const AdminDashboardPage = () => {
               <BarChart3 className="mr-3" size={20} />
               <div>
                 <div className="font-medium">View Demo Requests</div>
-                <div className="text-sm text-gray-400">Manage incoming demo requests</div>
+                <div className="text-sm text-gray-400">ROI: https://admin.sentratech.net/api/forms/roi-calculator</div>
               </div>
             </Button>
             
@@ -217,14 +217,14 @@ const AdminDashboardPage = () => {
               onClick={() => {
                 const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
-                window.open(`${dashboardUrl}/sales-leads`, '_blank');
+                window.open(`${dashboardUrl}/contact-sales`, '_blank');
               }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
               <Users className="mr-3" size={20} />
               <div>
                 <div className="font-medium">Contact Sales</div>
-                <div className="text-sm text-gray-400">Review sales inquiries</div>
+                <div className="text-sm text-gray-400">Sales: https://admin.sentratech.net/api/forms/contact-sales</div>
               </div>
             </Button>
             
@@ -239,7 +239,7 @@ const AdminDashboardPage = () => {
               <Mail className="mr-3" size={20} />
               <div>
                 <div className="font-medium">Newsletter Subscribers</div>
-                <div className="text-sm text-gray-400">Manage email subscribers</div>
+                <div className="text-sm text-gray-400">Newsletter: https://admin.sentratech.net/api/forms/newsletter-signup</div>
               </div>
             </Button>
           </div>
