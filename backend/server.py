@@ -1448,12 +1448,12 @@ async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict =
     """Proxy form submission to new CRM dashboard API with cross-domain support"""
     try:
         # Get API key from environment
-        api_key = os.environ.get('EMERGENT_API_KEY')
+        api_key = os.environ.get('DASHBOARD_API_KEY') or os.environ.get('EMERGENT_API_KEY')
         if not api_key:
-            logging.error("EMERGENT_API_KEY not found in environment")
+            logging.error("DASHBOARD_API_KEY not found in environment")
             return {
                 "success": False,
-                "error": "API key not configured"
+                "error": "Dashboard API key not configured"
             }
         
         # Prepare headers with API key authentication
