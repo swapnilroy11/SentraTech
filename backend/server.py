@@ -1610,7 +1610,8 @@ async def options_contact_sales():
 
 @api_router.post("/proxy/contact-sales")
 async def proxy_contact_sales(request: Request):
-    """Proxy contact sales to dashboard with idempotency and detailed logging"""
+    """DISABLED - Legacy dashboard proxy endpoint"""
+    return legacy_dashboard_disabled_response("contact-sales")
     try:
         data = await request.json()
         
