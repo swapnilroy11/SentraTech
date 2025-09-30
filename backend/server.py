@@ -1462,7 +1462,7 @@ async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict =
             "Accept": "application/json",
             "Origin": DASHBOARD_ORIGIN,
             "User-Agent": "SentraTech-Backend/1.0",
-            "X-API-Key": api_key  # Add API key for authentication
+            "X-INGEST-KEY": api_key  # Correct header name for dashboard authentication
         }
         
         # Forward additional authentication headers if present
