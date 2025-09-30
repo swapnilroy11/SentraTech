@@ -1,15 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --st-surface: rgb(17, 24, 39); /* gray-900 */
-  --st-primary: rgb(34, 197, 94); /* green-400 */
+  --st-surface: #0a0a0a; /* Very dark background like your image */
+  --st-primary: #00FF41; /* Neon green */
+  --st-card: #1a1a1a; /* Slightly lighter for cards */
+  --st-border: #333333; /* Dark borders */
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -25,4 +28,24 @@ code {
 
 .app-bg {
   background-color: var(--st-surface);
+}
+
+/* Dark theme overrides to match your screenshot */
+.dark {
+  --tw-bg-opacity: 1;
+  background-color: var(--st-surface);
+  color: white;
+}
+
+/* Neon green accents for key elements */
+.text-neon-green {
+  color: var(--st-primary);
+}
+
+.bg-neon-green {
+  background-color: var(--st-primary);
+}
+
+.border-neon-green {
+  border-color: var(--st-primary);
 }
