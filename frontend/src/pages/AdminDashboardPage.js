@@ -138,7 +138,11 @@ const AdminDashboardPage = () => {
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-400">admin@sentratech.net</span>
             <Button
-              onClick={() => window.open('http://localhost:3001', '_blank')}
+              onClick={() => {
+                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
+                window.open(dashboardUrl, '_blank');
+              }}
               className="bg-gray-700 text-gray-300 hover:bg-gray-600 text-sm px-3 py-1"
               title="Open Full Dashboard"
             >
