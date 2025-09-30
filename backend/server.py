@@ -1519,25 +1519,11 @@ async def options_newsletter_signup():
     """Handle preflight OPTIONS request for newsletter signup"""
     return {"status": "ok"}
 
-# LEGACY DASHBOARD PROXY ENDPOINTS - ALL DISABLED
-# These endpoints have been removed to prepare for new CRM dashboard integration
-
-def legacy_dashboard_disabled_response(endpoint_name: str):
-    """Standard response for disabled legacy dashboard endpoints"""
-    return JSONResponse(
-        content={
-            "success": False,
-            "error": "Legacy dashboard integration disabled",
-            "message": f"Old dashboard proxy endpoint '{endpoint_name}' has been removed. New CRM dashboard integration pending.",
-            "status": "410_gone"
-        },
-        status_code=410  # 410 Gone - resource permanently removed
-    )
+# NEW CRM DASHBOARD PROXY ENDPOINTS - Cross-domain integration with admin.sentratech.net
 
 @api_router.post("/proxy/newsletter-signup")
 async def proxy_newsletter_signup(request: Request):
-    """DISABLED - Legacy dashboard proxy endpoint"""
-    return legacy_dashboard_disabled_response("newsletter-signup")
+    """Proxy newsletter signup to new CRM dashboard with cross-domain support"""
     try:
         data = await request.json()
         
