@@ -1933,7 +1933,8 @@ async def options_chat_message():
 
 @api_router.post("/proxy/chat-message")
 async def proxy_chat_message(request: Request):
-    """Proxy chat message to dashboard"""
+    """DISABLED - Legacy dashboard proxy endpoint"""
+    return legacy_dashboard_disabled_response("chat-message")
     try:
         data = await request.json()
         
