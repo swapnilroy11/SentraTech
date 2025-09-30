@@ -19,6 +19,15 @@ import SEOManager from '../components/SEOManager';
 const HomePage = () => {
   const { t } = useLanguage();
   const navigateToSection = useNavigateWithScroll();
+  const [isAnimationReady, setIsAnimationReady] = useState(false);
+
+  useEffect(() => {
+    // Ensure animations are ready
+    const timer = setTimeout(() => {
+      setIsAnimationReady(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const features = [
     {
