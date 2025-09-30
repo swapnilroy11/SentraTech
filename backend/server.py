@@ -4312,7 +4312,7 @@ async def proxy_demo_request(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://dashboard-bridge-2.preview.emergentagent.com/api/forms/demo-request",
+                f"{DASHBOARD_BASE_URL}/forms/demo-request",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
