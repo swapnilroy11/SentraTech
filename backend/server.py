@@ -1854,36 +1854,8 @@ async def proxy_job_application(request: Request):
         if 'source' not in body:
             body['source'] = 'careers_page'
         
-        # Get API key from environment
-        api_key = os.environ.get('DASHBOARD_API_KEY') or os.environ.get('EMERGENT_API_KEY')
-        if not api_key:
-            logging.error("DASHBOARD_API_KEY not found in environment for job application")
-            return JSONResponse(
-                content={"success": False, "error": "API key not configured"}, 
-                status_code=500
-            )
-        
-        # Forward to dashboard with API key authentication
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            resp = await client.post(
-                "https://real-time-dash.preview.emergentagent.com/api/forms/job-application",
-                json=body,
-                headers={
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "X-API-Key": api_key,  # Forward the API key for authentication
-                    "Origin": "https://real-time-dash.preview.emergentagent.com",
-                    "User-Agent": "SentraTech-JobApplication-Proxy/1.0"
-                }
-            )
-            
-            if resp.status_code == 200:
-                response_data = resp.json()
-                logging.info(f"✅ Job application successfully forwarded to dashboard: {response_data.get('id', 'unknown')}")
-                return JSONResponse(content=response_data, status_code=200)
-            else:
-                logging.error(f"❌ Dashboard returned {resp.status_code}: {resp.text}")
-                return JSONResponse(content=resp.json(), status_code=resp.status_code)
+        # Use the centralized proxy function with proper configuration
+        result = await proxy_to_dashboard('/forms/job-application', body, dict(request.headers))
         
         if result['success']:
             return result['data']
