@@ -976,37 +976,19 @@ const JobApplicationPage = () => {
             <div className="lg:col-span-2">
               <div className="bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6 lg:p-8">
                 <div className="max-w-full overflow-hidden">
-                  {renderStep()}
+                  {renderSinglePageForm()}
                 </div>
                 
-                {/* Navigation Buttons */}
-                <div className="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t border-[rgb(63,63,63)] mt-8">
+                {/* Submit Button */}
+                <div className="flex justify-end pt-8 border-t border-[rgb(63,63,63)] mt-8">
                   <button
-                    onClick={handlePrevious}
-                    disabled={currentStep === 1}
-                    className="px-6 py-3 bg-transparent border border-[rgb(63,63,63)] text-[rgb(218,218,218)] rounded-lg hover:bg-[rgb(38,40,42)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting || submitStatus === 'success'}
+                    className="px-8 py-4 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                   >
-                    Previous
+                    <Send size={18} />
+                    <span>{isSubmitting ? 'Submitting Application...' : 'Submit Application'}</span>
                   </button>
-                  
-                  {currentStep < steps.length ? (
-                    <button
-                      onClick={handleNext}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <span>Continue</span>
-                      <ArrowLeft size={16} className="rotate-180" />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleSubmit}
-                      disabled={isSubmitting || submitStatus === 'success'}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                    >
-                      <Send size={16} />
-                      <span>{isSubmitting ? 'Submitting...' : 'Submit Application'}</span>
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
