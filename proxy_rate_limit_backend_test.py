@@ -13,7 +13,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend/.env
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
 TEST_EMAILS = ["proxy-test@example.com", "complete-flow-test@example.com"]
 
 class ProxyRateLimitTester:

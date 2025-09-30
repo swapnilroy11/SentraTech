@@ -1,70 +1,78 @@
 <analysis>
-The trajectory chronicles a comprehensive development cycle, evolving from bug fixing to feature implementation and deep system optimization. The initial task was to repair a non-functional admin dashboard login, a process that uncovered and resolved fundamental configuration issues with Supervisor, which was pointing to an outdated directory structure. Following this, the project pivoted to a major UI/UX overhaul based on user-provided visual specifications, implementing a dark theme with vibrant neon green accents across the dashboard.
+The trajectory documents a multi-stage development process, beginning with a user request to refactor a multi-step job application form into a single, streamlined page. This initial task involved significant frontend modifications in  but was complicated by environment issues, specifically an outdated Supervisor configuration pointing to a legacy directory structure ( instead of ).
 
-A significant portion of the work involved preparing for an enterprise-grade production deployment. This included restructuring the monorepo, creating a robust backend proxy with idempotency, implementing a WebSocket service for real-time data synchronization, and configuring production URLs. However, this led to a critical phase of debugging platform-specific deployment issues, revealing a misunderstanding of the deployment process and forcing a refactor to make the application environment-aware.
+Following this, the project pivoted to a major integration effort: decoupling a legacy dashboard and preparing for a new, enterprise-grade one. This involved systematically disabling proxy endpoints, WebSocket connections, and frontend links. The AI engineer then generated detailed payload schemas and a comprehensive integration specification for the new dashboard team, covering API endpoints, database schemas, and CORS configurations for production domains ( and ).
 
-The final phase focused on fine-grained user experience enhancements. The AI engineer addressed and fixed issues with delayed landing page animations by implementing instant CSS fallbacks, resolved a lagging cookie modal, and performed extensive mobile optimization. This included making the navigation menu full-screen, removing an unwanted floating menu, and optimizing performance on the ROI calculator page. The work concludes with the AI poised to refactor the multi-step job application form into a single, streamlined page, per the user's latest request.
+The final, most complex phase was the live integration and subsequent deep debugging. Despite the backend proxy returning success messages, no data was reaching the new dashboard. This led to a meticulous investigation that uncovered a series of critical configuration mismatches between the website and dashboard environments (URLs, API keys). The ultimate root cause was identified as graceful degradation logic in the website's backend proxy, which was masking validation errors () from the dashboard and returning false positives. After correcting payloads and fixing hardcoded URLs in the deployed backend, the integration was successfully established, and live test data was sent across all five form types.
 </analysis>
 
 <product_requirements>
-The primary goal is to build, deploy, and maintain the SentraTech application, which consists of a public-facing website and a secure, enterprise-grade administrative dashboard.
+The primary objective is to build and maintain the SentraTech application, comprising a public-facing website () and a secure administrative dashboard ().
 
-**Core Features:**
-1.  **Unified Monorepo:** The website and dashboard applications are consolidated into a single  directory for streamlined development and deployment.
-2.  **Secure Data Proxy:** All form submissions from the website are routed through a secure, idempotent FastAPI backend proxy to prevent data loss and duplication.
-3.  **Enterprise Admin Dashboard:** A feature-rich dashboard built with React, providing administrators with real-time data visualization. Key features include KPI cards, data charts, and detailed submission tables. It is designed with a specific dark theme complemented by neon green accents (#00FF41).
-4.  **Real-Time Functionality:** The dashboard must display new form submissions in real-time, achieved through a WebSocket connection.
-5.  **Optimized User Experience:** The public website must be highly performant, with instant-loading animations and a fully responsive, mobile-first design. All interactive elements, including modals and navigation, must be optimized for all devices.
-6.  **Production Deployment:** The final application will be deployed to custom domains, with the website at  and the dashboard at .
+**Core Requirements:**
+1.  **Unified Monorepo:** Consolidate the website and dashboard into a single  directory.
+2.  **Secure Data Proxy:** All form submissions (Newsletter, ROI Calculator, Demo Request, Contact Sales, Job Application) must be routed through a secure FastAPI backend proxy. This proxy is responsible for forwarding data to the live dashboard.
+3.  **Enterprise Admin Dashboard:** A new, live dashboard that receives and displays form submissions in real-time. The integration must be robust, handling cross-domain communication and authentication securely.
+4.  **Streamlined User Experience:** The job application process must be a single, continuous form on one page, eliminating the previous four-step journey to improve usability.
+5.  **Production Readiness:** The entire application must be environment-aware, using configuration variables instead of hardcoded values to ensure seamless deployment and communication between the website and the live dashboard servers.
 </product_requirements>
 
 <key_technical_concepts>
-- **Monorepo Architecture**: Manages the , , and  projects within a unified  directory, now structured under .
-- **FastAPI Backend**: Serves as a secure API gateway, a proxy for form submissions, and hosts the WebSocket server for real-time communication.
-- **React & Tailwind CSS**: Used for building modern, responsive, and visually consistent user interfaces for both the website and the dashboard.
-- **Framer Motion**: The primary library for implementing complex animations, enhanced with custom hooks and CSS fallbacks for optimal performance.
-- **Supervisor**: Manages background processes, ensuring the backend, website, and dashboard services are always running.
+- **Monorepo Architecture**: Manages frontend (, ) and  projects in a unified structure under .
+- **FastAPI Backend**: Acts as a secure proxy, forwarding form submissions from the website to the external dashboard API and handling graceful fallbacks.
+- **React & Tailwind CSS**: Used for building the responsive user interfaces for the public-facing website.
+- **Supervisor**: Manages the lifecycle of backend and frontend services, ensuring they are running correctly.
+- **Cross-Origin Resource Sharing (CORS)**: Critical for enabling communication between the website () and the dashboard API ().
 </key_technical_concepts>
 
 <code_architecture>
-The application follows a monorepo architecture, recently restructured to place frontend applications inside a  directory to align with modern deployment configurations.
+The application uses a monorepo structure with separate packages for the frontend applications and a distinct backend service.
 
 
 
 -   ****
-    -   **Importance**: This file contains the multi-step job application form. It is the focus of the current development task.
-    -   **Changes**: The immediate next step is to refactor this component to remove the four-step journey and consolidate all form fields into a single, scrollable page.
+    -   **Importance**: This is the core FastAPI application. It defines all API routes, including the crucial  endpoints that forward form data to the external dashboard.
+    -   **Changes**: This file was central to the entire trajectory. It was heavily modified to:
+        1.  Disable legacy dashboard proxy routes.
+        2.  Re-enable and reconfigure proxy routes for the new dashboard.
+        3.  Debug authentication issues by correcting the  header and API key environment variable references.
+        4.  Fix the root cause of false positive success messages by uncovering error-masking fallback logic.
+        5.  Resolve Internal Server Error on deployment by removing hardcoded URLs and using environment variables.
 
 -   ****
-    -   **Importance**: The main landing page of the website, featuring several animated sections.
-    -   **Changes**: This file was heavily modified to fix animation loading delays. Instant CSS animations were added to run immediately on page load while the  library initializes, ensuring a smooth user experience.
+    -   **Importance**: Contains the job application form, the target of the initial user request.
+    -   **Changes**: The file was intended to be refactored from a four-step form into a single-page form. However, debugging revealed that an old version of this file in a legacy  directory was causing confusion, and the single-page conversion was not properly implemented or served initially.
+
+-   ** & **
+    -   **Importance**: These files store all critical environment variables, including API endpoints and authentication keys. They were the primary source of integration failures.
+    -   **Changes**: These files were updated multiple times to align the , , and  variables between the website and the dashboard's actual configuration, resolving multiple connection and authentication errors.
 
 -   ****
-    -   **Importance**: Handles the website's main navigation, including the mobile hamburger menu.
-    -   **Changes**: The mobile menu styling was updated to be full-screen () to improve the user experience on smaller devices.
+    -   **Importance**: Configures the process manager (Supervisor) to run the frontend and backend services.
+    -   **Changes**: This file was updated to point to the correct directory for the frontend service () after the monorepo was restructured, fixing a critical issue where the old frontend code was being served.
 
 -   ****
-    -   **Importance**: The core FastAPI application. It handles all API routes, database interactions, and service initializations.
-    -   **Changes**: It was significantly enhanced to integrate the new enterprise proxy () and the WebSocket service (), preparing it for production deployment with real-time capabilities.
-
--   ****
-    -   **Importance**: Manages the lifecycle of all application services (backend, website, dashboard).
-    -   **Changes**: This file was debugged and corrected multiple times to fix port conflicts, point to the correct application directories ( and ), and ensure stable service operation.
+    -   **Importance**: A frontend configuration file that defines the API endpoints for form submissions.
+    -   **Changes**: Updated to use the correct  endpoints after the new dashboard integration was enabled.
 </code_architecture>
 
 <pending_tasks>
-- **Implement Advanced Table Features**: Add filtering, sorting, bulk status updates, and CSV export functionality to the dashboard's data tables as per the original enterprise specification.
-- **Finalize UI/UX**: Implement the dark/light theme toggle for the dashboard.
-- **Complete Real-Time Integration**: Ensure the WebSocket connection is robust and seamlessly updates the dashboard with live data in the production environment.
-- **Final Deployment and Domain Configuration**: Guide the user through the final steps of deploying on the platform and configuring the  and  domains.
+- **Implement Advanced Dashboard Features**: The user has requested future implementation of advanced table features for the dashboard, including filtering, sorting, bulk status updates, and CSV export functionality.
+- **Finalize UI/UX**: Implement a dark/light theme toggle for the dashboard.
 </pending_tasks>
 
 <current_work>
-The immediate task is to refactor the job application process on the SentraTech website. The user has requested to eliminate the existing four-step form journey within the  component. The goal is to create a more streamlined user experience by consolidating all required input fields into a single, continuous form. This new form will appear on the same page directly below the job description.
+The AI engineer has just completed an extensive and deep investigation into why form submissions were not appearing in the live dashboard, despite the website's backend proxy returning success messages. The work involved debugging multiple layers of the integration between the website and the new dashboard.
 
-The AI engineer has successfully identified the target file for this modification: . The last action taken was locating this file and analyzing its current structure, which uses a state machine and conditional rendering to display different steps. The next action will be to modify the JSX and state management logic within this component to render all form sections sequentially on one page, removing the Next Step and Previous Step buttons and associated logic. This change aims to simplify the application process and improve usability, particularly on mobile devices.
+**Key Findings & Fixes:**
+1.  **Root Cause Identified**: The primary issue was graceful degradation logic in the backend proxy (). This logic was catching legitimate errors from the dashboard API (like  for missing fields in payloads), storing data in a local fallback, and returning a fake success response to the frontend. This masked the real problem.
+2.  **Payload Validation Errors**: Direct testing against the dashboard API revealed that many test payloads were missing required fields, causing the  validation errors.
+3.  **Configuration Hell Resolved**: A series of critical mismatches in environment variables between the website and dashboard were corrected. This included aligning , CORS origins, and the authentication .
+4.  **Deployment Fix**: The final Internal Server Error on the deployed website backend () was resolved by removing hardcoded URLs and replacing them with environment variables, making the application production-ready.
+
+The immediate last action was sending a full suite of five realistic, complete test submissions to the now-correctly-configured live dashboard to confirm the end-to-end data flow is finally working.
 </current_work>
 
 <optional_next_step>
-I will now modify  to consolidate the four-step application process into a single, unified form.
+Verify with the user that the five sets of live test data, sent in the last step, have appeared correctly in their dashboard at .
 </optional_next_step>

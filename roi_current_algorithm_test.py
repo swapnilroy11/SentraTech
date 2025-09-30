@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 def test_current_algorithm():
     """Test current ROI algorithm with valid parameters"""

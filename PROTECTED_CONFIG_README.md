@@ -86,7 +86,7 @@ git checkout HEAD~1 -- backend/dashboard_config.py
 sudo supervisorctl restart all
 
 # Validate configuration
-curl -s "https://real-time-dash.preview.emergentagent.com/api/config/validate" | jq .
+curl -s "https://dashboard-bridge-2.preview.emergentagent.com/api/config/validate" | jq .
 ```
 
 ## ✅ Configuration Verification
@@ -94,10 +94,10 @@ curl -s "https://real-time-dash.preview.emergentagent.com/api/config/validate" |
 ### Quick Health Check
 ```bash
 # Check configuration status
-curl "https://real-time-dash.preview.emergentagent.com/api/config/validate"
+curl "https://dashboard-bridge-2.preview.emergentagent.com/api/config/validate"
 
 # Test form submission
-curl -X POST "https://real-time-dash.preview.emergentagent.com/api/ingest/demo_requests" \
+curl -X POST "https://dashboard-bridge-2.preview.emergentagent.com/api/ingest/demo_requests" \
   -H "Content-Type: application/json" \
   -H "X-INGEST-KEY: a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6" \
   -d '{"user_name":"Test","email":"test@test.com","company":"Test","phone":"123","message":"test"}'

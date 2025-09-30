@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 # External job application endpoint
-EXTERNAL_JOB_URL = "https://real-time-dash.preview.emergentagent.com/api"
+EXTERNAL_JOB_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 def test_job_application_corrected():
     """Test job application with corrected schema"""

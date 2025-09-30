@@ -4,7 +4,7 @@ set -euo pipefail
 # Required env vars:
 # KNS=<namespace>
 # POD=<backend-pod-name>
-# ADMIN_URL=https://real-time-dash.preview.emergentagent.com
+# ADMIN_URL=https://dashboard-bridge-2.preview.emergentagent.com
 # INGEST_KEY=<32-byte-hex>
 # AUTH_EMAIL=swapnil.roy@sentratech.net
 # AUTH_PASSWORD=Sentra@2025

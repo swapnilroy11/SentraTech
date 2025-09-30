@@ -12,7 +12,7 @@ from typing import Dict, Any
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 class Phase1DemoRequestTester:
     """Phase 1 Demo Request Form Issue Investigation"""

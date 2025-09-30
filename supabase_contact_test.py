@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Frontend URL from environment
-FRONTEND_URL = "https://real-time-dash.preview.emergentagent.com"
+FRONTEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
 
 # Supabase configuration from frontend/.env
 SUPABASE_URL = "https://dwishuwpqyffsmgljrqy.supabase.co"
@@ -217,7 +217,7 @@ class SupabaseContactSalesIntegrationTester:
                 },
                 "metadata": {
                     "userAgent": "Mozilla/5.0 (Test Browser)",
-                    "referrer": "https://real-time-dash.preview.emergentagent.com/pricing",
+                    "referrer": "https://dashboard-bridge-2.preview.emergentagent.com/pricing",
                     "timestamp": datetime.now().isoformat(),
                     "viewport": {
                         "width": 1920,
@@ -327,7 +327,7 @@ class SupabaseContactSalesIntegrationTester:
                 "utm_data": contact_data.get("utmData", {}),
                 "metadata": {
                     "userAgent": "Mozilla/5.0 (Test Browser)",
-                    "referrer": "https://real-time-dash.preview.emergentagent.com/pricing",
+                    "referrer": "https://dashboard-bridge-2.preview.emergentagent.com/pricing",
                     "timestamp": datetime.now().isoformat(),
                     "viewport": {"width": 1920, "height": 1080},
                     "deviceType": "desktop"

@@ -14,7 +14,7 @@ import os
 import sys
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
 
 class ProxyEndpointTester:
     def __init__(self):

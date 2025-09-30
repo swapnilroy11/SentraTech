@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 class ROICalculationTester:
     """Comprehensive ROI Calculation Testing Framework"""

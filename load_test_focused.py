@@ -13,7 +13,7 @@ import random
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 class FocusedLoadTester:
     """Focused Load Testing for SentraTech Production Readiness"""

@@ -16,7 +16,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com/api"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com/api"
 
 class PricingBackendTester:
     """Comprehensive testing for NEW SentraTech pricing backend integration"""

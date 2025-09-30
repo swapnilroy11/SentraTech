@@ -11,7 +11,7 @@ import time
 from datetime import datetime, timezone
 
 # Test Configuration
-BACKEND_URL = "https://real-time-dash.preview.emergentagent.com"
+BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
 API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
 class FocusedAPIKeyTester:
@@ -91,7 +91,7 @@ class FocusedAPIKeyTester:
             
             headers = {
                 "Content-Type": "application/json",
-                "Origin": "https://real-time-dash.preview.emergentagent.com",
+                "Origin": "https://dashboard-bridge-2.preview.emergentagent.com",
                 "User-Agent": "SentraTech-API-Test/1.0"
             }
             
@@ -132,7 +132,7 @@ class FocusedAPIKeyTester:
         
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://real-time-dash.preview.emergentagent.com"
+            "Origin": "https://dashboard-bridge-2.preview.emergentagent.com"
         }
         
         try:
@@ -244,7 +244,7 @@ class FocusedAPIKeyTester:
         for endpoint_path, payload, test_name in comprehensive_tests:
             headers = {
                 "Content-Type": "application/json",
-                "Origin": "https://real-time-dash.preview.emergentagent.com"
+                "Origin": "https://dashboard-bridge-2.preview.emergentagent.com"
             }
             
             try:
