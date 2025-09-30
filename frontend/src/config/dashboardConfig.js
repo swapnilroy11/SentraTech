@@ -140,7 +140,7 @@ export const debugNetworkEnvironment = async () => {
   // 2. CORS Origin Detection
   const possibleOrigins = [
     window.location.origin,
-    'https://secure-form-relay.preview.emergentagent.com',
+    process.env.REACT_APP_BACKEND_URL?.replace('/api', '') || 'https://secure-form-relay.preview.emergentagent.com',
     'http://localhost:3000',
     'http://localhost',
     null // No Origin header
