@@ -1,0 +1,17 @@
+{
+  "name": "sentratech-collect-proxy",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Same-origin proxy for forwarding form submissions to dashboard",
+  "main": "proxy-collect.js",
+  "scripts": {
+    "start": "node proxy-collect.js",
+    "dev": "node --watch proxy-collect.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
