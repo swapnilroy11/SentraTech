@@ -1,6 +1,6 @@
 """
-Enterprise WebSocket Service for Real-Time Form Submission Sync
-Handles real-time notifications, reconnection, and message acknowledgments
+LEGACY Enterprise WebSocket Service - DISABLED FOR NEW CRM INTEGRATION
+OLD dashboard WebSocket service removed to prevent conflicts
 """
 import asyncio
 import json
