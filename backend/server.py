@@ -1597,12 +1597,26 @@ async def options_contact_sales():
 
 @api_router.post("/proxy/contact-sales")
 async def proxy_contact_sales(request: Request):
-    """Proxy contact sales to dashboard with detailed logging"""
+    """Proxy contact sales to dashboard with idempotency and detailed logging"""
     try:
         data = await request.json()
         
+        # Check for duplicate requests using idempotency
+        request_id = data.get("id")
+        if is_duplicate_request(request_id):
+            proxy_logger.warning(f"🚫 Duplicate contact sales request blocked: {request_id}")
+            return JSONResponse(
+                content={
+                    "success": False, 
+                    "error": "Duplicate request", 
+                    "message": "This contact sales request was already submitted recently"
+                }, 
+                status_code=429
+            )
+        
         # Comprehensive payload logging
         proxy_logger.info(f"🔎 PROXY RECEIVED CONTACT SALES PAYLOAD:")
+        proxy_logger.info(f"🆔 Processing unique contact sales request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
         proxy_logger.info(f"📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
