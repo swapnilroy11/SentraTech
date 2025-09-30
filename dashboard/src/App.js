@@ -104,8 +104,9 @@ function App() {
     try {
       setIsLoading(true);
       
-      // Call backend authentication API
-      const response = await axios.post(`${API_BASE}/dashboard/auth/login`, {
+      // Call backend authentication API  
+      const authEndpoint = isDevelopment ? `${API_BASE}/dashboard/auth/login` : `https://admin.sentratech.net/api/dashboard/auth/login`;
+      const response = await axios.post(authEndpoint, {
         email: credentials.email,
         password: credentials.password
       }, {
