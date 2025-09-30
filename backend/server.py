@@ -1862,7 +1862,7 @@ async def proxy_job_application(request: Request):
         else:
             # Store locally as backup
             job_data = {
-                **data,
+                **body,
                 "id": str(uuid.uuid4()),
                 "created_at": datetime.now(timezone.utc).isoformat(),
                 "status": "proxy_failed", 
