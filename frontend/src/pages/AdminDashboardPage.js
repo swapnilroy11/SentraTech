@@ -199,7 +199,11 @@ const AdminDashboardPage = () => {
           <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button 
-              onClick={() => window.open('http://localhost:3001/demo-requests', '_blank')}
+              onClick={() => {
+                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
+                window.open(`${dashboardUrl}/demo-requests`, '_blank');
+              }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
               <BarChart3 className="mr-3" size={20} />
@@ -210,7 +214,11 @@ const AdminDashboardPage = () => {
             </Button>
             
             <Button 
-              onClick={() => window.open('http://localhost:3001/contact-sales', '_blank')}
+              onClick={() => {
+                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
+                window.open(`${dashboardUrl}/sales-leads`, '_blank');
+              }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
               <Users className="mr-3" size={20} />
@@ -221,7 +229,11 @@ const AdminDashboardPage = () => {
             </Button>
             
             <Button 
-              onClick={() => window.open('http://localhost:3001/newsletter', '_blank')}
+              onClick={() => {
+                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
+                window.open(`${dashboardUrl}/newsletter-signups`, '_blank');
+              }}
               className="bg-gray-700 hover:bg-gray-600 text-left justify-start p-4 h-auto"
             >
               <Mail className="mr-3" size={20} />
