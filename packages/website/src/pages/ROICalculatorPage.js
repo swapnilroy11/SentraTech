@@ -26,6 +26,56 @@ import { ArrowRight, Calculator, TrendingUp, DollarSign, Clock, Users, Zap, Targ
 import ROICalculatorRedesigned from '../components/ROICalculatorRedesigned';
 
 const ROICalculatorPage = () => {
+  
+  // Mobile optimization CSS
+  const mobileOptimizationStyles = `
+    /* Mobile-first optimizations for ROI Calculator */
+    @media (max-width: 768px) {
+      .mobile-optimized {
+        transform: translateZ(0); /* Hardware acceleration */
+        backface-visibility: hidden;
+      }
+      
+      .mobile-stat-card {
+        min-height: auto;
+        padding: 0.75rem !important;
+      }
+      
+      .mobile-stat-card .text-2xl {
+        font-size: 1.25rem !important;
+      }
+      
+      .mobile-stat-card .text-sm {
+        font-size: 0.75rem !important;
+      }
+      
+      /* Reduce animation complexity on mobile */
+      * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+      }
+      
+      /* Optimize touch targets */
+      .mobile-touch-target {
+        min-height: 44px;
+        min-width: 44px;
+      }
+      
+      /* Prevent zoom on input focus */
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* Reduce motion for better performance */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  `;
   const benefits = [
     {
       icon: DollarSign,
