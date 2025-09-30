@@ -110,7 +110,7 @@ app.post('/api/collect', async (req, res) => {
   };
 
   // Basic shape validation - adapt fields to your form's schema
-  if (!payload.email) {
+  if (!payload.email && !payload.work_email) {
     return res.status(400).json({ ok:false, error:'email_required', trace_id });
   }
 
