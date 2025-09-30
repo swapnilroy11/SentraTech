@@ -251,12 +251,7 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center max-w-4xl mx-auto animate-fade-in-up"
-            style={{
-              opacity: isAnimationReady ? 1 : 0,
-              transform: isAnimationReady ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'all 0.8s ease-out'
-            }}
+            className="text-center max-w-4xl mx-auto hero-content"
           >
             <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight">
               <span className="text-[#FFFFFF]">Customer Support as a</span><br/>
