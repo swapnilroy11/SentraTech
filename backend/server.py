@@ -4624,6 +4624,10 @@ async def websocket_endpoint(websocket: WebSocket, last_received_id: str = None)
     Enterprise WebSocket endpoint: wss://admin.sentratech.net/ws
     Handles real-time form submission notifications with replay capability
     """
+    if not ws_manager:
+        await websocket.close(code=1003, reason="WebSocket service not available")
+        return
+        
     connection_id = None
     try:
         connection_id = await ws_manager.connect(websocket, last_received_id)
