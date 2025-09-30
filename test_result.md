@@ -61,7 +61,7 @@ test_plan:
   current_focus:
     - "Backend Proxy Endpoint Configuration Fix - ADMIN_DASHBOARD_URL Correction"
   stuck_tasks: 
-    - "Job Application Single-Page Form Conversion - CRITICAL: NOT IMPLEMENTED + ROUTING BROKEN"
+    - "Deployed Backend Environment Variables - Need deployment refresh to apply ADMIN_DASHBOARD_URL fix"
   completed_focus:
     - "Backend Proxy Endpoints Testing After ADMIN_DASHBOARD_URL Configuration Fix"
     - "Final Comprehensive Backend Proxy Endpoints Testing for Dashboard Deployment"
