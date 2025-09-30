@@ -4460,9 +4460,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_origins=[
         "https://www.sentratech.net",
-        "https://sentratech.net",
+        "https://sentratech.net", 
         "https://secure-form-relay.preview.emergentagent.com",
-        "https://secure-form-relay.preview.emergentagent.com",
+        "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:8080"
     ],
