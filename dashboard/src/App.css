@@ -1,28 +1,29 @@
 .App {
   min-height: 100vh;
-  background-color: var(--st-surface);
+  background-color: #0a0a0a;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .app-bg {
-  background: linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(31, 41, 55) 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Neon Green Theme */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(31, 41, 55);
+  background: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(75, 85, 99);
+  background: #00FF41;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(107, 114, 128);
+  background: #00cc34;
 }
 
 /* Loading states */
