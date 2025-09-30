@@ -4356,7 +4356,7 @@ async def proxy_contact_sales(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://dashboard-bridge-2.preview.emergentagent.com/api/forms/contact-sales",
+                f"{DASHBOARD_BASE_URL}/forms/contact-sales",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
