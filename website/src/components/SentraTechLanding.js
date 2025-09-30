@@ -401,6 +401,18 @@ const SentraTechLanding = () => {
                     </span>
                   </div>
                 </div>
+                
+                {/* Mobile Admin Login Button */}
+                <Button 
+                  onClick={() => {
+                    window.open('https://admin.sentratech.net', '_blank');
+                    setIsMenuOpen(false); // Close mobile menu
+                  }}
+                  className="bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 text-sm py-2 rounded-md transition-all duration-200"
+                >
+                  Admin Dashboard
+                </Button>
+                
                 <Button 
                   onClick={() => {
                     const contactSection = document.querySelector('#contact');
