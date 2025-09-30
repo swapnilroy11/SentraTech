@@ -20,13 +20,21 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-// API Configuration - Production URLs
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// API Configuration - Environment aware
+const currentHost = window.location.hostname;
+const isPreview = currentHost.includes('emergentagent.com') || currentHost.includes('emergent');
+const isDevelopment = currentHost === 'localhost' || currentHost === '127.0.0.1';
+
 const API_BASE = isDevelopment 
   ? 'http://localhost:8001/api' 
+  : isPreview
+  ? `${window.location.protocol}//${window.location.host}/api`
   : (process.env.REACT_APP_API_BASE || 'https://admin.sentratech.net/api/forms');
+
 const WS_URL = isDevelopment
   ? 'ws://localhost:8001/ws'
+  : isPreview 
+  ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`
   : (process.env.REACT_APP_WS_URL || 'wss://admin.sentratech.net/ws');
 
 export const api = axios.create({
