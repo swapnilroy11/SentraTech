@@ -21,6 +21,15 @@ export const subscriptionsTable = () => supabase ? supabase.from('subscriptions'
 
 // Helper function to insert a newsletter subscription
 export const insertSubscription = async (email) => {
+  if (!supabase) {
+    console.warn('Supabase not available. Newsletter subscription will be skipped.');
+    return {
+      success: false,
+      error: 'database_unavailable',
+      message: 'Database service is currently unavailable. Please try again later.'
+    };
+  }
+  
   try {
     console.log('Subscribing email to newsletter:', email);
     
