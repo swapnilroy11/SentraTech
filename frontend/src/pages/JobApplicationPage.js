@@ -8,7 +8,7 @@ const JobApplicationPage = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   
-  const [currentStep, setCurrentStep] = useState(1);
+  // Single form - no step navigation needed
   const [formData, setFormData] = useState({
     // Personal Information - Updated to match prompt schema
     full_name: '',
@@ -107,13 +107,6 @@ const JobApplicationPage = () => {
 
   const job = jobData[jobId] || jobData['customer-support-specialist'];
 
-  const steps = [
-    { number: 1, title: 'Personal Information', description: 'Basic contact details' },
-    { number: 2, title: 'Professional Background', description: 'Experience and skills' },
-    { number: 3, title: 'Motivation & Fit', description: 'Why SentraTech?' },
-    { number: 4, title: 'Review & Submit', description: 'Final review' }
-  ];
-
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -170,96 +163,42 @@ const JobApplicationPage = () => {
     }
   };
 
-  const validateStep = (step) => {
+  const validateForm = () => {
     const newErrors = {};
     
-    if (step === 1) {
-      if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
-      if (!formData.email.trim()) newErrors.email = 'Email is required';
-      if (!formData.location.trim()) newErrors.location = 'Location is required';
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (formData.email && !emailRegex.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-      }
+    // Personal Information validation
+    if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
     
-    if (step === 2) {
-      if (!resume && !formData.portfolio_website.trim()) {
-        newErrors.resume = 'Please upload a resume or provide portfolio website';
-        newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
-      }
+    // Professional Information validation  
+    if (!resume && !formData.portfolio_website.trim()) {
+      newErrors.resume = 'Please upload a resume or provide portfolio website';
+      newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
     }
     
-    if (step === 3) {
-      if (!formData.why_sentratech.trim()) {
-        newErrors.why_sentratech = 'Please tell us why you want to join SentraTech';
-      }
+    // Motivation validation
+    if (!formData.why_sentratech.trim()) {
+      newErrors.why_sentratech = 'Please tell us why you want to join SentraTech';
     }
     
-    if (step === 4) {
-      if (!formData.consent_for_storage) newErrors.consent_for_storage = 'You must consent to data processing';
-      if (!formData.work_authorization) newErrors.work_authorization = 'Work authorization status is required';
-    }
+    // Legal validation
+    if (!formData.consent_for_storage) newErrors.consent_for_storage = 'You must consent to data processing';
+    if (!formData.work_authorization) newErrors.work_authorization = 'Work authorization status is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Multi-step data collection - collect and log data at each step transition
-  const collectStepData = (stepNumber) => {
-    const stepData = {};
-    
-    switch(stepNumber) {
-      case 1: // Personal Information
-        stepData.step1_personal = {
-          full_name: formData.full_name,
-          email: formData.email,
-          phone: formData.phone,
-          location: formData.location
-        };
-        break;
-      case 2: // Professional Background
-        stepData.step2_professional = {
-          portfolio_website: formData.portfolio_website,
-          preferred_shifts: formData.preferred_shifts,
-          availability_start_date: formData.availability_start_date,
-          relevant_experience: formData.relevant_experience
-        };
-        break;
-      case 3: // Motivation & Fit
-        stepData.step3_motivation = {
-          why_sentratech: formData.why_sentratech,
-          cover_letter: formData.cover_letter
-        };
-        break;
-      case 4: // Review & Submit
-        stepData.step4_legal = {
-          work_authorization: formData.work_authorization,
-          consent_for_storage: formData.consent_for_storage,
-          consent_for_contact: formData.consent_for_contact
-        };
-        break;
-    }
-    
-    console.log(`📊 [JOB-APPLICATION] Step ${stepNumber} data collected:`, stepData);
-    return stepData;
-  };
-
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      // Collect current step data before moving forward
-      collectStepData(currentStep);
-      setCurrentStep(prev => Math.min(prev + 1, steps.length));
-    }
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
+  // No step navigation needed for single-page form
 
   const handleSubmit = async () => {
-    if (!validateStep(4)) return;
+    if (!validateForm()) return;
     
     setIsSubmitting(true);
     setSubmitStatus(null);
@@ -299,7 +238,7 @@ const JobApplicationPage = () => {
   };
 
   // Submit to SentraTech Admin Dashboard with network fallback
-  // Multi-step job application handler - aggregate all step data
+  // Single-page job application handler
   const submitApplication = async (formData) => {
     // Prevent duplicate submissions
     if (isSubmitting) {
@@ -314,78 +253,77 @@ const JobApplicationPage = () => {
       // Generate unique ID for submission
       const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-      // Log aggregated form data from all steps
-      console.log(`🔍 [MULTI-STEP-JOB-APPLICATION] Aggregated data from all steps:`, {
-        step1_personal: {
+      // Log single-page form data
+      console.log(`🔍 [SINGLE-PAGE-JOB-APPLICATION] Form data:`, {
+        personal: {
           full_name: `"${formData.full_name}" (type: ${typeof formData.full_name})`,
           email: `"${formData.email}" (type: ${typeof formData.email})`,
           phone: `"${formData.phone}" (type: ${typeof formData.phone})`,
           location: `"${formData.location}" (type: ${typeof formData.location})`
         },
-        step2_professional: {
+        professional: {
           portfolio_website: `"${formData.portfolio_website}" (type: ${typeof formData.portfolio_website})`,
           preferred_shifts: `"${formData.preferred_shifts}" (type: ${typeof formData.preferred_shifts})`,
           availability_start_date: `"${formData.availability_start_date}" (type: ${typeof formData.availability_start_date})`,
           relevant_experience: `"${formData.relevant_experience}" (type: ${typeof formData.relevant_experience})`
         },
-        step3_motivation: {
+        motivation: {
           why_sentratech: `"${formData.why_sentratech}" (type: ${typeof formData.why_sentratech})`,
           cover_letter: `"${formData.cover_letter}" (type: ${typeof formData.cover_letter})`
         },
-        step4_legal: {
+        legal: {
           work_authorization: `"${formData.work_authorization}" (type: ${typeof formData.work_authorization})`,
           consent_for_storage: formData.consent_for_storage,
           consent_for_contact: formData.consent_for_contact
         }
       });
 
-      // Comprehensive payload with field mappings matching your specification
+      // Comprehensive payload with field mappings
       const jobData = {
         id: generateUUID(),
         
-        // Personal Information (Step 1)
-        full_name: formData.full_name || formData.name || '', // Support multiple field names
-        name: formData.full_name || formData.name || '', // Alternative mapping
+        // Personal Information
+        full_name: formData.full_name || formData.name || '',
+        name: formData.full_name || formData.name || '',
         email: formData.email || formData.email_address || '',
-        email_address: formData.email || formData.email_address || '', // Alternative mapping  
+        email_address: formData.email || formData.email_address || '',
         phone: formData.phone || formData.phone_number || '',
-        phone_number: formData.phone || formData.phone_number || '', // Alternative mapping
+        phone_number: formData.phone || formData.phone_number || '',
         location: formData.location || '',
         
-        // Professional Information (Step 2)
-        position_applied: 'Customer Support Specialist', // Fixed as per your spec
-        position: 'Customer Support Specialist', // Alternative mapping
+        // Professional Information
+        position_applied: 'Customer Support Specialist',
+        position: 'Customer Support Specialist',
         resume_url: formData.portfolio_website || '',
-        portfolio_website: formData.portfolio_website || '', // Alternative mapping
+        portfolio_website: formData.portfolio_website || '',
         experience_level: formData.relevant_experience || '',
-        relevant_experience: formData.relevant_experience || '', // Alternative mapping
+        relevant_experience: formData.relevant_experience || '',
         work_shifts: formData.preferred_shifts || '',
-        preferred_shifts: formData.preferred_shifts || '', // Alternative mapping
+        preferred_shifts: formData.preferred_shifts || '',
         start_date: formData.availability_start_date || '',
-        availability_start_date: formData.availability_start_date || '', // Alternative mapping
+        availability_start_date: formData.availability_start_date || '',
         
-        // Motivation & Cover Letter (Step 3)
+        // Motivation & Cover Letter
         motivation: formData.why_sentratech || '',
-        why_sentratech: formData.why_sentratech || '', // Alternative mapping
+        why_sentratech: formData.why_sentratech || '',
         cover_letter: formData.cover_letter || '',
-        cover_note: formData.cover_letter || '', // Alternative mapping
-        motivation_text: formData.why_sentratech || formData.cover_letter || '', // Combined motivation text
+        cover_note: formData.cover_letter || '',
+        motivation_text: formData.why_sentratech || formData.cover_letter || '',
         
-        // Legal & Authorization (Step 4) 
+        // Legal & Authorization
         work_authorization: formData.work_authorization || '',
-        bangladesh_work_authorization_status: formData.work_authorization || '', // Alternative mapping
+        bangladesh_work_authorization_status: formData.work_authorization || '',
         consent_for_storage: formData.consent_for_storage || false,
         consent_for_contact: formData.consent_for_contact || false,
         
         // Metadata
-        source: 'careers_page_multi_step',
+        source: 'careers_page_single_form',
         status: 'new',
         created: new Date().toISOString(),
         timestamp: new Date().toISOString(),
         
-        // Additional tracking
-        application_step_completed: 4,
-        form_version: 'multi_step_v2'
+        // Single-page form tracking
+        form_version: 'single_page_v1'
       };
 
       // Log the complete payload before submission
@@ -415,10 +353,11 @@ const JobApplicationPage = () => {
           window.dataLayer.push({
             event: "job_application_submit",
             position: jobData.position,
-            source: 'careers_page',
+            source: 'careers_page_single_form',
             location: jobData.location,
             submission_mode: result.mode,
-            applicationId: applicationId
+            applicationId: applicationId,
+            form_type: 'single_page'
           });
         }
         
@@ -440,9 +379,9 @@ const JobApplicationPage = () => {
       const applicationId = `job_fallback_${Date.now()}`;
       console.log('✅ Job application submitted successfully (fallback mode):', {
         applicationId,
-        applicant: `${applicationData.first_name} ${applicationData.last_name || ''}`.trim(),
-        email: applicationData.email,
-        position: applicationData.position_applied
+        applicant: formData.full_name,
+        email: formData.email,
+        position: 'Customer Support Specialist'
       });
       
       setSubmitStatus('success');
@@ -450,10 +389,11 @@ const JobApplicationPage = () => {
       if (window?.dataLayer) {
         window.dataLayer.push({
           event: "job_application_submit_fallback",
-          position: applicationData.position_applied,
-          source: 'careers_page',
-          location: applicationData.location,
-          applicationId: applicationId
+          position: 'Customer Support Specialist',
+          source: 'careers_page_single_form',
+          location: formData.location,
+          applicationId: applicationId,
+          form_type: 'single_page'
         });
       }
       
@@ -472,345 +412,333 @@ const JobApplicationPage = () => {
     noIndex: true // Don't index application pages
   };
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Personal Information</h3>
-              <p className="text-[rgb(161,161,170)] mb-6">Let's start with your basic contact information.</p>
-            </div>
-            
+  const renderSinglePageForm = () => {
+    return (
+      <div className="space-y-12">
+        {/* Personal Information Section */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Personal Information</h3>
+            <p className="text-[rgb(161,161,170)] mb-6">Let's start with your basic contact information.</p>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Full Name *
+            </label>
+            <input
+              type="text"
+              value={formData.full_name}
+              onChange={(e) => handleInputChange('full_name', e.target.value)}
+              className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.full_name ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+              placeholder="John Doe"
+            />
+            {errors.full_name && <p className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                Full Name *
+                Email Address *
               </label>
               <input
-                type="text"
-                value={formData.full_name}
-                onChange={(e) => handleInputChange('full_name', e.target.value)}
-                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.full_name ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                placeholder="John Doe"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.email ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                placeholder="john.doe@example.com"
               />
-              {errors.full_name && <p className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.email ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                  placeholder="john.doe@example.com"
-                />
-                {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors"
-                  placeholder="+880 1XXX XXXXXX"
-                />
-              </div>
+              {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
             </div>
             
             <div>
               <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                Location *
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors"
+                placeholder="+880 1XXX XXXXXX"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Location *
+            </label>
+            <div className="relative">
+              <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+              <input
+                type="text"
+                value={formData.location}
+                onChange={(e) => handleInputChange('location', e.target.value)}
+                className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.location ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                placeholder="Dhaka, Bangladesh"
+              />
+            </div>
+            {errors.location && <p className="text-red-400 text-xs mt-1">{errors.location}</p>}
+          </div>
+        </div>
+
+        {/* Professional Background Section */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Professional Background</h3>
+            <p className="text-[rgb(161,161,170)] mb-6">Share your professional experience and online presence.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                Resume/CV
               </label>
               <div className="relative">
-                <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
                 <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.location ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                  placeholder="Dhaka, Bangladesh"
+                  type="file"
+                  id="resume-upload"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileChange}
+                  className="hidden"
                 />
-              </div>
-              {errors.location && <p className="text-red-400 text-xs mt-1">{errors.location}</p>}
-            </div>
-          </div>
-        );
-      
-      case 2:
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Professional Background</h3>
-              <p className="text-[rgb(161,161,170)] mb-6">Share your professional experience and online presence.</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Resume/CV
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="resume-upload"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="resume-upload"
-                    className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.resume ? 'border-red-500' : 'border-[rgb(63,63,63)]'} border-dashed rounded-lg cursor-pointer hover:border-[#00FF41] transition-colors flex flex-col items-center space-y-2`}
-                  >
-                    {resume ? (
-                      <>
-                        <File size={20} className="text-[#00FF41]" />
-                        <span className="text-sm text-white">{resume.name}</span>
-                        <span className="text-xs text-[rgb(161,161,170)]">
-                          {(resume.size / 1024 / 1024).toFixed(1)} MB
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={20} className="text-[rgb(161,161,170)]" />
-                        <span className="text-sm text-[rgb(161,161,170)]">Upload Resume (PDF/Word)</span>
-                        <span className="text-xs text-[rgb(161,161,170)]">Max 5MB</span>
-                      </>
-                    )}
-                  </label>
-                </div>
-                {errors.resume && <p className="text-red-400 text-xs mt-1">{errors.resume}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Portfolio/Website
-                </label>
-                <input
-                  type="url"
-                  value={formData.portfolio_website}
-                  onChange={(e) => handleInputChange('portfolio_website', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolio_website ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
-                  placeholder="https://yourwebsite.com"
-                />
-                {errors.portfolio_website && <p className="text-red-400 text-xs mt-1">{errors.portfolio_website}</p>}
-                <p className="text-xs text-[rgb(161,161,170)] mt-1">
-                  Provide either resume or portfolio website (at least one required)
-                </p>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Preferred Work Shifts
-                </label>
-                <select
-                  value={formData.preferred_shifts}
-                  onChange={(e) => handleInputChange('preferred_shifts', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+                <label
+                  htmlFor="resume-upload"
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.resume ? 'border-red-500' : 'border-[rgb(63,63,63)]'} border-dashed rounded-lg cursor-pointer hover:border-[#00FF41] transition-colors flex flex-col items-center space-y-2`}
                 >
-                  <option value="">Select preferred shifts</option>
-                  <option value="morning">Morning (6 AM - 2 PM)</option>
-                  <option value="afternoon">Afternoon (2 PM - 10 PM)</option>
-                  <option value="night">Night (10 PM - 6 AM)</option>
-                  <option value="flexible">Flexible / Rotational</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Availability Start Date
+                  {resume ? (
+                    <>
+                      <File size={20} className="text-[#00FF41]" />
+                      <span className="text-sm text-white">{resume.name}</span>
+                      <span className="text-xs text-[rgb(161,161,170)]">
+                        {(resume.size / 1024 / 1024).toFixed(1)} MB
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={20} className="text-[rgb(161,161,170)]" />
+                      <span className="text-sm text-[rgb(161,161,170)]">Upload Resume (PDF/Word)</span>
+                      <span className="text-xs text-[rgb(161,161,170)]">Max 5MB</span>
+                    </>
+                  )}
                 </label>
-                <input
-                  type="date"
-                  value={formData.availability_start_date}
-                  onChange={(e) => handleInputChange('availability_start_date', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
-                />
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Years of Relevant Experience
-                </label>
-                <select
-                  value={formData.relevant_experience}
-                  onChange={(e) => handleInputChange('relevant_experience', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
-                >
-                  <option value="">Select experience level</option>
-                  <option value="0-1">0-1 years</option>
-                  <option value="1-3">1-3 years</option>
-                  <option value="3-5">3-5 years</option>
-                  <option value="5+">5+ years</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        );
-      
-      case 3:
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Motivation & Fit</h3>
-              <p className="text-[rgb(161,161,170)] mb-6">Help us understand why you're excited about joining SentraTech.</p>
+              {errors.resume && <p className="text-red-400 text-xs mt-1">{errors.resume}</p>}
             </div>
             
             <div>
               <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                Why do you want to join SentraTech? *
+                Portfolio/Website
               </label>
-              <textarea
-                value={formData.why_sentratech}
-                onChange={(e) => handleInputChange('why_sentratech', e.target.value)}
-                rows={4}
-                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.why_sentratech ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none`}
-                placeholder="Tell us what excites you about our mission, technology, or culture..."
+              <input
+                type="url"
+                value={formData.portfolio_website}
+                onChange={(e) => handleInputChange('portfolio_website', e.target.value)}
+                className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolio_website ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors`}
+                placeholder="https://yourwebsite.com"
               />
-              {errors.why_sentratech && <p className="text-red-400 text-xs mt-1">{errors.why_sentratech}</p>}
+              {errors.portfolio_website && <p className="text-red-400 text-xs mt-1">{errors.portfolio_website}</p>}
+              <p className="text-xs text-[rgb(161,161,170)] mt-1">
+                Provide either resume or portfolio website (at least one required)
+              </p>
+            </div>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                Preferred Work Shifts
+              </label>
+              <select
+                value={formData.preferred_shifts}
+                onChange={(e) => handleInputChange('preferred_shifts', e.target.value)}
+                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+              >
+                <option value="">Select preferred shifts</option>
+                <option value="morning">Morning (6 AM - 2 PM)</option>
+                <option value="afternoon">Afternoon (2 PM - 10 PM)</option>
+                <option value="night">Night (10 PM - 6 AM)</option>
+                <option value="flexible">Flexible / Rotational</option>
+              </select>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                Cover Letter / Additional Notes
+                Years of Relevant Experience
               </label>
-              <textarea
-                value={formData.cover_letter}
-                onChange={(e) => handleInputChange('cover_letter', e.target.value)}
-                rows={6}
-                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none"
-                placeholder="Share more about your English proficiency, relevant experience, achievements, or anything else you'd like us to know..."
+              <select
+                value={formData.relevant_experience}
+                onChange={(e) => handleInputChange('relevant_experience', e.target.value)}
+                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+              >
+                <option value="">Select experience level</option>
+                <option value="0-1">0-1 years</option>
+                <option value="1-3">1-3 years</option>
+                <option value="3-5">3-5 years</option>
+                <option value="5+">5+ years</option>
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Availability Start Date
+            </label>
+            <input
+              type="date"
+              value={formData.availability_start_date}
+              onChange={(e) => handleInputChange('availability_start_date', e.target.value)}
+              className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+            />
+          </div>
+        </div>
+
+        {/* Motivation & Fit Section */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Motivation & Fit</h3>
+            <p className="text-[rgb(161,161,170)] mb-6">Help us understand why you're excited about joining SentraTech.</p>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Why do you want to join SentraTech? *
+            </label>
+            <textarea
+              value={formData.why_sentratech}
+              onChange={(e) => handleInputChange('why_sentratech', e.target.value)}
+              rows={4}
+              className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.why_sentratech ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none`}
+              placeholder="Tell us what excites you about our mission, technology, or culture..."
+            />
+            {errors.why_sentratech && <p className="text-red-400 text-xs mt-1">{errors.why_sentratech}</p>}
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Cover Letter / Additional Notes
+            </label>
+            <textarea
+              value={formData.cover_letter}
+              onChange={(e) => handleInputChange('cover_letter', e.target.value)}
+              rows={6}
+              className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41] transition-colors resize-none"
+              placeholder="Share more about your English proficiency, relevant experience, achievements, or anything else you'd like us to know..."
+            />
+          </div>
+        </div>
+
+        {/* Legal & Final Section */}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Final Details</h3>
+            <p className="text-[rgb(161,161,170)] mb-6">Please complete the final requirements to submit your application.</p>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+              Bangladesh Work Authorization Status *
+            </label>
+            <select
+              value={formData.work_authorization}
+              onChange={(e) => handleInputChange('work_authorization', e.target.value)}
+              className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
+              required
+            >
+              <option value="">Select Work Authorization Status</option>
+              <option value="Bangladeshi Citizen">Bangladeshi Citizen</option>
+              <option value="Permanent Resident">Permanent Resident of Bangladesh</option>
+              <option value="Work Permit">Valid Work Permit/Visa</option>
+              <option value="Student Visa">Student Visa (Part-time eligible)</option>
+              <option value="Need Work Permit">Will require work permit sponsorship</option>
+            </select>
+            {errors.work_authorization && <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>}
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="consent-storage"
+                checked={formData.consent_for_storage}
+                onChange={(e) => handleInputChange('consent_for_storage', e.target.checked)}
+                className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
+                required
               />
+              <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
+                I consent to SentraTech storing and processing my application data *
+              </label>
+            </div>
+            {errors.consent_for_storage && <p className="text-red-400 text-xs ml-7">{errors.consent_for_storage}</p>}
+            
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="consent-contact"
+                checked={formData.consent_for_contact}
+                onChange={(e) => handleInputChange('consent_for_contact', e.target.checked)}
+                className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
+              />
+              <label htmlFor="consent-contact" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
+                I consent to SentraTech contacting me about this application and future opportunities
+              </label>
             </div>
           </div>
-        );
-      
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Review & Submit</h3>
-              <p className="text-[rgb(161,161,170)] mb-6">Please review your application and complete the final requirements.</p>
-            </div>
-            
-            {/* Application Summary */}
-            <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg p-6">
-              <h4 className="text-lg font-semibold text-white mb-4">Application Summary</h4>
-              <div className="space-y-3 text-sm">
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Name:</span>
-                  <span className="text-white break-words">{formData.full_name}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Email:</span>
-                  <span className="text-white break-all">{formData.email}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Location:</span>
-                  <span className="text-white break-words">{formData.location}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Resume:</span>
-                  <span className="text-white break-words">{resume ? resume.name : 'Not provided'}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Portfolio:</span>
-                  <span className="text-white break-all">{formData.portfolio_website || 'Not provided'}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between">
-                  <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
-                  <span className="text-white">{formData.relevant_experience || 'Not specified'}</span>
-                </div>
+
+          {/* Application Summary */}
+          <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg p-6">
+            <h4 className="text-lg font-semibold text-white mb-4">Application Summary</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Name:</span>
+                <span className="text-white break-words">{formData.full_name || 'Not provided'}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Email:</span>
+                <span className="text-white break-all">{formData.email || 'Not provided'}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Location:</span>
+                <span className="text-white break-words">{formData.location || 'Not provided'}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Resume:</span>
+                <span className="text-white break-words">{resume ? resume.name : 'Not provided'}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Portfolio:</span>
+                <span className="text-white break-all">{formData.portfolio_website || 'Not provided'}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between">
+                <span className="text-[rgb(161,161,170)] font-medium">Experience:</span>
+                <span className="text-white">{formData.relevant_experience || 'Not specified'}</span>
               </div>
             </div>
-            
-            {/* Legal Requirements */}
-            <div className="space-y-4">
+          </div>
+          
+          {/* Submit Status */}
+          {submitStatus === 'success' && (
+            <div className="flex items-center space-x-2 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <CheckCircle size={18} className="text-green-400" />
               <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Bangladesh Work Authorization Status *
-                </label>
-                <select
-                  value={formData.work_authorization}
-                  onChange={(e) => handleInputChange('work_authorization', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
-                  required
-                >
-                  <option value="">Select Work Authorization Status</option>
-                  <option value="Bangladeshi Citizen">Bangladeshi Citizen</option>
-                  <option value="Permanent Resident">Permanent Resident of Bangladesh</option>
-                  <option value="Work Permit">Valid Work Permit/Visa</option>
-                  <option value="Student Visa">Student Visa (Part-time eligible)</option>
-                  <option value="Need Work Permit">Will require work permit sponsorship</option>
-                </select>
-                {errors.work_authorization && <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>}
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    id="consent-storage"
-                    checked={formData.consent_for_storage}
-                    onChange={(e) => handleInputChange('consent_for_storage', e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
-                    required
-                  />
-                  <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I consent to SentraTech storing and processing my application data *
-                  </label>
-                </div>
-                {errors.consent_for_storage && <p className="text-red-400 text-xs ml-7">{errors.consent_for_storage}</p>}
-                
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    id="consent-contact"
-                    checked={formData.consent_for_contact}
-                    onChange={(e) => handleInputChange('consent_for_contact', e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2 flex-shrink-0"
-                  />
-                  <label htmlFor="consent-contact" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-                    I consent to SentraTech contacting me about this application and future opportunities
-                  </label>
-                </div>
+                <p className="text-green-400 text-sm font-medium">Application submitted successfully!</p>
+                <p className="text-green-400 text-xs">We'll review your application and get back to you within 7-10 business days.</p>
               </div>
             </div>
-            
-            {/* Submit Status */}
-            {submitStatus === 'success' && (
-              <div className="flex items-center space-x-2 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                <CheckCircle size={18} className="text-green-400" />
-                <div>
-                  <p className="text-green-400 text-sm font-medium">Application submitted successfully!</p>
-                  <p className="text-green-400 text-xs">We'll review your application and get back to you within 7-10 business days.</p>
-                </div>
-              </div>
-            )}
-            
-            {submitStatus === 'error' && (
-              <div className="flex items-center space-x-2 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                <AlertCircle size={18} className="text-red-400" />
-                <p className="text-red-400 text-sm">
-                  Something went wrong. Please try again or email your application to careers@sentratech.net
-                </p>
-              </div>
-            )}
-          </div>
-        );
-      
-      default:
-        return null;
-    }
+          )}
+          
+          {submitStatus === 'error' && (
+            <div className="flex items-center space-x-2 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <AlertCircle size={18} className="text-red-400" />
+              <p className="text-red-400 text-sm">
+                Something went wrong. Please try again or email your application to careers@sentratech.net
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -821,59 +749,17 @@ const JobApplicationPage = () => {
         {/* Header */}
         <div className="border-b border-[rgb(63,63,63)] bg-[rgb(13,13,13)]">
           <div className="container mx-auto max-w-6xl px-6 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Link 
-                  to="/careers"
-                  className="p-2 hover:bg-[rgb(38,40,42)] rounded-lg transition-colors"
-                >
-                  <ArrowLeft size={20} className="text-[rgb(161,161,170)]" />
-                </Link>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Apply for Position</h1>
-                  <p className="text-[rgb(161,161,170)] text-sm">{job.title}</p>
-                </div>
-              </div>
-              
-              <div className="text-right">
-                <div className="text-sm text-[rgb(161,161,170)]">Step {currentStep} of {steps.length}</div>
-                <div className="text-xs text-[#00FF41]">{steps[currentStep - 1]?.title}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="bg-[rgb(13,13,13)] border-b border-[rgb(63,63,63)]">
-          <div className="container mx-auto max-w-6xl px-6 py-4">
             <div className="flex items-center space-x-4">
-              {steps.map((step, index) => (
-                <div key={step.number} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    currentStep > step.number 
-                      ? 'bg-[#00FF41] text-black'
-                      : currentStep === step.number
-                      ? 'bg-[#00FF41] text-black'
-                      : 'bg-[rgb(38,40,42)] text-[rgb(161,161,170)]'
-                  }`}>
-                    {currentStep > step.number ? '✓' : step.number}
-                  </div>
-                  <div className="ml-3 hidden md:block">
-                    <div className={`text-sm font-medium ${
-                      currentStep >= step.number ? 'text-white' : 'text-[rgb(161,161,170)]'
-                    }`}>
-                      {step.title}
-                    </div>
-                    <div className="text-xs text-[rgb(161,161,170)]">{step.description}</div>
-                  </div>
-                  
-                  {index < steps.length - 1 && (
-                    <div className={`hidden md:block w-12 h-px mx-4 ${
-                      currentStep > step.number ? 'bg-[#00FF41]' : 'bg-[rgb(63,63,63)]'
-                    }`} />
-                  )}
-                </div>
-              ))}
+              <Link 
+                to="/careers"
+                className="p-2 hover:bg-[rgb(38,40,42)] rounded-lg transition-colors"
+              >
+                <ArrowLeft size={20} className="text-[rgb(161,161,170)]" />
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Apply for Position</h1>
+                <p className="text-[rgb(161,161,170)] text-sm">{job.title}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1091,37 +977,19 @@ const JobApplicationPage = () => {
             <div className="lg:col-span-2">
               <div className="bg-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6 lg:p-8">
                 <div className="max-w-full overflow-hidden">
-                  {renderStep()}
+                  {renderSinglePageForm()}
                 </div>
                 
-                {/* Navigation Buttons */}
-                <div className="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t border-[rgb(63,63,63)] mt-8">
+                {/* Submit Button */}
+                <div className="flex justify-end pt-8 border-t border-[rgb(63,63,63)] mt-8">
                   <button
-                    onClick={handlePrevious}
-                    disabled={currentStep === 1}
-                    className="px-6 py-3 bg-transparent border border-[rgb(63,63,63)] text-[rgb(218,218,218)] rounded-lg hover:bg-[rgb(38,40,42)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting || submitStatus === 'success'}
+                    className="px-8 py-4 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                   >
-                    Previous
+                    <Send size={18} />
+                    <span>{isSubmitting ? 'Submitting Application...' : 'Submit Application'}</span>
                   </button>
-                  
-                  {currentStep < steps.length ? (
-                    <button
-                      onClick={handleNext}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <span>Continue</span>
-                      <ArrowLeft size={16} className="rotate-180" />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleSubmit}
-                      disabled={isSubmitting || submitStatus === 'success'}
-                      className="px-6 py-3 bg-[#00FF41] text-black font-semibold rounded-lg hover:bg-[#00e83a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                    >
-                      <Send size={16} />
-                      <span>{isSubmitting ? 'Submitting...' : 'Submit Application'}</span>
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
