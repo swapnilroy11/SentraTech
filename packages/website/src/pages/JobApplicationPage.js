@@ -379,9 +379,9 @@ const JobApplicationPage = () => {
       const applicationId = `job_fallback_${Date.now()}`;
       console.log('✅ Job application submitted successfully (fallback mode):', {
         applicationId,
-        applicant: `${applicationData.first_name} ${applicationData.last_name || ''}`.trim(),
-        email: applicationData.email,
-        position: applicationData.position_applied
+        applicant: formData.full_name,
+        email: formData.email,
+        position: 'Customer Support Specialist'
       });
       
       setSubmitStatus('success');
