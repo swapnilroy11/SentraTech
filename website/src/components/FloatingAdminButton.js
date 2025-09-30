@@ -12,7 +12,7 @@ const FloatingAdminButton = () => {
       // Development environment - navigate to internal dashboard route
       navigate('/admin-dashboard');
     } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-      // Production environment - open external dashboard
+      // Production environment - open admin dashboard at admin.sentratech.net
       window.open('https://admin.sentratech.net', '_blank');
     } else {
       // Fallback - navigate to internal dashboard route
