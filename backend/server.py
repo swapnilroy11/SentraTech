@@ -1669,12 +1669,26 @@ async def options_demo_request():
 
 @api_router.post("/proxy/demo-request")
 async def proxy_demo_request(request: Request):
-    """Proxy demo request to dashboard with detailed logging"""
+    """Proxy demo request to dashboard with idempotency and detailed logging"""
     try:
         data = await request.json()
         
+        # Check for duplicate requests using idempotency
+        request_id = data.get("id")
+        if is_duplicate_request(request_id):
+            proxy_logger.warning(f"🚫 Duplicate demo request blocked: {request_id}")
+            return JSONResponse(
+                content={
+                    "success": False, 
+                    "error": "Duplicate request", 
+                    "message": "This demo request was already submitted recently"
+                }, 
+                status_code=429
+            )
+        
         # Comprehensive payload logging
         proxy_logger.info(f"🔎 PROXY RECEIVED DEMO REQUEST PAYLOAD:")
+        proxy_logger.info(f"🆔 Processing unique demo request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
         proxy_logger.info(f"📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
