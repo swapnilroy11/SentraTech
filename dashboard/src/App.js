@@ -20,8 +20,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-// API Configuration - Use local backend for development
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+// API Configuration - Detect environment
+const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BACKEND_URL = isDevelopment 
+  ? 'http://localhost:8001' 
+  : (process.env.REACT_APP_BACKEND_URL || 'https://admin.sentratech.net');
 const API_BASE = `${BACKEND_URL}/api`;
 
 export const api = axios.create({
