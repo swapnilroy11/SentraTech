@@ -1855,9 +1855,9 @@ async def proxy_job_application(request: Request):
             body['source'] = 'careers_page'
         
         # Get API key from environment
-        api_key = os.environ.get('EMERGENT_API_KEY')
+        api_key = os.environ.get('DASHBOARD_API_KEY') or os.environ.get('EMERGENT_API_KEY')
         if not api_key:
-            logging.error("EMERGENT_API_KEY not found in environment for job application")
+            logging.error("DASHBOARD_API_KEY not found in environment for job application")
             return JSONResponse(
                 content={"success": False, "error": "API key not configured"}, 
                 status_code=500
