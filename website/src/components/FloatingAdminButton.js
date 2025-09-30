@@ -4,22 +4,20 @@ import { Settings } from 'lucide-react';
 import { Button } from './ui/button';
 
 const FloatingAdminButton = () => {
+  const navigate = useNavigate();
+  
   const handleAdminClick = () => {
-    // For now, open dashboard in a new window using localhost URL
-    // This will work for development and can be updated for production
     const currentHost = window.location.hostname;
-    let adminUrl;
     
     if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-      // Development environment - open internal dashboard route
-      window.open('/admin-dashboard', '_blank');
+      // Development environment - navigate to internal dashboard route
+      navigate('/admin-dashboard');
     } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-      // Production environment
-      adminUrl = 'https://admin.sentratech.net';
-      window.open(adminUrl, '_blank');
+      // Production environment - open external dashboard
+      window.open('https://admin.sentratech.net', '_blank');
     } else {
-      // Fallback - try to access dashboard route
-      window.open('/admin-dashboard', '_blank');
+      // Fallback - navigate to internal dashboard route
+      navigate('/admin-dashboard');
     }
   };
 
