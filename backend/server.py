@@ -3327,10 +3327,11 @@ async def get_key_performance_indicators():
         logger.error(f"Error getting KPIs: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to get KPIs")
 
-# WebSocket for real-time metrics updates
-@app.websocket("/ws/metrics")
-async def websocket_metrics_endpoint(websocket: WebSocket):
-    """WebSocket endpoint for real-time metrics updates"""
+# DISABLED - Legacy WebSocket for metrics updates
+# @app.websocket("/ws/metrics")
+async def websocket_metrics_endpoint_disabled(websocket: WebSocket):
+    """DISABLED - Legacy WebSocket endpoint for metrics"""
+    await websocket.close(code=4010, reason="Legacy WebSocket metrics service disabled for new CRM integration")
     await websocket.accept()
     
     try:
