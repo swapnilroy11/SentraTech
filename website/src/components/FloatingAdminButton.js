@@ -23,16 +23,14 @@ const FloatingAdminButton = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <div className="w-16 h-16">
-        <Button
-          onClick={handleAdminClick}
-          className="w-full h-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
-          title="Admin Dashboard"
-          aria-label="Open Admin Dashboard"
-        >
-          <Settings size={24} />
-        </Button>
-      </div>
+      <button
+        onClick={handleAdminClick}
+        className="w-16 h-16 bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
+        title="Admin Dashboard"
+        aria-label="Open Admin Dashboard"
+      >
+        <Settings size={24} />
+      </button>
     </div>
   );
 };
