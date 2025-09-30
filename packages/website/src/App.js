@@ -39,6 +39,7 @@ const SupportCenterPage = lazy(() => import("./pages/SupportCenterPage"));
 const ContactSalesPage = lazy(() => import("./pages/ContactSalesPage"));
 const CareersPage = lazy(() => import("./pages/CareersPage"));
 const JobApplicationPage = lazy(() => import("./pages/JobApplicationPage"));
+const TestJobApp = lazy(() => import("./pages/TestJobApp"));
 const AdminDashboardPage = lazy(() => import("./pages/AdminDashboardPage"));
 
 // Contexts
