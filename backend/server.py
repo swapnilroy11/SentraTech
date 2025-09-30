@@ -4334,7 +4334,7 @@ async def proxy_roi_calculator(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://dashboard-bridge-2.preview.emergentagent.com/api/forms/roi-calculator",
+                f"{DASHBOARD_BASE_URL}/forms/roi-calculator",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
