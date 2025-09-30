@@ -4549,7 +4549,7 @@ async def get_dashboard_job_applications():
         return {"success": False, "error": "Failed to fetch job applications"}
 
 @api_router.get("/dashboard/stats")
-async def get_dashboard_stats():
+async def get_dashboard_statistics():
     """Get overall dashboard statistics"""
     try:
         stats = {}
