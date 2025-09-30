@@ -1437,16 +1437,15 @@ async def get_job_applications_status():
     except Exception as e:
         return {"error": str(e), "total_count": 0}
 
-# Server-to-Server Dashboard Proxy Endpoints
-# This eliminates CORS issues by proxying requests through our backend
+# Legacy Dashboard Proxy Configuration - DISABLED
+# Old dashboard integration removed to prevent conflicts with new CRM dashboard
 
+# DASHBOARD INTEGRATION DISABLED - All proxy routes commented out
+# DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
+# DASHBOARD_ORIGIN = "https://sentratech.net"
 
-# Dashboard API configuration
-DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
-DASHBOARD_ORIGIN = "https://sentratech.net"
-
-async def proxy_to_dashboard(endpoint: str, data: dict, original_headers: dict = None):
-    """Proxy form submission to dashboard API with API key authentication"""
+async def proxy_to_dashboard_disabled(endpoint: str, data: dict, original_headers: dict = None):
+    """Legacy dashboard proxy - DISABLED to prevent conflicts with new CRM dashboard"""
     try:
         # Get API key from environment
         api_key = os.environ.get('EMERGENT_API_KEY')
