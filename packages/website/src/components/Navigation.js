@@ -193,10 +193,10 @@ const Navigation = () => {
           aria-hidden="true"
         />
 
-        {/* Mobile Menu Panel - Enhanced with better background */}
+        {/* Mobile Menu Panel - FULL SCREEN for better mobile experience */}
         <div 
           id="mobile-navigation-menu"
-          className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
+          className={`fixed inset-0 w-full h-full bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{
