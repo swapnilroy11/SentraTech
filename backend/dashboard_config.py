@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # 🔒 PROTECTED - Dashboard Integration Settings
 class DashboardConfig:
     # Target dashboard for forwarding (CRITICAL - DO NOT CHANGE)
-    EXTERNAL_DASHBOARD_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
+    EXTERNAL_DASHBOARD_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api')
     
     # Current host (used for loop detection)
     CURRENT_HOST = "customer-flow-5.preview.emergentagent.com"
