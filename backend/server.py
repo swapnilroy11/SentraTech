@@ -4290,7 +4290,7 @@ async def proxy_newsletter_signup(request: dict):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                "https://dashboard-bridge-2.preview.emergentagent.com/api/forms/newsletter-signup",
+                f"{DASHBOARD_BASE_URL}/forms/newsletter-signup",
                 json=request,
                 headers={"Content-Type": "application/json"}
             )
