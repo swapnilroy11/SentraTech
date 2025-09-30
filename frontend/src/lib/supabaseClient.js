@@ -15,9 +15,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export { supabase };
 
 // Optional: Add helper functions for common operations
-export const demoRequestsTable = () => supabase.from('demo_requests');
-export const contactRequestsTable = () => supabase.from('contact_requests');
-export const subscriptionsTable = () => supabase.from('subscriptions');
+export const demoRequestsTable = () => supabase ? supabase.from('demo_requests') : null;
+export const contactRequestsTable = () => supabase ? supabase.from('contact_requests') : null;
+export const subscriptionsTable = () => supabase ? supabase.from('subscriptions') : null;
 
 // Helper function to insert a newsletter subscription
 export const insertSubscription = async (email) => {
