@@ -208,6 +208,9 @@ function App() {
             
             {/* Global Chat Widget */}
             <ChatWidget />
+            
+            {/* Admin Access Button */}
+            <FloatingAdminButton />
           </BrowserRouter>
         </div>
       </LanguageProvider>
