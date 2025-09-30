@@ -1,5 +1,5 @@
-// LEGACY Dashboard Configuration - DISABLED FOR NEW CRM INTEGRATION
-// Old dashboard integration removed - prepare for new CRM dashboard
+// NEW CRM Dashboard Configuration - Cross-domain integration with admin.sentratech.net
+// Provides reliable form submission with cross-domain API calls
 
 import { set, get, keys, del } from 'idb-keyval';
 
