@@ -1,5 +1,5 @@
-// Dashboard Configuration for SentraTech Admin Integration
-// Provides reliable form submission with robust fallback mechanisms
+// LEGACY Dashboard Configuration - DISABLED FOR NEW CRM INTEGRATION
+// Old dashboard integration removed - prepare for new CRM dashboard
 
 import { set, get, keys, del } from 'idb-keyval';
 
