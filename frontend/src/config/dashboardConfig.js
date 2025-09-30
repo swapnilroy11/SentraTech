@@ -93,7 +93,7 @@ export const DASHBOARD_CONFIG = {
   
   // Dashboard API configuration (for reference only - all requests now go through proxy)
   DASHBOARD_API: {
-    BASE_URL: 'https://secure-form-relay.preview.emergentagent.com/api',
+    BASE_URL: process.env.REACT_APP_BACKEND_URL || 'https://secure-form-relay.preview.emergentagent.com/api',
     ENDPOINTS: {
       CONTACT_SALES: '/forms/contact-sales',
       DEMO_REQUEST: '/forms/demo-request',
