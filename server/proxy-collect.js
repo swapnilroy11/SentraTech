@@ -63,6 +63,34 @@ async function forwardToDashboard(payload) {
   }
 }
 
+// Helper to determine the correct dashboard endpoint
+function getDashboardEndpoint(payload) {
+  // Determine form type based on payload
+  if (payload.form_type) {
+    return `/forms/${payload.form_type}`;
+  }
+  
+  // Auto-detect based on fields
+  if (payload.email && (!payload.name || !payload.message)) {
+    return '/forms/newsletter-signup';
+  }
+  if (payload.company || payload.companyName) {
+    return '/forms/contact-sales';
+  }
+  if (payload.calculationType || payload.roiData) {
+    return '/forms/roi-calculator';
+  }
+  if (payload.position || payload.fullName) {
+    return '/forms/job-application';
+  }
+  if (payload.company_name || payload.demo_request) {
+    return '/forms/demo-request';
+  }
+  
+  // Default to newsletter if just email
+  return '/forms/newsletter-signup';
+}
+
 // API
 app.post('/api/collect', async (req, res) => {
   const incoming = req.body || {};
@@ -79,8 +107,8 @@ app.post('/api/collect', async (req, res) => {
   };
 
   // Basic shape validation - adapt fields to your form's schema
-  if (!payload.name && !payload.email && !payload.message) {
-    return res.status(400).json({ ok:false, error:'invalid_payload', trace_id });
+  if (!payload.email) {
+    return res.status(400).json({ ok:false, error:'email_required', trace_id });
   }
 
   // Idempotency check
@@ -90,8 +118,9 @@ app.post('/api/collect', async (req, res) => {
   }
   dedupe.set(trace_id, Date.now());
 
-  // Forward
-  const result = await forwardToDashboard(payload);
+  // Determine endpoint and forward
+  const endpoint = getDashboardEndpoint(payload);
+  const result = await forwardToDashboard(payload, endpoint);
 
   // Log
   logLine({
