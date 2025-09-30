@@ -227,30 +227,13 @@ const Navigation = () => {
             <div className="mt-8 pt-6 border-t border-[rgba(0,255,65,0.4)] bg-[#0A0A0A]"
                  style={{ backgroundColor: '#0A0A0A' }}>
               
-              {/* Admin Login Button for Mobile */}
+              {/* Admin Button - DISABLED for new CRM integration */}
               <button 
-                onClick={() => {
-                  // Determine admin URL based on current environment
-                  const currentHost = window.location.hostname;
-                  let adminUrl;
-                  
-                  if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-                    // Development environment
-                    adminUrl = `${window.location.protocol}//${currentHost}:3001`;
-                  } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-                    // Production environment
-                    adminUrl = 'https://admin.sentratech.net';
-                  } else {
-                    // Fallback
-                    adminUrl = 'https://admin.sentratech.net';
-                  }
-                  
-                  window.open(adminUrl, '_blank');
-                  handleMenuClose(); // Close mobile menu
-                }}
-                className="w-full mb-4 bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 py-3 rounded-lg transition-all duration-200"
+                disabled
+                className="w-full mb-4 bg-transparent border border-gray-700 text-gray-500 py-3 rounded-lg opacity-50 cursor-not-allowed"
+                title="Admin Dashboard - Temporarily disabled during CRM integration"
               >
-                Admin Dashboard
+                Admin Dashboard (Soon)
               </button>
               
               {/* Demo Request Button */}
