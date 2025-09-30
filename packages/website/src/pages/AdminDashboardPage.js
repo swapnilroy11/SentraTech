@@ -139,9 +139,17 @@ const AdminDashboardPage = () => {
             <span className="text-sm text-gray-400">admin@sentratech.net</span>
             <Button
               onClick={() => {
-                const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const dashboardUrl = isDevelopment ? 'http://localhost:3001' : 'https://admin.sentratech.net';
-                window.open(dashboardUrl, '_blank');
+                const currentHost = window.location.hostname;
+                // For preview environments, open dashboard in same tab
+                if (currentHost.includes('localhost') || 
+                    currentHost.includes('emergentagent.com') ||
+                    currentHost.includes('emergent')) {
+                  // Stay in same app - navigate to dashboard route
+                  window.location.href = '/dashboard';
+                } else {
+                  // Production - open external domain
+                  window.open('https://admin.sentratech.net', '_blank');
+                }
               }}
               className="bg-gray-700 text-gray-300 hover:bg-gray-600 text-sm px-3 py-1"
               title="Open Full Dashboard"
