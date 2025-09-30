@@ -130,6 +130,7 @@ app.post('/api/collect', async (req, res) => {
     ts: new Date().toISOString(),
     trace_id,
     client_ip,
+    endpoint: result.endpoint || endpoint,
     payload_summary: { name: payload.name?.slice(0,50), email: payload.email },
     upstream_status: result.status,
     upstream_body: typeof result.body === 'string' ? result.body.slice(0,2048) : ''
