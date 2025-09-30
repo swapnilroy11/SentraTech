@@ -1,34 +1,34 @@
 // SentraTech Branding Configuration for Admin Dashboard
 
 export const BrandColors = {
-  // Primary Colors
-  PRIMARY: '#0047BB',
-  PRIMARY_LIGHT: '#1a5bc9',
-  PRIMARY_DARK: '#003397',
+  // Primary Colors - Neon Green Theme
+  PRIMARY: '#00FF41',
+  PRIMARY_LIGHT: '#33ff66',
+  PRIMARY_DARK: '#00cc34',
   
   // Accent Colors
-  ACCENT: '#00A676',
-  ACCENT_LIGHT: '#1ab689',
-  ACCENT_DARK: '#008c63',
+  ACCENT: '#00FF41',
+  ACCENT_LIGHT: '#33ff66',
+  ACCENT_DARK: '#00cc34',
   
   // SentraTech Green (from website)
   SENTRA_GREEN: '#00FF41',
   SENTRA_GREEN_HOVER: '#00e83a',
   
   // Status Colors
-  SUCCESS: '#00A676',
+  SUCCESS: '#00FF41',
   WARNING: '#f59e0b',
   ERROR: '#ef4444',
-  INFO: '#3b82f6',
+  INFO: '#00FF41',
   
-  // Neutral Colors - Dark Theme
-  BACKGROUND_DARK: '#0A0A0A',
-  SURFACE_DARK: '#111827',
-  CARD_DARK: '#1f2937',
-  BORDER_DARK: '#374151',
+  // Neutral Colors - Dark Theme (matching your image)
+  BACKGROUND_DARK: '#0a0a0a',
+  SURFACE_DARK: '#111111',
+  CARD_DARK: '#1a1a1a',
+  BORDER_DARK: '#333333',
   TEXT_PRIMARY_DARK: '#ffffff',
-  TEXT_SECONDARY_DARK: '#d1d5db',
-  TEXT_MUTED_DARK: '#9ca3af',
+  TEXT_SECONDARY_DARK: '#cccccc',
+  TEXT_MUTED_DARK: '#888888',
   
   // Neutral Colors - Light Theme  
   BACKGROUND_LIGHT: '#ffffff',
