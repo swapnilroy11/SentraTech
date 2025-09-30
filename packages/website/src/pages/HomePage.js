@@ -171,6 +171,30 @@ const animationStyles = `
     transform: translateY(0);
     transition: all 0.6s ease-out;
   }
+
+  /* INSTANT COOKIE BANNER - No delays or transitions */
+  .cookie-banner-instant {
+    animation: instantCookieBannerAppear 0.3s ease-out;
+    animation-fill-mode: both;
+  }
+
+  @keyframes instantCookieBannerAppear {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  /* Force immediate visibility for cookie banner */
+  [data-cookie-banner="true"] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 `;
 
 const HomePage = () => {
