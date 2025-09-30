@@ -230,37 +230,6 @@ const Footer = () => {
               <p className="text-[rgb(218,218,218)] text-sm font-medium">
                 Built with AI + Human Intelligence.
               </p>
-              
-              {/* Admin Access - Discrete */}
-              <div className="pt-2">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    // Determine admin URL based on current environment
-                    const currentHost = window.location.hostname;
-                    let adminUrl;
-                    
-                    if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-                      // Development environment - use current domain with different port
-                      adminUrl = `${window.location.protocol}//${currentHost}:3001`;
-                    } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-                      // Production environment
-                      adminUrl = 'https://admin.sentratech.net';
-                    } else {
-                      // Fallback
-                      adminUrl = 'https://admin.sentratech.net';
-                    }
-                    
-                    // Open dashboard in new tab
-                    window.open(adminUrl, '_blank');
-                  }}
-                  className="text-[rgb(113,113,122)] hover:text-[#00FF41] text-xs transition-colors duration-200 opacity-40 hover:opacity-100"
-                  title="Admin Dashboard"
-                >
-                  Admin
-                </a>
-              </div>
             </div>
           </div>
         </div>
