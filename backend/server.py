@@ -4521,7 +4521,7 @@ async def get_dashboard_contact_sales():
         return {"success": False, "error": "Failed to fetch contact sales"}
 
 @api_router.get("/forms/newsletter-subscribers")
-async def get_newsletter_subscribers():
+async def get_dashboard_newsletter_subscribers():
     """Get all newsletter subscribers for dashboard"""
     try:
         subscribers = await db.subscriptions.find().sort("created_at", -1).to_list(length=100)
