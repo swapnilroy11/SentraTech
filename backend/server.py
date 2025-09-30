@@ -1668,8 +1668,7 @@ async def options_demo_request():
 
 @api_router.post("/proxy/demo-request")
 async def proxy_demo_request(request: Request):
-    """DISABLED - Legacy dashboard proxy endpoint"""
-    return legacy_dashboard_disabled_response("demo-request")
+    """Proxy demo request to new CRM dashboard with cross-domain support"""
     try:
         data = await request.json()
         
