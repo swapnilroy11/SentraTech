@@ -169,6 +169,9 @@ const HomePage = () => {
       {/* SEO Management for Homepage */}
       <SEOManager />
       
+      {/* Inject animation styles */}
+      <style>{animationStyles}</style>
+      
       <main role="main" aria-label="SentraTech Homepage - AI Customer Support Platform">
         <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] pt-20" id="home">
       {/* Hero Section */}
