@@ -125,7 +125,36 @@ const Navigation = () => {
           </ul>
 
           {/* CTA Section */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center space-x-3">
+            {/* Admin Login Button - Discrete */}
+            <a 
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                // Determine admin URL based on current environment
+                const currentHost = window.location.hostname;
+                let adminUrl;
+                
+                if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
+                  // Development environment - use current domain with different port
+                  adminUrl = `${window.location.protocol}//${currentHost}:3001`;
+                } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
+                  // Production environment
+                  adminUrl = 'https://admin.sentratech.net';
+                } else {
+                  // Fallback
+                  adminUrl = 'https://admin.sentratech.net';
+                }
+                
+                // Open dashboard in new tab to avoid disrupting user experience
+                window.open(adminUrl, '_blank');
+              }}
+              className="text-gray-400 hover:text-gray-300 text-xs px-3 py-1 border border-gray-600 rounded-md transition-all duration-200 opacity-70 hover:opacity-100"
+              title="Admin Dashboard Login"
+            >
+              Admin
+            </a>
+            
             <Link to="/demo-request">
               <Button 
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
@@ -218,6 +247,33 @@ const Navigation = () => {
             {/* Mobile Menu Actions - Enhanced */}
             <div className="mt-8 pt-6 border-t border-[rgba(0,255,65,0.4)] bg-[#0A0A0A]"
                  style={{ backgroundColor: '#0A0A0A' }}>
+              
+              {/* Admin Login Button for Mobile */}
+              <button 
+                onClick={() => {
+                  // Determine admin URL based on current environment
+                  const currentHost = window.location.hostname;
+                  let adminUrl;
+                  
+                  if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
+                    // Development environment
+                    adminUrl = `${window.location.protocol}//${currentHost}:3001`;
+                  } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
+                    // Production environment
+                    adminUrl = 'https://admin.sentratech.net';
+                  } else {
+                    // Fallback
+                    adminUrl = 'https://admin.sentratech.net';
+                  }
+                  
+                  window.open(adminUrl, '_blank');
+                  handleMenuClose(); // Close mobile menu
+                }}
+                className="w-full mb-4 bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 py-3 rounded-lg transition-all duration-200"
+              >
+                Admin Dashboard
+              </button>
+              
               {/* Demo Request Button */}
               <Link to="/demo-request" onClick={handleMenuItemClick} className="block">
                 <Button className="w-full bg-gradient-to-r from-[#00FF41] to-[#00e83a] text-[#0A0A0A] hover:from-[#00e83a] hover:to-[#00d235] font-semibold px-6 py-4 rounded-xl font-rajdhani shadow-lg shadow-[rgba(0,255,65,0.3)] transform hover:scale-105 transition-all duration-200">
