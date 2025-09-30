@@ -269,20 +269,8 @@ export const isOnline = () => {
   return navigator.onLine;
 };
 
-// LEGACY Dashboard form submission - DISABLED FOR NEW CRM INTEGRATION  
+// NEW CRM Dashboard form submission - Cross-domain integration with admin.sentratech.net
 export const submitFormToDashboard = async (endpoint, data, options = {}) => {
-  // Return early with disabled message for all dashboard submissions
-  console.warn('🚫 Legacy dashboard integration disabled - preparing for new CRM dashboard');
-  
-  return {
-    success: false,
-    error: 'Legacy dashboard integration disabled',
-    message: 'Old dashboard proxy has been removed. New CRM dashboard integration pending.',
-    data: {
-      id: `legacy_disabled_${Date.now()}`,
-      status: 'disabled'
-    }
-  };
   const {
     timeout = DASHBOARD_CONFIG.TIMEOUT.DEFAULT,
     retries = DASHBOARD_CONFIG.RETRY.MAX_ATTEMPTS
