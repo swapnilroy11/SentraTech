@@ -4601,6 +4601,13 @@ async def refresh_token():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Include enterprise proxy router
+from enterprise_proxy import proxy_router
+app.include_router(proxy_router)
+
+# Include WebSocket service
+from websocket_service import ws_manager
+
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
