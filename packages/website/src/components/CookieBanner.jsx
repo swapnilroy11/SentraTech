@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 const CookieBanner = () => {
-  const [showBanner, setShowBanner] = useState(false);
+  // Check immediately on component initialization - no waiting
+  const [showBanner, setShowBanner] = useState(() => {
+    // Check localStorage immediately when component initializes
+    if (typeof window !== 'undefined') {
+      const consentData = localStorage.getItem('cookieConsent');
+      return !consentData; // Show immediately if no consent exists
+    }
+    return false;
+  });
   const [showPreferences, setShowPreferences] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [preferences, setPreferences] = useState({
