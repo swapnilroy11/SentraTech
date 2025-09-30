@@ -4491,8 +4491,10 @@ app.add_middleware(
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
         "https://secure-form-relay.preview.emergentagent.com",
+        "https://formflow-admin-2.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
+        "http://localhost:3001",
         "http://localhost:8080"
     ],
     allow_methods=["GET", "POST", "OPTIONS"],
