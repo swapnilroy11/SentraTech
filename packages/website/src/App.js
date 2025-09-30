@@ -198,7 +198,6 @@ function App() {
                   <Route path="/contact-sales-management" element={<ContactSalesPage />} />
                   <Route path="/careers" element={<CareersPage />} />
                   <Route path="/careers/apply/:jobId" element={<JobApplicationPage />} />
-                  <Route path="/test-job-app" element={<TestJobApp />} />
                   <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
                   <Route path="/dashboard" element={<AdminDashboardPage />} />
                 </Routes>
