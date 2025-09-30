@@ -1809,8 +1809,7 @@ async def options_job_application():
 
 @api_router.post("/proxy/job-application")
 async def proxy_job_application(request: Request):
-    """DISABLED - Legacy dashboard proxy endpoint"""
-    return legacy_dashboard_disabled_response("job-application")
+    """Proxy job application to new CRM dashboard with cross-domain support"""
     try:
         body = await request.json()
         
