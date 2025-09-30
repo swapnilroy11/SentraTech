@@ -493,3 +493,116 @@ body {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
+/* COMPREHENSIVE MOBILE OPTIMIZATION CSS */
+
+/* Base mobile optimizations */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Optimize touch targets */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Optimize typography */
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.5rem !important; }
+  h3 { font-size: 1.25rem !important; }
+  
+  /* Optimize spacing */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Optimize cards */
+  .card, [class*="card"] {
+    margin-bottom: 1rem;
+    padding: 1rem !important;
+  }
+  
+  /* Optimize forms */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Optimize animations - reduce complexity */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Hardware acceleration */
+  .mobile-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Fix hamburger menu full screen */
+  #mobile-navigation-menu {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  /* Further optimizations for very small screens */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .flex {
+    flex-direction: column !important;
+  }
+  
+  .text-lg { font-size: 1rem !important; }
+  .text-xl { font-size: 1.125rem !important; }
+}
+
+/* Landscape mobile optimizations */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Optimize for landscape mobile */
+  .hero-section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+/* Reduce motion for better performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Optimize for touch */
+@media (pointer: coarse) {
+  /* Larger touch targets for touch devices */
+  button, a {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\\:scale-105 {
+    transform: none !important;
+  }
+}
