@@ -1683,7 +1683,8 @@ async def options_demo_request():
 
 @api_router.post("/proxy/demo-request")
 async def proxy_demo_request(request: Request):
-    """Proxy demo request to dashboard with idempotency and detailed logging"""
+    """DISABLED - Legacy dashboard proxy endpoint"""
+    return legacy_dashboard_disabled_response("demo-request")
     try:
         data = await request.json()
         
