@@ -264,7 +264,7 @@ const HomePage = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16 hero-buttons">
               <Button 
                 onClick={() => navigateToSection('/roi-calculator')}
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl hover-scale hover-glow animate-pulse-hover flex items-center space-x-2 shadow-lg"
