@@ -99,10 +99,18 @@ function App() {
     try {
       setIsLoading(true);
       
-      // Simple authentication (replace with actual API call)
-      if (credentials.email === 'admin@sentratech.net' && 
-          credentials.password === 'sentratech2025') {
-        
+      // Call backend authentication API
+      const response = await axios.post(`${API_BASE}/dashboard/auth/login`, {
+        email: credentials.email,
+        password: credentials.password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
+      });
+      
+      if (response.data.success) {
         const authData = {
           token: 'admin_session_' + Date.now(),
           expiry: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
@@ -120,13 +128,23 @@ function App() {
         toast.success('Successfully logged in!');
         return { success: true };
       } else {
-        toast.error('Invalid credentials');
-        return { success: false, error: 'Invalid credentials' };
+        toast.error(response.data.error || 'Login failed');
+        return { success: false, error: response.data.error || 'Login failed' };
       }
     } catch (error) {
       console.error('Login failed:', error);
-      toast.error('Login failed. Please try again.');
-      return { success: false, error: error.message };
+      
+      // Handle different error types
+      if (error.response?.status === 401) {
+        toast.error('Invalid credentials');
+        return { success: false, error: 'Invalid credentials' };
+      } else if (error.code === 'ECONNREFUSED' || error.message.includes('Network Error')) {
+        toast.error('Cannot connect to server. Please try again.');
+        return { success: false, error: 'Connection failed' };
+      } else {
+        toast.error('Login failed. Please try again.');
+        return { success: false, error: error.message || 'Login failed' };
+      }
     } finally {
       setIsLoading(false);
     }
