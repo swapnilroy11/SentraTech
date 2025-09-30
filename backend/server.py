@@ -4645,6 +4645,121 @@ async def websocket_endpoint(websocket: WebSocket, last_received_id: str = None)
         if connection_id:
             await ws_manager.disconnect(connection_id)
 
+# Enterprise Dashboard API Endpoints
+# Base URL: https://admin.sentratech.net/api/forms
+
+@api_router.post("/forms/roi-calculator")
+async def dashboard_roi_calculator(request: Request):
+    """
+    ROI Calculator submissions: https://admin.sentratech.net/api/forms/roi-calculator
+    """
+    return await handle_dashboard_form_submission("roi-calculator", request)
+
+@api_router.post("/forms/demo-request") 
+async def dashboard_demo_request(request: Request):
+    """
+    Demo Request submissions: https://admin.sentratech.net/api/forms/demo-request
+    """
+    return await handle_dashboard_form_submission("demo-request", request)
+
+@api_router.post("/forms/contact-sales")
+async def dashboard_contact_sales(request: Request):
+    """
+    Sales Contact submissions: https://admin.sentratech.net/api/forms/contact-sales
+    """
+    return await handle_dashboard_form_submission("contact-sales", request)
+
+@api_router.post("/forms/newsletter-signup")
+async def dashboard_newsletter_signup(request: Request):
+    """
+    Newsletter Signup submissions: https://admin.sentratech.net/api/forms/newsletter-signup
+    """
+    return await handle_dashboard_form_submission("newsletter-signup", request)
+
+@api_router.post("/forms/job-application")
+async def dashboard_job_application(request: Request):
+    """
+    Job Application submissions: https://admin.sentratech.net/api/forms/job-application
+    """
+    return await handle_dashboard_form_submission("job-application", request)
+
+async def handle_dashboard_form_submission(form_type: str, request: Request):
+    """
+    Enterprise handler for dashboard form submissions with API key validation
+    """
+    try:
+        # Validate API key
+        api_key = request.headers.get('X-API-Key')
+        expected_key = os.getenv('EMERGENT_API_KEY', 'sk-emergent-7A236FdD2Ce8d9b52C')
+        
+        if api_key != expected_key:
+            logger.warning(f"Invalid API key for {form_type}: {api_key}")
+            raise HTTPException(status_code=401, detail="Invalid API key")
+        
+        # Parse request body
+        if request.headers.get('content-type', '').startswith('application/json'):
+            body = await request.json()
+        else:
+            form_data = await request.form()
+            body = dict(form_data)
+        
+        # Extract metadata
+        submission_id = body.get('submissionId')
+        timestamp = body.get('timestamp')
+        form_data = body.get('data', {})
+        
+        # Store in database
+        document = {
+            'submissionId': submission_id,
+            'timestamp': timestamp,
+            'formType': form_type,
+            'source': body.get('source', 'unknown'),
+            'userAgent': body.get('userAgent'),
+            'ipAddress': body.get('ipAddress'),
+            'data': form_data,
+            'processed': datetime.now(timezone.utc),
+            'status': 'received'
+        }
+        
+        # Insert into appropriate collection
+        collection_name = form_type.replace('-', '_')
+        await db[collection_name].insert_one(document)
+        
+        logger.info(f"Stored {form_type} submission: {submission_id}")
+        
+        # Notify WebSocket clients in real-time
+        await ws_manager.notify_form_submission(form_type, document)
+        
+        # Return acknowledgment
+        return JSONResponse(
+            status_code=200,
+            content={
+                'ack': True,
+                'submissionId': submission_id,
+                'timestamp': datetime.now(timezone.utc).isoformat(),
+                'message': f'{form_type} submission processed successfully'
+            }
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error processing {form_type} submission: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+# WebSocket Health Check
+@api_router.get("/ws/health")
+async def websocket_health():
+    """WebSocket service health check"""
+    stats = ws_manager.get_connection_stats()
+    return {
+        'status': 'healthy',
+        'service': 'websocket',
+        'endpoint': 'wss://admin.sentratech.net/ws',
+        'stats': stats,
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    }
+
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
