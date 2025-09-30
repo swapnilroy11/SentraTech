@@ -1740,8 +1740,7 @@ async def options_roi_calculator():
 
 @api_router.post("/proxy/roi-calculator")
 async def proxy_roi_calculator(request: Request):
-    """DISABLED - Legacy dashboard proxy endpoint"""
-    return legacy_dashboard_disabled_response("roi-calculator")
+    """Proxy ROI calculator to new CRM dashboard with cross-domain support"""
     try:
         data = await request.json()
         
