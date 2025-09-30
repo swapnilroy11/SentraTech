@@ -4569,7 +4569,7 @@ async def get_dashboard_stats():
         return {"success": False, "error": "Failed to fetch dashboard stats"}
 
 # Authentication endpoints for dashboard
-@api_router.post("/auth/login")
+@api_router.post("/dashboard/auth/login")
 async def dashboard_login(request: Request):
     """Simple login for dashboard access"""
     try:
