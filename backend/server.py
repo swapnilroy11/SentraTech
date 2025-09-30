@@ -4607,6 +4607,7 @@ app.include_router(proxy_router)
 
 # Include WebSocket service
 from websocket_service import ws_manager
+import json
 
 # WebSocket endpoint for real-time updates
 @app.websocket("/ws")
