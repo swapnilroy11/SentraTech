@@ -748,59 +748,17 @@ const JobApplicationPage = () => {
         {/* Header */}
         <div className="border-b border-[rgb(63,63,63)] bg-[rgb(13,13,13)]">
           <div className="container mx-auto max-w-6xl px-6 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Link 
-                  to="/careers"
-                  className="p-2 hover:bg-[rgb(38,40,42)] rounded-lg transition-colors"
-                >
-                  <ArrowLeft size={20} className="text-[rgb(161,161,170)]" />
-                </Link>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Apply for Position</h1>
-                  <p className="text-[rgb(161,161,170)] text-sm">{job.title}</p>
-                </div>
-              </div>
-              
-              <div className="text-right">
-                <div className="text-sm text-[rgb(161,161,170)]">Step {currentStep} of {steps.length}</div>
-                <div className="text-xs text-[#00FF41]">{steps[currentStep - 1]?.title}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="bg-[rgb(13,13,13)] border-b border-[rgb(63,63,63)]">
-          <div className="container mx-auto max-w-6xl px-6 py-4">
             <div className="flex items-center space-x-4">
-              {steps.map((step, index) => (
-                <div key={step.number} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    currentStep > step.number 
-                      ? 'bg-[#00FF41] text-black'
-                      : currentStep === step.number
-                      ? 'bg-[#00FF41] text-black'
-                      : 'bg-[rgb(38,40,42)] text-[rgb(161,161,170)]'
-                  }`}>
-                    {currentStep > step.number ? '✓' : step.number}
-                  </div>
-                  <div className="ml-3 hidden md:block">
-                    <div className={`text-sm font-medium ${
-                      currentStep >= step.number ? 'text-white' : 'text-[rgb(161,161,170)]'
-                    }`}>
-                      {step.title}
-                    </div>
-                    <div className="text-xs text-[rgb(161,161,170)]">{step.description}</div>
-                  </div>
-                  
-                  {index < steps.length - 1 && (
-                    <div className={`hidden md:block w-12 h-px mx-4 ${
-                      currentStep > step.number ? 'bg-[#00FF41]' : 'bg-[rgb(63,63,63)]'
-                    }`} />
-                  )}
-                </div>
-              ))}
+              <Link 
+                to="/careers"
+                className="p-2 hover:bg-[rgb(38,40,42)] rounded-lg transition-colors"
+              >
+                <ArrowLeft size={20} className="text-[rgb(161,161,170)]" />
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Apply for Position</h1>
+                <p className="text-[rgb(161,161,170)] text-sm">{job.title}</p>
+              </div>
             </div>
           </div>
         </div>
