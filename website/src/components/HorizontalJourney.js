@@ -1,0 +1,1081 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import * as THREE from 'three';
+import { Card, CardContent } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { 
+  ArrowLeft, ArrowRight, Phone, Mail, MessageSquare, 
+  Users, BarChart3, Target, Brain, Zap, Clock, 
+  TrendingUp, CheckCircle, X, Play, Pause
+} from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+
+const HorizontalJourney = () => {
+  const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const sceneRef = useRef(null);
+  const animationRef = useRef(null);
+  
+  const [currentPanel, setCurrentPanel] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [selectedPanel, setSelectedPanel] = useState(null);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [isAutoAdvancing, setIsAutoAdvancing] = useState(true);
+  const [isMobile, setIsMobile] = useState(false); // Initialize as false, detect in useEffect
+  const [hasThreeJSError, setHasThreeJSError] = useState(false);
+  
+  // Handle modal opening/closing with body scroll lock
+  const openModal = (stage, event) => {
+    // Get the clicked card's position
+    const cardElement = event.currentTarget;
+    const rect = cardElement.getBoundingClientRect();
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    
+    // Calculate position to center modal above the card
+    setModalPosition({
+      x: rect.left + (rect.width / 2), // Center horizontally on card
+      y: rect.top + scrollY - 400 // Position above card with more margin for bigger modal
+    });
+    
+    setSelectedPanel(stage);
+    document.body.classList.add('modal-open');
+  };
+  
+  const closeModal = () => {
+    setSelectedPanel(null);
+    document.body.classList.remove('modal-open');
+  };
+  
+  const { t } = useLanguage();
+
+  // Journey stages data - now using translations
+  const journeyStages = [
+    {
+      id: 'contact',
+      title: t.journey.stages.contact.title,
+      subtitle: t.journey.stages.contact.subtitle,
+      metric: '<5s',
+      metricLabel: 'Response Time',
+      description: t.journey.stages.contact.description,
+      icon: MessageSquare,
+      color: '#00FF41',
+      automationRate: 85,
+      keyFeatures: t.journey.stages.contact.features,
+      channels: ['Voice', 'Chat', 'Email', 'SMS', 'Social Media']
+    },
+    {
+      id: 'triage',
+      title: t.journey.stages.triage.title,
+      subtitle: t.journey.stages.triage.subtitle,
+      metric: '<50ms',
+      metricLabel: 'Analysis Time',
+      description: t.journey.stages.triage.description,
+      icon: Brain,
+      color: '#00DDFF',
+      automationRate: 94,
+      keyFeatures: t.journey.stages.triage.features,
+      channels: ['AI Engine', 'NLP Analysis', 'Sentiment Detection', 'Priority Routing']
+    },
+    {
+      id: 'engagement',
+      title: t.journey.stages.engagement.title,
+      subtitle: t.journey.stages.engagement.subtitle,
+      metric: '70%',
+      metricLabel: 'Automation Rate',
+      description: t.journey.stages.engagement.description,
+      icon: Zap,
+      color: '#FFD700',
+      automationRate: 70,
+      keyFeatures: t.journey.stages.engagement.features,
+      channels: ['Chatbot', 'Live Agent', 'Knowledge Base', 'Self-Service']
+    },
+    {
+      id: 'augmentation',
+      title: t.journey.stages.augmentation.title,
+      subtitle: t.journey.stages.augmentation.subtitle,
+      metric: '60%',
+      metricLabel: 'Productivity Gain',
+      description: t.journey.stages.augmentation.description,
+      icon: Users,
+      color: '#FF6B6B',
+      automationRate: 60,
+      keyFeatures: t.journey.stages.augmentation.features,
+      channels: ['Agent Dashboard', 'AI Assistant', 'CRM Integration', 'Real-time Insights']
+    },
+    {
+      id: 'analytics',
+      title: t.journey.stages.analytics.title,
+      subtitle: t.journey.stages.analytics.subtitle,
+      metric: '99.9%',
+      metricLabel: 'Data Accuracy',
+      description: t.journey.stages.analytics.description,
+      icon: BarChart3,
+      color: '#9D4EDD',
+      automationRate: 100,
+      keyFeatures: t.journey.stages.analytics.features,
+      channels: ['Performance Metrics', 'Quality Scores', 'Satisfaction Tracking', 'Business Intelligence']
+    },
+    {
+      id: 'outcome',
+      title: t.journey.stages.outcome.title,
+      subtitle: t.journey.stages.outcome.subtitle,
+      metric: '96%',
+      metricLabel: 'Customer Satisfaction',
+      description: t.journey.stages.outcome.description,
+      icon: CheckCircle,
+      color: '#00FF41',
+      automationRate: 88,
+      keyFeatures: t.journey.stages.outcome.features,
+      channels: ['Follow-up Automation', 'Feedback Collection', 'ML Learning', 'Process Optimization']
+    }
+  ];
+
+  const { scrollXProgress } = useScroll({
+    container: containerRef,
+    axis: 'x'
+  });
+
+  // Scroll to panel function
+  const scrollToPanel = (panelIndex) => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        left: panelIndex * window.innerWidth,
+        behavior: 'smooth'
+      });
+      setCurrentPanel(panelIndex);
+    }
+  };
+
+  // Auto-advance functionality
+  useEffect(() => {
+    if (!isAutoAdvancing || isHovered || isMobile) return;
+    
+    const timer = setInterval(() => {
+      setCurrentPanel(prev => {
+        const nextPanel = (prev + 1) % journeyStages.length;
+        // Actually scroll to the next panel
+        if (containerRef.current) {
+          containerRef.current.scrollTo({
+            left: nextPanel * window.innerWidth,
+            behavior: 'smooth'
+          });
+        }
+        return nextPanel;
+      });
+    }, 8000);
+    
+    return () => clearInterval(timer);
+  }, [isAutoAdvancing, isHovered, isMobile, journeyStages.length]);
+
+  // Mobile detection
+  useEffect(() => {
+    const detectMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial detection after component mounts
+    detectMobile();
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Three.js neural network background
+  useEffect(() => {
+    if (isMobile || !canvasRef.current) return;
+    
+    // Additional WebGL checks (don't modify mobile state)
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        console.log('WebGL not supported, will show mobile fallback');
+        setHasThreeJSError(true);
+        return;
+      }
+    } catch (e) {
+      console.log('WebGL check failed, will show mobile fallback');
+      setHasThreeJSError(true);
+      return;
+    }
+
+    try {
+      const scene = new THREE.Scene();
+      sceneRef.current = scene;
+
+      const camera = new THREE.PerspectiveCamera(
+        75, 
+        window.innerWidth / 400, 
+        0.1, 
+        1000
+      );
+      camera.position.z = 5;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvasRef.current,
+        antialias: true,
+        alpha: true
+      });
+      renderer.setSize(window.innerWidth, 400);
+      renderer.setClearColor(0x000000, 0);
+
+    // Create neural node network
+    const nodeGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+    const nodeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00FF41,
+      transparent: true,
+      opacity: 0.6
+    });
+
+    const nodes = [];
+    const connections = [];
+
+    // Create nodes
+    for (let i = 0; i < 50; i++) {
+      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      node.position.set(
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.5) * 10
+      );
+      scene.add(node);
+      nodes.push(node);
+    }
+
+    // Create connections between nearby nodes
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const distance = nodes[i].position.distanceTo(nodes[j].position);
+        if (distance < 3) {
+          const geometry = new THREE.BufferGeometry().setFromPoints([
+            nodes[i].position,
+            nodes[j].position
+          ]);
+          const material = new THREE.LineBasicMaterial({
+            color: 0x00FF41,
+            transparent: true,
+            opacity: 0.2
+          });
+          const line = new THREE.Line(geometry, material);
+          scene.add(line);
+          connections.push(line);
+        }
+      }
+    }
+
+    // Animation loop
+    const animate = () => {
+      const time = Date.now() * 0.001;
+      
+      // Animate nodes
+      nodes.forEach((node, index) => {
+        node.position.x += Math.sin(time + index) * 0.01;
+        node.rotation.x = time + index;
+        node.rotation.y = time + index * 0.5;
+      });
+
+      // Animate camera based on scroll
+      camera.position.x = scrollXProgress.get() * 10 - 5;
+
+      renderer.render(scene, camera);
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+      animate();
+
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        renderer.dispose();
+      };
+    } catch (error) {
+      console.error('Three.js initialization failed:', error);
+      setHasThreeJSError(true); // Only set Three.js error, don't force mobile
+    }
+  }, [isMobile, scrollXProgress]);
+
+  // Keyboard navigation and modal escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (selectedPanel) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeModal();
+          return false;
+        }
+      }
+      
+      // Only handle arrow keys when modal is not open
+      if (!selectedPanel) {
+        if (e.key === 'ArrowLeft' && currentPanel > 0) {
+          scrollToPanel(currentPanel - 1);
+        } else if (e.key === 'ArrowRight' && currentPanel < journeyStages.length - 1) {
+          scrollToPanel(currentPanel + 1);
+        }
+      }
+    };
+
+    // Use window instead of document for more reliable event handling
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [currentPanel, journeyStages.length, selectedPanel]);
+  
+  // Cleanup body class and modal container on unmount
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('modal-open');
+      const modalContainer = document.getElementById('customer-journey-modal-root');
+      if (modalContainer && modalContainer.parentNode) {
+        modalContainer.parentNode.removeChild(modalContainer);
+      }
+    };
+  }, []);
+
+  const ChannelIcon = ({ type, delay }) => {
+    const icons = {
+      phone: Phone,
+      email: Mail,
+      chat: MessageSquare,
+      social: Users,
+      sms: MessageSquare
+    };
+    
+    const Icon = icons[type] || Phone;
+    
+    return (
+      <motion.div
+        className="absolute opacity-20"
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ 
+          x: window.innerWidth + 100, 
+          opacity: 0.3,
+          transition: { 
+            duration: 20, 
+            delay, 
+            repeat: Infinity, 
+            ease: 'linear' 
+          }
+        }}
+        style={{
+          top: `${Math.random() * 300 + 50}px`,
+        }}
+      >
+        <Icon size={24} className="text-[#00FF41]" />
+      </motion.div>
+    );
+  };
+
+  if (isMobile || hasThreeJSError) {
+    // Static mobile fallback
+    return (
+      <section className="py-20 bg-[#0A0A0A] relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-[rgba(0,255,65,0.1)] text-[#00FF41] border-[#00FF41]/30">
+              <Brain className="mr-2" size={14} />
+              Customer Journey
+            </Badge>
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Intelligent Customer Experience Flow
+            </h2>
+            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto">
+              Six stages of AI-powered customer support optimization
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-6">
+            {journeyStages.map((stage, index) => (
+              <Card key={stage.id} className="bg-[rgb(26,28,30)] border border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-12 h-12 bg-[rgba(0,255,65,0.2)] rounded-xl flex items-center justify-center border border-[rgba(0,255,65,0.5)]">
+                      <stage.icon size={24} style={{ color: stage.color }} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-white">{stage.title}</h3>
+                      <p className="text-[rgb(161,161,170)]">{stage.subtitle}</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold" style={{ color: stage.color }}>
+                        {stage.metric}
+                      </div>
+                      <div className="text-xs text-[rgb(161,161,170)]">
+                        {stage.metricLabel}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-[rgb(218,218,218)] text-sm">
+                    {stage.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="relative h-screen bg-[#0A0A0A] overflow-hidden">
+      {/* Custom styles for smooth scrolling and modal positioning */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .customer-journey-modal-overlay {
+          will-change: opacity, backdrop-filter;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          z-index: 99999 !important;
+          padding: 20px !important;
+          box-sizing: border-box !important;
+        }
+        .customer-journey-modal-content {
+          will-change: transform, opacity;
+          position: relative !important;
+          max-width: 32rem !important;
+          width: 100% !important;
+          max-height: 90vh !important;
+          margin: 0 !important;
+          flex-shrink: 0 !important;
+        }
+        .smooth-modal-scroll {
+          scroll-behavior: smooth;
+          scrollbar-width: thin;
+          -webkit-overflow-scrolling: touch;
+        }
+        .smooth-modal-scroll::-webkit-scrollbar {
+          width: 4px;
+        }
+        .smooth-modal-scroll::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          margin: 4px 0;
+        }
+        .smooth-modal-scroll::-webkit-scrollbar-thumb {
+          border-radius: 8px;
+          transition: all 0.2s ease-out;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        }
+        .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
+          transition: all 0.1s ease-out;
+        }
+        .smooth-modal-scroll::-webkit-scrollbar-corner {
+          background: transparent;
+        }
+        body.modal-open {
+          overflow: hidden;
+        }
+      `}</style>
+      {/* Three.js Neural Network Background */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{ zIndex: 1 }}
+      />
+
+      {/* Channel Icons Midground */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+        {['phone', 'email', 'chat', 'social', 'sms'].map((type, index) => (
+          <ChannelIcon key={`${type}-${index}`} type={type} delay={index * 4} />
+        ))}
+      </div>
+
+      {/* Horizontal Scroll Container */}
+      <div
+        ref={containerRef}
+        className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide h-full"
+        style={{ 
+          zIndex: 3,
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}
+        onScroll={(e) => {
+          const scrollLeft = e.target.scrollLeft;
+          const panelIndex = Math.round(scrollLeft / window.innerWidth);
+          setCurrentPanel(panelIndex);
+        }}
+      >
+        {journeyStages.map((stage, index) => (
+          <div
+            key={stage.id}
+            className="flex-shrink-0 w-screen h-full snap-center flex items-center justify-center relative"
+            style={{ minWidth: '100vw' }}
+          >
+            {/* Stage Content Card */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <motion.div
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.2, ease: "easeOut" }
+                }}
+                whileTap={{ 
+                  scale: 0.98,
+                  transition: { duration: 0.1, ease: "easeOut" }
+                }}
+              >
+                <Card 
+                  className="w-[500px] h-80 bg-[#0A0A0A] border-2 border-[rgba(0,255,65,0.3)] rounded-2xl overflow-hidden cursor-pointer transition-all duration-200"
+                  onClick={(e) => openModal(stage, e)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${stage.title} - ${stage.subtitle}`}
+                >
+                <CardContent className="p-8 h-full flex flex-col">
+                  {/* Header Section */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-4">
+                      <div 
+                        className="w-16 h-16 rounded-xl flex items-center justify-center"
+                        style={{ 
+                          backgroundColor: `${stage.color}20`,
+                          border: `2px solid ${stage.color}50`
+                        }}
+                      >
+                        <stage.icon size={32} style={{ color: stage.color }} />
+                      </div>
+                      <Badge 
+                        className="text-sm px-3 py-1 font-medium"
+                        style={{ 
+                          backgroundColor: `${stage.color}20`,
+                          color: stage.color,
+                          border: `1px solid ${stage.color}50`
+                        }}
+                      >
+                        Step {index + 1}
+                      </Badge>
+                    </div>
+                    
+                    <div className="text-right">
+                      <div 
+                        className="text-4xl font-bold font-rajdhani"
+                        style={{ color: stage.color }}
+                      >
+                        {stage.metric}
+                      </div>
+                      <div className="text-[rgb(161,161,170)] text-sm">
+                        {stage.metricLabel}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex-1 mb-6">
+                    <h3 className="text-2xl font-bold text-white mb-3">
+                      {stage.title}
+                    </h3>
+                    <p className="text-[rgb(161,161,170)] text-base leading-relaxed mb-4">
+                      {stage.subtitle}
+                    </p>
+                    
+                    {/* Key Features Preview */}
+                    <div className="space-y-2">
+                      {stage.keyFeatures.slice(0, 2).map((feature, idx) => (
+                        <div key={idx} className="flex items-center space-x-2">
+                          <div 
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: stage.color }}
+                          />
+                          <span className="text-[rgb(218,218,218)] text-sm">
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Footer Section */}
+                  <div className="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.1)]">
+                    <div className="flex items-center space-x-2">
+                      <div 
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: stage.color }}
+                      />
+                      <span className="text-sm font-medium" style={{ color: stage.color }}>
+                        {stage.automationRate}% Automated
+                      </span>
+                    </div>
+                    <div className="text-sm text-[#00FF41] font-medium">
+                      Click to explore →
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              </motion.div>
+            </motion.div>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-10">
+        <Button
+          onClick={() => setIsAutoAdvancing(!isAutoAdvancing)}
+          size="sm"
+          variant="outline"
+          className="border-[#00FF41] text-[#00FF41] hover:bg-[#00FF41] hover:text-black"
+        >
+          {isAutoAdvancing ? <Pause size={16} /> : <Play size={16} />}
+        </Button>
+
+        <div className="flex space-x-2">
+          {journeyStages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToPanel(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentPanel ? 'bg-[#00FF41] w-6' : 'bg-[rgba(0,255,65,0.3)]'
+              }`}
+              aria-label={`Go to panel ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <div className="flex space-x-2">
+          <Button
+            onClick={() => currentPanel > 0 && scrollToPanel(currentPanel - 1)}
+            disabled={currentPanel === 0}
+            size="sm"
+            variant="outline"
+            className="border-[#00FF41] text-[#00FF41] hover:bg-[#00FF41] hover:text-black disabled:opacity-30"
+          >
+            <ArrowLeft size={16} />
+          </Button>
+          <Button
+            onClick={() => currentPanel < journeyStages.length - 1 && scrollToPanel(currentPanel + 1)}
+            disabled={currentPanel === journeyStages.length - 1}
+            size="sm"
+            variant="outline"
+            className="border-[#00FF41] text-[#00FF41] hover:bg-[#00FF41] hover:text-black disabled:opacity-30"
+          >
+            <ArrowRight size={16} />
+          </Button>
+        </div>
+      </div>
+
+      {/* MODAL POSITIONED ABOVE CLICKED CARD */}
+      {selectedPanel && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 999999,
+            pointerEvents: 'all'
+          }}
+          onClick={closeModal}
+        >
+          <div
+            className="smooth-modal-scroll"
+            style={{
+              position: 'absolute',
+              left: `${modalPosition.x - 275}px`, // Center by subtracting half width (550/2)
+              top: `${modalPosition.y}px`,
+              backgroundColor: 'rgb(26, 28, 30)',
+              border: `3px solid ${selectedPanel.color}`,
+              borderRadius: '24px',
+              padding: '28px',
+              width: '550px',
+              maxWidth: '95vw',
+              boxShadow: `0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px ${selectedPanel.color}40`,
+              zIndex: 1000000,
+              maxHeight: '85vh',
+              overflowY: 'auto',
+              transform: 'translateZ(0)', // Enable hardware acceleration
+              WebkitTransform: 'translateZ(0)', // Safari hardware acceleration
+              scrollbarColor: `${selectedPanel.color}70 ${selectedPanel.color}10`
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Dynamic scrollbar styling */}
+            <style dangerouslySetInnerHTML={{
+              __html: `
+                .smooth-modal-scroll::-webkit-scrollbar-track {
+                  background: ${selectedPanel.color}08;
+                  border: 1px solid ${selectedPanel.color}15;
+                }
+                .smooth-modal-scroll::-webkit-scrollbar-thumb {
+                  background: linear-gradient(180deg, ${selectedPanel.color}60 0%, ${selectedPanel.color}40 50%, ${selectedPanel.color}30 100%);
+                  border: 1px solid ${selectedPanel.color}20;
+                  box-shadow: inset 0 1px 0 ${selectedPanel.color}80, 0 0 2px ${selectedPanel.color}30;
+                }
+                .smooth-modal-scroll::-webkit-scrollbar-thumb:hover {
+                  background: linear-gradient(180deg, ${selectedPanel.color}80 0%, ${selectedPanel.color}60 50%, ${selectedPanel.color}50 100%);
+                  border: 1px solid ${selectedPanel.color}40;
+                  box-shadow: inset 0 1px 0 ${selectedPanel.color}90, 0 0 4px ${selectedPanel.color}50;
+                }
+              `
+            }} />
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: 'transparent',
+                border: `1px solid ${selectedPanel.color}40`,
+                color: selectedPanel.color,
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                lineHeight: '1',
+                transition: 'all 0.2s ease',
+                zIndex: 1
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = `${selectedPanel.color}20`;
+                e.target.style.borderColor = `${selectedPanel.color}60`;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.borderColor = `${selectedPanel.color}40`;
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Enhanced Header */}
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <div style={{
+                display: 'inline-block',
+                padding: '6px 16px',
+                backgroundColor: `${selectedPanel.color}20`,
+                border: `2px solid ${selectedPanel.color}60`,
+                borderRadius: '12px',
+                fontSize: '12px',
+                color: selectedPanel.color,
+                marginBottom: '12px',
+                fontWeight: 'bold'
+              }}>
+                Stage {journeyStages.findIndex(stage => stage.id === selectedPanel.id) + 1} of 6
+              </div>
+              <h3 style={{ 
+                color: 'white', 
+                fontSize: '28px', 
+                fontWeight: 'bold', 
+                margin: '8px 0',
+                letterSpacing: '-0.5px'
+              }}>
+                {selectedPanel.title}
+              </h3>
+              <p style={{ 
+                color: selectedPanel.color, 
+                fontSize: '16px',
+                margin: '8px 0',
+                fontWeight: '500'
+              }}>
+                {selectedPanel.subtitle}
+              </p>
+            </div>
+
+            {(() => {
+              const stageIndex = journeyStages.findIndex(stage => stage.id === selectedPanel.id);
+              const getStepByStepContent = () => {
+                switch(stageIndex) {
+                  case 0: // Contact Stage
+                    return {
+                      overview: "The customer journey begins when your customers reach out through any communication channel. SentraTech's intelligent contact system immediately captures and analyzes every interaction.",
+                      steps: [
+                        "Customer initiates contact via phone, email, chat, or social media",
+                        "SentraTech AI instantly captures all interaction details and context",
+                        "System identifies customer intent using natural language processing",
+                        "Customer profile and history are automatically retrieved or created",
+                        "Initial sentiment analysis determines the best response approach"
+                      ],
+                      impact: "Every customer interaction is captured with 99.9% accuracy, ensuring no inquiry is lost and all context is preserved for optimal service delivery."
+                    };
+                  case 1: // Triage Stage  
+                    return {
+                      overview: "Once contact is established, SentraTech's intelligent triage system analyzes the inquiry complexity and routes it to the most appropriate resource - AI or human agent.",
+                      steps: [
+                        "AI analyzes inquiry complexity, urgency, and required expertise level",
+                        "System determines if issue can be resolved through automation",
+                        "High-complexity issues are intelligently routed to specialized human agents",
+                        "Routine inquiries are handled instantly by AI with personalized responses",
+                        "Priority scoring ensures urgent matters receive immediate attention"
+                      ],
+                      impact: "85% of routine inquiries are resolved instantly by AI, while complex issues get expert human attention, optimizing both speed and quality."
+                    };
+                  case 2: // Engagement Stage
+                    return {
+                      overview: "SentraTech engages with customers through personalized, contextual interactions that feel natural and helpful, whether delivered by AI or human agents.",
+                      steps: [
+                        "Personalized responses crafted based on customer history and preferences",
+                        "Multi-channel engagement maintains conversation context across platforms",
+                        "Real-time language translation enables global customer support",
+                        "Sentiment monitoring adjusts interaction tone and approach dynamically",
+                        "Proactive follow-ups ensure customer satisfaction and issue resolution"
+                      ],
+                      impact: "Customers experience consistent, personalized service across all touchpoints with 92% satisfaction rates and 40% faster resolution times."
+                    };
+                  case 3: // Augmentation Stage
+                    return {
+                      overview: "Human agents are augmented with AI-powered tools and insights, enabling them to provide exceptional service while maintaining the human touch for complex situations.",
+                      steps: [
+                        "AI provides real-time suggestions and relevant information to human agents",
+                        "Automated knowledge base searches surface solutions instantly",
+                        "Customer sentiment and escalation risk alerts guide agent responses",
+                        "AI drafts responses that agents can review, modify, and personalize",
+                        "Continuous learning from agent interactions improves AI recommendations"
+                      ],
+                      impact: "Human agents become 3x more efficient while delivering higher quality service, handling complex cases with AI-powered intelligence and insights."
+                    };
+                  case 4: // Analytics Stage
+                    return {
+                      overview: "Every interaction generates valuable insights that continuously improve service quality, predict customer needs, and optimize business operations.",
+                      steps: [
+                        "Real-time analytics track customer satisfaction and resolution effectiveness",
+                        "Predictive models identify potential issues before they become problems",
+                        "Performance metrics provide insights into service quality and efficiency",
+                        "Customer behavior patterns inform proactive service improvements",
+                        "Business intelligence dashboards enable data-driven decision making"
+                      ],
+                      impact: "Data-driven insights reduce customer issues by 35% through predictive prevention and continuous service optimization based on real performance metrics."
+                    };
+                  case 5: // Outcome Stage
+                    return {
+                      overview: "The customer journey concludes with measurable outcomes - satisfied customers, resolved issues, and valuable feedback that fuels continuous improvement.",
+                      steps: [
+                        "Issue resolution confirmation ensures customer satisfaction",
+                        "Automated follow-up surveys capture feedback and satisfaction scores",
+                        "Success metrics are tracked and analyzed for service optimization",
+                        "Customer loyalty indicators help identify expansion opportunities", 
+                        "Continuous feedback loop improves AI models and service processes"
+                      ],
+                      impact: "95% customer satisfaction with first-contact resolution, generating loyal customers and continuous service improvement through systematic feedback analysis."
+                    };
+                  default:
+                    return {
+                      overview: selectedPanel.description,
+                      steps: ["Advanced AI Processing", "Real-time Analytics", "Quality Assurance"],
+                      impact: "Exceptional customer service delivery."
+                    };
+                }
+              };
+
+              const content = getStepByStepContent();
+              
+              return (
+                <>
+                  {/* Overview Section */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '10px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
+                    }}>
+                      What Happens in This Stage
+                    </h4>
+                    <p style={{ 
+                      color: 'rgb(218,218,218)', 
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      marginBottom: '16px'
+                    }}>
+                      {content.overview}
+                    </p>
+                  </div>
+
+                  {/* Step-by-Step Process */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '12px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
+                    }}>
+                      Step-by-Step Process
+                    </h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {content.steps.map((step, index) => (
+                        <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                          <div style={{
+                            minWidth: '24px',
+                            height: '24px',
+                            backgroundColor: `${selectedPanel.color}20`,
+                            border: `2px solid ${selectedPanel.color}`,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            color: selectedPanel.color,
+                            marginTop: '2px'
+                          }}>
+                            {index + 1}
+                          </div>
+                          <span style={{ 
+                            color: 'rgb(218,218,218)', 
+                            fontSize: '13px',
+                            lineHeight: '1.4',
+                            flex: 1
+                          }}>
+                            {step}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key Metrics */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}10`,
+                      border: `1px solid ${selectedPanel.color}30`,
+                      borderRadius: '12px',
+                      padding: '12px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ 
+                        color: selectedPanel.color, 
+                        fontSize: '20px', 
+                        fontWeight: 'bold' 
+                      }}>
+                        {selectedPanel.metric}
+                      </div>
+                      <div style={{ 
+                        color: 'rgb(161,161,170)', 
+                        fontSize: '11px',
+                        marginTop: '4px'
+                      }}>
+                        {selectedPanel.metricLabel}
+                      </div>
+                    </div>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}10`,
+                      border: `1px solid ${selectedPanel.color}30`,
+                      borderRadius: '12px',
+                      padding: '12px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ 
+                        color: selectedPanel.color, 
+                        fontSize: '20px', 
+                        fontWeight: 'bold' 
+                      }}>
+                        {selectedPanel.automationRate}%
+                      </div>
+                      <div style={{ 
+                        color: 'rgb(161,161,170)', 
+                        fontSize: '11px',
+                        marginTop: '4px'
+                      }}>
+                        Automation Rate
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business Impact */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ 
+                      color: 'white', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      marginBottom: '8px',
+                      borderLeft: `3px solid ${selectedPanel.color}`,
+                      paddingLeft: '12px'
+                    }}>
+                      Business Impact
+                    </h4>
+                    <div style={{
+                      backgroundColor: `${selectedPanel.color}08`,
+                      border: `1px solid ${selectedPanel.color}20`,
+                      borderRadius: '8px',
+                      padding: '12px'
+                    }}>
+                      <p style={{ 
+                        color: 'rgb(218,218,218)', 
+                        fontSize: '13px',
+                        lineHeight: '1.4',
+                        margin: 0,
+                        fontStyle: 'italic'
+                      }}>
+                        {content.impact}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Navigation Hint */}
+                  {(() => {
+                    const currentStageIndex = journeyStages.findIndex(stage => stage.id === selectedPanel.id);
+                    const nextStage = journeyStages[currentStageIndex + 1];
+                    const isLastStage = currentStageIndex === journeyStages.length - 1;
+
+                    return (
+                      <div style={{
+                        borderTop: `1px solid ${selectedPanel.color}20`,
+                        paddingTop: '12px',
+                        textAlign: 'center'
+                      }}>
+                        {!isLastStage ? (
+                          <div style={{ fontSize: '12px', color: 'rgb(161,161,170)' }}>
+                            <span>Next: </span>
+                            <span style={{ color: nextStage.color, fontWeight: 'bold' }}>
+                              Stage {currentStageIndex + 2} - {nextStage.title}
+                            </span>
+                            <div style={{ marginTop: '4px', fontSize: '11px' }}>
+                              Close this modal and click the next card to continue →
+                            </div>
+                          </div>
+                        ) : (
+                          <div style={{ fontSize: '12px', color: 'rgb(161,161,170)' }}>
+                            <span style={{ color: selectedPanel.color, fontWeight: 'bold' }}>
+                              🎉 Journey Complete!
+                            </span>
+                            <div style={{ marginTop: '4px', fontSize: '11px' }}>
+                              You now understand the complete SentraTech process
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default HorizontalJourney;
