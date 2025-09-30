@@ -258,7 +258,7 @@ const HomePage = () => {
               <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by AI&nbsp;+&nbsp;BI</span>
             </h1>
             
-            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed hero-subtitle">
               Transform your customer service into a competitive advantage with our sub-50ms AI routing platform. 
               Reduce costs by 40-60% while improving satisfaction.
             </p>
