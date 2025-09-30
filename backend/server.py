@@ -4735,7 +4735,7 @@ async def websocket_health():
     }
 
 # Collect Proxy Route - Forward to local collect service
-@api_router.post("/collect")
+@app.post("/api/collect")
 async def collect_proxy(request: Request):
     """Proxy form submissions to local collect service"""
     try:
