@@ -353,10 +353,11 @@ const JobApplicationPage = () => {
           window.dataLayer.push({
             event: "job_application_submit",
             position: jobData.position,
-            source: 'careers_page',
+            source: 'careers_page_single_form',
             location: jobData.location,
             submission_mode: result.mode,
-            applicationId: applicationId
+            applicationId: applicationId,
+            form_type: 'single_page'
           });
         }
         
