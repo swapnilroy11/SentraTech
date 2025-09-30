@@ -219,6 +219,15 @@ export const insertROIReport = async (email, roiData) => {
 
 // Helper function to insert a contact request
 export const insertContactRequest = async (formData) => {
+  if (!supabase) {
+    console.warn('Supabase not available. Contact request will be skipped.');
+    return {
+      success: false,
+      error: 'database_unavailable',
+      message: 'Database service is currently unavailable. Please try again later.'
+    };
+  }
+  
   try {
     console.log('🔍 Submitting contact request to Supabase...', formData);
     console.log('🔍 Form data fields:', Object.keys(formData));
