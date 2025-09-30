@@ -59,7 +59,7 @@
 
 test_plan:
   current_focus:
-    - "Job Application Single-Page Form Conversion Testing"
+    - "Backend Proxy Endpoint Configuration Fix - ADMIN_DASHBOARD_URL Correction"
   stuck_tasks: 
     - "Job Application Single-Page Form Conversion - CRITICAL: NOT IMPLEMENTED + ROUTING BROKEN"
   completed_focus:
