@@ -14,7 +14,7 @@
 # Main and testing agents must follow this exact format to maintain testing data. 
 # The testing data must be entered in yaml format Below is the data structure:
 # 
-## user_problem_statement: {problem_statement}
+## user_problem_statement: "User reported that the login does not work on the newly built SentraTech Admin Dashboard. The user requested to fix the login and provide user credentials to test login."
 ## backend:
 ##   - task: "Task name"
 ##     implemented: true
