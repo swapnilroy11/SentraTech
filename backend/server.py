@@ -1566,24 +1566,29 @@ async def proxy_newsletter_signup(request: Request):
         if result['success']:
             return result['data']
         else:
-            # Log error but return success to user (graceful degradation)
-            logging.warning(f"Newsletter proxy failed, storing locally: {result['error']}")
-            
-            # Store locally as backup
-            newsletter_data = {
-                **data,
-                "id": str(uuid.uuid4()),
-                "created_at": datetime.now(timezone.utc).isoformat(),
-                "status": "proxy_failed",
-                "proxy_error": result['error']
-            }
-            await db.newsletter_fallback.insert_one(newsletter_data)
-            
+            # TEMPORARILY DISABLED FALLBACK - Show real dashboard errors
+            logging.error(f"Newsletter proxy failed: {result['error']}")
             return {
-                "success": True,
-                "message": "Newsletter subscription confirmed",
-                "id": newsletter_data["id"]
+                "success": False,
+                "error": f"Dashboard integration failed: {result['error']}",
+                "debug_mode": True
             }
+            
+            # # Store locally as backup (DISABLED for debugging)
+            # newsletter_data = {
+            #     **data,
+            #     "id": str(uuid.uuid4()),
+            #     "created_at": datetime.now(timezone.utc).isoformat(),
+            #     "status": "proxy_failed",
+            #     "proxy_error": result['error']
+            # }
+            # await db.newsletter_fallback.insert_one(newsletter_data)
+            
+            # return {
+            #     "success": True,
+            #     "message": "Newsletter subscription confirmed",
+            #     "id": newsletter_data["id"]
+            # }
             
     except Exception as e:
         logging.error(f"Newsletter proxy endpoint error: {str(e)}")
