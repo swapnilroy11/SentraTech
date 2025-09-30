@@ -148,6 +148,7 @@ const CookieBanner = () => {
         role="dialog"
         aria-label="Cookie consent dialog"
         aria-describedby="cookie-description"
+        data-cookie-banner={showBanner ? "true" : "false"}
         style={{
           position: 'fixed',
           top: '0',
@@ -155,7 +156,9 @@ const CookieBanner = () => {
           width: '100vw',
           height: '100vh',
           zIndex: 99999,
-          display: showBanner ? 'block' : 'none'
+          display: showBanner ? 'block' : 'none',
+          opacity: showBanner ? 1 : 0,
+          visibility: showBanner ? 'visible' : 'hidden'
         }}
       >
         {/* Modal Backdrop */}
