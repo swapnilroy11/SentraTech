@@ -1188,7 +1188,7 @@ async def validate_dashboard_config():
 
 # Form Ingest Endpoints with Dashboard Integration
 from pydantic import BaseModel, Field
-from fastapi import HTTPException, Header
+from fastapi import Header
 from typing import Optional
 
 # Ingest models
@@ -1440,8 +1440,6 @@ async def get_job_applications_status():
 # Server-to-Server Dashboard Proxy Endpoints
 # This eliminates CORS issues by proxying requests through our backend
 
-import httpx
-from fastapi import Request
 
 # Dashboard API configuration
 DASHBOARD_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
@@ -1542,10 +1540,10 @@ async def proxy_newsletter_signup(request: Request):
             )
         
         # Comprehensive payload logging
-        proxy_logger.info(f"🔎 PROXY RECEIVED NEWSLETTER SIGNUP PAYLOAD:")
+        proxy_logger.info("🔎 PROXY RECEIVED NEWSLETTER SIGNUP PAYLOAD:")
         proxy_logger.info(f"🆔 Processing unique newsletter request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
-        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info("📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
         proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
         proxy_logger.info(f"  - Status: '{data.get('status', 'MISSING')}' (type: {type(data.get('status'))})")
@@ -1615,10 +1613,10 @@ async def proxy_contact_sales(request: Request):
             )
         
         # Comprehensive payload logging
-        proxy_logger.info(f"🔎 PROXY RECEIVED CONTACT SALES PAYLOAD:")
+        proxy_logger.info("🔎 PROXY RECEIVED CONTACT SALES PAYLOAD:")
         proxy_logger.info(f"🆔 Processing unique contact sales request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
-        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info("📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
         proxy_logger.info(f"  - Full Name: '{data.get('full_name', 'MISSING')}' (type: {type(data.get('full_name'))})")
         proxy_logger.info(f"  - Work Email: '{data.get('work_email', 'MISSING')}' (type: {type(data.get('work_email'))})")
@@ -1687,10 +1685,10 @@ async def proxy_demo_request(request: Request):
             )
         
         # Comprehensive payload logging
-        proxy_logger.info(f"🔎 PROXY RECEIVED DEMO REQUEST PAYLOAD:")
+        proxy_logger.info("🔎 PROXY RECEIVED DEMO REQUEST PAYLOAD:")
         proxy_logger.info(f"🆔 Processing unique demo request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
-        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info("📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
         proxy_logger.info(f"  - Name/Full Name: '{data.get('name', 'MISSING')}' / '{data.get('full_name', 'MISSING')}'")
         proxy_logger.info(f"  - Email/Work Email: '{data.get('email', 'MISSING')}' / '{data.get('work_email', 'MISSING')}'")
@@ -1759,10 +1757,10 @@ async def proxy_roi_calculator(request: Request):
             )
         
         # Comprehensive payload logging
-        proxy_logger.info(f"🔎 PROXY RECEIVED ROI CALCULATOR PAYLOAD:")
+        proxy_logger.info("🔎 PROXY RECEIVED ROI CALCULATOR PAYLOAD:")
         proxy_logger.info(f"🆔 Processing unique ROI request: {request_id}")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(data, indent=2, default=str)}")
-        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info("📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(data)}")
         proxy_logger.info(f"  - Email: '{data.get('email', 'MISSING')}' (type: {type(data.get('email'))})")
         proxy_logger.info(f"  - Country: '{data.get('country', 'MISSING')}' (type: {type(data.get('country'))})")
@@ -1832,9 +1830,9 @@ async def proxy_job_application(request: Request):
         proxy_logger.info(f"🆔 Processing unique job application request: {request_id}")
         
         # Comprehensive payload logging for detailed analysis
-        proxy_logger.info(f"🔎 PROXY RECEIVED JOB APPLICATION PAYLOAD:")
+        proxy_logger.info("🔎 PROXY RECEIVED JOB APPLICATION PAYLOAD:")
         proxy_logger.info(f"📊 Complete payload: {json.dumps(body, indent=2, default=str)}")
-        proxy_logger.info(f"📋 Field analysis:")
+        proxy_logger.info("📋 Field analysis:")
         proxy_logger.info(f"  - Total fields: {len(body)}")
         proxy_logger.info(f"  - Full Name: '{body.get('full_name', 'MISSING')}' (type: {type(body.get('full_name'))})")
         proxy_logger.info(f"  - Email: '{body.get('email', 'MISSING')}' (type: {type(body.get('email'))})")
@@ -4301,7 +4299,6 @@ async def send_contact_notification(notification: ContactNotification):
 # Dashboard Proxy Endpoints (CORS Workaround)
 # ============================================================================
 
-import httpx
 
 @api_router.post("/forms/newsletter-signup")
 async def proxy_newsletter_signup(request: dict):
