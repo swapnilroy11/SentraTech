@@ -1756,7 +1756,8 @@ async def options_roi_calculator():
 
 @api_router.post("/proxy/roi-calculator")
 async def proxy_roi_calculator(request: Request):
-    """Proxy ROI calculator to dashboard with idempotency and detailed logging"""
+    """DISABLED - Legacy dashboard proxy endpoint"""
+    return legacy_dashboard_disabled_response("roi-calculator")
     try:
         data = await request.json()
         
