@@ -4479,7 +4479,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 # Dashboard-specific API endpoints
 @api_router.get("/forms/demo-requests")
-async def get_demo_requests():
+async def get_dashboard_demo_requests():
     """Get all demo requests for dashboard"""
     try:
         demo_requests = await db.demo_requests.find().sort("created_at", -1).to_list(length=100)
