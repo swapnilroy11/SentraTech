@@ -16,90 +16,160 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 import SEOManager from '../components/SEOManager';
 
-// CSS animations fallback
+// Immediate CSS animations that start instantly (no JS dependency)
 const animationStyles = `
-  @keyframes fadeInUp {
-    from {
+  /* Immediate page load animations - start instantly */
+  @keyframes instantFadeInUp {
+    0% {
       opacity: 0;
       transform: translateY(30px);
     }
-    to {
+    100% {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  @keyframes fadeInLeft {
-    from {
+  @keyframes instantFadeInLeft {
+    0% {
       opacity: 0;
       transform: translateX(-30px);
     }
-    to {
+    100% {
       opacity: 1;
       transform: translateX(0);
     }
   }
 
-  @keyframes fadeInRight {
-    from {
+  @keyframes instantFadeInRight {
+    0% {
       opacity: 0;
       transform: translateX(30px);
     }
-    to {
+    100% {
       opacity: 1;
       transform: translateX(0);
     }
   }
 
-  @keyframes scaleIn {
-    from {
+  @keyframes instantScaleIn {
+    0% {
       opacity: 0;
-      transform: scale(0.9);
+      transform: scale(0.95);
     }
-    to {
+    100% {
       opacity: 1;
       transform: scale(1);
     }
   }
 
-  @keyframes pulse {
+  @keyframes slideInFromBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes buttonPulse {
     0%, 100% {
       transform: scale(1);
+      box-shadow: 0 0 0 rgba(0, 255, 65, 0);
     }
     50% {
-      transform: scale(1.05);
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
     }
   }
 
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out;
+  /* Apply animations immediately on page load */
+  .hero-content {
+    animation: instantFadeInUp 0.8s ease-out;
+    animation-fill-mode: both;
   }
 
-  .animate-fade-in-left {
-    animation: fadeInLeft 0.6s ease-out;
+  .hero-title {
+    animation: instantFadeInUp 1.0s ease-out 0.2s;
+    animation-fill-mode: both;
   }
 
-  .animate-fade-in-right {
-    animation: fadeInRight 0.6s ease-out;
+  .hero-subtitle {
+    animation: instantFadeInUp 1.0s ease-out 0.4s;
+    animation-fill-mode: both;
   }
 
-  .animate-scale-in {
-    animation: scaleIn 0.6s ease-out;
+  .hero-buttons {
+    animation: instantFadeInUp 1.0s ease-out 0.6s;
+    animation-fill-mode: both;
   }
 
-  .animate-pulse-hover:hover {
-    animation: pulse 0.3s ease-in-out;
+  .stats-card {
+    animation: instantScaleIn 0.6s ease-out;
+    animation-fill-mode: both;
   }
 
-  /* Enhanced hover effects */
-  .hover-scale:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
+  .stats-card:nth-child(1) { animation-delay: 0.8s; }
+  .stats-card:nth-child(2) { animation-delay: 1.0s; }
+  .stats-card:nth-child(3) { animation-delay: 1.2s; }
+  .stats-card:nth-child(4) { animation-delay: 1.4s; }
+
+  .feature-card {
+    animation: slideInFromBottom 0.6s ease-out;
+    animation-fill-mode: both;
   }
 
-  .hover-glow:hover {
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-    transition: box-shadow 0.3s ease;
+  .feature-card:nth-child(1) { animation-delay: 0.2s; }
+  .feature-card:nth-child(2) { animation-delay: 0.4s; }
+  .feature-card:nth-child(3) { animation-delay: 0.6s; }
+
+  /* Instant hover effects */
+  .instant-hover-scale {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0); /* Hardware acceleration */
+  }
+
+  .instant-hover-scale:hover {
+    transform: scale(1.05) translateZ(0);
+  }
+
+  .instant-hover-glow:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .instant-button-hover {
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .instant-button-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+  }
+
+  .instant-button-hover:active {
+    transform: translateY(0);
+  }
+
+  /* Ensure animations start immediately */
+  * {
+    animation-play-state: running;
+  }
+
+  /* Prevent flash of unstyled content */
+  .loading-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .loaded-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s ease-out;
   }
 `;
 
