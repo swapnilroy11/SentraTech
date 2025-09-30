@@ -2,6 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
+
+// Mobile-optimized animations - reduce complexity for better performance
+const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+const reduceMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const mobileOptimizedVariants = {
+  // Simple animations for mobile to prevent lag
+  fadeIn: {
+    initial: reduceMotion || isMobile ? {} : { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: reduceMotion || isMobile ? 0.2 : 0.6 }
+  },
+  staggerContainer: {
+    animate: {
+      transition: {
+        staggerChildren: reduceMotion || isMobile ? 0.05 : 0.1
+      }
+    }
+  }
+};
 import { ArrowRight, Calculator, TrendingUp, DollarSign, Clock, Users, Zap, Target, CheckCircle } from 'lucide-react';
 import ROICalculatorRedesigned from '../components/ROICalculatorRedesigned';
 
