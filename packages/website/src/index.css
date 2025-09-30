@@ -457,3 +457,39 @@ body {
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+/* INSTANT COOKIE BANNER - Show immediately without delay */
+[data-cookie-banner="true"] {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: cookieBannerInstantShow 0.2s ease-out;
+}
+
+@keyframes cookieBannerInstantShow {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Cookie banner modal content instant animation */
+.cookie-banner-instant {
+  animation: cookieBannerContentShow 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes cookieBannerContentShow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
