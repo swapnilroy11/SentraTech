@@ -168,6 +168,15 @@ export const insertDemoRequest = async (formData) => {
 
 // Helper function to insert ROI report request
 export const insertROIReport = async (email, roiData) => {
+  if (!supabase) {
+    console.warn('Supabase not available. ROI report request will be skipped.');
+    return {
+      success: false,
+      error: 'database_unavailable',
+      message: 'Database service is currently unavailable. Please try again later.'
+    };
+  }
+  
   try {
     console.log('Saving ROI report request:', email, roiData);
     
