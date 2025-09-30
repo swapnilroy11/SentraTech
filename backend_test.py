@@ -16,35 +16,54 @@ import sys
 # Backend URL from frontend environment
 BACKEND_URL = "https://real-time-dash.preview.emergentagent.com"
 
-class SentraTechBackendTester:
+class ProxyEndpointTester:
     def __init__(self):
-        self.session = None
-        self.test_results = []
+        self.backend_url = BACKEND_URL
+        self.test_results = {}
         self.total_tests = 0
         self.passed_tests = 0
-        self.failed_tests = 0
         
-    async def setup(self):
-        """Initialize HTTP session"""
-        self.session = aiohttp.ClientSession()
-        
-    async def cleanup(self):
-        """Clean up HTTP session"""
-        if self.session:
-            await self.session.close()
-            
-    def log_test(self, test_name: str, status: str, details: str = "", response_time: float = 0):
-        """Log test result"""
+    def log_test(self, test_name, status, details=""):
+        """Log test results"""
         self.total_tests += 1
         if status == "PASS":
             self.passed_tests += 1
-            print(f"✅ {test_name}: {status} ({response_time:.2f}ms)")
+            print(f"✅ {test_name}: {status}")
         else:
-            self.failed_tests += 1
-            print(f"❌ {test_name}: {status} ({response_time:.2f}ms)")
-            
+            print(f"❌ {test_name}: {status}")
+        
         if details:
             print(f"   Details: {details}")
+        
+        self.test_results[test_name] = {
+            "status": status,
+            "details": details,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    
+    def test_backend_health(self):
+        """Test backend health endpoint"""
+        print("\n🔍 Testing Backend Health...")
+        try:
+            start_time = time.time()
+            response = requests.get(f"{self.backend_url}/api/health", timeout=10)
+            response_time = (time.time() - start_time) * 1000
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.log_test(
+                    "Backend Health Check", 
+                    "PASS", 
+                    f"Status: {data.get('status')}, Response time: {response_time:.2f}ms, Database: {data.get('database')}, Ingest configured: {data.get('ingest_configured')}"
+                )
+                return True
+            else:
+                self.log_test("Backend Health Check", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Backend Health Check", "FAIL", f"Connection error: {str(e)}")
+            return False
             
         self.test_results.append({
             "test": test_name,
