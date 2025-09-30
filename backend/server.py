@@ -4602,11 +4602,19 @@ async def refresh_token():
 app.include_router(api_router)
 
 # Include enterprise proxy router
-from enterprise_proxy import proxy_router
-app.include_router(proxy_router)
+# Include enterprise proxy router
+try:
+    from enterprise_proxy import proxy_router
+    app.include_router(proxy_router)
+except ImportError:
+    logger.warning("Enterprise proxy module not found")
 
 # Include WebSocket service
-from websocket_service import ws_manager
+try:
+    from websocket_service import ws_manager
+except ImportError:
+    logger.warning("WebSocket service module not found")
+    ws_manager = None
 import json
 
 # WebSocket endpoint for real-time updates
