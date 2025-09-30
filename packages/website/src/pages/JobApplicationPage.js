@@ -107,13 +107,6 @@ const JobApplicationPage = () => {
 
   const job = jobData[jobId] || jobData['customer-support-specialist'];
 
-  const steps = [
-    { number: 1, title: 'Personal Information', description: 'Basic contact details' },
-    { number: 2, title: 'Professional Background', description: 'Experience and skills' },
-    { number: 3, title: 'Motivation & Fit', description: 'Why SentraTech?' },
-    { number: 4, title: 'Review & Submit', description: 'Final review' }
-  ];
-
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
