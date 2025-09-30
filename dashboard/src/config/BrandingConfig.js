@@ -30,11 +30,11 @@ export const BrandColors = {
   TEXT_SECONDARY_DARK: '#cccccc',
   TEXT_MUTED_DARK: '#888888',
   
-  // Neutral Colors - Light Theme  
+  // Neutral Colors - Light Theme (with neon green accents)
   BACKGROUND_LIGHT: '#ffffff',
   SURFACE_LIGHT: '#f8fafc',
   CARD_LIGHT: '#ffffff', 
-  BORDER_LIGHT: '#e5e7eb',
+  BORDER_LIGHT: '#00FF41',
   TEXT_PRIMARY_LIGHT: '#111827',
   TEXT_SECONDARY_LIGHT: '#4b5563',
   TEXT_MUTED_LIGHT: '#6b7280',
