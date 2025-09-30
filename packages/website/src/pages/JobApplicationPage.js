@@ -163,37 +163,33 @@ const JobApplicationPage = () => {
     }
   };
 
-  const validateStep = (step) => {
+  const validateForm = () => {
     const newErrors = {};
     
-    if (step === 1) {
-      if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
-      if (!formData.email.trim()) newErrors.email = 'Email is required';
-      if (!formData.location.trim()) newErrors.location = 'Location is required';
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (formData.email && !emailRegex.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-      }
+    // Personal Information validation
+    if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
     
-    if (step === 2) {
-      if (!resume && !formData.portfolio_website.trim()) {
-        newErrors.resume = 'Please upload a resume or provide portfolio website';
-        newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
-      }
+    // Professional Information validation  
+    if (!resume && !formData.portfolio_website.trim()) {
+      newErrors.resume = 'Please upload a resume or provide portfolio website';
+      newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
     }
     
-    if (step === 3) {
-      if (!formData.why_sentratech.trim()) {
-        newErrors.why_sentratech = 'Please tell us why you want to join SentraTech';
-      }
+    // Motivation validation
+    if (!formData.why_sentratech.trim()) {
+      newErrors.why_sentratech = 'Please tell us why you want to join SentraTech';
     }
     
-    if (step === 4) {
-      if (!formData.consent_for_storage) newErrors.consent_for_storage = 'You must consent to data processing';
-      if (!formData.work_authorization) newErrors.work_authorization = 'Work authorization status is required';
-    }
+    // Legal validation
+    if (!formData.consent_for_storage) newErrors.consent_for_storage = 'You must consent to data processing';
+    if (!formData.work_authorization) newErrors.work_authorization = 'Work authorization status is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
