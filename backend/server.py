@@ -3062,9 +3062,12 @@ async def send_chat_message(session_id: str, message: str):
         raise HTTPException(status_code=500, detail="Failed to process message")
 
 # WebSocket endpoint for real-time chat
-@app.websocket("/ws/chat/{session_id}")
-async def websocket_endpoint(websocket: WebSocket, session_id: str):
-    await connection_manager.connect(websocket, session_id)
+# @app.websocket("/ws/chat/{session_id}")
+async def websocket_endpoint_disabled(websocket: WebSocket, session_id: str):
+    """DISABLED - Legacy WebSocket endpoint - connections will be rejected"""
+    # Immediately close WebSocket to prevent connections to old dashboard
+    await websocket.close(code=4010, reason="Legacy WebSocket service disabled for new CRM integration")
+    return
     try:
         # Send welcome message
         welcome_message = {
