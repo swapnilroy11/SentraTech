@@ -8,11 +8,15 @@ const FloatingAdminButton = () => {
   const handleAdminClick = () => {
     const currentHost = window.location.hostname;
     
-    if (currentHost.includes('localhost') || currentHost.includes('preview.emergentagent.com')) {
-      // Development environment - navigate to internal dashboard route
+    // For Emergent.sh preview and development, always use internal routing
+    if (currentHost.includes('localhost') || 
+        currentHost.includes('preview.emergentagent.com') ||
+        currentHost.includes('.emergentagent.com') ||
+        currentHost.includes('emergent')) {
+      // Development/Preview environment - navigate to internal dashboard route
       navigate('/admin-dashboard');
     } else if (currentHost === 'sentratech.net' || currentHost === 'www.sentratech.net') {
-      // Production environment - open admin dashboard at admin.sentratech.net
+      // Only use external domain in actual production
       window.open('https://admin.sentratech.net', '_blank');
     } else {
       // Fallback - navigate to internal dashboard route
