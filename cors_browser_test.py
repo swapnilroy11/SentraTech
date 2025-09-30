@@ -13,8 +13,8 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend/.env
-BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com"
-BROWSER_ORIGIN = "https://secure-form-relay.preview.emergentagent.com"
+BACKEND_URL = "https://sentra-forms.preview.emergentagent.com"
+BROWSER_ORIGIN = "https://sentra-forms.preview.emergentagent.com"
 
 class CORSBrowserTester:
     def __init__(self):

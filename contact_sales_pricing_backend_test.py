@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
 
 class ContactSalesPricingBackendTester:
     """Comprehensive backend testing for Contact Sales and Pricing functionality"""

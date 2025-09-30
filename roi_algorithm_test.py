@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
 
 class ROIAlgorithmTester:
     """Test the updated ROI Calculator algorithm with new cost baselines and 30% profit margin"""

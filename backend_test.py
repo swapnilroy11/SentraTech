@@ -13,7 +13,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend .env
-BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com"
+BACKEND_URL = "https://sentra-forms.preview.emergentagent.com"
 VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 INVALID_INGEST_KEY = "invalid-key-12345"
 EMERGENT_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
@@ -470,7 +470,7 @@ class SentraTechBackendTester:
         endpoint = f"{BACKEND_URL}/api/proxy/demo-request"
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "Origin": "https://sentra-forms.preview.emergentagent.com",
             "User-Agent": "SentraTech-Test/1.0"
         }
         
@@ -512,7 +512,7 @@ class SentraTechBackendTester:
         endpoint = f"{BACKEND_URL}/api/proxy/contact-sales"
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "Origin": "https://sentra-forms.preview.emergentagent.com",
             "User-Agent": "SentraTech-Test/1.0"
         }
         
@@ -555,7 +555,7 @@ class SentraTechBackendTester:
         endpoint = f"{BACKEND_URL}/api/proxy/newsletter-signup"
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "Origin": "https://sentra-forms.preview.emergentagent.com",
             "User-Agent": "SentraTech-Test/1.0"
         }
         
@@ -592,7 +592,7 @@ class SentraTechBackendTester:
         endpoint = f"{BACKEND_URL}/api/proxy/roi-calculator"
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "Origin": "https://sentra-forms.preview.emergentagent.com",
             "User-Agent": "SentraTech-Test/1.0"
         }
         
@@ -633,7 +633,7 @@ class SentraTechBackendTester:
         endpoint = f"{BACKEND_URL}/api/proxy/job-application"
         headers = {
             "Content-Type": "application/json",
-            "Origin": "https://secure-form-relay.preview.emergentagent.com",
+            "Origin": "https://sentra-forms.preview.emergentagent.com",
             "User-Agent": "SentraTech-Test/1.0"
         }
         

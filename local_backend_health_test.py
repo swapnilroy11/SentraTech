@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://secure-form-relay.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-forms.preview.emergentagent.com/api"
 
 class LocalBackendHealthTester:
     """Local Backend Health Testing"""
@@ -249,7 +249,7 @@ class LocalBackendHealthTester:
         try:
             # Test preflight request
             headers = {
-                'Origin': 'https://secure-form-relay.preview.emergentagent.com',
+                'Origin': 'https://sentra-forms.preview.emergentagent.com',
                 'Access-Control-Request-Method': 'POST',
                 'Access-Control-Request-Headers': 'Content-Type,X-INGEST-KEY'
             }
