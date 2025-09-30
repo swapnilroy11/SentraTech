@@ -4535,7 +4535,7 @@ async def get_dashboard_newsletter_subscribers():
         return {"success": False, "error": "Failed to fetch newsletter subscribers"}
 
 @api_router.get("/forms/job-applications")
-async def get_job_applications():
+async def get_dashboard_job_applications():
     """Get all job applications for dashboard"""
     try:
         applications = await db.job_applications.find().sort("created_at", -1).to_list(length=100)
