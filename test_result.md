@@ -82,6 +82,7 @@ test_plan:
     - "Comprehensive SentraTech Forms Backend Testing"
     - "Form Ingest Endpoints with Network Restoration Functionality Testing"
     - "SentraTech Admin Dashboard Login and Dashboard Loading Flow Testing"
+    - "ROI Calculator Performance Optimization Testing"
   test_all: false
   test_priority: "high_first"
 
