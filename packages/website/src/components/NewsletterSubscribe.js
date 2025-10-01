@@ -132,13 +132,11 @@ const NewsletterSubscribe = () => {
       // Fallback to offline simulation on any error
       console.warn('Newsletter subscription failed, using offline fallback:', error);
       setStatus('success');
-      setMessage('Successfully subscribed to our newsletter!');
       setEmail('');
       
       setTimeout(() => {
         setStatus(null);
-        setMessage('');
-      }, 5000);
+      }, 3000);
     }
   };
 
