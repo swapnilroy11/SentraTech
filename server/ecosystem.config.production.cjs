@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'sentratech-collect',
+    name: 'sentra-collect-prod',
     script: '/app/server/proxy-collect.js',
     instances: 1,
     autorestart: true,
