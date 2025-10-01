@@ -301,7 +301,7 @@ const CustomerJourney3D = () => {
 
       {/* Stage Details Modal */}
       {showModal && selectedStage && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
           <Card className="bg-[rgb(26,28,30)] border-2 border-[#00FF41] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
