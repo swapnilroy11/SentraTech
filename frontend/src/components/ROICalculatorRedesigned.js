@@ -444,7 +444,7 @@ const ROICalculatorRedesigned = () => {
                   placeholder="e.g., 1000"
                   value={callVolume}
                   onChange={handleCallVolumeChange}
-                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
+                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl smooth-hover ${
                     callVolumeError 
                       ? 'border-red-500 focus:border-red-500' 
                       : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
@@ -467,7 +467,7 @@ const ROICalculatorRedesigned = () => {
                   placeholder="e.g., 1500"
                   value={interactionVolume}
                   onChange={handleInteractionVolumeChange}
-                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl transition-all duration-200 ${
+                  className={`bg-[rgba(26,28,30,0.8)] border-2 text-white text-lg p-4 rounded-xl smooth-hover ${
                     interactionVolumeError 
                       ? 'border-red-500 focus:border-red-500' 
                       : 'border-[rgba(255,255,255,0.1)] focus:border-[#00FF41]'
