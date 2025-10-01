@@ -57,7 +57,7 @@ echo "✅ Backup created: $BACKUP_DIR"
 echo ""
 echo "📂 Deploying updated files..."
 
-# Copy the updated files
+# Copy the updated files to production server (35.57.15.54)
 cp ROICalculatorPage.js "$APP_DIR/frontend/src/pages/"
 cp ROICalculatorRedesigned.js "$APP_DIR/frontend/src/components/"  
 cp InvestorRelationsPage.js "$APP_DIR/frontend/src/pages/"
@@ -69,6 +69,7 @@ cp ContactSalesSlideIn.js "$APP_DIR/frontend/src/components/"
 cp Footer.js "$APP_DIR/frontend/src/components/"
 cp CookieBanner.jsx "$APP_DIR/frontend/src/components/"
 cp App.js "$APP_DIR/frontend/src/"
+cp dashboardConfig.js "$APP_DIR/frontend/src/config/"
 cp index.css "$APP_DIR/frontend/src/"
 
 echo "✅ Files deployed successfully"
