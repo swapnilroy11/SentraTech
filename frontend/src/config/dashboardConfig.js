@@ -79,13 +79,13 @@ export const logPayload = (formType, payload) => {
 export const DASHBOARD_CONFIG = {
   // Ingest endpoints with API key authentication
   ENDPOINTS: {
-    CONTACT_SALES: '/api/ingest/contact_sales',
-    DEMO_REQUEST: '/api/ingest/demo_requests', 
-    ROI_CALCULATOR: '/api/ingest/roi_reports',
-    NEWSLETTER: '/api/ingest/subscriptions',
-    JOB_APPLICATION: '/api/ingest/job_applications',
-    PILOT_REQUEST: '/api/ingest/pilot_requests',
-    CHAT_MESSAGE: '/api/ingest/chat_messages'
+    CONTACT_SALES: '/ingest/contact_sales',
+    DEMO_REQUEST: '/ingest/demo_requests', 
+    ROI_CALCULATOR: '/ingest/roi_reports',
+    NEWSLETTER: '/ingest/subscriptions',
+    JOB_APPLICATION: '/ingest/job_applications',
+    PILOT_REQUEST: '/ingest/pilot_requests',
+    CHAT_MESSAGE: '/ingest/chat_messages'
   },
   
   // Healthcheck endpoint for connectivity testing
