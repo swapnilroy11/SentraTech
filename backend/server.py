@@ -1251,7 +1251,9 @@ class JobApplication(BaseModel):
 
 # Authentication middleware for ingest endpoints
 async def verify_ingest_key(x_ingest_key: Optional[str] = Header(None)):
-    expected_key = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
+    expected_key = os.environ.get("INGEST_API_KEY")
+    if not expected_key:
+        raise ValueError("INGEST_API_KEY environment variable is required for production deployment")
     if x_ingest_key != expected_key:
         raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
     return x_ingest_key
