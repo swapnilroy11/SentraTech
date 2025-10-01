@@ -5,6 +5,27 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Calculator, TrendingUp, DollarSign, Clock, Users, Zap, Target, CheckCircle } from 'lucide-react';
 import ROICalculatorRedesigned from '../components/ROICalculatorRedesigned';
 
+// Optimized animation variants for better performance
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: "easeOut" }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.4, ease: "easeOut" }
+};
+
 const ROICalculatorPage = () => {
   const benefits = [
     {
