@@ -293,7 +293,7 @@ const CookieBanner = () => {
             aria-describedby="preferences-description"
           >
             <div
-              className="bg-[#161B22] border-2 border-[#00FF41]/20 rounded-2xl p-8 w-full max-w-lg shadow-2xl relative z-[110] transform transition-all duration-300 scale-100"
+              className="bg-[#161B22] border border-[#00FF41]/30 rounded-2xl p-8 w-full max-w-lg relative z-[110]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}

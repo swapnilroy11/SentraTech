@@ -477,7 +477,7 @@ const SentraTechLanding = () => {
                       transparent, 
                       ${i % 4 === 0 ? '#ffffff' : i % 4 === 1 ? '#f0f8ff' : i % 4 === 2 ? '#e6f3ff' : '#ddeeff'}, 
                       transparent)`,
-                    filter: 'blur(0.5px)'
+                    filter: 'none'
                   }}
                 />
               </div>
@@ -499,7 +499,7 @@ const SentraTechLanding = () => {
                   opacity: 0.4 + Math.random() * 0.6,
                   animation: `twinkle ${3 + Math.random() * 6}s ease-in-out infinite`,
                   animationDelay: `${Math.random() * 4}s`,
-                  filter: `blur(${Math.random() * 0.5}px)`
+                  filter: 'none'
                 }}
               />
             ))}

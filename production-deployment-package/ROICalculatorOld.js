@@ -291,7 +291,7 @@ const ROICalculator = () => {
                     }`}
                     style={{
                       transform: 'perspective(150px) rotateY(-10deg) rotateX(10deg) translateZ(-3px)',
-                      filter: 'blur(1.5px)',
+                      filter: 'none',
                       color: '#00FF41'
                     }}
                   >

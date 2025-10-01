@@ -401,7 +401,6 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 z-[99999]"
             style={{ 
-              backdropFilter: 'blur(4px)',
               pointerEvents: 'auto'
             }}
             onClick={handleClose}
@@ -414,7 +413,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-            className="fixed right-0 top-0 h-full bg-[#0A0A0A] z-[99999] overflow-y-auto shadow-2xl"
+            className="fixed right-0 top-0 h-full bg-[#0A0A0A] z-[99999] overflow-y-auto border-l border-[#2a2a2a]"
             style={{
               position: 'fixed',
               right: 0,
@@ -488,7 +487,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                   <div className="space-y-3">
                     <Button
                       onClick={handleReturnToPricing}
-                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 px-6 rounded-lg transform hover:scale-105 transition-all"
+                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 px-6 rounded-lg transition-colors"
                       style={{
                         background: '#00FF41',
                         color: '#0A0A0A',
@@ -817,7 +816,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                   <Button
                     ref={lastFocusableRef}
                     type="submit"
-                    className="w-full font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all shadow-lg hover:shadow-[#00FF41]/30"
+                    className="w-full font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:brightness-110"
                     disabled={isSubmitting}
                     style={{
                       background: '#00FF41',
