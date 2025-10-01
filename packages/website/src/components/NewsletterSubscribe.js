@@ -126,7 +126,12 @@ const NewsletterSubscribe = () => {
           setMessage('');
         }, (result.remainingTime || 3) * 1000);
       } else {
-        throw new Error(result.error || result.message || 'Subscription failed');
+        setStatus('error');
+        setMessage(result.error || result.message || 'Subscription failed');
+        setTimeout(() => {
+          setStatus(null);
+          setMessage('');
+        }, 5000);
       }
     } catch (error) {
       // Fallback to offline simulation on any error
