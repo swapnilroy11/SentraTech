@@ -538,7 +538,7 @@ const SentraTechLanding = () => {
             {/* KPI Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               {stats.map((stat, index) => (
-                <div key={stat.id} className="text-center p-4 bg-[#1a1a1a]/50 rounded-xl border border-[#2a2a2a] backdrop-blur-sm">
+                <div key={stat.id} className="text-center p-4 bg-[#1a1a1a]/50 rounded-xl border border-[#2a2a2a]">
                   <div className="text-2xl md:text-3xl font-bold text-[#00FF41] mb-1 font-rajdhani">
                     {stat.value}{stat.suffix}
                   </div>
