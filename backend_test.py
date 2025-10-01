@@ -396,7 +396,68 @@ class ProxyEndpointTester:
         except Exception as e:
             self.log_test("Job Application Idempotency", "FAIL", f"Request error: {str(e)}")
             return False
-        """Test backend environment variable configuration"""
+    
+    def test_job_application_error_handling(self):
+        """Test job application error handling and graceful fallback"""
+        print("\n🛡️ Testing Job Application Error Handling...")
+        
+        # Test with invalid payload to check error handling
+        invalid_payload = {
+            "id": str(uuid.uuid4()),
+            "full_name": "",  # Empty required field
+            "email": "invalid-email",  # Invalid email format
+            "phone": "+880 1712-345678",
+            "location": "Dhaka, Bangladesh"
+        }
+        
+        try:
+            start_time = time.time()
+            response = requests.post(
+                f"{self.backend_url}/api/proxy/job-application",
+                json=invalid_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            response_time = (time.time() - start_time) * 1000
+            
+            # Check if error is handled gracefully
+            if response.status_code in [400, 422]:  # Bad request or validation error
+                self.log_test(
+                    "Job Application Error Handling", 
+                    "PASS", 
+                    f"HTTP {response.status_code} ({response_time:.2f}ms) - Validation errors handled correctly"
+                )
+                return True
+            elif response.status_code == 200:
+                # Check if it has fallback mechanism
+                data = response.json()
+                if data.get('success') == False or 'fallback' in str(data).lower():
+                    self.log_test(
+                        "Job Application Error Handling", 
+                        "PASS", 
+                        f"HTTP 200 with graceful fallback - Error handled gracefully"
+                    )
+                    return True
+                else:
+                    self.log_test(
+                        "Job Application Error Handling", 
+                        "FAIL", 
+                        f"HTTP 200 but invalid data accepted - Validation not working"
+                    )
+                    return False
+            else:
+                self.log_test(
+                    "Job Application Error Handling", 
+                    "FAIL", 
+                    f"HTTP {response.status_code} - Unexpected error response"
+                )
+                return False
+                
+        except Exception as e:
+            self.log_test("Job Application Error Handling", "FAIL", f"Request error: {str(e)}")
+            return False
+    
+    def test_environment_variables(self):
         print("\n🔧 Testing Environment Variable Configuration...")
         
         # Test if we can access the backend configuration endpoint
