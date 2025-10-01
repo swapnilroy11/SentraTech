@@ -194,27 +194,12 @@ const NewsletterSubscribe = () => {
         </Button>
       </form>
 
-      {/* Status Messages */}
-      {message && (
-        <div className={`mt-4 p-3 rounded-lg text-center text-sm flex items-center justify-center space-x-2 max-w-md mx-auto ${
-          status === 'success' 
-            ? 'bg-green-500/10 border border-green-500/30 text-green-400'
-            : status === 'duplicate'
-            ? 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400'
-            : 'bg-red-500/10 border border-red-500/30 text-red-400'
-        }`}>
-          {status === 'success' && <Check size={16} />}
-          {status === 'duplicate' && <AlertCircle size={16} />}
-          {status === 'error' && <AlertCircle size={16} />}
+      {/* Only show error messages, no success messages */}
+      {message && status === 'error' && (
+        <div className="mt-4 p-3 rounded-lg text-center text-sm flex items-center justify-center space-x-2 max-w-md mx-auto bg-red-500/10 border border-red-500/30 text-red-400">
+          <AlertCircle size={16} />
           <span>{message}</span>
         </div>
-      )}
-
-      {/* Success State Additional Info */}
-      {status === 'success' && (
-        <p className="text-xs text-[rgb(161,161,170)] text-center mt-2 max-w-md mx-auto">
-          Thank you for subscribing! You'll receive updates about AI-powered customer support and platform news.
-        </p>
       )}
     </div>
   );
