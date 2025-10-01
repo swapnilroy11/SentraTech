@@ -110,7 +110,7 @@ except Exception as e:
 Import this config instead of hardcoding values:
 
 ❌ Wrong:
-dashboard_url = "https://dashboard-bridge-2.preview.emergentagent.com"
+dashboard_url = "https://formforward.preview.emergentagent.com"
 headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
 
 ✅ Correct:

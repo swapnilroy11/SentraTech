@@ -4925,7 +4925,7 @@ app.add_middleware(
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://dashboard-bridge-2.preview.emergentagent.com",
+        "https://formforward.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:3001",

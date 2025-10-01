@@ -13,8 +13,8 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend/.env
-BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
-BROWSER_ORIGIN = "https://dashboard-bridge-2.preview.emergentagent.com"
+BACKEND_URL = "https://formforward.preview.emergentagent.com"
+BROWSER_ORIGIN = "https://formforward.preview.emergentagent.com"
 
 class CORSBrowserTester:
     def __init__(self):

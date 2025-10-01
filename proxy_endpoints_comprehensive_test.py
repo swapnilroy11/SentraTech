@@ -28,7 +28,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend .env
-BACKEND_URL = "https://dashboard-bridge-2.preview.emergentagent.com"
+BACKEND_URL = "https://formforward.preview.emergentagent.com"
 DASHBOARD_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
 class ProxyEndpointsIntegrationTester:

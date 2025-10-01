@@ -64,21 +64,21 @@ Updated forms to use new ingest endpoints:
 ./test-ingest-proxy.sh
 
 # Test individual endpoint
-curl -X POST "https://dashboard-bridge-2.preview.emergentagent.com/api/ingest/demo_requests" \
+curl -X POST "https://formforward.preview.emergentagent.com/api/ingest/demo_requests" \
   -H "X-INGEST-KEY: a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6" \
   -H "Content-Type: application/json" \
   -d '{"user_name":"Test","email":"test@example.com","company":"Acme","call_volume":"10000","interaction_volume":"5000","message":"Test"}'
 ```
 
 ### **Verify Frontend Integration**
-1. Go to https://dashboard-bridge-2.preview.emergentagent.com/roi-calculator
+1. Go to https://formforward.preview.emergentagent.com/roi-calculator
 2. Fill out the calculator and submit email report
 3. Check browser DevTools → Network tab
 4. Confirm POST to `/api/ingest/roi_reports` returns HTTP 200
 
 ### **Check Backend Health**
 ```bash
-curl -s https://dashboard-bridge-2.preview.emergentagent.com/api/health
+curl -s https://formforward.preview.emergentagent.com/api/health
 # Should show: "ingest_configured": true
 ```
 
