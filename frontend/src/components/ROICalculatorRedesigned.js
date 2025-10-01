@@ -631,7 +631,7 @@ const ROICalculatorRedesigned = () => {
 
       {/* Email Modal */}
       {showEmailModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <Card className="bg-[rgba(26,28,30,0.98)] border border-[rgba(0,255,65,0.3)] rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <CardContent className="p-8">
               
