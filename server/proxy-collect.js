@@ -51,6 +51,7 @@ async function forwardToDashboard(payload, endpoint = '/forms/newsletter-signup'
         headers: {
           'Content-Type': 'application/json',
           'X-INGEST-KEY': DASH_TOKEN,
+          'Authorization': `Bearer ${DASH_TOKEN}`,
           'Origin': 'https://sentratech.net'
         },
         body: JSON.stringify(payload),
