@@ -1,14 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { Button } from './ui/button';
-import { Search } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
 
 const Navigation = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Simplified navigation without mobile menu functionality
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    // Handle Escape key
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+    
+    // Cleanup on unmount or menu close
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isMenuOpen]);
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+    
+    // Focus management
+    if (!isMenuOpen) {
+      // When opening menu, focus on the close button after animation
+      setTimeout(() => {
+        document.querySelector('[aria-controls="mobile-navigation-menu"]')?.focus();
+      }, 100);
+    }
+  };
+
+  const handleOverlayClick = (event) => {
+    // Only close if clicking the overlay, not the menu content
+    if (event.target === event.currentTarget) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  const handleMenuClose = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsMenuOpen(false);
+  };
+
+  const handleMenuItemClick = () => {
+    setIsMenuOpen(false);
+  };
   const navigationItems = [
     { name: 'Home', path: '/', label: 'Home' },
     { name: 'Features', path: '/features', label: 'Features' },
