@@ -1,0 +1,38 @@
+[Unit]
+Description=SentraTech Proxy Service
+After=network.target mongod.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=sentratech
+Group=sentratech
+WorkingDirectory=/opt/sentratech-proxy
+Environment=PATH=/opt/sentratech-proxy/venv/bin
+EnvironmentFile=/opt/sentratech-proxy/.env
+ExecStart=/opt/sentratech-proxy/venv/bin/uvicorn server:app --host 0.0.0.0 --port 8001 --workers 1
+ExecReload=/bin/kill -HUP $MAINPID
+RestartSec=5
+Restart=always
+KillMode=mixed
+TimeoutStopSec=30
+
+# Security settings
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/var/log/sentratech /var/data/pending_submissions /opt/sentratech-proxy
+
+# Resource limits
+LimitNOFILE=65535
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentratech-proxy
+
+[Install]
+WantedBy=multi-user.target
