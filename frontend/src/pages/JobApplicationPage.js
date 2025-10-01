@@ -891,26 +891,26 @@ const JobApplicationPage = () => {
                     <p className="text-[rgb(161,161,170)] text-sm">Join our team and help shape the future of AI-powered customer support.</p>
                   </div>
                   
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(161,161,170)] text-sm">Position</span>
-                      <span className="text-white text-sm font-medium">Customer Support</span>
+                  <div className="space-y-5 mb-8">
+                    <div className="flex items-start justify-between py-2 border-b border-[rgb(63,63,63)]/50">
+                      <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">Position</span>
+                      <span className="text-white text-sm font-medium text-right leading-relaxed max-w-[140px]">Customer Support</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(161,161,170)] text-sm">Experience</span>
-                      <span className="text-white text-sm font-medium">{job.experience}</span>
+                    <div className="flex items-start justify-between py-2 border-b border-[rgb(63,63,63)]/50">
+                      <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">Experience</span>
+                      <span className="text-white text-sm font-medium text-right leading-relaxed max-w-[140px]">{job.experience}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(161,161,170)] text-sm">Education</span>
-                      <span className="text-white text-sm font-medium">{job.education}</span>
+                    <div className="flex items-start justify-between py-2 border-b border-[rgb(63,63,63)]/50">
+                      <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">Education</span>
+                      <span className="text-white text-sm font-medium text-right leading-relaxed max-w-[140px]">{job.education}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(161,161,170)] text-sm">Location</span>
-                      <span className="text-white text-sm font-medium">Dhaka/Remote</span>
+                    <div className="flex items-start justify-between py-2 border-b border-[rgb(63,63,63)]/50">
+                      <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">Location</span>
+                      <span className="text-white text-sm font-medium text-right leading-relaxed max-w-[140px]">Dhaka/Remote</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[rgb(161,161,170)] text-sm">Salary</span>
-                      <span className="text-white text-sm font-medium">{job.salary}</span>
+                    <div className="flex items-start justify-between py-2">
+                      <span className="text-[rgb(161,161,170)] text-sm leading-relaxed">Salary</span>
+                      <span className="text-white text-sm font-medium text-right leading-relaxed max-w-[140px]">{job.salary}</span>
                     </div>
                   </div>
                   
