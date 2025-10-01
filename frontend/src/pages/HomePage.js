@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import { motion } from 'framer-motion';
 import { 
   Calculator, 
   MessageSquare, 
@@ -12,6 +11,28 @@ import {
   ArrowRight,
   Play
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
+import SEOManager from '../components/SEOManager';
+
+// Lazy load heavy motion components - will reduce initial bundle size
+const MotionDiv = React.lazy(() => 
+  import('framer-motion').then(module => ({ default: module.motion.div }))
+);
+const MotionSection = React.lazy(() => 
+  import('framer-motion').then(module => ({ default: module.motion.section }))
+);
+const MotionH1 = React.lazy(() => 
+  import('framer-motion').then(module => ({ default: module.motion.h1 }))
+);
+const MotionP = React.lazy(() => 
+  import('framer-motion').then(module => ({ default: module.motion.p }))
+);
+
+// Lightweight fallback component for loading
+const MotionFallback = ({ children, className = "" }) => (
+  <div className={className}>{children}</div>
+);
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
 import SEOManager from '../components/SEOManager';
