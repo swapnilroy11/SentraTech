@@ -4874,6 +4874,7 @@ async def collect_proxy(request: Request):
             "ts": datetime.now(timezone.utc).isoformat(),
             "trace_id": trace_id,
             "client_ip": client_ip,
+            "endpoint": result.get("endpoint", "unknown"),
             "payload_summary": {
                 "name": payload.get('name', '')[:50] if payload.get('name') else '',
                 "email": payload.get('email', '')
