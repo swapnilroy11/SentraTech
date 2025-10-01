@@ -209,7 +209,7 @@ function App() {
             <ChatWidget />
             
             {/* Global Admin Button */}
-            <FloatingAdminButton />
+            {/* FloatingAdminButton removed as requested */}
           </BrowserRouter>
         </div>
       </LanguageProvider>
