@@ -236,9 +236,9 @@ const HomePage = () => {
                   initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className="text-center group cursor-pointer"
+                  className="text-center group cursor-pointer transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="w-20 h-20 bg-[rgba(0,255,65,0.1)] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-20 h-20 bg-[rgba(0,255,65,0.1)] hover:bg-[rgba(0,255,65,0.2)] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                     <Icon size={40} className="text-[#00FF41]" />
                   </div>
                   
