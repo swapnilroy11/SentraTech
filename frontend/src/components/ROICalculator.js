@@ -656,7 +656,7 @@ const ROICalculator = () => {
 
         {/* Email Modal */}
         {showEmailModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="bg-[rgb(26,28,30)] rounded-2xl p-8 max-w-md w-full mx-4 border border-[#00FF41]/30 shadow-2xl">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
