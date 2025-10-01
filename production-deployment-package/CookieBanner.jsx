@@ -164,8 +164,8 @@ const CookieBanner = () => {
         
         {/* Modal Content - Absolutely Centered */}
         <div 
-          className={`transform transition-all duration-500 ${
-            showBanner ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+          className={`transition-all duration-500 ${
+            showBanner ? 'scale-100' : 'scale-95'
           }`}
           style={{
             position: 'absolute',

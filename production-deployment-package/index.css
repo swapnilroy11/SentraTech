@@ -6,10 +6,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 /* Global smooth scrolling and performance optimizations */
-* {
-    scroll-behavior: smooth;
-}
-
 html {
     scroll-behavior: smooth;
 }
@@ -23,13 +19,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: #0A0A0A;
     color: #F8F9FA;
-    scroll-behavior: smooth;
     /* Performance optimizations */
-    will-change: scroll-position;
     overscroll-behavior: contain;
 }
 
-/* Performance optimization for elements with transitions */
+/* Performance optimization for specific transform elements */
 .will-change-transform {
     will-change: transform;
 }
