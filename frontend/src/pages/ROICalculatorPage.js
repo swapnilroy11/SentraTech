@@ -176,22 +176,17 @@ const ROICalculatorPage = () => {
         </div>
       </section>
 
-      {/* Implementation Timeline */}
+      {/* Implementation Timeline - Performance Optimized */}
       <section className="py-16 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]" id="implementation">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12 animate-fade-in">
             <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
               ROI Timeline
             </h2>
             <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto">
               See how quickly you can achieve return on investment with our phased implementation approach
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
@@ -217,14 +212,12 @@ const ROICalculatorPage = () => {
                 color: 'text-[#00FF41]'
               }
             ].map((phase, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="text-center relative"
+                className="text-center relative animate-slide-up"
+                style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6">
+                <div className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 hover:bg-[rgba(0,255,65,0.08)] transition-colors duration-200">
                   <div className="text-sm font-medium text-[rgb(161,161,170)] mb-2">{phase.phase}</div>
                   <h3 className="text-xl font-bold text-white mb-3">{phase.title}</h3>
                   <div className={`text-3xl font-bold mb-3 font-rajdhani ${phase.color}`}>
@@ -233,11 +226,11 @@ const ROICalculatorPage = () => {
                   <p className="text-sm text-[rgb(161,161,170)]">{phase.description}</p>
                 </div>
                 
-                {/* Timeline connector */}
+                {/* Timeline connector - Simplified */}
                 {index < 2 && (
-                  <div className="hidden md:block absolute top-1/2 left-full w-8 h-px bg-gradient-to-r from-[#00FF41] to-transparent transform -translate-y-1/2"></div>
+                  <div className="hidden md:block absolute top-1/2 left-full w-8 h-px bg-gradient-to-r from-[#00FF41] to-transparent -translate-y-1/2"></div>
                 )}
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
