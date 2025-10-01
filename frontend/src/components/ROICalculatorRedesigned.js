@@ -407,7 +407,7 @@ const ROICalculatorRedesigned = () => {
                     onClick={() => setSelectedCountry(country)}
                     onMouseEnter={() => setShowCountryTooltip(country)}
                     onMouseLeave={() => setShowCountryTooltip(null)}
-                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
+                    className={`relative p-4 rounded-xl border-2 smooth-hover ${
                       selectedCountry === country
                         ? 'border-[#00FF41] bg-[rgba(0,255,65,0.1)]'
                         : 'border-[rgba(255,255,255,0.1)] hover:border-[rgba(0,255,65,0.5)]'
