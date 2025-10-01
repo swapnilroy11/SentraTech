@@ -413,7 +413,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-            className="fixed right-0 top-0 h-full bg-[#0A0A0A] z-[99999] overflow-y-auto shadow-2xl"
+            className="fixed right-0 top-0 h-full bg-[#0A0A0A] z-[99999] overflow-y-auto border-l border-[#2a2a2a]"
             style={{
               position: 'fixed',
               right: 0,
