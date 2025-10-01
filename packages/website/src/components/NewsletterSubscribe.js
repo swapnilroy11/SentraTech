@@ -97,11 +97,7 @@ const NewsletterSubscribe = () => {
       const result = await safeSubmit('newsletter', subscriptionData, {
         disableDuration: 3000, // 3 seconds for Newsletter
         onSubmitStart: () => setStatus('loading'),
-        onSubmitEnd: () => setStatus(null),
-        onDuplicate: () => {
-          setStatus('error');
-          setMessage('Newsletter subscription already in progress');
-        }
+        onSubmitEnd: () => setStatus(null)
       });
 
       if (result.success) {
