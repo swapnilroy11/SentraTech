@@ -169,7 +169,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                 >
-                  <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(0,255,65,0.3)] hover:shadow-lg hover:shadow-[rgba(0,255,65,0.2)] transition-all duration-300 h-full group cursor-pointer transform hover:scale-[1.02]">
+                  <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(0,255,65,0.3)] hover:shadow-lg hover:shadow-[rgba(0,255,65,0.2)] transition-all duration-300 h-full group cursor-pointer transform hover:scale-[1.02] card-hover-enhanced hover-only">
                     <CardContent className="p-8">
                       <div className="flex items-center space-x-4 mb-6">
                         <div 
