@@ -14,6 +14,10 @@ const NewsletterSubscribe = () => {
     if (!email || !email.trim()) {
       setStatus('error');
       setMessage('Please enter a valid email address.');
+      setTimeout(() => {
+        setStatus(null);
+        setMessage('');
+      }, 3000);
       return;
     }
 
@@ -22,6 +26,10 @@ const NewsletterSubscribe = () => {
     if (!emailRegex.test(email)) {
       setStatus('error');
       setMessage('Please enter a valid email address.');
+      setTimeout(() => {
+        setStatus(null);
+        setMessage('');
+      }, 3000);
       return;
     }
 
