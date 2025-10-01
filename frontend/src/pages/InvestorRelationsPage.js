@@ -340,7 +340,7 @@ const InvestorRelationsPage = () => {
                   </ul>
                 </div>
                 <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2025</div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2026</div>
                   <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
                     <li>• First paying customers</li>
                     <li>• $500K ARR target</li>
