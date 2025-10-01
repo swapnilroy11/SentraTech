@@ -51,7 +51,7 @@ run_curl() {
   local fname="$3"
   echo "=== CURL -> $url" | tee -a "$OUT"
   # Use --insecure only for debugging self-signed certs; avoid if using Let's Encrypt
-  curl -v -sS --show-error -X POST "$url" \
+  curl -v -sS --show-error --insecure -X POST "$url" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $DASHBOARD_API_KEY" \
     -d "$body" 2>&1 | mask_token | tee -a "$RESULT_DIR/$fname"
