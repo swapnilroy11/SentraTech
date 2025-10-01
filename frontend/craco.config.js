@@ -113,12 +113,4 @@ module.exports = {
       return webpackConfig;
     },
   },
-  babel: {
-    plugins: [
-      // Enable tree shaking for specific libraries
-      ...(process.env.NODE_ENV === 'production' ? [
-        ['import', { libraryName: 'lodash', libraryDirectory: '', camel2DashComponentName: false }, 'lodash'],
-      ] : []),
-    ],
-  },
 };
