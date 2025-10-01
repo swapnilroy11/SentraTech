@@ -420,7 +420,7 @@ const ROICalculatorRedesigned = () => {
                     
                     {/* Country Tooltip */}
                     {showCountryTooltip === country && (
-                      <div className="absolute z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-3 bg-[rgba(26,28,30,0.95)] border border-[rgba(0,255,65,0.3)] rounded-lg shadow-xl backdrop-blur-sm">
+                      <div className="absolute z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-3 bg-[rgba(26,28,30,0.95)] border border-[rgba(0,255,65,0.3)] rounded-lg shadow-lg">
                         <div className="text-xs text-[rgb(161,161,170)] whitespace-nowrap">
                           {data.description}
                         </div>
