@@ -30,7 +30,9 @@ class DashboardConfig:
     CURRENT_HOST = "customer-flow-5.preview.emergentagent.com"
     
     # Authentication for dashboard forwarding
-    DASHBOARD_AUTH_KEY = "test-ingest-key-12345"
+    DASHBOARD_AUTH_KEY = os.environ.get('DASHBOARD_AUTH_KEY')
+    if not DASHBOARD_AUTH_KEY:
+        raise ValueError("DASHBOARD_AUTH_KEY environment variable is required for production deployment")
     
     # Local authentication key (from environment)
     LOCAL_INGEST_KEY = os.environ.get("INGEST_API_KEY")
