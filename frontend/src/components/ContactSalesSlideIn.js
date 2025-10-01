@@ -487,7 +487,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                   <div className="space-y-3">
                     <Button
                       onClick={handleReturnToPricing}
-                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 px-6 rounded-lg transform hover:scale-105 transition-all"
+                      className="w-full bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold py-3 px-6 rounded-lg transition-colors"
                       style={{
                         background: '#00FF41',
                         color: '#0A0A0A',
