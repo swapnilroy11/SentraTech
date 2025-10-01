@@ -11,7 +11,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
 AUTH_ENDPOINT = f"{BACKEND_URL}/api/dashboard/auth/login"
 
 class DashboardAuthTester:

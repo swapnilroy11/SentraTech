@@ -1,78 +1,70 @@
 <analysis>
-The trajectory details a comprehensive development and debugging process, starting with the creation of a robust FastAPI proxy () to handle form submissions. This initial phase involved fixing backend configuration errors and implementing features like idempotency, retries, and logging.
+The trajectory documents a complex and iterative development and debugging process. The initial task was to fix a non-functional Submit Application button. This led to the discovery of a misconfigured frontend environment variable (), which was corrected. Subsequently, the user reported severe visual glitches (shadow/overlay artifacts) and performance issues.
 
-A recurring and central theme is the discrepancy between the AI's development environment (a preview server) and the user's production environment ( at IP ). The AI repeatedly completes tasks on the preview server, which are then packaged for deployment, as the user reports the changes are not live.
+The engineer embarked on a multi-stage debugging effort. Initial attempts involved removing CSS classes, but the problem persisted. A deeper investigation, aided by a troubleshooter agent, revealed the true root cause: an unstable, experimental version of React () was in use. Downgrading React to a stable version () and cleaning up conflicting CSS finally resolved the visual artifacts.
 
-The work then pivoted to a series of frontend fixes based on user requests. This included performance optimization of the ROI calculator page by replacing heavy JavaScript animations (Framer Motion) with CSS transitions, extensive UI/UX adjustments (updating the Investor Relations page, fixing the cookie modal, removing/restoring UI elements like hamburger menus and icons), and resolving data logic issues in the contact sales form.
+Following this, a new task to optimize the site's poor PageSpeed score was initiated. This involved implementing code splitting, lazy loading, and script deferral. However, these changes introduced new build errors, most notably a persistent  issue and later a . The engineer also discovered they were working in the wrong directory ( instead of the active ).
 
-The final and most critical task was investigating why job applications were being lost. While the user suspected a wrong API endpoint, deep testing revealed the backend API was fully functional. The root cause was identified as a critical frontend bug: the Submit Application button was completely non-functional, lacking any event handlers and thus never making a network request. The work concluded immediately after this discovery.
+The trajectory concludes with the user ordering a full rollback of the performance optimization changes to fix the new build-breaking error.
 </analysis>
 
 <product_requirements>
-The core requirement is to ensure the  website is fully functional, performant, and bug-free on its production server (IP: ).
+The primary goal is to ensure the SentraTech website (, IP ) is fully functional, performant, and bug-free for production use.
 
-Initial requirements focused on building a reliable backend proxy at  for all form submissions, forwarding them to an admin dashboard. This proxy needed idempotency, retries, persistence, and detailed logging.
+Initial requirements focused on fixing a critical bug where job applications were being lost due to a non-functional submit button. This was traced to an incorrect backend URL configuration in the frontend.
 
-Subsequent requirements shifted to the frontend, demanding fixes for:
-1.  **Performance:** Resolve laggy scrolling and slow transition effects on pages like the ROI Calculator.
-2.  **UI/UX:**
-    *   Update content on the Investor Relations page (funding goal, timeline).
-    *   Remove specific UI elements: a search icon, a floating admin button, and a floating blue hamburger menu, while preserving the main navigation menu.
-    *   Correct visual bugs, such as font overlapping on job application cards and broken hover effects on homepage cards.
-    *   Update social media icons in the footer (Twitter to X, add Facebook).
-3.  **Functionality:**
-    *   Ensure the cookie modal appears instantly and only once.
-    *   Fix the contact sales form to populate correct volume data when a range is selected.
-    *   **Critically:** Resolve the issue of lost job applications by ensuring the form submits data correctly to the dashboard.
+Subsequent requirements focused on resolving major UI/UX and performance problems:
+1.  **Visual Glitches:** Eliminate severe visual artifacts, distortions, and laggy overlay/shadow effects on modals (Cookie Banner, Customer Journey, Contact Sales) and cards.
+2.  **Performance:** Address extremely slow page load times and poor PageSpeed Insights scores, which were causing laggy scrolling and a poor user experience.
+3.  **Deployment Stability:** Ensure the application can be successfully built and deployed to the production environment without errors.
+
+The most recent and critical requirement is to revert a set of performance-enhancing changes that, while well-intentioned, introduced new, build-breaking syntax errors, preventing deployment. The immediate priority is to restore the application to a stable, deployable state.
 </product_requirements>
 
 <key_technical_concepts>
-- **FastAPI:** Used for the Python backend, including the form submission proxy.
-- **React:** The core framework for the frontend application.
-- **Framer Motion:** JavaScript animation library identified as a source of performance issues.
-- **CSS Animations/Transitions:** Used to replace Framer Motion for better performance.
-- **Deployment Workflow:** A key concept was the distinction between the preview server (for development) and the production server, requiring the creation of deployment packages () for handoff.
+- **React:** Frontend library. A critical issue was resolved by downgrading from an unstable v19.0.0 to v18.3.1.
+- **FastAPI:** Python framework for the backend server.
+- **MongoDB Atlas:** The production database service, requiring the codebase to handle Atlas connection strings.
+- **TailwindCSS:** Utility-first CSS framework used for styling. Many visual glitches were related to its effects.
+- **CRACO:** Configuration layer for Create React App, used to modify webpack settings for performance optimization.
+- **Yarn:** The required package manager for the frontend.
+- **Environment Variables:** Crucial for configuration, especially  for API communication and secrets management.
 </key_technical_concepts>
 
 <code_architecture>
-The application is a monorepo with a distinct frontend and backend. The primary work occurred within  and .
+The application is a monorepo with two distinct frontend directories discovered during the process, and a single backend. The supervisor was configured to run the  package, which became the focus of the final fixes.
 
 
 
--   ****: The main FastAPI application file. It was initially modified to implement the  proxy and later inspected to verify that all form submission endpoints () were correctly defined and functional.
-
--   ** & **: These files were heavily modified to improve performance by removing expensive Framer Motion  animations and replacing them with CSS-based transitions.
-
--   ****: Edited to update text content related to funding goals and timelines, and to remove two of three CTA buttons.
-
--   ****: Modified multiple times: first to mistakenly remove the main hamburger menu, then to restore it, and finally to remove the search icon.
-
--   ****: Edited to replace the Twitter icon with a custom X icon and add a new Facebook social media link.
-
--   ****: The logic for populating call and interaction volume fields was updated to ensure the total volume correctly reflects the selected range button.
-
--   ** & **: The CSS classes in these files were adjusted to fix font overlapping issues on the job cards. The modal component was identified as having a non-functional submit button.
-
--   ****: This file was analyzed to confirm that frontend form submission functions were pointing to the correct backend proxy endpoints. It was temporarily modified during debugging but ultimately reverted to its correct state.
-
--   ****: New CSS classes for performant animations and card hover effects were added to this global stylesheet.
+-   ****: This file was central to fixing build issues. It was modified to downgrade React from  to , resolve peer dependency warnings by installing specific versions of  and , and fix the build script to prevent errors when the  directory already existed.
+-   ** & **: These files were modified to address critical security vulnerabilities. Hardcoded secrets (JWT secret, API keys) were removed and replaced with calls to  to load them from environment variables, making the application safe for production deployment.
+-   ****: Initially modified to add performance optimizations like code splitting. Later, a faulty  section causing build failures was identified and removed to resolve the persistent  error during deployment.
+-   ****: This file was created to explicitly define a clean Babel configuration, which helped resolve transitive dependency issues that were causing the  build error.
+-   ****: This was a key file modified during the performance optimization phase to implement lazy loading. These changes introduced a  and are currently being reverted.
+-   **Numerous Components (, , etc.)**: Multiple component files across the frontend were edited to remove conflicting CSS classes (, , ) that were causing visual artifacts due to the React 19 conflict.
+-   ** & **: The  files were updated multiple times. First, to correct the backend URL from a non-existent preview link to . Second, to add the new environment variables for the secrets that were removed from the backend code.
 </code_architecture>
 
 <pending_tasks>
-- **Fix the Job Application Form:** The critical pending task is to fix the non-functional Submit Application button in the  component. This involves adding the correct  event handler to trigger the  function.
-- **Deploy All Fixes to Production:** Once the job application form is fixed, all accumulated changes (UI fixes, performance optimizations, bug fixes) must be packaged and deployed to the correct production server at IP .
+- Complete the reversion of all performance-related changes made to the frontend codebase. This includes reverting modifications to , , and deleting newly created utility files.
+- Ensure the application builds successfully after the reversion.
+- Re-evaluate the strategy for performance optimization once the application is in a stable, deployable state.
 </pending_tasks>
 
 <current_work>
-The immediate last action was a comprehensive investigation into why job applications submitted from the website were being lost. The user suspected that the form was sending data to the wrong API endpoint.
+The immediate task is a **critical rollback**. A recent attempt to optimize the website's performance, based on PageSpeed Insights, introduced a build-breaking syntax error: . This error is preventing the application from being deployed.
 
-However, a series of diagnostic tests revealed a different and more critical root cause:
-1.  **Backend Verification:** Backend testing confirmed that the job application API endpoint () on the production server is fully operational and correctly processes incoming data.
-2.  **Frontend Testing:** A detailed frontend test was conducted on the live job application page (). This test uncovered that the **Submit Application button is completely broken**. It lacks any associated JavaScript event handlers (, ).
+The user has explicitly ordered all changes related to this performance optimization effort to be reversed.
 
-**Conclusion:** When a user clicks the submit button, absolutely nothing happens—no network request is made, and the form data is never sent to any endpoint. This 100% data loss is due to a non-functional frontend component, not a backend or configuration issue. The work stopped immediately after confirming this critical frontend bug.
+The previous engineer had already begun this process by:
+1.  Deleting the  and  utility files.
+2.  Deleting the  file.
+3.  Reverting the  file to its pre-optimization state.
+4.  Reverting the  file.
+
+The work stopped right before reverting the changes in the application's entry points and components (like ) where lazy loading and other optimizations were implemented. The primary goal is to get the application back to a stable state that can pass the deployment build process.
 </current_work>
 
 <optional_next_step>
-I will now fix the broken Submit Application button in the  component by implementing the necessary event handler to ensure it correctly submits the form data.
+I will now complete the reversion process by reverting the changes in  and  to remove the performance optimizations that are causing the build to fail.
 </optional_next_step>

@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com/api"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
 
 class ContactSalesPricingBackendTester:
     """Comprehensive backend testing for Contact Sales and Pricing functionality"""

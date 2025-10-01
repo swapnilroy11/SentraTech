@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 # Backend URL from environment
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com/api"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
 
 class SupabaseFormsTestFramework:
     """Test framework for Supabase form submissions after fixes"""

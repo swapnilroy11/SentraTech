@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timezone
 
 # Backend URL and authentication
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
 INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 
 def test_ingest_endpoints():

@@ -8,7 +8,7 @@ import websockets
 import json
 import requests
 
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com/api"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
 WEBSOCKET_URL = "wss://sentrafuture.preview.emergentagent.com/ws/chat"
 
 async def test_websocket():

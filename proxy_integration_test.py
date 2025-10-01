@@ -23,7 +23,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend .env
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
 EMERGENT_API_KEY = "sk-emergent-7A236FdD2Ce8d9b52C"
 
 class ProxyIntegrationTester:

@@ -4928,7 +4928,7 @@ app.add_middleware(
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://formflow-repair.preview.emergentagent.com",
+        "https://react-rescue-4.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:3001",

@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Backend URL from environment
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com/api"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
 
 class LiveChatTester:
     """Test Live Chat Integration functionality with WebSocket and AI"""

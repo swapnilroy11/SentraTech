@@ -13,8 +13,8 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend/.env
-BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
-BROWSER_ORIGIN = "https://formflow-repair.preview.emergentagent.com"
+BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
+BROWSER_ORIGIN = "https://react-rescue-4.preview.emergentagent.com"
 
 class CORSBrowserTester:
     def __init__(self):
