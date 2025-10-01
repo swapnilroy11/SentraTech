@@ -120,9 +120,7 @@ const ROICalculatorPage = () => {
       <section className="py-16 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)] relative" id="calculator">
         <div className="container mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            {...fadeInUp}
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
@@ -134,9 +132,8 @@ const ROICalculatorPage = () => {
           </motion.div>
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            {...fadeIn}
+            transition={{ delay: 0.2 }}
           >
             <ROICalculatorRedesigned />
           </motion.div>
