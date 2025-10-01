@@ -381,7 +381,10 @@ client = AsyncIOMotorClient(
     heartbeatFrequencyMS=5000,      # Heartbeat every 5s (reduced)
 )
 
-db = client[os.environ['DB_NAME']]
+# Use database name from MONGO_URL or default to 'sentratech_forms'
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017/sentratech_forms')
+db_name = mongo_url.split('/')[-1] if '/' in mongo_url else 'sentratech_forms'
+db = client[db_name]
 
 # Database optimization configurations
 DATABASE_CONFIG = {
