@@ -140,34 +140,27 @@ const ROICalculatorPage = () => {
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {/* Benefits Section - Optimized for performance */}
       <section className="py-16 bg-[#0A0A0A]" id="roi-benefits">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12 animate-fade-in">
             <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
               Why Calculate ROI with SentraTech?
             </h2>
             <p className="text-lg text-[rgb(161,161,170)] max-w-3xl mx-auto">
               Understand the tangible benefits and financial impact of implementing our AI-powered platform
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {benefits.map((benefit, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                className={`${benefit.bgColor} ${benefit.borderColor} border rounded-xl p-6 relative overflow-hidden group hover:shadow-lg hover:shadow-[rgba(0,255,65,0.1)] transition-all duration-300`}
+                className={`${benefit.bgColor} ${benefit.borderColor} border rounded-xl p-6 relative overflow-hidden group hover:shadow-lg hover:shadow-[rgba(0,255,65,0.1)] transition-shadow duration-200 animate-slide-up`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* Background accent */}
-                <div className={`absolute top-0 right-0 w-32 h-32 ${benefit.bgColor} rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-300`}></div>
+                {/* Simplified background accent - removed expensive blur */}
+                <div className={`absolute top-0 right-0 w-32 h-32 ${benefit.bgColor} rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-200`}></div>
                 
                 <div className="relative z-10">
                   <div className={`w-12 h-12 ${benefit.bgColor} rounded-lg flex items-center justify-center mb-4 ${benefit.borderColor} border`}>
@@ -177,7 +170,7 @@ const ROICalculatorPage = () => {
                   <h3 className="text-xl font-bold text-white mb-3">{benefit.title}</h3>
                   <p className="text-[rgb(161,161,170)] leading-relaxed">{benefit.description}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
