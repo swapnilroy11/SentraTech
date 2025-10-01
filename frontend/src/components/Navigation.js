@@ -178,7 +178,6 @@ const Navigation = () => {
         }`}
         style={{
           backgroundColor: '#0A0A0A',
-          backdropFilter: 'blur(20px)',
           boxShadow: '0 0 50px rgba(0, 0, 0, 0.8)'
         }}
       >
