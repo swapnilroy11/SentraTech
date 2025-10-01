@@ -19,9 +19,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: #0A0A0A;
     color: #F8F9FA;
-    scroll-behavior: smooth;
     /* Performance optimizations */
-    will-change: scroll-position;
     overscroll-behavior: contain;
 }
 
