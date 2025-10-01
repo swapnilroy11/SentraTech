@@ -74,7 +74,7 @@ const InvestorRelationsPage = () => {
   const milestones = [
     {
       title: 'Product Development Milestone',
-      date: 'November 2024',
+      date: 'November 2025',
       type: 'Technical Achievement',
       highlights: [
         'Core AI automation engine reaching 70% accuracy',
@@ -85,7 +85,7 @@ const InvestorRelationsPage = () => {
     },
     {
       title: 'Pilot Customer Validation',
-      date: 'October 2024',
+      date: 'October 2025',
       type: 'Market Validation',
       highlights: [
         '3 enterprise pilot customers onboarded',
@@ -96,7 +96,7 @@ const InvestorRelationsPage = () => {
     },
     {
       title: 'Team & Infrastructure',
-      date: 'September 2024',
+      date: 'September 2025',
       type: 'Company Development',
       highlights: [
         'AI/ML team expanded to 4 engineers',
