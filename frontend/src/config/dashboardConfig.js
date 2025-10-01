@@ -77,15 +77,15 @@ export const logPayload = (formType, payload) => {
 
 // Dashboard configuration - PROXY ENDPOINTS WITH API KEY AUTHENTICATION
 export const DASHBOARD_CONFIG = {
-  // Proxy endpoints that include API key authentication
+  // Ingest endpoints with API key authentication
   ENDPOINTS: {
-    CONTACT_SALES: '/api/proxy/contact-sales',
-    DEMO_REQUEST: '/api/proxy/demo-request', 
-    ROI_CALCULATOR: '/api/proxy/roi-calculator',
-    NEWSLETTER: '/api/proxy/newsletter-signup',
-    JOB_APPLICATION: '/api/proxy/job-application',
-    PILOT_REQUEST: '/api/proxy/pilot-request',
-    CHAT_MESSAGE: '/api/proxy/chat-message'
+    CONTACT_SALES: '/api/ingest/contact_sales',
+    DEMO_REQUEST: '/api/ingest/demo_requests', 
+    ROI_CALCULATOR: '/api/ingest/roi_reports',
+    NEWSLETTER: '/api/ingest/subscriptions',
+    JOB_APPLICATION: '/api/ingest/job_applications',
+    PILOT_REQUEST: '/api/ingest/pilot_requests',
+    CHAT_MESSAGE: '/api/ingest/chat_messages'
   },
   
   // Healthcheck endpoint for connectivity testing
