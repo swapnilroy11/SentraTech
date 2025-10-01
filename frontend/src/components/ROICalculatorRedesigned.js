@@ -377,7 +377,7 @@ const ROICalculatorRedesigned = () => {
     <div className="max-w-4xl mx-auto space-y-8">
       
       {/* Main Calculator Card with Glassmorphism Design */}
-      <Card className="bg-gradient-to-br from-[rgba(26,28,30,0.95)] to-[rgba(38,40,42,0.95)] backdrop-blur-xl border border-[rgba(0,255,65,0.2)] rounded-2xl shadow-2xl">
+      <Card className="bg-gradient-to-br from-[rgba(26,28,30,0.95)] to-[rgba(38,40,42,0.95)] border border-[rgba(0,255,65,0.2)] rounded-2xl shadow-lg">
         <CardContent className="p-8">
           
           {/* Header */}
