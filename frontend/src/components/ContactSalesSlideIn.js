@@ -816,7 +816,7 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                   <Button
                     ref={lastFocusableRef}
                     type="submit"
-                    className="w-full font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all shadow-lg hover:shadow-[#00FF41]/30"
+                    className="w-full font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:brightness-110"
                     disabled={isSubmitting}
                     style={{
                       background: '#00FF41',
