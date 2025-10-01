@@ -173,7 +173,7 @@ const HomePage = () => {
                     <CardContent className="p-8">
                       <div className="flex items-center space-x-4 mb-6">
                         <div 
-                          className="w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                          className="w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300"
                           style={{ backgroundColor: `${feature.color}20` }}
                         >
                           <Icon size={32} style={{ color: feature.color }} />
