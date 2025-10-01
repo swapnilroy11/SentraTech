@@ -101,129 +101,69 @@
         }
         </script>
         
-        <!-- Optimized script loading - deferred until user interaction -->
+        <!-- Google tag (gtag.js) - Conditional Loading Based on Cookie Consent -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-75HTVL1QME"></script>
         <script>
-          // Optimized third-party script loader
-          class OptimizedScriptLoader {
-            static loadedScripts = new Set();
-
-            // Lazy load Google Analytics only when needed
-            static loadGoogleAnalytics() {
-              if (this.loadedScripts.has('ga')) return;
-              
-              const script = document.createElement('script');
-              script.async = true;
-              script.src = 'https://www.googletagmanager.com/gtag/js?id=G-75HTVL1QME';
-              script.onload = () => {
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { window.dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('consent', 'default', {
-                  'analytics_storage': 'denied',
-                  'ad_storage': 'denied',
-                  'wait_for_update': 500,
-                });
-                gtag('config', 'G-75HTVL1QME', {
-                  send_page_view: false,
-                  anonymize_ip: true
-                });
-                
-                // Check consent and initialize if granted
-                try {
-                  const consentData = localStorage.getItem('cookieConsent');
-                  if (consentData) {
-                    const consent = consentData === 'all' ? true : JSON.parse(consentData).analytics;
-                    if (consent) {
-                      gtag('consent', 'update', { 'analytics_storage': 'granted' });
-                      gtag('event', 'page_view', { send_to: 'G-75HTVL1QME' });
-                    }
-                  }
-                } catch (error) {
-                  console.warn('Error checking cookie consent:', error);
-                }
-              };
-              document.head.appendChild(script);
-              this.loadedScripts.add('ga');
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          
+          // Initialize gtag with consent mode (disabled by default)
+          gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'wait_for_update': 500,
+          });
+          
+          // Configure GA4 but don't send page views initially
+          gtag('config', 'G-75HTVL1QME', {
+            send_page_view: false, // We'll handle this manually based on consent
+            anonymize_ip: true, // Ensure IP anonymization
+            custom_map: {
+              'custom_parameter_1': 'company_name',
+              'custom_parameter_2': 'reference_id'
             }
-
-            // Lazy load PostHog only when user interacts
-            static loadPostHog() {
-              if (this.loadedScripts.has('posthog')) return;
-
-              const script = document.createElement('script');
-              script.async = true;
-              script.defer = true;
-              script.src = 'https://us-assets.i.posthog.com/static/array.js';
-              script.onload = () => {
-                if (window.posthog && window.posthog.init) {
-                  window.posthog.init('phc_yJW1VjHGGwmCbbrtczfqqNxgBDbhlhOWcdzcIJEOTFE', {
-                    api_host: 'https://us.i.posthog.com',
-                    person_profiles: 'identified_only',
-                    // Performance optimizations
-                    autocapture: false,
-                    session_recording: false,
-                    disable_session_recording: true,
-                    capture_pageview: false, // Manual control
-                  });
-                }
-              };
-              document.head.appendChild(script);
-              this.loadedScripts.add('posthog');
-            }
-
-            // Load scripts based on user interaction
-            static initializeOnUserInteraction() {
-              const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
-              let hasLoaded = false;
-              
-              const loadOnInteraction = () => {
-                if (hasLoaded) return;
-                hasLoaded = true;
-                
-                this.loadGoogleAnalytics();
-                this.loadPostHog();
-                
-                // Remove listeners after loading
-                events.forEach(event => {
-                  document.removeEventListener(event, loadOnInteraction, { passive: true });
-                });
-              };
-
-              // Add listeners for user interaction
-              events.forEach(event => {
-                document.addEventListener(event, loadOnInteraction, { passive: true });
-              });
-
-              // Fallback: load after 3 seconds if no interaction
-              setTimeout(() => {
-                if (!hasLoaded) {
-                  loadOnInteraction();
-                }
-              }, 3000);
-            }
-          }
-
-          // Initialize optimized loading when DOM is ready
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-              OptimizedScriptLoader.initializeOnUserInteraction();
-            });
-          } else {
-            OptimizedScriptLoader.initializeOnUserInteraction();
-          }
-
-          // Global consent update function for backward compatibility
+          });
+          
+          // Function to update consent based on user choice
           window.updateGoogleAnalyticsConsent = function(hasAnalyticsConsent) {
-            const script = document.querySelector('script[src*="gtag"]');
-            if (script && window.gtag) {
-              if (hasAnalyticsConsent) {
-                window.gtag('consent', 'update', { 'analytics_storage': 'granted' });
-                window.gtag('event', 'page_view', { send_to: 'G-75HTVL1QME' });
-              } else {
-                window.gtag('consent', 'update', { 'analytics_storage': 'denied' });
-              }
+            if (hasAnalyticsConsent) {
+              // Grant consent and enable analytics
+              gtag('consent', 'update', {
+                'analytics_storage': 'granted'
+              });
+              
+              // Send initial page view if consent is granted
+              gtag('event', 'page_view', {
+                page_title: document.title,
+                page_location: window.location.href,
+                page_path: window.location.pathname,
+                send_to: 'G-75HTVL1QME'
+              });
+              
+              console.log('Google Analytics consent granted and initialized');
+            } else {
+              // Keep consent denied
+              gtag('consent', 'update', {
+                'analytics_storage': 'denied'
+              });
+              
+              console.log('Google Analytics consent denied');
             }
           };
+          
+          // Check for existing consent on page load
+          document.addEventListener('DOMContentLoaded', function() {
+            try {
+              const consentData = localStorage.getItem('cookieConsent');
+              if (consentData) {
+                const consent = consentData === 'all' ? true : JSON.parse(consentData).analytics;
+                window.updateGoogleAnalyticsConsent(consent);
+              }
+            } catch (error) {
+              console.warn('Error checking cookie consent:', error);
+            }
+          });
         </script>
         <!--
       manifest.json provides metadata used when your web app is installed on a
