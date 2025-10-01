@@ -143,6 +143,24 @@ const Navigation = () => {
             </Link>
           </div>
 
+          {/* Mobile Menu Toggle - Green hamburger button (keeping this one) */}
+          <div className="md:hidden">
+            <button
+              onClick={handleMenuToggle}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation-menu"
+              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              className={`w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 relative z-50 shadow-lg ${
+                isMenuOpen ? 'bg-[rgba(0,255,65,0.4)] border-[rgba(0,255,65,0.7)]' : ''
+              }`}
+            >
+              {isMenuOpen ? (
+                <X size={20} className="text-[#00FF41]" />
+              ) : (
+                <Menu size={20} className="text-[#00FF41]" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </nav>
