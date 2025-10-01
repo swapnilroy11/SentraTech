@@ -224,7 +224,7 @@ const FeaturesPage = () => {
                   { icon: '🗣️', title: 'Conversational Flow', desc: 'Dynamic conversation with context retention' },
                   { icon: '🔄', title: 'Seamless Handoffs', desc: 'Intelligent escalation when needed' },
                 ].map((item, index) => (
-                  <div key={index} className="bg-[#0A0A0A]/80 rounded-lg p-3 border border-[rgba(255,255,255,0.1)] backdrop-blur-sm">
+                  <div key={index} className="bg-[#0A0A0A]/80 rounded-lg p-3 border border-[rgba(255,255,255,0.1)]">
                     <div className="flex items-center space-x-3">
                       <span className="text-lg">{item.icon}</span>
                       <div>
