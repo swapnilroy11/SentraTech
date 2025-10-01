@@ -4734,30 +4734,142 @@ async def websocket_health():
         'timestamp': datetime.now(timezone.utc).isoformat()
     }
 
-# Collect Proxy Route - Forward to local collect service
+# In-memory dedupe store for idempotency
+collect_dedupe = {}
+COLLECT_IDEMPOTENCY_TTL_MS = 86400000  # 24 hours
+
+def clean_collect_dedupe():
+    """Clean old entries from dedupe store"""
+    import time
+    now = time.time() * 1000  # Convert to milliseconds
+    cutoff = now - COLLECT_IDEMPOTENCY_TTL_MS
+    keys_to_remove = [k for k, v in collect_dedupe.items() if v < cutoff]
+    for key in keys_to_remove:
+        del collect_dedupe[key]
+
+def generate_trace_id():
+    """Generate unique trace ID"""
+    import random
+    import string
+    return 'trace-' + str(int(time.time() * 1000)) + '-' + ''.join(random.choices(string.ascii_lowercase + string.digits, k=9))
+
+def log_collect_line(obj):
+    """Log collect request to file"""
+    import os
+    import json
+    log_dir = "/var/log/sentratech"
+    os.makedirs(log_dir, exist_ok=True)
+    line = json.dumps(obj)
+    with open(os.path.join(log_dir, 'collect.log'), 'a') as f:
+        f.write(line + '\n')
+
+# Forward function (direct to ADMIN_DASHBOARD_URL) — use native fetch or node-fetch
+async def forward_to_dashboard(payload):
+    """Forward payload directly to dashboard with retry logic"""
+    import httpx
+    import asyncio
+    
+    maxRetries = 3
+    backoff = 500
+    DASH_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
+    DASH_TOKEN = os.environ.get('DASHBOARD_API_KEY')
+    
+    for attempt in range(maxRetries):
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    DASH_URL,
+                    json=payload,
+                    headers={
+                        'Content-Type': 'application/json',
+                        'Authorization': f'Bearer {DASH_TOKEN}'
+                    }
+                )
+                text = await response.aread()
+                return {"ok": response.is_success, "status": response.status_code, "body": text.decode()}
+        except Exception as err:
+            if attempt == maxRetries - 1:
+                return {"ok": False, "status": 0, "body": str(err)}
+            await asyncio.sleep(backoff / 1000.0)  # Convert ms to seconds
+            backoff *= 3
+    
+    return {"ok": False, "status": 0, "body": "Max retries exceeded"}
+
+# Collect Proxy Route - Forward directly to dashboard
 @app.post("/api/collect")
 async def collect_proxy(request: Request):
-    """Proxy form submissions to local collect service"""
+    """Proxy form submissions directly to dashboard with idempotency and logging"""
     try:
-        # Get raw request body
-        body = await request.body()
+        # Parse incoming request
+        body = await request.json()
         
-        # Forward to local collect service
-        import httpx
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                "http://127.0.0.1:3002/api/collect",
-                headers={
-                    "Content-Type": "application/json",
-                    "X-Forwarded-For": request.headers.get("x-forwarded-for", str(request.client.host))
-                },
-                content=body
-            )
-            
-            # Return the same response from collect service
+        # Generate trace_id if missing
+        trace_id = body.get('trace_id') or generate_trace_id()
+        
+        # Get client info
+        client_ip = request.headers.get("x-forwarded-for") or str(request.client.host)
+        user_agent = request.headers.get("user-agent", "")
+        
+        # Enrich payload
+        payload = {
+            **body,
+            "trace_id": trace_id,
+            "received_at": datetime.now(timezone.utc).isoformat(),
+            "client_ip": client_ip,
+            "user_agent": user_agent,
+            "src": "site-proxy"
+        }
+        
+        # Idempotency check
+        clean_collect_dedupe()
+        current_time = time.time() * 1000
+        if trace_id in collect_dedupe:
+            log_collect_line({
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "trace_id": trace_id,
+                "event": "duplicate_received"
+            })
             return JSONResponse(
-                status_code=response.status_code,
-                content=response.json()
+                status_code=200,
+                content={"ok": True, "trace_id": trace_id, "note": "duplicate_ignored"}
+            )
+        
+        collect_dedupe[trace_id] = current_time
+        
+        # Forward to dashboard
+        result = await forward_to_dashboard(payload)
+        
+        # Log the request
+        log_collect_line({
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "trace_id": trace_id,
+            "client_ip": client_ip,
+            "payload_summary": {
+                "name": payload.get('name', '')[:50] if payload.get('name') else '',
+                "email": payload.get('email', '')
+            },
+            "upstream_status": result["status"],
+            "upstream_body": result["body"][:2048] if isinstance(result["body"], str) else str(result["body"])[:2048]
+        })
+        
+        if result["ok"]:
+            return JSONResponse(
+                status_code=200,
+                content={"ok": True, "trace_id": trace_id}
+            )
+        else:
+            # Persist payload for later replay
+            import os
+            import json
+            pending_dir = "/var/data/pending_submissions"
+            os.makedirs(pending_dir, exist_ok=True)
+            fname = os.path.join(pending_dir, f"{int(time.time() * 1000)}_{trace_id}.json")
+            with open(fname, 'w') as f:
+                json.dump({"payload": payload, "forward_result": result}, f, indent=2)
+            
+            return JSONResponse(
+                status_code=result["status"] if result["status"] > 0 else 502,
+                content={"ok": False, "trace_id": trace_id, "error": "forward_failed"}
             )
     
     except Exception as e:
