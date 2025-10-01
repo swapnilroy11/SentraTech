@@ -14,7 +14,7 @@ import os
 import sys
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://formforward.preview.emergentagent.com"
+BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
 
 class ProxyEndpointTester:
     def __init__(self):

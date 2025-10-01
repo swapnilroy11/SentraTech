@@ -13,7 +13,7 @@ import uuid
 import os
 
 # Backend URL from environment
-BACKEND_URL = "https://formforward.preview.emergentagent.com/api"
+BACKEND_URL = "https://formflow-repair.preview.emergentagent.com/api"
 
 class IngestProxyTester:
     """Comprehensive Ingest Proxy Integration Tester"""

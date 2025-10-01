@@ -21,7 +21,7 @@ from datetime import datetime
 
 # Configuration - Test local backend first, then external if needed
 LOCAL_BACKEND_URL = "http://localhost:8001"
-EXTERNAL_BACKEND_URL = "https://formforward.preview.emergentagent.com"
+EXTERNAL_BACKEND_URL = "https://formflow-repair.preview.emergentagent.com"
 VALID_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 INVALID_INGEST_KEY = "invalid-key-12345"
 
