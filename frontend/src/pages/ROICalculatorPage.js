@@ -93,22 +93,25 @@ const ROICalculatorPage = () => {
               Get personalized calculations based on your current operations.
             </p>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+            {/* Quick Stats - Optimized with CSS animation instead of JS */}
+            <motion.div 
+              variants={staggerContainer}
+              initial="initial"
+              animate="animate"
+              className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12"
+            >
               {statistics.map((stat, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-4"
+                  variants={fadeIn}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-4 hover:bg-[rgba(0,255,65,0.08)] transition-colors duration-200"
                 >
                   <stat.icon size={24} className="text-[#00FF41] mx-auto mb-2" />
                   <div className="text-2xl font-bold text-[#00FF41] mb-1 font-rajdhani">{stat.value}</div>
                   <div className="text-sm text-[rgb(161,161,170)]">{stat.label}</div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
