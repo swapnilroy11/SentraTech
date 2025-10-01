@@ -122,10 +122,16 @@ After deployment to production (35.57.15.54), verify:
 - [ ] "Contact for Investment" button is removed
 - [ ] All milestone dates updated to 2026
 
-### Cookie Modal
-- [ ] Cookie consent modal appears on first visit to production site
-- [ ] Modal works correctly on https://sentratech.net/
-- [ ] Consent preferences are saved properly
+### Landing Page Card Effects
+- [ ] Feature cards show hover animations (scale, shadow, color changes)
+- [ ] Benefits section cards have working hover effects (scale, rotate)
+- [ ] Icons animate on hover with proper transitions
+- [ ] Card effects work smoothly across desktop, tablet, and mobile
+
+### Cookie Modal Performance
+- [ ] Cookie consent modal appears instantly on first visit to production site
+- [ ] Modal works correctly on https://sentratech.net/ without delay
+- [ ] Consent preferences are saved properly and don't repeat
 
 ### Floating Hamburger Button Removal
 - [ ] FloatingNavScrollable (blue floating button) completely removed from all pages
