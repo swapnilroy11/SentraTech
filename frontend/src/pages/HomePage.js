@@ -179,7 +179,7 @@ const HomePage = () => {
                           <Icon size={32} style={{ color: feature.color }} />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-bold text-white mb-2">{feature.title}</h3>
+                          <h3 className="text-2xl font-bold text-white group-hover:text-[#00FF41] transition-colors duration-300 mb-2">{feature.title}</h3>
                         </div>
                       </div>
                       
