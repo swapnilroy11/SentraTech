@@ -492,3 +492,44 @@ input[type="range"]::-moz-range-thumb:hover {
 .btn-optimized:hover {
   box-shadow: 0 4px 12px rgba(0, 255, 65, 0.25);
 }
+
+/* Enhanced Card Hover Effects for Landing Page */
+.card-hover-enhanced {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+
+.card-hover-enhanced:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 255, 65, 0.15);
+}
+
+.icon-hover-enhanced {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.icon-hover-enhanced:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Group hover enhancements */
+.group:hover .group-hover-scale {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover-color {
+  color: #00FF41;
+}
+
+.group:hover .group-hover-bg {
+  background-color: rgba(0, 255, 65, 0.2);
+}
+
+/* Ensure hover effects work on mobile */
+@media (hover: hover) {
+  .hover-only:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 65, 0.2);
+  }
+}
