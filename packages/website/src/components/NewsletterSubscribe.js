@@ -35,13 +35,11 @@ const NewsletterSubscribe = () => {
         console.log('📧 TEST EMAIL FOR DASHBOARD:', diagnosticResult.testEmail);
         
         setStatus('success');
-        setMessage(`Diagnostic complete! Check console and dashboard for: ${diagnosticResult.testEmail}`);
         setEmail('');
         
         setTimeout(() => {
           setStatus(null);
-          setMessage('');
-        }, 10000); // Longer timeout for diagnostic mode
+        }, 3000);
         
         return;
       } catch (error) {
