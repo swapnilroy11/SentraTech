@@ -202,7 +202,7 @@ const InvestorRelationsPage = () => {
               <span className="text-white ml-3">•</span>
               <span className="text-white ml-3">Seeking $2.5M</span>
               <span className="text-white ml-3">•</span>
-              <span className="text-white ml-3">Q1 2025 Timeline</span>
+              <span className="text-white ml-3">Q1 2026 Timeline</span>
             </div>
           </div>
         </div>
