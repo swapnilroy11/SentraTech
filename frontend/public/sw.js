@@ -1,7 +1,7 @@
 // SentraTech Enterprise Service Worker
 // Advanced caching strategies for optimal performance and offline capability
 
-const CACHE_NAME = 'sentratech-v1.0.0';
+const CACHE_NAME = 'sentratech-v1.1.0'; // Updated for new optimizations
 const RUNTIME_CACHE_NAME = 'sentratech-runtime-v1.0.0';
 const API_CACHE_NAME = 'sentratech-api-v1.0.0';
 
