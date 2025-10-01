@@ -242,7 +242,7 @@ const HomePage = () => {
                     <Icon size={40} className="text-[#00FF41]" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#00FF41] transition-colors">
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#00FF41] transition-colors duration-300">
                     {benefit.title}
                   </h3>
                   
