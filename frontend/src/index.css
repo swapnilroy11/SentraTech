@@ -6,10 +6,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 /* Global smooth scrolling and performance optimizations */
-* {
-    scroll-behavior: smooth;
-}
-
 html {
     scroll-behavior: smooth;
 }
