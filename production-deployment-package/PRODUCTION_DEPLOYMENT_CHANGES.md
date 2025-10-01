@@ -146,6 +146,13 @@ After deployment to production (35.57.15.54), verify:
 - [ ] Modal works correctly on https://sentratech.net/ without delay
 - [ ] Consent preferences are saved properly and don't repeat
 
+### Contact Sales Form Volume Ranges
+- [ ] `<10k` range populates Call Volume: 2,500, Interaction Volume: 5,500
+- [ ] `10k-50k` range populates Call Volume: 12,000, Interaction Volume: 18,000  
+- [ ] `50k+` range populates Call Volume: 25,000, Interaction Volume: 40,000
+- [ ] Total volumes align logically with selected ranges
+- [ ] Form validation works correctly with new values
+
 ### Floating Hamburger Button Removal
 - [ ] FloatingNavScrollable (blue floating button) completely removed from all pages
 - [ ] Green hamburger menu in top navigation still functional for mobile users
