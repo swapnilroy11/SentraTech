@@ -25,11 +25,6 @@ app.use(express.static(path.join(__dirname, 'dist'), {
   etag: true
 }));
 
-// SPA fallback - all routes serve index.html
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
 const port = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0', () => {
   console.log(`✅ Production server running on port ${port}`);
