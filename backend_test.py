@@ -254,22 +254,24 @@ class ProxyEndpointTester:
             return False
     
     def test_job_application(self):
-        """Test job application proxy endpoint"""
+        """Test job application proxy endpoint with realistic data"""
         print("\n👔 Testing Job Application Proxy...")
         
+        # Using the exact payload format from the review request
         payload = {
             "id": str(uuid.uuid4()),
-            "full_name": "Jessica Rodriguez",
-            "email": "jessica.rodriguez@email.com",
+            "full_name": "Sarah Ahmed",
+            "email": "sarah.ahmed@example.com",
+            "phone": "+880 1712-345678",
             "location": "Dhaka, Bangladesh",
-            "linkedin_profile": "https://linkedin.com/in/jessicarodriguez",
-            "position": "Customer Support Specialist English-Fluent",
-            "preferred_shifts": "Day Shift (9 AM - 6 PM)",
-            "availability_start_date": "2025-02-01",
-            "cover_note": "Experienced customer support professional with 5+ years in tech support and fluent English communication skills. Passionate about helping customers and working with AI-powered tools.",
-            "source": "website_careers",
+            "position_applied": "Customer Support Specialist",
+            "preferred_shifts": "flexible",
+            "availability_start_date": "2025-01-15",
+            "motivation": "I am excited to join SentraTech and contribute to AI customer support innovation.",
+            "cover_letter": "I have strong English communication skills and customer service experience.",
             "consent_for_storage": True,
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "source": "careers_page_single_form",
+            "created": "2025-01-01T15:00:00.000Z"
         }
         
         try:
