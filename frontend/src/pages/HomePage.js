@@ -234,19 +234,28 @@ const HomePage = () => {
       {/* Why SentraTech Strip */}
       <section className="py-20 bg-[#0A0A0A]" id="why-choose">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
+          <Suspense fallback={<MotionFallback className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
               Why Choose SentraTech?
             </h2>
             <p className="text-lg text-[rgb(161,161,170)]">
               The competitive advantages that set us apart
             </p>
-          </motion.div>
+          </MotionFallback>}>
+            <MotionDiv
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
+                Why Choose SentraTech?
+              </h2>
+              <p className="text-lg text-[rgb(161,161,170)]">
+                The competitive advantages that set us apart
+              </p>
+            </MotionDiv>
+          </Suspense>
 
           <div className="grid md:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => {
