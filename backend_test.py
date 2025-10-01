@@ -590,6 +590,10 @@ class ProxyEndpointTester:
         self.test_contact_sales()
         self.test_job_application()
         
+        # Test job application specific features
+        self.test_job_application_idempotency()
+        self.test_job_application_error_handling()
+        
         # Test authentication and performance
         self.test_authentication_headers()
         self.test_response_times()
