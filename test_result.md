@@ -58,10 +58,13 @@
 ##
 
 test_plan:
-  current_focus: []
+  current_focus: 
+    - "SentraTech Production Website Card Effects Animation Fix"
   stuck_tasks: 
     - "Deployed Backend Environment Variables - Need deployment refresh to apply ADMIN_DASHBOARD_URL fix"
+    - "SentraTech Production Website Card Effects Animation Fix - Critical UX Issue"
   completed_focus:
+    - "SentraTech Production Website Cross-Device Performance Testing"
     - "SentraTech Production Deployment Package Validation Testing"
     - "Final Comprehensive Backend Proxy Endpoints Testing After CORS Origin Fix"
     - "Backend Proxy Endpoints Testing After ADMIN_DASHBOARD_URL Configuration Fix"
