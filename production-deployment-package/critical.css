@@ -1,0 +1,180 @@
+/* Critical CSS - Above the fold styles loaded inline */
+/* This ensures fastest possible paint for critical page elements */
+
+/* CSS Variables for consistent theming */
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: rgb(17, 17, 19);
+  --bg-tertiary: rgb(26, 28, 30);
+  --bg-quaternary: rgb(38, 40, 42);
+  --text-primary: #F8F9FA;
+  --text-secondary: rgb(218, 218, 218);
+  --text-tertiary: rgb(161, 161, 170);
+  --text-quaternary: rgb(63, 63, 63);
+  --accent-primary: #00FF41;
+  --accent-secondary: #00DDFF;
+  --accent-tertiary: #FFD700;
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(0, 255, 65, 0.3);
+}
+
+/* Critical page structure */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Critical navigation styles */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 10, 0.95);
+  /* backdrop-filter: blur(10px); */
+  border-bottom: 1px solid var(--border-primary);
+}
+
+/* Critical hero section styles */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+/* Critical typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--text-primary);
+}
+
+/* Critical button styles */
+.btn-primary {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #00e83a;
+  transform: translateY(-2px);
+}
+
+/* Critical loading states */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 255, 65, 0.2);
+  border-top: 4px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Critical container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Critical responsive utilities */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+/* Critical animation performance optimizations */
+* {
+  will-change: auto;
+}
+
+.animate-element {
+  will-change: transform, opacity;
+}
+
+/* Prevent layout shifts */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Critical accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Focus indicators for accessibility */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Critical font loading optimization */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: local('Inter');
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  font-display: swap;  
+  src: local('Rajdhani');
+}
