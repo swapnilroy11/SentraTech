@@ -319,7 +319,7 @@ const CaseStudies = () => {
                 className="bg-[rgb(26,28,30)] border border-[rgba(0,255,65,0.3)] rounded-xl overflow-hidden cursor-pointer h-full group
                            hover:border-[#00FF41] hover:shadow-lg hover:shadow-[rgba(0,255,65,0.15)] 
                            hover:bg-[rgb(28,30,32)] transition-all duration-400 ease-out transform-gpu
-                           will-change-transform backdrop-blur-sm"
+                           will-change-transform"
                 onClick={() => setSelectedCase(caseStudy)}
               >
                 <CardContent className="p-6">
