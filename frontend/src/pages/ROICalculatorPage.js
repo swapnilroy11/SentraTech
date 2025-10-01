@@ -236,20 +236,15 @@ const ROICalculatorPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Performance Optimized */}
       <section className="py-16 bg-[#0A0A0A]" id="roi-cta">
         <div className="container mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto"
-          >
-            {/* Enhanced background */}
+          <div className="max-w-4xl mx-auto animate-fade-in">
+            {/* Enhanced background - Simplified for performance */}
             <div className="bg-gradient-to-br from-[rgba(0,255,65,0.05)] to-[rgba(0,221,255,0.05)] rounded-3xl border border-[rgba(0,255,65,0.2)] p-8 relative overflow-hidden">
-              {/* Background accents */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#00FF41]/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#00DDFF]/10 rounded-full blur-3xl"></div>
+              {/* Simplified background accents - removed expensive blur */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#00FF41]/5 rounded-full"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#00DDFF]/5 rounded-full"></div>
               
               <div className="relative z-10">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-rajdhani">
@@ -261,21 +256,21 @@ const ROICalculatorPage = () => {
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/demo-request">
-                    <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-[#00FF41]/25">
+                    <Button className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl hover:shadow-lg hover:shadow-[#00FF41]/25 transition-all duration-200 flex items-center space-x-2">
                       <span>Schedule Demo</span>
                       <ArrowRight size={20} />
                     </Button>
                   </Link>
                   
                   <Link to="/case-studies">
-                    <Button variant="outline" className="border-[#00DDFF] text-[#00DDFF] hover:bg-[#00DDFF]/10 font-semibold px-8 py-4 text-lg rounded-xl transition-all duration-300">
+                    <Button variant="outline" className="border-[#00DDFF] text-[#00DDFF] hover:bg-[#00DDFF]/10 font-semibold px-8 py-4 text-lg rounded-xl transition-colors duration-200">
                       View Case Studies
                     </Button>
                   </Link>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
       </div>
