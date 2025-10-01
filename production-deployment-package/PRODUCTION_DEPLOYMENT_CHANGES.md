@@ -47,13 +47,30 @@
 
 **Impact:** Removes the floating blue hamburger button from the middle of screens while preserving the functional green hamburger menu in the navigation bar for mobile users
 
-### 4. Cookie Modal Production Fix
-**Issue:** Cookie modal shows on preview but not on production environment
+### 4. Landing Page Card Effects Fix
+**Files Modified:**
+- `/frontend/src/pages/HomePage.js`
+- `/frontend/src/index.css`
 
-**Investigation Needed:**
-- Check localStorage behavior on production
-- Verify CookieBanner component is properly deployed
-- Clear any cached versions that might prevent modal from showing
+**Changes:**
+- ✅ Enhanced card hover effects with transform, scale, and shadow animations
+- ✅ Added CSS classes: card-hover-enhanced, icon-hover-enhanced, hover-only
+- ✅ Improved feature cards with better hover feedback (scale, rotate, color changes)
+- ✅ Enhanced benefits section hover effects with scale and rotation
+- ✅ Added explicit CSS animations for better cross-browser compatibility
+
+**Impact:** Fixes the reported issue where landing page cards don't move/show effects on hover
+
+### 5. Cookie Modal Performance Fix
+**File Modified:**
+- `/frontend/src/components/CookieBanner.jsx`
+
+**Changes:**
+- ✅ Removed 300ms delay - cookie modal now appears instantly
+- ✅ Improved loading time for better user experience
+- ✅ Maintains persistence across page navigation to prevent repetition
+
+**Impact:** Cookie modal appears immediately on first visit, doesn't repeat once accepted
 
 ## Deployment Steps Required
 
