@@ -807,7 +807,7 @@ ${'='.repeat(50)}
   return (
     <div className="min-h-screen bg-[rgb(18,20,22)] text-white">
       {/* Header Controls */}
-      <div className="sticky top-0 z-50 bg-[rgb(18,20,22)]/95 backdrop-blur-sm border-b border-[rgb(63,63,63)] px-6 py-4">
+      <div className="sticky top-0 z-50 bg-[rgb(18,20,22)]/95 border-b border-[rgb(63,63,63)] px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold text-white">SentraTech Pitch Deck</h1>
