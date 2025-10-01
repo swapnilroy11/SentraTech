@@ -23,7 +23,7 @@ body {
     overscroll-behavior: contain;
 }
 
-/* Performance optimization for elements with transitions */
+/* Performance optimization for specific transform elements */
 .will-change-transform {
     will-change: transform;
 }
