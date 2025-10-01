@@ -65,9 +65,9 @@ const FloatingNavigation = () => {
           }}
         >
           {isOpen ? (
-            <X size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+            <X size={28} className="text-[#00FF41]" />
           ) : (
-            <Menu size={28} className="text-[#00FF41] drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))' }} />
+            <Menu size={28} className="text-[#00FF41]" />
           )}
         </button>
 
