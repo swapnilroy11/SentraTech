@@ -76,9 +76,7 @@ const ROICalculatorPage = () => {
       <section className="pt-24 pb-12 relative overflow-hidden" id="roi-hero">
         <div className="container mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            {...fadeInUp}
             className="text-center max-w-5xl mx-auto"
           >
             <div className="flex items-center justify-center space-x-4 mb-6">
