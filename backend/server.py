@@ -783,7 +783,9 @@ class UserResponse(BaseModel):
 class UserService:
     def __init__(self):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-        self.secret_key = os.environ.get("JWT_SECRET_KEY", "sentratech-super-secret-jwt-key-2024")
+        self.secret_key = os.environ.get("JWT_SECRET_KEY")
+        if not self.secret_key:
+            raise ValueError("JWT_SECRET_KEY environment variable is required for production deployment")
         self.algorithm = "HS256"
         self.access_token_expire_minutes = 30 * 24 * 60  # 30 days
         
