@@ -56,6 +56,8 @@ echo "📂 Deploying updated files..."
 cp ROICalculatorPage.js "$APP_DIR/frontend/src/pages/"
 cp ROICalculatorRedesigned.js "$APP_DIR/frontend/src/components/"  
 cp InvestorRelationsPage.js "$APP_DIR/frontend/src/pages/"
+cp Navigation.js "$APP_DIR/frontend/src/components/"
+cp App.js "$APP_DIR/frontend/src/"
 cp index.css "$APP_DIR/frontend/src/"
 
 echo "✅ Files deployed successfully"
