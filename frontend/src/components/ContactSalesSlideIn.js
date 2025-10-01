@@ -401,7 +401,6 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 z-[99999]"
             style={{ 
-              backdropFilter: 'blur(4px)',
               pointerEvents: 'auto'
             }}
             onClick={handleClose}
