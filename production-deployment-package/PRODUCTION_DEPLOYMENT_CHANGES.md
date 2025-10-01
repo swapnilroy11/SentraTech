@@ -67,11 +67,12 @@ The following files contain the changes and need to be deployed to 35.57.15.54:
 frontend/src/pages/ROICalculatorPage.js
 frontend/src/components/ROICalculatorRedesigned.js  
 frontend/src/pages/InvestorRelationsPage.js
+frontend/src/components/Navigation.js
+frontend/src/App.js
 frontend/src/index.css
 
 # Verify CookieBanner is deployed
 frontend/src/components/CookieBanner.jsx
-frontend/src/App.js
 ```
 
 ### Step 2: Restart Services on Production
