@@ -126,10 +126,7 @@ const Navigation = () => {
               </li>
             ))}
             
-            {/* Search Icon */}
-            <button className="p-2 text-[#e2e8f0] hover:text-[#00FF41] transition-colors">
-              <Search size={20} />
-            </button>
+            {/* Search icon removed as requested */}
           </ul>
 
           {/* CTA Section */}
