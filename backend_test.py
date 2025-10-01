@@ -305,7 +305,97 @@ class ProxyEndpointTester:
             self.log_test("Job Application Proxy", "FAIL", f"Request error: {str(e)}")
             return False
     
-    def test_environment_variables(self):
+    def test_job_application_idempotency(self):
+        """Test job application idempotency and duplicate submission prevention"""
+        print("\n🔄 Testing Job Application Idempotency...")
+        
+        # Use the same ID for both requests to test duplicate prevention
+        duplicate_id = str(uuid.uuid4())
+        
+        payload = {
+            "id": duplicate_id,
+            "full_name": "Sarah Ahmed",
+            "email": "sarah.ahmed@example.com",
+            "phone": "+880 1712-345678",
+            "location": "Dhaka, Bangladesh",
+            "position_applied": "Customer Support Specialist",
+            "preferred_shifts": "flexible",
+            "availability_start_date": "2025-01-15",
+            "motivation": "I am excited to join SentraTech and contribute to AI customer support innovation.",
+            "cover_letter": "I have strong English communication skills and customer service experience.",
+            "consent_for_storage": True,
+            "source": "careers_page_single_form",
+            "created": "2025-01-01T15:00:00.000Z"
+        }
+        
+        try:
+            # First submission - should succeed
+            print("   Testing first submission...")
+            start_time = time.time()
+            response1 = requests.post(
+                f"{self.backend_url}/api/proxy/job-application",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            response_time1 = (time.time() - start_time) * 1000
+            
+            # Second submission with same ID - should be rejected or handled gracefully
+            print("   Testing duplicate submission...")
+            start_time = time.time()
+            response2 = requests.post(
+                f"{self.backend_url}/api/proxy/job-application",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            response_time2 = (time.time() - start_time) * 1000
+            
+            # Analyze results
+            if response1.status_code == 200:
+                if response2.status_code == 429:  # Rate limited/duplicate detected
+                    self.log_test(
+                        "Job Application Idempotency", 
+                        "PASS", 
+                        f"First: HTTP 200 ({response_time1:.2f}ms), Duplicate: HTTP 429 ({response_time2:.2f}ms) - Duplicate prevention working"
+                    )
+                    return True
+                elif response2.status_code == 200:
+                    # Check if it's the same response (idempotent)
+                    data1 = response1.json()
+                    data2 = response2.json()
+                    if data1.get('id') == data2.get('id'):
+                        self.log_test(
+                            "Job Application Idempotency", 
+                            "PASS", 
+                            f"Both HTTP 200, same ID returned - Idempotent behavior working"
+                        )
+                        return True
+                    else:
+                        self.log_test(
+                            "Job Application Idempotency", 
+                            "FAIL", 
+                            f"Both HTTP 200 but different IDs - Duplicate not prevented"
+                        )
+                        return False
+                else:
+                    self.log_test(
+                        "Job Application Idempotency", 
+                        "FAIL", 
+                        f"First: HTTP 200, Duplicate: HTTP {response2.status_code} - Unexpected duplicate response"
+                    )
+                    return False
+            else:
+                self.log_test(
+                    "Job Application Idempotency", 
+                    "FAIL", 
+                    f"First submission failed: HTTP {response1.status_code}"
+                )
+                return False
+                
+        except Exception as e:
+            self.log_test("Job Application Idempotency", "FAIL", f"Request error: {str(e)}")
+            return False
         """Test backend environment variable configuration"""
         print("\n🔧 Testing Environment Variable Configuration...")
         
