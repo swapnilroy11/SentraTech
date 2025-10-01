@@ -93,7 +93,7 @@ export const DASHBOARD_CONFIG = {
   
   // Dashboard API configuration (for reference only - all requests now go through proxy)
   DASHBOARD_API: {
-    BASE_URL: process.env.REACT_APP_API_BASE || process.env.REACT_APP_BACKEND_URL + '/api' || 'https://sentratech.net/api',
+    BASE_URL: process.env.REACT_APP_API_BASE || process.env.REACT_APP_BACKEND_URL + '/api' || '/api',
     ENDPOINTS: {
       CONTACT_SALES: '/forms/contact-sales',
       DEMO_REQUEST: '/forms/demo-request',
