@@ -33,7 +33,9 @@ class DashboardConfig:
     DASHBOARD_AUTH_KEY = "test-ingest-key-12345"
     
     # Local authentication key (from environment)
-    LOCAL_INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
+    LOCAL_INGEST_KEY = os.environ.get("INGEST_API_KEY")
+    if not LOCAL_INGEST_KEY:
+        raise ValueError("INGEST_API_KEY environment variable is required for production deployment")
     
     # Timeout for dashboard requests
     REQUEST_TIMEOUT = 30.0
