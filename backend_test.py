@@ -13,8 +13,8 @@ from datetime import datetime, timezone
 import os
 import sys
 
-# Backend URL from frontend environment
-BACKEND_URL = "https://sentratech.net"
+# Backend URL from frontend environment - Updated to admin.sentratech.net
+BACKEND_URL = "https://admin.sentratech.net"
 
 class ProxyEndpointTester:
     def __init__(self):
