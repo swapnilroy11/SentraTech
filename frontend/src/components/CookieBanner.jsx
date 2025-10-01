@@ -280,7 +280,7 @@ const CookieBanner = () => {
         <>
           {/* Modal Backdrop */}
           <div
-            className="fixed inset-0 z-[100] bg-black bg-opacity-70 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] bg-black/70"
             aria-hidden="true"
             onClick={handleClosePreferences}
           />
