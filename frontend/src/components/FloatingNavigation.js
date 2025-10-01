@@ -160,8 +160,7 @@ const FloatingNavigation = () => {
           <div 
             className="rounded-3xl p-8 min-w-[280px] max-h-[80vh] overflow-y-auto"
             style={{
-              background: 'rgba(10, 10, 10, 0.95)',
-              backdropFilter: 'blur(20px)',
+              background: 'rgba(10, 10, 10, 0.98)',
               border: '2px solid rgba(0, 255, 65, 0.4)',
               boxShadow: '0 25px 50px -12px rgba(0, 255, 65, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3)'
             }}
