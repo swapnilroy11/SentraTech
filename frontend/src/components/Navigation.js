@@ -6,40 +6,9 @@ import { Menu, X, Search } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
 
 const Navigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Close menu on route change
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location.pathname]);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    // Handle Escape key
-    const handleEscapeKey = (event) => {
-      if (event.key === 'Escape' && isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    if (isMenuOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
-    }
-    
-    // Cleanup on unmount or menu close
-    return () => {
-      document.body.style.overflow = 'unset';
-      document.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [isMenuOpen]);
-
+  // Simplified navigation without mobile menu functionality
   const navigationItems = [
     { name: 'Home', path: '/', label: 'Home' },
     { name: 'Features', path: '/features', label: 'Features' },
@@ -53,26 +22,6 @@ const Navigation = () => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
     return false;
-  };
-
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleMenuClose = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsMenuOpen(false);
-  };
-
-  const handleOverlayClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsMenuOpen(false);
-  };
-
-  const handleMenuItemClick = () => {
-    setIsMenuOpen(false);
   };
 
   return (
