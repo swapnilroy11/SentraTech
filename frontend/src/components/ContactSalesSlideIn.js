@@ -673,17 +673,20 @@ const ContactSalesSlideIn = ({ isOpen, onClose, selectedPlan = null, prefill = n
                             key={option.value}
                             type="button"
                             onClick={() => {
-                              // Auto-populate based on selection
+                              // Auto-populate based on selection with more realistic proportions
                               let callVol = '', intVol = '';
                               if (option.value === '<10k') {
-                                callVol = '3000';
-                                intVol = '2000';
+                                // For <10k monthly interactions: 40% calls, 60% other interactions
+                                callVol = '2500';
+                                intVol = '6500';
                               } else if (option.value === '10k-50k') {
-                                callVol = '15000';
-                                intVol = '10000';
+                                // For 10k-50k range: mid-range values with realistic proportions
+                                callVol = '8000';
+                                intVol = '22000';
                               } else if (option.value === '50k+') {
-                                callVol = '30000';
-                                intVol = '20000';
+                                // For 50k+ range: higher volumes with enterprise proportions
+                                callVol = '20000';
+                                intVol = '65000';
                               }
                               
                               setFormData(prev => ({ 
