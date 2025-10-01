@@ -377,7 +377,7 @@ const ROICalculatorRedesigned = () => {
     <div className="max-w-4xl mx-auto space-y-8">
       
       {/* Main Calculator Card with Glassmorphism Design */}
-      <Card className="bg-gradient-to-br from-[rgba(26,28,30,0.95)] to-[rgba(38,40,42,0.95)] backdrop-blur-xl border border-[rgba(0,255,65,0.2)] rounded-2xl shadow-2xl">
+      <Card className="bg-gradient-to-br from-[rgba(26,28,30,0.95)] to-[rgba(38,40,42,0.95)] border border-[rgba(0,255,65,0.2)] rounded-2xl shadow-lg">
         <CardContent className="p-8">
           
           {/* Header */}
@@ -420,7 +420,7 @@ const ROICalculatorRedesigned = () => {
                     
                     {/* Country Tooltip */}
                     {showCountryTooltip === country && (
-                      <div className="absolute z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-3 bg-[rgba(26,28,30,0.95)] border border-[rgba(0,255,65,0.3)] rounded-lg shadow-xl backdrop-blur-sm">
+                      <div className="absolute z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-3 bg-[rgba(26,28,30,0.95)] border border-[rgba(0,255,65,0.3)] rounded-lg shadow-lg">
                         <div className="text-xs text-[rgb(161,161,170)] whitespace-nowrap">
                           {data.description}
                         </div>
@@ -631,7 +631,7 @@ const ROICalculatorRedesigned = () => {
 
       {/* Email Modal */}
       {showEmailModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <Card className="bg-[rgba(26,28,30,0.98)] border border-[rgba(0,255,65,0.3)] rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <CardContent className="p-8">
               

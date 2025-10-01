@@ -85,7 +85,7 @@ const Navigation = () => {
 
   return (
     <nav 
-      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]"
+      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 border-b border-[#2a2a2a]"
       role="navigation" 
       aria-label="Main navigation"
     >
@@ -147,7 +147,7 @@ const Navigation = () => {
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation-menu"
               aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              className={`w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 relative z-50 shadow-lg ${
+              className={`w-10 h-10 bg-[rgba(0,255,65,0.3)] border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 relative z-50 shadow-lg ${
                 isMenuOpen ? 'bg-[rgba(0,255,65,0.4)] border-[rgba(0,255,65,0.7)]' : ''
               }`}
             >
@@ -163,7 +163,7 @@ const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 bg-black/70 transition-opacity duration-300 md:hidden ${
           isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none z-40'
         }`}
         onClick={handleOverlayClick}
@@ -173,12 +173,11 @@ const Navigation = () => {
       {/* Mobile Menu Panel - Enhanced with better background */}
       <div 
         id="mobile-navigation-menu"
-        className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
+        className={`fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-[#0A0A0A] border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{
           backgroundColor: '#0A0A0A',
-          backdropFilter: 'blur(20px)',
           boxShadow: '0 0 50px rgba(0, 0, 0, 0.8)'
         }}
       >
@@ -195,7 +194,7 @@ const Navigation = () => {
           <button
             onClick={handleMenuClose}
             aria-label="Close navigation menu"
-            className="w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 shadow-lg"
+            className="w-10 h-10 bg-[rgba(0,255,65,0.3)] border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 shadow-lg"
           >
             <X size={20} className="text-[#00FF41]" />
           </button>
