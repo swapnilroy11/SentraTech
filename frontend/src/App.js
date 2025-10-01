@@ -160,8 +160,7 @@ function App() {
             {/* Scroll to Top on Route Change */}
             <ScrollToTop />
             
-            {/* Floating Left Navigation - moved inside BrowserRouter */}
-            <FloatingNavScrollable />
+            {/* Floating Left Navigation - REMOVED as requested */}
             
             {/* Cookie Consent Banner */}
             <CookieBanner />
