@@ -10,7 +10,7 @@ module.exports = {
     }]
   ],
   plugins: [
-    // Only include plugins that are actually needed
+    // Required to fix babel-preset-react-app warning
     '@babel/plugin-proposal-private-property-in-object'
   ]
 };
