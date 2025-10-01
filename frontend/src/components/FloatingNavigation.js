@@ -125,7 +125,7 @@ const FloatingNavigation = () => {
               size={30} 
               className="text-[#00FF41]" 
               style={{ 
-                filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))',
+                filter: 'none',
                 fontWeight: 'bold'
               }} 
             />
@@ -134,7 +134,7 @@ const FloatingNavigation = () => {
               size={30} 
               className="text-[#00FF41]" 
               style={{ 
-                filter: 'drop-shadow(0 0 8px rgba(0,255,65,0.8))',
+                filter: 'none',
                 fontWeight: 'bold'
               }} 
             />
