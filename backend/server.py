@@ -4815,7 +4815,9 @@ async def forward_to_dashboard(payload):
                         # keep X-INGEST-KEY for current dashboard compatibility
                         'X-INGEST-KEY': DASH_TOKEN,
                         # add standard Authorization header for transition
-                        'Authorization': f'Bearer {DASH_TOKEN}'
+                        'Authorization': f'Bearer {DASH_TOKEN}',
+                        # add Origin header for CORS compliance
+                        'Origin': 'https://sentratech.net'
                     }
                 )
                 text = await response.aread()
