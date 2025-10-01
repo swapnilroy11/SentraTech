@@ -46,7 +46,7 @@ const FeatureShowcase = () => {
                 key={feature.id}
                 className={`bg-[#1a1a1a] border border-[rgba(248,249,250,0.1)] rounded-2xl p-8 
                   hover:border-[#00FF41] transition-all duration-300 cursor-pointer transform hover:scale-105 hover:rotate-1
-                  ${hoveredCard === feature.id ? 'shadow-2xl shadow-[#00FF41]/20' : ''}
+                  ${hoveredCard === feature.id ? 'shadow-lg shadow-[#00FF41]/10' : ''}
                 `}
                 onMouseEnter={() => setHoveredCard(feature.id)}
                 onMouseLeave={() => setHoveredCard(null)}
