@@ -99,12 +99,7 @@ const NewsletterSubscribe = () => {
       });
 
       if (result.success) {
-        showSuccessMessage(
-          'Newsletter subscription successful',
-          { ...result.data, form_type: 'newsletter' }
-        );
         setStatus('success');
-        setMessage('Successfully subscribed to our newsletter!');
         setEmail('');
         
         // Analytics event
@@ -116,11 +111,10 @@ const NewsletterSubscribe = () => {
           });
         }
         
-        // Clear success status after 5 seconds
+        // Clear success status after 3 seconds
         setTimeout(() => {
           setStatus(null);
-          setMessage('');
-        }, 5000);
+        }, 3000);
       } else if (result.reason === 'rate_limited') {
         // Handle rate limiting specifically
         setStatus('error');
