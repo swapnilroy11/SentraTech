@@ -9,7 +9,7 @@ module.exports = {
         DASHBOARD_API_KEY: 'sk-emergent-7A236FdD2Ce8d9b52C',
         LOG_DIR: '/var/log/sentratech',
         PENDING_DIR: '/var/data/pending_submissions',
-        COLLECT_PORT: 3001,
+        COLLECT_PORT: 3003,
         IDEMPOTENCY_TTL_MS: 86400000
       }
     }
