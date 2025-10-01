@@ -4671,7 +4671,9 @@ async def handle_dashboard_form_submission(form_type: str, request: Request):
     try:
         # Validate API key
         api_key = request.headers.get('X-API-Key')
-        expected_key = os.getenv('EMERGENT_API_KEY', 'sk-emergent-7A236FdD2Ce8d9b52C')
+        expected_key = os.getenv('EMERGENT_API_KEY')
+        if not expected_key:
+            raise ValueError("EMERGENT_API_KEY environment variable is required for production deployment")
         
         if api_key != expected_key:
             logger.warning(f"Invalid API key for {form_type}: {api_key}")
