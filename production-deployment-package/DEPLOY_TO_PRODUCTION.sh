@@ -46,6 +46,7 @@ cp "$APP_DIR/frontend/src/components/ROICalculatorRedesigned.js" "$BACKUP_DIR/" 
 cp "$APP_DIR/frontend/src/pages/InvestorRelationsPage.js" "$BACKUP_DIR/" 2>/dev/null
 cp "$APP_DIR/frontend/src/pages/HomePage.js" "$BACKUP_DIR/" 2>/dev/null
 cp "$APP_DIR/frontend/src/components/Navigation.js" "$BACKUP_DIR/" 2>/dev/null
+cp "$APP_DIR/frontend/src/components/ContactSalesSlideIn.js" "$BACKUP_DIR/" 2>/dev/null
 cp "$APP_DIR/frontend/src/components/CookieBanner.jsx" "$BACKUP_DIR/" 2>/dev/null
 cp "$APP_DIR/frontend/src/App.js" "$BACKUP_DIR/" 2>/dev/null
 cp "$APP_DIR/frontend/src/index.css" "$BACKUP_DIR/" 2>/dev/null
