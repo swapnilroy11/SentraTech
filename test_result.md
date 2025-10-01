@@ -64,6 +64,7 @@ test_plan:
     - "Deployed Backend Environment Variables - Need deployment refresh to apply ADMIN_DASHBOARD_URL fix"
     - "SentraTech Production Website Card Effects Animation Fix - Critical UX Issue"
   completed_focus:
+    - "SentraTech Production Website Comprehensive Mobile & Tablet Cross-Device Performance Testing"
     - "SentraTech Production Website Cross-Device Performance Testing"
     - "SentraTech Production Deployment Package Validation Testing"
     - "Final Comprehensive Backend Proxy Endpoints Testing After CORS Origin Fix"
