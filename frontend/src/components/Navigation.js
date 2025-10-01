@@ -85,7 +85,7 @@ const Navigation = () => {
 
   return (
     <nav 
-      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]"
+      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 border-b border-[#2a2a2a]"
       role="navigation" 
       aria-label="Main navigation"
     >
