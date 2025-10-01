@@ -113,4 +113,5 @@ module.exports = {
       return webpackConfig;
     },
   },
+  // Removed babel config to avoid conflicts during build
 };
