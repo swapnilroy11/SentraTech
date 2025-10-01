@@ -74,7 +74,7 @@ h1, h2, h3, h4, h5, h6 {
   mix-blend-mode: difference;
   will-change: transform;
   transition: opacity 0.3s ease;
-  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(2px); */
 }
 
 .cursor-particle {
