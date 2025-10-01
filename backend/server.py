@@ -4764,6 +4764,32 @@ def log_collect_line(obj):
         f.write(line + '\n')
 
 # Forward function (direct to ADMIN_DASHBOARD_URL) — use native fetch or node-fetch
+def get_dashboard_endpoint(payload):
+    """Determine the correct dashboard endpoint based on payload"""
+    # Check for explicit form type
+    if payload.get('form_type'):
+        return f"/forms/{payload['form_type']}"
+    
+    # Auto-detect based on fields
+    if payload.get('email'):
+        # If has company fields, it's likely contact sales
+        if payload.get('company') or payload.get('companyName') or payload.get('company_name'):
+            return '/forms/contact-sales'
+        # If has work_email and company_name specifically
+        if payload.get('work_email') and payload.get('company_name'):
+            return '/forms/contact-sales'
+        # If has position/fullName, it's job application
+        if payload.get('position') or payload.get('fullName'):
+            return '/forms/job-application'
+        # If has demo-related fields
+        if payload.get('demo_request') or (payload.get('company') and payload.get('name')):
+            return '/forms/demo-request'
+        # Default to newsletter for email-only
+        return '/forms/newsletter-signup'
+    
+    # Fallback to newsletter
+    return '/forms/newsletter-signup'
+
 async def forward_to_dashboard(payload):
     """Forward payload directly to dashboard with retry logic"""
     import httpx
@@ -4771,14 +4797,18 @@ async def forward_to_dashboard(payload):
     
     maxRetries = 3
     backoff = 500
-    DASH_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
+    DASH_BASE_URL = os.environ.get('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api')
     DASH_TOKEN = os.environ.get('DASHBOARD_API_KEY')
+    
+    # Get the specific endpoint
+    endpoint = get_dashboard_endpoint(payload)
+    full_url = f"{DASH_BASE_URL.rstrip('/api')}/api{endpoint}"
     
     for attempt in range(maxRetries):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    DASH_URL,
+                    full_url,
                     json=payload,
                     headers={
                         'Content-Type': 'application/json',
@@ -4786,14 +4816,14 @@ async def forward_to_dashboard(payload):
                     }
                 )
                 text = await response.aread()
-                return {"ok": response.is_success, "status": response.status_code, "body": text.decode()}
+                return {"ok": response.is_success, "status": response.status_code, "body": text.decode(), "endpoint": full_url}
         except Exception as err:
             if attempt == maxRetries - 1:
-                return {"ok": False, "status": 0, "body": str(err)}
+                return {"ok": False, "status": 0, "body": str(err), "endpoint": full_url}
             await asyncio.sleep(backoff / 1000.0)  # Convert ms to seconds
             backoff *= 3
     
-    return {"ok": False, "status": 0, "body": "Max retries exceeded"}
+    return {"ok": False, "status": 0, "body": "Max retries exceeded", "endpoint": full_url}
 
 # Collect Proxy Route - Forward directly to dashboard
 @app.post("/api/collect")
