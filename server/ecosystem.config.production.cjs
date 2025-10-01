@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'sentratech-collect',
-    script: './proxy-collect.js',
+    script: '/app/server/proxy-collect.js',
     instances: 1,
     autorestart: true,
     watch: false,
