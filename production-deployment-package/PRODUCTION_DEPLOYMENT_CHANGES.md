@@ -72,6 +72,19 @@
 
 **Impact:** Cookie modal appears immediately on first visit, doesn't repeat once accepted
 
+### 6. Contact Sales Form Volume Range Fix
+**File Modified:**
+- `/frontend/src/components/ContactSalesSlideIn.js`
+
+**Changes:**
+- ✅ Fixed volume range button calculations with logical values
+- ✅ Updated `<10k` range: Call Volume 2,500 + Interaction Volume 5,500 (total ≈ 8K)
+- ✅ Updated `10k-50k` range: Call Volume 12,000 + Interaction Volume 18,000 (total = 30K)  
+- ✅ Updated `50k+` range: Call Volume 25,000 + Interaction Volume 40,000 (total = 65K)
+- ✅ Values now align logically with the selected ranges and realistic business proportions
+
+**Impact:** Fixes the reported issue where range buttons populated wrong amounts in volume fields
+
 ## Deployment Steps Required
 
 ### Step 1: Copy Files to Production Server
