@@ -511,7 +511,7 @@ const InvestorRelationsPage = () => {
                     <li><span className="text-white font-medium">Stage:</span> Pre-Seed</li>
                     <li><span className="text-white font-medium">Target:</span> $2.5M</li>
                     <li><span className="text-white font-medium">Security:</span> SAFE/Convertible</li>
-                    <li><span className="text-white font-medium">Timeline:</span> Q1 2025 Close</li>
+                    <li><span className="text-white font-medium">Timeline:</span> Q1 2026 Close</li>
                   </ul>
                 </div>
                 
