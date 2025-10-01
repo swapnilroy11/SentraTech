@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { 
-  Linkedin, Twitter, Youtube, Github, Mail, Phone, 
+  Linkedin, Youtube, Github, Mail, Phone, 
   MapPin, ArrowRight, ExternalLink, MessageSquare,
-  Zap, Shield, Globe
+  Zap, Shield, Globe, Facebook
 } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
 import NewsletterSubscribe from './NewsletterSubscribe';
