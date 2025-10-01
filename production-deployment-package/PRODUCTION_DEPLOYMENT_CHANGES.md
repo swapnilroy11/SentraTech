@@ -133,6 +133,19 @@
 
 **Impact:** Removes admin button and admin-related UI elements from user-facing website
 
+### 11. Dashboard Configuration Fix
+**File Modified:**
+- `/frontend/src/config/dashboardConfig.js`
+
+**Changes:**
+- ✅ Verified and maintained correct proxy endpoint URLs
+- ✅ Ensured ROI Calculator uses `/api/proxy/roi-calculator`
+- ✅ Ensured Newsletter uses `/api/proxy/newsletter-signup`
+- ✅ Confirmed authentication and CORS configuration
+- ✅ Validated rate limiting and error handling
+
+**Impact:** Ensures ROI Calculator and Newsletter data properly reaches admin dashboard from production
+
 ## Deployment Steps Required
 
 ### Step 1: Copy Files to Production Server
