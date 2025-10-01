@@ -110,6 +110,12 @@ After deployment to production (35.57.15.54), verify:
 - [ ] Modal works correctly on https://sentratech.net/
 - [ ] Consent preferences are saved properly
 
+### Floating Hamburger Button Removal
+- [ ] FloatingNavScrollable (blue floating button) completely removed from all pages
+- [ ] Green hamburger menu in top navigation still functional for mobile users
+- [ ] Mobile menu opens/closes correctly with green hamburger button
+- [ ] Desktop navigation unaffected and working properly
+
 ## Commands for Production Deployment
 
 ```bash
