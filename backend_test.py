@@ -857,59 +857,105 @@ class ProxyEndpointTester:
             )
     
     def run_all_tests(self):
-        """Run comprehensive test suite"""
-        print("🚀 Starting Comprehensive Backend Proxy Endpoint Testing")
-        print("=" * 70)
+        """Run comprehensive test suite for Docker Buildx migration verification"""
+        print("🚀 Starting Comprehensive SentraTech Backend API Testing After Docker Buildx Migration")
+        print("Testing all backend functionality after build system switch from Kaniko to Docker Buildx")
+        print("=" * 80)
         
-        # Test backend health first
+        # 1. Core Health Check - Test /api/health endpoint
+        print("\n🏥 PHASE 1: CORE HEALTH CHECK")
         if not self.test_backend_health():
             print("\n❌ Backend health check failed. Stopping tests.")
             return False
         
-        # Test environment configuration
+        # 2. Environment Variables - Verify all required environment variables are loaded
+        print("\n🔧 PHASE 2: ENVIRONMENT VARIABLES VERIFICATION")
         self.test_environment_variables()
         
-        # Test all 5 proxy endpoints
+        # 3. Database Connectivity - Ensure MongoDB connection is working
+        print("\n🗄️ PHASE 3: DATABASE CONNECTIVITY")
+        self.test_database_connectivity()
+        
+        # 4. Authentication System - Verify X-INGEST-KEY authentication
+        print("\n🔐 PHASE 4: AUTHENTICATION SYSTEM")
+        self.test_ingest_endpoints_authentication()
+        
+        # 5. Data Validation - Test form validation with proper and malformed data
+        print("\n🛡️ PHASE 5: DATA VALIDATION")
+        self.test_data_validation()
+        
+        # 6. All Form Submission Endpoints - Test all proxy endpoints with sample data
+        print("\n📋 PHASE 6: FORM SUBMISSION ENDPOINTS")
         self.test_newsletter_signup()
         self.test_roi_calculator()
         self.test_demo_request()
         self.test_contact_sales()
         self.test_job_application()
         
-        # Test job application specific features
+        # 7. Advanced Features - Test idempotency and error handling
+        print("\n🔄 PHASE 7: ADVANCED FEATURES")
         self.test_job_application_idempotency()
         self.test_job_application_error_handling()
         
-        # Test authentication and performance
+        # 8. Performance and Authentication - Test response times and auth handling
+        print("\n⚡ PHASE 8: PERFORMANCE & AUTHENTICATION")
         self.test_authentication_headers()
         self.test_response_times()
         
-        # Print summary
-        print("\n" + "=" * 70)
-        print("📊 TEST SUMMARY")
-        print("=" * 70)
+        # Print comprehensive summary
+        print("\n" + "=" * 80)
+        print("📊 COMPREHENSIVE TEST SUMMARY - DOCKER BUILDX MIGRATION VERIFICATION")
+        print("=" * 80)
         
         success_rate = (self.passed_tests / self.total_tests) * 100 if self.total_tests > 0 else 0
         
-        print(f"Total Tests: {self.total_tests}")
-        print(f"Passed: {self.passed_tests}")
-        print(f"Failed: {self.total_tests - self.passed_tests}")
+        print(f"Total Tests Executed: {self.total_tests}")
+        print(f"Tests Passed: {self.passed_tests}")
+        print(f"Tests Failed: {self.total_tests - self.passed_tests}")
         print(f"Success Rate: {success_rate:.1f}%")
         
-        if success_rate >= 80:
-            print(f"\n✅ OVERALL RESULT: EXCELLENT - Backend ready for dashboard deployment!")
+        # Categorize results
+        if success_rate >= 90:
+            print(f"\n🎉 OVERALL RESULT: EXCELLENT - Docker Buildx migration successful!")
+            print("✅ All backend functionality working perfectly after build system change")
+            print("✅ Ready for production deployment with new build system")
+        elif success_rate >= 80:
+            print(f"\n✅ OVERALL RESULT: GOOD - Docker Buildx migration mostly successful")
+            print("⚠️ Minor issues found, but core functionality intact")
+            print("✅ Ready for deployment with monitoring of identified issues")
         elif success_rate >= 60:
-            print(f"\n⚠️ OVERALL RESULT: GOOD - Minor issues found, mostly ready for deployment")
+            print(f"\n⚠️ OVERALL RESULT: NEEDS ATTENTION - Docker Buildx migration has issues")
+            print("❌ Several issues found that may impact functionality")
+            print("🔧 Requires fixes before production deployment")
         else:
-            print(f"\n❌ OVERALL RESULT: NEEDS ATTENTION - Critical issues found")
+            print(f"\n❌ OVERALL RESULT: CRITICAL ISSUES - Docker Buildx migration failed")
+            print("🚨 Major functionality broken after build system change")
+            print("🛠️ Immediate attention required before deployment")
         
         # Print failed tests details
         failed_tests = [name for name, result in self.test_results.items() if result['status'] == 'FAIL']
         if failed_tests:
-            print(f"\n🔍 FAILED TESTS DETAILS:")
+            print(f"\n🔍 DETAILED FAILURE ANALYSIS:")
+            print("The following tests failed after Docker Buildx migration:")
             for test_name in failed_tests:
                 result = self.test_results[test_name]
-                print(f"   ❌ {test_name}: {result['details']}")
+                print(f"   ❌ {test_name}")
+                print(f"      Issue: {result['details']}")
+                print(f"      Time: {result['timestamp']}")
+        else:
+            print(f"\n🎉 NO FAILURES DETECTED!")
+            print("All backend functionality working correctly after Docker Buildx migration")
+        
+        # Print success summary
+        passed_tests = [name for name, result in self.test_results.items() if result['status'] == 'PASS']
+        if passed_tests:
+            print(f"\n✅ SUCCESSFUL TESTS ({len(passed_tests)}):")
+            for test_name in passed_tests:
+                print(f"   ✅ {test_name}")
+        
+        print(f"\n🏁 DOCKER BUILDX MIGRATION VERIFICATION COMPLETE")
+        print(f"Backend URL tested: {self.backend_url}")
+        print(f"Test completed at: {datetime.now(timezone.utc).isoformat()}")
         
         return success_rate >= 80
 
