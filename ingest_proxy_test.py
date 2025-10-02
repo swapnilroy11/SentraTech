@@ -13,7 +13,7 @@ import uuid
 import os
 
 # Backend URL from environment
-BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com/api"
+BACKEND_URL = "https://sentra-deploy-fix.preview.emergentagent.com/api"
 
 class IngestProxyTester:
     """Comprehensive Ingest Proxy Integration Tester"""

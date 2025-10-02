@@ -53,7 +53,7 @@ After deployment, verify the fix works:
 
 ### Before (Broken):
 ```
-REACT_APP_BACKEND_URL=https://matrix-team-update.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://sentra-deploy-fix.preview.emergentagent.com
 ```
 
 ### After (Fixed):

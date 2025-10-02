@@ -20,7 +20,7 @@
    # Set required environment variables
    export KNS="your-namespace"
    export POD=$(kubectl get pods -n $KNS -o jsonpath='{.items[0].metadata.name}')
-   export ADMIN_URL="https://matrix-team-update.preview.emergentagent.com"
+   export ADMIN_URL="https://sentra-deploy-fix.preview.emergentagent.com"
    export INGEST_KEY="a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
    export AUTH_EMAIL="swapnil.roy@sentratech.net"
    export AUTH_PASSWORD="Sentra@2025"
@@ -64,13 +64,13 @@ After applying the infrastructure changes, please provide these outputs:
 
 ### **1. Admin Proxy Health**
 ```bash
-curl -s https://matrix-team-update.preview.emergentagent.com/api/health
+curl -s https://sentra-deploy-fix.preview.emergentagent.com/api/health
 ```
 **Expected**: `{"ingest_configured": true, "mock": false}`
 
 ### **2. Admin Proxy Diagnostics**  
 ```bash
-curl -s https://matrix-team-update.preview.emergentagent.com/api/_diag/upstream
+curl -s https://sentra-deploy-fix.preview.emergentagent.com/api/_diag/upstream
 ```
 **Expected**: `{"dns_ok": true, "health_ok": true, "login_ok": true}`
 
@@ -81,7 +81,7 @@ bash verify-infrastructure.sh
 ```
 
 ### **4. WebSocket Test (Optional)**
-- Open browser to `https://matrix-team-update.preview.emergentagent.com`
+- Open browser to `https://sentra-deploy-fix.preview.emergentagent.com`
 - Check Network tab in DevTools
 - Confirm `/api/ws` shows Status: 101 (WebSocket Upgrade)
 

@@ -8,7 +8,7 @@
 ## ROOT CAUSE IDENTIFIED ✅
 The React frontend was configured with an incorrect backend URL pointing to a non-existent preview environment:
 ```
-❌ BROKEN: REACT_APP_BACKEND_URL=https://matrix-team-update.preview.emergentagent.com  
+❌ BROKEN: REACT_APP_BACKEND_URL=https://sentra-deploy-fix.preview.emergentagent.com  
 ✅ FIXED:  REACT_APP_BACKEND_URL=https://sentratech.net
 ```
 
