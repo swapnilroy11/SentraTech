@@ -126,3 +126,4 @@ packages/website/node_modules/.cache/default-development/10.pack
 # Environment files
 *.env
 *.env.*
+packages/website/node_modules/.cache/default-development/1.pack
