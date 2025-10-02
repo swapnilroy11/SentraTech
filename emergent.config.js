@@ -12,6 +12,8 @@ module.exports = {
     {
       name: "website",
       root: ".",
+      buildSystem: "buildx",
+      buildContext: ".",
       buildCommand: "yarn install --frozen-lockfile && yarn build:website",
       output: "packages/website/dist",
       domains: ["sentratech.net", "www.sentratech.net"],
