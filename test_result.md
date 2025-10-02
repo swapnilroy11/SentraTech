@@ -93,6 +93,17 @@ test_plan:
   test_priority: "high_first"
 
 frontend:
+  - task: "SentraTech Investor Relations Investment Terms Section Updates Verification"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/InvestorRelationsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "🚨 CRITICAL VERIFICATION FAILURE: INVESTMENT TERMS SECTION UPDATES NOT IMPLEMENTED - ROUTING ISSUE IDENTIFIED! Conducted comprehensive testing of SentraTech investor relations page at https://sentratech.net/investor-relations as specifically requested to verify Investment Terms section updates. ❌ CRITICAL ROUTING FAILURE: URL https://sentratech.net/investor-relations redirects to homepage (https://react-rescue-4.preview.emergentagent.com/) instead of loading investor relations content. Page shows standard homepage content ('Customer Support as a Growth Engine') rather than investment-related content. ❌ NO INVESTMENT CONTENT FOUND: Comprehensive page analysis found 0 instances of investment-related terms - 'Investment Opportunity' (0), 'Investment Terms' (0), 'Pre-Seed' (0), '$80K' (0), '$2.5M' (0), 'Q1 2026' (0), 'Q1 2025' (0), 'Schedule Product Demo' (0). Page contains only homepage content with headings like 'Experience Our Core Features', 'Why Choose SentraTech?', etc. ❌ CODE VS PRODUCTION MISMATCH: InvestorRelationsPage.js file exists in codebase with investment content but is not being served at production URL. Code shows old values still present ($2.5M on lines 203, 512; Q1 2026 timeline appears correct). Route defined in App.js (line 194: /investor-relations) but not functioning in production. ❌ VERIFICATION IMPOSSIBLE: Cannot verify any of the requested updates (target amount $2.5M → $80K, timeline Q1 2025 → Q1 2026, button reorganization, font improvements, card styling) because investor relations page is not accessible. ❌ PRODUCTION IMPACT: Investors attempting to access investment information at https://sentratech.net/investor-relations are redirected to homepage, preventing access to funding details, investment terms, and contact information. This is a critical business issue affecting investor relations. 🎯 ROOT CAUSE ANALYSIS: (1) Investor relations page routing not working in production environment, (2) Page may not be deployed or build configuration issue, (3) URL rewrite/redirect rules may be interfering with investor relations route, (4) Frontend routing configuration may not be properly deployed. 🚨 URGENT FIXES REQUIRED: (1) Fix investor relations page routing to serve InvestorRelationsPage.js at /investor-relations URL, (2) Verify deployment includes all page routes, (3) Update InvestorRelationsPage.js with correct values ($80K target, ensure Q1 2026 timeline, implement button reorganization), (4) Test routing configuration in production environment, (5) Ensure proper build and deployment of all page components. This is a critical blocking issue preventing verification of any Investment Terms updates and affecting investor access to funding information."
   - task: "SentraTech Investor Relations Founding Team Section 2x2 Grid Layout Update Verification"
     implemented: false
     working: false
