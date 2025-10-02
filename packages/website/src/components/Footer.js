@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 import { 
-  Linkedin, Twitter, Youtube, Github, Mail, Phone, 
+  Linkedin, X, Youtube, Github, Facebook, Mail, Phone, 
   MapPin, ArrowRight, ExternalLink, MessageSquare,
   Zap, Shield, Globe
 } from 'lucide-react';
