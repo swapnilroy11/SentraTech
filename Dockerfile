@@ -31,7 +31,7 @@ RUN echo "=== PRE-BUILD DEBUG INFO ===" && \
     echo "Node version: $(node --version)" && \
     echo "Yarn version: $(yarn --version)" && \
     echo "=== STARTING BUILD ===" && \
-    yarn build:website && \
+    yarn workspace frontend build && \
     echo "=== BUILD COMPLETED ===" && \
     ls -la packages/website/dist/ && \
     echo "=== POST-BUILD DEBUG INFO ===" && \
