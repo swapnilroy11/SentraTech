@@ -23,7 +23,19 @@ COPY emergent.config.js ./
 
 # Build the website (primary target) - using monorepo build strategy
 WORKDIR /workspace/app
-RUN yarn build:website
+
+# Debug: Show memory and disk usage before build
+RUN echo "=== PRE-BUILD DEBUG INFO ===" && \
+    df -h && \
+    free -h && \
+    echo "Node version: $(node --version)" && \
+    echo "Yarn version: $(yarn --version)" && \
+    echo "=== STARTING BUILD ===" && \
+    yarn build:website && \
+    echo "=== BUILD COMPLETED ===" && \
+    ls -la packages/website/dist/ && \
+    echo "=== POST-BUILD DEBUG INFO ===" && \
+    df -h
 
 # Production stage
 FROM nginx:alpine
