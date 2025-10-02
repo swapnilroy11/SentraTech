@@ -3,7 +3,7 @@
 
 const SITE_CONFIG = {
   siteName: "SentraTech",
-  siteUrl: "https://sentratech.com",
+  siteUrl: "https://sentratech.net",
   companyName: "SentraTech Ltd.",
   defaultLanguage: "en",
   defaultCountry: "US",
