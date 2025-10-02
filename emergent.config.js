@@ -12,7 +12,7 @@ module.exports = {
     {
       name: "website",
       root: "packages/website",
-      buildCommand: "npm ci && npm run build",
+      buildCommand: "yarn install && yarn build",
       output: "dist",
       domains: ["sentratech.net", "www.sentratech.net"],
       env: {
@@ -23,7 +23,7 @@ module.exports = {
     {
       name: "dashboard",
       root: "packages/dashboard",
-      buildCommand: "npm ci && npm run build",
+      buildCommand: "yarn install && yarn build",
       output: "build",
       domains: ["admin.sentratech.net"],
       env: {
