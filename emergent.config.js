@@ -11,11 +11,12 @@ module.exports = {
   sites: [
     {
       name: "website",
-      root: "packages/website",
+      root: ".",
       buildSystem: "buildx",
-      buildContext: "packages/website",
-      buildCommand: "yarn install --frozen-lockfile && yarn build --verbose",
-      output: "dist",
+      buildContext: ".",
+      dockerfile: "Dockerfile",
+      buildCommand: "yarn build:website",
+      output: "packages/website/dist",
       domains: ["sentratech.net", "www.sentratech.net"],
       env: {
         REACT_APP_API_BASE: "https://sentratech.net/api/proxy",
