@@ -59,6 +59,7 @@
 
 test_plan:
   current_focus: 
+    - "SentraTech Investor Relations Investment Terms Section Updates Verification"
     - "SentraTech Investor Relations Founding Team Section 2x2 Grid Layout Update Verification"
     - "SentraTech Investor Relations Timeline Year Updates Verification"
     - "SentraTech Production Website Card Effects Animation Fix"
