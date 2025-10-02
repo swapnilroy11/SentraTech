@@ -16,9 +16,9 @@ RUN yarn install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the website (primary target)
-WORKDIR /workspace/app/packages/website
-RUN yarn build
+# Build the website (primary target) - using monorepo build strategy
+WORKDIR /workspace/app
+RUN yarn build:website
 
 # Production stage
 FROM nginx:alpine
