@@ -23,8 +23,6 @@ module.exports = {
     {
       name: "dashboard",
       root: "packages/dashboard",
-      buildSystem: "buildx",
-      buildContext: "packages/dashboard",
       buildCommand: "yarn install --frozen-lockfile && yarn build --verbose",
       output: "build",
       domains: ["admin.sentratech.net"],
