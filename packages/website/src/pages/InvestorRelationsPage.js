@@ -39,8 +39,8 @@ const InvestorRelationsPage = () => {
 
   const fundingStatus = {
     currentStage: 'Pre-Seed',
-    seeking: '$2.5M',
-    timeline: 'Q1 2025',
+    seeking: '$80K',
+    timeline: 'Q1 2026',
     purpose: 'Production infrastructure & pilot customer scaling',
     useOfFunds: [
       'Production-grade AI infrastructure development - 40%',
