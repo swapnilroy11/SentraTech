@@ -189,7 +189,7 @@ const LeadershipTeamPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Twitter size={16} className="text-[#00FF41]" />
+                    <X size={16} className="text-[#00FF41]" />
                   </a>
                   <a
                     href={`mailto:${exec.email}`}
