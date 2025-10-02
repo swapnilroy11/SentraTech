@@ -496,20 +496,25 @@ const InvestorRelationsPage = () => {
             and can provide both capital and industry expertise to accelerate our growth.
           </p>
           
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
+            {/* Investment Terms and What We Provide - Side by Side */}
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold text-white mb-4">Investor Inquiries</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <span className="text-white font-medium">CEO & Founder: </span>
-                    <a href="mailto:swapnil.roy@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38]">swapnil.roy@sentratech.net</a>
-                  </li>
-                </ul>
-                
-                <div className="mt-6 p-4 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl">
-                  <h4 className="text-white font-semibold mb-2">What We Provide Investors</h4>
-                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1 text-left">
+                <h3 className="text-xl font-semibold text-white mb-6">Investment Terms</h3>
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6">
+                  <ul className="space-y-3 text-[rgb(218,218,218)] text-base text-left">
+                    <li><span className="text-white font-semibold">Stage:</span> Pre-Seed</li>
+                    <li><span className="text-white font-semibold">Target:</span> $80K</li>
+                    <li><span className="text-white font-semibold">Security:</span> SAFE/Convertible</li>
+                    <li><span className="text-white font-semibold">Timeline:</span> Q1 2026 Close</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="text-center md:text-left">
+                <h3 className="text-xl font-semibold text-white mb-6">What We Provide Investors</h3>
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6">
+                  <ul className="text-[rgb(218,218,218)] text-base space-y-2 text-left">
                     <li>• Detailed pitch deck and financial projections</li>
                     <li>• Product demonstration and technical deep-dive</li>
                     <li>• Customer validation calls and pilot results</li>
@@ -518,26 +523,30 @@ const InvestorRelationsPage = () => {
                   </ul>
                 </div>
               </div>
-              
-              <div className="text-center md:text-left">
-                <h3 className="text-xl font-semibold text-white mb-6">Investment Terms</h3>
-                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6 mb-6">
-                  <ul className="space-y-3 text-[rgb(218,218,218)] text-base text-left">
-                    <li><span className="text-white font-semibold">Stage:</span> Pre-Seed</li>
-                    <li><span className="text-white font-semibold">Target:</span> $80K</li>
-                    <li><span className="text-white font-semibold">Security:</span> SAFE/Convertible</li>
-                    <li><span className="text-white font-semibold">Timeline:</span> Q1 2026 Close</li>
-                  </ul>
-                </div>
-                
-                <h4 className="text-white font-semibold mb-3 text-lg">Ideal Investor Profile</h4>
-                <ul className="text-[rgb(218,218,218)] text-base space-y-2 text-left">
+            </div>
+
+            {/* Ideal Investor Profile - Full Width */}
+            <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-8 mb-8">
+              <h3 className="text-xl font-semibold text-white mb-6 text-center">Ideal Investor Profile</h3>
+              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <ul className="text-[rgb(218,218,218)] text-base space-y-3">
                   <li>• Experience with B2B SaaS and AI startups</li>
                   <li>• Network in enterprise customer support market</li>
+                </ul>
+                <ul className="text-[rgb(218,218,218)] text-base space-y-3">
                   <li>• Hands-on approach to supporting portfolio companies</li>
                   <li>• Understanding of pre-seed to Series A scaling</li>
                 </ul>
               </div>
+            </div>
+
+            {/* Investor Contact */}
+            <div className="text-center bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-6">
+              <h4 className="text-lg font-semibold text-white mb-3">Investor Inquiries</h4>
+              <p className="text-[rgb(218,218,218)] mb-2">
+                <span className="text-white font-medium">CEO & Founder: </span>
+                <a href="mailto:swapnil.roy@sentratech.net" className="text-[#00FF41] hover:text-[#00DD38] text-lg">swapnil.roy@sentratech.net</a>
+              </p>
             </div>
           </div>
           
