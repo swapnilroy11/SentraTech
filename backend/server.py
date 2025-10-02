@@ -4543,8 +4543,11 @@ async def dashboard_login(request: Request):
         email = data.get('email')
         password = data.get('password')
         
-        # Simple hardcoded auth for now (replace with proper auth later)
-        if email == 'admin@sentratech.net' and password == 'sentratech2025':
+        # Admin credentials from environment variables
+        admin_email = os.environ.get('ADMIN_EMAIL', 'admin@sentratech.net')
+        admin_password = os.environ.get('ADMIN_PASSWORD', 'sentratech2025')
+        
+        if email == admin_email and password == admin_password:
             return {
                 "success": True,
                 "message": "Login successful",
