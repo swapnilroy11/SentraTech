@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Final Comprehensive Backend Testing for SentraTech Form Proxy Endpoints
-Testing all 5 form submission endpoints for dashboard deployment readiness
-Focus: Newsletter Signup, ROI Calculator, Demo Request, Contact Sales, Job Application
+Comprehensive SentraTech Backend API Testing After Docker Buildx Migration
+Testing all backend functionality after build system switch from Kaniko to Docker Buildx
+Focus: Health Check, Form Proxy Endpoints, Authentication, Data Validation, Environment Variables, Database Connectivity
 """
 
 import requests
@@ -15,6 +15,7 @@ import sys
 
 # Backend URL - Testing production backend URL from frontend .env
 BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
+INGEST_API_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
 
 class ProxyEndpointTester:
     def __init__(self):
