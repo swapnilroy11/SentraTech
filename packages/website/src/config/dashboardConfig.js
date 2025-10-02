@@ -61,8 +61,11 @@ export const safeSubmit = async (formType, payload, options = {}) => {
   }
 };
 
-// Get backend URL from environment - using local backend for proxy
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+// Get backend URL from environment variable (required for production)
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+if (!BACKEND_URL) {
+  throw new Error('REACT_APP_BACKEND_URL environment variable is required');
+}
 
 // Payload logging helper for debugging
 export const logPayload = (formType, payload) => {
