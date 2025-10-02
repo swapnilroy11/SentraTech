@@ -37,6 +37,16 @@ const WS_URL = isDevelopment
   ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`
   : process.env.REACT_APP_WS_URL;
 
+// Validate required environment variables in production
+if (!isDevelopment && !isPreview) {
+  if (!API_BASE) {
+    throw new Error('REACT_APP_API_BASE environment variable is required for production');
+  }
+  if (!WS_URL) {
+    throw new Error('REACT_APP_WS_URL environment variable is required for production');
+  }
+}
+
 export const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
