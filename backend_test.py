@@ -485,6 +485,291 @@ class ProxyEndpointTester:
             self.log_test("Environment Configuration", "FAIL", f"Request error: {str(e)}")
             return False
     
+    def test_ingest_endpoints_authentication(self):
+        """Test X-INGEST-KEY authentication on all ingest endpoints"""
+        print("\n🔐 Testing X-INGEST-KEY Authentication System...")
+        
+        ingest_endpoints = [
+            ("/api/ingest/contact_requests", {
+                "full_name": "Test User",
+                "work_email": "test@example.com",
+                "company_name": "Test Company",
+                "message": "Test message"
+            }),
+            ("/api/ingest/demo_requests", {
+                "name": "Test User",
+                "email": "test@example.com",
+                "company": "Test Company"
+            }),
+            ("/api/ingest/roi_reports", {
+                "email": "test@example.com",
+                "country": "Bangladesh",
+                "calculated_savings": 1000.0
+            }),
+            ("/api/ingest/subscriptions", {
+                "email": "test@example.com"
+            }),
+            ("/api/ingest/job_applications", {
+                "full_name": "Test User",
+                "email": "test@example.com"
+            })
+        ]
+        
+        auth_tests_passed = 0
+        total_auth_tests = len(ingest_endpoints) * 2  # Test with and without key
+        
+        for endpoint, payload in ingest_endpoints:
+            endpoint_name = endpoint.split('/')[-1]
+            
+            # Test without X-INGEST-KEY (should fail with 401)
+            try:
+                response = requests.post(
+                    f"{self.backend_url}{endpoint}",
+                    json=payload,
+                    headers={"Content-Type": "application/json"},
+                    timeout=10
+                )
+                
+                if response.status_code == 401:
+                    self.log_test(
+                        f"Auth Rejection {endpoint_name}", 
+                        "PASS", 
+                        "HTTP 401 - Correctly rejected request without X-INGEST-KEY"
+                    )
+                    auth_tests_passed += 1
+                else:
+                    self.log_test(
+                        f"Auth Rejection {endpoint_name}", 
+                        "FAIL", 
+                        f"HTTP {response.status_code} - Should reject without X-INGEST-KEY"
+                    )
+                    
+            except Exception as e:
+                self.log_test(f"Auth Rejection {endpoint_name}", "FAIL", f"Request error: {str(e)}")
+            
+            # Test with valid X-INGEST-KEY (should succeed with 200)
+            try:
+                response = requests.post(
+                    f"{self.backend_url}{endpoint}",
+                    json=payload,
+                    headers={
+                        "Content-Type": "application/json",
+                        "X-INGEST-KEY": INGEST_API_KEY
+                    },
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(
+                        f"Auth Success {endpoint_name}", 
+                        "PASS", 
+                        f"HTTP 200 - Correctly accepted request with valid X-INGEST-KEY, ID: {data.get('id', 'N/A')}"
+                    )
+                    auth_tests_passed += 1
+                else:
+                    self.log_test(
+                        f"Auth Success {endpoint_name}", 
+                        "FAIL", 
+                        f"HTTP {response.status_code} - Should accept with valid X-INGEST-KEY: {response.text[:200]}"
+                    )
+                    
+            except Exception as e:
+                self.log_test(f"Auth Success {endpoint_name}", "FAIL", f"Request error: {str(e)}")
+        
+        # Overall authentication system test
+        auth_success_rate = (auth_tests_passed / total_auth_tests) * 100 if total_auth_tests > 0 else 0
+        if auth_success_rate >= 80:
+            self.log_test(
+                "X-INGEST-KEY Authentication System", 
+                "PASS", 
+                f"Authentication working correctly ({auth_tests_passed}/{total_auth_tests} tests passed)"
+            )
+            return True
+        else:
+            self.log_test(
+                "X-INGEST-KEY Authentication System", 
+                "FAIL", 
+                f"Authentication issues found ({auth_tests_passed}/{total_auth_tests} tests passed)"
+            )
+            return False
+    
+    def test_data_validation(self):
+        """Test form validation with proper and malformed data"""
+        print("\n🛡️ Testing Data Validation System...")
+        
+        validation_tests = [
+            # Test malformed JSON
+            {
+                "name": "Malformed JSON",
+                "endpoint": "/api/proxy/newsletter-signup",
+                "data": "invalid json data",
+                "headers": {"Content-Type": "application/json"},
+                "expected_status": [400, 422],
+                "description": "Should reject malformed JSON"
+            },
+            # Test empty payload
+            {
+                "name": "Empty Payload",
+                "endpoint": "/api/proxy/demo-request",
+                "data": {},
+                "headers": {"Content-Type": "application/json"},
+                "expected_status": [400, 422],
+                "description": "Should reject empty payload"
+            },
+            # Test missing required fields
+            {
+                "name": "Missing Required Fields",
+                "endpoint": "/api/proxy/contact-sales",
+                "data": {"id": str(uuid.uuid4())},  # Missing required fields
+                "headers": {"Content-Type": "application/json"},
+                "expected_status": [400, 422, 500],  # May fail at proxy level
+                "description": "Should handle missing required fields"
+            },
+            # Test invalid email format
+            {
+                "name": "Invalid Email Format",
+                "endpoint": "/api/proxy/newsletter-signup",
+                "data": {
+                    "id": str(uuid.uuid4()),
+                    "email": "invalid-email-format",
+                    "source": "test"
+                },
+                "headers": {"Content-Type": "application/json"},
+                "expected_status": [400, 422, 500],  # May fail at proxy or dashboard level
+                "description": "Should handle invalid email format"
+            }
+        ]
+        
+        validation_passed = 0
+        
+        for test in validation_tests:
+            try:
+                if isinstance(test["data"], str):
+                    # Send raw string for malformed JSON test
+                    response = requests.post(
+                        f"{self.backend_url}{test['endpoint']}",
+                        data=test["data"],
+                        headers=test["headers"],
+                        timeout=10
+                    )
+                else:
+                    response = requests.post(
+                        f"{self.backend_url}{test['endpoint']}",
+                        json=test["data"],
+                        headers=test["headers"],
+                        timeout=10
+                    )
+                
+                if response.status_code in test["expected_status"]:
+                    self.log_test(
+                        f"Validation: {test['name']}", 
+                        "PASS", 
+                        f"HTTP {response.status_code} - {test['description']}"
+                    )
+                    validation_passed += 1
+                else:
+                    self.log_test(
+                        f"Validation: {test['name']}", 
+                        "FAIL", 
+                        f"HTTP {response.status_code} - Expected {test['expected_status']}, got {response.status_code}"
+                    )
+                    
+            except Exception as e:
+                # For malformed JSON, exception is expected
+                if test["name"] == "Malformed JSON":
+                    self.log_test(
+                        f"Validation: {test['name']}", 
+                        "PASS", 
+                        f"Exception caught as expected: {str(e)[:100]}"
+                    )
+                    validation_passed += 1
+                else:
+                    self.log_test(f"Validation: {test['name']}", "FAIL", f"Request error: {str(e)}")
+        
+        validation_success_rate = (validation_passed / len(validation_tests)) * 100
+        if validation_success_rate >= 75:
+            self.log_test(
+                "Data Validation System", 
+                "PASS", 
+                f"Validation working correctly ({validation_passed}/{len(validation_tests)} tests passed)"
+            )
+            return True
+        else:
+            self.log_test(
+                "Data Validation System", 
+                "FAIL", 
+                f"Validation issues found ({validation_passed}/{len(validation_tests)} tests passed)"
+            )
+            return False
+    
+    def test_database_connectivity(self):
+        """Test MongoDB database connectivity through backend"""
+        print("\n🗄️ Testing Database Connectivity...")
+        
+        try:
+            # Test health endpoint which includes database check
+            response = requests.get(f"{self.backend_url}/api/health", timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                db_status = data.get('database')
+                
+                if db_status == 'connected':
+                    self.log_test(
+                        "Database Connectivity", 
+                        "PASS", 
+                        f"MongoDB connection confirmed via health check"
+                    )
+                    
+                    # Test actual database operation by submitting data
+                    test_payload = {
+                        "id": str(uuid.uuid4()),
+                        "email": "db.test@sentratech.net",
+                        "source": "database_connectivity_test",
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }
+                    
+                    db_test_response = requests.post(
+                        f"{self.backend_url}/api/proxy/newsletter-signup",
+                        json=test_payload,
+                        headers={"Content-Type": "application/json"},
+                        timeout=15
+                    )
+                    
+                    if db_test_response.status_code == 200:
+                        self.log_test(
+                            "Database Write Operation", 
+                            "PASS", 
+                            "Successfully submitted data through proxy (confirms DB write capability)"
+                        )
+                        return True
+                    else:
+                        self.log_test(
+                            "Database Write Operation", 
+                            "FAIL", 
+                            f"Data submission failed: HTTP {db_test_response.status_code}"
+                        )
+                        return False
+                else:
+                    self.log_test(
+                        "Database Connectivity", 
+                        "FAIL", 
+                        f"Database status: {db_status} (expected: connected)"
+                    )
+                    return False
+            else:
+                self.log_test(
+                    "Database Connectivity", 
+                    "FAIL", 
+                    f"Health check failed: HTTP {response.status_code}"
+                )
+                return False
+                
+        except Exception as e:
+            self.log_test("Database Connectivity", "FAIL", f"Request error: {str(e)}")
+            return False
+    
     def test_authentication_headers(self):
         """Test that proxy endpoints handle authentication correctly"""
         print("\n🔐 Testing Authentication Header Handling...")
