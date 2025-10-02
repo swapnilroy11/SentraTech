@@ -12,6 +12,13 @@
       "**/react-router-dom/**"
     ]
   },
+  "scripts": {
+    "build:website": "cd packages/website && yarn install --frozen-lockfile && yarn build",
+    "build:dashboard": "cd packages/dashboard && yarn install --frozen-lockfile && yarn build",
+    "build": "yarn build:website",
+    "install": "yarn install --frozen-lockfile",
+    "start": "cd packages/website && yarn start"
+  },
   "dependencies": {
     "node-fetch": "^2.7.0",
     "playwright": "^1.55.1"
