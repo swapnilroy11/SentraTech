@@ -411,12 +411,17 @@ const InvestorRelationsPage = () => {
           
           <div className="mb-12">
             <h3 className="text-xl font-semibold text-white mb-6 text-center">Founding Team</h3>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {teamHighlights.map((member, index) => (
                 <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <Users size={24} className="text-[#00FF41]" />
+                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-2 border-[#00FF41]/30">
+                      <img 
+                        src={member.image} 
+                        alt={member.name}
+                        className="w-full h-full object-cover object-center"
+                        style={{ objectPosition: member.name === 'Arina Tasnim' ? 'center 20%' : 'center center' }}
+                      />
                     </div>
                     <h4 className="text-lg font-bold text-white mb-1">{member.name}</h4>
                     <p className="text-[#00FF41] font-medium text-sm mb-1">{member.title}</p>
