@@ -1,0 +1,147 @@
+{
+  "overall_success": false,
+  "success_rate": 8.333333333333332,
+  "total_tests": 12,
+  "successful_tests": 1,
+  "total_time": 5.15,
+  "test_results": [
+    {
+      "test": "ssl_certificates",
+      "success": true,
+      "check_time": 4.933,
+      "domains": {
+        "https://sentratech.net": {
+          "accessible": true,
+          "status_code": 404,
+          "ssl_valid": true
+        },
+        "https://www.sentratech.net": {
+          "accessible": true,
+          "status_code": 404,
+          "ssl_valid": true
+        },
+        "https://admin.sentratech.net": {
+          "accessible": true,
+          "status_code": 200,
+          "ssl_valid": true
+        }
+      },
+      "error": null
+    },
+    {
+      "test": "proxy_roi-calculator",
+      "success": false,
+      "status_code": null,
+      "response_time": 0.01,
+      "submission_id": null,
+      "response_data": null,
+      "error": "404, message='Attempt to decode JSON with unexpected mimetype: text/plain; charset=utf-8', url='https://sentratech.net/api/proxy/roi-calculator'"
+    },
+    {
+      "test": "proxy_demo-request",
+      "success": false,
+      "status_code": null,
+      "response_time": 0.01,
+      "submission_id": null,
+      "response_data": null,
+      "error": "404, message='Attempt to decode JSON with unexpected mimetype: text/plain; charset=utf-8', url='https://sentratech.net/api/proxy/demo-request'"
+    },
+    {
+      "test": "proxy_contact-sales",
+      "success": false,
+      "status_code": null,
+      "response_time": 0.016,
+      "submission_id": null,
+      "response_data": null,
+      "error": "404, message='Attempt to decode JSON with unexpected mimetype: text/plain; charset=utf-8', url='https://sentratech.net/api/proxy/contact-sales'"
+    },
+    {
+      "test": "proxy_newsletter-signup",
+      "success": false,
+      "status_code": null,
+      "response_time": 0.012,
+      "submission_id": null,
+      "response_data": null,
+      "error": "404, message='Attempt to decode JSON with unexpected mimetype: text/plain; charset=utf-8', url='https://sentratech.net/api/proxy/newsletter-signup'"
+    },
+    {
+      "test": "proxy_job-application",
+      "success": false,
+      "status_code": null,
+      "response_time": 0.011,
+      "submission_id": null,
+      "response_data": null,
+      "error": "404, message='Attempt to decode JSON with unexpected mimetype: text/plain; charset=utf-8', url='https://sentratech.net/api/proxy/job-application'"
+    },
+    {
+      "test": "dashboard_roi-calculator",
+      "success": false,
+      "status_code": 401,
+      "response_time": 0.024,
+      "submission_id": "smoke_test_test_e52ba950",
+      "ack_received": false,
+      "response_data": {
+        "detail": "Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>"
+      },
+      "error": "HTTP 401: {'detail': 'Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>'}"
+    },
+    {
+      "test": "dashboard_demo-request",
+      "success": false,
+      "status_code": 401,
+      "response_time": 0.022,
+      "submission_id": "smoke_test_test_7080faf2",
+      "ack_received": false,
+      "response_data": {
+        "detail": "Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>"
+      },
+      "error": "HTTP 401: {'detail': 'Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>'}"
+    },
+    {
+      "test": "dashboard_contact-sales",
+      "success": false,
+      "status_code": 401,
+      "response_time": 0.016,
+      "submission_id": "smoke_test_test_2a7f3533",
+      "ack_received": false,
+      "response_data": {
+        "detail": "Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>"
+      },
+      "error": "HTTP 401: {'detail': 'Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>'}"
+    },
+    {
+      "test": "dashboard_newsletter-signup",
+      "success": false,
+      "status_code": 401,
+      "response_time": 0.018,
+      "submission_id": "smoke_test_test_5f7deb71",
+      "ack_received": false,
+      "response_data": {
+        "detail": "Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>"
+      },
+      "error": "HTTP 401: {'detail': 'Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>'}"
+    },
+    {
+      "test": "dashboard_job-application",
+      "success": false,
+      "status_code": 401,
+      "response_time": 0.014,
+      "submission_id": "smoke_test_test_adabbe2c",
+      "ack_received": false,
+      "response_data": {
+        "detail": "Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>"
+      },
+      "error": "HTTP 401: {'detail': 'Missing authentication. Provide either X-INGEST-KEY or Authorization: Bearer <token>'}"
+    },
+    {
+      "test": "websocket_connection",
+      "success": false,
+      "connection_time": 0.057,
+      "messages_received": 0,
+      "real_time_sync": false,
+      "messages": [],
+      "error": "server rejected WebSocket connection: HTTP 200"
+    }
+  ],
+  "timestamp": "2025-10-02T02:46:46.335465+00:00"
+}
