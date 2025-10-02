@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { 
   Calculator, 
   MessageSquare, 
-  Route, 
+  GitBranch, 
   TrendingUp, 
   BarChart3, 
   Zap,
