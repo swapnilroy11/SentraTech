@@ -1,6 +1,9 @@
 # SentraTech Multi-Stage Build Dockerfile
-# Compatible with both Kaniko and BuildX
+# Optimized for Kaniko with memory constraints
 FROM node:18-alpine as builder
+
+# Set NODE_OPTIONS for memory optimization
+ENV NODE_OPTIONS="--max_old_space_size=4096"
 
 # Set working directory
 WORKDIR /workspace/app
@@ -10,11 +13,13 @@ COPY package.json yarn.lock ./
 COPY packages/website/package.json ./packages/website/
 COPY packages/dashboard/package.json ./packages/dashboard/
 
-# Install dependencies (with cache optimization)
-RUN yarn install --frozen-lockfile --network-timeout 300000
+# Install dependencies with optimizations for Kaniko
+RUN yarn install --frozen-lockfile --network-timeout 600000 --prefer-offline --production=false
 
-# Copy source code
-COPY . .
+# Copy only necessary source files (excluding node_modules via .dockerignore)
+COPY packages/ ./packages/
+COPY backend/ ./backend/
+COPY emergent.config.js ./
 
 # Build the website (primary target) - using monorepo build strategy
 WORKDIR /workspace/app
