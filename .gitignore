@@ -118,3 +118,7 @@ packages/website/node_modules/.cache/default-development/5.pack
 packages/website/node_modules/.cache/default-development/0.pack
 packages/website/node_modules/.cache/default-development/2.pack
 packages/website/node_modules/.cache/default-development/10.pack
+-e 
+# Environment files
+*.env
+*.env.*
