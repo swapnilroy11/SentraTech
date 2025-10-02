@@ -127,14 +127,14 @@ const InvestorRelationsPage = () => {
       title: 'CHRO',
       company: 'SentraTech',
       expertise: 'Human Resources, Talent Management, Organizational Development',
-      image: '/images/team/chro-arina-tasnim.jpg'
+      image: '/images/team/chro-arina-tasnim-new.jpg'
     },
     {
       name: 'MD. Ajmal Hossen',
       title: 'COO',
       company: 'SentraTech',
       expertise: 'Operations Management, Strategic Planning, Business Development',
-      image: '/images/team/coo-ajmal-hossen.jpg'
+      image: '/images/team/chro-arina-tasnim.jpg'
     }
   ];
 
