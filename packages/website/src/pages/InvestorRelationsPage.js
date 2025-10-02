@@ -338,31 +338,31 @@ const InvestorRelationsPage = () => {
               </div>
             </div>
             
-            <div className="border-t border-[rgb(63,63,63)] pt-6">
-              <h3 className="text-lg font-semibold text-white mb-4">18-Month Milestones with Funding</h3>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1-Q2 2026</div>
-                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+            <div className="border-t border-[rgb(63,63,63)] pt-8">
+              <h3 className="text-xl font-semibold text-white mb-6">18-Month Milestones with Funding</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6">
+                  <div className="text-[#00FF41] font-bold text-lg mb-3">Q1-Q2 2026</div>
+                  <ul className="text-[rgb(218,218,218)] text-base space-y-2">
                     <li>• Production infrastructure deployment</li>
                     <li>• 10 enterprise pilot customers</li>
-                    <li>• Team expansion to 12 members</li>
+                    <li>• AI/ML team expansion</li>
                   </ul>
                 </div>
-                <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2026</div>
-                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6">
+                  <div className="text-[#00FF41] font-bold text-lg mb-3">Q3-Q4 2026</div>
+                  <ul className="text-[rgb(218,218,218)] text-base space-y-2">
                     <li>• First paying customers</li>
                     <li>• $500K ARR target</li>
-                    <li>• Series A fundraising prep</li>
+                    <li>• Product-market fit validation</li>
                   </ul>
                 </div>
-                <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1 2027</div>
-                  <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6">
+                  <div className="text-[#00FF41] font-bold text-lg mb-3">Q1 2027</div>
+                  <ul className="text-[rgb(218,218,218)] text-base space-y-2">
                     <li>• Series A funding round</li>
                     <li>• Market expansion strategy</li>
-                    <li>• Advanced AI capabilities</li>
+                    <li>• International customer acquisition</li>
                   </ul>
                 </div>
               </div>
