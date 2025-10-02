@@ -12,7 +12,7 @@ module.exports = {
     {
       name: "website",
       root: ".",
-      buildCommand: "yarn install --frozen-lockfile && yarn build:website",
+      buildCommand: "yarn install --frozen-lockfile && yarn workspace frontend build",
       output: "packages/website/dist",
       domains: ["sentratech.net", "www.sentratech.net"],
       env: {
