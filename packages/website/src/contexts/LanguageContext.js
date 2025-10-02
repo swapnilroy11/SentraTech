@@ -3,13 +3,13 @@ import { translations } from '../data/translations';
 
 const LanguageContext = createContext();
 
-export const useLanguage = () => {
+export function useLanguage() {
   const context = useContext(LanguageContext);
   if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
-};
+}
 
 export const LanguageProvider = ({ children }) => {
   // Only English language - Bengali removed completely
