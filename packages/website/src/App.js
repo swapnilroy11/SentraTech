@@ -38,7 +38,6 @@ const SupportCenterPage = lazy(() => import("./pages/SupportCenterPage"));
 const ContactSalesPage = lazy(() => import("./pages/ContactSalesPage"));
 const CareersPage = lazy(() => import("./pages/CareersPage"));
 const JobApplicationPage = lazy(() => import("./pages/JobApplicationPage"));
-const AdminDashboardPage = lazy(() => import("./pages/AdminDashboardPage"));
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
