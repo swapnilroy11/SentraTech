@@ -127,3 +127,4 @@ packages/website/node_modules/.cache/default-development/10.pack
 *.env
 *.env.*
 packages/website/node_modules/.cache/default-development/1.pack
+packages/dashboard/node_modules/.cache/default-development/4.pack

@@ -10,8 +10,8 @@ COPY package.json yarn.lock ./
 COPY packages/website/package.json ./packages/website/
 COPY packages/dashboard/package.json ./packages/dashboard/
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+# Install dependencies (with cache optimization)
+RUN yarn install --frozen-lockfile --network-timeout 300000
 
 # Copy source code
 COPY . .
