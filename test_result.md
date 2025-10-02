@@ -59,6 +59,7 @@
 
 test_plan:
   current_focus: 
+    - "SentraTech Investor Relations Timeline Year Updates Verification"
     - "SentraTech Production Website Card Effects Animation Fix"
   stuck_tasks: 
     - "Deployed Backend Environment Variables - Need deployment refresh to apply ADMIN_DASHBOARD_URL fix"
