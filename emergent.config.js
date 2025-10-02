@@ -40,7 +40,9 @@ module.exports = {
     domains: ["preview.sentratech.net", "preview.admin.sentratech.net"],
   },
   hooks: {
-    // Removed smoke-tests from postdeploy to prevent deployment failure
-    // Smoke tests can be run manually after deployment verification
+    postdeploy: [
+      // Simple deployment verification test
+      "npm run smoke-tests",
+    ],
   },
 };
