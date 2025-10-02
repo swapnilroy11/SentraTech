@@ -86,7 +86,7 @@ const Navigation = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-8"
             aria-label="SentraTech homepage"
           >
             <SentraTechLogo 
