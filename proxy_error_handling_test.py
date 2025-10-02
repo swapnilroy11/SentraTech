@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime, timezone
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
+BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com"
 
 class ProxyErrorHandlingTester:
     def __init__(self):

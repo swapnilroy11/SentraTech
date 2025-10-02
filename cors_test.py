@@ -9,7 +9,7 @@ import json
 from datetime import datetime, timezone
 
 # Backend URL
-BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
+BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com"
 
 def test_cors_headers():
     """Test CORS headers for different origins"""
@@ -20,7 +20,7 @@ def test_cors_headers():
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://react-rescue-4.preview.emergentagent.com"
+        "https://matrix-team-update.preview.emergentagent.com"
     ]
     
     for origin in test_origins:

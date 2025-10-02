@@ -114,7 +114,7 @@ except Exception as e:
 Import this config instead of hardcoding values:
 
 ❌ Wrong:
-dashboard_url = "https://react-rescue-4.preview.emergentagent.com"
+dashboard_url = "https://matrix-team-update.preview.emergentagent.com"
 headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
 
 ✅ Correct:

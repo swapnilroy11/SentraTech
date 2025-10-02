@@ -4928,7 +4928,7 @@ app.add_middleware(
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://react-rescue-4.preview.emergentagent.com",
+        "https://matrix-team-update.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:3001",

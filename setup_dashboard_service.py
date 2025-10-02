@@ -13,7 +13,7 @@ command=/root/.venv/bin/uvicorn server:app --host 0.0.0.0 --port 8001 --workers 
 directory=/app/backend
 autostart=true
 autorestart=true
-environment=APP_URL="https://react-rescue-4.preview.emergentagent.com",INTEGRATION_PROXY_URL="https://integrations.emergentagent.com"
+environment=APP_URL="https://matrix-team-update.preview.emergentagent.com",INTEGRATION_PROXY_URL="https://integrations.emergentagent.com"
 stderr_logfile=/var/log/supervisor/backend.err.log
 stdout_logfile=/var/log/supervisor/backend.out.log
 stopsignal=TERM

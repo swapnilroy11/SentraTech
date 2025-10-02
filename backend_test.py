@@ -14,7 +14,7 @@ import os
 import sys
 
 # Backend URL - Testing production backend URL from frontend .env
-BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com"
+BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com"
 
 class ProxyEndpointTester:
     def __init__(self):

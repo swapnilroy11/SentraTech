@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
+BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com/api"
 
 def test_review_request_scenario():
     """Test the exact scenario from the review request"""

@@ -5,7 +5,7 @@ Test form endpoint with different email formats
 
 import requests
 
-BACKEND_URL = "https://react-rescue-4.preview.emergentagent.com/api"
+BACKEND_URL = "https://matrix-team-update.preview.emergentagent.com/api"
 
 def test_form_with_email(email, description):
     """Test form endpoint with specific email"""
