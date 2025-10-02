@@ -530,8 +530,8 @@ const InvestorRelationsPage = () => {
                   </ul>
                 </div>
                 
-                <h4 className="text-white font-semibold mb-2">Ideal Investor Profile</h4>
-                <ul className="text-[rgb(218,218,218)] text-sm space-y-1 text-left">
+                <h4 className="text-white font-semibold mb-3 text-lg">Ideal Investor Profile</h4>
+                <ul className="text-[rgb(218,218,218)] text-base space-y-2 text-left">
                   <li>• Experience with B2B SaaS and AI startups</li>
                   <li>• Network in enterprise customer support market</li>
                   <li>• Hands-on approach to supporting portfolio companies</li>
