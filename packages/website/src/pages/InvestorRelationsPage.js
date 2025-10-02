@@ -183,7 +183,7 @@ const InvestorRelationsPage = () => {
     <div className="min-h-screen bg-[rgb(18,18,18)] text-white">
       <SEOManager 
         title="Investment Opportunity | SentraTech - Pre-Seed AI Customer Support Startup"
-        description="SentraTech is seeking $2.5M in pre-seed funding to scale AI-powered customer support automation. Learn about our investment opportunity, market validation, and growth potential."
+        description="SentraTech is seeking $80K in pre-seed funding to scale AI-powered customer support automation. Learn about our investment opportunity, market validation, and growth potential."
         keywords="SentraTech investment, pre-seed funding, AI customer support startup, enterprise automation, investment opportunity"
       />
       
