@@ -36,10 +36,10 @@ RUN echo "=== PRE-BUILD DEBUG INFO ===" && \
 FROM nginx:alpine
 
 # Copy built files
-COPY --from=builder /workspace/app/packages/website/dist /usr/share/nginx/html
+COPY --from=builder /app/packages/website/dist /usr/share/nginx/html
 
 # Copy nginx configuration if exists
-COPY --from=builder /workspace/app/packages/website/nginx.conf /etc/nginx/conf.d/default.conf 2>/dev/null || true
+COPY --from=builder /app/packages/website/nginx.conf /etc/nginx/conf.d/default.conf 2>/dev/null || true
 
 # Expose port
 EXPOSE 80
