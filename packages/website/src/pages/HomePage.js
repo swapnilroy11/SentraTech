@@ -230,7 +230,7 @@ const HomePage = () => {
     {
       title: 'Customer Journey',
       description: 'Visualize the complete customer support workflow with interactive timeline',
-      icon: Route,
+      icon: GitBranch,
       preview: 'Horizontal parallax timeline with 6 automated stages',
       link: '/features#customer-journey',
       color: '#FFD700'
