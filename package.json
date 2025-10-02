@@ -15,5 +15,13 @@
   "dependencies": {
     "node-fetch": "^2.7.0",
     "playwright": "^1.55.1"
+  },
+  "resolutions": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.263.1",
+    "react-router-dom": "^6.28.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
   }
 }
