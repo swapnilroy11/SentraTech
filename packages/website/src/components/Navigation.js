@@ -121,17 +121,6 @@ const Navigation = () => {
 
           {/* CTA Section */}
           <div className="hidden md:flex items-center space-x-3">
-            {/* Admin Login Button - Ready for new CRM dashboard */}
-            <a 
-              href="https://admin.sentratech.net/dashboard"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-300 text-xs px-3 py-1 border border-gray-600 rounded-md transition-all duration-200 opacity-70 hover:opacity-100"
-              title="Admin Dashboard - New CRM Integration"
-            >
-              Admin
-            </a>
-            
             <Link to="/demo-request">
               <Button 
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
