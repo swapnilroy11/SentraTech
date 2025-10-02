@@ -1,4 +1,7 @@
 {
+  "name": "sentratech-monorepo",
+  "private": true,
+  "workspaces": ["packages/*", "server"],
   "dependencies": {
     "node-fetch": "^2.7.0",
     "playwright": "^1.55.1"
