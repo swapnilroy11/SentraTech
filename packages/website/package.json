@@ -68,7 +68,7 @@
     "start": "craco start",
     "build": "craco build && rm -rf dist && mv build dist",
     "test": "craco test",
-    "smoke-tests": "python ../../enterprise_smoke_tests.py"
+    "smoke-tests": "node simple-deploy-test.js"
   },
   "browserslist": {
     "production": [
