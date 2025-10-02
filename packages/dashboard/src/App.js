@@ -35,7 +35,7 @@ const WS_URL = isDevelopment
   ? 'ws://localhost:8001/ws'
   : isPreview 
   ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`
-  : (process.env.REACT_APP_WS_URL || 'wss://admin.sentratech.net/ws');
+  : process.env.REACT_APP_WS_URL;
 
 export const api = axios.create({
   baseURL: API_BASE,
