@@ -1,7 +1,17 @@
 {
   "name": "sentratech-monorepo",
   "private": true,
-  "workspaces": ["packages/*", "server"],
+  "workspaces": {
+    "packages": ["packages/*", "server"],
+    "nohoist": [
+      "**/react",
+      "**/react-dom",
+      "**/react-router-dom",
+      "**/react/**",
+      "**/react-dom/**",
+      "**/react-router-dom/**"
+    ]
+  },
   "dependencies": {
     "node-fetch": "^2.7.0",
     "playwright": "^1.55.1"
