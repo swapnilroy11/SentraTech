@@ -12,7 +12,7 @@ module.exports = {
     {
       name: "website",
       root: "packages/website",
-      buildCommand: "yarn install && yarn build",
+      buildCommand: "yarn install --frozen-lockfile && yarn build --verbose",
       output: "dist",
       domains: ["sentratech.net", "www.sentratech.net"],
       env: {
@@ -23,7 +23,7 @@ module.exports = {
     {
       name: "dashboard",
       root: "packages/dashboard",
-      buildCommand: "yarn install && yarn build",
+      buildCommand: "yarn install --frozen-lockfile && yarn build --verbose",
       output: "build",
       domains: ["admin.sentratech.net"],
       env: {
