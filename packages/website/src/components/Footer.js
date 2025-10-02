@@ -34,9 +34,10 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Linkedin, href: 'https://www.linkedin.com/company/sentratechltd/', label: 'LinkedIn' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: X, href: '#', label: 'X (Twitter)' },
     { icon: Youtube, href: '#', label: 'YouTube' },
-    { icon: Github, href: '#', label: 'GitHub' }
+    { icon: Github, href: '#', label: 'GitHub' },
+    { icon: Facebook, href: 'https://www.facebook.com/sentratechltd', label: 'Facebook' }
   ];
 
   return (
