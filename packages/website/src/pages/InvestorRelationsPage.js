@@ -520,13 +520,13 @@ const InvestorRelationsPage = () => {
               </div>
               
               <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold text-white mb-4">Investment Terms</h3>
-                <div className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-xl p-4 mb-4">
-                  <ul className="space-y-2 text-[rgb(218,218,218)] text-sm text-left">
-                    <li><span className="text-white font-medium">Stage:</span> Pre-Seed</li>
-                    <li><span className="text-white font-medium">Target:</span> $2.5M</li>
-                    <li><span className="text-white font-medium">Security:</span> SAFE/Convertible</li>
-                    <li><span className="text-white font-medium">Timeline:</span> Q1 2025 Close</li>
+                <h3 className="text-xl font-semibold text-white mb-6">Investment Terms</h3>
+                <div className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-xl p-6 mb-6">
+                  <ul className="space-y-3 text-[rgb(218,218,218)] text-base text-left">
+                    <li><span className="text-white font-semibold">Stage:</span> Pre-Seed</li>
+                    <li><span className="text-white font-semibold">Target:</span> $80K</li>
+                    <li><span className="text-white font-semibold">Security:</span> SAFE/Convertible</li>
+                    <li><span className="text-white font-semibold">Timeline:</span> Q1 2026 Close</li>
                   </ul>
                 </div>
                 
