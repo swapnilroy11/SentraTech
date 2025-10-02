@@ -342,7 +342,7 @@ const InvestorRelationsPage = () => {
               <h3 className="text-lg font-semibold text-white mb-4">18-Month Milestones with Funding</h3>
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1-Q2 2025</div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1-Q2 2026</div>
                   <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
                     <li>• Production infrastructure deployment</li>
                     <li>• 10 enterprise pilot customers</li>
@@ -350,7 +350,7 @@ const InvestorRelationsPage = () => {
                   </ul>
                 </div>
                 <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2025</div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q3-Q4 2026</div>
                   <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
                     <li>• First paying customers</li>
                     <li>• $500K ARR target</li>
@@ -358,7 +358,7 @@ const InvestorRelationsPage = () => {
                   </ul>
                 </div>
                 <div>
-                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1 2026</div>
+                  <div className="text-[#00FF41] font-semibold text-sm mb-2">Q1 2027</div>
                   <ul className="text-[rgb(218,218,218)] text-sm space-y-1">
                     <li>• Series A funding round</li>
                     <li>• Market expansion strategy</li>
