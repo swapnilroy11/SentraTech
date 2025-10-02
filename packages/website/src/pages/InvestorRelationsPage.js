@@ -541,22 +541,10 @@ const InvestorRelationsPage = () => {
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => navigate('/pitch-deck')}
-              className="px-8 py-3 bg-[#00FF41] text-black font-semibold rounded-xl hover:bg-[#00DD38] transition-colors duration-200"
-            >
-              View Interactive Pitch Deck
-            </button>
-            <button
-              onClick={() => window.location.href = 'mailto:swapnil.roy@sentratech.net?subject=Investment Inquiry - SentraTech Pre-Seed&body=Hi Swapnil,%0A%0AI am interested in learning more about SentraTech\'s pre-seed investment opportunity. Please send me the pitch deck and let me know when we can schedule a call.%0A%0AThank you,%0A[Your Name]'}
-              className="px-8 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] font-semibold rounded-xl hover:bg-[#00FF41]/10 transition-colors duration-200"
-            >
-              Contact for Investment
-            </button>
+          <div className="flex justify-center mt-8">
             <button
               onClick={() => navigate('/demo-request')}
-              className="px-8 py-3 border-2 border-[#00FF41]/30 text-[#00FF41] font-semibold rounded-xl hover:bg-[#00FF41]/10 transition-colors duration-200"
+              className="px-10 py-4 bg-gradient-to-r from-[#00FF41] to-[#00DD38] text-black font-bold text-lg rounded-xl hover:from-[#00DD38] hover:to-[#00BB30] transform hover:scale-105 transition-all duration-200 shadow-lg shadow-[#00FF41]/20"
             >
               Schedule Product Demo
             </button>
