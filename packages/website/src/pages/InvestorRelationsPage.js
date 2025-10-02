@@ -210,9 +210,9 @@ const InvestorRelationsPage = () => {
             <div className="mt-8 inline-flex items-center px-6 py-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-xl">
               <span className="text-[#00FF41] font-semibold text-lg">Pre-Seed Stage</span>
               <span className="text-white ml-3">•</span>
-              <span className="text-white ml-3">Seeking $2.5M</span>
+              <span className="text-white ml-3">Seeking $80K</span>
               <span className="text-white ml-3">•</span>
-              <span className="text-white ml-3">Q1 2025 Timeline</span>
+              <span className="text-white ml-3">Q1 2026 Timeline</span>
             </div>
           </div>
         </div>
