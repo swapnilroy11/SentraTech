@@ -1,0 +1,476 @@
+import React, { useEffect, useState } from 'react';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import { motion } from 'framer-motion';
+import { 
+  Calculator, 
+  MessageSquare, 
+  GitBranch, 
+  TrendingUp, 
+  BarChart3, 
+  Zap,
+  ArrowRight,
+  Play
+} from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
+import SEOManager from '../components/SEOManager';
+
+// Immediate CSS animations that start instantly (no JS dependency)
+const animationStyles = `
+  /* Immediate page load animations - start instantly */
+  @keyframes instantFadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes instantFadeInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes instantFadeInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes instantScaleIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes buttonPulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 rgba(0, 255, 65, 0);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    }
+  }
+
+  /* Apply animations immediately on page load */
+  .hero-content {
+    animation: instantFadeInUp 0.8s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .hero-title {
+    animation: instantFadeInUp 1.0s ease-out 0.2s;
+    animation-fill-mode: both;
+  }
+
+  .hero-subtitle {
+    animation: instantFadeInUp 1.0s ease-out 0.4s;
+    animation-fill-mode: both;
+  }
+
+  .hero-buttons {
+    animation: instantFadeInUp 1.0s ease-out 0.6s;
+    animation-fill-mode: both;
+  }
+
+  .stats-card {
+    animation: instantScaleIn 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .stats-card:nth-child(1) { animation-delay: 0.8s; }
+  .stats-card:nth-child(2) { animation-delay: 1.0s; }
+  .stats-card:nth-child(3) { animation-delay: 1.2s; }
+  .stats-card:nth-child(4) { animation-delay: 1.4s; }
+
+  .feature-card {
+    animation: slideInFromBottom 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .feature-card:nth-child(1) { animation-delay: 0.2s; }
+  .feature-card:nth-child(2) { animation-delay: 0.4s; }
+  .feature-card:nth-child(3) { animation-delay: 0.6s; }
+
+  /* Instant hover effects */
+  .instant-hover-scale {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0); /* Hardware acceleration */
+  }
+
+  .instant-hover-scale:hover {
+    transform: scale(1.05) translateZ(0);
+  }
+
+  .instant-hover-glow:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .instant-button-hover {
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .instant-button-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+  }
+
+  .instant-button-hover:active {
+    transform: translateY(0);
+  }
+
+  /* Ensure animations start immediately */
+  * {
+    animation-play-state: running;
+  }
+
+  /* Prevent flash of unstyled content */
+  .loading-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .loaded-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s ease-out;
+  }
+
+  /* INSTANT COOKIE BANNER - No delays or transitions */
+  .cookie-banner-instant {
+    animation: instantCookieBannerAppear 0.3s ease-out;
+    animation-fill-mode: both;
+  }
+
+  @keyframes instantCookieBannerAppear {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  /* Force immediate visibility for cookie banner */
+  [data-cookie-banner="true"] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+`;
+
+const HomePage = () => {
+  const { t } = useLanguage();
+  const navigateToSection = useNavigateWithScroll();
+  const [isAnimationReady, setIsAnimationReady] = useState(false);
+
+  useEffect(() => {
+    // Ensure animations are ready
+    const timer = setTimeout(() => {
+      setIsAnimationReady(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const features = [
+    {
+      title: 'ROI Calculator',
+      description: 'Calculate your potential savings with our intelligent cost analysis tool',
+      icon: Calculator,
+      preview: 'Interactive sliders showing potential 60% cost reduction',
+      link: '/roi-calculator',
+      color: '#00FF41'
+    },
+    {
+      title: 'Multi-Channel Support',
+      description: 'Seamless customer interactions across voice, chat, email, and social media',
+      icon: MessageSquare,
+      preview: 'Human-like voice agents with real-time conversation flow',
+      link: '/features#multi-channel',
+      color: '#00DDFF'
+    },
+    {
+      title: 'Customer Journey',
+      description: 'Visualize the complete customer support workflow with interactive timeline',
+      icon: GitBranch,
+      preview: 'Horizontal parallax timeline with 6 automated stages',
+      link: '/features#customer-journey',
+      color: '#FFD700'
+    }
+  ];
+
+  const benefits = [
+    {
+      title: '70% Automation',
+      description: 'Intelligent automation handles routine inquiries while humans focus on complex issues',
+      icon: Zap,
+      link: '/features'
+    },
+    {
+      title: 'Real-time Metrics',
+      description: 'Comprehensive BI dashboards with 20+ KPI metrics for data-driven decisions',
+      icon: BarChart3,
+      link: '/features#real-time-metrics'
+    },
+    {
+      title: 'Enterprise Security',
+      description: 'SOC 2 compliant platform with end-to-end encryption and comprehensive auditing',
+      icon: TrendingUp,
+      link: '/security#enterprise-security'
+    }
+  ];
+
+  return (
+    <>
+      {/* SEO Management for Homepage */}
+      <SEOManager />
+      
+      {/* Inject animation styles */}
+      <style>{animationStyles}</style>
+      
+      <main role="main" aria-label="SentraTech Homepage - AI Customer Support Platform">
+        <div className="min-h-screen bg-[#0A0A0A] text-[#F8F9FA] pt-20" id="home">
+      {/* Hero Section */}
+      <section className="py-20 relative overflow-hidden" id="hero">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center max-w-4xl mx-auto hero-content"
+          >
+            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight hero-title">
+              <span className="text-[#FFFFFF]">Customer Support as a</span><br/>
+              <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by AI&nbsp;+&nbsp;BI</span>
+            </h1>
+            
+            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed hero-subtitle">
+              Transform your customer service into a competitive advantage with our sub-50ms AI routing platform. 
+              Reduce costs by 40-60% while improving satisfaction.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16 hero-buttons">
+              <Button 
+                onClick={() => navigateToSection('/roi-calculator')}
+                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl instant-hover-scale instant-hover-glow instant-button-hover flex items-center space-x-2 shadow-lg"
+              >
+                <Calculator size={24} />
+                <span>Calculate ROI</span>
+              </Button>
+              
+              <Button 
+                onClick={() => navigateToSection('/demo-request')}
+                variant="outline"
+                className="border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 text-lg rounded-xl font-semibold instant-hover-scale instant-button-hover flex items-center space-x-2 shadow-lg"
+              >
+                <Play size={24} />
+                <span>Request Your Demo</span>
+              </Button>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {[
+                { value: '50ms', label: 'Average Response Time' },
+                { value: '70%', label: 'Automation Rate' },
+                { value: '99.9%', label: 'Platform Uptime' },
+                { value: '60%', label: 'Cost Reduction' }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: index * 0.15,
+                    ease: "easeOut"
+                  }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    y: -5,
+                    transition: { duration: 0.2 }
+                  }}
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 stats-card instant-hover-scale instant-hover-glow cursor-pointer"
+                >
+                  <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-[rgb(161,161,170)]">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Feature Cards Section */}
+      <section className="py-20 bg-gradient-to-br from-[rgb(17,17,19)] to-[rgb(26,28,30)]" id="features">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl font-bold text-white mb-6 font-rajdhani">
+              Experience Our Core Features
+            </h2>
+            <p className="text-xl text-[rgb(161,161,170)] max-w-3xl mx-auto">
+              Get hands-on with the tools that power next-generation customer support
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                >
+                  <Card className="bg-[rgb(26,28,30)] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(0,255,65,0.3)] transition-all duration-300 h-full group cursor-pointer">
+                    <CardContent className="p-8">
+                      <div className="flex items-center space-x-4 mb-6">
+                        <div 
+                          className="w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                          style={{ backgroundColor: `${feature.color}20` }}
+                        >
+                          <Icon size={32} style={{ color: feature.color }} />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-bold text-white mb-2">{feature.title}</h3>
+                        </div>
+                      </div>
+                      
+                      <p className="text-[rgb(161,161,170)] mb-4 leading-relaxed">
+                        {feature.description}
+                      </p>
+                      
+                      <div className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-lg p-4 mb-6">
+                        <p className="text-sm text-[#00FF41] font-medium">
+                          {feature.preview}
+                        </p>
+                      </div>
+
+                      <Button 
+                        onClick={() => navigateToSection(feature.link)}
+                        variant="ghost"
+                        className="w-full justify-between text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
+                      >
+                        <span>Explore Feature</span>
+                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Why SentraTech Strip */}
+      <section className="py-20 bg-[#0A0A0A]" id="why-choose">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold text-white mb-4 font-rajdhani">
+              Why Choose SentraTech?
+            </h2>
+            <p className="text-lg text-[rgb(161,161,170)]">
+              The competitive advantages that set us apart
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  className="text-center group cursor-pointer"
+                >
+                  <div className="w-20 h-20 bg-[rgba(0,255,65,0.1)] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <Icon size={40} className="text-[#00FF41]" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#00FF41] transition-colors">
+                    {benefit.title}
+                  </h3>
+                  
+                  <p className="text-[rgb(161,161,170)] mb-6 leading-relaxed">
+                    {benefit.description}
+                  </p>
+                  
+                  <Button 
+                    onClick={() => navigateToSection(benefit.link)}
+                    variant="outline"
+                    size="sm"
+                    className="border-[rgba(0,255,65,0.3)] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default HomePage;

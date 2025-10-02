@@ -1,0 +1,215 @@
+/* SentraTech Brand Color Palette */
+
+:root {
+  /* Primary Brand Colors */
+  --sentra-matrix-green: #00FF41;
+  --sentra-matrix-green-hover: #00e83a;
+  --sentra-matrix-green-pressed: #00cc33;
+  --sentra-matrix-green-light: rgba(0, 255, 65, 0.1);
+  --sentra-matrix-green-medium: rgba(0, 255, 65, 0.3);
+  
+  /* Background Colors */
+  --sentra-deep-black: #0A0A0A;
+  --sentra-dark-gray: #1a1a1a;
+  --sentra-medium-gray: #2a2a2a;
+  
+  /* Text Colors */
+  --sentra-pure-white: #F8F9FA;
+  --sentra-light-gray: #e2e8f0;
+  --sentra-muted-gray: #a1a1aa;
+  
+  /* Accent Colors */
+  --sentra-neon-cyan: #00DDFF;
+  --sentra-silver: #C0C0C0;
+  
+  /* Semantic Colors */
+  --sentra-success: #00FF41;
+  --sentra-warning: #FFB800;
+  --sentra-error: #FF4444;
+  --sentra-info: #00DDFF;
+}
+
+/* CSS Classes for Brand Colors */
+
+/* Backgrounds */
+.bg-matrix-green { background-color: var(--sentra-matrix-green); }
+.bg-deep-black { background-color: var(--sentra-deep-black); }
+.bg-dark-gray { background-color: var(--sentra-dark-gray); }
+.bg-medium-gray { background-color: var(--sentra-medium-gray); }
+.bg-pure-white { background-color: var(--sentra-pure-white); }
+.bg-neon-cyan { background-color: var(--sentra-neon-cyan); }
+
+/* Text Colors */
+.text-matrix-green { color: var(--sentra-matrix-green); }
+.text-deep-black { color: var(--sentra-deep-black); }
+.text-pure-white { color: var(--sentra-pure-white); }
+.text-light-gray { color: var(--sentra-light-gray); }
+.text-muted-gray { color: var(--sentra-muted-gray); }
+.text-neon-cyan { color: var(--sentra-neon-cyan); }
+.text-silver { color: var(--sentra-silver); }
+
+/* Border Colors */
+.border-matrix-green { border-color: var(--sentra-matrix-green); }
+.border-medium-gray { border-color: var(--sentra-medium-gray); }
+.border-light-gray { border-color: var(--sentra-light-gray); }
+
+/* Interactive States */
+.hover-matrix-green:hover { color: var(--sentra-matrix-green); }
+.hover-bg-matrix-green:hover { background-color: var(--sentra-matrix-green); }
+.focus-matrix-green:focus { 
+  outline: 2px solid var(--sentra-matrix-green);
+  outline-offset: 2px;
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: var(--sentra-matrix-green);
+  color: var(--sentra-deep-black);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--sentra-matrix-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--sentra-matrix-green-medium);
+}
+
+.btn-primary:active {
+  background-color: var(--sentra-matrix-green-pressed);
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--sentra-pure-white);
+  border: 2px solid var(--sentra-medium-gray);
+  border-radius: 12px;
+  padding: 14px 30px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--sentra-matrix-green);
+  color: var(--sentra-matrix-green);
+  background-color: var(--sentra-matrix-green-light);
+}
+
+/* Typography Classes */
+.font-rajdhani {
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.heading-1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.heading-2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.heading-3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-large {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.body-regular {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.body-small {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Animation Classes */
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--sentra-matrix-green-medium);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--sentra-matrix-green-medium), 0 0 60px var(--sentra-matrix-green-light);
+  }
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+    color: var(--sentra-matrix-green);
+  }
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  .heading-1 {
+    font-size: 2.5rem;
+  }
+  
+  .heading-2 {
+    font-size: 2rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading-1 {
+    font-size: 1.875rem;
+  }
+  
+  .heading-2 {
+    font-size: 1.5rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
