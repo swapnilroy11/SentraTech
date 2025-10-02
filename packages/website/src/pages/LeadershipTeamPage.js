@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Linkedin, Twitter, Mail, Users, Award, Globe, Zap } from 'lucide-react';
+import { ArrowLeft, Linkedin, X, Mail, Users, Award, Globe, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SEOManager from '../components/SEOManager';
 
