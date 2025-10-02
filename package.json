@@ -1,23 +1,15 @@
 {
   "name": "sentratech-monorepo",
   "private": true,
-  "workspaces": {
-    "packages": ["packages/*", "server"],
-    "nohoist": [
-      "**/react",
-      "**/react-dom",
-      "**/react-router-dom",
-      "**/react/**",
-      "**/react-dom/**",
-      "**/react-router-dom/**"
-    ]
-  },
+  "workspaces": ["packages/*", "server"],
   "scripts": {
-    "build:website": "cd packages/website && yarn install --frozen-lockfile && yarn build",
-    "build:dashboard": "cd packages/dashboard && yarn install --frozen-lockfile && yarn build",
-    "build": "yarn build:website",
+    "build": "yarn workspace website build",
+    "build:website": "yarn workspace website build", 
+    "build:dashboard": "yarn workspace dashboard build",
+    "build:server": "yarn workspace server build",
     "install": "yarn install --frozen-lockfile",
-    "start": "cd packages/website && yarn start"
+    "start": "yarn workspace website start",
+    "dev": "yarn workspace website start"
   },
   "dependencies": {
     "node-fetch": "^2.7.0",
