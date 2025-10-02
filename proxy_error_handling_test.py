@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime, timezone
 
 # Backend URL from frontend environment
-BACKEND_URL = "https://sentra-deploy-fix.preview.emergentagent.com"
+BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
 
 class ProxyErrorHandlingTester:
     def __init__(self):

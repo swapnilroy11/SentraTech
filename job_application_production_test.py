@@ -15,7 +15,7 @@ import sys
 
 # Production URLs
 PRODUCTION_BACKEND_URL = "https://admin.sentratech.net"
-PREVIEW_BACKEND_URL = "https://sentra-deploy-fix.preview.emergentagent.com"
+PREVIEW_BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
 
 class JobApplicationTester:
     def __init__(self):
@@ -125,7 +125,7 @@ class JobApplicationTester:
     def test_preview_job_application(self):
         """Test job application endpoint on preview environment for comparison"""
         print("\n🔍 COMPARISON TEST: Preview Job Application Endpoint")
-        print("Testing against: https://sentra-deploy-fix.preview.emergentagent.com")
+        print("Testing against: https://deploy-bug-fixes.preview.emergentagent.com")
         
         # Same payload as production test
         payload = {

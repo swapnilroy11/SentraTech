@@ -17,20 +17,20 @@ This document serves as a **CONFIGURATION LOCK** for dashboard integration setti
 
 #### Frontend Configuration (`/frontend/src/config/dashboardConfig.js`)
 ```javascript
-BACKEND_URL: 'https://sentra-deploy-fix.preview.emergentagent.com'
+BACKEND_URL: 'https://deploy-bug-fixes.preview.emergentagent.com'
 INGEST_KEY: 'a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6'
 ```
 
 #### Backend Configuration (`/backend/dashboard_config.py`)
 ```python
-EXTERNAL_DASHBOARD_URL = "https://sentra-deploy-fix.preview.emergentagent.com"
+EXTERNAL_DASHBOARD_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
 CURRENT_HOST = "customer-flow-5.preview.emergentagent.com"
 DASHBOARD_AUTH_KEY = "test-ingest-key-12345"
 ```
 
 #### Environment Variables (`/frontend/.env`)
 ```bash
-REACT_APP_BACKEND_URL=https://sentra-deploy-fix.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://deploy-bug-fixes.preview.emergentagent.com
 ```
 
 ### 🛡️ PROTECTION MECHANISMS ACTIVE

@@ -15,7 +15,7 @@ import sys
 # Correct production URLs based on frontend .env
 PRODUCTION_API_BASE = "https://sentratech.net/api/proxy"
 PRODUCTION_BACKEND_URL = "https://sentratech.net"
-PREVIEW_BACKEND_URL = "https://sentra-deploy-fix.preview.emergentagent.com"
+PREVIEW_BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
 
 class ProductionJobApplicationTester:
     def __init__(self):

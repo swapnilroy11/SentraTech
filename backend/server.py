@@ -4937,7 +4937,7 @@ app.add_middleware(
         "https://sentratech.net",
         "https://www.sentratech.net", 
         "https://admin.sentratech.net",
-        "https://sentra-deploy-fix.preview.emergentagent.com",
+        "https://deploy-bug-fixes.preview.emergentagent.com",
         "https://*.emergent.host",  # Emergent production domains
         "http://localhost:3000",
         "http://localhost:3001",
