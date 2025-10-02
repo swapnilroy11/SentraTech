@@ -15,7 +15,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import CookieBanner from "./components/CookieBanner";
 import SEOManager from "./components/SEOManager";
 import ChatWidget from "./components/ChatWidget";
-import FloatingAdminButton from "./components/FloatingAdminButton";
 
 // Critical pages (loaded immediately)
 import HomePage from "./pages/HomePage";
