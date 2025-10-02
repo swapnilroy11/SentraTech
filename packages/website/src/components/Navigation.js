@@ -214,17 +214,6 @@ const Navigation = () => {
             <div className="mt-8 pt-6 border-t border-[rgba(0,255,65,0.4)] bg-[#0A0A0A]"
                  style={{ backgroundColor: '#0A0A0A' }}>
               
-              {/* Admin Login Button for Mobile - New CRM Dashboard */}
-              <button 
-                onClick={() => {
-                  window.open('https://admin.sentratech.net/dashboard', '_blank');
-                  handleMenuClose(); // Close mobile menu
-                }}
-                className="w-full mb-4 bg-transparent border border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 py-3 rounded-lg transition-all duration-200"
-              >
-                Admin Dashboard
-              </button>
-              
               {/* Demo Request Button */}
               <Link to="/demo-request" onClick={handleMenuItemClick} className="block">
                 <Button className="w-full bg-gradient-to-r from-[#00FF41] to-[#00e83a] text-[#0A0A0A] hover:from-[#00e83a] hover:to-[#00d235] font-semibold px-6 py-4 rounded-xl font-rajdhani shadow-lg shadow-[rgba(0,255,65,0.3)] transform hover:scale-105 transition-all duration-200">
