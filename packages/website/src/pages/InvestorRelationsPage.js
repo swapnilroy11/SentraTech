@@ -112,19 +112,29 @@ const InvestorRelationsPage = () => {
       name: 'Swapnil Roy',
       title: 'CEO & Co-Founder',
       company: 'SentraTech',
-      expertise: 'AI Product Strategy, Enterprise Software, Team Leadership'
+      expertise: 'AI Product Strategy, Enterprise Software, Team Leadership',
+      image: '/images/team/ceo-swapnil-roy.jpg'
     },
     {
-      name: 'Lead AI Engineer',
-      title: 'Co-Founder & CTO',
+      name: 'Samiul Sakib',
+      title: 'CTO',
       company: 'SentraTech',
-      expertise: 'Machine Learning, NLP, Distributed Systems Architecture'
+      expertise: 'Machine Learning, NLP, Distributed Systems Architecture',
+      image: '/images/team/cto-samiul-sakib.jpg'
     },
     {
-      name: 'Senior Full-Stack Engineer',
-      title: 'Head of Engineering',
+      name: 'Arina Tasnim',
+      title: 'CHRO',
       company: 'SentraTech',
-      expertise: 'Scalable Backend Systems, Frontend Architecture, DevOps'
+      expertise: 'Human Resources, Talent Management, Organizational Development',
+      image: '/images/team/chro-arina-tasnim.jpg'
+    },
+    {
+      name: 'MD. Ajmal Hossen',
+      title: 'COO',
+      company: 'SentraTech',
+      expertise: 'Operations Management, Strategic Planning, Business Development',
+      image: '/images/team/coo-ajmal-hossen.jpg'
     }
   ];
 
