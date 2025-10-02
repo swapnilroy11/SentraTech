@@ -410,7 +410,7 @@ const InvestorRelationsPage = () => {
           </div>
           
           <div className="mb-12">
-            <h3 className="text-xl font-semibold text-white mb-6 text-center">Founding Team</h3>
+            <h3 className="text-2xl font-semibold text-[#00FF41] mb-6 text-center">FOUNDING TEAM</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {teamHighlights.map((member, index) => (
                 <div key={index} className="bg-gradient-to-br from-[rgb(38,40,42)] to-[rgb(26,28,30)] border border-[rgb(63,63,63)] rounded-2xl p-6">
@@ -419,13 +419,13 @@ const InvestorRelationsPage = () => {
                       <img 
                         src={member.image} 
                         alt={member.name}
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover object-center grayscale contrast-125 brightness-110"
                         style={{ objectPosition: member.name === 'Arina Tasnim' ? 'center 20%' : 'center center' }}
                       />
                     </div>
-                    <h4 className="text-lg font-bold text-white mb-1">{member.name}</h4>
-                    <p className="text-[#00FF41] font-medium text-sm mb-1">{member.title}</p>
-                    <p className="text-[rgb(218,218,218)] text-xs leading-relaxed">{member.expertise}</p>
+                    <h4 className="text-xl font-bold text-white mb-1">{member.name}</h4>
+                    <p className="text-[#00FF41] font-bold text-base mb-2">{member.title}</p>
+                    <p className="text-[rgb(218,218,218)] text-sm leading-relaxed">{member.expertise}</p>
                   </div>
                 </div>
               ))}
