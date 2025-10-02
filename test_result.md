@@ -91,6 +91,17 @@ test_plan:
   test_priority: "high_first"
 
 frontend:
+  - task: "SentraTech Investor Relations Timeline Year Updates Verification"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/InvestorRelationsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "🚨 CRITICAL VERIFICATION FAILURE: TIMELINE YEAR UPDATES NOT IMPLEMENTED ON PRODUCTION WEBSITE! Conducted comprehensive testing of SentraTech investor relations page at https://sentratech.net/investor-relations as specifically requested to verify timeline year updates from 2024 to 2025. ❌ TIMELINE DATES NOT UPDATED: All three milestone dates are still showing 2024 instead of the required 2025 updates - 'Product Development Milestone' shows 'November 2024' (should be 'November 2025'), 'Pilot Customer Validation' shows 'October 2024' (should be 'October 2025'), 'Team & Infrastructure' shows 'September 2024' (should be 'September 2025'). ❌ CODE ANALYSIS CONFIRMS ISSUE: Examination of /app/frontend/src/pages/InvestorRelationsPage.js shows dates are still hardcoded as 2024 in lines 77, 88, and 99 of the milestones array. The requested changes were not implemented in the source code. ✅ WEBSITE ACCESSIBILITY CONFIRMED: Successfully accessed production website, cookie banner handling working, timeline section is visible and functional, all milestone content displays correctly except for the incorrect years. ❌ PRODUCTION IMPACT: Users visiting the investor relations page see outdated 2024 milestone dates instead of the current 2025 timeline, which may impact investor confidence and accuracy of company milestones. 🎯 URGENT ACTION REQUIRED: Main agent must update the three milestone dates in InvestorRelationsPage.js from 2024 to 2025 and redeploy the website. The changes need to be made to lines 77 ('November 2024' → 'November 2025'), line 88 ('October 2024' → 'October 2025'), and line 99 ('September 2024' → 'September 2025'). This is a high-priority content update that affects the accuracy of investor-facing information."
   - task: "Newsletter Subscription Duplicate Message Fix Testing"
     implemented: true
     working: true
