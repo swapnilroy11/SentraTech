@@ -204,7 +204,7 @@ const InvestorRelationsPage = () => {
             </h1>
             <p className="text-xl text-[rgb(161,161,170)] max-w-4xl mx-auto leading-relaxed">
               SentraTech is pioneering the next generation of AI-powered customer support automation. 
-              We're seeking $2.5M in pre-seed funding to scale our production infrastructure and 
+              We're seeking $80K in pre-seed funding to scale our production infrastructure and 
               accelerate enterprise pilot customer adoption in the rapidly growing $95B customer service market.
             </p>
             <div className="mt-8 inline-flex items-center px-6 py-3 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-xl">
