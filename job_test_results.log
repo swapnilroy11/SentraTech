@@ -1,0 +1,322 @@
+🎯 Job Application Backend Testing
+Testing Careers page functionality and Job Application submission system
+
+🚀 Starting Job Application Backend Testing
+================================================================================
+Testing Careers page functionality and Job Application submission system:
+• Backend connectivity and health check
+• Job application submission with comprehensive data
+• X-INGEST-KEY authentication testing
+• Data validation and error handling
+• Job application status endpoint
+• MongoDB data persistence verification
+• Comprehensive application scenarios
+================================================================================
+
+=== Testing Backend Connectivity ===
+✅ PASS: Backend Connectivity
+   Details: Backend responding correctly: {'message': 'Hello World'}
+
+=== Testing Backend Health Check ===
+✅ PASS: Backend Health Check
+   Details: Backend healthy - Response time: 0.71ms, Ingest configured: True
+
+=== Testing Job Application Submission ===
+📝 Submitting job application...
+   Position: Customer Support Specialist (English-Fluent)
+   Applicant: Sarah Johnson (sarah.johnson@email.com)
+   Location: Dhaka, Bangladesh
+❌ FAIL: Job Application Submission - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=30)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=30)
+
+=== Testing Job Application Authentication ===
+🔑 Testing valid ingest key...
+❌ FAIL: Job Application Auth - Valid Key - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+🔑 Testing invalid ingest key...
+❌ FAIL: Job Application Auth - Invalid Key - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+🔑 Testing missing ingest key...
+❌ FAIL: Job Application Auth - Missing Key - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+
+=== Testing Job Application Validation ===
+🔍 Testing validation - Missing required fields...
+✅ PASS: Job Application Validation - Missing Fields
+   Details: ✅ Validation correctly rejected missing fields: HTTP 422
+🔍 Testing validation - Invalid email format...
+✅ PASS: Job Application Validation - Invalid Email
+   Details: ✅ Validation correctly rejected invalid email: HTTP 400
+🔍 Testing validation - Malformed JSON...
+✅ PASS: Job Application Validation - Malformed JSON
+   Details: ✅ Malformed JSON correctly rejected: HTTP 422
+
+=== Testing Job Application Status Endpoint ===
+📊 Testing job application status endpoint...
+   Response Status: 200
+   Response Body: {
+  "total_count": 2849,
+  "recent_applications": [
+    {
+      "_id": "68d936850a87762a202d0073",
+      "id": "06f75f0d-69f4-41e0-a83b-14710c616fbd",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:13.071870+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936850a87762a202d0072",
+      "id": "708b3953-be0f-413f-ba88-dbf20c5fce33",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:13.070966+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936850a87762a202d0071",
+      "id": "6807d1b2-377d-42f9-9c74-4222ec443224",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:13.018822+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936850a87762a202d0070",
+      "id": "3ccec175-bd8d-4f89-90bf-95a123238db0",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:13.018621+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006f",
+      "id": "162eb816-3731-4c3f-8783-342198c46f95",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.966484+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006e",
+      "id": "59e2f2ba-8138-4c22-b30b-ae72a56a97b0",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.965579+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006d",
+      "id": "8c74c340-07d7-41da-822d-4c1ab321644f",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.912763+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006c",
+      "id": "35398127-870a-4a2d-adc0-b2f878763303",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.912191+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006b",
+      "id": "ec16c87a-11f8-48ba-b8c8-80fe0ab55f85",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.858723+00:00",
+      "resume_url": null,
+      "resume_name": null
+    },
+    {
+      "_id": "68d936840a87762a202d006a",
+      "id": "b84a279b-a2ec-4dcc-8dfb-ee3ccd6c960b",
+      "full_name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "location": "Bangladesh",
+      "preferred_shifts": null,
+      "availability_start_date": null,
+      "cover_note": null,
+      "linkedin_profile": null,
+      "position": "Customer Support Specialist",
+      "source": "careers_page",
+      "consent_for_storage": true,
+      "status": "received",
+      "created_at": "2025-09-28T13:22:12.858508+00:00",
+      "resume_url": null,
+      "resume_name": null
+    }
+  ]
+}
+✅ PASS: Job Application Status Endpoint
+   Details: ✅ Status endpoint working - Total: 2849, Recent: 10
+
+=== Testing MongoDB Data Persistence ===
+❌ FAIL: Job Application Data Persistence - No application ID available from previous test
+   Details: No application ID available from previous test
+
+=== Testing Comprehensive Job Application Scenarios ===
+🔍 Testing Application with only required fields...
+❌ FAIL: Job Application - Minimal Application - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+🔍 Testing Application with all optional fields...
+✅ PASS: Job Application - Complete Application
+   Details: ✅ Application with all optional fields successful
+🔍 Testing Application for different position...
+❌ FAIL: Job Application - Different Position - Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+   Details: Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+❌ FAIL: Job Application Scenario Compatibility - Poor scenario compatibility: only 1/3 scenarios successful
+   Details: Poor scenario compatibility: only 1/3 scenarios successful
+
+================================================================================
+📊 JOB APPLICATION BACKEND TESTING SUMMARY
+================================================================================
+📈 Overall Test Results:
+   Total Tests: 15
+   ✅ Passed: 7
+   ❌ Failed: 8
+   📊 Success Rate: 46.7%
+
+📋 Detailed Test Results:
+   ✅ PASS: Backend Connectivity
+   ✅ PASS: Backend Health Check
+   ❌ FAIL: Job Application Submission
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=30)
+   ❌ FAIL: Job Application Auth - Valid Key
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   ❌ FAIL: Job Application Auth - Invalid Key
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   ❌ FAIL: Job Application Auth - Missing Key
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   ✅ PASS: Job Application Validation - Missing Fields
+   ✅ PASS: Job Application Validation - Invalid Email
+   ✅ PASS: Job Application Validation - Malformed JSON
+   ✅ PASS: Job Application Status Endpoint
+   ❌ FAIL: Job Application Data Persistence
+      └─ No application ID available from previous test
+   ❌ FAIL: Job Application - Minimal Application
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+   ✅ PASS: Job Application - Complete Application
+   ❌ FAIL: Job Application - Different Position
+      └─ Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=20)
+   ❌ FAIL: Job Application Scenario Compatibility
+      └─ Poor scenario compatibility: only 1/3 scenarios successful
+
+🎯 Critical Findings:
+   ❌ AUTHENTICATION ISSUES:
+      • Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+      • Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+      • Exception: HTTPSConnectionPool(host='tech-careers-3.preview.emergentagent.com', port=443): Read timed out. (read timeout=15)
+   ❌ DATA PERSISTENCE ISSUES:
+      • No application ID available from previous test
+
+🎯 Production Readiness Assessment:
+   ❌ POOR - Significant issues need resolution
+
+💡 Recommendations:
+   • Address 8 failed test cases
+   • Review X-INGEST-KEY authentication implementation
+   • Verify MongoDB storage and retrieval functionality
+
+❌ ISSUES DETECTED: Job application system needs attention before production use

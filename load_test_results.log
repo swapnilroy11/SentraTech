@@ -1,0 +1,177 @@
+🚀 SentraTech API Load & Stability Testing - Production Readiness Assessment
+==========================================================================================
+Focus: Comprehensive API Load Testing for Production Deployment
+Testing: Concurrent load, response times, error rates, throughput, and data integrity
+==========================================================================================
+🚀 Starting Comprehensive API Load & Stability Testing
+================================================================================
+Testing SentraTech API endpoints for production readiness:
+• Demo Request API: 50 concurrent requests (<300ms target)
+• Health Check API: 100 concurrent requests (<100ms target)
+• ROI Calculator API: 40 concurrent requests (<250ms target)
+• Analytics Endpoints: 20 concurrent requests each (<300ms target)
+• Burst Load Testing: Simultaneous request handling
+• Sustained Load Testing: Performance over time
+• Mixed Endpoint Testing: Resource contention analysis
+• Data Integrity Testing: Concurrent operation safety
+================================================================================
+
+=== Testing Demo Request API Load (50 concurrent requests) ===
+🚀 Executing 50 concurrent POST requests to /demo/request...
+❌ FAIL: Demo Request Load - Average Response Time - ❌ Avg response time: 5879.37ms (target: <300ms)
+   Details: ❌ Avg response time: 5879.37ms (target: <300ms)
+❌ FAIL: Demo Request Load - 95th Percentile Response Time - ❌ 95th percentile: 6081.75ms (too slow)
+   Details: ❌ 95th percentile: 6081.75ms (too slow)
+✅ PASS: Demo Request Load - Success Rate
+   Details: ✅ Success rate: 100.0% (50/50)
+❌ FAIL: Demo Request Load - Throughput - ❌ Throughput: 7.82 RPS (target: >10 RPS)
+   Details: ❌ Throughput: 7.82 RPS (target: >10 RPS)
+✅ PASS: Demo Request Load - Error Rate
+   Details: ✅ No errors detected
+📊 Demo Request Load Test Summary:
+   Total Requests: 50
+   Successful: 50 (100.0%)
+   Failed: 0
+   Avg Response Time: 5879.37ms
+   95th Percentile: 6081.75ms
+   Max Response Time: 6172.10ms
+   Throughput: 7.82 RPS
+
+=== Testing Health Check API Load (100 concurrent requests) ===
+🚀 Executing 100 concurrent GET requests to /health...
+✅ PASS: Health Check Load - Average Response Time
+   Details: ✅ Avg response time: 0.00ms (target: <100ms)
+❌ FAIL: Health Check Load - Success Rate - ❌ Success rate: 0.0% (target: >99%)
+   Details: ❌ Success rate: 0.0% (target: >99%)
+📊 Health Check Load Test Summary:
+   Total Requests: 100
+   Successful: 0 (0.0%)
+   Avg Response Time: 0.00ms
+   Throughput: 8.33 RPS
+
+=== Testing ROI Calculator API Load (40 concurrent requests) ===
+🚀 Executing 40 concurrent POST requests to /roi/calculate...
+❌ FAIL: ROI Calculator Load - Average Response Time - ❌ Avg response time: 4099.80ms (target: <250ms)
+   Details: ❌ Avg response time: 4099.80ms (target: <250ms)
+✅ PASS: ROI Calculator Load - Success Rate
+   Details: ✅ Success rate: 100.0%
+✅ PASS: ROI Calculator Load - Calculation Accuracy
+   Details: ✅ ROI calculations returning correct data structure
+📊 ROI Calculator Load Test Summary:
+   Total Requests: 40
+   Successful: 40 (100.0%)
+   Avg Response Time: 4099.80ms
+   Throughput: 4.76 RPS
+
+=== Testing Analytics Endpoints Load (20 concurrent requests each) ===
+🔍 Testing /metrics/live...
+🚀 Executing 20 concurrent GET requests to /metrics/live...
+❌ FAIL: Analytics Load - /metrics/live Response Time - ❌ Avg: 1836.07ms (target: <300ms)
+   Details: ❌ Avg: 1836.07ms (target: <300ms)
+✅ PASS: Analytics Load - /metrics/live Success Rate
+   Details: ✅ Success: 100.0%
+🔍 Testing /metrics/dashboard...
+🚀 Executing 20 concurrent GET requests to /metrics/dashboard...
+❌ FAIL: Analytics Load - /metrics/dashboard Response Time - ❌ Avg: 1955.70ms (target: <300ms)
+   Details: ❌ Avg: 1955.70ms (target: <300ms)
+✅ PASS: Analytics Load - /metrics/dashboard Success Rate
+   Details: ✅ Success: 100.0%
+🔍 Testing /metrics/kpis...
+🚀 Executing 20 concurrent GET requests to /metrics/kpis...
+❌ FAIL: Analytics Load - /metrics/kpis Response Time - ❌ Avg: 1994.16ms (target: <300ms)
+   Details: ❌ Avg: 1994.16ms (target: <300ms)
+✅ PASS: Analytics Load - /metrics/kpis Success Rate
+   Details: ✅ Success: 100.0%
+🔍 Testing /analytics/stats...
+🚀 Executing 20 concurrent GET requests to /analytics/stats...
+❌ FAIL: Analytics Load - /analytics/stats Response Time - ❌ Avg: 2017.09ms (target: <300ms)
+   Details: ❌ Avg: 2017.09ms (target: <300ms)
+✅ PASS: Analytics Load - /analytics/stats Success Rate
+   Details: ✅ Success: 100.0%
+❌ FAIL: Analytics Load - Overall Performance - ❌ Overall analytics performance issues
+   Details: ❌ Overall analytics performance issues
+
+=== Testing Burst Load Scenario ===
+🚀 Testing burst load on demo request endpoint...
+🚀 Executing 25 concurrent POST requests to /demo/request...
+✅ PASS: Burst Load - Peak Response Time
+   Details: ✅ Max response time: 4096.02ms
+✅ PASS: Burst Load - Success Rate
+   Details: ✅ Burst success rate: 100.0%
+✅ PASS: Burst Load - Timeout Handling
+   Details: ✅ No timeout errors during burst
+
+=== Testing Sustained Load Scenario ===
+📈 Testing sustained load with gradual ramp-up...
+Phase 1: Ramp-up over 15 seconds...
+Phase 2: Sustained load for 30 seconds...
+✅ PASS: Sustained Load - Ramp-up Performance
+   Details: ✅ Ramp-up success rate: 100.0%
+✅ PASS: Sustained Load - Sustained Performance
+   Details: ✅ Sustained success rate: 100.0%
+✅ PASS: Sustained Load - Performance Degradation
+   Details: ✅ No significant performance degradation (avg: 518.70ms)
+
+=== Testing Mixed Endpoint Scenario ===
+🔀 Testing mixed load across multiple endpoints...
+🚀 Executing 20 concurrent POST requests to /demo/request...
+🚀 Executing 15 concurrent POST requests to /roi/calculate...
+🚀 Executing 10 concurrent GET requests to /health...
+🚀 Executing 5 concurrent GET requests to /metrics/live...
+❌ FAIL: Mixed Load - Overall Success Rate - ❌ Mixed load success rate: 80.0% (target: >85%)
+   Details: ❌ Mixed load success rate: 80.0% (target: >85%)
+❌ FAIL: Mixed Load - Resource Contention - ❌ Possible resource contention: /metrics/live: 4656.84ms, /demo/request: 5269.22ms, /roi/calculate: 4826.09ms
+   Details: ❌ Possible resource contention: /metrics/live: 4656.84ms, /demo/request: 5269.22ms, /roi/calculate: 4826.09ms
+✅ PASS: Mixed Load - Endpoint Isolation
+   Details: ✅ Good endpoint isolation: 3/4 endpoints healthy
+📊 Mixed Load Test Summary:
+   /metrics/live: 5/5 (100.0%) - Avg: 4656.84ms
+   /health: 0/10 (0.0%) - Avg: 0.00ms
+   /demo/request: 20/20 (100.0%) - Avg: 5269.22ms
+   /roi/calculate: 15/15 (100.0%) - Avg: 4826.09ms
+
+=== Testing Data Integrity Under Load ===
+🔍 Testing concurrent demo request submissions for data integrity...
+❌ FAIL: Data Integrity - Concurrent Submissions - ❌ 10 submissions failed out of 10
+   Details: ❌ 10 submissions failed out of 10
+✅ PASS: Data Integrity - Unique Reference IDs
+   Details: ✅ All reference IDs unique (no race conditions)
+✅ PASS: Data Integrity - Data Persistence
+   Details: ✅ Data persistence verified: 0/0 requests found
+
+================================================================================
+📊 SENTRATECH API LOAD & STABILITY TESTING - PRODUCTION READINESS REPORT
+================================================================================
+📈 Overall Test Results:
+   Total Tests: 31
+   ✅ Passed: 18
+   ❌ Failed: 13
+   📊 Success Rate: 58.1%
+
+🚀 Load Testing Summary:
+   Demo Request API (50 concurrent):
+     Success Rate: 100.0%
+     Avg Response: 5879.37ms (target: <300ms)
+     95th Percentile: 6081.75ms
+     Throughput: 7.82 RPS
+   Health Check API (100 concurrent):
+     Success Rate: 0.0%
+     Avg Response: 0.00ms (target: <100ms)
+     Throughput: 8.33 RPS
+   ROI Calculator API (40 concurrent):
+     Success Rate: 100.0%
+     Avg Response: 4099.80ms (target: <250ms)
+     Throughput: 4.76 RPS
+
+📊 Stability Metrics:
+Traceback (most recent call last):
+  File "/app/backend_test.py", line 3357, in <module>
+    production_ready = load_tester.run_comprehensive_load_tests()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/backend_test.py", line 1034, in run_comprehensive_load_tests
+    readiness_score = self.generate_production_readiness_report()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/backend_test.py", line 912, in generate_production_readiness_report
+    total_errors += result["failed_requests"]
+                    ~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'failed_requests'

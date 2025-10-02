@@ -1,0 +1,66 @@
+🚀 Starting Comprehensive Proxy Endpoints with Rate Limiting Testing...
+Backend URL: https://sentra-deploy-fix.preview.emergentagent.com
+Testing Focus: Proxy endpoints, rate limiting, error handling
+================================================================================
+
+🔍 Testing Backend Health Check...
+✅ Health Check: PASS (19543.51ms)
+   Details: Status: healthy, Version: 1.0.0-optimized
+
+📧 Testing Newsletter Signup Proxy Endpoint...
+✅ Newsletter Proxy - Valid Data: PASS (5144.96ms)
+   Details: Success: True, ID: b536b229-6092-4c75-b42d-0ded81f9101f
+✅ Newsletter Proxy - Malformed Data: PASS (5124.78ms)
+   Details: Handled gracefully: HTTP 200
+
+📞 Testing Contact Sales Proxy Endpoint...
+✅ Contact Sales Proxy - Valid Data: PASS (5214.74ms)
+   Details: Success: True, ID: d35e7647-0a13-438c-9426-f40dc4c61d49
+
+🎯 Testing Demo Request Proxy Endpoint...
+✅ Demo Request Proxy - Valid Data: PASS (5233.91ms)
+   Details: Success: True, ID: 19c84987-b5ef-45b8-a425-bc88537a4e65
+
+💰 Testing ROI Calculator Proxy Endpoint...
+✅ ROI Calculator Proxy - Valid Data: PASS (9191.01ms)
+   Details: Success: True, ID: c3cb8f1a-0936-4e56-af59-1b2544215d6d
+
+💼 Testing Job Application Proxy Endpoint...
+✅ Job Application Proxy - Valid Data: PASS (5144.74ms)
+   Details: Success: True, ID: 971deac1-721c-494e-a625-c7132b7f54c8
+
+💬 Testing Chat Message Proxy Endpoint...
+❌ Chat Message Proxy - Valid Data: FAIL (137.63ms)
+   Details: Success false: {'success': False, 'error': 'Internal server error'}
+
+⚡ Testing Rate Limiting Verification...
+✅ Rate Limiting - Rapid Requests: PASS (13974.21ms)
+   Details: Handled 5/5 rapid requests gracefully, Avg: 13974.21ms
+
+🔍 Testing Original Test Data Verification...
+✅ Test Data Verification - proxy-test@example.com: PASS (5102.67ms)
+   Details: Proxy forwarding working for test email
+✅ Test Data Verification - complete-flow-test@example.com: PASS (5156.74ms)
+   Details: Proxy forwarding working for test email
+
+🚨 Testing Error Handling Scenarios...
+❌ Error Handling - Malformed JSON: FAIL (539.75ms)
+   Details: Unexpected status: 200
+✅ Error Handling - Empty Body: PASS (5117.07ms)
+   Details: Handled gracefully: HTTP 200
+✅ Error Handling - Large Payload: PASS (5110.18ms)
+   Details: Large payload handled: HTTP 200
+
+================================================================================
+🎯 TEST SUMMARY
+================================================================================
+Total Tests: 14
+✅ Passed: 12
+❌ Failed: 2
+📊 Success Rate: 85.7%
+
+❌ FAILED TESTS:
+   - Chat Message Proxy - Valid Data: Success false: {'success': False, 'error': 'Internal server error'}
+   - Error Handling - Malformed JSON: Unexpected status: 200
+
+🎉 Proxy Endpoints with Rate Limiting Testing Complete!
