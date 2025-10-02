@@ -29,7 +29,7 @@ const API_BASE = isDevelopment
   ? 'http://localhost:8001/api' 
   : isPreview
   ? `${window.location.protocol}//${window.location.host}/api`
-  : (process.env.REACT_APP_API_BASE || 'https://admin.sentratech.net/api/forms');
+  : process.env.REACT_APP_API_BASE;
 
 const WS_URL = isDevelopment
   ? 'ws://localhost:8001/ws'
