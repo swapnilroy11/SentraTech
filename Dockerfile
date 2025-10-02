@@ -17,13 +17,15 @@ COPY . .
 # Install all dependencies (workspaces)
 RUN yarn install --frozen-lockfile --network-timeout 600000 --prefer-offline
 
-# Debug: Show memory and disk usage before build
+# Build frontend and backend with debug info
 RUN echo "=== PRE-BUILD DEBUG INFO ===" && \
+    echo "Current directory: $(pwd)" && \
+    echo "Package.json exists: $(ls -la package.json)" && \
     df -h && \
     free -h && \
     echo "Node version: $(node --version)" && \
     echo "Yarn version: $(yarn --version)" && \
-    echo "=== STARTING BUILD ===" && \
+    echo "=== STARTING WORKSPACE BUILD ===" && \
     yarn workspace frontend build && \
     echo "=== BUILD COMPLETED ===" && \
     ls -la packages/website/dist/ && \
