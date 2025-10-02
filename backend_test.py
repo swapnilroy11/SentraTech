@@ -960,9 +960,13 @@ class ProxyEndpointTester:
         return success_rate >= 80
 
 if __name__ == "__main__":
-    print("SentraTech Backend Proxy Endpoints Testing")
+    print("🔧 SentraTech Backend API Testing After Docker Buildx Migration")
+    print("Comprehensive verification of backend functionality after build system switch")
     print(f"Backend URL: {BACKEND_URL}")
     print(f"Test started at: {datetime.now(timezone.utc).isoformat()}")
+    print(f"Build System: Docker Buildx (migrated from Kaniko)")
+    print(f"Frontend Directory: /app/packages/website/")
+    print(f"Backend Port: 8001 (supervisor managed)")
     
     tester = ProxyEndpointTester()
     success = tester.run_all_tests()
