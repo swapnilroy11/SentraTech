@@ -1,47 +1,24 @@
-# SentraTech Multi-Stage Build Dockerfile
-# Fixed for Kaniko - using /app working directory
-FROM node:18-alpine as builder
+# Stage 1: builder
+FROM node:18-alpine AS builder
+WORKDIR /usr/src/app
 
-# Set NODE_OPTIONS for memory optimization
-ENV NODE_OPTIONS="--max_old_space_size=4096"
+# Install dependencies (cached separately)
+COPY package*.json ./
+RUN npm ci --production=false
 
-# Set working directory to /app (where Kaniko expects package.json)
-WORKDIR /app
-
-# Copy root package.json + lockfile so Kaniko sees them at /app
-COPY package.json yarn.lock ./
-
-# Copy the rest of the monorepo (so workspaces are available)
+# Copy source and build
 COPY . .
+RUN npm run build
 
-# Install all dependencies (workspaces)
-RUN yarn install --frozen-lockfile --network-timeout 600000 --prefer-offline
+# Debugging (optional, remove later)
+RUN echo "Contents of /usr/src/app" && ls -la /usr/src/app
+RUN echo "Contents of /usr/src/app/frontend/dist" && ls -la /usr/src/app/frontend/dist
 
-# Build frontend and backend with debug info
-RUN echo "=== PRE-BUILD DEBUG INFO ===" && \
-    echo "Current directory: $(pwd)" && \
-    echo "Package.json exists: $(ls -la package.json)" && \
-    df -h && \
-    free -h && \
-    echo "Node version: $(node --version)" && \
-    echo "Yarn version: $(yarn --version)" && \
-    echo "=== STARTING WORKSPACE BUILD ===" && \
-    yarn workspace frontend build && \
-    echo "=== BUILD COMPLETED ===" && \
-    ls -la packages/website/dist/ && \
-    echo "=== POST-BUILD DEBUG INFO ===" && \
-    df -h
+# Stage 2: nginx runtime
+FROM nginx:alpine AS runner
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /usr/src/app/frontend/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Production stage
-FROM nginx:alpine
-
-# Copy built files
-COPY --from=builder /app/packages/website/dist /usr/share/nginx/html
-
-# Copy nginx configuration if exists
-COPY --from=builder /app/packages/website/nginx.conf /etc/nginx/conf.d/default.conf 2>/dev/null || true
-
-# Expose port
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

@@ -6,16 +6,19 @@
         <meta name="theme-color" content="#000000" />
         <meta name="description" content="SentraTech - AI-Powered Customer Support Platform" />
         
-        <!-- Performance Optimization: DNS Prefetch -->
-        <link rel="dns-prefetch" href="//fonts.googleapis.com">
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link rel="dns-prefetch" href="//www.googletagmanager.com">
-        <link rel="dns-prefetch" href="//www.google-analytics.com">
-        
-        <!-- Performance Optimization: Preconnect for Critical Third Parties -->
+        <!-- Enhanced DNS and connection optimizations -->
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preconnect" href="https://www.googletagmanager.com">
+        <link rel="dns-prefetch" href="https://www.google-analytics.com">
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+        
+        <!-- Preload critical resources -->
+        <link rel="preload" href="/favicon.ico" as="image" type="image/x-icon">
+        
+        <!-- Prefetch likely next pages -->
+        <link rel="prefetch" href="/features">
+        <link rel="prefetch" href="/roi-calculator">
+        <link rel="prefetch" href="/demo-request">
         
         <!-- Critical Font Preloading with Optimized Loading Strategy -->
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -50,17 +53,30 @@
         <meta http-equiv="X-Content-Type-Options" content="nosniff">
         <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
         
-        <!-- PWA Manifest -->
-        <link rel="manifest" href="/manifest.json" />
+        <!-- Enhanced PWA Manifest -->
+        <link rel="manifest" href="/manifest.json">
         
-        <!-- Apple Touch Icons for iOS -->
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <!-- Advanced iOS PWA meta tags -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="SentraTech">
+        <meta name="apple-touch-startup-image" content="/apple-touch-icon.png">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         
-        <!-- Web App Manifest -->
+        <!-- Enhanced Microsoft PWA meta tags -->
+        <meta name="msapplication-TileColor" content="#00FF41">
+        <meta name="msapplication-TileImage" content="/apple-touch-icon.png">
+        <meta name="msapplication-config" content="/browserconfig.xml">
+        <meta name="msapplication-navbutton-color" content="#00FF41">
+        
+        <!-- Advanced PWA features -->
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="application-name" content="SentraTech">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00FF41">
         
         <!-- Open Graph Meta Tags for Social Sharing -->
         <meta property="og:title" content="SentraTech - AI-Powered Customer Support Platform">

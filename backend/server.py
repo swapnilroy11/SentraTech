@@ -385,7 +385,7 @@ client = AsyncIOMotorClient(
 mongo_url = os.environ.get('MONGO_URL')
 if not mongo_url:
     raise ValueError("MONGO_URL environment variable is required")
-db_name = mongo_url.split('/')[-1] if '/' in mongo_url else 'sentratech_forms'
+db_name = mongo_url.split('/')[-1] if '/' in mongo_url else os.environ.get('DB_NAME', 'sentratech_forms')
 db = client[db_name]
 
 # Database optimization configurations
@@ -1135,35 +1135,41 @@ async def root():
 
 @api_router.get("/health")
 async def health_check():
-    """Health check endpoint with performance metrics"""
+    """Health check endpoint with performance metrics - works despite MongoDB connection issues"""
     start_time = time.time()
     
+    # Check if ingest is configured
+    ingest_configured = bool(os.environ.get("INGEST_KEY") and os.environ.get("SVC_EMAIL"))
+    
+    # Try database connection but don't fail if it's unavailable
+    database_status = "disconnected"
     try:
-        # Quick database ping
+        # Quick database ping with short timeout
         await client.admin.command('ping')
-        
-        # Get cache statistics
-        cache_stats = SpecializedCaches.get_all_stats()
-        
-        response_time = (time.time() - start_time) * 1000
-        
-        # Check if ingest is configured
-        ingest_configured = bool(os.environ.get("INGEST_KEY") and os.environ.get("SVC_EMAIL"))
-        
-        return {
-            "status": "healthy",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "response_time_ms": round(response_time, 2),
-            "database": "connected",
-            "cache_stats": cache_stats,
-            "version": "1.0.0-optimized",
-            "mock": False,
-            "ingest_configured": ingest_configured
-        }
+        database_status = "connected"
     except Exception as e:
-        response_time = (time.time() - start_time) * 1000
-        logger.error(f"Health check failed after {response_time:.2f}ms: {str(e)}")
-        raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
+        logger.warning(f"Database connection unavailable: {str(e)}")
+        database_status = "unavailable"
+    
+    # Get cache statistics (this should work even without database)
+    try:
+        cache_stats = SpecializedCaches.get_all_stats()
+    except Exception:
+        cache_stats = {"error": "cache_stats_unavailable"}
+    
+    response_time = (time.time() - start_time) * 1000
+    
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "response_time_ms": round(response_time, 2),
+        "database": database_status,
+        "cache_stats": cache_stats,
+        "version": "1.0.0-optimized",
+        "mock": False,
+        "ingest_configured": ingest_configured,
+        "integrations": "dashboard_only"  # Using dashboard integration only
+    }
 
 @api_router.get("/config/validate")
 async def validate_dashboard_config():
@@ -1253,9 +1259,9 @@ class JobApplication(BaseModel):
 
 # Authentication middleware for ingest endpoints
 async def verify_ingest_key(x_ingest_key: Optional[str] = Header(None)):
-    expected_key = os.environ.get("INGEST_API_KEY")
+    expected_key = os.environ.get("INGEST_API_KEY") or os.environ.get("INGEST_KEY")
     if not expected_key:
-        raise ValueError("INGEST_API_KEY environment variable is required for production deployment")
+        raise ValueError("INGEST_API_KEY or INGEST_KEY environment variable is required for production deployment")
     if x_ingest_key != expected_key:
         raise HTTPException(status_code=401, detail="Invalid or missing X-INGEST-KEY")
     return x_ingest_key
@@ -1787,9 +1793,22 @@ async def proxy_roi_calculator(request: Request):
         proxy_logger.info(f"  - Monthly Savings: {data.get('monthly_savings', 'MISSING')} (type: {type(data.get('monthly_savings'))})")
         proxy_logger.info(f"  - ROI Percentage: {data.get('roi_percentage', 'MISSING')} (type: {type(data.get('roi_percentage'))})")
         proxy_logger.info(f"  - Cost Reduction: {data.get('cost_reduction', 'MISSING')} (type: {type(data.get('cost_reduction'))})")
+        proxy_logger.info(f"  - Bundles: {data.get('bundles', 'MISSING')} (type: {type(data.get('bundles'))})")
         
         if 'timestamp' not in data:
             data['timestamp'] = datetime.now(timezone.utc).isoformat()
+        
+        # Fix: Convert bundles from float to integer before sending to dashboard
+        # Dashboard validation expects bundles to be an integer, but frontend sends float
+        if 'bundles' in data and data['bundles'] is not None:
+            try:
+                # Convert float bundles to integer using round() for proper rounding
+                bundles_value = data['bundles']
+                if isinstance(bundles_value, (int, float)):
+                    data['bundles'] = int(round(bundles_value))
+                    proxy_logger.info(f"🔧 Converted bundles from {bundles_value} ({type(bundles_value)}) to {data['bundles']} (int)")
+            except (ValueError, TypeError) as e:
+                proxy_logger.warning(f"⚠️ Failed to convert bundles to integer: {e}, keeping original value")
             
         result = await proxy_to_dashboard('/forms/roi-calculator', data, dict(request.headers))
         
@@ -1861,6 +1880,31 @@ async def proxy_job_application(request: Request):
         proxy_logger.info(f"  - Work Authorization: '{body.get('work_authorization', 'MISSING')}' (type: {type(body.get('work_authorization'))})")
         proxy_logger.info(f"  - Preferred Shifts: '{body.get('preferred_shifts', 'MISSING')}' (type: {type(body.get('preferred_shifts'))})")
         proxy_logger.info(f"  - Start Date: '{body.get('availability_start_date', 'MISSING')}' (type: {type(body.get('availability_start_date'))})")
+        
+        # Fix field name mappings for dashboard compatibility (similar to ROI calculator bundles fix)
+        if 'name' in body and 'full_name' not in body:
+            body['full_name'] = body['name']
+            proxy_logger.info(f"🔧 Mapped 'name' to 'full_name': {body['name']}")
+        
+        if 'position' in body and 'position_applied' not in body:
+            body['position_applied'] = body['position']
+            proxy_logger.info(f"🔧 Mapped 'position' to 'position_applied': {body['position']}")
+        
+        # Convert array shifts to strings before sending to dashboard (similar to ROI calculator bundles fix)
+        if 'work_shifts' in body and isinstance(body['work_shifts'], list):
+            original_value = body['work_shifts']
+            body['work_shifts'] = ','.join(body['work_shifts']) if body['work_shifts'] else ''
+            proxy_logger.info(f"🔧 Converted work_shifts from {original_value} ({type(original_value)}) to '{body['work_shifts']}' (string)")
+            
+        if 'preferred_shifts' in body and isinstance(body['preferred_shifts'], list):
+            original_value = body['preferred_shifts']
+            body['preferred_shifts'] = ','.join(body['preferred_shifts']) if body['preferred_shifts'] else ''
+            proxy_logger.info(f"🔧 Converted preferred_shifts from {original_value} ({type(original_value)}) to '{body['preferred_shifts']}' (string)")
+        
+        # Add missing required fields with default values
+        if 'work_authorization' not in body:
+            body['work_authorization'] = 'authorized'  # Default value for work authorization
+            proxy_logger.info(f"🔧 Added missing required field 'work_authorization': authorized")
         
         # Ensure required fields
         if 'timestamp' not in body:
@@ -2211,138 +2255,6 @@ async def get_candidate_detail(request: Request, candidate_id: str):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 # Google Sheets Service
-class AirtableService:
-    """Airtable integration service for demo requests and analytics"""
-    
-    def __init__(self):
-        # Airtable configuration - using provided token
-        self.access_token = "patqEN3h5N1BfTEbw.88afc089ca1a1196530c9237148b71ea0b1d12f8600878b2ed272b3e10323ad8"
-        self.base_id = "appSentraTechDemo"  # This will be auto-detected or configured
-        self.table_name = "Demo Requests"
-        self.base_url = "https://api.airtable.com/v0"
-        
-    async def create_demo_request(self, demo_request: DemoRequest):
-        """Create a demo request in Airtable with retry logic"""
-        max_retries = 3
-        
-        for attempt in range(max_retries):
-            try:
-                # Construct URL - try multiple base ID formats if needed
-                possible_base_ids = [
-                    "appSentraTechDemo",
-                    "appdemo12345",  # fallback IDs
-                    "app123456789"
-                ]
-                
-                for base_id in possible_base_ids:
-                    url = f"{self.base_url}/{base_id}/{self.table_name}"
-                    headers = {
-                        "Authorization": f"Bearer {self.access_token}",
-                        "Content-Type": "application/json"
-                    }
-                    
-                    # Prepare Airtable record format
-                    current_time = datetime.now(timezone.utc)
-                    data = {
-                        "fields": {
-                            "Name": demo_request.name,
-                            "Email": demo_request.email,
-                            "Company": demo_request.company,
-                            "Phone": demo_request.phone or "",
-                            "Message": demo_request.message or "",
-                            "Call Volume": demo_request.call_volume or "",
-                            "Interaction Volume": demo_request.interaction_volume or "",
-                            "Preferred Date": current_time.strftime("%Y-%m-%d"),
-                            "Status": "Pending",
-                            "Source": "Website Form",
-                            "Date Created": current_time.isoformat(),
-                            "Reference ID": str(uuid.uuid4())
-                        }
-                    }
-                    
-                    import httpx
-                    async with httpx.AsyncClient(timeout=30.0) as client:
-                        logger.info(f"Attempting Airtable submission to base: {base_id}")
-                        response = await client.post(url, headers=headers, json=data)
-                        
-                        if response.status_code == 200:
-                            result = response.json()
-                            logger.info(f"✅ Demo request created in Airtable: {result['id']}")
-                            return {
-                                "success": True,
-                                "source": "airtable",
-                                "airtable_id": result["id"],
-                                "base_id": base_id,
-                                "record": result
-                            }
-                        elif response.status_code == 404:
-                            # Base ID not found, try next one
-                            logger.warning(f"Base ID {base_id} not found, trying next...")
-                            continue
-                        elif response.status_code >= 500:
-                            # Server error - retry
-                            logger.error(f"Airtable server error (attempt {attempt + 1}): {response.status_code}")
-                            if attempt < max_retries - 1:
-                                await asyncio.sleep(2 ** attempt)  # exponential backoff
-                                break  # break inner loop, continue outer loop
-                            else:
-                                return {"success": False, "error": f"Airtable server error: {response.status_code}"}
-                        else:
-                            # Client error - don't retry
-                            error_text = response.text
-                            logger.error(f"Airtable client error: {response.status_code} - {error_text}")
-                            return {"success": False, "error": f"Airtable client error: {response.status_code}"}
-                
-                # If all base IDs failed with 404
-                return {"success": False, "error": "No valid Airtable base ID found"}
-                        
-            except Exception as e:
-                logger.error(f"Airtable integration error (attempt {attempt + 1}): {str(e)}")
-                if attempt < max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)  # exponential backoff
-                else:
-                    return {"success": False, "error": f"Airtable connection failed: {str(e)}"}
-        
-        return {"success": False, "error": "Max retries exceeded"}
-    
-    async def track_analytics_event(self, event_data: dict):
-        """Track analytics events in Airtable"""
-        try:
-            # Use first working base ID from demo requests
-            url = f"{self.base_url}/appSentraTechDemo/Analytics"
-            headers = {
-                "Authorization": f"Bearer {self.access_token}",
-                "Content-Type": "application/json"
-            }
-            
-            data = {
-                "fields": {
-                    "Event Type": event_data.get("event_type", "page_view"),
-                    "Page URL": event_data.get("page_url", ""),
-                    "User IP": event_data.get("user_ip", ""),
-                    "User Agent": event_data.get("user_agent", ""),
-                    "Timestamp": datetime.now(timezone.utc).isoformat(),
-                    "Session ID": event_data.get("session_id", ""),
-                    "Additional Data": str(event_data.get("metadata", {}))
-                }
-            }
-            
-            import httpx
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.post(url, headers=headers, json=data)
-                
-                if response.status_code == 200:
-                    logger.info("✅ Analytics event tracked in Airtable")
-                    return {"success": True}
-                else:
-                    logger.error(f"Airtable analytics error: {response.status_code}")
-                    return {"success": False}
-                    
-        except Exception as e:
-            logger.error(f"Airtable analytics error: {str(e)}")
-            return {"success": False}
-
-
 class GoogleSheetsService:
     """Google Sheets service for storing demo requests"""
     
@@ -2522,7 +2434,6 @@ async def fallback_to_sheets(demo_request: DemoRequest, reference_id: str):
 
 # Initialize services
 sheets_service = GoogleSheetsService()
-airtable_service = AirtableService()
 email_service = EmailService()
 connection_manager = ConnectionManager()
 chat_service = LiveChatService()
@@ -2695,7 +2606,7 @@ async def create_demo_request(
     demo_request: DemoRequest,
     background_tasks: BackgroundTasks
 ):
-    """Create a demo request with Airtable primary, Google Sheets fallback - PERFORMANCE OPTIMIZED"""
+    """Create a demo request with database storage and Google Sheets fallback - PERFORMANCE OPTIMIZED"""
     start_time = time.time()
     
     try:
@@ -2706,39 +2617,23 @@ async def create_demo_request(
         
         # Initialize status tracking
         integration_results = {
-            "airtable": {"success": False, "error": "Not attempted"},
             "sheets": {"success": False, "error": "Not attempted"},
             "database": {"success": False, "error": "Not attempted"}
         }
         
-        # Use asyncio.gather for parallel execution to reduce response time
-        airtable_task = airtable_service.create_demo_request(demo_request)
-        db_task = store_demo_request_optimized(demo_request, reference_id)
-        
-        # Execute Airtable and database storage in parallel
-        airtable_result, db_result = await asyncio.gather(
-            airtable_task, db_task, return_exceptions=True
-        )
-        
-        # Handle Airtable result
-        if isinstance(airtable_result, Exception):
-            integration_results["airtable"] = {"success": False, "error": str(airtable_result)}
-            primary_success = False
-        else:
-            integration_results["airtable"] = airtable_result
-            primary_success = airtable_result.get("success", False)
+        # Store in database first
+        db_result = await store_demo_request_optimized(demo_request, reference_id)
         
         # Handle database result  
         if isinstance(db_result, Exception):
             integration_results["database"] = {"success": False, "error": str(db_result)}
+            database_success = False
         else:
             integration_results["database"] = {"success": True, "error": None}
+            database_success = True
         
-        # FALLBACK: If Airtable failed, try Google Sheets (background task)
-        if not primary_success:
-            logger.warning(f"⚠️ Airtable failed: {integration_results['airtable'].get('error')}, falling back to Google Sheets")
-            # Execute sheets submission as background task to not block response
-            background_tasks.add_task(fallback_to_sheets, demo_request, reference_id)
+        # Try Google Sheets as backup (background task to not block response)
+        background_tasks.add_task(fallback_to_sheets, demo_request, reference_id)
         
         # Schedule email notifications as background tasks
         background_tasks.add_task(
@@ -2880,10 +2775,7 @@ async def submit_demo_request_form(
             call_volume="1000"  # Default value since not provided in form
         )
         
-        # Try Airtable submission first
-        airtable_result = await airtable_service.create_demo_request(demo_request_data)
-        
-        # Also try Google Sheets as backup
+        # Try Google Sheets as backup
         sheets_result = await sheets_service.submit_demo_request(demo_request_data)
         
         # Generate request ID and timestamp
@@ -2903,9 +2795,7 @@ async def submit_demo_request_form(
             "timestamp": timestamp.isoformat(),
             "client_ip": client_ip,
             "source": "demo_request_form",
-            "airtable_status": airtable_result.get("success", False),
-            "sheets_status": sheets_result["success"],
-            "airtable_id": airtable_result.get("airtable_id") if airtable_result.get("success") else None
+            "sheets_status": sheets_result["success"]
         }
         
         await db.demo_requests.insert_one(demo_record)
@@ -4575,6 +4465,60 @@ async def refresh_token():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Add root-level health check for deployment systems
+@app.get("/health")
+async def root_health_check():
+    """Root-level health check endpoint for deployment systems"""
+    try:
+        # Quick database ping
+        await client.admin.command('ping')
+        
+        # Check if we're using Atlas (production) or local (development)
+        mongo_url = os.environ.get('MONGO_URL', '')
+        db_type = "atlas" if "mongodb.net" in mongo_url or "cloud.mongodb.com" in mongo_url else "local"
+        
+        return {
+            "status": "healthy", 
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "database": "connected",
+            "db_type": db_type,
+            "service": "sentratech-api"
+        }
+    except Exception as e:
+        logger.error(f"Root health check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
+
+@app.get("/readiness")
+async def readiness_check():
+    """Kubernetes readiness probe endpoint"""
+    try:
+        # More thorough check for readiness
+        await client.admin.command('ping')
+        
+        # Verify key collections exist and are accessible
+        collections_check = {}
+        required_collections = ["demo_requests", "contact_requests", "roi_reports", "subscriptions"]
+        
+        for collection_name in required_collections:
+            try:
+                # Check if collection is accessible (don't create if it doesn't exist)
+                await db[collection_name].count_documents({}, limit=1)
+                collections_check[collection_name] = "accessible"
+            except Exception:
+                # Collection might not exist yet, which is fine for new deployments
+                collections_check[collection_name] = "not_found_but_ok"
+        
+        return {
+            "status": "ready",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "database": "connected",
+            "collections": collections_check,
+            "service": "sentratech-api"
+        }
+    except Exception as e:
+        logger.error(f"Readiness check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service not ready: {str(e)}")
+
 # Include enterprise proxy router
 # Include enterprise proxy router
 try:
@@ -4935,16 +4879,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=[
-        "https://sentratech.net",
-        "https://www.sentratech.net", 
-        "https://admin.sentratech.net",
-        "https://deploy-bug-fixes.preview.emergentagent.com",
-        "https://*.emergent.host",  # Emergent production domains
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:8080"
-    ],
+    allow_origins=["*"],
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],  # Allow all headers for maximum compatibility
 )

@@ -1,63 +1,8 @@
-# Dependencies
 node_modules
-*/node_modules
-.pnp
-.pnp.js
-
-# Testing
-coverage
-test-results
-
-# Production builds (exclude existing builds)
-build
-dist
-*/build
-*/dist
-
-# Development
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
 .git
-.gitignore
-
-# Misc
-README.md
-*.md
-docs/
-deployment-package/
-tests/
-
-# Keep only necessary files for build
-!package.json
-!yarn.lock
-!packages/*/package.json
-!packages/*/src
-!packages/*/public
-!packages/*/craco.config.js
-!emergent.config.js
+.DS_Store
+.vscode
+.env
+npm-debug.log
+coverage
+dist

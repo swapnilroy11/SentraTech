@@ -19,7 +19,9 @@ logger = logging.getLogger("enterprise_proxy")
 
 class EnterpriseProxyService:
     def __init__(self):
-        self.api_key = os.getenv('EMERGENT_API_KEY', 'sk-emergent-7A236FdD2Ce8d9b52C')
+        self.api_key = os.getenv('EMERGENT_API_KEY')
+        if not self.api_key:
+            raise ValueError("EMERGENT_API_KEY environment variable is required")
         self.dashboard_base_url = os.getenv('ADMIN_DASHBOARD_URL', 'https://admin.sentratech.net/api/forms')
         self.timeout = int(os.getenv('PROXY_TIMEOUT', '10000')) / 1000  # Convert to seconds
         self.max_retries = int(os.getenv('PROXY_RETRIES', '3'))

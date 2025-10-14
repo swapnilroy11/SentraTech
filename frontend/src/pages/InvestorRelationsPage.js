@@ -145,9 +145,12 @@ const InvestorRelationsPage = () => {
       value: 'Product roadmap & technical architecture guidance'
     },
     {
-      role: 'Go-to-Market',
-      expertise: 'VP Sales at leading SaaS customer support platform',
-      value: 'Enterprise sales strategy & customer acquisition'
+      name: 'Taufiq Ahamed Emon',
+      role: 'Visionary Tech Leadership',
+      expertise: 'Visionary leader in technology startups with proven track record in scaling innovative solutions and driving digital transformation',
+      value: 'Strategic technology roadmap & startup growth expertise',
+      image: '/images/advisors/taufiq-ahamed-emon.jpg',
+      hasImage: true
     },
     {
       role: 'Industry Expert',
@@ -438,10 +441,23 @@ const InvestorRelationsPage = () => {
               {advisors.map((advisor, index) => (
                 <div key={index} className="bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-2xl p-6">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                      <Award size={20} className="text-[#00FF41]" />
-                    </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">{advisor.role}</h4>
+                    {advisor.hasImage ? (
+                      <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-2 border-[#00FF41]/30">
+                        <img 
+                          src={advisor.image} 
+                          alt={advisor.name}
+                          className="w-full h-full object-cover object-center grayscale contrast-125 brightness-110"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 bg-[#00FF41]/10 border border-[#00FF41]/30 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                        <Award size={20} className="text-[#00FF41]" />
+                      </div>
+                    )}
+                    {advisor.name && (
+                      <h4 className="text-xl font-bold text-white mb-1">{advisor.name}</h4>
+                    )}
+                    <h4 className="text-lg font-semibold text-[#00FF41] mb-2">{advisor.role}</h4>
                     <p className="text-[rgb(161,161,170)] text-sm mb-2">{advisor.expertise}</p>
                     <p className="text-[rgb(218,218,218)] text-xs">{advisor.value}</p>
                   </div>

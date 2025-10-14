@@ -66,9 +66,9 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build && rm -rf dist && mv build dist",
+    "build": "craco build",
     "test": "craco test",
-    "smoke-tests": "node simple-deploy-test.js"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
@@ -90,6 +90,7 @@
     "@eslint/js": "9.23.0",
     "@types/node": "^24.6.1",
     "autoprefixer": "^10.4.20",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "9.23.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",

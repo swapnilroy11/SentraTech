@@ -12,7 +12,6 @@ import SpaceBackground from "./components/SpaceBackground";
 // FloatingNavScrollable removed - not needed per user request
 import Analytics from "./components/Analytics";
 import ScrollToTop from "./components/ScrollToTop";
-import CookieBanner from "./components/CookieBanner";
 import SEOManager from "./components/SEOManager";
 import ChatWidget from "./components/ChatWidget";
 
@@ -20,24 +19,77 @@ import ChatWidget from "./components/ChatWidget";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-// Lazy-loaded pages for performance optimization
-const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
-const CaseStudiesPage = lazy(() => import("./pages/CaseStudiesPage"));
-const SecurityPage = lazy(() => import("./pages/SecurityPage"));
-const ROICalculatorPage = lazy(() => import("./pages/ROICalculatorPage"));
-const PricingPage = lazy(() => import("./pages/PricingPage"));
-const DemoRequestPage = lazy(() => import("./pages/DemoRequestPage"));
-const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
-const TermsOfServicePage = lazy(() => import("./pages/TermsOfServicePage"));
-const CookiePolicyPage = lazy(() => import("./pages/CookiePolicyPage"));
-const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
-const LeadershipTeamPage = lazy(() => import("./pages/LeadershipTeamPage"));
-const InvestorRelationsPage = lazy(() => import("./pages/InvestorRelationsPage"));
-const PitchDeckPage = lazy(() => import("./pages/PitchDeckPage"));
-const SupportCenterPage = lazy(() => import("./pages/SupportCenterPage"));
-const ContactSalesPage = lazy(() => import("./pages/ContactSalesPage"));
-const CareersPage = lazy(() => import("./pages/CareersPage"));
-const JobApplicationPage = lazy(() => import("./pages/JobApplicationPage"));
+// Advanced lazy-loaded pages with better chunking and preloading
+const FeaturesPage = lazy(() => 
+  import(/* webpackChunkName: "features" */ "./pages/FeaturesPage")
+);
+const CaseStudiesPage = lazy(() => 
+  import(/* webpackChunkName: "case-studies" */ "./pages/CaseStudiesPage")
+);
+const SecurityPage = lazy(() => 
+  import(/* webpackChunkName: "security" */ "./pages/SecurityPage")
+);
+const ROICalculatorPage = lazy(() => 
+  import(/* webpackChunkName: "roi-calculator" */ "./pages/ROICalculatorPage")
+);
+const PricingPage = lazy(() => 
+  import(/* webpackChunkName: "pricing" */ "./pages/PricingPage")
+);
+const DemoRequestPage = lazy(() => 
+  import(/* webpackChunkName: "demo-request" */ "./pages/DemoRequestPage")
+);
+
+// Group related pages into single chunks
+const LegalPages = {
+  PrivacyPolicyPage: lazy(() => 
+    import(/* webpackChunkName: "legal-pages" */ "./pages/PrivacyPolicyPage")
+  ),
+  TermsOfServicePage: lazy(() => 
+    import(/* webpackChunkName: "legal-pages" */ "./pages/TermsOfServicePage")
+  ),
+  CookiePolicyPage: lazy(() => 
+    import(/* webpackChunkName: "legal-pages" */ "./pages/CookiePolicyPage")
+  )
+};
+
+const CompanyPages = {
+  AboutUsPage: lazy(() => 
+    import(/* webpackChunkName: "company-pages" */ "./pages/AboutUsPage")
+  ),
+  LeadershipTeamPage: lazy(() => 
+    import(/* webpackChunkName: "company-pages" */ "./pages/LeadershipTeamPage")
+  ),
+  InvestorRelationsPage: lazy(() => 
+    import(/* webpackChunkName: "company-pages" */ "./pages/InvestorRelationsPage")
+  ),
+  PitchDeckPage: lazy(() => 
+    import(/* webpackChunkName: "company-pages" */ "./pages/PitchDeckPage")
+  )
+};
+
+const SupportPages = {
+  SupportCenterPage: lazy(() => 
+    import(/* webpackChunkName: "support-pages" */ "./pages/SupportCenterPage")
+  ),
+  ContactSalesPage: lazy(() => 
+    import(/* webpackChunkName: "support-pages" */ "./pages/ContactSalesPage")
+  )
+};
+
+const CareerPages = {
+  CareersPage: lazy(() => 
+    import(/* webpackChunkName: "career-pages" */ "./pages/CareersPage")
+  ),
+  JobApplicationPage: lazy(() => 
+    import(/* webpackChunkName: "career-pages" */ "./pages/JobApplicationPage")
+  )
+};
+
+// Extract lazy components for easier access
+const { PrivacyPolicyPage, TermsOfServicePage, CookiePolicyPage } = LegalPages;
+const { AboutUsPage, LeadershipTeamPage, InvestorRelationsPage, PitchDeckPage } = CompanyPages;
+const { SupportCenterPage, ContactSalesPage } = SupportPages;
+const { CareersPage, JobApplicationPage } = CareerPages;
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
@@ -45,6 +97,10 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 // Enterprise Utilities
 import serviceWorkerRegistration from "./utils/serviceWorkerRegistration";
 // import performanceMonitor from "./utils/performanceMonitoring"; // Temporarily disabled
+import AdvancedPerformanceMonitor from './utils/performanceMonitor';
+import PredictiveResourceLoader from './utils/predictiveLoader';
+import WebAssemblyPerformanceModule from './utils/wasmPerformance';
+import AdvancedNetworkingModule from './utils/advancedNetworking';
 import errorTracker from "./utils/errorTracking";
 
 function App() {
@@ -92,39 +148,62 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Loading component for lazy-loaded pages
-  const LoadingFallback = () => (
+  // Enhanced loading component with better performance
+  const LoadingFallback = React.memo(() => (
     <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 border-4 border-[#00FF41]/20 border-t-[#00FF41] rounded-full animate-spin mx-auto mb-4"></div>
+        <div 
+          className="w-16 h-16 border-4 border-[#00FF41]/20 border-t-[#00FF41] rounded-full mx-auto mb-4"
+          style={{ 
+            animation: 'spin 1s linear infinite',
+            willChange: 'transform'
+          }}
+        ></div>
         <p className="text-[#00FF41] font-semibold text-lg">Loading SentraTech...</p>
         <p className="text-[rgb(161,161,170)] text-sm mt-2">Optimizing your experience</p>
       </div>
     </div>
-  );
+  ));
 
   const initializeEnterpriseFeatures = () => {
     console.log('🚀 Initializing SentraTech Enterprise Features...');
     
     try {
-      // Enable service worker registration for production
-      if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-        serviceWorkerRegistration.register({
-          onSuccess: (registration) => {
-            console.log('✅ Service Worker registered successfully:', registration);
-          },
-          onUpdate: (registration) => {
-            console.log('🔄 Service Worker updated:', registration);
-          },
-          onOffline: () => {
-            console.log('📱 App is now ready to work offline');
-          },
-          onError: (error) => {
-            console.warn('⚠️ Service Worker registration failed:', error);
+      // Advanced Service Worker registration with performance monitoring
+      if ('serviceWorker' in navigator) {
+        // Register service worker immediately for better caching
+        navigator.serviceWorker.register('/sw.js', {
+          scope: '/'
+        }).then((registration) => {
+          console.log('✅ Advanced Service Worker registered:', registration.scope);
+          
+          // Enable background sync for better offline experience
+          if ('sync' in window.ServiceWorkerRegistration.prototype) {
+            console.log('✅ Background Sync supported');
+          }
+          
+          // Enable push notifications capability
+          if ('PushManager' in window) {
+            console.log('✅ Push messaging supported');
+          }
+          
+          // Performance monitoring
+          if ('performance' in window && 'measure' in performance) {
+            performance.mark('sw-registered');
+          }
+          
+        }).catch((error) => {
+          console.warn('⚠️ Service Worker registration failed:', error);
+        });
+        
+        // Listen for service worker updates
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data && event.data.type === 'CACHE_UPDATED') {
+            console.log('🔄 Cache updated, new content available');
           }
         });
       } else {
-        console.log('⚠️ Service Worker registration disabled in development mode');
+        console.log('⚠️ Service Worker not supported in this browser');
       }
       
       // Add breadcrumbs for error tracking
@@ -160,9 +239,6 @@ function App() {
             
             {/* Floating Left Navigation - moved inside BrowserRouter */}
             {/* FloatingNavScrollable removed - not needed per user request */}
-            
-            {/* Cookie Consent Banner */}
-            <CookieBanner />
             
             {/* Global Navigation */}
             <Navigation />

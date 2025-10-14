@@ -1,9 +1,9 @@
 // SentraTech Enterprise Service Worker
 // Advanced caching strategies for optimal performance and offline capability
 
-const CACHE_NAME = 'sentratech-v1.0.0';
-const RUNTIME_CACHE_NAME = 'sentratech-runtime-v1.0.0';
-const API_CACHE_NAME = 'sentratech-api-v1.0.0';
+const CACHE_NAME = 'sentratech-v2.0.0';
+const RUNTIME_CACHE_NAME = 'sentratech-runtime-v2.0.0';
+const API_CACHE_NAME = 'sentratech-api-v2.0.0';
 
 // Cache configuration
 const CACHE_CONFIG = {
@@ -19,6 +19,15 @@ const CACHE_CONFIG = {
     RUNTIME: 50,
     API: 30
   }
+};
+// Advanced cache strategy configuration with versioning
+const ADVANCED_CACHE_CONFIG = {
+  STATIC_CACHE: 'sentratech-static-v2.0.0',
+  DYNAMIC_CACHE: 'sentratech-dynamic-v2.0.0',
+  IMAGE_CACHE: 'sentratech-images-v2.0.0',
+  API_CACHE: 'sentratech-api-v2.0.0',
+  FONT_CACHE: 'sentratech-fonts-v2.0.0',
+  CDN_CACHE: 'sentratech-cdn-v2.0.0'
 };
 
 // Critical assets to precache

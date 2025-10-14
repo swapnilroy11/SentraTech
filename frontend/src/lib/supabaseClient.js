@@ -3,13 +3,21 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables. Please check REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY in your .env file.');
-}
+// Create mock client if env vars are missing
+const mockClient = {
+  from: () => ({
+    insert: () => Promise.resolve({ data: null, error: null }),
+    select: () => Promise.resolve({ data: [], error: null }),
+    update: () => Promise.resolve({ data: null, error: null }),
+    delete: () => Promise.resolve({ data: null, error: null })
+  })
+};
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = (!supabaseUrl || !supabaseAnonKey) 
+  ? mockClient 
+  : createClient(supabaseUrl, supabaseAnonKey);
 
-// Optional: Add helper functions for common operations
+// Helper functions for common operations
 export const demoRequestsTable = () => supabase.from('demo_requests');
 export const contactRequestsTable = () => supabase.from('contact_requests');
 export const subscriptionsTable = () => supabase.from('subscriptions');

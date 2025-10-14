@@ -12,8 +12,8 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com/api"
-EXTERNAL_JOB_URL = "https://deploy-bug-fixes.preview.emergentagent.com/api"
+BACKEND_URL = "https://tech-site-boost.preview.emergentagent.com/api"
+EXTERNAL_JOB_URL = "https://tech-site-boost.preview.emergentagent.com/api"
 
 # Authentication key
 INGEST_KEY = "a0d3f2b6c9e4d1784a92f3c1b5e6d0aa7c18e2f49b35c6d7e8f0a1b2c3d4e5f6"
@@ -456,7 +456,7 @@ class ComprehensiveFormTester:
         # Test preflight request
         try:
             response = requests.options(f"{BACKEND_URL}/ingest/demo_requests", 
-                                      headers={"Origin": "https://deploy-bug-fixes.preview.emergentagent.com"}, 
+                                      headers={"Origin": "https://tech-site-boost.preview.emergentagent.com"}, 
                                       timeout=10)
             if response.status_code in [200, 204]:
                 self.log_test("CORS - Preflight Request", True, 

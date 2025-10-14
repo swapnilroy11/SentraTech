@@ -1,26 +1,11 @@
 {
-  "name": "sentratech-monorepo",
+  "name": "sentratech-app",
   "private": true,
-  "workspaces": ["packages/*", "server"],
   "scripts": {
-    "build": "yarn workspace frontend build",
-    "build:website": "yarn workspace frontend build", 
-    "build:dashboard": "yarn workspace sentratech-dashboard build",
-    "build:server": "yarn workspace server build",
-    "install": "yarn install --frozen-lockfile",
-    "start": "yarn workspace frontend start",
-    "dev": "yarn workspace frontend start"
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "dev": "cd frontend && npm start"
   },
-  "dependencies": {
-    "node-fetch": "^2.7.0",
-    "playwright": "^1.55.1"
-  },
-  "resolutions": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "lucide-react": "^0.263.1",
-    "react-router-dom": "^6.28.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

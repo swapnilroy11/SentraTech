@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useCallback, useMemo } from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import { motion } from 'framer-motion';
 import { 
   Calculator, 
   MessageSquare, 
@@ -14,7 +13,19 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigateWithScroll } from '../hooks/useNavigateWithScroll';
+import { useNavigate } from 'react-router-dom';
 import SEOManager from '../components/SEOManager';
+// import { throttle } from '../utils/performanceOptimizations';
+
+// Import motion directly instead of lazy loading to prevent errors
+import { motion } from 'framer-motion';
+
+// Performance loading component (for future use)
+// const PerformanceLoader = ({ children, fallback = null }) => (
+//   <Suspense fallback={fallback}>
+//     {children}
+//   </Suspense>
+// );
 
 // Immediate CSS animations that start instantly (no JS dependency)
 const animationStyles = `
@@ -171,44 +182,104 @@ const animationStyles = `
     transform: translateY(0);
     transition: all 0.6s ease-out;
   }
-
-  /* INSTANT COOKIE BANNER - No delays or transitions */
-  .cookie-banner-instant {
-    animation: instantCookieBannerAppear 0.3s ease-out;
-    animation-fill-mode: both;
-  }
-
-  @keyframes instantCookieBannerAppear {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
-
-  /* Force immediate visibility for cookie banner */
-  [data-cookie-banner="true"] {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
 `;
 
-const HomePage = () => {
+const HomePage = React.memo(() => {
   const { t } = useLanguage();
   const navigateToSection = useNavigateWithScroll();
-  const [isAnimationReady, setIsAnimationReady] = useState(false);
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
+  const [performanceMetrics, setPerformanceMetrics] = useState({
+    lcp: null,
+    fid: null,
+    cls: null
+  });
+
+  // Smart navigation function that uses appropriate method based on link type
+  const smartNavigate = useCallback((link) => {
+    if (link.includes('#')) {
+      // Use scroll navigation for anchor links
+      navigateToSection(link);
+    } else {
+      // Use direct navigation for regular pages
+      navigate(link);
+    }
+  }, [navigate, navigateToSection]);
+
+  // Performance monitoring and optimization hooks
+  useEffect(() => {
+    setIsVisible(true);
+
+    // Performance monitoring
+    const observePerformanceMetrics = () => {
+      // Measure LCP (Largest Contentful Paint)
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        if (entries.length > 0) {
+          const lastEntry = entries[entries.length - 1];
+          setPerformanceMetrics(prev => ({
+            ...prev,
+            lcp: lastEntry.startTime
+          }));
+        }
+      }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+      // Measure FID (First Input Delay)
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach(entry => {
+          setPerformanceMetrics(prev => ({
+            ...prev,
+            fid: entry.processingStart - entry.startTime
+          }));
+        });
+      }).observe({ entryTypes: ['first-input'] });
+
+      // Measure CLS (Cumulative Layout Shift)
+      let clsValue = 0;
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach(entry => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        setPerformanceMetrics(prev => ({
+          ...prev,
+          cls: clsValue
+        }));
+      }).observe({ entryTypes: ['layout-shift'] });
+    };
+
+    // Start performance monitoring
+    if (typeof PerformanceObserver !== 'undefined') {
+      observePerformanceMetrics();
+    }
+
+    // Preload critical next pages
+    const preloadCriticalPages = () => {
+      const criticalPages = ['/features', '/pricing', '/demo-request'];
+      criticalPages.forEach(page => {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = page;
+        document.head.appendChild(link);
+      });
+    };
+
+    // Delayed preloading to not interfere with initial render
+    setTimeout(preloadCriticalPages, 2000);
+  }, []);
+
+  // Throttled scroll handler for performance (disabled)
+  const handleScroll = useCallback(() => {
+    // Throttled scroll logic here if needed
+  }, []);
 
   useEffect(() => {
-    // Ensure animations are ready
-    const timer = setTimeout(() => {
-      setIsAnimationReady(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const features = [
     {
@@ -277,42 +348,43 @@ const HomePage = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center max-w-4xl mx-auto hero-content"
           >
-            <h1 className="text-6xl md:text-7xl font-bold font-rajdhani mb-8 leading-tight hero-title">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-rajdhani mb-8 leading-tight hero-title">
               <span className="text-[#FFFFFF]">Customer Support as a</span><br/>
-              <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by AI&nbsp;+&nbsp;BI</span>
+              <span className="text-[#00FF41]">Growth Engine</span><span className="text-[#FFFFFF]">, Powered by</span><br className="sm:hidden"/>
+              <span className="text-[#FFFFFF]"> AI&nbsp;+&nbsp;BI</span>
             </h1>
             
-            <p className="text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed hero-subtitle">
+            <p className="text-lg sm:text-xl text-[rgb(161,161,170)] mb-12 max-w-3xl mx-auto leading-relaxed hero-subtitle px-4">
               Transform your customer service into a competitive advantage with our sub-50ms AI routing platform. 
               Reduce costs by 40-60% while improving satisfaction.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16 hero-buttons">
+            {/* CTA Buttons - Mobile Optimized */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 hero-buttons px-4">
               <Button 
-                onClick={() => navigateToSection('/roi-calculator')}
-                className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl instant-hover-scale instant-hover-glow instant-button-hover flex items-center space-x-2 shadow-lg"
+                onClick={() => navigate('/roi-calculator')}
+                className="w-full sm:w-auto bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-8 py-4 text-lg rounded-xl instant-hover-scale instant-hover-glow instant-button-hover flex items-center justify-center space-x-2 shadow-lg min-h-[56px] touch-target-optimized"
               >
                 <Calculator size={24} />
                 <span>Calculate ROI</span>
               </Button>
               
               <Button 
-                onClick={() => navigateToSection('/demo-request')}
+                onClick={() => navigate('/demo-request')}
                 variant="outline"
-                className="border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 text-lg rounded-xl font-semibold instant-hover-scale instant-button-hover flex items-center space-x-2 shadow-lg"
+                className="w-full sm:w-auto border-2 border-[#00FF41] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] px-8 py-4 text-lg rounded-xl font-semibold instant-hover-scale instant-button-hover flex items-center justify-center space-x-2 shadow-lg min-h-[56px] touch-target-optimized"
               >
                 <Play size={24} />
                 <span>Request Your Demo</span>
               </Button>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {/* Quick Stats - Mobile Optimized */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto px-4">
               {[
-                { value: '50ms', label: 'Average Response Time' },
-                { value: '70%', label: 'Automation Rate' },
-                { value: '99.9%', label: 'Platform Uptime' },
+                { value: '50ms', label: 'Response Time' },
+                { value: '70%', label: 'Automation' },
+                { value: '99.9%', label: 'Uptime' },
                 { value: '60%', label: 'Cost Reduction' }
               ].map((stat, index) => (
                 <motion.div
@@ -329,12 +401,12 @@ const HomePage = () => {
                     y: -5,
                     transition: { duration: 0.2 }
                   }}
-                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-6 stats-card instant-hover-scale instant-hover-glow cursor-pointer"
+                  className="bg-[rgba(0,255,65,0.05)] border border-[rgba(0,255,65,0.2)] rounded-xl p-4 sm:p-6 stats-card instant-hover-scale instant-hover-glow cursor-pointer touch-target-optimized min-h-[100px]"
                 >
-                  <div className="text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#00FF41] mb-2 font-rajdhani">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-[rgb(161,161,170)]">
+                  <div className="text-xs sm:text-sm text-[rgb(161,161,170)] leading-tight">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -396,7 +468,7 @@ const HomePage = () => {
                       </div>
 
                       <Button 
-                        onClick={() => navigateToSection(feature.link)}
+                        onClick={() => smartNavigate(feature.link)}
                         variant="ghost"
                         className="w-full justify-between text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
                       >
@@ -453,7 +525,7 @@ const HomePage = () => {
                   </p>
                   
                   <Button 
-                    onClick={() => navigateToSection(benefit.link)}
+                    onClick={() => smartNavigate(benefit.link)}
                     variant="outline"
                     size="sm"
                     className="border-[rgba(0,255,65,0.3)] text-[#00FF41] hover:bg-[rgba(0,255,65,0.1)] group"
@@ -471,6 +543,6 @@ const HomePage = () => {
       </main>
     </>
   );
-};
+});
 
 export default HomePage;

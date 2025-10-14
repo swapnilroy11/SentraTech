@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
+// import { WebWorkerManager } from '../utils/performanceOptimizations';
 
 // Mobile-optimized animations - reduce complexity for better performance
 const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
 const reduceMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+import { ArrowRight, Calculator, TrendingUp, DollarSign, Clock, Users, Zap, Target, CheckCircle } from 'lucide-react';
+import ROICalculatorRedesigned from '../components/ROICalculatorRedesigned';
 
 const mobileOptimizedVariants = {
   // Simple animations for mobile to prevent lag
@@ -22,10 +26,17 @@ const mobileOptimizedVariants = {
     }
   }
 };
-import { ArrowRight, Calculator, TrendingUp, DollarSign, Clock, Users, Zap, Target, CheckCircle } from 'lucide-react';
-import ROICalculatorRedesigned from '../components/ROICalculatorRedesigned';
 
-const ROICalculatorPage = () => {
+const ROICalculatorPage = React.memo(() => {
+  // Initialize Web Worker for heavy calculations (disabled)
+  // const webWorkerManager = useMemo(() => new WebWorkerManager(), []);
+
+  // Cleanup Web Workers on unmount
+  // useEffect(() => {
+  //   return () => {
+  //     webWorkerManager.terminateAll();
+  //   };
+  // }, [webWorkerManager]);
   
   // Mobile optimization CSS
   const mobileOptimizationStyles = `
@@ -349,6 +360,6 @@ const ROICalculatorPage = () => {
       </div>
     </main>
   );
-};
+});
 
 export default ROICalculatorPage;

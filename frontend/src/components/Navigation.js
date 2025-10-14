@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { Button } from './ui/button';
 import { Menu, X } from 'lucide-react';
 import SentraTechLogo from './SentraTechLogo';
+// import { throttle } from '../utils/performanceOptimizations';
 
-const Navigation = () => {
+const Navigation = React.memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  // Throttled scroll handler for navbar background (simplified)
+  const handleScroll = useCallback(() => {
+    setScrolled(window.scrollY > 50);
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -40,66 +47,79 @@ const Navigation = () => {
     };
   }, [isMenuOpen]);
 
-  const navigationItems = [
+  // Scroll effect for navbar background
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Memoize navigation items for performance
+  const navigationItems = useMemo(() => [
     { name: 'Home', path: '/', label: 'Home' },
     { name: 'Features', path: '/features', label: 'Features' },
     { name: 'Case Studies', path: '/case-studies', label: 'Case Studies' },
     { name: 'Security', path: '/security', label: 'Security' },
     { name: 'ROI Calculator', path: '/roi-calculator', label: 'ROI Calculator' },
     { name: 'Pricing', path: '/pricing', label: 'Pricing' }
-  ];
+  ], []);
 
-  const isActivePath = (path) => {
+  // Memoize path checking function
+  const isActivePath = useCallback((path) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
     return false;
-  };
+  }, [location.pathname]);
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // Optimized event handlers
+  const handleMenuToggle = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
-  const handleMenuClose = (event) => {
+  const handleMenuClose = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
     setIsMenuOpen(false);
-  };
+  }, []);
 
-  const handleOverlayClick = (event) => {
+  const handleOverlayClick = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
     setIsMenuOpen(false);
-  };
+  }, []);
 
-  const handleMenuItemClick = () => {
+  const handleMenuItemClick = useCallback(() => {
     setIsMenuOpen(false);
-  };
+  }, []);
 
   return (
     <nav 
-      className="fixed top-0 w-full z-50 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2a2a2a]"
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-[#0A0A0A]/98 backdrop-blur-xl border-b border-[#2a2a2a] shadow-lg' 
+          : 'bg-[#0A0A0A]/90 backdrop-blur-md'
+      }`}
       role="navigation" 
       aria-label="Main navigation"
     >
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
+      <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex items-center justify-between w-full">
+          {/* Logo - Optimized for mobile */}
           <Link 
             to="/" 
-            className="flex items-center space-x-8"
+            className="flex items-center flex-shrink-0"
             aria-label="SentraTech homepage"
           >
             <SentraTechLogo 
-              width={48} 
-              height={48} 
+              width={40} 
+              height={40} 
               showText={true} 
               textColor="#00FF41"
-              className=""
+              className="sm:w-12 sm:h-12"
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center space-x-8" role="menubar">
+          {/* Desktop Navigation - Hidden on mobile/tablet */}
+          <ul className="hidden lg:flex items-center space-x-8" role="menubar">
             {navigationItems.map((item) => (
               <li key={item.path} role="none">
                 <HashLink
@@ -119,8 +139,8 @@ const Navigation = () => {
             ))}
           </ul>
 
-          {/* CTA Section */}
-          <div className="hidden md:flex items-center space-x-3">
+          {/* CTA Section - Hidden on mobile/tablet */}
+          <div className="hidden lg:flex items-center space-x-3">
             <Link to="/demo-request">
               <Button 
                 className="bg-[#00FF41] text-[#0A0A0A] hover:bg-[#00e83a] font-semibold px-6 py-2 rounded-xl transform hover:scale-105 transition-all duration-200"
@@ -130,14 +150,14 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Toggle - Fixed with proper background */}
-          <div className="md:hidden">
+          {/* Mobile/Tablet Menu Toggle - Shows on tablet and mobile */}
+          <div className="lg:hidden">
             <button
               onClick={handleMenuToggle}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation-menu"
               aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              className={`w-10 h-10 bg-[rgba(0,255,65,0.3)] backdrop-blur-md border border-[rgba(0,255,65,0.5)] rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.4)] hover:scale-110 relative z-50 shadow-lg ${
+              className={`w-10 h-10 bg-[rgba(0,255,65,0.2)] backdrop-blur-md border border-[rgba(0,255,65,0.4)] rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,255,65,0.3)] hover:scale-105 relative z-50 shadow-md flex-shrink-0 ${
                 isMenuOpen ? 'bg-[rgba(0,255,65,0.4)] border-[rgba(0,255,65,0.7)]' : ''
               }`}
             >
@@ -152,7 +172,7 @@ const Navigation = () => {
 
         {/* Mobile Menu Overlay */}
         <div 
-          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
             isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none z-40'
           }`}
           onClick={handleOverlayClick}
@@ -162,7 +182,7 @@ const Navigation = () => {
         {/* Mobile Menu Panel - FULL SCREEN for better mobile experience */}
         <div 
           id="mobile-navigation-menu"
-          className={`fixed inset-0 w-full h-full bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 md:hidden shadow-2xl ${
+          className={`fixed inset-0 w-full h-full bg-[#0A0A0A] backdrop-blur-xl border-l-2 border-[rgba(0,255,65,0.6)] transform transition-transform duration-300 ease-in-out z-50 lg:hidden shadow-2xl ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{
@@ -226,6 +246,6 @@ const Navigation = () => {
       </div>
     </nav>
   );
-};
+});
 
 export default Navigation;

@@ -16,7 +16,7 @@ from typing import Dict, Any, List
 import uuid
 
 # Backend URL from environment
-BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com/api"
+BACKEND_URL = "https://tech-site-boost.preview.emergentagent.com/api"
 
 class PricingBackendTester:
     """Comprehensive testing for NEW SentraTech pricing backend integration"""

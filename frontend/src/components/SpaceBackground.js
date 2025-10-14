@@ -48,8 +48,8 @@ const SpaceBackground = ({ intensity = 0.3, particles = 50 }) => {
         />
       ))}
       
-      {/* CSS keyframes for smooth floating animation */}
-      <style jsx>{`
+      {/* CSS keyframes for smooth floating animation - moved to CSS file */}
+      <style>{`
         @keyframes float {
           0% {
             transform: translateY(100vh) translateX(0px);

@@ -129,3 +129,31 @@ packages/website/node_modules/.cache/default-development/10.pack
 packages/website/node_modules/.cache/default-development/1.pack
 packages/dashboard/node_modules/.cache/default-development/4.pack
 packages/website/node_modules/.cache/default-development/6.pack
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*

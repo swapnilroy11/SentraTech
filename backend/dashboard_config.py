@@ -114,7 +114,7 @@ except Exception as e:
 Import this config instead of hardcoding values:
 
 ❌ Wrong:
-dashboard_url = "https://deploy-bug-fixes.preview.emergentagent.com"
+dashboard_url = "https://tech-site-boost.preview.emergentagent.com"
 headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
 
 ✅ Correct:

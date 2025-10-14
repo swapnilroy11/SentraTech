@@ -13,8 +13,8 @@ from typing import Dict, Any, List
 import uuid
 
 # Test Configuration - Using production URL from frontend/.env
-BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com"
-BROWSER_ORIGIN = "https://deploy-bug-fixes.preview.emergentagent.com"
+BACKEND_URL = "https://tech-site-boost.preview.emergentagent.com"
+BROWSER_ORIGIN = "https://tech-site-boost.preview.emergentagent.com"
 
 class CORSBrowserTester:
     def __init__(self):

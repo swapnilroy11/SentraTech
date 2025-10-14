@@ -1,0 +1,79 @@
+# SentraTech Multi-Stage Build Dockerfile (NPM Version)
+# Stage 1: Build the React application inside the container
+FROM node:18 as builder
+
+# Set NODE_OPTIONS for memory optimization
+ENV NODE_OPTIONS="--max_old_space_size=4096"
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# DEBUG: Show initial directory structure
+RUN echo "=== INITIAL CONTAINER STATE ===" && \
+    pwd && \
+    ls -la
+
+# Copy package.json only (we'll generate package-lock.json)
+COPY frontend/package.json ./
+
+# DEBUG: Verify package files were copied
+RUN echo "=== PACKAGE FILES COPIED ===" && \
+    ls -la && \
+    echo "Node version: $(node --version)" && \
+    echo "NPM version: $(npm --version)"
+
+# Install dependencies using npm (will generate package-lock.json)
+RUN npm install
+
+# DEBUG: Verify node_modules was created
+RUN echo "=== DEPENDENCIES INSTALLED ===" && \
+    ls -la && \
+    echo "node_modules size: $(du -sh node_modules 2>/dev/null || echo 'not found')"
+
+# Copy the entire frontend source code
+COPY frontend/ ./
+
+# DEBUG: Verify source code was copied
+RUN echo "=== SOURCE CODE COPIED ===" && \
+    ls -la && \
+    echo "src directory:" && \
+    ls -la src/ && \
+    echo "public directory:" && \
+    ls -la public/
+
+# Update build script to work with npm (create build folder, don't rename to dist)
+RUN echo "=== MODIFYING BUILD SCRIPT ===" && \
+    npm pkg set scripts.build="craco build"
+
+# Build the application inside the container
+RUN echo "=== STARTING BUILD PROCESS ===" && \
+    npm run build && \
+    echo "=== BUILD COMPLETED ==="
+
+# DEBUG: Verify build folder exists and show contents
+RUN echo "=== BUILD VERIFICATION ===" && \
+    ls -la && \
+    echo "Build folder contents:" && \
+    ls -la build/ && \
+    echo "Build folder size: $(du -sh build/)" && \
+    echo "Total files in build: $(find build -type f | wc -l)"
+
+# Stage 2: Serve the built application with nginx
+FROM nginx:alpine
+
+# Copy built files from builder stage to nginx html directory
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+
+# DEBUG: Verify files were copied to nginx
+RUN echo "=== NGINX STAGE VERIFICATION ===" && \
+    ls -la /usr/share/nginx/html && \
+    echo "Total files served: $(find /usr/share/nginx/html -type f | wc -l)"
+
+# Copy custom nginx configuration if it exists
+COPY --from=builder /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf 2>/dev/null || echo "No custom nginx config found"
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

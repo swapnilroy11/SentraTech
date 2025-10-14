@@ -1,153 +1,208 @@
 #!/usr/bin/env python3
 """
-Job Application Form Fix Testing
-Testing with corrected schema based on error analysis
+Job Application Backend Endpoint Fix Testing
+Testing the fix for field name mapping issues similar to ROI calculator bundles problem
 """
 
 import requests
 import json
-from datetime import datetime
+import time
+import uuid
+from datetime import datetime, timezone
 
-# External job application endpoint
-EXTERNAL_JOB_URL = "https://deploy-bug-fixes.preview.emergentagent.com/api"
+# Backend URL
+BACKEND_URL = "https://tech-site-boost.preview.emergentagent.com"
 
-def test_job_application_corrected():
-    """Test job application with corrected schema"""
-    print("🔧 Testing Job Application Form with Corrected Schema")
-    print("=" * 60)
+def test_job_application_fix():
+    """Test job application with the exact payload from review request after fix"""
+    print("🔧 Testing Job Application Fix...")
     
-    # Corrected test data based on error analysis
-    # Error showed: missing "full_name" field and preferred_shifts should be string, not array
-    corrected_data = {
-        "full_name": "Alex Johnson",  # Changed from first_name/last_name to full_name
-        "email": "alex.johnson@jobseeker.com",
-        "phone": "+1-555-0789",
-        "location": "Bangladesh",
-        "preferred_shifts": "Morning, Afternoon",  # Changed from array to string
-        "availability_date": "2024-02-01",
-        "experience_years": "3-5",
-        "motivation_text": "I am passionate about customer service and excited to join SentraTech's innovative team",
-        "cover_letter": "Dear Hiring Manager, I am writing to express my interest in the Customer Support Specialist position...",
-        "work_authorization": "Authorized",
-        "position_applied": "Customer Support Specialist",
-        "application_source": "career_site",
-        "consent_for_storage": True
+    # Using the exact payload format from the review request
+    payload = {
+        "name": "John Doe",  # This should be mapped to full_name
+        "email": "john.doe@gmail.com", 
+        "phone": "+1234567890",
+        "position": "Customer Support Specialist",  # This should be mapped to position_applied
+        "experience": "2-3 years",
+        "location": "Remote",
+        "motivation": "I am passionate about customer service and helping customers succeed.",
+        "availability": "Immediately",
+        "resume_url": "https://example.com/resume.pdf",
+        "cover_letter": "Dear Hiring Manager, I am excited to apply for this position...",
+        "consent_data_processing": True,
+        "consent_marketing": False
     }
     
-    # Test with external endpoint and authentication
-    headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
-    
     try:
-        print(f"📝 Testing Job Application Form with corrected schema...")
-        print(f"   Corrected Data: {json.dumps(corrected_data, indent=2)}")
+        print(f"📤 Sending payload: {json.dumps(payload, indent=2)}")
         
-        response = requests.post(f"{EXTERNAL_JOB_URL}/ingest/job_applications", 
-                               json=corrected_data, headers=headers, timeout=30)
+        start_time = time.time()
+        response = requests.post(
+            f"{BACKEND_URL}/api/proxy/job-application",
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=30
+        )
+        response_time = (time.time() - start_time) * 1000
         
-        print(f"   Response Status: {response.status_code}")
-        print(f"   Response Body: {response.text}")
+        print(f"📥 Response Status: {response.status_code}")
+        print(f"⏱️ Response Time: {response_time:.2f}ms")
+        print(f"📄 Response Body: {response.text}")
         
         if response.status_code == 200:
-            result = response.json()
-            print(f"✅ SUCCESS: Job application successful!")
-            print(f"   Response: {json.dumps(result, indent=2)}")
-            return True
+            try:
+                data = response.json()
+                if data.get('success') == False and 'error' in data:
+                    print(f"❌ STILL FAILING: {data['error']}")
+                    return False
+                else:
+                    dashboard_id = data.get('id') or data.get('data', {}).get('id')
+                    print(f"✅ SUCCESS: Job application submitted successfully!")
+                    print(f"🆔 Dashboard ID: {dashboard_id}")
+                    return True
+            except json.JSONDecodeError:
+                print(f"❌ Invalid JSON response: {response.text}")
+                return False
         else:
-            print(f"❌ FAILED: HTTP {response.status_code}")
-            print(f"   Error: {response.text}")
+            print(f"❌ HTTP Error {response.status_code}: {response.text}")
             return False
             
     except Exception as e:
-        print(f"❌ EXCEPTION: {str(e)}")
+        print(f"❌ Request error: {str(e)}")
         return False
 
-def test_job_application_alternative_schemas():
-    """Test different possible schemas for job application"""
-    print("\n🔍 Testing Alternative Job Application Schemas")
-    print("=" * 60)
+def test_job_application_validation_edge_cases():
+    """Test edge cases to ensure validation is working properly"""
+    print("\n🧪 Testing Job Application Validation Edge Cases...")
     
-    # Test different schema variations
-    schemas = [
+    test_cases = [
         {
-            "name": "Schema 1 - fullName field",
-            "data": {
-                "fullName": "Alex Johnson",
-                "email": "alex.johnson@jobseeker.com",
-                "phone": "+1-555-0789",
-                "location": "Bangladesh",
-                "preferredShifts": "Morning, Afternoon",
-                "availabilityStartDate": "2024-02-01",
-                "coverNote": "I am passionate about customer service",
-                "source": "career_site",
-                "consentForStorage": True
-            }
+            "name": "Missing Name Field",
+            "payload": {
+                "email": "test@example.com",
+                "phone": "+1234567890",
+                "position": "Customer Support Specialist"
+            },
+            "should_succeed": False
         },
         {
-            "name": "Schema 2 - name field",
-            "data": {
-                "name": "Alex Johnson",
-                "email": "alex.johnson@jobseeker.com",
-                "phone": "+1-555-0789",
-                "location": "Bangladesh",
-                "preferred_shifts": "Morning, Afternoon",
-                "availability_date": "2024-02-01",
-                "cover_letter": "I am passionate about customer service",
+            "name": "Empty Name Field", 
+            "payload": {
+                "name": "",
+                "email": "test@example.com",
+                "phone": "+1234567890",
+                "position": "Customer Support Specialist"
+            },
+            "should_succeed": False
+        },
+        {
+            "name": "Valid Complete Application",
+            "payload": {
+                "name": "Jane Smith",
+                "email": "jane.smith@example.com",
+                "phone": "+1234567890",
                 "position": "Customer Support Specialist",
-                "consent_for_storage": True
-            }
-        },
-        {
-            "name": "Schema 3 - minimal required fields",
-            "data": {
-                "full_name": "Alex Johnson",
-                "email": "alex.johnson@jobseeker.com",
-                "location": "Bangladesh"
-            }
+                "experience": "3 years",
+                "location": "New York",
+                "motivation": "I love helping customers",
+                "availability": "2 weeks notice",
+                "consent_data_processing": True,
+                "consent_marketing": False
+            },
+            "should_succeed": True
         }
     ]
     
-    headers = {"X-INGEST-KEY": "test-ingest-key-12345"}
+    results = []
     
-    for schema in schemas:
+    for test_case in test_cases:
+        print(f"\n🔍 Testing: {test_case['name']}")
+        
         try:
-            print(f"\n📝 Testing {schema['name']}...")
-            response = requests.post(f"{EXTERNAL_JOB_URL}/ingest/job_applications", 
-                                   json=schema['data'], headers=headers, timeout=30)
+            response = requests.post(
+                f"{BACKEND_URL}/api/proxy/job-application",
+                json=test_case["payload"],
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
             
-            print(f"   Response Status: {response.status_code}")
+            print(f"   Status: {response.status_code}")
             
             if response.status_code == 200:
-                result = response.json()
-                print(f"   ✅ SUCCESS: {schema['name']} works!")
-                print(f"   Response: {json.dumps(result, indent=2)}")
-                return True
+                try:
+                    data = response.json()
+                    success = data.get('success', True) and 'error' not in data
+                    
+                    if success and test_case["should_succeed"]:
+                        print(f"   ✅ PASS: Application succeeded as expected")
+                        results.append(True)
+                    elif not success and not test_case["should_succeed"]:
+                        print(f"   ✅ PASS: Application failed as expected")
+                        results.append(True)
+                    elif success and not test_case["should_succeed"]:
+                        print(f"   ❌ FAIL: Application should have failed but succeeded")
+                        results.append(False)
+                    else:
+                        print(f"   ❌ FAIL: Application should have succeeded but failed: {data.get('error', 'Unknown error')}")
+                        results.append(False)
+                        
+                except json.JSONDecodeError:
+                    print(f"   ❌ FAIL: Invalid JSON response")
+                    results.append(False)
             else:
-                print(f"   ❌ FAILED: {schema['name']} - HTTP {response.status_code}")
-                if response.status_code == 422:
-                    error_detail = response.json()
-                    print(f"   Validation errors: {json.dumps(error_detail, indent=2)}")
-                
+                if test_case["should_succeed"]:
+                    print(f"   ❌ FAIL: Expected success but got HTTP {response.status_code}")
+                    results.append(False)
+                else:
+                    print(f"   ✅ PASS: Expected failure and got HTTP {response.status_code}")
+                    results.append(True)
+                    
         except Exception as e:
-            print(f"   ❌ EXCEPTION: {schema['name']} - {str(e)}")
+            print(f"   ❌ FAIL: Request error: {str(e)}")
+            results.append(False)
     
-    return False
-
-def main():
-    """Main function"""
-    print("🎯 Job Application Form Schema Fix Testing")
-    print("Attempting to identify correct schema for external job application endpoint")
-    print()
+    success_rate = (sum(results) / len(results)) * 100 if results else 0
+    print(f"\n📊 Edge Case Testing Results: {sum(results)}/{len(results)} passed ({success_rate:.1f}%)")
     
-    # Test corrected schema
-    success1 = test_job_application_corrected()
-    
-    # If that fails, test alternative schemas
-    if not success1:
-        success2 = test_job_application_alternative_schemas()
-        return success2
-    
-    return success1
+    return success_rate >= 80
 
 if __name__ == "__main__":
-    success = main()
-    exit(0 if success else 1)
+    print("🚀 Job Application Backend Endpoint Fix Testing")
+    print("Testing field mapping fixes similar to ROI calculator bundles solution")
+    print(f"Backend URL: {BACKEND_URL}")
+    print(f"Test started at: {datetime.now(timezone.utc).isoformat()}")
+    print("=" * 80)
+    
+    # Test 1: Basic fix verification
+    basic_test_passed = test_job_application_fix()
+    
+    # Test 2: Edge cases
+    edge_cases_passed = test_job_application_validation_edge_cases()
+    
+    print("\n" + "=" * 80)
+    print("📊 JOB APPLICATION FIX TEST SUMMARY")
+    print("=" * 80)
+    
+    if basic_test_passed:
+        print("✅ Basic Fix Test: PASSED - Field mapping working correctly")
+    else:
+        print("❌ Basic Fix Test: FAILED - Field mapping issues remain")
+    
+    if edge_cases_passed:
+        print("✅ Edge Cases Test: PASSED - Validation working properly")
+    else:
+        print("❌ Edge Cases Test: FAILED - Validation issues found")
+    
+    overall_success = basic_test_passed and edge_cases_passed
+    
+    if overall_success:
+        print("\n🎉 OVERALL RESULT: SUCCESS!")
+        print("✅ Job application endpoint fix is working correctly")
+        print("✅ Field mapping issues resolved (similar to ROI calculator bundles fix)")
+        print("✅ Data now transfers properly to dashboard")
+    else:
+        print("\n⚠️ OVERALL RESULT: ISSUES REMAIN")
+        print("❌ Job application endpoint still has validation problems")
+        print("🔧 Additional fixes may be required")
+    
+    print(f"\n🏁 Testing completed at: {datetime.now(timezone.utc).isoformat()}")

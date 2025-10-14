@@ -6,7 +6,7 @@ Quick test for Demo Request endpoints after fixes
 import requests
 import json
 
-BACKEND_URL = "https://deploy-bug-fixes.preview.emergentagent.com/api"
+BACKEND_URL = "https://tech-site-boost.preview.emergentagent.com/api"
 
 def test_demo_request_json():
     """Test JSON endpoint"""

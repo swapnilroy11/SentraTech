@@ -237,6 +237,8 @@ const JobApplicationPage = () => {
     }
   };
 
+  // Removed Google Sheets integration as requested
+
   // Submit to SentraTech Admin Dashboard with network fallback
   // Single-page job application handler
   const submitApplication = async (formData) => {
@@ -247,6 +249,7 @@ const JobApplicationPage = () => {
     }
 
     try {
+      // Submit to dashboard
       const { submitFormWithRateLimit, showSuccessMessage, logPayload } =
         await import('../config/dashboardConfig.js');
 

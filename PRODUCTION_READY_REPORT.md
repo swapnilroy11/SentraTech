@@ -125,7 +125,7 @@ if (!isDevelopment && !isPreview) {
 ✅ MONGO_URL=mongodb://localhost:27017/sentratech_forms
 
 # Frontend (.env)  
-✅ REACT_APP_BACKEND_URL=https://deploy-bug-fixes.preview.emergentagent.com
+✅ REACT_APP_BACKEND_URL=https://tech-site-boost.preview.emergentagent.com
 ✅ REACT_APP_API_BASE=https://sentratech.net/api/proxy
 ✅ REACT_APP_WS_URL=wss://admin.sentratech.net/ws
 ```

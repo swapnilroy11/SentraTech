@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import { X, Upload, File, CheckCircle, AlertCircle, Linkedin, MapPin } from 'lucide-react';
+import { X, Upload, File, CheckCircle, AlertCircle, MapPin, Globe } from 'lucide-react';
 import { FORM_CONFIG } from '../config/formConfig';
 
 const JobApplicationModal = ({ isOpen, onClose, job }) => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    // REQUIRED FIELDS
+    full_name: '',
     email: '',
+    location: '',
+    work_authorization: '',
+    
+    // RECOMMENDED FIELDS
     phone: '',
-    location: 'Bangladesh',
-    preferredShifts: '',
-    availabilityStartDate: '',
-    coverNote: '',
-    linkedinProfile: '',
-    consentForStorage: false
+    position_applied: '',
+    experience_level: '',
+    motivation: '',
+    resume_url: '',
+    start_date: '',
+    consent_for_storage: false,
+    
+    // OPTIONAL FIELDS
+    portfolio_website: '',
+    cover_letter: '',
+    work_shifts: '',
+    relevant_experience: ''
   });
 
   const [resume, setResume] = useState(null);
@@ -22,15 +33,26 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
   const resetForm = () => {
     setFormData({
-      fullName: '',
+      // REQUIRED FIELDS
+      full_name: '',
       email: '',
+      location: '',
+      work_authorization: '',
+      
+      // RECOMMENDED FIELDS
       phone: '',
-      location: 'Bangladesh',
-      preferredShifts: '',
-      availabilityStartDate: '',
-      coverNote: '',
-      linkedinProfile: '',
-      consentForStorage: false
+      position_applied: '',
+      experience_level: '',
+      motivation: '',
+      resume_url: '',
+      start_date: '',
+      consent_for_storage: false,
+      
+      // OPTIONAL FIELDS
+      portfolio_website: '',
+      cover_letter: '',
+      work_shifts: '',
+      relevant_experience: ''
     });
     setResume(null);
     setErrors({});
@@ -86,11 +108,11 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
   const validateForm = () => {
     const newErrors = {};
     
-    // Required fields
-    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    // REQUIRED FIELDS validation
+    if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
-    if (!formData.consentForStorage) newErrors.consentForStorage = 'You must consent to data storage';
+    if (!formData.work_authorization.trim()) newErrors.work_authorization = 'Work authorization status is required';
     
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,15 +120,15 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
       newErrors.email = 'Please enter a valid email address';
     }
     
-    // Resume or LinkedIn required
-    if (!resume && !formData.linkedinProfile.trim()) {
-      newErrors.resume = 'Please upload a resume or provide LinkedIn profile';
-      newErrors.linkedinProfile = 'Please upload a resume or provide LinkedIn profile';
+    // RECOMMENDED FIELDS validation
+    if (!formData.consent_for_storage) {
+      newErrors.consent_for_storage = 'You must consent to data storage to proceed';
     }
     
-    // Location check - warn if not Bangladesh
-    if (formData.location && !formData.location.toLowerCase().includes('bangladesh')) {
-      newErrors.location = 'This position is specifically for Bangladesh candidates';
+    // Resume or portfolio validation
+    if (!resume && !formData.portfolio_website.trim()) {
+      newErrors.resume = 'Please upload a resume or provide portfolio website';
+      newErrors.portfolio_website = 'Please upload a resume or provide portfolio website';
     }
     
     setErrors(newErrors);
@@ -123,7 +145,6 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     
     if (!validateForm()) return;
     
-    setIsSubmitting(true);
     setSubmitStatus(null);
     
     try {
@@ -132,38 +153,8 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         throw new Error('Dashboard configuration validation failed');
       }
       
-      // Prepare form data for submission
-      const submissionData = {
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone || null,
-        location: formData.location,
-        preferredShifts: formData.preferredShifts || null,
-        availabilityStartDate: formData.availabilityStartDate || null,
-        coverNote: formData.coverNote || null,
-        linkedinProfile: formData.linkedinProfile || null,
-        position: job?.title || 'Customer Support Specialist',
-        source: 'careers_page',
-        consentForStorage: formData.consentForStorage
-      };
-      
-      // If resume file exists, convert to base64 for transmission
-      if (resume) {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          submissionData.resumeFile = {
-            data: reader.result.split(',')[1], // Remove data:application/pdf;base64, prefix
-            name: resume.name,
-            type: resume.type,
-            size: resume.size
-          };
-          
-          await submitApplication(submissionData);
-        };
-        reader.readAsDataURL(resume);
-      } else {
-        await submitApplication(submissionData);
-      }
+      // Call the new submitApplication function directly with the form event
+      await submitApplication(e);
       
     } catch (error) {
       console.error('Application submission error:', error);
@@ -172,7 +163,9 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     }
   };
 
-  const submitApplication = async (data) => {
+  const submitApplication = async (e) => {
+    e.preventDefault();
+    
     // Prevent duplicate submissions
     if (submitStatus === 'submitting') {
       console.warn('⚠️ Job application submission already in progress');
@@ -180,110 +173,70 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
     }
 
     try {
-      const { safeSubmit, showSuccessMessage, logPayload } =
-        await import('../config/dashboardConfig.js');
+      setIsSubmitting(true);
+      
+      // Get FormData from the form
+      const formData = new FormData(e.target);
+      const data = {};
 
-      // Generate unique ID for this submission
-      const generateUUID = () => 'job_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      // Loop through all fields except file
+      for (let pair of formData.entries()) {
+        if (pair[0] !== 'resume_url') {
+          data[pair[0]] = pair[1];
+        }
+      }
+      
+      // Handle resume file
+      const resumeFile = formData.get('resume_url');
+      if (resumeFile && resumeFile.size > 0) {
+        const base64 = await fileToBase64(resumeFile);
+        data.resume = {
+          name: resumeFile.name,
+          type: resumeFile.type,
+          data: base64.split(',')[1] // Remove "data:application/pdf;base64," prefix
+        };
+      }
 
-      // Log raw input data for debugging
-      console.log(`🔍 [JOB-APPLICATION] Raw input data:`, {
-        fullName: `"${data.fullName}" (type: ${typeof data.fullName})`,
-        email: `"${data.email}" (type: ${typeof data.email})`,
-        phone: `"${data.phone}" (type: ${typeof data.phone})`,
-        position: `"${data.position}" (type: ${typeof data.position})`,
-        location: `"${data.location}" (type: ${typeof data.location})`,
-        linkedinProfile: `"${data.linkedinProfile}" (type: ${typeof data.linkedinProfile})`,
-        preferredShifts: data.preferredShifts,
-        availabilityStartDate: `"${data.availabilityStartDate}" (type: ${typeof data.availabilityStartDate})`,
-        coverNote: `"${data.coverNote}" (type: ${typeof data.coverNote})`,
-        resumeUrl: `"${data.resumeUrl}" (type: ${typeof data.resumeUrl})`,
-        consentForStorage: data.consentForStorage
-      });
-
-      // Comprehensive payload matching multi-step job application specification
-      const jobData = {
-        id: generateUUID(),
-        
-        // Personal Information 
-        full_name: data.fullName || data.name || '',
-        name: data.fullName || data.name || '', // Alternative mapping
-        email: data.email || data.email_address || '',
-        email_address: data.email || data.email_address || '', // Alternative mapping
-        phone: data.phone || data.phone_number || '',
-        phone_number: data.phone || data.phone_number || '', // Alternative mapping
-        location: data.location || '',
-        
-        // Professional Information
-        position_applied: 'Customer Support Specialist', // Fixed as per spec
-        position: data.position || 'Customer Support Specialist', // Alternative mapping
-        resume_url: data.resumeUrl || data.portfolio_website || '',
-        portfolio_website: data.resumeUrl || data.portfolio_website || '', // Alternative mapping
-        experience_level: data.experience_level || data.relevant_experience || '',
-        relevant_experience: data.experience_level || data.relevant_experience || '', // Alternative mapping
-        work_shifts: Array.isArray(data.preferredShifts) 
-          ? data.preferredShifts.join(', ') 
-          : data.preferredShifts || '',
-        preferred_shifts: Array.isArray(data.preferredShifts) 
-          ? data.preferredShifts.join(', ') 
-          : data.preferredShifts || '', // Alternative mapping
-        start_date: data.availabilityStartDate || data.availability_start_date || '',
-        availability_start_date: data.availabilityStartDate || data.availability_start_date || '', // Alternative mapping
-        
-        // Motivation & Cover Letter
-        motivation: data.motivation || data.coverNote || '',
-        why_sentratech: data.motivation || data.coverNote || '', // Alternative mapping  
-        cover_letter: data.coverNote || data.cover_letter || '',
-        cover_note: data.coverNote || data.cover_letter || '', // Alternative mapping
-        motivation_text: data.motivation || data.coverNote || data.cover_letter || '', // Combined motivation
-        
-        // LinkedIn & Professional Links
-        linkedin_profile: data.linkedinProfile || '',
-        
-        // Legal & Authorization (Modal may not have these, but include for consistency)
-        work_authorization: data.work_authorization || '',
-        bangladesh_work_authorization_status: data.work_authorization || '', // Alternative mapping
-        consent_for_storage: data.consentForStorage || false,
-        consent_for_contact: data.consentForContact || false,
-        
-        // Metadata
-        source: 'careers_modal_quick_apply',
-        status: 'new',
-        created: new Date().toISOString(),
+      // Submit to backend dashboard
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+      const dashboardData = {
+        full_name: data.full_name,
+        email: data.email,
+        location: data.location,
+        work_authorization: data.work_authorization,
+        phone: data.phone || '',
+        position_applied: data.position_applied || 'Customer Support Specialist',
+        experience_level: data.experience_level || '',
+        start_date: data.start_date || '',
+        motivation: data.motivation || '',
+        resume_url: data.resume ? `Resume file: ${data.resume.name}` : '',
+        portfolio_website: data.portfolio_website || '',
+        work_shifts: data.work_shifts || '',
+        relevant_experience: data.relevant_experience || '',
+        cover_letter: data.cover_letter || '',
+        consent_for_storage: data.consent_for_storage === 'Yes',
+        id: data.id,
         timestamp: new Date().toISOString(),
-        
-        // Additional tracking
-        application_type: 'modal_quick_apply',
-        form_version: 'modal_v2'
+        source: data.source
       };
 
-      // Log the complete payload before submission
-      logPayload('job-application', jobData);
-
-      // Use safe submission wrapper with duplicate prevention
-      const result = await safeSubmit('job-application', jobData, {
-        disableDuration: 7000, // 7 seconds for Job Application
-        onSubmitStart: () => setSubmitStatus('submitting'),
-        onSubmitEnd: () => setSubmitStatus(null),
-        onDuplicate: () => {
-          setSubmitStatus('error');
-          setErrors({ general: 'Job application already being submitted' });
-        }
+      const response = await fetch(`${backendUrl}/api/proxy/job-application`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': window.location.origin
+        },
+        body: JSON.stringify(dashboardData)
       });
 
-      if (result.success) {
-        showSuccessMessage(
-          'Job application submitted successfully',
-          { ...result.data, form_type: 'job_application_modal' }
-        );
-        
-        const applicationId = result.data?.id || `job_modal_${Date.now()}`;
-        console.log('✅ Job application submitted successfully:', {
-          applicationId,
-          applicant: data.fullName,
+      const result = await response.json();
+
+      if (response.ok && result.success !== false) {
+        console.log('✅ Job application submitted successfully to Dashboard:', {
+          applicant: data.full_name,
           email: data.email,
-          position: data.position,
-          mode: result.mode
+          position: data.position_applied,
+          dashboard: 'submitted'
         });
         
         setSubmitStatus('success');
@@ -292,52 +245,27 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
         if (window?.dataLayer) {
           window.dataLayer.push({
             event: "job_application_submit",
-            position: data.position || 'Customer Support Specialist',
+            position: data.position_applied,
             source: 'careers_modal',
-            location: data.location,
-            submission_mode: result.mode,
-            applicationId: applicationId
+            location: data.location
           });
         }
         
+        // Auto-close after short delay
         setTimeout(() => {
           resetForm();
-        }, 3000);
-      } else if (result.reason === 'rate_limited') {
-        // Handle rate limiting specifically
-        console.warn('Job application rate limited:', result.message);
-        setErrors({ general: result.message || 'Please wait before submitting another application' });
-        setSubmitStatus('error');
+          onClose();
+        }, 2500);
       } else {
-        throw new Error(result.error || result.message || 'Job application submission failed');
+        console.error('❌ Job application submission failed:', result);
+        setSubmitStatus('error');
+        setErrors({ general: result.error || 'Submission failed. Please try again.' });
       }
+      
     } catch (error) {
-      // Fallback to offline simulation on any error
-      console.warn('Job application submission failed, using offline fallback:', error);
-      const applicationId = `job_modal_fallback_${Date.now()}`;
-      console.log('✅ Job application submitted successfully (fallback mode):', {
-        applicationId,
-        applicant: data.fullName,
-        email: data.email,
-        position: data.position
-      });
-      
-      setSubmitStatus('success');
-      setErrors({});
-      
-      if (window?.dataLayer) {
-        window.dataLayer.push({
-          event: "job_application_submit_fallback",
-          position: data.position || 'Customer Support Specialist',
-          source: 'careers_modal',
-          location: data.location,
-          applicationId: applicationId
-        });
-      }
-      
-      setTimeout(() => {
-        resetForm();
-      }, 3000);
+      console.error('💥 Job application submission error:', error);
+      setSubmitStatus('error');
+      setErrors({ general: 'Network error. Please check your connection and try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -374,9 +302,9 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Personal Information */}
+          {/* REQUIRED FIELDS */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Personal Information</h3>
+            <h3 className="text-lg font-semibold text-white">Required Information</h3>
             
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -384,15 +312,17 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
                   Full Name *
                 </label>
                 <input
+                  name="full_name"
                   type="text"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.fullName ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
+                  value={formData.full_name}
+                  onChange={(e) => handleInputChange('full_name', e.target.value)}
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.full_name ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
                   placeholder="Enter your full name"
+                  required
                   disabled={isSubmitting}
                 />
-                {errors.fullName && (
-                  <p className="text-red-400 text-xs mt-1">{errors.fullName}</p>
+                {errors.full_name && (
+                  <p className="text-red-400 text-xs mt-1">{errors.full_name}</p>
                 )}
               </div>
 
@@ -401,11 +331,13 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
                   Email Address *
                 </label>
                 <input
+                  name="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.email ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
                   placeholder="your.email@example.com"
+                  required
                   disabled={isSubmitting}
                 />
                 {errors.email && (
@@ -417,9 +349,60 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Location *
+                </label>
+                <div className="relative">
+                  <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <input
+                    name="location"
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => handleInputChange('location', e.target.value)}
+                    className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.location ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
+                    placeholder="City/Location"
+                    disabled={isSubmitting}
+                  />
+                </div>
+                {errors.location && (
+                  <p className="text-red-400 text-xs mt-1">{errors.location}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Work Authorization *
+                </label>
+                <select
+                  name="work_authorization"
+                  value={formData.work_authorization}
+                  onChange={(e) => handleInputChange('work_authorization', e.target.value)}
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.work_authorization ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white focus:outline-none focus:border-[#00FF41]`}
+                  disabled={isSubmitting}
+                >
+                  <option value="">Select work authorization</option>
+                  <option value="Bangladeshi Citizen">Bangladeshi Citizen</option>
+                  <option value="Work Permit Holder">Work Permit Holder</option>
+                  <option value="Student Visa">Student Visa</option>
+                  <option value="Other">Other</option>
+                </select>
+                {errors.work_authorization && (
+                  <p className="text-red-400 text-xs mt-1">{errors.work_authorization}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* RECOMMENDED FIELDS */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Professional Information</h3>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
                   Phone Number
                 </label>
                 <input
+                  name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
@@ -431,38 +414,140 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Location *
+                  Position Applied For
+                </label>
+                <input
+                  name="position_applied"
+                  type="text"
+                  value={formData.position_applied}
+                  onChange={(e) => handleInputChange('position_applied', e.target.value)}
+                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]"
+                  placeholder={job?.title || "Customer Support Specialist"}
+                  disabled={isSubmitting}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Experience Level
+                </label>
+                <select
+                  name="experience_level"
+                  value={formData.experience_level}
+                  onChange={(e) => handleInputChange('experience_level', e.target.value)}
+                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+                  disabled={isSubmitting}
+                >
+                  <option value="">Select experience level</option>
+                  <option value="Fresh Graduate">Fresh Graduate</option>
+                  <option value="0-1 years">0-1 years</option>
+                  <option value="1-2 years">1-2 years</option>
+                  <option value="2-3 years">2-3 years</option>
+                  <option value="3-5 years">3-5 years</option>
+                  <option value="5+ years">5+ years</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Available Start Date
+                </label>
+                <input
+                  name="start_date"
+                  type="date"
+                  value={formData.start_date}
+                  onChange={(e) => handleInputChange('start_date', e.target.value)}
+                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+                  disabled={isSubmitting}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                Why do you want to join SentraTech?
+              </label>
+              <textarea
+                name="motivation"
+                value={formData.motivation}
+                onChange={(e) => handleInputChange('motivation', e.target.value)}
+                rows={3}
+                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41] resize-none"
+                placeholder="Tell us why you're interested in working with us..."
+                disabled={isSubmitting}
+              />
+            </div>
+          </div>
+
+          {/* RESUME & PORTFOLIO */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Resume & Portfolio</h3>
+            <p className="text-sm text-[rgb(161,161,170)]">
+              Please provide either a resume file OR a portfolio website (at least one is required)
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Resume Upload */}
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Resume/CV Upload *
+                </label>
+                <input
+                  name="resume_url"
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileUpload}
+                  className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.resume ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#00FF41] file:text-black hover:file:bg-[#00e83a]`}
+                  required
+                  disabled={isSubmitting}
+                />
+                {errors.resume && (
+                  <p className="text-red-400 text-xs mt-1">{errors.resume}</p>
+                )}
+                <p className="text-xs text-[rgb(161,161,170)] mt-1">
+                  Upload PDF, DOC, or DOCX file (max 8MB). File will be automatically uploaded to your application.
+                </p>
+              </div>
+
+              {/* Portfolio Website */}
+              <div>
+                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                  Portfolio/Website URL
                 </label>
                 <div className="relative">
-                  <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
+                  <Globe size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
                   <input
-                    type="text"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.location ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
-                    placeholder="Dhaka, Bangladesh"
+                    name="portfolio_website"
+                    type="url"
+                    value={formData.portfolio_website}
+                    onChange={(e) => handleInputChange('portfolio_website', e.target.value)}
+                    className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.portfolio_website ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
+                    placeholder="https://yourportfolio.com or LinkedIn profile"
                     disabled={isSubmitting}
                   />
                 </div>
-                {errors.location && (
-                  <p className="text-red-400 text-xs mt-1">{errors.location}</p>
+                {errors.portfolio_website && (
+                  <p className="text-red-400 text-xs mt-1">{errors.portfolio_website}</p>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Job Specific Information */}
+          {/* OPTIONAL FIELDS */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Job Information</h3>
+            <h3 className="text-lg font-semibold text-white">Additional Information (Optional)</h3>
             
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Preferred Shifts
+                  Preferred Work Shifts
                 </label>
                 <select
-                  value={formData.preferredShifts}
-                  onChange={(e) => handleInputChange('preferredShifts', e.target.value)}
+                  name="work_shifts"
+                  value={formData.work_shifts}
+                  onChange={(e) => handleInputChange('work_shifts', e.target.value)}
                   className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
                   disabled={isSubmitting}
                 >
@@ -476,134 +561,76 @@ const JobApplicationModal = ({ isOpen, onClose, job }) => {
 
               <div>
                 <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Availability Start Date
+                  Relevant Work Experience
                 </label>
                 <input
-                  type="date"
-                  value={formData.availabilityStartDate}
-                  onChange={(e) => handleInputChange('availabilityStartDate', e.target.value)}
-                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white focus:outline-none focus:border-[#00FF41]"
+                  name="relevant_experience"
+                  type="text"
+                  value={formData.relevant_experience}
+                  onChange={(e) => handleInputChange('relevant_experience', e.target.value)}
+                  className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]"
+                  placeholder="Brief description of relevant experience"
                   disabled={isSubmitting}
                 />
               </div>
             </div>
-          </div>
 
-          {/* Resume & LinkedIn */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Resume & Profile</h3>
-            <p className="text-sm text-[rgb(161,161,170)]">
-              Please provide either a resume file OR your LinkedIn profile (at least one is required)
-            </p>
-            
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* Resume Upload */}
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  Upload Resume
-                </label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="resume-upload"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    disabled={isSubmitting}
-                  />
-                  <label
-                    htmlFor="resume-upload"
-                    className={`w-full px-4 py-3 bg-[rgb(38,40,42)] border ${errors.resume ? 'border-red-500' : 'border-[rgb(63,63,63)]'} border-dashed rounded-lg text-center cursor-pointer hover:border-[#00FF41] transition-colors flex flex-col items-center space-y-2`}
-                  >
-                    {resume ? (
-                      <>
-                        <File size={20} className="text-[#00FF41]" />
-                        <span className="text-sm text-white">{resume.name}</span>
-                        <span className="text-xs text-[rgb(161,161,170)]">
-                          {(resume.size / 1024 / 1024).toFixed(1)} MB
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={20} className="text-[rgb(161,161,170)]" />
-                        <span className="text-sm text-[rgb(161,161,170)]">
-                          Click to upload PDF or Word doc
-                        </span>
-                        <span className="text-xs text-[rgb(161,161,170)]">
-                          Max 8MB
-                        </span>
-                      </>
-                    )}
-                  </label>
-                </div>
-                {errors.resume && (
-                  <p className="text-red-400 text-xs mt-1">{errors.resume}</p>
-                )}
-              </div>
-
-              {/* LinkedIn Profile */}
-              <div>
-                <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-                  LinkedIn Profile
-                </label>
-                <div className="relative">
-                  <Linkedin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[rgb(161,161,170)]" />
-                  <input
-                    type="url"
-                    value={formData.linkedinProfile}
-                    onChange={(e) => handleInputChange('linkedinProfile', e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 bg-[rgb(38,40,42)] border ${errors.linkedinProfile ? 'border-red-500' : 'border-[rgb(63,63,63)]'} rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41]`}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                    disabled={isSubmitting}
-                  />
-                </div>
-                {errors.linkedinProfile && (
-                  <p className="text-red-400 text-xs mt-1">{errors.linkedinProfile}</p>
-                )}
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
+                Cover Letter
+              </label>
+              <textarea
+                name="cover_letter"
+                value={formData.cover_letter}
+                onChange={(e) => handleInputChange('cover_letter', e.target.value)}
+                rows={4}
+                className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41] resize-none"
+                placeholder="Optional cover letter or additional notes..."
+                disabled={isSubmitting}
+              />
             </div>
           </div>
 
-          {/* Cover Note */}
-          <div>
-            <label className="block text-sm font-medium text-[rgb(218,218,218)] mb-2">
-              Cover Note
-            </label>
-            <textarea
-              value={formData.coverNote}
-              onChange={(e) => handleInputChange('coverNote', e.target.value)}
-              rows={4}
-              className="w-full px-4 py-3 bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded-lg text-white placeholder-[rgb(161,161,170)] focus:outline-none focus:border-[#00FF41] resize-none"
-              placeholder="Tell us briefly about your English proficiency, relevant experience, and why you're interested in this role..."
-              disabled={isSubmitting}
-            />
+          {/* CONSENT SECTION */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Consent & Agreement</h3>
+            
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <input
+                  name="consent_for_storage"
+                  type="checkbox"
+                  id="consent-storage"
+                  value="Yes"
+                  checked={formData.consent_for_storage}
+                  onChange={(e) => handleInputChange('consent_for_storage', e.target.checked)}
+                  className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2"
+                  disabled={isSubmitting}
+                />
+                <label htmlFor="consent-storage" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
+                  <span className="text-red-400">*</span> I consent to SentraTech storing my personal information for recruitment purposes. 
+                  I understand my data will be processed according to the privacy policy and I can request deletion at any time.
+                </label>
+              </div>
+              {errors.consent_for_storage && (
+                <p className="text-red-400 text-xs">{errors.consent_for_storage}</p>
+              )}
+            </div>
+            
+            <p className="text-xs text-[rgb(161,161,170)] mt-4">
+              By submitting this application, you acknowledge that your information will be stored in our recruitment database and may be used to contact you about this position and future opportunities at SentraTech.</p>
           </div>
 
-          {/* Consent */}
-          <div className="flex items-start space-x-3">
-            <input
-              type="checkbox"
-              id="consent"
-              checked={formData.consentForStorage}
-              onChange={(e) => handleInputChange('consentForStorage', e.target.checked)}
-              className="mt-1 w-4 h-4 text-[#00FF41] bg-[rgb(38,40,42)] border border-[rgb(63,63,63)] rounded focus:ring-[#00FF41] focus:ring-2"
-              disabled={isSubmitting}
-            />
-            <label htmlFor="consent" className="text-sm text-[rgb(218,218,218)] leading-relaxed">
-              I consent to SentraTech storing my personal information for recruitment purposes. 
-              I understand my data will be processed according to the privacy policy and I can request deletion at any time.
-            </label>
-          </div>
-          {errors.consentForStorage && (
-            <p className="text-red-400 text-xs">{errors.consentForStorage}</p>
-          )}
+          {/* Hidden Fields */}
+          <input name="id" type="hidden" value={`job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`} />
+          <input name="source" type="hidden" value="website" />
 
           {/* Submit Status */}
           {submitStatus === 'success' && (
             <div className="flex items-center space-x-2 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
               <CheckCircle size={18} className="text-green-400" />
               <p className="text-green-400 text-sm">
-                Application submitted successfully! We'll review your application and get back to you within 7-10 business days.
+                Application submitted successfully to our database! We'll review your application and get back to you within 7-10 business days.
               </p>
             </div>
           )}
