@@ -2,9 +2,10 @@
   "name": "sentratech-app",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm run build",
-    "start": "cd frontend && npm start",
-    "dev": "cd frontend && npm start"
+    "build": "cd frontend && yarn build",
+    "start": "cd frontend && yarn start",
+    "dev": "cd frontend && yarn start",
+    "install": "cd frontend && yarn install"
   },
   "dependencies": {},
   "devDependencies": {}
